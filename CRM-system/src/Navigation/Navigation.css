@@ -1,0 +1,137 @@
+.navigation {
+    position: fixed;
+    /* Делаем позицию фиксированной */
+    top: 0;
+    /* Прикрепляем к верху */
+    left: 0;
+    /* Прикрепляем к левому краю */
+    width: 100%;
+    /* Ширина 100% */
+    height: 54px;
+    z-index: 1000;
+    /* Устанавливаем высокий z-index, чтобы div был поверх других элементов */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #112347;
+}
+
+.logo {
+    height: 32px;
+    width: 160px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 11px;
+    margin-left: 16px;
+}
+
+.profile {
+    display: flex;
+    flex-direction: row;
+
+}
+
+.profile-user-role{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* выравнивание по горизонтали */
+    align-items: left;
+    /* выравнивание по вертикали */
+    margin-left: 18px;
+    margin-right: 18px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 11px;
+    width: 562px;
+}
+
+.navigation-button {
+    background-color: #112347;
+    border: none;
+    color: #ffffff;
+    height: 32px;
+    margin-left: 3px;
+    margin-right: 3px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.profile-button {
+    width: 54px;
+    height: 54px;
+    background-color: #112347;
+    border: none;
+}
+
+.logo-img {
+    height: 32px;
+    width: 32px;
+    margin: auto;
+}
+
+.logo-h1 {
+    font-size: 20px;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: bold;
+    margin-top: 6px;
+    margin-left: 6px;
+}
+
+.profile-user
+{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    margin: 0;
+    color: #ffffff;
+}
+
+.profile-role{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 10px;
+    margin: 0px;
+    color: #ffffff;
+}
+
+.profile-mini-text{
+    color: #000000;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+    margin-top: 15.5px;
+}
+
+.profile-mini {
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    display: flex;
+    /* используем Flexbox для центрирования */
+    justify-content: center;
+    /* выравнивание по горизонтали */
+    align-items: center;
+    /* выравнивание по вертикали */
+    color: white;
+    background-color: #ffffff;
+    border-radius: 50%;
+    margin-top: 11px;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-style: bold;
+}
