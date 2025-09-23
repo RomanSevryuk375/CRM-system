@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import Navigation from './Navigation/Navigation';
-import Vect from './assets/Vector.svg';
+import Footer from './Footer/Footer';
+import Breadcrumbs from './Breadcrumbs/Breadcrumbs';
+import Table from './Table/Table';
+import Toolbar from './Toolbar/Toolbar';
 import './App.css'
 
 function App() {
@@ -8,7 +11,13 @@ function App() {
 
   return (
     <>
-      <div><Navigation /></div>
+      <div>
+        <Navigation />
+        <Breadcrumbs />
+        <Toolbar />
+        <Table />
+        <Footer />
+      </div>
     </>
   )
 }

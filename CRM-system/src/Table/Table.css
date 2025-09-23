@@ -1,0 +1,45 @@
+.tableMarking {
+    left: 0;
+    position: fixed;
+    margin-top: 124px;
+    width: 100%;
+    height: auto;
+    background-color: #F1F3F5;
+    border: 0px, 1px, 1px, 0px;
+    border-style: solid;
+    border-collapse: collapse;
+    text-align: left;
+    border-color: #EBEDF0;
+}
+
+td,
+tr,
+th {
+    border: 1px;
+    border-style: solid;
+    border-collapse: collapse;
+    border: 0px, 1px, 1px, 0px;
+    border-color: #EBEDF0;
+}
+
+.th-button {
+    width: 48px;
+}
+
+.th-button {
+    width: 48px;
+    height: 36px;
+    border: none;
+    background-color: none;
+}
+
+.start-th-button {
+    width: 48px;
+    height: 36px;
+}
+
+.th-button:hover {
+    background-color: #112347;
+    transition-delay: 0.3s ease-in-out;
+    border-radius: 10%;
+}

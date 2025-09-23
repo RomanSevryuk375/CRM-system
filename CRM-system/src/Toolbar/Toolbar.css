@@ -1,0 +1,13 @@
+.toolbar {
+    border-bottom: 1px solid;
+    border-color: #ea2300;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: blueviolet;
+    position: fixed;
+    left: 0;
+    margin-top: 80px;
+    width: 100%;
+    height: 46px;
+}

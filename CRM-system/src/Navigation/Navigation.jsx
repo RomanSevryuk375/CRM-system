@@ -7,6 +7,8 @@ import './Navigation.css'
 const Name = 'Петров Петр Петрович'
 const Role = 'менеджер'
 const Text = 'GG'
+const navButtons = ['ЗАКАЗ-НАРЯДЫ', 'КЛИЕНТЫ', 'МАТСЕРА', 'РАБОТЫ', 'ЗАПЧАСТИ'];
+
 function Navigation() {
     return (
         <div className='navigation'>
@@ -15,11 +17,7 @@ function Navigation() {
                 <h1 className='logo-h1' >AUTOService</h1>
             </div>
             <div className='buttons'>
-                <button className='navigation-button'>ЗАКАЗ-НАРЯДЫ</button>
-                <button className='navigation-button' >КЛИЕНТЫ</button>
-                <button className='navigation-button' >МАСТЕРА</button>
-                <button className='navigation-button' >РАБОТЫ</button>
-                <button className='navigation-button' >ЗАПЧАСТИ</button>
+                {navButtons.map((item) => (<button key={item} className='navigation-button'>{item}</button>))}
             </div>
             <div className='profile'>
                 <button className='profile-button'><img src={Info} alt="Information" /></button>
@@ -36,3 +34,5 @@ function Navigation() {
 }
 
 export default Navigation;
+
+// Переделать систему для выведения инвы в профиль

@@ -1,15 +1,10 @@
 .navigation {
     position: fixed;
-    /* Делаем позицию фиксированной */
     top: 0;
-    /* Прикрепляем к верху */
     left: 0;
-    /* Прикрепляем к левому краю */
     width: 100%;
-    /* Ширина 100% */
     height: 54px;
     z-index: 1000;
-    /* Устанавливаем высокий z-index, чтобы div был поверх других элементов */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -18,10 +13,9 @@
 
 .logo {
     height: 32px;
-    width: 160px;
+    width: 30%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
     margin-top: 11px;
     margin-left: 16px;
 }
@@ -29,16 +23,15 @@
 .profile {
     display: flex;
     flex-direction: row;
-
+    width: 30%;
+    justify-content: end;
 }
 
-.profile-user-role{
+.profile-user-role {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* выравнивание по горизонтали */
-    align-items: left;
-    /* выравнивание по вертикали */
+    align-items: start;
     margin-left: 18px;
     margin-right: 18px;
 }
@@ -47,7 +40,7 @@
     display: flex;
     justify-content: space-between;
     margin-top: 11px;
-    width: 562px;
+    width: 40%;
 }
 
 .navigation-button {
@@ -58,21 +51,36 @@
     margin-left: 3px;
     margin-right: 3px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 400;
+    font-weight: 500;
     font-style: normal;
 }
 
+.navigation-button:hover {
+    background-color: #ffffff;
+    color: #112347;
+    transition: 0.3s ease-in-out;
+    border-radius: 1px;
+    font-weight: 500;
+}
+
 .profile-button {
-    width: 54px;
+    width: 52px;
     height: 54px;
     background-color: #112347;
     border: none;
 }
 
+.profile-button:hover {
+    border: #ffffff;
+    border-width: 1.5px;
+    border-style: solid;
+    transition: 0.3s ease-in-out;
+}
+
 .logo-img {
     height: 32px;
     width: 32px;
-    margin: auto;
+    margin-left: 16px;
 }
 
 .logo-h1 {
@@ -85,8 +93,7 @@
     margin-left: 6px;
 }
 
-.profile-user
-{
+.profile-user {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 14px;
@@ -94,7 +101,7 @@
     color: #ffffff;
 }
 
-.profile-role{
+.profile-role {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 10px;
@@ -102,7 +109,7 @@
     color: #ffffff;
 }
 
-.profile-mini-text{
+.profile-mini-text {
     color: #000000;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
@@ -118,12 +125,9 @@
     height: 32px;
     text-align: center;
     display: flex;
-    /* используем Flexbox для центрирования */
     justify-content: center;
-    /* выравнивание по горизонтали */
     align-items: center;
-    /* выравнивание по вертикали */
-    color: white;
+    color: #ffffff;
     background-color: #ffffff;
     border-radius: 50%;
     margin-top: 11px;
