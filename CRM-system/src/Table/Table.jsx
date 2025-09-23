@@ -1,17 +1,19 @@
-import './Table.css'
 import Edit from '../assets/Edit.svg';
+import './Table.css'
 
 function Table() {
   return (
     <table className='tableMarking'>
       <thead>
-        <th className='start-th-button'></th>
-        <th>№</th>
-        <th>Клиент</th>
-        <th>ID автомобиля</th>
-        <th>Статус</th>
-        <th>Мастер</th>
-        <th>Итоговая стоимость</th>
+        <tr>
+          <th className='start-th-button'></th>
+          <th>№</th>
+          <th>Клиент</th>
+          <th>ID автомобиля</th>
+          <th>Статус</th>
+          <th>Мастер</th>
+          <th>Итоговая стоимость</th>
+        </tr>
       </thead>
       <tbody>
         <tr>
