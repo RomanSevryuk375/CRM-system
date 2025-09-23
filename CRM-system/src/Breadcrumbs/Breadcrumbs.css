@@ -23,3 +23,10 @@
     line-height: 8px;
     margin-left: 16px;
 }
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-style: bold;
+}
