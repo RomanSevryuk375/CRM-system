@@ -1,5 +1,6 @@
 import Edit from '../assets/Edit.svg';
-import Sort from '../assets/Sort.svg'
+import Sort from '../assets/Sort.svg';
+import PopupMenu from '../Popup_menu/PopupMenu.jsx';
 import './Table.css'
 
 const headText = ['№', 'Клиент', 'Автомобиля', 'Статус', 'Мастер', 'Дата создания', 'Итоговая стоимость'];
@@ -14,37 +15,40 @@ const bodyText = [
 
 function Table() {
   return (
-    <table className='tableMarking'>
-      <thead>
-        <tr>
-          <th className='start-th-button'></th>
-          {headText.map((item) => (
-            <th key={item} className='сolumn-names'>
-              <div className='сolumn-elements'>
-                <p className='names'>
-                  {item}
-                </p>
-                <button className='button-sort'>
-                  <img className='button-sort-img' src={Sort} alt="" />
-                </button>
-              </div>
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {bodyText.map((row, index) => (<tr key={row.id} className={`table-row ${index % 2 === 0 ? 'even' : 'odd'}`}>
-          <td><button className={`td-button ${index % 2 === 0 ? 'even' : 'odd'}`}><img src={Edit} alt="" /></button></td>
-          <td className='td-id'>{row.id}</td>
-          <td className='td-client'>{row.client}</td>
-          <td className='td-car_id'>{row.car_id}</td>
-          <td className='td-status'>{row.status}</td>
-          <td className='td-worker'>{row.worker}</td>
-          <td className='td-date'>{row.date}</td>
-          <td className='td-sum'>{row.sum}</td>
-        </tr>))}
-      </tbody>
-    </table>
+    <>
+      <table className='tableMarking'>
+        <thead>
+          <tr>
+            <th className='start-th-button'></th>
+            {headText.map((item) => (
+              <th key={item} className='сolumn-names'>
+                <div className='сolumn-elements'>
+                  <p className='names'>
+                    {item}
+                  </p>
+                  <button className='button-sort'>
+                    <img className='button-sort-img' src={Sort} alt="" />
+                  </button>
+                </div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {bodyText.map((row, index) => (<tr key={row.id} className={`table-row ${index % 2 === 0 ? 'even' : 'odd'}`}>
+            <td><button className={`td-button ${index % 2 === 0 ? 'even' : 'odd'}`}><img src={Edit} alt="" /></button></td>
+            <td className='td-id'>{row.id}</td>
+            <td className='td-client'>{row.client}</td>
+            <td className='td-car_id'>{row.car_id}</td>
+            <td className='td-status'>{row.status}</td>
+            <td className='td-worker'>{row.worker}</td>
+            <td className='td-date'>{row.date}</td>
+            <td className='td-sum'>{row.sum}</td>
+          </tr>))}
+        </tbody>
+      </table>
+      <PopupMenu />
+    </>
   );
 }
 

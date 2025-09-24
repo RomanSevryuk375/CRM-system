@@ -16,7 +16,7 @@ function App() {
         <Breadcrumbs />
         <Toolbar />
         <Table />
-        <Footer />
+        <Footer /> 
       </div>
     </>
   )
