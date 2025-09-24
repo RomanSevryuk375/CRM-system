@@ -3,8 +3,13 @@ import './PopupMenu.css'
 
 const ModalTitle = 'Создание заказа';
 const toolBarContent = ['Основное', 'Работы', 'Запчасти', 'Итог'];
+const footerContent = ['Завершить', 'Перевести в работу', 'Сохранить'];
+const inputLable = ['Клиент', 'Автомобиль', 'Дата', 'Статус'];
 const inputContent = [
-
+    { id: 1, name: 'Roman', surname: 'Sevryuk' },
+    { id: 2, name: 'Roman', surname: 'Sevryuk' },
+    { id: 3, name: 'Roman', surname: 'Sevryuk' },
+    { id: 99, name: 'Roman', surname: 'Sevryuk' },
 ];
 
 function PopupMenu() {
@@ -16,38 +21,21 @@ function PopupMenu() {
                     <button className='exit'><img className='modal-img' src={ModalImg} alt="" /></button>
                 </div>
                 <div className='toolBar'>
-                    {toolBarContent.map((item) => (<button key={item} className='modal-toolbar-button'>{item}</button>))}
+                    {toolBarContent.map((item) => (<button key={item.id} className='modal-toolbar-button'>{item.name}</button>))}
                 </div>
                 <div className='modal-body'>
-                    <div className='modal-select'>
-                        <p className='select-lable'>Клиент</p>
-                        <select className='custom-select'>
-                            <option value="client">Выберите клиента</option>
-                        </select>
-                    </div>
-                    <div className='modal-select'>
-                        <p className='select-lable'>Автомобиль</p>
-                        <select className='custom-select'>
-                            <option value="car">Выберите автомобиль</option>
-                        </select>
-                    </div>
-                    <div className='modal-select'>
-                        <p className='select-lable'>Дата</p>
-                        <select className='custom-select'>
-                            <option value="date">Выберите дату</option>
-                        </select>
-                    </div>
-                    <div className='modal-select'>
-                        <p className='select-lable'>Статус</p>
-                        <select className='custom-select'>
-                            <option value="status">Выберите статус</option>
-                        </select>
-                    </div>
+                    {inputLable.map((label) => (
+                        <div key={label} className='modal-select'>
+                            <p className='select-lable'>{label}</p>
+                            <select className='custom-select'>
+                                <option value="">Выберите {label.toLowerCase()}</option>
+                                {inputContent.map((item) => (<option key={item.id} value={item.id}>{item.name} {item.surname}</option>))}
+                            </select>
+                        </div>
+                    ))}
                 </div>
                 <div className='footer-button'>
-                    <button className='custom-button'>Сохранить</button>
-                    <button className='custom-button'>Перевести вработу</button>
-                    <button className='custom-button'>Сохранить</button>
+                    {footerContent.map((footer) => (<button key={footer} className='custom-button'>{footer}</button>))}
                 </div>
             </div>
         </div>
