@@ -12,16 +12,19 @@ const inputContent = [
     { id: 99, name: 'Roman', surname: 'Sevryuk' },
 ];
 
-function PopupMenu() {
+const PopupMenu = ({ isOpen, onClose}) => {
+    if (!isOpen) {
+        return null;
+    }
     return (
         <div className='shadow'>
             <div className='main-menu'>
                 <div className='modal-header'>
                     <h1 className='modal-title'>{ModalTitle}</h1>
-                    <button className='exit'><img className='modal-img' src={ModalImg} alt="" /></button>
+                    <button onClick={onClose} className='exit'><img className='modal-img' src={ModalImg} alt="" /></button>
                 </div>
                 <div className='toolBar'>
-                    {toolBarContent.map((item) => (<button key={item.id} className='modal-toolbar-button'>{item.name}</button>))}
+                    {toolBarContent.map((item) => (<button key={item} className='modal-toolbar-button'>{item}</button>))}
                 </div>
                 <div className='modal-body'>
                     {inputLable.map((label) => (

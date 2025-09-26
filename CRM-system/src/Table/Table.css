@@ -3,13 +3,17 @@
     position: fixed;
     margin-top: 124px;
     width: 100%;
-    height: auto;
+    height: calc(100vh - 166px);
     background-color: #F1F3F5;
     border: 0px, 1px, 1px, 0px;
     border-style: solid;
     border-collapse: collapse;
     text-align: left;
     border-color: #EBEDF0;
+    /* display: block;
+    overflow-y: scroll;
+    scroll-behavior: smooth; */
+    /* Съебывает итоговая стоимость но работает заебись */
 }
 
 .table-row.even {

@@ -1,10 +1,22 @@
 import Edit from '../assets/Edit.svg';
 import Sort from '../assets/Sort.svg';
-import PopupMenu from '../Popup_menu/PopupMenu.jsx';
+import FiltreModal from '../FilreModal/FiltreModal';
 import './Table.css'
 
 const headText = ['№', 'Клиент', 'Автомобиля', 'Статус', 'Мастер', 'Дата создания', 'Итоговая стоимость'];
 const bodyText = [
+  { id: 1, client: 'Севрюк Роман Петрович', car_id: 23, status: 'принят', worker: 'Севрюк Петр Юрьевич', date: '01.01.2025', sum: 564 },
+  { id: 2, client: 'Пупкин Василий Иванович', car_id: 47, status: 'на диагностике', worker: 'Севрюк Петр Юрьевич', date: '01.01.2025', sum: 2900 },
+  { id: 3, client: 'Сяньтянь Лю', car_id: 64, status: 'ожидает согласования', worker: 'Стрелков Григорий Григорьевич', date: '01.01.2025', sum: 5000 },
+  { id: 4, client: 'Севрюк Роман Петрович', car_id: 23, status: 'принят', worker: 'Севрюк Петр Юрьевич', date: '01.01.2025', sum: 564 },
+  { id: 5, client: 'Пупкин Василий Иванович', car_id: 47, status: 'на диагностике', worker: 'Севрюк Петр Юрьевич', date: '01.01.2025', sum: 2900 },
+  { id: 6, client: 'Сяньтянь Лю', car_id: 64, status: 'ожидает согласования', worker: 'Стрелков Григорий Григорьевич', date: '01.01.2025', sum: 5000 },
+  { id: 1, client: 'Севрюк Роман Петрович', car_id: 23, status: 'принят', worker: 'Севрюк Петр Юрьевич', date: '01.01.2025', sum: 564 },
+  { id: 2, client: 'Пупкин Василий Иванович', car_id: 47, status: 'на диагностике', worker: 'Севрюк Петр Юрьевич', date: '01.01.2025', sum: 2900 },
+  { id: 3, client: 'Сяньтянь Лю', car_id: 64, status: 'ожидает согласования', worker: 'Стрелков Григорий Григорьевич', date: '01.01.2025', sum: 5000 },
+  { id: 4, client: 'Севрюк Роман Петрович', car_id: 23, status: 'принят', worker: 'Севрюк Петр Юрьевич', date: '01.01.2025', sum: 564 },
+  { id: 5, client: 'Пупкин Василий Иванович', car_id: 47, status: 'на диагностике', worker: 'Севрюк Петр Юрьевич', date: '01.01.2025', sum: 2900 },
+  { id: 6, client: 'Сяньтянь Лю', car_id: 64, status: 'ожидает согласования', worker: 'Стрелков Григорий Григорьевич', date: '01.01.2025', sum: 5000 },
   { id: 1, client: 'Севрюк Роман Петрович', car_id: 23, status: 'принят', worker: 'Севрюк Петр Юрьевич', date: '01.01.2025', sum: 564 },
   { id: 2, client: 'Пупкин Василий Иванович', car_id: 47, status: 'на диагностике', worker: 'Севрюк Петр Юрьевич', date: '01.01.2025', sum: 2900 },
   { id: 3, client: 'Сяньтянь Лю', car_id: 64, status: 'ожидает согласования', worker: 'Стрелков Григорий Григорьевич', date: '01.01.2025', sum: 5000 },
@@ -16,6 +28,7 @@ const bodyText = [
 function Table() {
   return (
     <>
+    <FiltreModal /> 
       <table className='tableMarking'>
         <thead>
           <tr>
@@ -47,7 +60,6 @@ function Table() {
           </tr>))}
         </tbody>
       </table>
-      <PopupMenu />
     </>
   );
 }
