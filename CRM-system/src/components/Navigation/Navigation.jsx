@@ -1,7 +1,7 @@
-import Vect from '../assets/Vector.svg';
-import Info from '../assets/Info.svg';
-import darkMode from '../assets/DarkMode.svg';
-import Exit from '../assets/Exit.svg';
+import Vect from '../../assets/svg/Vector.svg';
+import Info from '../../assets/svg/Info.svg';
+import darkMode from '../../assets/svg/DarkMode.svg';
+import Exit from '../../assets/svg/Exit.svg';
 import './Navigation.css'
 
 const Name = 'Петров Петр Петрович'

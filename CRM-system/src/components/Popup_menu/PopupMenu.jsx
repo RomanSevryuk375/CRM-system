@@ -1,4 +1,4 @@
-import ModalImg from '../assets/Cross.svg';
+import ModalImg from '../../assets/svg/Cross.svg';
 import './PopupMenu.css'
 
 const ModalTitle = 'Создание заказа';

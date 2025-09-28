@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import Navigation from './Navigation/Navigation';
-import Footer from './Footer/Footer';
-import Breadcrumbs from './Breadcrumbs/Breadcrumbs';
-import Table from './Table/Table';
-import Toolbar from './Toolbar/Toolbar';
+import Navigation from './components/Navigation/Navigation';
+import Footer from './components/Footer/Footer';
+import Breadcrumbs from './components/Breadcrumbs/Breadcrumbs';
+import Table from './components/Table/Table';
+import Toolbar from './components/Toolbar/Toolbar.jsx';
 import './App.css'
 
 function App() {

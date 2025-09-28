@@ -1,40 +1,37 @@
-.tableMarking {
+.table-container {
     left: 0;
     position: fixed;
-    margin-top: 124px;
+    top: 124px;
     width: 100%;
     height: calc(100vh - 166px);
     background-color: #F1F3F5;
+    display: block;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+.tableMarking {
+    width: 100%;
     border: 0px, 1px, 1px, 0px;
     border-style: solid;
     border-collapse: collapse;
     text-align: left;
     border-color: #EBEDF0;
-    /* display: block;
-    overflow-y: scroll;
-    scroll-behavior: smooth; */
-    /* Съебывает итоговая стоимость но работает заебись */
+    table-layout: fixed;
 }
 
-.table-row.even {
-    height: 36px;
-    border: 1px;
-    border-style: solid;
-    border-collapse: collapse;
-    border: 0px, 1px, 1px, 0px;
-    border-color: #EBEDF0;
+.thead{
+    top: 0;
+    position: sticky;
     background-color: #EBEDF0;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    font-size: 14px;
+    box-sizing: border-box;
 }
 
 .table-row.odd {
     height: 36px;
-    border: 1px;
     border-style: solid;
     border-collapse: collapse;
-    border: 0px, 1px, 1px, 0px;
+    border: 1px;
     border-color: #EBEDF0;
     background-color: #ffffff;
     font-family: 'Roboto', sans-serif;
@@ -68,7 +65,7 @@
 }
 
 .td-sum {
-    width: 320px;
+    width: auto;
     height: 36px;
 }
 
@@ -119,6 +116,12 @@
     letter-spacing: 0%;
     vertical-align: middle;
     color: #333333;
+    position: sticky;
+    /* border: 1px;
+    border-style: solid;
+    border-collapse: collapse;
+    border: 0px, 1px, 1px, 0px;
+    border-color: #1e1e1e; */
 }
 
 .сolumn-elements {
