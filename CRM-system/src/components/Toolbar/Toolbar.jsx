@@ -18,8 +18,10 @@ function Toolbar() {
                     <button type="button" onClick={() => setIsModalOpen(true)} className='toolbar-button'>Создать заказ</button>
                 </div>
             </div>
-            <PopupMenu isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)} />
+            <PopupMenu
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
         </>
     );
 }

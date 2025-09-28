@@ -15,7 +15,6 @@ function App() {
         <Navigation />
         <Breadcrumbs />
         <Toolbar />
-        <Table />
         <Footer /> 
       </div>
     </>
