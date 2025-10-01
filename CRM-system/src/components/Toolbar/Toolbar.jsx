@@ -4,11 +4,11 @@ import PopupMenu from "../../components/Popup_menu/PopupMenu.jsx";
 import './Toolbar.css'
 
 
-function Toolbar() {
+function Toolbar({ activeFoolMenu }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     return (
         <>
-            <div className='toolbar'>
+            <div className={`toolbar ${activeFoolMenu ? 'enable' : 'disable'}`}>
                 <div>
                     <input id='toolbar-search' className='toolbar-input' type="text" />
                     <button className='toolbar-button-filtre'><img src={Filtre} alt="Фильтры" className='toolbar-button-filtre-img' /></button>
@@ -27,3 +27,7 @@ function Toolbar() {
 }
 
 export default Toolbar;
+
+// поправить стили
+// сделать обработку эксейпа
+// добавить обработчики событий

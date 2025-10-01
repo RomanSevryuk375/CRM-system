@@ -1,144 +1,97 @@
-.navigation {
-    position: fixed;
-    top: 0;
+.buttons{
+    transition: all 0.3s ease-in-out;
+}
+.buttons.folded {
     left: 0;
-    width: 100%;
-    height: 54px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    top: 54px;
+    width: 54px;
+    height: 100vh;
+    position: fixed;
     background-color: #112347;
-}
-
-.logo {
-    height: 32px;
-    width: 30%;
-    display: flex;
-    flex-direction: row;
-    margin-top: 11px;
-    margin-left: 16px;
-}
-
-.profile {
-    display: flex;
-    flex-direction: row;
-    width: 30%;
-    justify-content: end;
-}
-
-.profile-user-role {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: start;
-    margin-left: 18px;
-    margin-right: 18px;
+    align-items: center;
 }
 
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 11px;
-    width: 40%;
-}
-
-.navigation-button {
+.buttons.expanded {
+    left: 0;
+    top: 52px;
+    padding-left: 1px;
+    width: 240px;
+    height: 100vh;
+    position: fixed;
+    z-index: 1000;
     background-color: #112347;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navigation-button{
+     position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.navigation-button.folded {
     border: none;
-    color: #ffffff;
-    height: 32px;
-    width: 20%;
-    margin-left: 3px;
-    margin-right: 3px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-    font-style: normal;
-    font-size: 13px;
+    background-color: #112347;
+    height: 54px;
+    width: 100%;
+}
+
+.navigation-button.expanded {
+    border: none;
+    background-color: #112347;
+    height: 54px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
 }
 
 .navigation-button:hover {
     background-color: #40516E;
-    color: #ffffff;
-    transition: 0.3s ease-in-out;
-    border-radius: 2px;
+}
+
+.button-img{
+    transition: all 0.3s ease-in-out;
+}
+
+.button-img.foled {
+    height: 20px;
+    width: 20px;
+}
+
+.button-img.expanded {
+    height: 20px;
+    width: 20px;
+    margin-left: 10px;
+    
+}
+
+.buttons.expanded .button-text {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.1s;
+}
+
+.button-text {
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
-    font-style: bold;
-}
-
-.profile-button {
-    width: 52px;
-    height: 54px;
-    background-color: #112347;
-    border: none;
-}
-
-.profile-button:hover {
-    border: #ffffff;
-    border-width: 1.5px;
-    border-style: solid;
-    transition: 0.3s ease-in-out;
-}
-
-.logo-img {
-    height: 32px;
-    width: 32px;
+    font-size: 14px;
+    color: #ffffff;
     margin-left: 16px;
-}
-
-.logo-h1 {
-    font-size: 20px;
-    color: #ffffff;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 700;
-    font-style: bold;
-    margin-top: 6px;
-    margin-left: 6px;
-}
-
-.profile-user {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    margin: 0;
-    color: #ffffff;
-}
-
-.profile-role {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    font-size: 10px;
-    margin: 0px;
-    color: #ffffff;
-}
-
-.profile-mini-text {
-    color: #000000;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    font-size: 14px;
-    text-align: center;
-    justify-content: center;
-    justify-items: center;
-    margin-top: 15.5px;
-}
-
-.profile-mini {
-    width: 32px;
-    height: 32px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #ffffff;
-    background-color: #ffffff;
-    border-radius: 50%;
-    margin-top: 11px;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease-in-out;
+    white-space: nowrap;
 }
 
 @font-face {
     font-family: 'Roboto';
-    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('woff2');
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
     font-weight: 900;
-    font-style: bold;
+    font-style: normal;
 }

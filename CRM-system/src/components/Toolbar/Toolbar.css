@@ -1,12 +1,31 @@
-.toolbar {
+.toolbar{
+    transition: all 0.3s ease-in-out;
+}
+
+.toolbar.enable {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     background-color: #ffffff;
     position: fixed;
-    left: 0;
-    top: 80px;
-    width: 100%;
+    left: 240px;
+    top: 54px;
+    width: calc(100vw - 240px);
+    height: 46px;
+    border-bottom: 1px solid;
+    border-collapse: collapse;
+    border-color: #EBEDF0; 
+}
+
+.toolbar.disable {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #ffffff;
+    position: fixed;
+    left: 54px;
+    top: 54px;
+    width: calc(100vw - 54px); 
     height: 46px;
     border-bottom: 1px solid;
     border-collapse: collapse;
@@ -61,7 +80,7 @@
 
 @font-face {
     font-family: 'Roboto';
-    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('woff2');
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
     font-weight: 900;
-    font-style: bold;
+    font-style: normal;
 }
