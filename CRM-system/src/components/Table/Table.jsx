@@ -92,6 +92,75 @@ const bodyTextParts = [
   { id: 15, order_id: 1015, supplier: 'CarSupply', part_name: 'Антифриз G12+ (концентрат, 1 л)', article: 'G12PLUS-1L', quantity: 4, unit_price: 550 },
   { id: 16, order_id: 1016, supplier: 'AutoParts-M', part_name: 'Наконечник рулевой тяги', article: 'TRW-900', quantity: 2, unit_price: 1150 }
 ];
+const columnsBills = ['id', 'order_id', 'status', 'invoice_date', 'sum']
+const headTextBills = ['№', '№ заказ-наряда', 'Статус', 'Дата выставления счета', 'Сумма']
+const bodyTextBills = [
+  { id: 1, order_id: 1001, status: 'Оплачен', invoice_date: '2024-01-15', sum: 2250 },
+  { id: 2, order_id: 1002, status: 'Ожидает оплаты', invoice_date: '2024-01-16', sum: 6400 },
+  { id: 3, order_id: 1003, status: 'Оплачен', invoice_date: '2024-01-17', sum: 2800 },
+  { id: 4, order_id: 1004, status: 'Отменен', invoice_date: '2024-01-18', sum: 1850 },
+  { id: 5, order_id: 1005, status: 'Оплачен', invoice_date: '2024-01-19', sum: 6500 },
+  { id: 6, order_id: 1006, status: 'Ожидает оплаты', invoice_date: '2024-01-20', sum: 2500 },
+  { id: 7, order_id: 1007, status: 'Оплачен', invoice_date: '2024-01-21', sum: 3800 },
+  { id: 8, order_id: 1008, status: 'Оплачен', invoice_date: '2024-01-22', sum: 2100 },
+  { id: 9, order_id: 1009, status: 'Ожидает оплаты', invoice_date: '2024-01-23', sum: 3000 },
+  { id: 10, order_id: 1010, status: 'Оплачен', invoice_date: '2024-01-24', sum: 4500 },
+  { id: 11, order_id: 1011, status: 'Отменен', invoice_date: '2024-01-25', sum: 4800 },
+  { id: 12, order_id: 1012, status: 'Оплачен', invoice_date: '2024-01-26', sum: 3800 },
+  { id: 13, order_id: 1013, status: 'Ожидает оплаты', invoice_date: '2024-01-27', sum: 14700 },
+  { id: 14, order_id: 1014, status: 'Оплачен', invoice_date: '2024-01-28', sum: 5900 },
+  { id: 15, order_id: 1015, status: 'Оплачен', invoice_date: '2024-01-29', sum: 2200 },
+  { id: 16, order_id: 1016, status: 'Ожидает оплаты', invoice_date: '2024-01-30', sum: 2300 }
+];
+const columnsJournal = ['id', 'bill_id', 'paiment_date', 'sum', 'paiment_method'];
+const headTextJournal = ['№','№ счета','Дата оплаты','Сумма оплаты','Метод оплаты']
+const bodyTextJournal = [
+  { id: 1, bill_id: 1001, paiment_date: '2024-01-16', sum: 2250, paiment_method: 'Банковская карта' },
+  { id: 2, bill_id: 1003, paiment_date: '2024-01-18', sum: 2800, paiment_method: 'Наличные' },
+  { id: 3, bill_id: 1005, paiment_date: '2024-01-20', sum: 6500, paiment_method: 'Банковский перевод' },
+  { id: 4, bill_id: 1007, paiment_date: '2024-01-22', sum: 3800, paiment_method: 'Банковская карта' },
+  { id: 5, bill_id: 1008, paiment_date: '2024-01-23', sum: 2100, paiment_method: 'Наличные' },
+  { id: 6, bill_id: 1010, paiment_date: '2024-01-25', sum: 4500, paiment_method: 'Банковский перевод' },
+  { id: 7, bill_id: 1012, paiment_date: '2024-01-27', sum: 3800, paiment_method: 'Банковская карта' },
+  { id: 8, bill_id: 1014, paiment_date: '2024-01-29', sum: 5900, paiment_method: 'Наличные' },
+  { id: 9, bill_id: 1015, paiment_date: '2024-01-30', sum: 2200, paiment_method: 'Банковская карта' },
+  { id: 10, bill_id: 1002, paiment_date: '2024-01-31', sum: 6400, paiment_method: 'Банковский перевод' },
+  { id: 11, bill_id: 1006, paiment_date: '2024-02-01', sum: 2500, paiment_method: 'Наличные' },
+  { id: 12, bill_id: 1009, paiment_date: '2024-02-02', sum: 3000, paiment_method: 'Банковская карта' },
+  { id: 13, bill_id: 1013, paiment_date: '2024-02-03', sum: 14700, paiment_method: 'Банковский перевод' },
+  { id: 14, bill_id: 1016, paiment_date: '2024-02-04', sum: 2300, paiment_method: 'Наличные' }
+];
+const columnsTaxes = ['id', 'name', 'procent', 'type'];
+const headTextTaxes = ['№', 'Название', 'Ставка', 'Тип'];
+const bodyTextTaxes = [
+  { id: 1, name: 'Налог на прибыль', procent: 18.00, type: '%' },
+  { id: 2, name: 'НДС (основная ставка)', procent: 20.00, type: '%' },
+  { id: 3, name: 'НДС (льготная ставка)', procent: 0.00, type: '%' },
+  { id: 4, name: 'Налог на недвижимость', procent: 1.00, type: '%' },
+  { id: 5, name: 'Земельный налог', procent: 0.35, type: '%' },
+  { id: 6, name: 'Социальные взносы (ФСЗН)', procent: 34.00, type: '%' },
+  { id: 7, name: 'Подоходный налог (сотрудники)', procent: 13.00, type: '%' }
+];
+const columnsExpenses = ['id', 'date', 'category', 'tax_id', 'used_parts_id', 'type', 'sum'];
+const headTextExpenses = ['№', 'Дата', 'Категория', '№ налога', '№ использованной запчасти', 'Тип', 'Сумма']
+const bodyTextExpenses = [
+  { id: 1, date: '2024-01-15', category: 'Запчасти', tax_id: 2, used_parts_id: 1, type: 'Расход', sum: 2250 },
+  { id: 2, date: '2024-01-16', category: 'Зарплата', tax_id: 6, used_parts_id: null, type: 'Расход', sum: 150000 },
+  { id: 3, date: '2024-01-17', category: 'Коммунальные услуги', tax_id: 4, used_parts_id: null, type: 'Расход', sum: 25000 },
+  { id: 4, date: '2024-01-18', category: 'Запчасти', tax_id: 2, used_parts_id: 2, type: 'Расход', sum: 6400 },
+  { id: 5, date: '2024-01-19', category: 'Аренда', tax_id: 4, used_parts_id: null, type: 'Расход', sum: 80000 },
+  { id: 6, date: '2024-01-20', category: 'Запчасти', tax_id: 2, used_parts_id: 3, type: 'Расход', sum: 2800 },
+  { id: 7, date: '2024-01-21', category: 'Реклама', tax_id: 2, used_parts_id: null, type: 'Расход', sum: 15000 },
+  { id: 8, date: '2024-01-22', category: 'Запчасти', tax_id: 2, used_parts_id: 4, type: 'Расход', sum: 1850 },
+  { id: 9, date: '2024-01-23', category: 'Обслуживание оборудования', tax_id: 2, used_parts_id: null, type: 'Расход', sum: 12000 },
+  { id: 10, date: '2024-01-24', category: 'Запчасти', tax_id: 2, used_parts_id: 5, type: 'Расход', sum: 6500 },
+  { id: 11, date: '2024-01-25', category: 'Транспортные расходы', tax_id: 2, used_parts_id: null, type: 'Расход', sum: 8000 },
+  { id: 12, date: '2024-01-26', category: 'Запчасти', tax_id: 2, used_parts_id: 6, type: 'Расход', sum: 2500 },
+  { id: 13, date: '2024-01-27', category: 'Налоги', tax_id: 1, used_parts_id: null, type: 'Расход', sum: 45000 },
+  { id: 14, date: '2024-01-28', category: 'Запчасти', tax_id: 2, used_parts_id: 7, type: 'Расход', sum: 3800 },
+  { id: 15, date: '2024-01-29', category: 'Хозяйственные расходы', tax_id: 2, used_parts_id: null, type: 'Расход', sum: 5000 },
+  { id: 16, date: '2024-01-30', category: 'Запчасти', tax_id: 2, used_parts_id: 8, type: 'Расход', sum: 2100 }
+];
 
 const GenericTable = ({ headText, bodyText, columns, activeFoolMenu }) => {
   return (
@@ -187,6 +256,43 @@ function Table({ activeTable, activeFoolMenu }) {
           activeFoolMenu={activeFoolMenu}
         />
       );
+    case 'bills':
+      return (
+        <GenericTable
+          headText={headTextBills}
+          bodyText={bodyTextBills}
+          columns={columnsBills}
+          activeFoolMenu={activeFoolMenu}
+        />
+      );
+    case 'journal':
+      return (
+        <GenericTable
+          headText={headTextJournal}
+          bodyText={bodyTextJournal}
+          columns={columnsJournal}
+          activeFoolMenu={activeFoolMenu}
+        />
+      );
+    case 'taxes':
+      return (
+        <GenericTable
+          headText={headTextTaxes}
+          bodyText={bodyTextTaxes}
+          columns={columnsTaxes}
+          activeFoolMenu={activeFoolMenu}
+        />
+      );
+    case 'expenses':
+      return (
+        <GenericTable
+          headText={headTextExpenses}
+          bodyText={bodyTextExpenses}
+          columns={columnsExpenses}
+          activeFoolMenu={activeFoolMenu}
+        />
+      );
+
     // default:
     // return (
     //   <h1>Error</h1>

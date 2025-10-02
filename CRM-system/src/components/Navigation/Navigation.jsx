@@ -17,6 +17,10 @@ const navButtons = [
     { text: 'Работники', value: 'workers', icon: Workers },
     { text: 'Каталог работ', value: 'works', icon: Works },
     { text: 'Запчасти', value: 'parts', icon: Details },
+    { text: 'Счета', value: 'bills', icon: Task }, // Временно
+    { text: 'Журнал оплат', value: 'journal', icon: Clients }, // Временно
+    { text: 'Налоги', value: 'taxes', icon: Workers }, // Временно
+    { text: 'Расходы', value: 'expenses', icon: Details }, // Временно
 ];
 
 function Navigation({ activeFoolMenu }) {

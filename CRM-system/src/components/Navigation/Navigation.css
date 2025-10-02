@@ -16,7 +16,7 @@
 .buttons.expanded {
     left: 0;
     top: 52px;
-    padding-left: 1px;
+    padding-left: 2px;
     width: 240px;
     height: 100vh;
     position: fixed;
@@ -65,9 +65,10 @@
 }
 
 .button-img.expanded {
-    height: 20px;
-    width: 20px;
-    margin-left: 10px;
+    height: 17px;
+    width: 17px;
+    margin-left: 11px;
+    padding-right: 6px;
     
 }
 
