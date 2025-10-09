@@ -53,7 +53,7 @@ const Efficiency = () => {
           <Tooltip />
           <Legend />
           <CartesianGrid strokeDasharray="3 3" />
-          <Bar dataKey="uv" fill="#0069D0"/>
+          <Bar dataKey="uv" name='' fill="#0069D0"/>
         </BarChart>
       </ResponsiveContainer>
     );

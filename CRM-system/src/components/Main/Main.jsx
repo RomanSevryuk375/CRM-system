@@ -4,6 +4,7 @@ import Histogram from './Histogram';
 import HistogramEfficiency from './HistogramEfficiency';
 import Efficiency from './Efficiency';
 import PieChart from './PieChart';
+import Expenses from './Expenses/Expenses';
 import './Main.css'
 
 
@@ -72,7 +73,7 @@ function Main() {
                         </div>
                     </div>
                     <div className="right-right">
-
+                       <Expenses />
                     </div>
                 </div>
             </div>

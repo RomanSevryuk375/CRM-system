@@ -24,7 +24,7 @@ const navButtons = [
 ];
 
 function Navigation({ activeFoolMenu }) {
-    const [activeTable, setActiveTable] = useState('orders');
+    const [activeTable, setActiveTable] = useState('main');
 
     return (
         <>

@@ -2,7 +2,9 @@ import Edit from '../../assets/svg/Edit.svg';
 import Sort from '../../assets/svg/Sort.svg';
 import Main from '../Main/Main';
 import FiltreModal from '../FilreModal/FiltreModal';
+import Detailing from '../Detailing/Detailing';
 import './Table.css'
+import { useState } from 'react';
 
 const columnsOreders = ['id', 'client', 'car_id', 'status', 'worker', 'date', 'sum'];
 const headTextOrders = ['№', 'Клиент', 'Автомобиля', 'Статус', 'Мастер', 'Дата создания', 'Итоговая стоимость'];
@@ -113,7 +115,7 @@ const bodyTextBills = [
   { id: 16, order_id: 1016, status: 'Ожидает оплаты', invoice_date: '2024-01-30', sum: 2300 }
 ];
 const columnsJournal = ['id', 'bill_id', 'paiment_date', 'sum', 'paiment_method'];
-const headTextJournal = ['№','№ счета','Дата оплаты','Сумма оплаты','Метод оплаты']
+const headTextJournal = ['№', '№ счета', 'Дата оплаты', 'Сумма оплаты', 'Метод оплаты']
 const bodyTextJournal = [
   { id: 1, bill_id: 1001, paiment_date: '2024-01-16', sum: 2250, paiment_method: 'Банковская карта' },
   { id: 2, bill_id: 1003, paiment_date: '2024-01-18', sum: 2800, paiment_method: 'Наличные' },
@@ -162,7 +164,7 @@ const bodyTextExpenses = [
   { id: 16, date: '2024-01-30', category: 'Запчасти', tax_id: 2, used_parts_id: 8, type: 'Расход', sum: 2100 }
 ];
 
-const GenericTable = ({ headText, bodyText, columns, activeFoolMenu }) => {
+const GenericTable = ({ headText, bodyText, columns, activeFoolMenu, activeDetailing, setActiveDetailing }) => {
   return (
     <div className={`table-container ${activeFoolMenu ? 'enable' : 'disable'}`}>
       <table className='tableMarking'>
@@ -185,7 +187,10 @@ const GenericTable = ({ headText, bodyText, columns, activeFoolMenu }) => {
         </thead>
         <tbody>
           {bodyText.map((row, index) => (
-            <tr key={row.id} className={`table-row ${index % 2 === 0 ? 'even' : 'odd'}`}>
+            <tr
+              key={row.id}
+              className={`table-row ${index % 2 === 0 ? 'even' : 'odd'}`}
+              onClick={() => { setActiveDetailing(!activeDetailing) }}>
               <td>
                 <button className={`td-button ${index % 2 === 0 ? 'even' : 'odd'}`}>
                   <img src={Edit} alt="Редактировать" />
@@ -206,6 +211,7 @@ const GenericTable = ({ headText, bodyText, columns, activeFoolMenu }) => {
 
 function Table({ activeTable, activeFoolMenu }) {
   {/* <FiltreModal />   */ }
+  const [activeDetailing, setActiveDetailing] = useState(false);
   switch (activeTable) {
     case 'main':
       return (
@@ -213,84 +219,147 @@ function Table({ activeTable, activeFoolMenu }) {
       );
     case 'orders':
       return (
-        <GenericTable
-          headText={headTextOrders}
-          bodyText={bodyTextOrders}
-          columns={columnsOreders}
-          activeFoolMenu={activeFoolMenu}
-        />
+        <>
+          <GenericTable
+            headText={headTextOrders}
+            bodyText={bodyTextOrders}
+            columns={columnsOreders}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu} />
+        </>
       );
     case 'clients':
       return (
-        <GenericTable
-          headText={headTextClients}
-          bodyText={bodyTextClients}
-          columns={columnsClients}
-          activeFoolMenu={activeFoolMenu}
-        />
+        <>
+          <GenericTable
+            headText={headTextClients}
+            bodyText={bodyTextClients}
+            columns={columnsClients}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu} />
+        </>
       );
     case 'workers':
       return (
-        <GenericTable
-          headText={headTextWorkers}
-          bodyText={bodyTextWorkers}
-          columns={columnsWorkers}
-          activeFoolMenu={activeFoolMenu}
-        />
+        <>
+          <GenericTable
+            headText={headTextWorkers}
+            bodyText={bodyTextWorkers}
+            columns={columnsWorkers}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu} />
+        </>
       );
     case 'works':
       return (
-        <GenericTable
-          headText={headTextWorks}
-          bodyText={bodyTextWorks}
-          columns={columnsWorks}
-          activeFoolMenu={activeFoolMenu}
-        />
+        <>
+          <GenericTable
+            headText={headTextWorks}
+            bodyText={bodyTextWorks}
+            columns={columnsWorks}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu} />
+        </>
       );
     case 'parts':
       return (
-        <GenericTable
-          headText={headTextParts}
-          bodyText={bodyTextParts}
-          columns={columnsParts}
-          activeFoolMenu={activeFoolMenu}
-        />
+        <>
+          <GenericTable
+            headText={headTextParts}
+            bodyText={bodyTextParts}
+            columns={columnsParts}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu} />
+        </>
       );
     case 'bills':
       return (
-        <GenericTable
-          headText={headTextBills}
-          bodyText={bodyTextBills}
-          columns={columnsBills}
-          activeFoolMenu={activeFoolMenu}
-        />
+        <>
+          <GenericTable
+            headText={headTextBills}
+            bodyText={bodyTextBills}
+            columns={columnsBills}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu} />
+        </>
       );
     case 'journal':
       return (
-        <GenericTable
-          headText={headTextJournal}
-          bodyText={bodyTextJournal}
-          columns={columnsJournal}
-          activeFoolMenu={activeFoolMenu}
-        />
+        <>
+          <GenericTable
+            headText={headTextJournal}
+            bodyText={bodyTextJournal}
+            columns={columnsJournal}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu} />
+        </>
       );
     case 'taxes':
       return (
-        <GenericTable
-          headText={headTextTaxes}
-          bodyText={bodyTextTaxes}
-          columns={columnsTaxes}
-          activeFoolMenu={activeFoolMenu}
-        />
+        <>
+          <GenericTable
+            headText={headTextTaxes}
+            bodyText={bodyTextTaxes}
+            columns={columnsTaxes}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu} />
+        </>
       );
     case 'expenses':
       return (
-        <GenericTable
-          headText={headTextExpenses}
-          bodyText={bodyTextExpenses}
-          columns={columnsExpenses}
-          activeFoolMenu={activeFoolMenu}
-        />
+        <>
+          <GenericTable
+            headText={headTextExpenses}
+            bodyText={bodyTextExpenses}
+            columns={columnsExpenses}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu} />
+        </>
       );
 
     // default:
