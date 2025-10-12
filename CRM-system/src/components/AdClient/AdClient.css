@@ -1,0 +1,79 @@
+.ad-content {
+    background-color: #112347;
+    position: relative;
+    width: calc(100vw - 128px);
+    height: 33vh;
+    margin-left: 48px;
+    margin-top: 48px;
+    /* padding: 32px; */
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+}
+
+.ad-text{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    height: 100%;
+}
+
+.ad-text-h1 {
+    margin-top: 24px;
+    margin-left: 32px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    /* margin-left: 16px; */
+    font-weight: 700;
+    font-size: 40px;
+    color: #ffffff;
+}
+
+.ad-text-h6 {
+    margin-top: 0px;
+    margin-bottom: 16px;
+    margin-left: 32px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    /* margin-left: 16px; */
+    font-weight: 700;
+    font-size: 24px;
+    color: #ffffff;
+}
+
+.ad-text-span{
+    margin-left: 32px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    /* margin-left: 16px; */
+    font-weight: 300;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.ad-pointer{
+    color: #3296F8;
+}
+
+.ad-img{
+    width: 30%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0px 20px 20px 0px;
+}
+
+.shering{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    /* margin: -20px -20px 0 -20px; */
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
+    font-weight: 500;
+    font-style: normal;
+}

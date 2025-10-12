@@ -54,7 +54,7 @@ const data = [
 const CustomizedAxisTick = ({ x, y, stroke, payload }) => {
   return (
       <g transform={`translate(${x},${y})`}>
-        <text x={0} y={0} dy={12} textAnchor="end" fill="#666" transform="rotate(-45)">
+        <text style={{ fontFamily: "'Roboto', sans-serif" }} x={0} y={0} dy={12} textAnchor="end" fill="#666" transform="rotate(-45)">
           {payload.value}
         </text>
       </g>
@@ -62,8 +62,8 @@ const CustomizedAxisTick = ({ x, y, stroke, payload }) => {
 };
 const HistogramEfficiency = () => {
   return (
-    <ResponsiveContainer width="100%" height="100%">
-        <LineChart
+    <ResponsiveContainer style={{ fontFamily: "'Roboto', sans-serif" }} width="100%" height="100%">
+        <LineChart style={{ fontFamily: "'Roboto', sans-serif" }}
           width={500}
           height={300}
           data={data}
@@ -71,15 +71,14 @@ const HistogramEfficiency = () => {
             top: 16,
             right: 32,
             left: 16,
-            bottom: 0,
+            bottom: 16,
           }}
         >
           <CartesianGrid strokeDasharray="4 4" />
-          <XAxis dataKey="name" height={50} tick={<CustomizedAxisTick />} />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" name=' ' dataKey="uv" stroke="#0069D0" strokeWidth={3} />
+          <XAxis style={{ fontFamily: "'Roboto', sans-serif" }} dataKey="name" height={50} tick={<CustomizedAxisTick style={{ fontFamily: "'Roboto', sans-serif" }} />} />
+          <YAxis style={{ fontFamily: "'Roboto', sans-serif" }} />
+          <Tooltip style={{ fontFamily: "'Roboto', sans-serif" }} />
+          <Line style={{ fontFamily: "'Roboto', sans-serif" }} type="monotone" name=' ' dataKey="uv" stroke="#0069D0" strokeWidth={3} />
         </LineChart>
       </ResponsiveContainer>
   );

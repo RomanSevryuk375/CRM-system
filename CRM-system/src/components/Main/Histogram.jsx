@@ -76,6 +76,7 @@ const Histogram = () => {
   return (
     <ResponsiveContainer width="100%" height="100%">
         <LineChart
+        style={{ fontFamily: "'Roboto', sans-serif"}}
           width={500}
           height={300}
           data={data}
@@ -88,9 +89,9 @@ const Histogram = () => {
         >
           <CartesianGrid strokeDasharray="4 4" />
           <XAxis dataKey="name" height={50} tick={<CustomizedAxisTick />} />
-          <YAxis />
-          <Tooltip />
-          <Legend />
+          <YAxis style={{ fontFamily: "'Roboto', sans-serif"}}/>
+          <Tooltip style={{ fontFamily: "'Roboto', sans-serif"}}/>
+          <Legend style={{ fontFamily: "'Roboto', sans-serif"}}/>
           <Line type="monotone" name='Прибыль до вычета налогов' dataKey="uv" stroke="#112347" strokeWidth={3} />
           <Line type="monotone" name='Чистая прибыль' dataKey="pv" stroke="#0069D0" strokeWidth={3} />
         </LineChart>

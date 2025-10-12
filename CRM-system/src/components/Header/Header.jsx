@@ -5,6 +5,7 @@ import Exit from '../../assets/svg/Exit.svg';
 import ShowMenu from '../../assets/svg/ShowMenu.svg';
 import Table from '../Table/Table';
 import './Header.css'
+import ExitModal from '../ExitModal/ExitModal.jsx';
 import Navigation from '../Navigation/Navigation';
 import { useState } from 'react';
 
@@ -17,6 +18,7 @@ const manager = {
 
 function Header() {
     const [activeFoolMenu, setActiveFoolMenu] = useState(false);
+    const [activeExitMenu, setActiveExitMenu] = useState(false);
 
     return (
         <>
@@ -36,10 +38,14 @@ function Header() {
                         <h1 className='profile-user'>{manager.name}</h1>
                         <p className='profile-role'>{manager.role}</p>
                     </div>
-                    <button className='profile-button'><img src={Exit} alt="" /></button>
+                    <button className='profile-button' onClick={() => (setActiveExitMenu(!activeExitMenu))} ><img src={Exit} alt="" /></button>
                 </div>
             </div>
-            <Navigation activeFoolMenu={activeFoolMenu}/>
+            <Navigation activeFoolMenu={activeFoolMenu} />
+            <ExitModal
+                setActiveExitMenu={setActiveExitMenu}
+                activeExitMenu={activeExitMenu}
+            />
         </>
     );
 }

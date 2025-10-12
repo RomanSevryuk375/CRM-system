@@ -26,6 +26,7 @@ const navButtons = [
 function Navigation({ activeFoolMenu }) {
     const [activeTable, setActiveTable] = useState('main');
 
+
     return (
         <>
             <div className={`buttons ${activeFoolMenu ? 'expanded' : 'folded'}`}>

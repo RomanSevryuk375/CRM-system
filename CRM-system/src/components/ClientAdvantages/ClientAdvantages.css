@@ -1,0 +1,82 @@
+.client-content-adv {
+    position: relative;
+    width: calc(100vw - 48px);
+    padding-left: 48px;
+    padding-top: 48px;
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
+.advdntages-content-row {
+    width: 100%;
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+
+.advdntages-label {
+    padding-top: 48px;
+    padding-bottom: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    color: #112347;
+}
+
+.advantage-card {
+    width: calc(33vw - 80px);
+    margin-right: 16px;
+    padding: 16px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    background-color: #ffffff;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0px 0px 32px rgba(17, 35, 71, 0.15);
+}
+
+.advantage-card-img {
+    width: 48px;
+    height: 48px;
+}
+
+.advantage-card-h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #333333;
+}
+
+.advantage-card-label {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    color: #333333;
+}
+
+.advantage-card-content {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+}
+
+.advantage-card-text {
+    width: 80%;
+    height: 70%;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
+    font-weight: 500;
+    font-style: normal;
+}
