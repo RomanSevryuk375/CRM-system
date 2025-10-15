@@ -4,7 +4,7 @@ import PopupMenu from "../../components/Popup_menu/PopupMenu.jsx";
 import './Toolbar.css'
 
 
-function Toolbar({ activeFoolMenu }) {
+function Toolbar({ activeFoolMenu}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     return (
         <>

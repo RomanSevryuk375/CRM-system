@@ -1,0 +1,13 @@
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\bin\Debug\net9.0\system.DataAccess.deps.json
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\bin\Debug\net9.0\system.DataAccess.dll
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\bin\Debug\net9.0\system.DataAccess.pdb
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\obj\Debug\net9.0\system.DataAccess.csproj.AssemblyReference.cache
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\obj\Debug\net9.0\system.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\obj\Debug\net9.0\system.DataAccess.AssemblyInfoInputs.cache
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\obj\Debug\net9.0\system.DataAccess.AssemblyInfo.cs
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\obj\Debug\net9.0\system.DataAccess.csproj.CoreCompileInputs.cache
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\obj\Debug\net9.0\system.DataAccess.sourcelink.json
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\obj\Debug\net9.0\system.DataAccess.dll
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\obj\Debug\net9.0\refint\system.DataAccess.dll
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\obj\Debug\net9.0\system.DataAccess.pdb
+C:\Рабочий стол\CRM_system_for_car_service\system.DataAccess\obj\Debug\net9.0\ref\system.DataAccess.dll

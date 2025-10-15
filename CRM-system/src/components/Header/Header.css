@@ -4,8 +4,8 @@
     left: 0;
     width: 100vw;
     height: 54px;
-    /* z-index: 1000; */
     display: flex;
+    z-index: 300;
     flex-direction: row;
     justify-content: space-between;
     background-color: #112347;
@@ -52,14 +52,15 @@
 
 
 
-.menu-button{
+.menu-button {
     background-color: #112347;
     margin: 0;
     height: 54px;
     width: 54px;
     border: none;
 }
-.menu-button:hover{
+
+.menu-button:hover {
     background-color: #40516E;
     border: none;
 }
@@ -107,7 +108,7 @@
     margin-top: 15.5px;
 }
 
-.menu-button{
+.menu-button {
     margin-top: 0;
     width: 100%;
     height: 100%;

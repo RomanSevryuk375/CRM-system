@@ -3,11 +3,7 @@ import Info from '../../assets/svg/Info.svg';
 import darkMode from '../../assets/svg/DarkMode.svg';
 import Exit from '../../assets/svg/Exit.svg';
 import ShowMenu from '../../assets/svg/ShowMenu.svg';
-import Table from '../Table/Table';
 import './Header.css'
-import ExitModal from '../ExitModal/ExitModal.jsx';
-import Navigation from '../Navigation/Navigation';
-import { useState } from 'react';
 
 const manager = {
     name: 'Петров Петр Петрович',
@@ -16,10 +12,7 @@ const manager = {
 }; // на будущее переделать буквы в изображении
 
 
-function Header() {
-    const [activeFoolMenu, setActiveFoolMenu] = useState(false);
-    const [activeExitMenu, setActiveExitMenu] = useState(false);
-
+function Header({ activeFoolMenu, setActiveFoolMenu, activeExitMenu, setActiveExitMenu }) {
     return (
         <>
             <div className='navigation'>
@@ -41,11 +34,6 @@ function Header() {
                     <button className='profile-button' onClick={() => (setActiveExitMenu(!activeExitMenu))} ><img src={Exit} alt="" /></button>
                 </div>
             </div>
-            <Navigation activeFoolMenu={activeFoolMenu} />
-            <ExitModal
-                setActiveExitMenu={setActiveExitMenu}
-                activeExitMenu={activeExitMenu}
-            />
         </>
     );
 }

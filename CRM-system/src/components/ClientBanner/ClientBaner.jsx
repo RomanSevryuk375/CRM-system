@@ -2,6 +2,7 @@ import './ClientBanner.css'
 import Registration from '../Registration/Registration';
 import { HashLink } from "react-router-hash-link"
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Vect from '../../assets/svg/Vector.svg';
 import Info from '../../assets/svg/Info.svg';
@@ -11,7 +12,8 @@ import Account from '../Account/Account';
 
 function ClientBanner() {
     const [registrationIsOpen, setRegistrationIsOpen] = useState(false);
-    const [response, setResponse] = useState(false)
+    const [response, setResponse] = useState(false);
+    const navigate = useNavigate();
     return (
         <>
             <div className='client-content'>
@@ -51,8 +53,22 @@ function ClientBanner() {
                             <span className='main-text-desc-cli'>Гарантия на работу с двигателем до 3 лет<br /> На мелкосрочный ремонт до 6 месяцев</span>
                         </div>
                         <div className='content-block-buttons-cli'>
-                            <button className='banner-button-cli-active'>Заказать диагностику</button>
-                            <button className='banner-button-cli'>Консультация</button>
+                            <button
+                                className='banner-button-cli-active'
+                                onClick={() => {
+                                    if (response === true) {
+                                        navigate('/personal-page')
+                                    }
+                                }}
+                            >Заказать диагностику</button>
+                            <button
+                                className='banner-button-cli'
+                                onClick={() => {
+                                    if (response === true) {
+                                        navigate('/personal-page')
+                                    }
+                                }}
+                            >Консультация</button>
                         </div>
                     </div>
                 </div>

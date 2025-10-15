@@ -1,0 +1,42 @@
+[
+    {
+        "car_id": "1",
+        "car_name": "BMW X5 2005",
+        "car_vin": "YV1SW53C211123456",
+        "car_state_number": "1234 KX - 8",
+        "car_milage": "150 000",
+        "order_status": "на диагностике"
+    },
+    {
+        "car_id": "2", 
+        "car_name": "mercedes-benz w124 2001",
+        "car_vin": "YV1SW53C211123456",
+        "car_state_number": "1234 KX - 8",
+        "car_milage": "150 000",
+        "order_status": "в работе"
+    },
+    {
+        "car_id": "3",
+        "car_name": "Audi A4 2015",
+        "car_vin": "WAUZZZ8K9FA123789",
+        "car_state_number": "5678 AB - 7",
+        "car_milage": "85 000",
+        "order_status": "ожидает запчасти"
+    },
+    {
+        "car_id": "4",
+        "car_name": "Toyota Camry 2018",
+        "car_vin": "JTDBT123XHJ567432",
+        "car_state_number": "9012 CE - 6", 
+        "car_milage": "45 000",
+        "order_status": "ремонт завершен"
+    },
+    {
+        "car_id": "5",
+        "car_name": "Volkswagen Golf 2012",
+        "car_vin": "WVWZZZ1KZCW345678",
+        "car_state_number": "3456 MK - 5",
+        "car_milage": "120 000",
+        "order_status": "мойка"
+    }
+]

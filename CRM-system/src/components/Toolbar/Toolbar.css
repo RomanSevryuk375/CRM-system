@@ -31,6 +31,7 @@
     border-bottom: 1px solid;
     border-collapse: collapse;
     border-color: #EBEDF0; 
+     z-index: 100;
 }
 
 .toolbar-input {
@@ -60,7 +61,8 @@
 
 .toolbar-button{
     height: 30px;
-    width: 124px;
+    padding-left: 16px;
+    padding-right: 16px;
     background-color: #3296F8;
     border-radius: 2px;
     border: none;

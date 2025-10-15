@@ -1,0 +1,16 @@
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\obj\Debug\net9.0\system.Buisnes.csproj.AssemblyReference.cache
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\obj\Debug\net9.0\system.Buisnes.GeneratedMSBuildEditorConfig.editorconfig
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\obj\Debug\net9.0\system.Buisnes.AssemblyInfoInputs.cache
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\obj\Debug\net9.0\system.Buisnes.AssemblyInfo.cs
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\obj\Debug\net9.0\system.Buisnes.csproj.CoreCompileInputs.cache
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\obj\Debug\net9.0\system.Buisnes.sourcelink.json
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\bin\Debug\net9.0\system.Buisnes.deps.json
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\bin\Debug\net9.0\system.Buisnes.dll
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\bin\Debug\net9.0\system.Buisnes.pdb
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\bin\Debug\net9.0\system.DataAccess.dll
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\bin\Debug\net9.0\system.DataAccess.pdb
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\obj\Debug\net9.0\system.B.2D2147C4.Up2Date
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\obj\Debug\net9.0\system.Buisnes.dll
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\obj\Debug\net9.0\refint\system.Buisnes.dll
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\obj\Debug\net9.0\system.Buisnes.pdb
+C:\Рабочий стол\CRM_system_for_car_service\system.Buisnes\obj\Debug\net9.0\ref\system.Buisnes.dll

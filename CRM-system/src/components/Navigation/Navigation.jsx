@@ -23,10 +23,7 @@ const navButtons = [
     { text: 'Расходы', value: 'expenses', icon: Details }, // Временно
 ];
 
-function Navigation({ activeFoolMenu }) {
-    const [activeTable, setActiveTable] = useState('main');
-
-
+function Navigation({ activeFoolMenu,setActiveTable }) {
     return (
         <>
             <div className={`buttons ${activeFoolMenu ? 'expanded' : 'folded'}`}>
@@ -46,13 +43,6 @@ function Navigation({ activeFoolMenu }) {
                     </button>
                 ))}
             </div>
-            <Table
-                activeTable={activeTable}
-                activeFoolMenu={activeFoolMenu}
-            />
-            <Toolbar
-                activeFoolMenu={activeFoolMenu}
-            />
         </>
     );
 }

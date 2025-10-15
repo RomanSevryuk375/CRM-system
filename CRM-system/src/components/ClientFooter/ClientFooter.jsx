@@ -15,16 +15,16 @@ function ClientFooter() {
                 <span className='inc'>© 2025 AutoService</span>
             </div>
             <div className='footer-button-container'>
-                <button className='footer-button'>
+                <button className='footer-button-cli'>
                     <img className='footer-img' src={Facebook} />
                 </button>
-                <button className='footer-button'>
+                <button className='footer-button-cli'>
                     <img className='footer-img' src={Inst} />
                 </button>
-                <button className='footer-button'> 
+                <button className='footer-button-cli'> 
                     <img className='footer-img' src={Vk} />
                 </button>
-                <button className='footer-button'>
+                <button className='footer-button-cli'>
                     <img className='footer-img' src={Youtube} />
                 </button>
             </div>
