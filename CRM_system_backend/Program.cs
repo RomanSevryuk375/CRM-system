@@ -1,3 +1,5 @@
+using CRMSystem.Buisnes.Services;
+using CRMSystem.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using system.Buisnes.Services;
 using system.DataAccess;
@@ -28,6 +30,9 @@ public class Program
 
         builder.Services.AddScoped<IClientService, ClientService>();
         builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        
 
 
         var app = builder.Build();

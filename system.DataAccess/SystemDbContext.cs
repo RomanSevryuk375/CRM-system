@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CRMSystem.DataAccess.Entites;
+using Microsoft.EntityFrameworkCore;
 using system.DataAccess.Entites;
 
 namespace system.DataAccess;
@@ -10,7 +11,9 @@ public class SystemDbContext : DbContext
     {
     }
 
-    public DbSet<ClientEntity> clients { get; set; }
+    public DbSet<ClientEntity> Сlients { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
+    public DbSet<RoleEntity> Roles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
