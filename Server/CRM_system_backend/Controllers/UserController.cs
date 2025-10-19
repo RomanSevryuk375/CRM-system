@@ -1,0 +1,59 @@
+﻿using CRM_system_backend.Contracts;
+using CRMSystem.Buisnes.Services;
+using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CRM_system_backend.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class UserController : ControllerBase
+{
+    private readonly IUserService _userService;
+
+    public UserController(IUserService userService)
+    {
+        _userService = userService;
+    }
+
+    [HttpGet]
+
+    public async Task<ActionResult<List<UserResponse>>> GetUser()
+    {
+        var users = await _userService.GetUsers();
+
+        var response = users
+            .Select(u => new UserResponse(u.Id, u.RoleId, u.Login, u.PasswordHash))
+            .ToList();
+
+        return Ok(response);
+    }
+
+    [HttpGet("by-login/{login}")]
+    public async Task<ActionResult<User>> GetUserByLogin(string login)
+    {
+            var user = await _userService.GetUsersByLogin(login);
+            return Ok(user);
+    }
+
+    [HttpPost]
+
+    public async Task<ActionResult<int>> CreateUser([FromBody] UserRequest request)
+    {
+        var (user, error) = CRMSystem.Core.Models.User.Create(
+            0,
+            request.RoleId,
+            request.Login,
+            request.Password);
+
+
+        if (!string.IsNullOrEmpty(error))
+        {
+            return BadRequest(error);
+        }
+
+        var userId = await _userService.CreateUser(user);
+
+        return Ok(userId);
+    }
+}
