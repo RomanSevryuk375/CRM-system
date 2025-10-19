@@ -1,5 +1,6 @@
 ﻿using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
+using CRMSystem.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
@@ -7,23 +8,12 @@ namespace CRMSystem.DataAccess.Repositories;
 public class UserRepository : IUserRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMyPasswordHasher _myPasswordHasher;
 
-    public UserRepository(SystemDbContext context)
+    public UserRepository(SystemDbContext context, IMyPasswordHasher myPasswordHasher)
     {
         _context = context;
-    }
-
-    public async Task<List<User>> Get()
-    {
-        var userEntyries = await _context.Users
-            .AsNoTracking()
-            .ToListAsync();
-
-        var users = userEntyries
-            .Select(u => User.Create(u.Id, u.RoleId, u.Login, u.PasswordHash).user)
-            .ToList();
-
-        return users;
+        _myPasswordHasher = myPasswordHasher;
     }
 
     public async Task<User> GetByLogin(string login)
@@ -35,13 +25,30 @@ public class UserRepository : IUserRepository
         return User.Create(userEntity.Id, userEntity.RoleId, userEntity.Login, userEntity.PasswordHash).user;
     }
 
+    public async Task<string> Login(string login, string password)
+    {
+        var user = await GetByLogin(login);
+
+        var result = _myPasswordHasher.Verify(password, user.PasswordHash);
+
+        if (result == false)
+        {
+            throw new Exception("Failed");
+        }
+
+        return "Successful";
+    }
+
     public async Task<int> Create(User user)
     {
+        var hashedPassword = _myPasswordHasher.Generate(user.PasswordHash);
+
+
         var userEntyties = new UserEntity
         {
             RoleId = user.RoleId,
             Login = user.Login,
-            PasswordHash = user.PasswordHash
+            PasswordHash = hashedPassword
         };
 
         await _context.Users.AddAsync(userEntyties);

@@ -5,7 +5,7 @@ namespace CRMSystem.Buisnes.Services
     public interface IUserService
     {
         Task<int> CreateUser(User user);
-        Task<List<User>> GetUsers();
+        Task<string> LoginUser(string login, string password);
         Task<User> GetUsersByLogin(string login);
     }
 }

@@ -283,3 +283,4 @@ C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\
 C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
 C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
+C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\BCrypt.Net-Next.dll

@@ -47,26 +47,6 @@
   },
   {
     "ContainingType": "CRM_system_backend.Controllers.UserController",
-    "Method": "GetUser",
-    "RelativePath": "User",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[CRM_system_backend.Contracts.UserResponse, CRM_system_backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "CRM_system_backend.Controllers.UserController",
     "Method": "CreateUser",
     "RelativePath": "User",
     "HttpMethod": "POST",
@@ -108,6 +88,32 @@
     "ReturnTypes": [
       {
         "Type": "CRMSystem.Core.Models.User",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.UserController",
+    "Method": "LoginUser",
+    "RelativePath": "User/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginRequest",
+        "Type": "CRM_system_backend.Contracts.LoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
         "MediaTypes": [
           "text/plain",
           "application/json",

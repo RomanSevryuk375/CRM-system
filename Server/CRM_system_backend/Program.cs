@@ -2,8 +2,9 @@ using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.DataAccess;
 using CRMSystem.DataAccess.Repositories;
+using CRMSystem.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace CRM_system_backend;
 
@@ -31,6 +32,10 @@ public class Program
         builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IMyPasswordHasher, MyPasswordHasher>();
+
+
+
 
 
         var app = builder.Build();

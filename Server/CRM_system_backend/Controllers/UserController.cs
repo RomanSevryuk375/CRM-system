@@ -16,17 +16,12 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [HttpGet]
+    [HttpPost("login")]
 
-    public async Task<ActionResult<List<UserResponse>>> GetUser()
+    public async Task<ActionResult<string>> LoginUser([FromBody] LoginRequest loginRequest)
     {
-        var users = await _userService.GetUsers();
-
-        var response = users
-            .Select(u => new UserResponse(u.Id, u.RoleId, u.Login, u.PasswordHash))
-            .ToList();
-
-        return Ok(response);
+        var result = await _userService.LoginUser(loginRequest.Login, loginRequest.Password);
+        return Ok(new { Message = result });
     }
 
     [HttpGet("by-login/{login}")]

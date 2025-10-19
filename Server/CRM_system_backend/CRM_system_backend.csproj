@@ -26,6 +26,7 @@
     <ProjectReference Include="..\system.Buisnes\CRMSystem.Buisnes.csproj" />
     <ProjectReference Include="..\system.Core\CRMSystem.Core.csproj" />
     <ProjectReference Include="..\system.DataAccess\CRMSystem.DataAccess.csproj" />
+
   </ItemGroup>
 
 </Project>
