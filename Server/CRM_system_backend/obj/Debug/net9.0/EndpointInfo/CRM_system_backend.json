@@ -140,6 +140,18 @@
         }
       }
     },
+    "/User/logout": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/User/by-login/{login}": {
       "get": {
         "tags": [

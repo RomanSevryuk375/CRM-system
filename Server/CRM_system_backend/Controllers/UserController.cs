@@ -1,6 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -21,10 +22,39 @@ public class UserController : ControllerBase
     public async Task<ActionResult<string>> LoginUser([FromBody] LoginRequest loginRequest)
     {
         var token = await _userService.LoginUser(loginRequest.Login, loginRequest.Password);
-        return Ok(new { Message = token });
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true, 
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTimeOffset.UtcNow.AddHours(12), 
+            Path = "/",
+            IsEssential = true
+        };
+
+        Response.Cookies.Append("jwt", token, cookieOptions);
+
+        return Ok(new { Message = "Logged in" });
+    }
+
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+
+        Response.Cookies.Delete("jwt", new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Path = "/"
+        });
+
+        return Ok(new { Message = "Logged out" });
     }
 
     [HttpGet("by-login/{login}")]
+    [Authorize]
     public async Task<ActionResult<User>> GetUserByLogin(string login)
     {
             var user = await _userService.GetUsersByLogin(login);

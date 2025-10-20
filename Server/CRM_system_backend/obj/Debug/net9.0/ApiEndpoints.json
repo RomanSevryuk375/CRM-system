@@ -122,5 +122,15 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.UserController",
+    "Method": "Logout",
+    "RelativePath": "User/logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   }
 ]
