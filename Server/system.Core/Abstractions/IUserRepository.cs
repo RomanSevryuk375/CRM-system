@@ -6,5 +6,4 @@ public interface IUserRepository
 {
     Task<int> Create(User user);
     Task<User> GetByLogin(string login);
-    Task<string> Login(string login, string password);
 }

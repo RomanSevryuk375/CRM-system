@@ -20,8 +20,8 @@ public class UserController : ControllerBase
 
     public async Task<ActionResult<string>> LoginUser([FromBody] LoginRequest loginRequest)
     {
-        var result = await _userService.LoginUser(loginRequest.Login, loginRequest.Password);
-        return Ok(new { Message = result });
+        var token = await _userService.LoginUser(loginRequest.Login, loginRequest.Password);
+        return Ok(new { Message = token });
     }
 
     [HttpGet("by-login/{login}")]

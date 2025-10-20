@@ -284,3 +284,11 @@ C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\
 C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
 C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
 C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\BCrypt.Net-Next.dll
+C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
+C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\System.Diagnostics.EventLog.dll
+C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
+C:\Рабочий стол\CRM_system_for_car_service\Server\CRM_system_backend\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll

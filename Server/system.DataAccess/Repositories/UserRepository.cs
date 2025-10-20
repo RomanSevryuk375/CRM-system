@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Buisnes.Extensions;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using CRMSystem.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -23,20 +24,6 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(u => u.Login == login) ?? throw new Exception();
 
         return User.Create(userEntity.Id, userEntity.RoleId, userEntity.Login, userEntity.PasswordHash).user;
-    }
-
-    public async Task<string> Login(string login, string password)
-    {
-        var user = await GetByLogin(login);
-
-        var result = _myPasswordHasher.Verify(password, user.PasswordHash);
-
-        if (result == false)
-        {
-            throw new Exception("Failed");
-        }
-
-        return "Successful";
     }
 
     public async Task<int> Create(User user)

@@ -1,9 +1,9 @@
+using CRMSystem.Buisnes.Extensions;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.DataAccess;
 using CRMSystem.DataAccess.Repositories;
 using CRMSystem.Infrastructure;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRM_system_backend;
@@ -33,10 +33,8 @@ public class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IMyPasswordHasher, MyPasswordHasher>();
-
-
-
-
+        builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
+        builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
         var app = builder.Build();
 
