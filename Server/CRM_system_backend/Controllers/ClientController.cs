@@ -49,4 +49,27 @@ public class ClientController : ControllerBase
 
         return Ok(clientId);
     }
+
+    [HttpPut]
+
+    public async Task<ActionResult<int>> UpdateClient([FromBody] ClientUpdateRequest clientUpdateRequest, int id)
+    {
+        var result = await _clientService.UpdateClient(
+                    id,
+                    clientUpdateRequest.Name,
+                    clientUpdateRequest.Surname,
+                    clientUpdateRequest.PhoneNumber,
+                    clientUpdateRequest.Email);
+
+            return Ok(result);
+    }
+
+    [HttpDelete]
+
+    public async Task<ActionResult<int>> DeleteUser(int id)
+    {
+        var result = await _clientService.DeleteClient(id);
+
+        return Ok(result);
+    }
 }
