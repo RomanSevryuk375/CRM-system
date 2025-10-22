@@ -32,8 +32,9 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
             .HasMaxLength (User.MAX_PASSWORD_LENGTH)
             .IsRequired();
 
-        builder.HasOne(r => r.Role)
-            .WithMany(u => u.Users)
-            .HasForeignKey(r => r.RoleId);
+        builder.HasOne(u => u.Role)
+            .WithMany(r => r.Users)
+            .HasForeignKey(u => u.RoleId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

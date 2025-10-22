@@ -12,8 +12,9 @@ public class SystemDbContext : DbContext
 
     public DbSet<ClientEntity> Clients { get; set; }
     public DbSet<UserEntity> Users { get; set; }
-
     public DbSet<RoleEntity> Roles { get; set; }
+    public DbSet<CarEntity> Cars { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -69,7 +69,7 @@ public class ClientsRepository : IClientsRepository
 
     public async Task<int> Delete(int id)
     {
-        var clientRntyti = await _context.Clients
+        var clientEntyti = await _context.Clients
             .Where(c => c.ClientId == id)
             .ExecuteDeleteAsync();
 

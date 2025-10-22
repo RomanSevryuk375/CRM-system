@@ -15,4 +15,6 @@ public class ClientEntity
     public string ClientEmail { get; set; } = string.Empty;
 
     public UserEntity? User { get; set; }
+
+    public ICollection<CarEntity> Cars { get; set; } = new List<CarEntity>();
 }

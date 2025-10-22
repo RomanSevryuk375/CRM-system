@@ -29,6 +29,8 @@ public class Program
         builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<ICarService, CarService>();
+        builder.Services.AddScoped<ICarRepository, CarRepository>();
         builder.Services.AddScoped<IMyPasswordHasher, MyPasswordHasher>();
         builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 

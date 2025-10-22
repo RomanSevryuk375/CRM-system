@@ -43,7 +43,8 @@ public class ClientConfiguration : IEntityTypeConfiguration<ClientEntity>
             .IsRequired();
 
         builder.HasOne(c => c.User)
-            .WithOne(u => u.Client)                      // User имеет одного Client
-            .HasForeignKey<ClientEntity>(c => c.ClientUserId);
+           .WithOne(u => u.Client)
+           .HasForeignKey<ClientEntity>(c => c.ClientUserId)
+           .OnDelete(DeleteBehavior.Cascade);
     }
 }
