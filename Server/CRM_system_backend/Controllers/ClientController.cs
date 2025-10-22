@@ -1,4 +1,5 @@
 ﻿using CRM_system_backend.Contracts;
+using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace CRM_system_backend.Controllers;
 public class ClientController : ControllerBase
 {
     private readonly IClientService _clientService;
+    private readonly IUserService _userService;
 
-    public ClientController(IClientService clientService)
+    public ClientController(IClientService clientService, IUserService userService)
     {
         _clientService = clientService;
+        _userService = userService;
     }
 
     [HttpGet]
@@ -29,12 +32,23 @@ public class ClientController : ControllerBase
     }
 
 
-    [HttpPost]
-    public async Task<ActionResult<int>> CreateClient([FromBody] ClientsRequest request)
+    [HttpPost("with create user")]
+    public async Task<ActionResult<int>> CreateClient([FromBody] RegistreRequest request)
     {
+        var (user, errorUser) = CRMSystem.Core.Models.User.Create(
+            0,
+            request.RoleId,
+            request.Login,
+            request.Password);
+
+        if (!string.IsNullOrEmpty(errorUser))
+            return BadRequest(errorUser);
+
+        var userId = await _userService.CreateUser(user);
+
         var (client, error) = Client.Create(
             0,
-            request.UserId,
+            userId,
             request.Name,
             request.Surname,
             request.PhoneNumber,
@@ -47,7 +61,12 @@ public class ClientController : ControllerBase
 
         var clientId = await _clientService.CreateClient(client);
 
-        return Ok(clientId);
+        return Ok(new
+        {
+            Message = "Registration successful",
+            UserId = userId,
+            ClientId = clientId
+        });
     }
 
     [HttpPut]

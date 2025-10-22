@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict xkTRIMwGJ28BttYE88qhYi7jTl0EHP7ONLWaRt3LyUIJWFzu0agl5JEpDkq448Z
+\restrict zYEsJI0BcNLlUpYkLlE9Mhb14b1c0GAj5C9giOTscFI2hAsrYcFdcmAXyQIgRmG
 
 -- Dumped from database version 18.0
 -- Dumped by pg_dump version 18.0
 
--- Started on 2025-10-09 00:58:37
+-- Started on 2025-10-22 23:06:11
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -578,7 +578,7 @@ CREATE TABLE public.additional_work_proposals (
 
 
 --
--- TOC entry 5230 (class 0 OID 0)
+-- TOC entry 5232 (class 0 OID 0)
 -- Dependencies: 254
 -- Name: COLUMN additional_work_proposals.proposal_status; Type: COMMENT; Schema: public; Owner: -
 --
@@ -587,7 +587,7 @@ COMMENT ON COLUMN public.additional_work_proposals.proposal_status IS '6=При�
 
 
 --
--- TOC entry 5231 (class 0 OID 0)
+-- TOC entry 5233 (class 0 OID 0)
 -- Dependencies: 254
 -- Name: COLUMN additional_work_proposals.client_decision; Type: COMMENT; Schema: public; Owner: -
 --
@@ -1370,7 +1370,7 @@ ALTER TABLE ONLY public.workers
 
 
 --
--- TOC entry 5077 (class 2620 OID 19850)
+-- TOC entry 5079 (class 2620 OID 19850)
 -- Name: additional_work_proposals trg_additional_work_decision; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -1378,7 +1378,7 @@ CREATE TRIGGER trg_additional_work_decision BEFORE UPDATE ON public.additional_w
 
 
 --
--- TOC entry 5074 (class 2620 OID 16946)
+-- TOC entry 5076 (class 2620 OID 16946)
 -- Name: bills trg_bill_total_sum; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -1386,7 +1386,7 @@ CREATE TRIGGER trg_bill_total_sum BEFORE INSERT ON public.bills FOR EACH ROW EXE
 
 
 --
--- TOC entry 5076 (class 2620 OID 17086)
+-- TOC entry 5078 (class 2620 OID 17086)
 -- Name: payment_journal trg_payment_journal_pay_check; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -1394,7 +1394,7 @@ CREATE TRIGGER trg_payment_journal_pay_check AFTER INSERT ON public.payment_jour
 
 
 --
--- TOC entry 5075 (class 2620 OID 19831)
+-- TOC entry 5077 (class 2620 OID 19831)
 -- Name: bills trg_set_actual_closing_date; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -1402,7 +1402,7 @@ CREATE TRIGGER trg_set_actual_closing_date BEFORE UPDATE ON public.bills FOR EAC
 
 
 --
--- TOC entry 5071 (class 2620 OID 19852)
+-- TOC entry 5073 (class 2620 OID 19852)
 -- Name: work_in_order trg_work_in_order_job_check; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -1410,7 +1410,7 @@ CREATE TRIGGER trg_work_in_order_job_check BEFORE INSERT OR UPDATE ON public.wor
 
 
 --
--- TOC entry 5073 (class 2620 OID 18599)
+-- TOC entry 5075 (class 2620 OID 18599)
 -- Name: work_orders trg_work_order_add_in_history; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -1418,7 +1418,7 @@ CREATE TRIGGER trg_work_order_add_in_history AFTER UPDATE ON public.work_orders 
 
 
 --
--- TOC entry 5072 (class 2620 OID 19849)
+-- TOC entry 5074 (class 2620 OID 19849)
 -- Name: work_in_order trg_work_order_status_inspection; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -1426,7 +1426,7 @@ CREATE TRIGGER trg_work_order_status_inspection AFTER UPDATE ON public.work_in_o
 
 
 --
--- TOC entry 5061 (class 2606 OID 16869)
+-- TOC entry 5063 (class 2606 OID 16869)
 -- Name: bills fk_bill_for_work_order; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1435,7 +1435,7 @@ ALTER TABLE ONLY public.bills
 
 
 --
--- TOC entry 5062 (class 2606 OID 16874)
+-- TOC entry 5064 (class 2606 OID 16874)
 -- Name: bills fk_bill_has_status; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1444,7 +1444,7 @@ ALTER TABLE ONLY public.bills
 
 
 --
--- TOC entry 5056 (class 2606 OID 16801)
+-- TOC entry 5058 (class 2606 OID 16801)
 -- Name: cars fk_car_owned_by_cklient; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1453,7 +1453,7 @@ ALTER TABLE ONLY public.cars
 
 
 --
--- TOC entry 5064 (class 2606 OID 18515)
+-- TOC entry 5066 (class 2606 OID 18515)
 -- Name: additional_work_proposals fk_client_decision_status; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1462,7 +1462,7 @@ ALTER TABLE ONLY public.additional_work_proposals
 
 
 --
--- TOC entry 5055 (class 2606 OID 16775)
+-- TOC entry 5057 (class 2606 OID 16775)
 -- Name: clients fk_client_has_user_account; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1480,7 +1480,7 @@ ALTER TABLE ONLY public.expenses
 
 
 --
--- TOC entry 5063 (class 2606 OID 16904)
+-- TOC entry 5065 (class 2606 OID 16904)
 -- Name: payment_journal fk_payment_for_bill; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1489,7 +1489,7 @@ ALTER TABLE ONLY public.payment_journal
 
 
 --
--- TOC entry 5065 (class 2606 OID 16923)
+-- TOC entry 5067 (class 2606 OID 16923)
 -- Name: additional_work_proposals fk_proposal_order; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1498,7 +1498,7 @@ ALTER TABLE ONLY public.additional_work_proposals
 
 
 --
--- TOC entry 5066 (class 2606 OID 18520)
+-- TOC entry 5068 (class 2606 OID 18520)
 -- Name: additional_work_proposals fk_proposal_status; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1507,7 +1507,7 @@ ALTER TABLE ONLY public.additional_work_proposals
 
 
 --
--- TOC entry 5067 (class 2606 OID 16933)
+-- TOC entry 5069 (class 2606 OID 16933)
 -- Name: additional_work_proposals fk_proposed_by_worker; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1516,7 +1516,7 @@ ALTER TABLE ONLY public.additional_work_proposals
 
 
 --
--- TOC entry 5069 (class 2606 OID 18252)
+-- TOC entry 5071 (class 2606 OID 18252)
 -- Name: proposed_parts fk_proposed_parts_additional_work_proposals; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1525,7 +1525,7 @@ ALTER TABLE ONLY public.proposed_parts
 
 
 --
--- TOC entry 5070 (class 2606 OID 18257)
+-- TOC entry 5072 (class 2606 OID 18257)
 -- Name: proposed_parts fk_proposed_parts_used_parts; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1534,7 +1534,7 @@ ALTER TABLE ONLY public.proposed_parts
 
 
 --
--- TOC entry 5068 (class 2606 OID 16928)
+-- TOC entry 5070 (class 2606 OID 16928)
 -- Name: additional_work_proposals fk_proposed_work; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1543,7 +1543,7 @@ ALTER TABLE ONLY public.additional_work_proposals
 
 
 --
--- TOC entry 5057 (class 2606 OID 16816)
+-- TOC entry 5059 (class 2606 OID 16816)
 -- Name: service_history fk_service_history_for_car; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1552,7 +1552,7 @@ ALTER TABLE ONLY public.service_history
 
 
 --
--- TOC entry 5058 (class 2606 OID 18593)
+-- TOC entry 5060 (class 2606 OID 18593)
 -- Name: service_history fk_service_history_work_order_id_has_work_order_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1588,7 +1588,7 @@ ALTER TABLE ONLY public.used_parts
 
 
 --
--- TOC entry 5054 (class 2606 OID 16747)
+-- TOC entry 5056 (class 2606 OID 16747)
 -- Name: users fk_user_has_role; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1606,7 +1606,25 @@ ALTER TABLE ONLY public.work_in_order
 
 
 --
--- TOC entry 5059 (class 2606 OID 16846)
+-- TOC entry 5051 (class 2606 OID 21458)
+-- Name: work_in_order fk_work_in_order_work_orders; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_in_order
+    ADD CONSTRAINT fk_work_in_order_work_orders FOREIGN KEY (work_order_id) REFERENCES public.work_orders(work_order_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 5052 (class 2606 OID 21453)
+-- Name: work_in_order fk_work_in_order_workers; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_in_order
+    ADD CONSTRAINT fk_work_in_order_workers FOREIGN KEY (work_in_order_worker_id) REFERENCES public.workers(worker_id) ON DELETE SET NULL;
+
+
+--
+-- TOC entry 5061 (class 2606 OID 16846)
 -- Name: work_orders fk_work_order_for_car; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1615,7 +1633,7 @@ ALTER TABLE ONLY public.work_orders
 
 
 --
--- TOC entry 5060 (class 2606 OID 16841)
+-- TOC entry 5062 (class 2606 OID 16841)
 -- Name: work_orders fk_work_order_has_status; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1624,7 +1642,7 @@ ALTER TABLE ONLY public.work_orders
 
 
 --
--- TOC entry 5051 (class 2606 OID 16686)
+-- TOC entry 5053 (class 2606 OID 16686)
 -- Name: work_in_order fk_work_performed; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1633,7 +1651,7 @@ ALTER TABLE ONLY public.work_in_order
 
 
 --
--- TOC entry 5052 (class 2606 OID 16754)
+-- TOC entry 5054 (class 2606 OID 16754)
 -- Name: workers fk_worker_has_user_account; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1642,7 +1660,7 @@ ALTER TABLE ONLY public.workers
 
 
 --
--- TOC entry 5053 (class 2606 OID 16730)
+-- TOC entry 5055 (class 2606 OID 16730)
 -- Name: workers fk_worker_specialization; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1650,11 +1668,11 @@ ALTER TABLE ONLY public.workers
     ADD CONSTRAINT fk_worker_specialization FOREIGN KEY (worker_specialization_id) REFERENCES public.specializations(specialization_id) ON DELETE CASCADE;
 
 
--- Completed on 2025-10-09 00:58:38
+-- Completed on 2025-10-22 23:06:12
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict xkTRIMwGJ28BttYE88qhYi7jTl0EHP7ONLWaRt3LyUIJWFzu0agl5JEpDkq448Z
+\unrestrict zYEsJI0BcNLlUpYkLlE9Mhb14b1c0GAj5C9giOTscFI2hAsrYcFdcmAXyQIgRmG
 

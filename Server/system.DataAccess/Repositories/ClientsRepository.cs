@@ -46,15 +46,25 @@ public class ClientsRepository : IClientsRepository
 
     public async Task<int> Update(int id, string name, string surname, string phoneNumber, string email)
     {
-        var clientEntity = await _context.Clients
-            .Where(c => c.ClientId == id)
-            .ExecuteUpdateAsync(s => s
-                .SetProperty(c => c.ClientName, c => name)
-                .SetProperty(c => c.ClientSurname, c => surname)
-                .SetProperty(c => c.ClientPhoneNumber, c => phoneNumber)
-                .SetProperty(c => c.ClientEmail, c => email));
+        var client = await _context.Clients.FirstOrDefaultAsync(c => c.ClientId == id);
+        if (client == null)
+            throw new Exception("Client not found");
 
-        return id;
+        if (!string.IsNullOrWhiteSpace(name))
+            client.ClientName = name;
+
+        if (!string.IsNullOrWhiteSpace(surname))
+            client.ClientSurname = surname;
+
+        if (!string.IsNullOrWhiteSpace(phoneNumber))
+            client.ClientPhoneNumber = phoneNumber;
+
+        if (!string.IsNullOrWhiteSpace(email))
+            client.ClientEmail = email;
+
+        await _context.SaveChangesAsync();
+
+        return client.ClientId;
     }
 
     public async Task<int> Delete(int id)

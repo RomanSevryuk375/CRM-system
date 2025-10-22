@@ -62,7 +62,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-
+    
     public async Task<ActionResult<int>> CreateUser([FromBody] UserRequest request)
     {
         var (user, error) = CRMSystem.Core.Models.User.Create(
@@ -79,6 +79,6 @@ public class UserController : ControllerBase
 
         var userId = await _userService.CreateUser(user);
 
-        return Ok(userId);
+        return userId;
     }
 }

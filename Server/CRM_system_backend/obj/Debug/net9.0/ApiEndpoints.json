@@ -21,32 +21,6 @@
   },
   {
     "ContainingType": "CRM_system_backend.Controllers.ClientController",
-    "Method": "CreateClient",
-    "RelativePath": "Client",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "CRM_system_backend.Contracts.ClientsRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Int32",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "CRM_system_backend.Controllers.ClientController",
     "Method": "UpdateClient",
     "RelativePath": "Client",
     "HttpMethod": "PUT",
@@ -88,6 +62,32 @@
         "Name": "id",
         "Type": "System.Int32",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.ClientController",
+    "Method": "CreateClient",
+    "RelativePath": "Client/with create user",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CRM_system_backend.Contracts.RegistreRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": [
