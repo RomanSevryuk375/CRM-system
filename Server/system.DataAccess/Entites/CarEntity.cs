@@ -20,4 +20,5 @@ public class CarEntity
 
     public ClientEntity? Client { get; set; }
 
+    public List<RepairHistoryEntity> histories { get; set; } = new List<RepairHistoryEntity>(); 
 }

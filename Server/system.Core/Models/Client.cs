@@ -34,47 +34,34 @@ public class Client
         var errors = string.Empty;
 
         if (string.IsNullOrWhiteSpace(name))
-        {
             errors = "Name can't be empty";
-        }
-        else if (name.Length > MAX_NAME_LENGTH)
-        {
+
+        if (name.Length > MAX_NAME_LENGTH)
             errors = $"Name cant't be longer than {MAX_NAME_LENGTH} symbols";
-        }
 
         if (string.IsNullOrWhiteSpace(surname))
-        {
             errors = "Surname can't be empty";
-        }
-        else if (surname.Length > MAX_SURNAME_LENGTH)
-        {
+
+        if (surname.Length > MAX_SURNAME_LENGTH)
             errors = $"Surname can't be longer than {MAX_SURNAME_LENGTH} symbols";
-        }
 
         if (string.IsNullOrWhiteSpace(phoneNumber))
-        {
             errors = "Phone number can't be empty";
-        }
-        else if (phoneNumber.Length > MAX_PHONE_NUMBER_LENGTH)
-        {
+
+        if (phoneNumber.Length > MAX_PHONE_NUMBER_LENGTH)
             errors = $"Phone number can't be longer than {MAX_PHONE_NUMBER_LENGTH} symbols";
-        }
-        else if (!Regex.IsMatch(phoneNumber, @"^(\375|80)(29|44|33|25)\d{7}$"))
-        {
+
+        if (!Regex.IsMatch(phoneNumber, @"^(\375|80)(29|44|33|25)\d{7}$"))
             errors = "Phone number should be in format +375XXXXXXXXX or 80XXXXXXXXX";
-        }
 
         if (string.IsNullOrWhiteSpace(email))
-        {
             errors = "Email can't be empty";
-        }
-        else if (email.Length > MAX_EMAIL_LENGTH)
-        {
+
+        if (email.Length > MAX_EMAIL_LENGTH)
             errors = $"Email can't be longer than {MAX_EMAIL_LENGTH} symbols";
-        }
 
         var client = new Client(id, userId, name.Trim(), surname.Trim(), phoneNumber.Trim(), email.Trim());
 
-        return (client, string.Empty);
+        return (client, errors);
     }
 }
