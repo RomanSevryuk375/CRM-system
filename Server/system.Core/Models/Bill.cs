@@ -31,9 +31,6 @@ public class Bill
         var error = string.Empty;
         var allowedStatuses = new[] { 1, 2, 3 };
 
-        if (id <= 0)
-            error = "Bill ID must be positive";
-
         if (orderId <= 0)
             error = "Order ID must be positive";
 

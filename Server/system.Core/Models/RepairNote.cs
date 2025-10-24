@@ -1,13 +1,14 @@
 ﻿namespace CRMSystem.Core.Models;
 
-public class RepairHistory
+public class RepairNote
 {
-    public RepairHistory(int id, int OrderId, int carId, DateTime workDate)
+    public RepairNote(int id, int OrderId, int carId, DateTime workDate, decimal serviceSum)
     {
         Id = id;
         this.OrderId = OrderId;
         CarId = carId;
         WorkDate = workDate;
+        ServiceSum = serviceSum;
     }
     public int Id { get; }
     public int OrderId { get; }
@@ -15,12 +16,9 @@ public class RepairHistory
     public DateTime WorkDate { get; }
     public decimal ServiceSum { get; }
 
-    public static (RepairHistory repairHistory, string error) Create(int id, int orderId, int carId, DateTime workDate, decimal serviceSum)
+    public static (RepairNote repairHistory, string error) Create(int id, int orderId, int carId, DateTime workDate, decimal serviceSum)
     {
         var error = string.Empty;
-
-        if (workDate >= DateTime.Now)
-            error = "History can't be in future";
 
         if (id < 0)
             error = "Id cannot be negative";
@@ -31,7 +29,7 @@ public class RepairHistory
         if (carId <= 0)
             error = "CarId must be positive";
 
-        if (workDate >= DateTime.Now)
+        if (workDate > DateTime.Now)
             error = "History can't be in future";
 
         if (workDate.Year < 1900)
@@ -40,7 +38,7 @@ public class RepairHistory
         if (serviceSum <= 0)
             error = "Service sum can't be negative or 0";
 
-        var repairHistory = new RepairHistory(id, orderId, carId, workDate);
+        var repairHistory = new RepairNote(id, orderId, carId, workDate, serviceSum);
 
         return (repairHistory, error);
     }

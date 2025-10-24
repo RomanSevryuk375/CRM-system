@@ -29,14 +29,17 @@ internal class RepairHistoryConfiguration : IEntityTypeConfiguration<RepairHisto
             .IsRequired();
 
         builder.Property(r => r.WorkDate)
-            .HasColumnName("service_history_work_complite_date")
+            .HasColumnName("service_history_work_completion_date")
             .IsRequired();
 
         builder.HasOne(c => c.Car)
-            .WithMany(car => car.histories)
+            .WithMany(car => car.RepairHistories)
             .HasForeignKey(c => c.CarId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // order 
+        builder.HasOne(o => o.Order)
+            .WithMany(order => order.RepairHistories)
+            .HasForeignKey(r => r.OrderId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

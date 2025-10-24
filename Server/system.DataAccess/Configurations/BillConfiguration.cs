@@ -39,5 +39,10 @@ public class BillConfiguration : IEntityTypeConfiguration<BillEntity>
         builder.Property(b => b.LastBillDate)
             .HasColumnName("last_closing_bill_date")
             .IsRequired();
+
+        builder.HasOne(s => s.Status)
+            .WithMany(b => b.Bills)
+            .HasForeignKey(b => b.StatusId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

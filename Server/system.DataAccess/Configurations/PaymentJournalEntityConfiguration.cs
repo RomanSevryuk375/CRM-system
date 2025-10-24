@@ -21,7 +21,7 @@ public class PaymentJournalEntityConfiguration : IEntityTypeConfiguration<Paymen
             .HasColumnName("payment_bill_id")
             .IsRequired();
 
-         builder.Property(p => p.Date)
+        builder.Property(p => p.Date)
             .HasColumnName("payment_date")
             .IsRequired();
 

@@ -8,5 +8,5 @@ public class RepairHistoryEntity
     public DateTime WorkDate { get; set; }
     public decimal ServiceSum { get; set; }
     public CarEntity? Car { get; set; }
-    //public OrderEntity? Order { get; set; }
+    public OrderEntity? Order { get; set; }
 }

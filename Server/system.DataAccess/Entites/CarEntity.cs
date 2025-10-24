@@ -20,5 +20,7 @@ public class CarEntity
 
     public ClientEntity? Client { get; set; }
 
-    public List<RepairHistoryEntity> histories { get; set; } = new List<RepairHistoryEntity>(); 
+    public ICollection<OrderEntity> Orders { get; set; } = new List<OrderEntity>();
+
+    public ICollection<RepairHistoryEntity> RepairHistories { get; set; } = new List<RepairHistoryEntity>(); 
 }

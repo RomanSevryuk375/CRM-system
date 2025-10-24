@@ -16,5 +16,7 @@ public class BillEntity
 
     public DateTime LastBillDate => Date.AddDays(14);
 
-    public List<PaymentJournalEntity> Payments { get; set; } = new List<PaymentJournalEntity>();
+    public StatusEntiy? Status { get; set; }
+
+    public ICollection<PaymentJournalEntity> Payments { get; set; } = new List<PaymentJournalEntity>();
 }

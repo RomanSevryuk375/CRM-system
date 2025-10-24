@@ -14,6 +14,10 @@ public class SystemDbContext : DbContext
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<RoleEntity> Roles { get; set; }
     public DbSet<CarEntity> Cars { get; set; }
+    public DbSet<BillEntity> Bills { get; set; }
+    public DbSet<PaymentJournalEntity> PaymentJournals { get; set; }
+    public DbSet<RepairHistoryEntity> repairHistories { get; set; }
+    public DbSet<StatusEntiy> statuses { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

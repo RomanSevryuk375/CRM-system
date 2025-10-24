@@ -1,8 +1,8 @@
 ﻿namespace CRMSystem.Core.Models;
 
-public class PaymentJournal
+public class PaymentNote
 {
-    public PaymentJournal(int id, int billId, DateTime date, decimal amount, string method)
+    public PaymentNote(int id, int billId, DateTime date, decimal amount, string method)
     {
         Id = id;
         BillId = billId;
@@ -20,15 +20,10 @@ public class PaymentJournal
 
     public string Method { get; } = string.Empty;
 
-    public static (PaymentJournal paymentJournal, string error) Create (int id, int billId, DateTime date, decimal amount, string method)
+    public static (PaymentNote paymentJournal, string error) Create (int id, int billId, DateTime date, decimal amount, string method)
     {
         var error = string.Empty;
         var allowedMethods = new[] { "Картой", "Наличными", "ЕРИП", "Рассрочка", "Другое" };
-
-        var paymentJournal = new PaymentJournal(id, billId, date, amount, method);
-
-        if (id <= 0)
-            error = "Id must be positive";
 
         if (billId <= 0)
             error = "BillId must be positive";
@@ -44,6 +39,8 @@ public class PaymentJournal
 
         if (!allowedMethods.Contains(method))
             error = $"Invalid payment method. Allowed: {string.Join(", ", allowedMethods)}";
+
+        var paymentJournal = new PaymentNote(id, billId, date, amount, method);
 
         return (paymentJournal, error);
     }
