@@ -11,11 +11,11 @@ public class Tax
     }
     public int Id { get; }
 
-    public string Name { get; } = string.Empty;
+    public string Name { get; } 
 
     public decimal Rate { get; }
 
-    public string Type { get; } = string.Empty;
+    public string Type { get; } 
 
     public static (Tax tax, string error) Create (int id, string name, decimal rate, string type)
     {

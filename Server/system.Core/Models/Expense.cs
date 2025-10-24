@@ -18,13 +18,13 @@ public class Expense
 
     public DateTime Date { get; }
 
-    public string Category { get; } = string.Empty;
+    public string Category { get; } 
 
     public int? TaxId { get; }
 
     public int? UsedPartId { get; }
 
-    public string ExpenseType { get; } = string.Empty;
+    public string ExpenseType { get; } 
 
     public decimal Sum { get; } 
 

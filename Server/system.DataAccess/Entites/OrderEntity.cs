@@ -12,13 +12,18 @@ public class OrderEntity
 
     public string Priority { get; set; } = string.Empty;
 
-    public ICollection<RepairHistoryEntity> RepairHistories { get; set; } = new List<RepairHistoryEntity>();
-
     public CarEntity? Car { get; set; }
 
-    public StatusEntiy? Status { get; set; }
+    public StatusEntity? Status { get; set; }
 
-    public StatusEntiy? Entiy { get; set; }
+    public ICollection<WorkEntity> Works { get; set; } = new HashSet<WorkEntity>();
+
+
+    public ICollection<WorkProposalEntity> WorkProposals { get; set; }  = new HashSet<WorkProposalEntity>();
 
     public ICollection<BillEntity> Bills { get; set; } = new List<BillEntity>();
+
+    public ICollection<RepairHistoryEntity> RepairHistories { get; set; } = new List<RepairHistoryEntity>();
+
+    public ICollection<UsedPartEntity> UsedParts { get; set; } = new HashSet<UsedPartEntity>();
 }

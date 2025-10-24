@@ -18,7 +18,7 @@ public class Order
 
     public DateTime Date { get; }
 
-    public string Priority { get; } = string.Empty;
+    public string Priority { get; } 
 
     public static (Order order, string error) Create(int id, int statusId, int carId, DateTime date, string priority)
     {

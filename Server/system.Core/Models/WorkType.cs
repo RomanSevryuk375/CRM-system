@@ -14,11 +14,11 @@ public class WorkType
     }
     public int Id { get; }
 
-    public string Title { get; } = string.Empty;
+    public string Title { get; } 
 
-    public string Category { get; } = string.Empty;
+    public string Category { get; } 
 
-    public string Description { get; } = string.Empty;
+    public string Description { get; } 
 
     public decimal StandardTime { get; }
 

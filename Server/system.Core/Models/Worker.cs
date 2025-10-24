@@ -26,15 +26,15 @@ public class Worker
 
     public int SpecializationId { get; }
 
-    public string Name { get; } = string.Empty;
+    public string Name { get; }
 
-    public string Surname { get; } = string.Empty;
+    public string Surname { get; }
 
     public decimal HourlyRate { get; }
 
-    public string PhoneNumber { get; } = string.Empty;
+    public string PhoneNumber { get; } 
 
-    public string Email { get; } = string.Empty;
+    public string Email { get; } 
 
     public static (Worker worker, string error) Create (int id, int userId, int specializationId, string name, string surname, decimal hourlyRate, string phoneNumber, string email)
     {

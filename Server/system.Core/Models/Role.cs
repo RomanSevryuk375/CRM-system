@@ -10,5 +10,5 @@ public class Role
 
     public int Id { get; }
 
-    public string Name { get; } = string.Empty;
+    public string Name { get; } 
 }

@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.DataAccess.Entites;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CRMSystem.DataAccess.Entites;
 
 public class BillEntity
 {
@@ -14,9 +16,11 @@ public class BillEntity
 
     public DateTime? ActualBillDate { get; set; }
 
-    public DateTime LastBillDate => Date.AddDays(14);
+    [NotMapped] public DateTime LastBillDate => Date.AddDays(14);
 
-    public StatusEntiy? Status { get; set; }
+    public StatusEntity? Status { get; set; }
+
+    public OrderEntity? Order { get; set; }
 
     public ICollection<PaymentJournalEntity> Payments { get; set; } = new List<PaymentJournalEntity>();
 }

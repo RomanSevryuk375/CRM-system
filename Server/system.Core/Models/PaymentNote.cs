@@ -18,7 +18,7 @@ public class PaymentNote
 
     public decimal Amount { get; }
 
-    public string Method { get; } = string.Empty;
+    public string Method { get; } 
 
     public static (PaymentNote paymentJournal, string error) Create (int id, int billId, DateTime date, decimal amount, string method)
     {

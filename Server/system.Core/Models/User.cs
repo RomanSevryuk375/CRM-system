@@ -19,9 +19,9 @@ public class User
 
     public int RoleId { get; }
 
-    public string Login { get; } = string.Empty;
+    public string Login { get; } 
 
-    public string PasswordHash { get; } = string.Empty;
+    public string PasswordHash { get; } 
 
     public static (User user, string? error) Create(int id, int roleId, string login, string passwordHash)
     {

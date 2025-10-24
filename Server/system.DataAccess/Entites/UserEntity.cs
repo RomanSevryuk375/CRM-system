@@ -12,5 +12,7 @@ public class UserEntity
 
     public ClientEntity? Client { get; set; }
 
+    public WorkerEntiеy? Worker { get; set; }
+
     public RoleEntity? Role { get; set; }
 }

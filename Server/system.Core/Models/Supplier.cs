@@ -12,9 +12,9 @@ public class Supplier
     }
     public int Id { get; }
 
-    public string Name { get; } = string.Empty;
+    public string Name { get; } 
 
-    public string Contacts { get; } = string.Empty;
+    public string Contacts { get; } 
 
     public static (Supplier supplier, string error) Create(int id, string name, string contacts)
     {

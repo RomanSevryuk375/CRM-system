@@ -10,7 +10,7 @@ public class Status
     }
     public int Id { get; }
 
-    public string Name { get; } = string.Empty;
+    public string Name { get; } 
 
-    public string Description { get; } = string.Empty;
+    public string Description { get; }
 }

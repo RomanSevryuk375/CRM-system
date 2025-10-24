@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CRMSystem.DataAccess.Configurations;
 
-internal class StatusConfiguration : IEntityTypeConfiguration<StatusEntiy>
+internal class StatusConfiguration : IEntityTypeConfiguration<StatusEntity>
 {
-    void IEntityTypeConfiguration<StatusEntiy>.Configure(EntityTypeBuilder<StatusEntiy> builder)
+    void IEntityTypeConfiguration<StatusEntity>.Configure(EntityTypeBuilder<StatusEntity> builder)
     {
         builder.ToTable("directory_of_statuses");
 
