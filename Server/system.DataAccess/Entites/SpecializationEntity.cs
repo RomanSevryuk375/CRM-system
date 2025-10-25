@@ -6,5 +6,5 @@ public class SpecializationEntity
 
     public string Name { get; set; } = string.Empty;
 
-    public ICollection<WorkerEntiеy> Workers { get; set; } = new List<WorkerEntiеy>(); // спорный момент посмотрю завтра 
+    public ICollection<WorkerEntity> Workers { get; set; } = new List<WorkerEntity>(); // спорный момент посмотрю завтра 
 }

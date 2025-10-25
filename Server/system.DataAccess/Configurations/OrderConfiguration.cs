@@ -29,7 +29,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
             .IsRequired();
 
         builder.Property(o => o.Priority)
-            .HasColumnName("work_order_priority")
+            .HasColumnName("work_in_order_priority")
             .IsRequired();
 
         builder.HasOne(o => o.Car)

@@ -44,7 +44,7 @@ internal class CarConfiguration : IEntityTypeConfiguration<CarEntity>
             .IsRequired();
 
         builder.Property(c => c.Mileage)
-            .HasColumnName("car_milage")
+            .HasColumnName("car_mileage")
             .IsRequired();
 
         builder.HasOne(c => c.Client)

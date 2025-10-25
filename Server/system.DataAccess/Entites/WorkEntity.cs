@@ -20,6 +20,6 @@ public class WorkEntity
 
     public StatusEntity? Status { get; set; }
 
-    public WorkerEntiеy? Worker { get; set; }
+    public WorkerEntity? Worker { get; set; }
 
 }

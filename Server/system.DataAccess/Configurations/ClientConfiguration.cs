@@ -40,11 +40,11 @@ public class ClientConfiguration : IEntityTypeConfiguration<ClientEntity>
         builder.Property(c => c.ClientEmail)
             .HasColumnName("client_email")
             .HasMaxLength(Client.MAX_EMAIL_LENGTH)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.HasOne(c => c.User)
            .WithOne(u => u.Client)
            .HasForeignKey<ClientEntity>(c => c.ClientUserId)
-           .OnDelete(DeleteBehavior.Cascade);
+           .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace CRMSystem.DataAccess.Entites;
 
-public class WorkerEntiеy
+public class WorkerEntity
 {
     public int Id { get; set; }
 

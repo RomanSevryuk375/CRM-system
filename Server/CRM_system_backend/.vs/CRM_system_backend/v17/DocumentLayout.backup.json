@@ -3,10 +3,10 @@
   "WorkspaceRootPath": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{67693361-1368-441F-A016-C6B0C7A264AB}|..\\system.DataAccess\\CRMSystem.DataAccess.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.dataaccess\\entites\\workerenti\u0435y.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{67693361-1368-441F-A016-C6B0C7A264AB}|..\\system.DataAccess\\CRMSystem.DataAccess.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.dataaccess\\entites\\specializationentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{67693361-1368-441F-A016-C6B0C7A264AB}|..\\system.DataAccess\\CRMSystem.DataAccess.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.dataaccess\\entites\\specializationentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{67693361-1368-441F-A016-C6B0C7A264AB}|..\\system.DataAccess\\CRMSystem.DataAccess.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.dataaccess\\entites\\workerenti\u0435y.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{67693361-1368-441F-A016-C6B0C7A264AB}|..\\system.DataAccess\\CRMSystem.DataAccess.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.dataaccess\\entites\\orderentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -70,7 +70,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 225,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
@@ -78,8 +78,8 @@
               "Title": "OrderEntity.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\OrderEntity.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Entites\\OrderEntity.cs",
-              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\OrderEntity.cs*",
-              "RelativeToolTip": "..\\system.DataAccess\\Entites\\OrderEntity.cs*",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\OrderEntity.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Entites\\OrderEntity.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAowBUAAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-24T22:02:03.457Z",
@@ -87,20 +87,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "SpecializationEntity.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\SpecializationEntity.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Entites\\SpecializationEntity.cs",
               "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\SpecializationEntity.cs",
               "RelativeToolTip": "..\\system.DataAccess\\Entites\\SpecializationEntity.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAB5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-24T22:23:09.169Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "WorkerEnti\u0435y.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\WorkerEnti\u0435y.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Entites\\WorkerEnti\u0435y.cs",
@@ -117,8 +117,8 @@
               "Title": "BillEntity.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\BillEntity.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Entites\\BillEntity.cs",
-              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\BillEntity.cs*",
-              "RelativeToolTip": "..\\system.DataAccess\\Entites\\BillEntity.cs*",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\BillEntity.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Entites\\BillEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-24T22:24:16.804Z",
@@ -182,8 +182,8 @@
               "Title": "UsedPartEntity.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\UsedPartEntity.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Entites\\UsedPartEntity.cs",
-              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\UsedPartEntity.cs*",
-              "RelativeToolTip": "..\\system.DataAccess\\Entites\\UsedPartEntity.cs*",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\UsedPartEntity.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Entites\\UsedPartEntity.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAqwBwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-24T22:00:34.195Z",
@@ -208,8 +208,8 @@
               "Title": "SupplierEntity.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\SupplierEntity.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Entites\\SupplierEntity.cs",
-              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\SupplierEntity.cs*",
-              "RelativeToolTip": "..\\system.DataAccess\\Entites\\SupplierEntity.cs*",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\SupplierEntity.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Entites\\SupplierEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-24T22:04:41.041Z",
@@ -221,8 +221,8 @@
               "Title": "StatusEntity.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\StatusEntity.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Entites\\StatusEntity.cs",
-              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\StatusEntity.cs*",
-              "RelativeToolTip": "..\\system.DataAccess\\Entites\\StatusEntity.cs*",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\StatusEntity.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Entites\\StatusEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-24T22:13:14.698Z",
@@ -247,8 +247,8 @@
               "Title": "RepairHistoryEntity.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\RepairHistoryEntity.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Entites\\RepairHistoryEntity.cs",
-              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\RepairHistoryEntity.cs*",
-              "RelativeToolTip": "..\\system.DataAccess\\Entites\\RepairHistoryEntity.cs*",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\RepairHistoryEntity.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Entites\\RepairHistoryEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-24T22:25:25.933Z",
@@ -260,8 +260,8 @@
               "Title": "ProposedPartEntity.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\ProposedPartEntity.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Entites\\ProposedPartEntity.cs",
-              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\ProposedPartEntity.cs*",
-              "RelativeToolTip": "..\\system.DataAccess\\Entites\\ProposedPartEntity.cs*",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\ProposedPartEntity.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Entites\\ProposedPartEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-24T22:05:35.287Z",
@@ -286,8 +286,8 @@
               "Title": "ExpenseEntity.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\ExpenseEntity.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Entites\\ExpenseEntity.cs",
-              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\ExpenseEntity.cs*",
-              "RelativeToolTip": "..\\system.DataAccess\\Entites\\ExpenseEntity.cs*",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Entites\\ExpenseEntity.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Entites\\ExpenseEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-24T21:57:16.317Z",

@@ -22,6 +22,6 @@ internal class StatusConfiguration : IEntityTypeConfiguration<StatusEntity>
 
         builder.Property(s => s.Description)
             .HasColumnName("status_description")
-            .IsRequired();
+            .IsRequired(false);
     }
 }
