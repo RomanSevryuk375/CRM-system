@@ -14,10 +14,10 @@ public class CarRepository : ICarRepository
     }
     public async Task<List<Car>> Get()
     {
-        var carEntyties = await _context.Cars
+        var carEntities = await _context.Cars
             .AsNoTracking()
             .ToListAsync();
-        var cars = carEntyties
+        var cars = carEntities
             .Select(c => Car.Create(
                 c.Id,
                 c.OwnerId,
@@ -34,7 +34,20 @@ public class CarRepository : ICarRepository
 
     public async Task<int> Create(Car car)
     {
-        var carEntyties = new CarEntity
+        var (_, error) = Car.Create(
+            0,
+            car.OwnerId,
+            car.Brand,
+            car.Model,
+            car.YearOfManufacture,
+            car.VinNumber,
+            car.StateNumber,
+            car.Mileage);
+
+        if (!string.IsNullOrEmpty(error))
+            throw new ArgumentException($"Create exception Car: {error}");
+
+        var carEntities = new CarEntity
         {
             OwnerId = car.OwnerId,
             Brand = car.Brand,
@@ -45,10 +58,10 @@ public class CarRepository : ICarRepository
             Mileage = car.Mileage
         };
 
-        await _context.Cars.AddAsync(carEntyties);
+        await _context.Cars.AddAsync(carEntities);
         await _context.SaveChangesAsync();
 
-        return carEntyties.Id;
+        return carEntities.Id;
     }
 
     public async Task<int> Update(
@@ -60,9 +73,9 @@ public class CarRepository : ICarRepository
         string stateNumber,
         int? mileage)
     {
-        var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
-        if (car == null)
-            throw new Exception("Car not found");
+        var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id) 
+            ?? throw new Exception("Car not found");
+
         if (!string.IsNullOrWhiteSpace(brand))
             car.Brand = brand;
         if (!string.IsNullOrWhiteSpace(model))
@@ -83,7 +96,7 @@ public class CarRepository : ICarRepository
 
     public async Task<int> Delete(int id)
     {
-        var carEntyties = await _context.Cars
+        var carEntities = await _context.Cars
             .Where(c => c.Id == id)
             .ExecuteDeleteAsync();
 

@@ -16,11 +16,11 @@ public class ClientsRepository : IClientsRepository
 
     public async Task<List<Client>> Get()
     {
-        var clientEntyties = await _context.Clients
+        var clientEntities = await _context.Clients
         .AsNoTracking()
         .ToListAsync();
 
-        var clients = clientEntyties
+        var clients = clientEntities
             .Select(c => Client.Create(c.ClientId, c.ClientUserId, c.ClientName, c.ClientSurname, c.ClientPhoneNumber, c.ClientEmail).client)
             .ToList();
 
@@ -29,7 +29,18 @@ public class ClientsRepository : IClientsRepository
 
     public async Task<int> Create(Client client)
     {
-        var clientEntyties = new ClientEntity
+        var (_, error) = Client.Create(
+        0,
+        client.UserId,
+        client.Name,
+        client.Surname,
+        client.PhoneNumber,
+        client.Email);
+
+        if (!string.IsNullOrEmpty(error))
+            throw new ArgumentException($"Create exception Client: {error}");
+
+        var clientEntities = new ClientEntity
         {
             ClientUserId = client.UserId,
             ClientName = client.Name,
@@ -38,17 +49,16 @@ public class ClientsRepository : IClientsRepository
             ClientEmail = client.Email
         };
 
-        await _context.Clients.AddAsync(clientEntyties);
+        await _context.Clients.AddAsync(clientEntities);
         await _context.SaveChangesAsync();
 
-        return clientEntyties.ClientId;
+        return clientEntities.ClientId;
     }
 
     public async Task<int> Update(int id, string name, string surname, string phoneNumber, string email)
     {
-        var client = await _context.Clients.FirstOrDefaultAsync(c => c.ClientId == id);
-        if (client == null)
-            throw new Exception("Client not found");
+        var client = await _context.Clients.FirstOrDefaultAsync(c => c.ClientId == id)
+            ?? throw new Exception("Client not found");
 
         if (!string.IsNullOrWhiteSpace(name))
             client.ClientName = name;
@@ -69,7 +79,7 @@ public class ClientsRepository : IClientsRepository
 
     public async Task<int> Delete(int id)
     {
-        var clientEntyti = await _context.Clients
+        var clientEntity = await _context.Clients
             .Where(c => c.ClientId == id)
             .ExecuteDeleteAsync();
 

@@ -1,5 +1,4 @@
-﻿using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using CRMSystem.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -28,8 +27,16 @@ public class UserRepository : IUserRepository
 
     public async Task<int> Create(User user)
     {
-        var hashedPassword = _myPasswordHasher.Generate(user.PasswordHash);
+        var (_, error) = User.Create(
+        0,
+        user.RoleId,
+        user.Login,
+        user.PasswordHash);
 
+        if (!string.IsNullOrEmpty(error))
+            throw new ArgumentException($"Create exception User: {error}");
+
+        var hashedPassword = _myPasswordHasher.Generate(user.PasswordHash);
 
         var userEntyties = new UserEntity
         {
