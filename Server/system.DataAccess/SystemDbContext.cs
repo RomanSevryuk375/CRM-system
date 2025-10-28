@@ -15,7 +15,7 @@ public class SystemDbContext : DbContext
     public DbSet<ClientEntity> Clients { get; set; }
     public DbSet<ExpenseEntity> Expenses { get; set; }
     public DbSet<OrderEntity> Orders { get; set; }
-    public DbSet<PaymentJournalEntity> PaymentJournals { get; set; }
+    public DbSet<PaymentNoteEntity> PaymentNotes { get; set; }
     public DbSet<ProposedPartEntity> ProposedParts { get; set; }
     public DbSet<RepairHistoryEntity> RepairHistories { get; set; }
     public DbSet<RoleEntity> Roles { get; set; }

@@ -22,5 +22,5 @@ public class BillEntity
 
     public OrderEntity? Order { get; set; }
 
-    public ICollection<PaymentJournalEntity> Payments { get; set; } = new List<PaymentJournalEntity>();
+    public ICollection<PaymentNoteEntity> Payments { get; set; } = new List<PaymentNoteEntity>();
 }

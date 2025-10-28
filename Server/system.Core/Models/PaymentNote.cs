@@ -20,7 +20,7 @@ public class PaymentNote
 
     public string Method { get; } 
 
-    public static (PaymentNote paymentJournal, string error) Create (int id, int billId, DateTime date, decimal amount, string method)
+    public static (PaymentNote paymentNote, string error) Create (int id, int billId, DateTime date, decimal amount, string method)
     {
         var error = string.Empty;
         var allowedMethods = new[] { "Картой", "Наличными", "ЕРИП", "Рассрочка", "Другое" };

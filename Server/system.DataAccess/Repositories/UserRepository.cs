@@ -46,8 +46,10 @@ public class UserRepository : IUserRepository
         };
 
         await _context.Users.AddAsync(userEntyties);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(); 
 
         return userEntyties.Id;
     }
 }
+
+

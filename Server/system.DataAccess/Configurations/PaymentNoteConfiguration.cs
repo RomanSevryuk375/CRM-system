@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CRMSystem.DataAccess.Configurations;
 
-public class PaymentJournalEntityConfiguration : IEntityTypeConfiguration<PaymentJournalEntity>
+public class PaymentNoteConfiguration : IEntityTypeConfiguration<PaymentNoteEntity>
 {
-    void IEntityTypeConfiguration<PaymentJournalEntity>.Configure(EntityTypeBuilder<PaymentJournalEntity> builder)
+    void IEntityTypeConfiguration<PaymentNoteEntity>.Configure(EntityTypeBuilder<PaymentNoteEntity> builder)
     {
         builder.ToTable("payment_journal");
 

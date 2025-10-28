@@ -1,6 +1,6 @@
 ﻿namespace CRMSystem.DataAccess.Entites;
 
-public class PaymentJournalEntity
+public class PaymentNoteEntity
 {
     public int Id { get; set; }
 
