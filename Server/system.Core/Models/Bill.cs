@@ -26,7 +26,7 @@ public class Bill
 
     public DateTime LastBillDate => Date.AddDays(14);
 
-    public static (Bill bills, string error) Create (int id, int orderId, int statusId, DateTime date, decimal amount, DateTime? actualBillDate)
+    public static (Bill bill, string error) Create (int id, int orderId, int statusId, DateTime date, decimal amount, DateTime? actualBillDate)
     {
         var error = string.Empty;
         var allowedStatuses = new[] { 1, 2, 3 };

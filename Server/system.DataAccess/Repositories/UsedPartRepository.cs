@@ -5,7 +5,7 @@ using System.Reflection.Metadata;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class UsedPartRepository
+public class UsedPartRepository : IUsedPartRepository
 {
     private readonly SystemDbContext _context;
 
@@ -17,7 +17,7 @@ public class UsedPartRepository
     public async Task<List<UsedPart>> Get()
     {
         var usedPartEntities = await _context.UsedParts
-            .AsNoTracking() 
+            .AsNoTracking()
             .ToListAsync();
 
         var usedPart = usedPartEntities
@@ -61,7 +61,7 @@ public class UsedPartRepository
             Sum = usedPart.Sum
         };
 
-        await _context.UsedParts.AddAsync( usedPartEntity );
+        await _context.UsedParts.AddAsync(usedPartEntity);
         await _context.SaveChangesAsync();
 
         return usedPartEntity.Id;
@@ -77,8 +77,8 @@ public class UsedPartRepository
         decimal? sum)
     {
         var usedPart = _context.UsedParts.FirstOrDefault(x => x.Id == id)
-              ?? throw new Exception("Car not found");
-       
+              ?? throw new Exception("Used part not found");
+
         if (orderId.HasValue)
             usedPart.OrderId = orderId.Value;
         if (supplierId.HasValue)
@@ -94,7 +94,7 @@ public class UsedPartRepository
         if (sum.HasValue)
             usedPart.Sum = sum.Value;
 
-        await _context.SaveChangesAsync( );
+        await _context.SaveChangesAsync();
 
         return usedPart.Id;
     }

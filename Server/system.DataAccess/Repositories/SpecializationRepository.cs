@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class SpecializationRepository
+public class SpecializationRepository : ISpecializationRepository
 {
     private readonly SystemDbContext _context;
 
@@ -16,7 +16,7 @@ public class SpecializationRepository
     public async Task<List<Specialization>> Get()
     {
         var specializationEntities = await _context.Specializations
-            .AsNoTracking() 
+            .AsNoTracking()
             .ToListAsync();
 
         var specializations = specializationEntities
@@ -48,7 +48,7 @@ public class SpecializationRepository
         return specializationEntities.Id;
     }
 
-    public async Task<int> Update(int id,string name)
+    public async Task<int> Update(int id, string name)
     {
         var specialization = await _context.Specializations.FirstOrDefaultAsync(s => s.Id == id)
             ?? throw new Exception("Specialization not found");
@@ -61,7 +61,7 @@ public class SpecializationRepository
         return specialization.Id;
     }
 
-    public async Task<int> Delete (int id)
+    public async Task<int> Delete(int id)
     {
         var specialization = await _context.Specializations
             .Where(s => s.Id == id)

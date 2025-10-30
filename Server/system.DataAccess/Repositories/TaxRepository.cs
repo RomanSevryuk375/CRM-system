@@ -5,11 +5,11 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class TaxRepositoty
+public class TaxRepository : ITaxRepository
 {
     private readonly SystemDbContext _context;
 
-    public TaxRepositoty(SystemDbContext context)
+    public TaxRepository(SystemDbContext context)
     {
         _context = context;
     }
@@ -28,7 +28,7 @@ public class TaxRepositoty
                 t.Type).tax)
             .ToList();
 
-        return taxes;        
+        return taxes;
     }
 
     public async Task<int> Create(Tax tax)
@@ -36,8 +36,8 @@ public class TaxRepositoty
         var (_, error) = Tax.Create(
             0,
             tax.Name,
-            tax.Rate, 
-            tax.Type);  
+            tax.Rate,
+            tax.Type);
         if (!string.IsNullOrEmpty(error))
             throw new ArgumentException($"Create exception Tax: {error}");
 
@@ -54,13 +54,15 @@ public class TaxRepositoty
         return taxEntitie.Id;
     }
 
-    public async Task<int> Update (int id, string name, decimal rate, string type)
+    public async Task<int> Update(int id, string name, decimal? rate, string type)
     {
         var tax = _context.Taxes.FirstOrDefault(t => t.Id == id)
             ?? throw new ArgumentException("Tax not found");
 
         if (!string.IsNullOrWhiteSpace(name))
             tax.Name = name;
+        if (rate.HasValue)
+            tax.Rate = rate.Value;
         if (!string.IsNullOrWhiteSpace(type))
             tax.Type = type;
 
@@ -69,7 +71,7 @@ public class TaxRepositoty
         return tax.Id;
     }
 
-    public async Task<int> Delete (int id)
+    public async Task<int> Delete(int id)
     {
         var tax = await _context.Taxes
             .Where(t => t.Id == id)

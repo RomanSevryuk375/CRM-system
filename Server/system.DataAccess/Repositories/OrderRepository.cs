@@ -5,7 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class OrderRepository
+public class OrderRepository : IOrderRepository
 {
     private readonly SystemDbContext _context;
 
@@ -14,7 +14,7 @@ public class OrderRepository
         _context = context;
     }
 
-    public async Task<List<Order>> Get ()
+    public async Task<List<Order>> Get()
     {
         var orderEntities = await _context.Orders
             .AsNoTracking()
@@ -32,7 +32,7 @@ public class OrderRepository
         return orders;
     }
 
-    public async Task<int> Create (Order order)
+    public async Task<int> Create(Order order)
     {
         var (_, error) = Order.Create(
             0,
@@ -74,7 +74,7 @@ public class OrderRepository
             order.CarId = carId.Value;
         if (date.HasValue)
             order.Date = date.Value;
-        if (string.IsNullOrWhiteSpace(priority))
+        if (!string.IsNullOrWhiteSpace(priority))
             order.Priority = priority;
 
         await _context.SaveChangesAsync();

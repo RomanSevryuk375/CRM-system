@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class SupplierRepository
+public class SupplierRepository : ISupplierRepository
 {
     private readonly SystemDbContext _context;
 
@@ -53,14 +53,14 @@ public class SupplierRepository
 
     public async Task<int> Update(
         int id,
-        string name, 
+        string name,
         string contacts)
     {
         var supplier = await _context.Suppliers.FirstOrDefaultAsync(su => su.Id == id)
             ?? throw new ArgumentException("Supplier not found");
 
         if (!string.IsNullOrWhiteSpace(name))
-            supplier.Name = name;   
+            supplier.Name = name;
         if (!string.IsNullOrWhiteSpace(contacts))
             supplier.Contacts = contacts;
 

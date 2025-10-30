@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class PaymentNoteRepository
+public class PaymentNoteRepository : IPaymentNoteRepository
 {
     private readonly SystemDbContext _context;
 
@@ -32,7 +32,7 @@ public class PaymentNoteRepository
         return paymentNote;
     }
 
-    public async Task<int> Create (PaymentNote paymentNote)
+    public async Task<int> Create(PaymentNote paymentNote)
     {
         var (_, error) = PaymentNote.Create(
             0,
@@ -41,11 +41,11 @@ public class PaymentNoteRepository
             paymentNote.Amount,
             paymentNote.Method);
 
-        if (!string.IsNullOrEmpty(error)) 
+        if (!string.IsNullOrEmpty(error))
             throw new ArgumentException($"Create exception Car: {error}");
 
         var paymentNoteEntites = new PaymentNoteEntity
-        { 
+        {
             BillId = paymentNote.BillId,
             Date = paymentNote.Date,
             Amount = paymentNote.Amount,
@@ -60,12 +60,12 @@ public class PaymentNoteRepository
 
     public async Task<int> Update(
         int id,
-        int? billId, 
-        DateTime? date, 
-        decimal? amount, 
+        int? billId,
+        DateTime? date,
+        decimal? amount,
         string method)
     {
-        var paymentNote = await _context.PaymentNotes.FirstOrDefaultAsync(pn => pn.Id == id) 
+        var paymentNote = await _context.PaymentNotes.FirstOrDefaultAsync(pn => pn.Id == id)
             ?? throw new Exception("Payment note not found");
 
         if (billId.HasValue)
@@ -74,7 +74,7 @@ public class PaymentNoteRepository
             paymentNote.Date = date.Value;
         if (amount.HasValue)
             paymentNote.Amount = amount.Value;
-        if (string.IsNullOrEmpty(method))
+        if (!string.IsNullOrEmpty(method))
             paymentNote.Method = method;
 
         await _context.SaveChangesAsync();

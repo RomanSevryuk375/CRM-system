@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class WorkerRepository
+public class WorkerRepository : IWorkerRepository
 {
     private readonly SystemDbContext _context;
 
@@ -34,7 +34,7 @@ public class WorkerRepository
         return worker;
     }
 
-    public async Task<int> Create (Worker worker)
+    public async Task<int> Create(Worker worker)
     {
         var (_, error) = Worker.Create(
             0,
@@ -89,9 +89,9 @@ public class WorkerRepository
             workerEntity.Surname = Surname;
         if (hourlyRate.HasValue)
             workerEntity.HourlyRate = hourlyRate.Value;
-        if (string.IsNullOrEmpty(phoneNumber))
+        if (!string.IsNullOrEmpty(phoneNumber))
             workerEntity.PhoneNumber = phoneNumber;
-        if (string.IsNullOrEmpty(email))
+        if (!string.IsNullOrEmpty(email))
             workerEntity.Email = email;
 
         await _context.SaveChangesAsync();
@@ -99,7 +99,7 @@ public class WorkerRepository
         return workerEntity.Id;
     }
 
-    public async Task<int> Delete (int id)
+    public async Task<int> Delete(int id)
     {
         var worker = await _context.Workers
             .Where(w => w.Id == id)
