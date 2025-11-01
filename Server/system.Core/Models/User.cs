@@ -1,6 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace CRMSystem.Core.Models;
+﻿namespace CRMSystem.Core.Models;
 
 public class User
 {
@@ -23,7 +21,7 @@ public class User
 
     public string PasswordHash { get; } 
 
-    public static (User user, string? error) Create(int id, int roleId, string login, string passwordHash)
+    public static (User user, string error) Create(int id, int roleId, string login, string passwordHash)
     {
         var error = string.Empty;
 

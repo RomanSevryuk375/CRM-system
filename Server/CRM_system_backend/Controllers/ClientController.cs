@@ -56,6 +56,7 @@ public class ClientController : ControllerBase
 
         if (!string.IsNullOrEmpty(error))
         {
+            await _userService.DeleteUser(userId);
             return BadRequest(error);
         }
 
@@ -81,14 +82,5 @@ public class ClientController : ControllerBase
                     clientUpdateRequest.Email);
 
             return Ok(result);
-    }
-
-    [HttpDelete]
-
-    public async Task<ActionResult<int>> DeleteUser(int id)
-    {
-        var result = await _clientService.DeleteClient(id);
-
-        return Ok(result);
     }
 }

@@ -51,7 +51,7 @@ public class Client
         if (phoneNumber.Length > MAX_PHONE_NUMBER_LENGTH)
             errors = $"Phone number can't be longer than {MAX_PHONE_NUMBER_LENGTH} symbols";
 
-        if (!Regex.IsMatch(phoneNumber, @"^(\375|80)(29|44|33|25)\d{7}$"))
+        if (!Regex.IsMatch(phoneNumber, @"^(375|80)(29|44|33|25)\d{7}$"))
             errors = "Phone number should be in format +375XXXXXXXXX or 80XXXXXXXXX";
 
         if (string.IsNullOrWhiteSpace(email))

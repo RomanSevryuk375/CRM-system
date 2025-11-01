@@ -20,12 +20,19 @@ public class Car
         Mileage = mileage;
     }
     public int Id { get; }
+
     public int OwnerId { get; }
+
     public string Brand { get; } 
-    public string Model { get; } 
+
+    public string Model { get; }
+    
     public int YearOfManufacture { get; }
+
     public string VinNumber { get; } 
+
     public string StateNumber { get; } 
+
     public int Mileage { get; } 
 
     public static (Car car,string error) Create(int id, int ownerId, string brand, string model, int yearOfManufacture, string vinNumber, string stateNumber, int mileage)

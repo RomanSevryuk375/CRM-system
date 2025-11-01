@@ -1,4 +1,5 @@
 ﻿using CRM_system_backend.Contracts;
+using CRMSystem.Buisnes.DTOs;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -16,14 +17,36 @@ public class CarController : ControllerBase
         _carService = carService;
     }
 
+    [HttpGet("with owner")]
+
+    public async Task<ActionResult<CarWithOwnerDto>> GetCarsWithOwner()
+    {
+        var dtos = await _carService.GetCarsWithOwner();
+
+        var responses = dtos.Select(d => new CarWithOwnerDto(
+            d.Id,
+            d.OwnerId,
+            d.OwnerFullName,
+            d.Brand,
+            d.Model,
+            d.YearOfManufacture,
+            d.VinNumber,
+            d.StateNumber,
+            d.Mileage
+        )).ToList();
+
+        return Ok(responses);
+    }
+
     [HttpGet]
 
     public async Task<ActionResult<List<Car>>> GetCar()
     {
-        var cars = await _carService.GetCars();
+        var cars = await _carService.GetAllCars();
 
-        var response = cars
-            .Select(b => new CarResponse(b.Id, b.OwnerId, b.Brand, b.Model, b.YearOfManufacture, b.VinNumber, b.StateNumber, b.Mileage))
+        var response = cars 
+            .Select(b => new CarResponse(
+                b.Id, b.OwnerId, b.Brand, b.Model, b.YearOfManufacture, b.VinNumber, b.StateNumber, b.Mileage))
             .ToList();
 
         return Ok(response);
@@ -56,14 +79,7 @@ public class CarController : ControllerBase
 
     public async Task<ActionResult<int>> UpdateCar([FromBody] CarUpdateRequest carUpdateRequest, int id)
     {
-        var result = await _carService.UpdateCar(
-            id,
-            carUpdateRequest.Brand,
-            carUpdateRequest.Model,
-            carUpdateRequest.YearOfManufacture,
-            carUpdateRequest.VinNumber,
-            carUpdateRequest.StateNumber,
-            carUpdateRequest.Mileage);
+        var result = await _carService.UpdateCar(id,carUpdateRequest.Brand, carUpdateRequest.Model, carUpdateRequest.YearOfManufacture, carUpdateRequest.VinNumber, carUpdateRequest.StateNumber, carUpdateRequest.Mileage);
         
         return Ok(result);
     }

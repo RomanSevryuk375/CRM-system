@@ -59,6 +59,8 @@ public class WorkPropossalRepository : IWorkPropossalRepository
 
         await _context.WorkProposals.AddAsync(workProposalEntity);
         await _context.SaveChangesAsync();
+
+        return workProposalEntity.OrderId;
     }
 
     public async Task<int> Update(

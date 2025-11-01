@@ -50,6 +50,15 @@ public class UserRepository : IUserRepository
 
         return userEntyties.Id;
     }
+
+    public async Task<int> Delete(int id)
+    {
+        var user = await _context.Users
+            .Where(u => u.Id == id)
+            .ExecuteDeleteAsync();
+
+        return id;
+    }
 }
 
 

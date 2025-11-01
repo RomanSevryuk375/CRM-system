@@ -103,6 +103,26 @@
     ]
   },
   {
+    "ContainingType": "CRM_system_backend.Controllers.CarController",
+    "Method": "GetCarsWithOwner",
+    "RelativePath": "Car/with owner",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "CRMSystem.Buisnes.DTOs.CarWithOwnerDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "CRM_system_backend.Controllers.ClientController",
     "Method": "GetClient",
     "RelativePath": "Client",
@@ -135,32 +155,6 @@
         "Type": "CRM_system_backend.Contracts.ClientUpdateRequest",
         "IsRequired": true
       },
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Int32",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "CRM_system_backend.Controllers.ClientController",
-    "Method": "DeleteUser",
-    "RelativePath": "Client",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
       {
         "Name": "id",
         "Type": "System.Int32",
@@ -217,6 +211,32 @@
         "Name": "request",
         "Type": "CRM_system_backend.Contracts.UserRequest",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.UserController",
+    "Method": "DeleteUser",
+    "RelativePath": "User",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [

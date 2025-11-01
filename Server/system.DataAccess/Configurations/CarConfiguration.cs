@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CRMSystem.DataAccess.Configurations;
 
-internal class CarConfiguration : IEntityTypeConfiguration<CarEntity>
+public class CarConfiguration : IEntityTypeConfiguration<CarEntity>
 {
     void IEntityTypeConfiguration<CarEntity>.Configure(EntityTypeBuilder<CarEntity> builder)
     {
@@ -44,7 +44,7 @@ internal class CarConfiguration : IEntityTypeConfiguration<CarEntity>
             .IsRequired();
 
         builder.Property(c => c.Mileage)
-            .HasColumnName("car_mileage")
+            .HasColumnName("car_milage")
             .IsRequired();
 
         builder.HasOne(c => c.Client)
