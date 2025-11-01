@@ -30,6 +30,8 @@ public class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<ICarService, CarService>();
+        builder.Services.AddScoped<ISupplierService, SupplierService>();
+        builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
         builder.Services.AddScoped<ICarRepository, CarRepository>();
         builder.Services.AddScoped<ISpecializationService, SpecializationService>();
         builder.Services.AddScoped<ISpecializationRepository, SpecializationRepository>();
