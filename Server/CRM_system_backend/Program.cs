@@ -29,6 +29,8 @@ public class Program
         builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IWorkTypepService, WorkTypepService>();
+        builder.Services.AddScoped<IWorkTypeRepository, WorkTypeRepository>();
         builder.Services.AddScoped<ICarService, CarService>();
         builder.Services.AddScoped<ISupplierService, SupplierService>();
         builder.Services.AddScoped<IWorkerService, WorkerService>();
