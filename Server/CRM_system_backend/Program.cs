@@ -25,6 +25,12 @@ public class Program
             options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(SystemDbContext)));
         });
 
+        builder.Services.AddScoped<IOrderService, OrderService>();
+        builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+        builder.Services.AddScoped<IStatusService, StatusService>();
+        builder.Services.AddScoped<IStatusRepository, StatusRepository>();
+        builder.Services.AddScoped<IRepairNoteService, RepairNoteService>();
+        builder.Services.AddScoped<IRepairNoteRepositry, RepairNoteRepositry>();
         builder.Services.AddScoped<IClientService, ClientService>();
         builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
