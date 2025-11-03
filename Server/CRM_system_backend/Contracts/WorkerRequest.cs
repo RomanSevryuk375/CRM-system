@@ -1,13 +1,12 @@
 ﻿namespace CRM_system_backend.Contracts;
 
-public record RegistreRequest
+public record WorkerRequest
 (
-    int RoleId,
     int UserId,
+    int SpecializationId,
     string Name,
     string Surname,
-    string Email,
+    decimal HourlyRate,
     string PhoneNumber,
-    string Login,
-    string Password
+    string Email
 );

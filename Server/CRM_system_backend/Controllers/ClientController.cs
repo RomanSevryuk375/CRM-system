@@ -33,7 +33,7 @@ public class ClientController : ControllerBase
 
 
     [HttpPost("with create user")]
-    public async Task<ActionResult<int>> CreateClient([FromBody] RegistreRequest request)
+    public async Task<ActionResult<int>> CreateClient([FromBody] ClientRegistreRequest request)
     {
         var (user, errorUser) = CRMSystem.Core.Models.User.Create(
             0,
