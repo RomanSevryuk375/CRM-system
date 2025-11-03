@@ -13,4 +13,12 @@ public class Status
     public string Name { get; } 
 
     public string Description { get; }
+
+    public static(Status status, string error) Create (int id, string name, string description)
+    {
+        var error = string.Empty;
+        var status = new Status(id, name, description);
+
+        return (status, error);
+    }
 }

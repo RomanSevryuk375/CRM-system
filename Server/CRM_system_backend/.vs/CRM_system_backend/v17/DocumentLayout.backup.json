@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{257CD9E9-120C-426A-BFB1-C519C6874F81}|..\\system.Core\\CRMSystem.Core.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.core\\models\\status.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{257CD9E9-120C-426A-BFB1-C519C6874F81}|..\\system.Core\\CRMSystem.Core.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.core\\models\\supplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{67693361-1368-441F-A016-C6B0C7A264AB}|..\\system.DataAccess\\CRMSystem.DataAccess.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.dataaccess\\repositories\\statusrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{67693361-1368-441F-A016-C6B0C7A264AB}|..\\system.DataAccess\\CRMSystem.DataAccess.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.dataaccess\\repositories\\billrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -62,19 +74,58 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Status.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Core\\Models\\Status.cs",
+              "RelativeDocumentMoniker": "..\\system.Core\\Models\\Status.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Core\\Models\\Status.cs",
+              "RelativeToolTip": "..\\system.Core\\Models\\Status.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T19:47:06.842Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BillRepository.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\BillRepository.cs",
+              "RelativeDocumentMoniker": "..\\system.DataAccess\\Repositories\\BillRepository.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\BillRepository.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Repositories\\BillRepository.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAswAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T19:44:20.454Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "StatusRepository.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\StatusRepository.cs",
+              "RelativeDocumentMoniker": "..\\system.DataAccess\\Repositories\\StatusRepository.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\StatusRepository.cs*",
+              "RelativeToolTip": "..\\system.DataAccess\\Repositories\\StatusRepository.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T19:42:20.806Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAowCAAAABOAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAABOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-03T16:01:53.064Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "WorkTypeController.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Controllers\\WorkTypeController.cs",
               "RelativeDocumentMoniker": "Controllers\\WorkTypeController.cs",
@@ -82,25 +133,23 @@
               "RelativeToolTip": "Controllers\\WorkTypeController.cs",
               "ViewState": "AgIAADwAAAAAAAAAAAAAwEsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T15:45:15.992Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-03T15:45:15.992Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "WorkTypeRequest.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\WorkTypeRequest.cs",
               "RelativeDocumentMoniker": "Contracts\\WorkTypeRequest.cs",
-              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\WorkTypeRequest.cs*",
-              "RelativeToolTip": "Contracts\\WorkTypeRequest.cs*",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\WorkTypeRequest.cs",
+              "RelativeToolTip": "Contracts\\WorkTypeRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T15:44:13.623Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-03T15:44:13.623Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "WorkTypeResponse.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\WorkTypeResponse.cs",
               "RelativeDocumentMoniker": "Contracts\\WorkTypeResponse.cs",
@@ -108,12 +157,11 @@
               "RelativeToolTip": "Contracts\\WorkTypeResponse.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T15:41:06.897Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-03T15:41:06.897Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 9,
               "Title": "WorkTypepService.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\Services\\WorkTypepService.cs",
               "RelativeDocumentMoniker": "..\\system.Buisnes\\Services\\WorkTypepService.cs",
@@ -121,12 +169,11 @@
               "RelativeToolTip": "..\\system.Buisnes\\Services\\WorkTypepService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T15:33:04.863Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-03T15:33:04.863Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 11,
               "Title": "WorkTypeRepository.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\WorkTypeRepository.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Repositories\\WorkTypeRepository.cs",
@@ -134,12 +181,11 @@
               "RelativeToolTip": "..\\system.DataAccess\\Repositories\\WorkTypeRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T15:32:21.017Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-03T15:32:21.017Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
               "Title": "ClientRegistreRequest.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\ClientRegistreRequest.cs",
               "RelativeDocumentMoniker": "Contracts\\ClientRegistreRequest.cs",
@@ -151,7 +197,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "WorkerRegistreRequest.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\WorkerRegistreRequest.cs",
               "RelativeDocumentMoniker": "Contracts\\WorkerRegistreRequest.cs",
@@ -159,12 +205,11 @@
               "RelativeToolTip": "Contracts\\WorkerRegistreRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T15:02:25.532Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-03T15:02:25.532Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "ClientService.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\Services\\ClientService.cs",
               "RelativeDocumentMoniker": "..\\system.Buisnes\\Services\\ClientService.cs",
@@ -172,12 +217,11 @@
               "RelativeToolTip": "..\\system.Buisnes\\Services\\ClientService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T14:47:00.273Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-03T14:47:00.273Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 15,
               "Title": "WorkerResponse.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\WorkerResponse.cs",
               "RelativeDocumentMoniker": "Contracts\\WorkerResponse.cs",
@@ -189,7 +233,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 13,
               "Title": "WorkerService.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\Services\\WorkerService.cs",
               "RelativeDocumentMoniker": "..\\system.Buisnes\\Services\\WorkerService.cs",
@@ -201,7 +245,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 14,
               "Title": "WorkerRepository.cs",
               "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\WorkerRepository.cs",
               "RelativeDocumentMoniker": "..\\system.DataAccess\\Repositories\\WorkerRepository.cs",
@@ -210,6 +254,25 @@
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-03T13:35:57.845Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 314,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Supplier.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Core\\Models\\Supplier.cs",
+              "RelativeDocumentMoniker": "..\\system.Core\\Models\\Supplier.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Core\\Models\\Supplier.cs",
+              "RelativeToolTip": "..\\system.Core\\Models\\Supplier.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T19:47:25.952Z",
+              "EditorCaption": ""
             }
           ]
         }
