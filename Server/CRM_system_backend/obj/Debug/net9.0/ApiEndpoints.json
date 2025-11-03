@@ -406,6 +406,109 @@
     ]
   },
   {
+    "ContainingType": "CRM_system_backend.Controllers.TaxContoller",
+    "Method": "GetTaxes",
+    "RelativePath": "TaxContoller",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[CRMSystem.Core.Models.Tax, CRMSystem.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.TaxContoller",
+    "Method": "CreateTax",
+    "RelativePath": "TaxContoller",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "taxRequest",
+        "Type": "CRM_system_backend.Contracts.TaxRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.TaxContoller",
+    "Method": "UpdateTax",
+    "RelativePath": "TaxContoller",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "taxRequest",
+        "Type": "CRM_system_backend.Contracts.TaxRequest",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.TaxContoller",
+    "Method": "DeleteTax",
+    "RelativePath": "TaxContoller",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "CRM_system_backend.Controllers.UserController",
     "Method": "CreateUser",
     "RelativePath": "User",

@@ -1,7 +1,6 @@
 ﻿using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CRMSystem.DataAccess.Repositories;
 

@@ -1,0 +1,378 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{268FA8FA-D8F7-4382-B970-781D2B56865D}|..\\system.Buisnes\\CRMSystem.Buisnes.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.buisnes\\services\\supplierservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{67693361-1368-441F-A016-C6B0C7A264AB}|..\\system.DataAccess\\CRMSystem.DataAccess.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.dataaccess\\repositories\\supplierrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{67693361-1368-441F-A016-C6B0C7A264AB}|..\\system.DataAccess\\CRMSystem.DataAccess.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.dataaccess\\repositories\\specializationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\controllers\\suppliercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:controllers\\suppliercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\contracts\\supplierrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:contracts\\supplierrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\contracts\\supplierresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:contracts\\supplierresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\contracts\\specializationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:contracts\\specializationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\contracts\\specializationresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:contracts\\specializationresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{268FA8FA-D8F7-4382-B970-781D2B56865D}|..\\system.Buisnes\\CRMSystem.Buisnes.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.buisnes\\services\\specializationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\controllers\\specializationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:controllers\\specializationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\contracts\\carupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:contracts\\carupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\contracts\\carrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:contracts\\carrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\crm_system_backend\\contracts\\carresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29347CB2-1A1F-4FD1-82B0-8A25BB63D937}|CRM_system_backend.csproj|solutionrelative:contracts\\carresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{268FA8FA-D8F7-4382-B970-781D2B56865D}|..\\system.Buisnes\\CRMSystem.Buisnes.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.buisnes\\services\\clientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{268FA8FA-D8F7-4382-B970-781D2B56865D}|..\\system.Buisnes\\CRMSystem.Buisnes.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.buisnes\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{257CD9E9-120C-426A-BFB1-C519C6874F81}|..\\system.Core\\CRMSystem.Core.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.core\\abstractions\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{67693361-1368-441F-A016-C6B0C7A264AB}|..\\system.DataAccess\\CRMSystem.DataAccess.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.dataaccess\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{257CD9E9-120C-426A-BFB1-C519C6874F81}|..\\system.Core\\CRMSystem.Core.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.core\\models\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{257CD9E9-120C-426A-BFB1-C519C6874F81}|..\\system.Core\\CRMSystem.Core.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.core\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{268FA8FA-D8F7-4382-B970-781D2B56865D}|..\\system.Buisnes\\CRMSystem.Buisnes.csproj|c:\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\crm_system_for_car_service\\server\\system.buisnes\\dtos\\carwithownerdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 259,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "SupplierRequest.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\SupplierRequest.cs",
+              "RelativeDocumentMoniker": "Contracts\\SupplierRequest.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\SupplierRequest.cs",
+              "RelativeToolTip": "Contracts\\SupplierRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T21:25:26.41Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "SupplierResponse.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\SupplierResponse.cs",
+              "RelativeDocumentMoniker": "Contracts\\SupplierResponse.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\SupplierResponse.cs",
+              "RelativeToolTip": "Contracts\\SupplierResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T21:24:10.697Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SupplierRepository.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\SupplierRepository.cs",
+              "RelativeDocumentMoniker": "..\\system.DataAccess\\Repositories\\SupplierRepository.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\SupplierRepository.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Repositories\\SupplierRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADgAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T21:19:34.163Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SupplierService.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\Services\\SupplierService.cs",
+              "RelativeDocumentMoniker": "..\\system.Buisnes\\Services\\SupplierService.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\Services\\SupplierService.cs",
+              "RelativeToolTip": "..\\system.Buisnes\\Services\\SupplierService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T21:15:29.179Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "CarUpdateRequest.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\CarUpdateRequest.cs",
+              "RelativeDocumentMoniker": "Contracts\\CarUpdateRequest.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\CarUpdateRequest.cs",
+              "RelativeToolTip": "Contracts\\CarUpdateRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T13:13:54.856Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:44:59.137Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SupplierController.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Controllers\\SupplierController.cs",
+              "RelativeDocumentMoniker": "Controllers\\SupplierController.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Controllers\\SupplierController.cs",
+              "RelativeToolTip": "Controllers\\SupplierController.cs",
+              "ViewState": "AgIAADQAAAAAAAAAAAAkwEUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T21:26:50.173Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "SpecializationController.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Controllers\\SpecializationController.cs",
+              "RelativeDocumentMoniker": "Controllers\\SpecializationController.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Controllers\\SpecializationController.cs",
+              "RelativeToolTip": "Controllers\\SpecializationController.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAAAmwAoAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T13:01:30.138Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "SpecializationRequest.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\SpecializationRequest.cs",
+              "RelativeDocumentMoniker": "Contracts\\SpecializationRequest.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\SpecializationRequest.cs",
+              "RelativeToolTip": "Contracts\\SpecializationRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T12:59:49.292Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "SpecializationResponse.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\SpecializationResponse.cs",
+              "RelativeDocumentMoniker": "Contracts\\SpecializationResponse.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\SpecializationResponse.cs",
+              "RelativeToolTip": "Contracts\\SpecializationResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T12:58:38.639Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CarRequest.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\CarRequest.cs",
+              "RelativeDocumentMoniker": "Contracts\\CarRequest.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\CarRequest.cs",
+              "RelativeToolTip": "Contracts\\CarRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T12:58:11.427Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SpecializationRepository.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\SpecializationRepository.cs",
+              "RelativeDocumentMoniker": "..\\system.DataAccess\\Repositories\\SpecializationRepository.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\SpecializationRepository.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Repositories\\SpecializationRepository.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAkwDIAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T12:55:29.89Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "SpecializationService.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\Services\\SpecializationService.cs",
+              "RelativeDocumentMoniker": "..\\system.Buisnes\\Services\\SpecializationService.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\Services\\SpecializationService.cs",
+              "RelativeToolTip": "..\\system.Buisnes\\Services\\SpecializationService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T12:47:57.682Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "..\\system.Buisnes\\Services\\UserService.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\Services\\UserService.cs",
+              "RelativeToolTip": "..\\system.Buisnes\\Services\\UserService.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAmwAgAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T11:10:59.042Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "IUserRepository.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Core\\Abstractions\\IUserRepository.cs",
+              "RelativeDocumentMoniker": "..\\system.Core\\Abstractions\\IUserRepository.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Core\\Abstractions\\IUserRepository.cs",
+              "RelativeToolTip": "..\\system.Core\\Abstractions\\IUserRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T11:10:08.684Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\UserRepository.cs",
+              "RelativeDocumentMoniker": "..\\system.DataAccess\\Repositories\\UserRepository.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.DataAccess\\Repositories\\UserRepository.cs",
+              "RelativeToolTip": "..\\system.DataAccess\\Repositories\\UserRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T11:08:35.499Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UserController.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Controllers\\UserController.cs",
+              "RelativeToolTip": "Controllers\\UserController.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAmwEoAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T11:05:58.543Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Client.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Core\\Models\\Client.cs",
+              "RelativeDocumentMoniker": "..\\system.Core\\Models\\Client.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Core\\Models\\Client.cs",
+              "RelativeToolTip": "..\\system.Core\\Models\\Client.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAAAUwDUAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T10:05:02.381Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Core\\Models\\User.cs",
+              "RelativeDocumentMoniker": "..\\system.Core\\Models\\User.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Core\\Models\\User.cs",
+              "RelativeToolTip": "..\\system.Core\\Models\\User.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T10:01:57.89Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ClientController.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Controllers\\ClientController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ClientController.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Controllers\\ClientController.cs",
+              "RelativeToolTip": "Controllers\\ClientController.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAmwFYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:51:02.631Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ClientService.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\Services\\ClientService.cs",
+              "RelativeDocumentMoniker": "..\\system.Buisnes\\Services\\ClientService.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\Services\\ClientService.cs",
+              "RelativeToolTip": "..\\system.Buisnes\\Services\\ClientService.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:26:39.237Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "CarResponse.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\CarResponse.cs",
+              "RelativeDocumentMoniker": "Contracts\\CarResponse.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\CRM_system_backend\\Contracts\\CarResponse.cs",
+              "RelativeToolTip": "Contracts\\CarResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:10:58.668Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "CarWithOwnerDto.cs",
+              "DocumentMoniker": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\DTOs\\CarWithOwnerDto.cs",
+              "RelativeDocumentMoniker": "..\\system.Buisnes\\DTOs\\CarWithOwnerDto.cs",
+              "ToolTip": "C:\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\CRM_system_for_car_service\\Server\\system.Buisnes\\DTOs\\CarWithOwnerDto.cs",
+              "RelativeToolTip": "..\\system.Buisnes\\DTOs\\CarWithOwnerDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:10:16.447Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

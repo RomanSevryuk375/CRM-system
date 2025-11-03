@@ -72,6 +72,7 @@ public class CarController : ControllerBase
         }
 
         var carId = await _carService.CreateCar(car);
+
         return Ok(carId);
     }
 
