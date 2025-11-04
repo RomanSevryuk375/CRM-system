@@ -27,6 +27,10 @@ public class Program
 
         builder.Services.AddScoped<IOrderService, OrderService>();
         builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+        builder.Services.AddScoped<IPaymentNoteService, PaymentNoteService>();
+        builder.Services.AddScoped<IPaymentNoteRepository, PaymentNoteRepository>();
+        builder.Services.AddScoped<IBillService, BillService>();
+        builder.Services.AddScoped<IBillRepository,  BillRepository>();
         builder.Services.AddScoped<IStatusService, StatusService>();
         builder.Services.AddScoped<IStatusRepository, StatusRepository>();
         builder.Services.AddScoped<IRepairNoteService, RepairNoteService>();

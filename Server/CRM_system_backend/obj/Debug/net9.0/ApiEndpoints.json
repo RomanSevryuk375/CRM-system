@@ -1,5 +1,25 @@
 [
   {
+    "ContainingType": "CRM_system_backend.Controllers.BillController",
+    "Method": "GetBill",
+    "RelativePath": "Bill",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[CRMSystem.Core.Models.Bill, CRMSystem.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "CRM_system_backend.Controllers.CarController",
     "Method": "GetCar",
     "RelativePath": "Car",

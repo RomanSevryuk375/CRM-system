@@ -30,31 +30,4 @@ public class BillRepository : IBillRepository
 
         return bill;
     }
-
-    public async Task<int> Update(
-        int id,
-        int? orderId,
-        int? statusId,
-        DateTime? date,
-        decimal? amount,
-        DateTime? actualBillDate)
-    {
-        var bill = await _context.Bills.FirstOrDefaultAsync(x => x.Id == id)
-            ?? throw new Exception("Bill not found");
-
-        if (orderId.HasValue)
-            bill.OrderId = orderId.Value;
-        if (statusId.HasValue)
-            bill.StatusId = statusId.Value;
-        if (date.HasValue)
-            bill.Date = date.Value;
-        if (amount.HasValue)
-            bill.Amount = amount.Value;
-        if (actualBillDate.HasValue)
-            bill.ActualBillDate = actualBillDate.Value;
-
-        await _context.SaveChangesAsync();
-
-        return bill.Id;
-    }
 }
