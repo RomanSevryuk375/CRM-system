@@ -26,11 +26,11 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<ExpenseEntity>
 
         builder.Property(e => e.TaxId)
             .HasColumnName("tax_id")
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(e => e.UsedPartId)
             .HasColumnName("used_part_id")
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(e => e.ExpenseType)
             .HasColumnName("expenses_type")
