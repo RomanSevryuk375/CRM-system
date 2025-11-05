@@ -1175,6 +1175,129 @@
     ]
   },
   {
+    "ContainingType": "CRM_system_backend.Controllers.WorkProposalController",
+    "Method": "GetWorkProposal",
+    "RelativePath": "WorkProposal",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[CRMSystem.Core.Models.WorkProposal, CRMSystem.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.WorkProposalController",
+    "Method": "CreateWorkProposal",
+    "RelativePath": "WorkProposal",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CRM_system_backend.Contracts.WorkProposalRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.WorkProposalController",
+    "Method": "UpdateWorkProposa",
+    "RelativePath": "WorkProposal",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CRM_system_backend.Contracts.WorkProposalRequest",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.WorkProposalController",
+    "Method": "DeleteWorkProposa",
+    "RelativePath": "WorkProposal",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.WorkProposalController",
+    "Method": "GetWorkProposalWithInfo",
+    "RelativePath": "WorkProposal/with-info",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[CRMSystem.Buisnes.DTOs.WorkProposalWithInfoDto, CRMSystem.Buisnes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "CRM_system_backend.Controllers.WorkTypeController",
     "Method": "GetWorkType",
     "RelativePath": "WorkType",

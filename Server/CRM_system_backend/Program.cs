@@ -27,6 +27,8 @@ public class Program
 
         builder.Services.AddScoped<IOrderService, OrderService>();
         builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+        builder.Services.AddScoped<IWorkPropossalService, WorkPropossalService>();
+        builder.Services.AddScoped<IWorkPropossalRepository,  WorkPropossalRepository>();
         builder.Services.AddScoped<IWorkService, WorkService>();
         builder.Services.AddScoped<IWorkRepository, WorkRepository>();
         builder.Services.AddScoped<IPaymentNoteService, PaymentNoteService>();
