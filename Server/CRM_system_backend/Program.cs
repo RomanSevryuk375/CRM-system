@@ -27,6 +27,8 @@ public class Program
 
         builder.Services.AddScoped<IOrderService, OrderService>();
         builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+        builder.Services.AddScoped<IExpenseService,  ExpenseService>();
+        builder.Services.AddScoped<IExpenseRespository,  ExpenseRespository>();
         builder.Services.AddScoped<IUsedPartService, UsedPartService>();
         builder.Services.AddScoped<IUsedPartRepository, UsedPartRepository>();
         builder.Services.AddScoped<IWorkPropossalService, WorkPropossalService>();

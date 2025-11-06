@@ -13,7 +13,7 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<ExpenseEntity>
         builder.HasKey(x => x.Id);
 
         builder.Property(e => e.Id)
-            .HasColumnName("expense_id")
+            .HasColumnName("expenses_id")
             .IsRequired();
 
         builder.Property(e => e.Date)
