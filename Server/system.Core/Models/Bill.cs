@@ -43,9 +43,6 @@ public class Bill
         if (date > DateTime.Now)
             error = "Bill date cannot be in the future";
 
-        if (amount <= 0)
-            error = "Bill amount must be greater than 0";
-
         if (actualBillDate.HasValue)
         {
             if (actualBillDate.Value > DateTime.Now)

@@ -42,7 +42,8 @@ public class UsedPartConfiguration : IEntityTypeConfiguration<UsedPartEntity>
 
         builder.Property(up => up.Sum)
             .HasColumnName("used_part_total_sum")
-            .IsRequired();
+            .ValueGeneratedOnAddOrUpdate()
+            .IsRequired(false);
 
         builder.HasOne(o => o.Order)
             .WithMany(up => up.UsedParts)

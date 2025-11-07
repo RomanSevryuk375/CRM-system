@@ -21,7 +21,7 @@ public class WorkProposalConfiguration : IEntityTypeConfiguration<WorkProposalEn
             .IsRequired();
 
         builder.Property(wp => wp.WorkId)
-            .HasColumnName("proposal_work_id")
+            .HasColumnName("proposed_work_id")
             .IsRequired();
 
         builder.Property(wp => wp.ByWorker)

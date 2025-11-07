@@ -16,7 +16,7 @@ public class UsedPartEntity
 
     public decimal UnitPrice { get; set; }
 
-    public decimal Sum { get; set; }
+    public decimal? Sum { get; set; }
 
     public OrderEntity? Order { get; set; }
 

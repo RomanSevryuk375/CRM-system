@@ -72,7 +72,7 @@ public class UsedPartController : ControllerBase
             request.Article,
             request.Quantity,
             request.UnitPrice,
-            request.Sum);
+            0);
 
         if (!string.IsNullOrEmpty(error))
         {

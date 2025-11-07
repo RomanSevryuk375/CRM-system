@@ -1,4 +1,5 @@
 ﻿using CRMSystem.Core.Models;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
@@ -29,5 +30,34 @@ public class BillRepository : IBillRepository
             .ToList();
 
         return bill;
+    }
+
+    public async Task<int> Create(Bill bill)
+    {
+        var (_, error) = Bill.Create(
+            bill.Id,
+            bill.OrderId,
+            bill.StatusId,
+            bill.Date,
+            bill.Amount,
+            bill.ActualBillDate);
+
+        if (!string.IsNullOrEmpty(error))
+            throw new ArgumentException($"Create exception Client: {error}");
+
+        var billEntity = new BillEntity
+        {
+            Id = bill.Id,
+            OrderId = bill.OrderId,
+            StatusId = bill.StatusId,
+            Date = bill.Date,
+            Amount = bill.Amount,
+            ActualBillDate = bill.ActualBillDate,
+        };
+
+        await _context.Bills.AddAsync(billEntity);
+        await _context.SaveChangesAsync();
+
+        return billEntity.Id;
     }
 }

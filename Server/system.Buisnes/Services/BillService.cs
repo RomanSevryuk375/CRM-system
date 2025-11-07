@@ -16,4 +16,9 @@ public class BillService : IBillService
     {
         return await _billRepository.Get();
     }
+
+    public async Task<int> CreateBill(Bill bill)
+    {
+        return await _billRepository.Create(bill);
+    }
 }

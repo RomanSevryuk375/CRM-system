@@ -21,11 +21,12 @@ public class WorkTypeConfiguration : IEntityTypeConfiguration<WorkTypeEntity>
             .IsRequired();
 
         builder.Property(wt => wt.Category)
-            .HasColumnName("catalog_of_works_description")
+            .HasColumnName("catalog_of_works_category")
+            .HasConversion<string>()
             .IsRequired();
 
         builder.Property(wt => wt.Description)
-            .HasColumnName("catalog_of_work_description")
+            .HasColumnName("catalog_of_works_description")
             .IsRequired();
 
         builder.Property(wt => wt.StandardTime)

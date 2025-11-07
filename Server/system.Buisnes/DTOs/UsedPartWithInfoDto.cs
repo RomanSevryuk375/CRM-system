@@ -9,6 +9,6 @@ public record UsedPartWithInfoDto
     string Article,
     decimal Quantity,
     decimal UnitPrice,
-    decimal Sum
+    decimal? Sum
 );
 

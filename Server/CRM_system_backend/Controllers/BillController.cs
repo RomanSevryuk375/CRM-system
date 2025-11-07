@@ -34,4 +34,26 @@ public class BillController : ControllerBase
 
         return Ok(response);
     }
+
+    [HttpPost]
+
+    public async Task<ActionResult<int>> CreateBill([FromBody] BillRequest request)
+    {
+        var (bill, error) = Bill.Create(
+            0,
+            request.OrderId,
+            request.StatusId,
+            request.Date,
+            0,
+            request.ActualBillDate);
+
+        if (!string.IsNullOrEmpty(error))
+        {
+            return BadRequest(error);
+        }
+
+        var billId = await _billService.CreateBill(bill);
+
+        return Ok(billId);
+    }
 }

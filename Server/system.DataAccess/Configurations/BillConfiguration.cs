@@ -30,10 +30,12 @@ public class BillConfiguration : IEntityTypeConfiguration<BillEntity>
 
         builder.Property(b => b.Amount)
             .HasColumnName("bill_total_sum")
+            .ValueGeneratedOnAddOrUpdate()
             .IsRequired();
 
         builder.Property(b => b.ActualBillDate)
             .HasColumnName("actual_closing_bill_date")
+            .ValueGeneratedOnAddOrUpdate()
             .IsRequired(false);
 
         builder.HasOne(s => s.Status)

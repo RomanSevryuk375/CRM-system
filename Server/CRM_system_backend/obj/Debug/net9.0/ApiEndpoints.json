@@ -20,6 +20,32 @@
     ]
   },
   {
+    "ContainingType": "CRM_system_backend.Controllers.BillController",
+    "Method": "CreateBill",
+    "RelativePath": "Bill",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CRM_system_backend.Contracts.BillRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "CRM_system_backend.Controllers.CarController",
     "Method": "GetCar",
     "RelativePath": "Car",

@@ -47,7 +47,7 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<ExpenseEntity>
 
         builder.HasOne(up => up.UsedPart)
             .WithMany(e => e.Expenses)
-            .HasForeignKey("used_part_id")
+            .HasForeignKey(e => e.UsedPartId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

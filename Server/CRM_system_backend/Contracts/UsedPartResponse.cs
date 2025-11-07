@@ -9,5 +9,5 @@ public record UsedPartResponse
     string Article,
     decimal Quantity,
     decimal UnitPrice,
-    decimal Sum
+    decimal? Sum
 );

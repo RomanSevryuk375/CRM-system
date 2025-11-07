@@ -7,7 +7,7 @@ public class UsedPart
     private const int MAX_NAME_LENGTH = 256;
     private const int MAX_ARTICLE_LENGTH = 128;
 
-    public UsedPart(int id, int orderId, int supplierId, string name, string article, decimal quantity, decimal unitPrice, decimal sum)
+    public UsedPart(int id, int orderId, int supplierId, string name, string article, decimal quantity, decimal unitPrice, decimal? sum)
     {
         Id = id;
         OrderId = orderId;
@@ -32,9 +32,9 @@ public class UsedPart
 
     public decimal UnitPrice { get; }
 
-    public decimal Sum { get; }
+    public decimal? Sum { get; }
 
-    public static (UsedPart usedPart, string error) Create (int id, int orderId, int supplierId, string name, string article, decimal quantity, decimal unitPrice, decimal sum)
+    public static (UsedPart usedPart, string error) Create (int id, int orderId, int supplierId, string name, string article, decimal quantity, decimal unitPrice, decimal? sum)
     {
         var error = string.Empty;
 
