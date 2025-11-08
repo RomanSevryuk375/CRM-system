@@ -181,15 +181,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 390,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
             },
             {
               "$type": "Document",
@@ -214,8 +210,7 @@
               "RelativeToolTip": "..\\system.DataAccess\\Entites\\UserEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:13:54.518Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:13:54.518Z"
             },
             {
               "$type": "Document",
@@ -227,8 +222,7 @@
               "RelativeToolTip": "..\\system.DataAccess\\Entites\\StatusEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:13:46.075Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:13:46.075Z"
             },
             {
               "$type": "Document",
@@ -240,8 +234,7 @@
               "RelativeToolTip": "..\\system.Core\\Models\\Bill.cs",
               "ViewState": "AgIAABwAAAAAAAAAAAAzwCsAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:04:00.602Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:04:00.602Z"
             },
             {
               "$type": "Document",
@@ -253,8 +246,7 @@
               "RelativeToolTip": "Contracts\\BillRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:03:03.15Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:03:03.15Z"
             },
             {
               "$type": "Document",
@@ -266,8 +258,7 @@
               "RelativeToolTip": "Contracts\\CarRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:02:37.911Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:02:37.911Z"
             },
             {
               "$type": "Document",
@@ -279,8 +270,7 @@
               "RelativeToolTip": "Contracts\\BillResponse.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:02:34.161Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:02:34.161Z"
             },
             {
               "$type": "Document",
@@ -292,8 +282,7 @@
               "RelativeToolTip": "..\\system.Core\\Abstractions\\IBillService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:01:56.505Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:01:56.505Z"
             },
             {
               "$type": "Document",
@@ -305,8 +294,7 @@
               "RelativeToolTip": "..\\system.Buisnes\\Services\\BillService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:01:05.812Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:01:05.812Z"
             },
             {
               "$type": "Document",
@@ -318,8 +306,7 @@
               "RelativeToolTip": "Controllers\\BillController.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAiwCUAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:04:46.083Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:04:46.083Z"
             },
             {
               "$type": "Document",
@@ -331,8 +318,7 @@
               "RelativeToolTip": "..\\system.DataAccess\\Entites\\UsedPartEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T11:52:28.942Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T11:52:28.942Z"
             },
             {
               "$type": "Document",
@@ -344,8 +330,7 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAADAAAAAAAAAAAAAMwEcAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T11:31:06.58Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-05T11:31:06.58Z"
             },
             {
               "$type": "Document",
@@ -357,8 +342,7 @@
               "RelativeToolTip": "..\\system.DataAccess\\Configurations\\BillConfiguration.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:09:40.782Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:09:40.782Z"
             },
             {
               "$type": "Document",
@@ -370,8 +354,7 @@
               "RelativeToolTip": "..\\system.DataAccess\\Configurations\\UsedPartConfiguration.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAowCwAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T11:50:37.965Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T11:50:37.965Z"
             },
             {
               "$type": "Document",
@@ -383,8 +366,7 @@
               "RelativeToolTip": "Controllers\\UserController.cs",
               "ViewState": "AgIAADcAAAAAAAAAAAAkwEoAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:07:29.271Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:07:29.271Z"
             },
             {
               "$type": "Document",
@@ -396,8 +378,7 @@
               "RelativeToolTip": "..\\system.Core\\Abstractions\\IBillRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T14:00:30.611Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T14:00:30.611Z"
             },
             {
               "$type": "Document",
@@ -409,8 +390,7 @@
               "RelativeToolTip": "Controllers\\CarController.cs",
               "ViewState": "AgIAADcAAAAAAAAAAAAkwEQAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T11:39:22.519Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-05T11:39:22.519Z"
             },
             {
               "$type": "Document",
@@ -422,8 +402,7 @@
               "RelativeToolTip": "..\\system.DataAccess\\Repositories\\ClientsRepository.cs",
               "ViewState": "AgIAAB0AAAAAAAAAAAAmwDIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T13:50:37.656Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T13:50:37.656Z"
             },
             {
               "$type": "Document",
@@ -435,8 +414,7 @@
               "RelativeToolTip": "..\\system.DataAccess\\Entites\\BillEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T13:54:55.574Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T13:54:55.574Z"
             },
             {
               "$type": "Document",
@@ -448,8 +426,7 @@
               "RelativeToolTip": "..\\system.DataAccess\\Entites\\ClientEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T13:56:02.03Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T13:56:02.03Z"
             },
             {
               "$type": "Document",
@@ -461,8 +438,7 @@
               "RelativeToolTip": "..\\system.DataAccess\\Repositories\\BillRepository.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAcwAYAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T13:49:53.494Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-07T13:49:53.494Z"
             },
             {
               "$type": "Document",
@@ -835,6 +811,10 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-05T11:48:44.849Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
             }
           ]
         }
