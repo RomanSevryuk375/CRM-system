@@ -7,6 +7,5 @@ public record UsedPartRequest
     string Name,
     string Article,
     decimal Quantity,
-    decimal UnitPrice,
-    decimal Sum
+    decimal UnitPrice
 );

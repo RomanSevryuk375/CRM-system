@@ -25,7 +25,7 @@ public class WorkController : ControllerBase
         var works = await _workService.GetWork();
 
         var response = works 
-            .Select(w => Work.Create(
+            .Select(w => new WorkResponse(
                 w.Id,
                 w.OrderId,
                 w.JobId,

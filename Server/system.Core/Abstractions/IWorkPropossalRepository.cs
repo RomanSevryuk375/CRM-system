@@ -8,5 +8,7 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> Delete(int id);
         Task<List<WorkProposal>> Get();
         Task<int> Update(int id, int? orderId, int? workId, int? byWorker, int? statusId, int? decisionStatusId, DateTime? date);
+        Task<int> AcceptProposal(int id);
+        Task<int> RejectProposal(int id);
     }
 }

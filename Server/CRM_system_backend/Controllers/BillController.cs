@@ -45,7 +45,7 @@ public class BillController : ControllerBase
             request.StatusId,
             request.Date,
             0,
-            request.ActualBillDate);
+            null);
 
         if (!string.IsNullOrEmpty(error))
         {

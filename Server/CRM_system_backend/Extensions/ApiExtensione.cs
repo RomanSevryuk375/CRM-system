@@ -19,7 +19,6 @@ public static class ApiExtensions
 
         services.AddAuthentication(options =>
         {
-            // 🧠 Указываем схему по умолчанию!
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
@@ -35,7 +34,6 @@ public static class ApiExtensions
                     Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
             };
 
-            // 💡 Важно: считываем токен из cookie
             options.Events = new JwtBearerEvents
             {
                 OnMessageReceived = context =>

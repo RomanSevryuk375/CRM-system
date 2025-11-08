@@ -65,4 +65,14 @@ public class WorkPropossalService : IWorkPropossalService
     {
         return await _workPropossal.Delete(id);
     }
+
+    public async Task<int> AcceptProposal(int id)
+    {
+        return await _workPropossal.AcceptProposal(id);
+    }
+
+    public async Task<int> RejectProposal(int id)
+    {
+        return await _workPropossal.RejectProposal(id);
+    }
 }

@@ -2701,7 +2701,47 @@
             }
           }
         }
-      },
+      }
+    },
+    "/WorkProposal/with-info": {
+      "get": {
+        "tags": [
+          "WorkProposal"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WorkProposalWithInfoDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WorkProposalWithInfoDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WorkProposalWithInfoDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/WorkProposal/{id}": {
       "put": {
         "tags": [
           "WorkProposal"
@@ -2709,7 +2749,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -2768,7 +2809,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -2802,10 +2844,21 @@
         }
       }
     },
-    "/WorkProposal/with-info": {
-      "get": {
+    "/WorkProposal/{id}/accept": {
+      "put": {
         "tags": [
           "WorkProposal"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -2813,26 +2866,63 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WorkProposalWithInfoDto"
-                  }
+                  "type": "integer",
+                  "format": "int32"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WorkProposalWithInfoDto"
-                  }
+                  "type": "integer",
+                  "format": "int32"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WorkProposalWithInfoDto"
-                  }
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/WorkProposal/{id}/reject": {
+      "put": {
+        "tags": [
+          "WorkProposal"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             }
@@ -3079,11 +3169,6 @@
           "date": {
             "type": "string",
             "format": "date-time"
-          },
-          "actualBillDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3236,10 +3321,6 @@
         "type": "object",
         "properties": {
           "roleId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "userId": {
             "type": "integer",
             "format": "int32"
           },
@@ -3789,10 +3870,6 @@
             "format": "double"
           },
           "unitPrice": {
-            "type": "number",
-            "format": "double"
-          },
-          "sum": {
             "type": "number",
             "format": "double"
           }

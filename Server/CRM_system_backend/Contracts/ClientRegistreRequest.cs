@@ -3,7 +3,6 @@
 public record ClientRegistreRequest
 (
     int RoleId,
-    int UserId,
     string Name,
     string Surname,
     string Email,

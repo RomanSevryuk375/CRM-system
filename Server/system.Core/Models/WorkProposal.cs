@@ -43,7 +43,7 @@ public class WorkProposal
             error = "Status Id must be positive";
 
         if (decisionStatusId >= 6 && decisionStatusId <= 8)
-            error = "Dicision Id must be positive";
+            error = "Dicision Id must be";
 
         if (date > DateTime.Now)
             error = "Propossed at can't be in future";

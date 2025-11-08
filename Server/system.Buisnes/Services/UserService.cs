@@ -2,7 +2,6 @@
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using CRMSystem.Infrastructure;
-using Microsoft.AspNetCore.Identity;
 
 namespace CRMSystem.Buisnes.Services;
 

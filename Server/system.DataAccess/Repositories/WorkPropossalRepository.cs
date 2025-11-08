@@ -73,7 +73,7 @@ public class WorkPropossalRepository : IWorkPropossalRepository
         DateTime? date)
     {
         var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(x => x.Id == id)
-            ?? throw new Exception("Expence not found");
+            ?? throw new Exception("Work proposal not found");
 
         if (orderId.HasValue)
             workProposal.OrderId = orderId.Value;
@@ -87,6 +87,30 @@ public class WorkPropossalRepository : IWorkPropossalRepository
             workProposal.DecisionStatusId = decisionStatusId.Value;
         if (date.HasValue)
             workProposal.Date = DateTime.Now;
+
+        await _context.SaveChangesAsync();
+
+        return workProposal.Id;
+    }
+
+    public async Task<int> AcceptProposal(int id)
+    {
+        var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(X => X.Id == id)
+            ?? throw new Exception("Work proposal not found");
+
+        workProposal.DecisionStatusId = 6;
+
+        await _context.SaveChangesAsync();
+
+        return workProposal.Id;
+    }
+
+    public async Task<int> RejectProposal(int id)
+    {
+        var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(X => X.Id == id)
+            ?? throw new Exception("Work proposal not found");
+
+        workProposal.DecisionStatusId = 7;
 
         await _context.SaveChangesAsync();
 

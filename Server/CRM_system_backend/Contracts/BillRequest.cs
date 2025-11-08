@@ -4,6 +4,5 @@ public record BillRequest
 (
      int OrderId, 
      int StatusId, 
-     DateTime Date,
-     DateTime? ActualBillDate
+     DateTime Date
 );

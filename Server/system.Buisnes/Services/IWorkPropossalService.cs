@@ -10,5 +10,7 @@ namespace CRMSystem.Buisnes.Services
         Task<List<WorkProposal>> GetWorkProposal();
         Task<List<WorkProposalWithInfoDto>> GetWorkProposalWithInfo();
         Task<int> UpdateWorkProposal(int id, int orderId, int workId, int byWorker, int statusId, int decisionStatusId, DateTime date);
+        Task<int> AcceptProposal(int id);
+        Task<int> RejectProposal(int id);
     }
 }

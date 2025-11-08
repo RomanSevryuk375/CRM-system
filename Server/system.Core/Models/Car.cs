@@ -67,7 +67,7 @@ public class Car
         if (stateNumber.Length > MAX_STATE_NUMBER_LENGTH)
             error = $"State number can't be longer than {MAX_STATE_NUMBER_LENGTH} symbols";
 
-        if (!Regex.IsMatch(stateNumber, @"^(\d{4}[ABEIKMHOPCTX]{2}-[1-7]|[ABEIKMHOPCTX]{2}\d{4}-[1-7]|(TA|TT|TY)\d{4}|E\d{3}[ABEIKMHOPCTX]{2}[1-7])$"))
+        if (!Regex.IsMatch(stateNumber, @"^(\d{4}\s?[ABEIKMHOPCTX]{2}-[1-7]|[ABEIKMHOPCTX]{2}\s?\d{4}-[1-7]|(TA|TT|TY)\d{4}|E\d{3}[ABEIKMHOPCTX]{2}[1-7])$"))
             error = "State number in invalid format";
 
         if (mileage < 0)

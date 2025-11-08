@@ -32,3 +32,21 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
+
+# Build artifacts
+bin/
+obj/
+
+# Visual Studio files
+.vs/
+
+# User-specific files
+*.user
+*.suo
+
+# Logs and temp
+*.log
+*.tmp
+
+# Publish
+publish/

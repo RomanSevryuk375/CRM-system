@@ -79,7 +79,7 @@ public class WorkProposalController : ControllerBase
         return Ok(workProposalId);
     }
 
-    [HttpPut]
+    [HttpPut("{id}")]
 
     public async Task<ActionResult<int>> UpdateWorkProposa([FromBody]WorkProposalRequest request, int id)
     {
@@ -94,7 +94,26 @@ public class WorkProposalController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpPut("{id}/accept")]
+
+    public async Task<ActionResult<int>> AcceptProposal(int id)
+    {
+        await _workPropossalService.AcceptProposal(id);
+
+        return Ok(0);
+    }
+
+    [HttpPut("{id}/reject")]
+
+    public async Task<ActionResult<int>> RejectProposal(int id)
+    {
+        await _workPropossalService.RejectProposal(id);
+
+        return Ok(0);
+    }
+
+
+    [HttpDelete("{id}")]
 
     public async Task<ActionResult<int>> DeleteWorkProposa(int id)
     {
