@@ -92,6 +92,44 @@
         }
       }
     },
+    "/Bill/My": {
+      "get": {
+        "tags": [
+          "Bill"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Bill"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Bill"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Bill"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Car/All-with-owner": {
       "get": {
         "tags": [

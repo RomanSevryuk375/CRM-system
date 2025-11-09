@@ -22,7 +22,28 @@ public class BillController : ControllerBase
 
     public async Task<ActionResult<List<Bill>>> GetBill()
     {
-        var bills = await _billService.GatBill();
+        var bills = await _billService.GetBill();
+
+        var response = bills
+            .Select(b => new BillResponse(
+                b.Id,
+                b.OrderId,
+                b.StatusId,
+                b.Date,
+                b.Amount,
+                b.ActualBillDate))
+            .ToList();
+
+        return Ok(response);
+    }
+
+    [HttpGet("My")]
+    [Authorize(Policy = "UserPolicy")]
+
+    public async Task<ActionResult<List<Bill>>> GetBillByUserId()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+        var bills = await _billService.GetBillByUser(userId);
 
         var response = bills
             .Select(b => new BillResponse(

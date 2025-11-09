@@ -33,11 +33,14 @@ public class ClientsRepository : IClientsRepository
         return clients;
     }
 
-    public async Task<int> GetClientIdByUserId(int userId)
+    public async Task<List<Client>> GetClientByUserId(int userId)
     {
-        var client = await _context.Clients
-            .AsNoTracking()
+        var clientEntities = await _context.Clients
             .Where(c => c.ClientUserId == userId)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var clients = clientEntities
             .Select(c => Client.Create(
                 c.ClientId,
                 c.ClientUserId,
@@ -45,12 +48,9 @@ public class ClientsRepository : IClientsRepository
                 c.ClientSurname,
                 c.ClientPhoneNumber,
                 c.ClientEmail).client)
-            .FirstOrDefaultAsync();
+            .ToList();
 
-        if (client == null)
-            throw new ArgumentException("Client not found");
-
-        return client.Id;
+        return clients;
     }
 
     public async Task<int> Create(Client client)

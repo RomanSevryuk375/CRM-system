@@ -12,5 +12,5 @@ public interface IClientsRepository
 
     Task<int> Delete(int id);
 
-    Task<int> GetClientIdByUserId(int userId);
+    Task<List<Client>> GetClientByUserId(int userId);
 }

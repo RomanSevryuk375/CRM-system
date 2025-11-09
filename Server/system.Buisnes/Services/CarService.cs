@@ -34,7 +34,9 @@ public class CarService : ICarService
 
     public async Task<List<Car>> GetCarsByOwnerId(int userId)
     {
-        var ownerId = await _clientsRepository.GetClientIdByUserId(userId);
+        var clients = await _clientsRepository.GetClientByUserId(userId);
+
+        var ownerId = clients.Select(c => c.Id).FirstOrDefault();
 
         return await _carRepository.GetByOwnerId(ownerId);
     }

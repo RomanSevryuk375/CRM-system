@@ -32,6 +32,26 @@ public class BillRepository : IBillRepository
         return bill;
     }
 
+    public async Task<List<Bill>> GetByOrderId(List<int> orderIds)
+    {
+        var billEntities = await _context.Bills
+            .Where(b => orderIds.Contains(b.OrderId))
+            .AsNoTracking()
+            .ToListAsync();
+
+        var bill = billEntities
+            .Select(b => Bill.Create(
+                b.Id,
+                b.OrderId,
+                b.StatusId,
+                b.Date,
+                b.Amount,
+                b.ActualBillDate).bill)
+            .ToList();
+
+        return bill;
+    }
+
     public async Task<int> Create(Bill bill)
     {
         var (_, error) = Bill.Create(

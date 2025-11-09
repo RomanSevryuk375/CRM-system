@@ -8,6 +8,7 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> Delete(int id);
         Task<List<Order>> Get();
         Task<List<Order>> GetById(int orderId);
+        Task<List<Order>> GetByCarId(int carId);
         Task<int> Update(int id, int? statusId, int? carId, DateTime? date, string priority);
     }
 }

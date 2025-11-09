@@ -50,6 +50,25 @@ public class OrderRepository : IOrderRepository
         return orders;
     }
 
+    public async Task<List<Order>> GetByCarId(int carId)
+    {
+        var orderEntities = await _context.Orders
+            .Where(o => o.CarId == carId)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var orders = orderEntities
+            .Select(o => Order.Create(
+                o.Id,
+                o.StatusId,
+                o.CarId,
+                o.Date,
+                o.Priority).order)
+            .ToList();
+
+        return orders;
+    }
+
     public async Task<int> Create(Order order)
     {
         var (_, error) = Order.Create(
