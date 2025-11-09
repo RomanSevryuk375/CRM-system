@@ -34,6 +34,28 @@ public class WorkerRepository : IWorkerRepository
         return worker;
     }
 
+    public async Task<int> GetWorkerIdByUserId(int userId)
+    {
+        var worker = await _context.Workers
+            .AsNoTracking()
+            .Where(w => w.UserId == userId)
+            .Select(w => Worker.Create(
+                w.Id,
+                w.UserId,
+                w.SpecializationId,
+                w.Name,
+                w.Surname,
+                w.HourlyRate,
+                w.PhoneNumber,
+                w.Email).worker)
+            .FirstOrDefaultAsync();
+
+        if (worker == null)
+            throw new ArgumentException("Client not found");
+
+        return worker.Id;
+    }
+
     public async Task<int> Create(Worker worker)
     {
         var (_, error) = Worker.Create(

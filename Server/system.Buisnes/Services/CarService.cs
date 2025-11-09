@@ -9,16 +9,45 @@ public class CarService : ICarService
 {
     private readonly ICarRepository _carRepository;
     private readonly IClientsRepository _clientsRepository;
+    private readonly IWorkRepository _workRepository;
+    private readonly IOrderRepository _orderRepository;
+    private readonly IWorkerRepository _workerRepository;
 
-    public CarService(ICarRepository carRepository, IClientsRepository clientsRepository)
+    public CarService(
+        ICarRepository carRepository,
+        IClientsRepository clientsRepository,
+        IWorkRepository workRepository,
+        IOrderRepository orderRepository,
+        IWorkerRepository workerRepository)
     {
         _carRepository = carRepository;
         _clientsRepository = clientsRepository;
+        _workRepository = workRepository;
+        _orderRepository = orderRepository;
+        _workerRepository = workerRepository;
     }
 
     public async Task<List<Car>> GetAllCars()
     {
         return await _carRepository.Get();
+    }
+
+    public async Task<List<Car>> GetCarsByOwnerId(int userId)
+    {
+        var ownerId = await _clientsRepository.GetClientIdByUserId(userId);
+
+        return await _carRepository.GetByOwnerId(ownerId);
+    }
+
+    public async Task<List<Car>> GetCarsForWorker(int userId)
+    {
+        var workerId = await _workerRepository.GetWorkerIdByUserId(userId);
+        var works = await _workRepository.GetByWorkerId(workerId);
+        var orderId = works.Select(works => works.OrderId).FirstOrDefault();
+        var orders = await _orderRepository.GetById(orderId);
+        var carId = orders.Select(orders => orders.CarId).FirstOrDefault();
+
+        return await _carRepository.GetById(carId);
     }
 
     public async Task<List<CarWithOwnerDto>> GetCarsWithOwner()

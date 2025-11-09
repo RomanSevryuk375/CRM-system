@@ -20,6 +20,11 @@ public class WorkerService : IWorkerService
         return await _workerRepository.Get();
     }
 
+    //public async Task<int> GetWorkerIdByUserId(int userId)
+    //{
+    //    return await _workerRepository.GetWorkerIdByUserId(userId);
+    //}
+
     public async Task<List<WorkerWithInfoDto>> GetWorkersWithInfo()
     {
         var workers = await _workerRepository.Get();

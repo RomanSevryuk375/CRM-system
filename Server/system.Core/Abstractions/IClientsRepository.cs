@@ -11,4 +11,6 @@ public interface IClientsRepository
     Task<int> Update(int id, string name, string surname, string phoneNumber, string email);
 
     Task<int> Delete(int id);
+
+    Task<int> GetClientIdByUserId(int userId);
 }

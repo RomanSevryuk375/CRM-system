@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,50 @@ public class CarRepository : ICarRepository
             .AsNoTracking()
             .ToListAsync();
         var cars = carEntities
+            .Select(c => Car.Create(
+                c.Id,
+                c.OwnerId,
+                c.Brand,
+                c.Model,
+                c.YearOfManufacture,
+                c.VinNumber,
+                c.StateNumber,
+                c.Mileage).car)
+            .ToList();
+
+        return cars;
+    }
+
+    public async Task<List<Car>> GetByOwnerId(int ownerId)
+    {
+        var carEntity = await _context.Cars
+            .Where(c  => c.OwnerId == ownerId)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var cars = carEntity
+            .Select(c => Car.Create(
+                c.Id,
+                c.OwnerId,
+                c.Brand,
+                c.Model,
+                c.YearOfManufacture,
+                c.VinNumber,
+                c.StateNumber,
+                c.Mileage).car)
+            .ToList();
+
+        return cars;
+    }
+
+    public async Task<List<Car>> GetById(int id)
+    { 
+        var carEntity = await _context.Cars
+            .Where(c => c.Id == id)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var cars = carEntity
             .Select(c => Car.Create(
                 c.Id,
                 c.OwnerId,

@@ -7,6 +7,7 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> Create(Order order);
         Task<int> Delete(int id);
         Task<List<Order>> Get();
+        Task<List<Order>> GetById(int orderId);
         Task<int> Update(int id, int? statusId, int? carId, DateTime? date, string priority);
     }
 }

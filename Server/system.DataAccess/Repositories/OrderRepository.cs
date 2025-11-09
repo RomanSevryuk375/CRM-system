@@ -1,7 +1,6 @@
 ﻿using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -17,6 +16,25 @@ public class OrderRepository : IOrderRepository
     public async Task<List<Order>> Get()
     {
         var orderEntities = await _context.Orders
+            .AsNoTracking()
+            .ToListAsync();
+
+        var orders = orderEntities
+            .Select(o => Order.Create(
+                o.Id,
+                o.StatusId,
+                o.CarId,
+                o.Date,
+                o.Priority).order)
+            .ToList();
+
+        return orders;
+    }
+
+    public async Task<List<Order>> GetById(int orderId)
+    {
+        var orderEntities = await _context.Orders
+            .Where(o => o.Id == orderId && (o.StatusId == 5 || o.StatusId == 7)) //not tested
             .AsNoTracking()
             .ToListAsync();
 

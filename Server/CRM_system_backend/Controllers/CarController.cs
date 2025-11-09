@@ -18,7 +18,7 @@ public class CarController : ControllerBase
         _carService = carService;
     }
 
-    [HttpGet("with owner")]
+    [HttpGet("All-with-owner")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<CarWithOwnerDto>> GetCarsWithOwner()
@@ -40,7 +40,7 @@ public class CarController : ControllerBase
         return Ok(responses);
     }
 
-    [HttpGet]
+    [HttpGet("All")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<Car>>> GetCar()
@@ -54,6 +54,40 @@ public class CarController : ControllerBase
 
         return Ok(response);
     }
+
+    [HttpGet("MyCars")]
+    [Authorize(Policy = "UserPolicy")]
+
+    public async Task<ActionResult<List<Car>>> GetCarsByOwnerId()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+        var cars = await _carService.GetCarsByOwnerId(userId);
+
+        var response = cars
+            .Select(b => new CarResponse(
+                b.Id, b.OwnerId, b.Brand, b.Model, b.YearOfManufacture, b.VinNumber, b.StateNumber, b.Mileage))
+            .ToList();
+
+        return Ok(response);
+    }
+
+    [HttpGet("WorkCars")]
+    [Authorize(Policy = "WorkerPolicy")]
+
+    public async Task<ActionResult<List<Car>>> GetCarsByWorker()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+        var cars = await _carService.GetCarsForWorker(userId);
+
+        var response = cars
+            .Select(b => new CarResponse(
+                b.Id, b.OwnerId, b.Brand, b.Model, b.YearOfManufacture, b.VinNumber, b.StateNumber, b.Mileage))
+            .ToList();
+
+        return Ok(response);
+    }
+
+
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
@@ -104,8 +138,4 @@ public class CarController : ControllerBase
         return Ok(result);
     }
 
-    //user get/udate/delete it by id from JWT
-    //          [Authorize(Policy = "UserPolicy")]
-    //worker get it by id from order and can change it only in milage 
-    //          [Authorize(Policy = "WorkerPolicy")]
 }

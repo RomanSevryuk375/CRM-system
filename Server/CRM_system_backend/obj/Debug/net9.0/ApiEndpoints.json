@@ -47,26 +47,6 @@
   },
   {
     "ContainingType": "CRM_system_backend.Controllers.CarController",
-    "Method": "GetCar",
-    "RelativePath": "Car",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[CRMSystem.Core.Models.Car, CRMSystem.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "CRM_system_backend.Controllers.CarController",
     "Method": "CreateCar",
     "RelativePath": "Car",
     "HttpMethod": "POST",
@@ -150,8 +130,28 @@
   },
   {
     "ContainingType": "CRM_system_backend.Controllers.CarController",
+    "Method": "GetCar",
+    "RelativePath": "Car/All",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[CRMSystem.Core.Models.Car, CRMSystem.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.CarController",
     "Method": "GetCarsWithOwner",
-    "RelativePath": "Car/with owner",
+    "RelativePath": "Car/All-with-owner",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -159,6 +159,46 @@
     "ReturnTypes": [
       {
         "Type": "CRMSystem.Buisnes.DTOs.CarWithOwnerDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.CarController",
+    "Method": "GetCarsByOwnerId",
+    "RelativePath": "Car/MyCars",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[CRMSystem.Core.Models.Car, CRMSystem.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CRM_system_backend.Controllers.CarController",
+    "Method": "GetCarsByWorker",
+    "RelativePath": "Car/WorkCars",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[CRMSystem.Core.Models.Car, CRMSystem.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

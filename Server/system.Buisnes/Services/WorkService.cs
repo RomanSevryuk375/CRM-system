@@ -28,6 +28,11 @@ public class WorkService : IWorkService
         return await _workRepository.Get();
     }
 
+    public async Task<List<Work>> GetByWorkerId(int workerId)
+    {
+        return await _workRepository.GetByWorkerId(workerId);
+    }
+
     public async Task<List<WorkWithInfoDto>> GetWorkWithInfo()
     {
         var works = await _workRepository.Get();

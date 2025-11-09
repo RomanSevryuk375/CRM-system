@@ -21,10 +21,36 @@ public class ClientsRepository : IClientsRepository
         .ToListAsync();
 
         var clients = clientEntities
-            .Select(c => Client.Create(c.ClientId, c.ClientUserId, c.ClientName, c.ClientSurname, c.ClientPhoneNumber, c.ClientEmail).client)
+            .Select(c => Client.Create(
+                c.ClientId,
+                c.ClientUserId,
+                c.ClientName,
+                c.ClientSurname,
+                c.ClientPhoneNumber,
+                c.ClientEmail).client)
             .ToList();
 
         return clients;
+    }
+
+    public async Task<int> GetClientIdByUserId(int userId)
+    {
+        var client = await _context.Clients
+            .AsNoTracking()
+            .Where(c => c.ClientUserId == userId)
+            .Select(c => Client.Create(
+                c.ClientId,
+                c.ClientUserId,
+                c.ClientName,
+                c.ClientSurname,
+                c.ClientPhoneNumber,
+                c.ClientEmail).client)
+            .FirstOrDefaultAsync();
+
+        if (client == null)
+            throw new ArgumentException("Client not found");
+
+        return client.Id;
     }
 
     public async Task<int> Create(Client client)

@@ -39,6 +39,28 @@ public class WorkController : ControllerBase
         return Ok(response);
     }
 
+    //[HttpGet("MyWorks")]
+    //[Authorize(Policy = "WorkerPolicy")]
+
+    //public async Task<ActionResult<List<Work>>> GetWorkByWorkerId()
+    //{
+    //    var userId = int.Parse(User.FindFirst("userId")!.Value);
+    //    //workerId
+    //    var works = await _workService.GetByWorkerId(workerId);
+
+    //    var response = works
+    //        .Select(w => new WorkResponse(
+    //            w.Id,
+    //            w.OrderId,
+    //            w.JobId,
+    //            w.WorkerId,
+    //            w.TimeSpent,
+    //            w.StatusId))
+    //        .ToList();
+
+    //    return Ok(response);
+    //}
+
     [HttpGet("with-info")]
 
     public async Task<ActionResult<List<WorkWithInfoDto>>> GetWorkWithInfo()
