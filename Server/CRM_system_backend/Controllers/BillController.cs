@@ -80,7 +80,4 @@ public class BillController : ControllerBase
 
         return Ok(billId);
     }
-
-    //user get it by id from JWT
-    //[Authorize(Policy = "UserPolicy")]
 }
