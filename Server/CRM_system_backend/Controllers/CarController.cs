@@ -2,6 +2,7 @@
 using CRMSystem.Buisnes.DTOs;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -18,6 +19,7 @@ public class CarController : ControllerBase
     }
 
     [HttpGet("with owner")]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<CarWithOwnerDto>> GetCarsWithOwner()
     {
@@ -39,12 +41,13 @@ public class CarController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<Car>>> GetCar()
     {
         var cars = await _carService.GetAllCars();
 
-        var response = cars 
+        var response = cars
             .Select(b => new CarResponse(
                 b.Id, b.OwnerId, b.Brand, b.Model, b.YearOfManufacture, b.VinNumber, b.StateNumber, b.Mileage))
             .ToList();
@@ -53,6 +56,8 @@ public class CarController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "UserPolicy")]
 
     public async Task<ActionResult<int>> CreateCar([FromBody] CarRequest carRequest)
     {
@@ -66,7 +71,7 @@ public class CarController : ControllerBase
             carRequest.StateNumber,
             carRequest.Mileage);
 
-        if(!string.IsNullOrEmpty(error))
+        if (!string.IsNullOrEmpty(error))
         {
             return BadRequest(new { error });
         }
@@ -76,16 +81,21 @@ public class CarController : ControllerBase
         return Ok(carId);
     }
 
-    [HttpPut]
+    [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "UserPolicy")]
+    [Authorize(Policy = "WorkerPolicy")]
 
     public async Task<ActionResult<int>> UpdateCar([FromBody] CarUpdateRequest carUpdateRequest, int id)
     {
-        var result = await _carService.UpdateCar(id,carUpdateRequest.Brand, carUpdateRequest.Model, carUpdateRequest.YearOfManufacture, carUpdateRequest.VinNumber, carUpdateRequest.StateNumber, carUpdateRequest.Mileage);
-        
+        var result = await _carService.UpdateCar(id, carUpdateRequest.Brand, carUpdateRequest.Model, carUpdateRequest.YearOfManufacture, carUpdateRequest.VinNumber, carUpdateRequest.StateNumber, carUpdateRequest.Mileage);
+
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "UserPolicy")]
 
     public async Task<ActionResult<int>> DeleteCar(int id)
     {
@@ -93,4 +103,9 @@ public class CarController : ControllerBase
 
         return Ok(result);
     }
+
+    //user get/udate/delete it by id from JWT
+    //          [Authorize(Policy = "UserPolicy")]
+    //worker get it by id from order and can change it only in milage 
+    //          [Authorize(Policy = "WorkerPolicy")]
 }

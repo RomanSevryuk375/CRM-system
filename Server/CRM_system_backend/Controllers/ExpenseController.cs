@@ -2,6 +2,7 @@
 using CRMSystem.Buisnes.DTOs;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -18,6 +19,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<Expense>>> GetExpense()
     {
@@ -38,6 +40,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet("with-Info")]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<ExpensesWitInfoDto>>> GetExpenseWithInfo()
     {
@@ -58,6 +61,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> CreateExpense([FromBody] ExpenseRequest request)
     {
@@ -81,6 +85,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateExpense([FromBody] ExpenseRequest request, int id)
     {
@@ -97,6 +102,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteExpense(int id)
     {

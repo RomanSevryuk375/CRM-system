@@ -1,6 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -17,6 +18,7 @@ public class TaxContoller : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<Tax>>> GetTaxes()
     {
@@ -31,6 +33,7 @@ public class TaxContoller : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> CreateTax([FromBody] TaxRequest taxRequest)
     {
@@ -50,7 +53,8 @@ public class TaxContoller : ControllerBase
         return Ok(taxId);
     }
 
-    [HttpPut] 
+    [HttpPut]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateTax([FromBody] TaxRequest taxRequest, int id)
     {
@@ -60,6 +64,7 @@ public class TaxContoller : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteTax(int id)
     {

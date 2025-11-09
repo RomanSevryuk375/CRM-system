@@ -39,6 +39,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("logout")]
+
     public IActionResult Logout()
     {
 
@@ -54,7 +55,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("by-login/{login}")]
-    [Authorize]
+
     public async Task<ActionResult<User>> GetUserByLogin(string login)
     {
             var user = await _userService.GetUsersByLogin(login);
@@ -62,7 +63,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    
+
     public async Task<ActionResult<int>> CreateUser([FromBody] UserRequest request)
     {
         var (user, error) = CRMSystem.Core.Models.User.Create(
@@ -83,6 +84,7 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteUser (int id)
     {

@@ -1,6 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -17,6 +18,7 @@ public class PaymentNoteController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<PaymentNote>>> GetPaymentNote()
     {
@@ -35,6 +37,8 @@ public class PaymentNoteController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "UserPolicy")]
 
     public async Task<ActionResult<int>> CreatePaymentNote([FromBody] PaymentNoteRequest paymentNoteRequest)
     {
@@ -56,6 +60,7 @@ public class PaymentNoteController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdatePaymentNote([FromBody] PaymentNoteRequest paymentNoteRequest, int id)
     {
@@ -70,6 +75,7 @@ public class PaymentNoteController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeletePaymentNote(int id)
     {
@@ -77,4 +83,7 @@ public class PaymentNoteController : ControllerBase
 
         return Ok(result);
     }
+
+    //user can get it by id from jwt
+    //[Authorize(Policy = "UserPolicy")]
 }

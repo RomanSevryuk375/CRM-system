@@ -2,6 +2,7 @@
 using CRMSystem.Buisnes.DTOs;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -17,6 +18,7 @@ public class WorkProposalController : ControllerBase
         _workPropossalService = workPropossalService;
     }
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<WorkProposal>>> GetWorkProposal()
     {
@@ -37,6 +39,7 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpGet("with-info")]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<WorkProposalWithInfoDto>>> GetWorkProposalWithInfo()
     {
@@ -57,6 +60,8 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "WorkerPolicy")]
 
     public async Task<ActionResult<int>> CreateWorkProposal([FromBody] WorkProposalRequest request)
     {
@@ -80,6 +85,7 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateWorkProposa([FromBody]WorkProposalRequest request, int id)
     {
@@ -95,6 +101,8 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpPut("{id}/accept")]
+    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "UserPolicy")]
 
     public async Task<ActionResult<int>> AcceptProposal(int id)
     {
@@ -104,6 +112,8 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpPut("{id}/reject")]
+    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "UserPolicy")]
 
     public async Task<ActionResult<int>> RejectProposal(int id)
     {
@@ -114,6 +124,8 @@ public class WorkProposalController : ControllerBase
 
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "WorkerPolicy")]
 
     public async Task<ActionResult<int>> DeleteWorkProposa(int id)
     {
@@ -121,4 +133,7 @@ public class WorkProposalController : ControllerBase
 
         return Ok(result);
     }
+
+    //get by id [Authorize(Policy = "UserPolicy")]
+    //post it only for his orders by id [Authorize(Policy = "WorkerPolicy")]
 }

@@ -1,5 +1,6 @@
 ﻿using CRMSystem.Buisnes.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -46,6 +47,22 @@ public static class ApiExtensions
             };
         });
 
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("AdminPolicy", policy =>
+            {
+                policy.RequireClaim("userRoleId", "1");
+            });
+
+            options.AddPolicy("UserPolicy", policy =>
+            {
+                policy.RequireClaim("userRoleId", "2");
+            });
+
+            options.AddPolicy("WorkerPolicy", policy =>
+            {
+                policy.RequireClaim("userRoleId", "3");
+            });
+        });
     }
 }

@@ -2,6 +2,7 @@
 using CRMSystem.Buisnes.DTOs;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.InteropServices;
 
@@ -19,6 +20,7 @@ public class WorkController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<Work>>> GetWork()
     {
@@ -57,6 +59,8 @@ public class WorkController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
+
     public async Task<ActionResult<int>> CreateWork([FromBody] WorkRequest request)
     {
         var (work, error) = Work.Create(
@@ -78,6 +82,7 @@ public class WorkController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateWork([FromBody] WorkRequest request, int id)
     {
@@ -93,6 +98,7 @@ public class WorkController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteWork(int id)
     {
@@ -100,4 +106,6 @@ public class WorkController : ControllerBase
 
         return Ok(result);
     }
+
+    //get and post/put it only for his orders by id [Authorize(Policy = "WorkerPolicy")]
 }

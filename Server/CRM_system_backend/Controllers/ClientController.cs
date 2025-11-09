@@ -2,6 +2,7 @@
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -20,6 +21,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<ClientsResponse>>> GetClient()
     {
         var clients = await _clientService.GetClients();
@@ -33,6 +35,7 @@ public class ClientController : ControllerBase
 
 
     [HttpPost("with create user")]
+
     public async Task<ActionResult<int>> CreateClient([FromBody] ClientRegistreRequest request)
     {
         var (user, errorUser) = CRMSystem.Core.Models.User.Create(
@@ -71,6 +74,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateClient([FromBody] ClientUpdateRequest clientUpdateRequest, int id)
     {
@@ -83,4 +87,6 @@ public class ClientController : ControllerBase
 
             return Ok(result);
     }
+
+    //user get it by id from jwt
 }

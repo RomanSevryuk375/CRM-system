@@ -1,6 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -17,6 +18,7 @@ public class BillController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<Bill>>> GetBill()
     {
@@ -36,6 +38,7 @@ public class BillController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> CreateBill([FromBody] BillRequest request)
     {
@@ -56,4 +59,7 @@ public class BillController : ControllerBase
 
         return Ok(billId);
     }
+
+    //user get it by id from JWT
+    //[Authorize(Policy = "UserPolicy")]
 }

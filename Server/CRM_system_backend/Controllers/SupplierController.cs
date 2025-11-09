@@ -1,6 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -17,6 +18,7 @@ public class SupplierController : Controller
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<Supplier>>> GetSuppliers()
     {
@@ -30,6 +32,7 @@ public class SupplierController : Controller
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> CreateSupplier ([FromBody] SupplierRequest supplierRequest)
     {
@@ -51,6 +54,7 @@ public class SupplierController : Controller
     }
 
     [HttpPut]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateSupplier([FromBody] SupplierRequest supplierRequest, int id)
     {
@@ -60,6 +64,7 @@ public class SupplierController : Controller
     }
 
     [HttpDelete]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteSupplier(int id)
     {

@@ -94,7 +94,7 @@
   {
     "ContainingType": "CRM_system_backend.Controllers.CarController",
     "Method": "UpdateCar",
-    "RelativePath": "Car",
+    "RelativePath": "Car/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -107,7 +107,7 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
     "ReturnTypes": [
@@ -125,7 +125,7 @@
   {
     "ContainingType": "CRM_system_backend.Controllers.CarController",
     "Method": "DeleteCar",
-    "RelativePath": "Car",
+    "RelativePath": "Car/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -133,7 +133,7 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
     "ReturnTypes": [

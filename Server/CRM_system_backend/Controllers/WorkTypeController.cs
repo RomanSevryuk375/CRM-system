@@ -1,6 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -17,6 +18,8 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "WorkerPolicy")]
 
     public async Task<ActionResult<List<WorkType>>> GetWorkType()
     {
@@ -34,6 +37,7 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> CreateWorkType([FromBody] WorkTypeRequest workTypeRequest)
     {
@@ -53,6 +57,7 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateWorkType([FromBody] WorkTypeRequest workTypeRequest, int id)
     {
@@ -67,6 +72,7 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteWorkType (int id)
     {

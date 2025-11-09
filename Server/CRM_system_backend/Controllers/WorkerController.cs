@@ -3,6 +3,7 @@ using CRMSystem.Buisnes.DTOs;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
@@ -22,6 +23,7 @@ public class WorkerController : ControllerBase
     }
 
     [HttpGet("with-info")]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<WorkerWithInfoDto>>> GetWorkerWithInfo()
     {
@@ -42,6 +44,7 @@ public class WorkerController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<WorkerResponse>>> GetAllWorker()
     {
@@ -98,6 +101,7 @@ public class WorkerController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateWorker([FromBody] WorkerRequest workerRequest, int id)
     {
@@ -116,6 +120,7 @@ public class WorkerController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteWorker(int id)
     {
@@ -123,4 +128,6 @@ public class WorkerController : ControllerBase
 
         return Ok(result);
     }
+
+    //worker get it by id from jwt
 }

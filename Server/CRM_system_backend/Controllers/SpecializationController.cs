@@ -1,6 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -18,6 +19,7 @@ public class SpecializationController : Controller
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<Specialization>> GetSpecialization()
     {
@@ -31,6 +33,7 @@ public class SpecializationController : Controller
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> CreateSpecialization([FromBody]SpecializationRequest specializationRequest)
     {
@@ -49,6 +52,7 @@ public class SpecializationController : Controller
     }
 
     [HttpPut]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateSpecialization([FromBody] SpecializationRequest specializationRequest, int id)
     {
@@ -58,10 +62,12 @@ public class SpecializationController : Controller
     }
 
     [HttpDelete]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteSpecialization(int id)
     {
         var result = await _specializationService.DeleteSpecialization(id);
 
         return Ok(result);
     }
+    //worker can get by id from jwt
 }

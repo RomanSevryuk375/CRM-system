@@ -2,6 +2,7 @@
 using CRMSystem.Buisnes.DTOs;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -18,6 +19,7 @@ public class RepairNoteController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<RepairNote>>> GetRepairNote()
     {
@@ -35,6 +37,7 @@ public class RepairNoteController : ControllerBase
     }
 
     [HttpGet("with-info")]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<RepairNoteWithInfoDto>>> GetRepairNoteWithInfo()
     {
@@ -50,4 +53,9 @@ public class RepairNoteController : ControllerBase
 
         return Ok(response);
     }
+
+    //user can get by id from jwt
+    //[Authorize(Policy = "UserPolicy")]
+    //worker can get it by cdr id from order
+    //Authorize(Policy = "WorkerPolicy")]
 }

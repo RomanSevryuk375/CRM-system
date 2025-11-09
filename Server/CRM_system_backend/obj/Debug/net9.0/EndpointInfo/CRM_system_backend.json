@@ -206,7 +206,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/Car/{id}": {
       "put": {
         "tags": [
           "Car"
@@ -214,7 +216,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -273,7 +276,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"

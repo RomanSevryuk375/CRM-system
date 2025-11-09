@@ -2,6 +2,7 @@
 using CRMSystem.Buisnes.DTOs;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -19,6 +20,7 @@ public class UsedPartController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<UsedPart>>> GetUsedPart()
     {
@@ -40,7 +42,8 @@ public class UsedPartController : ControllerBase
     }
 
     [HttpGet("with-info")]
-    
+    [Authorize(Policy = "AdminPolicy")]
+
     public async Task<ActionResult<List<UsedPartWithInfoDto>>> GetUsedPartWithInfo()
     {
         var dtos = await _usedPartService.GetUsedPartWithInfo();
@@ -61,6 +64,8 @@ public class UsedPartController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "WorkerPolicy")]
 
     public async Task<ActionResult<int>> CreateUsedPart([FromBody] UsedPartRequest request)
     {
@@ -85,6 +90,7 @@ public class UsedPartController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateUsedPart([FromBody] UsedPartRequest request, int id)
     {
@@ -102,6 +108,7 @@ public class UsedPartController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteUsedPart(int id)
     {
@@ -109,4 +116,6 @@ public class UsedPartController : ControllerBase
 
         return Ok(result);
     }
+
+    //get and post/put it only for his orders by id [Authorize(Policy = "WorkerPolicy")]
 }

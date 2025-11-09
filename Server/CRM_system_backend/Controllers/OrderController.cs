@@ -2,6 +2,7 @@
 using CRMSystem.Buisnes.DTOs;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -18,6 +19,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<Order>>> GetOrders()
     {
@@ -36,6 +38,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("with-info")]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<List<OrderWithInfoDto>>> GetOrderWithInfo()
     {
@@ -52,6 +55,8 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "UserPolicy")]
 
     public async Task<ActionResult<int>> CreateOrder([FromBody] OrderRequest request)
     {
@@ -73,6 +78,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateOrder([FromBody] OrderRequest request, int id)
     {
@@ -82,6 +88,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteOrder(int id)
     {
@@ -89,4 +96,9 @@ public class OrderController : ControllerBase
 
         return Ok(result);
     }
+
+    //user get it by id from gwt
+    //[Authorize(Policy = "UserPolicy")]
+    //worker get it by id from gwt and can change status 
+    //[Authorize(Policy = "WorkerPolicy")]
 }
