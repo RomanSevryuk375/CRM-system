@@ -1,7 +1,6 @@
 ﻿using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -19,6 +18,25 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         var paymentEntities = await _context.PaymentNotes
             .AsNoTracking()
             .ToListAsync();
+
+        var paymentNote = paymentEntities
+            .Select(pn => PaymentNote.Create(
+                pn.Id,
+                pn.BillId,
+                pn.Date,
+                pn.Amount,
+                pn.Method).paymentNote)
+            .ToList();
+
+        return paymentNote;
+    }
+
+    public async Task<List<PaymentNote>> GetByBillId(List<int> billIds)
+    {
+        var paymentEntities = await _context.PaymentNotes
+            .Where(p => billIds.Contains(p.BillId))
+           .AsNoTracking()
+           .ToListAsync();
 
         var paymentNote = paymentEntities
             .Select(pn => PaymentNote.Create(
@@ -58,12 +76,7 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         return paymentNote.Id;
     }
 
-    public async Task<int> Update(
-        int id,
-        int? billId,
-        DateTime? date,
-        decimal? amount,
-        string method)
+    public async Task<int> Update(int id, int? billId, DateTime? date, decimal? amount, string method)
     {
         var paymentNote = await _context.PaymentNotes.FirstOrDefaultAsync(pn => pn.Id == id)
             ?? throw new Exception("Payment note not found");

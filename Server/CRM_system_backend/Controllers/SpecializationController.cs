@@ -69,5 +69,4 @@ public class SpecializationController : Controller
 
         return Ok(result);
     }
-    //worker can get by id from jwt
 }

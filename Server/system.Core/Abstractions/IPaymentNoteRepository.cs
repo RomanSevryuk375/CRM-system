@@ -7,6 +7,7 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> Create(PaymentNote paymentNote);
         Task<int> Delete(int id);
         Task<List<PaymentNote>> Get();
+        Task<List<PaymentNote>> GetByBillId(List<int> billIds);
         Task<int> Update(int id, int? billId, DateTime? date, decimal? amount, string method);
     }
 }

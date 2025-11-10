@@ -15,6 +15,7 @@ public class PaymentNoteController : ControllerBase
     public PaymentNoteController(IPaymentNoteService paymentNoteService)
     {
         _paymentNoteService = paymentNoteService;
+        
     }
 
     [HttpGet]
@@ -25,6 +26,27 @@ public class PaymentNoteController : ControllerBase
         var paymentNotes  = await _paymentNoteService.GetPaymentNote();
 
         var  response = paymentNotes
+            .Select(p => new PaymentNoteResponse(
+                p.Id,
+                p.BillId,
+                p.Date,
+                p.Amount,
+                p.Method))
+            .ToList();
+
+        return Ok(response);
+    }
+
+    [HttpGet("My")]
+    [Authorize(Policy = "UserPolicy")]
+
+    public async Task<ActionResult<List<PaymentNote>>> GetUserNote()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+
+        var paymentNotes = await _paymentNoteService.GetUserNote(userId);
+
+        var response = paymentNotes
             .Select(p => new PaymentNoteResponse(
                 p.Id,
                 p.BillId,
@@ -83,7 +105,4 @@ public class PaymentNoteController : ControllerBase
 
         return Ok(result);
     }
-
-    //user can get it by id from jwt
-    //[Authorize(Policy = "UserPolicy")]
 }

@@ -1,11 +1,10 @@
 ﻿using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.DTOs;
 using CRMSystem.Buisnes.Services;
-using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+
 
 namespace CRM_system_backend.Controllers;
 

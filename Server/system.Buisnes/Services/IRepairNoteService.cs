@@ -7,5 +7,7 @@ namespace CRMSystem.Buisnes.Services
     {
         Task<List<RepairNote>> GetRepairNote();
         Task<List<RepairNoteWithInfoDto>> GetRepairNoteWithInfo();
+        Task<List<RepairNoteWithInfoDto>> GetUserRepairNote(int userId);
+        Task<List<RepairNoteWithInfoDto>> GetWorkerRepairNote(int userId);
     }
 }

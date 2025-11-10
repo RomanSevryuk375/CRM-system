@@ -90,7 +90,6 @@ public class OrderController : ControllerBase
             o.Priority)).ToList();
 
         return Ok(response);
-        //lox
     }
 
     [HttpPost]
@@ -135,7 +134,4 @@ public class OrderController : ControllerBase
 
         return Ok(result);
     }
-
-    //worker get it by id from gwt and can change status 
-    //[Authorize(Policy = "WorkerPolicy")]
 }

@@ -29,4 +29,42 @@ public class RepairNoteRepositry : IRepairNoteRepositry
 
         return repairNote;
     }
+
+    public async Task<List<RepairNote>> GetByCarId(List<int> carIds)
+    {
+        var repairNoteEntity = await _context.RepairHistories
+            .Where(r => carIds.Contains(r.CarId))
+            .AsNoTracking()
+            .ToListAsync();
+
+        var repairNote = repairNoteEntity
+            .Select(r => RepairNote.Create(
+                r.Id,
+                r.OrderId,
+                r.CarId,
+                r.WorkDate,
+                r.ServiceSum).repairHistory)
+            .ToList();
+
+        return repairNote;
+    }
+
+    public async Task<List<RepairNote>> GetByOrderId(List<int> orderIds)
+    {
+        var repairNoteEntity = await _context.RepairHistories
+            .Where(r => orderIds.Contains(r.OrderId))
+            .AsNoTracking()
+            .ToListAsync();
+
+        var repairNote = repairNoteEntity
+            .Select(r => RepairNote.Create(
+                r.Id,
+                r.OrderId,
+                r.CarId,
+                r.WorkDate,
+                r.ServiceSum).repairHistory)
+            .ToList();
+
+        return repairNote;
+    }
 }

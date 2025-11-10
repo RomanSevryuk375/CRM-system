@@ -54,8 +54,43 @@ public class RepairNoteController : ControllerBase
         return Ok(response);
     }
 
-    //user can get by id from jwt
-    //[Authorize(Policy = "UserPolicy")]
-    //worker can get it by cdr id from order
-    //Authorize(Policy = "WorkerPolicy")]
+    [HttpGet("My")]
+    [Authorize(Policy = "UserPolicy")]
+
+    public async Task<ActionResult<List<RepairNoteWithInfoDto>>> GetUserRepairNote()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+
+        var dtos = await _repairNoteService.GetUserRepairNote(userId);
+
+        var response = dtos
+            .Select(r => new RepairNoteWithInfoDto(
+                r.Id,
+                r.OrderId,
+                r.CarInfo,
+                r.Date,
+                r.ServiceSum)).ToList();
+
+        return Ok(response);
+    }
+
+    [HttpGet("InWork")]
+    [Authorize(Policy = "UserPolicy")]
+
+    public async Task<ActionResult<List<RepairNoteWithInfoDto>>> GetWorkerRepairNote()
+    {
+        var usreId = int.Parse(User.FindFirst("userId")!.Value);
+
+        var dtos = await _repairNoteService.GetWorkerRepairNote(usreId);
+
+        var response = dtos
+            .Select(r => new RepairNoteWithInfoDto(
+                r.Id,
+                r.OrderId,
+                r.CarInfo,
+                r.Date,
+                r.ServiceSum)).ToList();
+
+        return Ok(response);
+    }
 }

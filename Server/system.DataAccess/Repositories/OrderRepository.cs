@@ -34,7 +34,7 @@ public class OrderRepository : IOrderRepository
     public async Task<List<Order>> GetById(List<int> orderIds)
     {
         var orderEntities = await _context.Orders
-            .Where(o => orderIds.Contains(o.Id))// && (o.StatusId == 5 || o.StatusId == 7)) //not tested
+            .Where(o => orderIds.Contains(o.Id) && (o.StatusId == 5 || o.StatusId == 7)) //not tested but if it disable it work good
             .AsNoTracking()
             .ToListAsync();
 
@@ -95,12 +95,7 @@ public class OrderRepository : IOrderRepository
         return orderEntitie.Id;
     }
 
-    public async Task<int> Update(
-        int id,
-        int? statusId,
-        int? carId,
-        DateTime? date,
-        string priority)
+    public async Task<int> Update(int id, int? statusId, int? carId, DateTime? date, string priority)
     {
         var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new Exception("Order not found");
