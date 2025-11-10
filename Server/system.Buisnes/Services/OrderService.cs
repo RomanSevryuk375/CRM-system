@@ -1,4 +1,5 @@
 ﻿using CRMSystem.Buisnes.DTOs;
+using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 
@@ -9,20 +10,77 @@ public class OrderService : IOrderService
     private readonly IOrderRepository _orderRepository;
     private readonly IStatusRepository _statusRepository;
     private readonly ICarRepository _carRepository;
+    private readonly IClientsRepository _clientsRepository;
+    private readonly IWorkerRepository _workerRepository;
+    private readonly IWorkRepository _workRepository;
 
     public OrderService(
         IOrderRepository orderRepository,
         IStatusRepository statusRepository,
-        ICarRepository carRepository)
+        ICarRepository carRepository,
+        IClientsRepository clientsRepository,
+        IWorkerRepository workerRepository,
+        IWorkRepository workRepository)
     {
         _orderRepository = orderRepository;
         _statusRepository = statusRepository;
         _carRepository = carRepository;
+        _clientsRepository = clientsRepository;
+        _workerRepository = workerRepository;
+        _workRepository = workRepository;
     }
 
     public async Task<List<Order>> GetOrders()
     {
         return await _orderRepository.Get();
+    }
+
+    public async Task<List<OrderWithInfoDto>> GetUserOrders(int userId)
+    {
+        var client = await _clientsRepository.GetClientByUserId(userId);
+        var ownerId = client.Select(c => c.Id).FirstOrDefault();
+
+        var cars = await _carRepository.GetByOwnerId(ownerId);
+        var carIds = cars.Select(c => c.Id).ToList();
+
+        var orders = await _orderRepository.GetByCarId(carIds);
+
+        var statuses = await _statusRepository.Get();
+
+        var response = (from o in orders
+                        join c in cars on o.CarId equals c.Id
+                        join s in statuses on o.StatusId equals s.Id
+                        select new OrderWithInfoDto(
+                            o.Id,
+                            s.Name,
+                            $"{c.Brand} {c.Model} ({c.StateNumber})",
+                            o.Date,
+                            o.Priority)).ToList();
+        return response;
+    }
+
+    public async Task<List<OrderWithInfoDto>> GetWorkerOrders(int userId)
+    {
+        var workerId = await _workerRepository.GetWorkerIdByUserId(userId);
+
+        var works = await _workRepository.GetByWorkerId(workerId);
+        var orderIds = works.Select(c => c.OrderId).ToList();
+
+        var orders = await _orderRepository.GetById(orderIds);
+
+        var statuses = await _statusRepository.Get();
+        var cars = await _carRepository.Get();
+
+        var response = (from o in orders
+                        join c in cars on o.CarId equals c.Id
+                        join s in statuses on o.StatusId equals s.Id
+                        select new OrderWithInfoDto(
+                            o.Id,
+                            s.Name,
+                            $"{c.Brand} {c.Model} ({c.StateNumber})",
+                            o.Date,
+                            o.Priority)).ToList();
+        return response;
     }
 
     public async Task<List<OrderWithInfoDto>> GetOrderWithInfo()

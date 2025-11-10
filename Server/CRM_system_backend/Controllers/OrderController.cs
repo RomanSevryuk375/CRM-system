@@ -54,6 +54,45 @@ public class OrderController : ControllerBase
         return Ok(response);            
     }
 
+    [HttpGet("My")]
+    [Authorize(Policy = "UserPolicy")]
+
+    public async Task<ActionResult<List<OrderWithInfoDto>>> GetUserOrders()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+
+        var dtos = await _orderService.GetUserOrders(userId);
+
+        var response = dtos.Select(o => new OrderWithInfoDto(
+            o.Id,
+            o.StatusName,
+            o.CarInfo,
+            o.Date,
+            o.Priority)).ToList();
+
+        return Ok(response);
+    }
+
+    [HttpGet("InWork")]
+    [Authorize(Policy = "WorkerPolicy")]
+
+    public async Task<ActionResult<List<OrderWithInfoDto>>> GetWorkerOrders()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+
+        var dtos = await _orderService.GetWorkerOrders(userId);
+
+        var response = dtos.Select(o => new OrderWithInfoDto(
+            o.Id,
+            o.StatusName,
+            o.CarInfo,
+            o.Date,
+            o.Priority)).ToList();
+
+        return Ok(response);
+        //lox
+    }
+
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
     [Authorize(Policy = "UserPolicy")]
@@ -97,8 +136,6 @@ public class OrderController : ControllerBase
         return Ok(result);
     }
 
-    //user get it by id from gwt
-    //[Authorize(Policy = "UserPolicy")]
     //worker get it by id from gwt and can change status 
     //[Authorize(Policy = "WorkerPolicy")]
 }

@@ -45,7 +45,7 @@ public class CarService : ICarService
     {
         var workerId = await _workerRepository.GetWorkerIdByUserId(userId);
         var works = await _workRepository.GetByWorkerId(workerId);
-        var orderId = works.Select(works => works.OrderId).FirstOrDefault();
+        var orderId = works.Select(works => works.OrderId).ToList();
         var orders = await _orderRepository.GetById(orderId);
         var carId = orders.Select(orders => orders.CarId).FirstOrDefault();
 

@@ -102,6 +102,4 @@ public class ClientController : ControllerBase
 
             return Ok(result);
     }
-
-    //user get it by id from jwt
 }

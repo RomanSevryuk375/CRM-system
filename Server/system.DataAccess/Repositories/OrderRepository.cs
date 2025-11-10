@@ -31,10 +31,10 @@ public class OrderRepository : IOrderRepository
         return orders;
     }
 
-    public async Task<List<Order>> GetById(int orderId)
+    public async Task<List<Order>> GetById(List<int> orderIds)
     {
         var orderEntities = await _context.Orders
-            .Where(o => o.Id == orderId && (o.StatusId == 5 || o.StatusId == 7)) //not tested
+            .Where(o => orderIds.Contains(o.Id))// && (o.StatusId == 5 || o.StatusId == 7)) //not tested
             .AsNoTracking()
             .ToListAsync();
 
@@ -50,10 +50,10 @@ public class OrderRepository : IOrderRepository
         return orders;
     }
 
-    public async Task<List<Order>> GetByCarId(int carId)
+    public async Task<List<Order>> GetByCarId(List<int> carIds)
     {
         var orderEntities = await _context.Orders
-            .Where(o => o.CarId == carId)
+            .Where(o => carIds.Contains(o.CarId))
             .AsNoTracking()
             .ToListAsync();
 
