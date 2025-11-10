@@ -33,6 +33,21 @@ public class ClientController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("My")]
+    [Authorize(Policy = "UserPolicy")]
+
+    public async Task<ActionResult<List<Client>>> GetClientByUserId()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+
+        var clients = await _clientService.GetClientByUserId(userId);
+
+        var response = clients
+            .Select(b => new ClientsResponse(b.Id, b.UserId, b.Name, b.Surname, b.Email, b.PhoneNumber))
+            .ToList();
+
+        return Ok(response);
+    }
 
     [HttpPost("with create user")]
 

@@ -17,6 +17,11 @@ public class ClientService : IClientService
         return await _clientsRepository.Get();
     }
 
+    public async Task<List<Client>> GetClientByUserId(int userId)
+    {
+        return await _clientsRepository.GetClientByUserId(userId);
+    }
+
     public async Task<int> CreateClient(Client client)
     {
         return await _clientsRepository.Create(client);
