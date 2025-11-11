@@ -32,7 +32,32 @@ public class WorkService : IWorkService
     {
         return await _workRepository.GetByWorkerId(workerId);
     }
+    public async Task<List<WorkWithInfoDto>> GetInWorkWorks(int userId)
+    {
+        var worker = await _workerRepository.GetWorkerIdByUserId(userId);
+        var workerId = worker.Select(w => w.Id).ToList();
 
+        var allWorks = await _workRepository.GetByWorkerId(workerId);
+        var inWork = allWorks.Where(i => i.StatusId == 3).ToList();
+        var statuses = await _statusRepository.Get();
+        var workTypes = await _workTypeRepository.Get();
+        var workers = await _workerRepository.Get();
+
+        var response = (from w in inWork
+                        join s in statuses on w.StatusId equals s.Id
+                        join wt in workTypes on w.JobId equals wt.Id
+                        join wo in workers on w.WorkerId equals wo.Id
+                        select new WorkWithInfoDto(
+                            w.Id,
+                            w.OrderId,
+                            $"{wt.Title}",
+                            $"{wo.Name} {wo.Surname} ({wo.PhoneNumber})",
+                            w.TimeSpent,
+                            s.Name))
+                            .ToList();
+
+        return response;
+    }
     public async Task<List<WorkWithInfoDto>> GetWorkWithInfo()
     {
         var works = await _workRepository.Get();

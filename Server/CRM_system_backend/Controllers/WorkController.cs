@@ -4,7 +4,6 @@ using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.InteropServices;
 
 namespace CRM_system_backend.Controllers;
 
@@ -39,27 +38,27 @@ public class WorkController : ControllerBase
         return Ok(response);
     }
 
-    //[HttpGet("MyWorks")]
-    //[Authorize(Policy = "WorkerPolicy")]
+    [HttpGet("MyWorks")] //not tested
+    [Authorize(Policy = "WorkerPolicy")]
 
-    //public async Task<ActionResult<List<Work>>> GetWorkByWorkerId()
-    //{
-    //    var userId = int.Parse(User.FindFirst("userId")!.Value);
-    //    //workerId
-    //    var works = await _workService.GetByWorkerId(workerId);
+    public async Task<ActionResult<List<WorkWithInfoDto>>> GetWorkByWorkerId()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+        //workerId
+        var works = await _workService.GetInWorkWorks(userId);
 
-    //    var response = works
-    //        .Select(w => new WorkResponse(
-    //            w.Id,
-    //            w.OrderId,
-    //            w.JobId,
-    //            w.WorkerId,
-    //            w.TimeSpent,
-    //            w.StatusId))
-    //        .ToList();
+        var response = works
+            .Select(w => new WorkWithInfoDto(
+                w.Id,
+                w.OrderId,
+                w.JobName,
+                w.WorkerInfo,
+                w.TimeSpent,
+                w.StatusName))
+            .ToList();
 
-    //    return Ok(response);
-    //}
+        return Ok(response);
+    }
 
     [HttpGet("with-info")]
 
