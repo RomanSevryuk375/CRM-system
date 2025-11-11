@@ -127,6 +127,4 @@ public class WorkController : ControllerBase
 
         return Ok(result);
     }
-
-    //get and post/put it only for his orders by id [Authorize(Policy = "WorkerPolicy")]
 }

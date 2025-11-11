@@ -62,6 +62,28 @@ public class UsedPartController : ControllerBase
 
         return Ok(response);
     }
+    [HttpGet("InWork")]
+    [Authorize(Policy = "WorkerPolicy")]
+
+    public async Task<ActionResult<List<UsedPartWithInfoDto>>> GetWorkerUsedPart()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+        var usedParts = await _usedPartService.GetWorkerUsedPart(userId);
+
+        var response = usedParts
+            .Select(u => new UsedPartWithInfoDto(
+                u.Id,
+                u.OrderId,
+                u.SupplierName,
+                u.Name,
+                u.Article,
+                u.Quantity,
+                u.UnitPrice,
+                u.Sum))
+            .ToList();
+
+        return Ok(response);
+    }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
@@ -116,6 +138,4 @@ public class UsedPartController : ControllerBase
 
         return Ok(result);
     }
-
-    //get and post/put it only for his orders by id [Authorize(Policy = "WorkerPolicy")]
 }

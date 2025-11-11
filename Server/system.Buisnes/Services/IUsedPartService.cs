@@ -8,6 +8,7 @@ namespace CRMSystem.Buisnes.Services
         Task<int> CreateUsedPart(UsedPart usedPart);
         Task<int> DeleteUsedPart(int id);
         Task<List<UsedPart>> GetUsedPart();
+        Task<List<UsedPartWithInfoDto>> GetWorkerUsedPart(int userId);
         Task<List<UsedPartWithInfoDto>> GetUsedPartWithInfo();
         Task<int> UpdateUsedPart(int id, int orderId, int supplierId, string name, string article, decimal quantity, decimal unitPrice, decimal sum);
     }

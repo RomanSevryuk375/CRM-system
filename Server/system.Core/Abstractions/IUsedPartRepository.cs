@@ -7,6 +7,7 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> Create(UsedPart usedPart);
         Task<int> Delete(int id);
         Task<List<UsedPart>> Get();
+        Task<List<UsedPart>> GetByOrderId(List<int> orderIds);
         Task<int> Update(int id, int? orderId, int? supplierId, string name, string article, decimal? quantity, decimal? unitPrice, decimal? sum);
     }
 }

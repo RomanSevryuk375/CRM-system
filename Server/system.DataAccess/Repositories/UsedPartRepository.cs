@@ -1,7 +1,6 @@
 ﻿using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -17,6 +16,28 @@ public class UsedPartRepository : IUsedPartRepository
     public async Task<List<UsedPart>> Get()
     {
         var usedPartEntities = await _context.UsedParts
+            .AsNoTracking()
+            .ToListAsync();
+
+        var usedPart = usedPartEntities
+            .Select(up => UsedPart.Create(
+                up.Id,
+                up.OrderId,
+                up.SupplierId,
+                up.Name,
+                up.Article,
+                up.Quantity,
+                up.UnitPrice,
+                up.Sum).usedPart)
+            .ToList();
+
+        return usedPart;
+    }
+
+    public async Task<List<UsedPart>> GetByOrderId(List<int> orderIds)
+    {
+        var usedPartEntities = await _context.UsedParts
+            .Where(w => orderIds.Contains(w.OrderId))
             .AsNoTracking()
             .ToListAsync();
 
