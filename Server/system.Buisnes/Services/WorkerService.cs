@@ -20,10 +20,26 @@ public class WorkerService : IWorkerService
         return await _workerRepository.Get();
     }
 
-    //public async Task<int> GetWorkerIdByUserId(int userId)
-    //{
-    //    return await _workerRepository.GetWorkerIdByUserId(userId);
-    //}
+    public async Task<List<WorkerWithInfoDto>> GetWorkerIdByUserId(int userId)
+    {
+        var worker = await _workerRepository.GetWorkerIdByUserId(userId);
+        var specializations = await _specializationRepository.Get();
+
+        var response = (from w in worker
+                        join s in specializations on w.SpecializationId equals s.Id
+                        select new WorkerWithInfoDto(
+                            w.Id,
+                            w.UserId,
+                            s.Name,
+                            w.Name,
+                            w.Surname,
+                            w.HourlyRate,
+                            w.PhoneNumber,
+                            w.Email
+                            )).ToList();
+
+        return response;
+    }
 
     public async Task<List<WorkerWithInfoDto>> GetWorkersWithInfo()
     {

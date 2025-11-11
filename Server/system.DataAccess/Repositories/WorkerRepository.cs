@@ -34,11 +34,14 @@ public class WorkerRepository : IWorkerRepository
         return worker;
     }
 
-    public async Task<int> GetWorkerIdByUserId(int userId)
+    public async Task<List<Worker>> GetWorkerIdByUserId(int userId)
     {
-        var worker = await _context.Workers
+        var workerEntities = await _context.Workers
             .AsNoTracking()
             .Where(w => w.UserId == userId)
+            .ToListAsync();
+
+        var worker = workerEntities
             .Select(w => Worker.Create(
                 w.Id,
                 w.UserId,
@@ -48,12 +51,9 @@ public class WorkerRepository : IWorkerRepository
                 w.HourlyRate,
                 w.PhoneNumber,
                 w.Email).worker)
-            .FirstOrDefaultAsync();
+            .ToList();
 
-        if (worker == null)
-            throw new ArgumentException("Client not found");
-
-        return worker.Id;
+        return worker;
     }
 
     public async Task<int> Create(Worker worker)
@@ -88,15 +88,7 @@ public class WorkerRepository : IWorkerRepository
         return worker.Id;
     }
 
-    public async Task<int> Update(
-        int id,
-        int? userId,
-        int? specialization,
-        string name,
-        string Surname,
-        decimal? hourlyRate,
-        string phoneNumber,
-        string email)
+    public async Task<int> Update(int id, int? userId, int? specialization, string name, string Surname, decimal? hourlyRate, string phoneNumber, string email)
     {
         var workerEntity = await _context.Workers.FirstOrDefaultAsync(w => w.Id == id)
             ?? throw new Exception("Payment note not found");

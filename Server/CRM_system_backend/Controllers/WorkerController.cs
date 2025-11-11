@@ -42,6 +42,30 @@ public class WorkerController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("My")]
+    [Authorize(Policy = "WorkerPolicy")]
+
+    public async Task<ActionResult<List<WorkerWithInfoDto>>> GetUserWorkerInfo()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+
+        var dtos = await _workerService.GetWorkerIdByUserId(userId);
+
+        var response = dtos.Select(d => new WorkerWithInfoDto(
+            d.Id,
+            d.UserId,
+            d.SpecializationName,
+            d.Name,
+            d.Surname,
+            d.HourlyRate,
+            d.PhoneNumber,
+            d.Email
+        )).ToList();
+
+        return Ok(response);
+
+    }
+
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
 

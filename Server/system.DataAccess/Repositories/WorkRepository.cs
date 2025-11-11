@@ -32,10 +32,10 @@ public class WorkRepository : IWorkRepository
         return work;
     }
 
-    public async Task<List<Work>> GetByWorkerId(int workerId)
+    public async Task<List<Work>> GetByWorkerId(List<int> workerIds)
     {
         var workEntities = await _context.Works
-            .Where(w => w.WorkerId == workerId)
+            .Where(w => workerIds.Contains(w.WorkerId))
             .AsNoTracking()
             .ToListAsync();
 

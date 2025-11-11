@@ -78,7 +78,8 @@ public class RepairNoteService : IRepairNoteService
 
     public async Task<List<RepairNoteWithInfoDto>> GetWorkerRepairNote(int userId)
     {
-        var workerId = await _workerRepository.GetWorkerIdByUserId(userId);
+        var worker = await _workerRepository.GetWorkerIdByUserId(userId);
+        var workerId = worker.Select(w => w.Id).ToList();
 
         var works = await _workRepository.GetByWorkerId(workerId);
 

@@ -8,6 +8,7 @@ namespace CRMSystem.Buisnes.Services
         Task<int> CreateWorker(Worker worker);
         Task<int> DeleteWorker(int id);
         Task<List<Worker>> GetAllWorkers();
+        Task<List<WorkerWithInfoDto>> GetWorkerIdByUserId(int userId);
         Task<List<WorkerWithInfoDto>> GetWorkersWithInfo();
         Task<int> UpdateWorker(int id, int? userId, int? specialization, string name, string Surname, decimal? hourlyRate, string phoneNumber, string email);
     }
