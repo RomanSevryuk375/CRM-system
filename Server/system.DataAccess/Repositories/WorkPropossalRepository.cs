@@ -33,6 +33,27 @@ public class WorkPropossalRepository : IWorkPropossalRepository
         return workProposals;
     }
 
+    public async Task<List<WorkProposal>> GetByOrderId(List<int> orderIds)
+    {
+        var workProposalEntities = await _context.WorkProposals
+            .Where(p => orderIds.Contains(p.OrderId))
+            .AsNoTracking()
+            .ToListAsync();
+
+        var workProposals = workProposalEntities
+            .Select(wp => WorkProposal.Create(
+                wp.Id,
+                wp.OrderId,
+                wp.WorkId,
+                wp.ByWorker,
+                wp.StatusId,
+                wp.DecisionStatusId,
+                wp.Date).workPropossal)
+            .ToList();
+
+        return workProposals;
+    }
+
     public async Task<int> Create(WorkProposal workProposal)
     {
         var (_, error) = WorkProposal.Create(

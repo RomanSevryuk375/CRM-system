@@ -59,6 +59,29 @@ public class WorkProposalController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("InWork")]
+    [Authorize(Policy = "WorkerPolicy")]
+
+    public async Task<ActionResult<List<WorkerWithInfoDto>>> GetProposalForClient()
+    {
+        var userId = int.Parse(User.FindFirst("userId")!.Value);
+
+        var proposals = await _workPropossalService.GetProposalForClient(userId);
+
+        var response = proposals
+            .Select(d => new WorkProposalWithInfoDto(
+                d.Id,
+                d.OrderId,
+                d.WorkName,
+                d.ByWorker,
+                d.StatusName,
+                d.DecisionStatusName,
+                d.Date))
+            .ToList();
+
+        return Ok(response);
+    }
+
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
     [Authorize(Policy = "WorkerPolicy")]
@@ -133,7 +156,4 @@ public class WorkProposalController : ControllerBase
 
         return Ok(result);
     }
-
-    //get by id [Authorize(Policy = "UserPolicy")]
-    //post it only for his orders by id [Authorize(Policy = "WorkerPolicy")]
 }
