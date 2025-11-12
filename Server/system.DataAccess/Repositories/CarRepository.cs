@@ -1,5 +1,4 @@
-﻿using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,11 +54,11 @@ public class CarRepository : ICarRepository
         return cars;
     }
 
-    public async Task<List<Car>> GetById(int id)
+    public async Task<List<Car>> GetById(List<int> carIds)
     { 
         var carEntity = await _context.Cars
-            .Where(c => c.Id == id)
             .AsNoTracking()
+            .Where(c => carIds.Contains(c.Id))
             .ToListAsync();
 
         var cars = carEntity
@@ -109,14 +108,7 @@ public class CarRepository : ICarRepository
         return carEntities.Id;
     }
 
-    public async Task<int> Update(
-        int id,
-        string brand,
-        string model,
-        int? yearOfManufacture,
-        string vinNumber,
-        string stateNumber,
-        int? mileage)
+    public async Task<int> Update(int id, string? brand, string? model, int? yearOfManufacture, string? vinNumber, string? stateNumber, int? mileage)
     {
         var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id) 
             ?? throw new Exception("Car not found");

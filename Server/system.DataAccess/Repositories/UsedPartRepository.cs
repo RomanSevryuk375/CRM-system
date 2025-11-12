@@ -37,8 +37,8 @@ public class UsedPartRepository : IUsedPartRepository
     public async Task<List<UsedPart>> GetByOrderId(List<int> orderIds)
     {
         var usedPartEntities = await _context.UsedParts
-            .Where(w => orderIds.Contains(w.OrderId))
             .AsNoTracking()
+            .Where(w => orderIds.Contains(w.OrderId))
             .ToListAsync();
 
         var usedPart = usedPartEntities
@@ -88,14 +88,7 @@ public class UsedPartRepository : IUsedPartRepository
         return usedPartEntity.Id;
     }
 
-    public async Task<int> Update(int id,
-        int? orderId,
-        int? supplierId,
-        string name,
-        string article,
-        decimal? quantity,
-        decimal? unitPrice,
-        decimal? sum)
+    public async Task<int> Update(int id, int? orderId, int? supplierId, string? name, string? article, decimal? quantity, decimal? unitPrice, decimal? sum)
     {
         var usedPart = _context.UsedParts.FirstOrDefault(x => x.Id == id)
               ?? throw new Exception("Used part not found");

@@ -56,12 +56,7 @@ public class WorkTypeRepository : IWorkTypeRepository
         return workType.Id;
     }
 
-    public async Task<int> Update(
-        int id,
-        string title,
-        string category,
-        string description,
-        decimal? standardTime)
+    public async Task<int> Update(int id, string? title, string? category, string? description, decimal? standardTime)
     {
         var workType = await _context.WorkTypes.FirstOrDefaultAsync(wt => wt.Id == id)
             ?? throw new Exception("Work type not found");

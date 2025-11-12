@@ -48,7 +48,7 @@ public class SpecializationRepository : ISpecializationRepository
         return specializationEntities.Id;
     }
 
-    public async Task<int> Update(int id, string name)
+    public async Task<int> Update(int id, string? name)
     {
         var specialization = await _context.Specializations.FirstOrDefaultAsync(s => s.Id == id)
             ?? throw new Exception("Specialization not found");

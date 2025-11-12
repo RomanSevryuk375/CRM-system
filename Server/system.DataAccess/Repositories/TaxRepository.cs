@@ -53,7 +53,7 @@ public class TaxRepository : ITaxRepository
         return taxEntitie.Id;
     }
 
-    public async Task<int> Update(int id, string name, decimal? rate, string type)
+    public async Task<int> Update(int id, string? name, decimal? rate, string? type)
     {
         var tax = _context.Taxes.FirstOrDefault(t => t.Id == id)
             ?? throw new ArgumentException("Tax not found");

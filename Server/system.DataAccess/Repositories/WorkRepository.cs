@@ -35,8 +35,8 @@ public class WorkRepository : IWorkRepository
     public async Task<List<Work>> GetByWorkerId(List<int> workerIds)
     {
         var workEntities = await _context.Works
-            .Where(w => workerIds.Contains(w.WorkerId))
             .AsNoTracking()
+            .Where(w => workerIds.Contains(w.WorkerId))
             .ToListAsync();
 
         var work = workEntities
@@ -80,13 +80,7 @@ public class WorkRepository : IWorkRepository
         return workEntity.Id;
     }
 
-    public async Task<int> Update(
-        int id,
-        int? orderId,
-        int? jobId,
-        int? workerId,
-        decimal? timeSpent,
-        int? statusId)
+    public async Task<int> Update(int id, int? orderId, int? jobId, int? workerId, decimal? timeSpent, int? statusId)
     {
         var work = await _context.Works.FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new Exception("Work not found");

@@ -81,7 +81,7 @@ public class ClientsRepository : IClientsRepository
         return clientEntities.ClientId;
     }
 
-    public async Task<int> Update(int id, string name, string surname, string phoneNumber, string email)
+    public async Task<int> Update(int id, string? name, string? surname, string? phoneNumber, string? email)
     {
         var client = await _context.Clients.FirstOrDefaultAsync(c => c.ClientId == id)
             ?? throw new Exception("Client not found");

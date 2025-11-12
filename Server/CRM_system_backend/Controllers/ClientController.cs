@@ -21,7 +21,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<ClientsResponse>>> GetClient()
     {
         var clients = await _clientService.GetClients();
@@ -34,7 +34,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet("My")]
-    [Authorize(Policy = "UserPolicy")]
+    //[Authorize(Policy = "UserPolicy")]
 
     public async Task<ActionResult<List<Client>>> GetClientByUserId()
     {
@@ -89,7 +89,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateClient([FromBody] ClientUpdateRequest clientUpdateRequest, int id)
     {

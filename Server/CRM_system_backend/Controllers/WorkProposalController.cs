@@ -17,6 +17,7 @@ public class WorkProposalController : ControllerBase
     {
         _workPropossalService = workPropossalService;
     }
+
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
 

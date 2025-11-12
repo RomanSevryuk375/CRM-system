@@ -51,10 +51,7 @@ public class SupplierRepository : ISupplierRepository
         return supplierEntity.Id;
     }
 
-    public async Task<int> Update(
-        int id,
-        string name,
-        string contacts)
+    public async Task<int> Update(int id, string? name, string? contacts)
     {
         var supplier = await _context.Suppliers.FirstOrDefaultAsync(su => su.Id == id)
             ?? throw new ArgumentException("Supplier not found");

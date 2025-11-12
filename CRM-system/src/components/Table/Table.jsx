@@ -4,7 +4,10 @@ import Main from '../Main/Main';
 import FiltreModal from '../FilreModal/FiltreModal';
 import Detailing from '../Detailing/Detailing';
 import './Table.css'
-import { useState } from 'react';
+// import { getUsers } from '../redux/Actions/users';
+import { getCatalogOfWorks } from '../../redux/Actions/catalogOfWorks';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 const columnsOreders = ['id', 'client', 'car_id', 'status', 'worker', 'date', 'sum'];
 const headTextOrders = ['№', 'Клиент', 'Автомобиля', 'Статус', 'Мастер', 'Дата создания', 'Итоговая стоимость'];
@@ -42,36 +45,6 @@ const bodyTextWorkers = [
   { id: 5, surname: 'Зайцев', name: 'Дмитрий', patronymic: 'Олегович', specialization: 'Сварка/Кузовной ремонт', hourly_rate: 2000, phone_number: '+79502020202' },
   { id: 6, surname: 'Куликов', name: 'Виктор', patronymic: 'Петрович', specialization: 'Обслуживание', hourly_rate: 1000, phone_number: '+79603030303' },
   { id: 7, surname: 'Павлова', name: 'Светлана', patronymic: 'Геннадьевна', specialization: 'Малярные работы', hourly_rate: 2200, phone_number: '+79704040404' }
-
-];
-const columnsWorks = ['id', 'title', 'category', 'description', 'standart_time'];
-const headTextWorks = ['№', 'Название работы', 'Категория', 'Описание', 'Нормативное время'];
-const bodyTextWorks = [
-  { id: 1, title: 'Замена масла и фильтра', category: 'Обслуживание', description: 'Замена моторного масла и масляного фильтра', standart_time: 0.5 },
-  { id: 2, title: 'Замена тормозных колодок (перед)', category: 'Тормозная система', description: 'Замена передних тормозных колодок', standart_time: 1.0 },
-  { id: 3, title: 'Замена свечей зажигания', category: 'Двигатель', description: 'Замена комплекта свечей зажигания (4-цилиндровый двигатель)', standart_time: 0.8 },
-  { id: 4, title: 'Компьютерная диагностика', category: 'Диагностика', description: 'Считывание и анализ кодов ошибок ЭБУ', standart_time: 0.7 },
-  { id: 5, title: 'Шиномонтаж R16', category: 'Шиномонтаж', description: 'Снятие, монтаж, балансировка 4 колес R16', standart_time: 1.5 },
-  { id: 6, title: 'Ремонт прокола колеса', category: 'Шиномонтаж', description: 'Устранение прокола шины жгутом', standart_time: 0.3 },
-  { id: 7, title: 'Замена воздушного фильтра', category: 'Обслуживание', description: 'Замена фильтрующего элемента воздуховода', standart_time: 0.2 },
-  { id: 8, title: 'Замена переднего ступичного подшипника', category: 'Ходовая часть', description: 'Демонтаж/монтаж ступичного подшипника с обеих сторон', standart_time: 2.5 },
-  { id: 9, title: 'Сход-развал 3D', category: 'Регулировка', description: 'Регулировка углов установки колес на стенде 3D', standart_time: 1.2 },
-  { id: 10, title: 'Замена ремня ГРМ', category: 'Двигатель', description: 'Замена ремня газораспределительного механизма с роликами', standart_time: 4.0 },
-  { id: 11, title: 'Замена охлаждающей жидкости', category: 'Обслуживание', description: 'Слив старой и заливка новой охлаждающей жидкости', standart_time: 0.6 },
-  { id: 12, title: 'Ремонт генератора', category: 'Электрика', description: 'Снятие, ремонт и установка генератора', standart_time: 3.5 },
-  { id: 13, title: 'Замена салонного фильтра', category: 'Обслуживание', description: 'Замена фильтра салона', standart_time: 0.3 },
-  { id: 14, title: 'Замена сцепления (МКПП)', category: 'Трансмиссия', description: 'Снятие/установка коробки передач и замена сцепления', standart_time: 6.0 },
-  { id: 15, title: 'Замена лампы ближнего света', category: 'Электрика', description: 'Замена одной лампы головного света', standart_time: 0.1 },
-  { id: 16, title: 'Антикоррозийная обработка днища', category: 'Кузовной ремонт', description: 'Полная обработка днища антикоррозийным составом', standart_time: 8.0 },
-  { id: 17, title: 'Проверка уровня технических жидкостей', category: 'Диагностика', description: 'Проверка всех рабочих жидкостей по уровням', standart_time: 0.2 },
-  { id: 18, title: 'Замена аккумулятора', category: 'Электрика', description: 'Демонтаж старого и монтаж нового аккумулятора', standart_time: 0.4 },
-  { id: 19, title: 'Замена топливного фильтра', category: 'Топливная система', description: 'Замена топливного фильтра (внешний/под днищем)', standart_time: 0.9 },
-  { id: 20, title: 'Ремонт глушителя (сварка)', category: 'Выхлопная система', description: 'Сварочные работы по восстановлению герметичности глушителя', standart_time: 1.5 },
-  { id: 21, title: 'Прокачка тормозной системы', category: 'Тормозная система', description: 'Удаление воздуха из тормозной системы', standart_time: 1.0 },
-  { id: 22, title: 'Замена рычага подвески', category: 'Ходовая часть', description: 'Замена нижнего переднего рычага подвески', standart_time: 1.8 },
-  { id: 23, title: 'Ремонт ЭБУ', category: 'Электрика/Диагностика', description: 'Ремонт электронного блока управления (сложный)', standart_time: 10.0 },
-  { id: 24, title: 'Полная покраска детали (бампер)', category: 'Малярные работы', description: 'Подготовка, грунтовка и покраска бампера', standart_time: 5.0 },
-  { id: 25, title: 'Замена помпы (водяного насоса)', category: 'Двигатель', description: 'Замена водяного насоса системы охлаждения', standart_time: 3.0 }
 
 ];
 const columnsParts = ['id', 'order_id', 'supplier', 'part_name', 'article', 'quantity', 'unit_price'];
@@ -163,6 +136,8 @@ const bodyTextExpenses = [
   { id: 15, date: '2024-01-29', category: 'Хозяйственные расходы', tax_id: 2, used_parts_id: null, type: 'Расход', sum: 5000 },
   { id: 16, date: '2024-01-30', category: 'Запчасти', tax_id: 2, used_parts_id: 8, type: 'Расход', sum: 2100 }
 ];
+const columnsWorks = ['id', 'title', 'category', 'description', 'standardTime'];
+const headTextWorks = ['№', 'Название работы', 'Категория', 'Описание', 'Нормативное время'];
 
 const GenericTable = ({ headText, bodyText, columns, activeFoolMenu, activeDetailing, setActiveDetailing }) => {
   return (
@@ -210,6 +185,18 @@ const GenericTable = ({ headText, bodyText, columns, activeFoolMenu, activeDetai
 }
 
 function Table({ activeTable, activeFoolMenu }) {
+  const { catalogOfWorks, isCatalogOfWorksLoading } = useSelector(
+    (state) => state.catalogOfWorks
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCatalogOfWorks());
+  }, [dispatch]);
+
+  console.log(catalogOfWorks, "catalogOfWorks");
+
+
   {/* <FiltreModal />   */ }
   const [activeDetailing, setActiveDetailing] = useState(false);
   switch (activeTable) {
@@ -270,7 +257,7 @@ function Table({ activeTable, activeFoolMenu }) {
         <>
           <GenericTable
             headText={headTextWorks}
-            bodyText={bodyTextWorks}
+            bodyText={catalogOfWorks || []}
             columns={columnsWorks}
             activeFoolMenu={activeFoolMenu}
             activeDetailing={activeDetailing}

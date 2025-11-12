@@ -35,8 +35,8 @@ public class BillRepository : IBillRepository
     public async Task<List<Bill>> GetByOrderId(List<int> orderIds)
     {
         var billEntities = await _context.Bills
-            .Where(b => orderIds.Contains(b.OrderId))
             .AsNoTracking()
+            .Where(b => orderIds.Contains(b.OrderId))
             .ToListAsync();
 
         var bill = billEntities

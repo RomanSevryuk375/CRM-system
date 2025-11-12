@@ -36,8 +36,8 @@ public class WorkPropossalRepository : IWorkPropossalRepository
     public async Task<List<WorkProposal>> GetByOrderId(List<int> orderIds)
     {
         var workProposalEntities = await _context.WorkProposals
-            .Where(p => orderIds.Contains(p.OrderId))
             .AsNoTracking()
+            .Where(p => orderIds.Contains(p.OrderId))
             .ToListAsync();
 
         var workProposals = workProposalEntities
@@ -84,14 +84,7 @@ public class WorkPropossalRepository : IWorkPropossalRepository
         return workProposalEntity.OrderId;
     }
 
-    public async Task<int> Update(
-        int id,
-        int? orderId,
-        int? workId,
-        int? byWorker,
-        int? statusId,
-        int? decisionStatusId,
-        DateTime? date)
+    public async Task<int> Update(int id, int? orderId, int? workId, int? byWorker, int? statusId, int? decisionStatusId, DateTime? date)
     {
         var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(x => x.Id == id)
             ?? throw new Exception("Work proposal not found");

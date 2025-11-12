@@ -18,6 +18,31 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigin",
+                policy =>
+                {
+                    // Укажите URL вашего React-приложения.
+                    // НЕ используйте AllowAnyOrigin() в продакшене без очень веской причины,
+                    // так как это открывает ваш API для запросов с любого домена.
+                    policy.WithOrigins("http://localhost:5173")
+                          .AllowAnyMethod() // Разрешает все HTTP-методы (GET, POST, PUT, DELETE и т.д.)
+                          .AllowAnyHeader(); // Разрешает все HTTP-заголовки
+                                             // .AllowCredentials(); // Если вы используете куки или аутентификацию на основе заголовков (например, JWT), раскомментируйте это.
+                                             // Примечание: AllowCredentials() не может использоваться вместе с AllowAnyOrigin().
+                });
+
+            // Опционально: Можно добавить политику для разработки, которая разрешает любой источник.
+            // Используйте это только для разработки, НИКОГДА для продакшена.
+            options.AddPolicy("AllowAllOriginsDevelopment",
+                policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+        });
         builder.Services.AddOpenApi();
 
         builder.Services.AddDbContext<SystemDbContext>(options =>
@@ -65,6 +90,20 @@ public class Program
         builder.Services.AddApiAuthentication(builder.Configuration);
 
         var app = builder.Build();
+
+        // Настройте HTTP-конвейер запросов.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            // В режиме разработки можно использовать более открытую политику CORS
+            app.UseCors("AllowAllOriginsDevelopment");
+        }
+        else
+        {
+            // В продакшене используйте более строгую политику
+            app.UseCors("AllowSpecificOrigin");
+        }
 
         using (var scope = app.Services.CreateScope())
         {

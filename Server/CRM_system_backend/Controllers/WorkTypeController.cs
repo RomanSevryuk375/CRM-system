@@ -18,8 +18,8 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    [Authorize(Policy = "WorkerPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "WorkerPolicy")]
 
     public async Task<ActionResult<List<WorkType>>> GetWorkType()
     {
@@ -37,7 +37,7 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> CreateWorkType([FromBody] WorkTypeRequest workTypeRequest)
     {
@@ -57,7 +57,7 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateWorkType([FromBody] WorkTypeRequest workTypeRequest, int id)
     {
@@ -72,7 +72,7 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpDelete]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteWorkType (int id)
     {

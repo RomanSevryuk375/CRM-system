@@ -34,8 +34,8 @@ public class PaymentNoteRepository : IPaymentNoteRepository
     public async Task<List<PaymentNote>> GetByBillId(List<int> billIds)
     {
         var paymentEntities = await _context.PaymentNotes
-            .Where(p => billIds.Contains(p.BillId))
            .AsNoTracking()
+           .Where(p => billIds.Contains(p.BillId))
            .ToListAsync();
 
         var paymentNote = paymentEntities
@@ -76,7 +76,7 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         return paymentNote.Id;
     }
 
-    public async Task<int> Update(int id, int? billId, DateTime? date, decimal? amount, string method)
+    public async Task<int> Update(int id, int? billId, DateTime? date, decimal? amount, string? method)
     {
         var paymentNote = await _context.PaymentNotes.FirstOrDefaultAsync(pn => pn.Id == id)
             ?? throw new Exception("Payment note not found");

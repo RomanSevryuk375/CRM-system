@@ -88,7 +88,7 @@ public class WorkerRepository : IWorkerRepository
         return worker.Id;
     }
 
-    public async Task<int> Update(int id, int? userId, int? specialization, string name, string Surname, decimal? hourlyRate, string phoneNumber, string email)
+    public async Task<int> Update(int id, int? userId, int? specialization, string? name, string? Surname, decimal? hourlyRate, string? phoneNumber, string? email)
     {
         var workerEntity = await _context.Workers.FirstOrDefaultAsync(w => w.Id == id)
             ?? throw new Exception("Payment note not found");
