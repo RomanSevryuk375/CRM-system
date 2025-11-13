@@ -13,8 +13,13 @@ public class WorkTypeRepository : IWorkTypeRepository
         _context = context;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.WorkTypes.CountAsync();
+    }
     public async Task<List<WorkType>> Get()
     {
+
         var workTypeEntities = await _context.WorkTypes
             .AsNoTracking()
             .ToListAsync();

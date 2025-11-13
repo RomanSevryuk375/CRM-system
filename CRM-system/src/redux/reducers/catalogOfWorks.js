@@ -1,8 +1,9 @@
-import { GET_CATALOG_FAILED, GET_CATALOG_STARTED, GET_CATALOG_SUCCESS } from "../actionCreators/catalogOfWorks";
+import { GET_CATALOG_FAILED, GET_CATALOG_STARTED, GET_CATALOG_SUCCESS, SET_CATALOG_TOTAL } from "../actionCreators/catalogOfWorks";
 
 const initialeState = {
     catalogOfWorks: [],
     isCatalogOfWorksLoading: true,
+    totalCatalog: 0,
 };
 
 export const catalogReducer = (state = initialeState, action) => {
@@ -16,7 +17,10 @@ export const catalogReducer = (state = initialeState, action) => {
         case GET_CATALOG_SUCCESS:
             return {
                 ...state,
-                catalogOfWorks: action.payload,
+                catalogOfWorks:
+                    action.payload.page === 1
+                        ? action.payload.data
+                        : [...state.catalogOfWorks, ...action.payload.data],
                 isCatalogOfWorksLoading: false,
             };
 
@@ -25,6 +29,12 @@ export const catalogReducer = (state = initialeState, action) => {
                 ...state,
                 isCatalogOfWorksLoading: false,
             };
+
+        case SET_CATALOG_TOTAL:
+            return {
+                ...state,
+                totalCatalog: action.payload,
+            }
 
         default:
             return {

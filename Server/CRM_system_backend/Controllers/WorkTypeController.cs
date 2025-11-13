@@ -1,7 +1,6 @@
 ﻿using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -21,9 +20,13 @@ public class WorkTypeController : ControllerBase
     //[Authorize(Policy = "AdminPolicy")]
     //[Authorize(Policy = "WorkerPolicy")]
 
-    public async Task<ActionResult<List<WorkType>>> GetWorkType()
+    public async Task<ActionResult<List<WorkTypeResponse>>> GetWorkTypes(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var workTypes = await _workTypepService.GetWorkType();
+
+        var totalCount = await _workTypepService.GetWorkTypeCount();
+        var workTypes = await _workTypepService.GetPagedWorkType(page, limit);
 
         var response = workTypes
             .Select(wt => new WorkTypeResponse(
@@ -32,6 +35,8 @@ public class WorkTypeController : ControllerBase
                 wt.Description,
                 wt.Category,
                 wt.StandardTime)).ToList();
+
+        Response.Headers.Append("x-total-count", totalCount.ToString());
 
         return Ok(response);
     }

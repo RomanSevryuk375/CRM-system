@@ -7,6 +7,7 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> Create(WorkType workType);
         Task<int> Delete(int id);
         Task<List<WorkType>> Get();
+        Task<int> GetCount();
         Task<int> Update(int id, string title, string category, string description, decimal? standardTime);
     }
 }

@@ -4,10 +4,10 @@ import Main from '../Main/Main';
 import FiltreModal from '../FilreModal/FiltreModal';
 import Detailing from '../Detailing/Detailing';
 import './Table.css'
-// import { getUsers } from '../redux/Actions/users';
 import { getCatalogOfWorks } from '../../redux/Actions/catalogOfWorks';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const columnsOreders = ['id', 'client', 'car_id', 'status', 'worker', 'date', 'sum'];
 const headTextOrders = ['№', 'Клиент', 'Автомобиля', 'Статус', 'Мастер', 'Дата создания', 'Итоговая стоимость'];
@@ -139,66 +139,90 @@ const bodyTextExpenses = [
 const columnsWorks = ['id', 'title', 'category', 'description', 'standardTime'];
 const headTextWorks = ['№', 'Название работы', 'Категория', 'Описание', 'Нормативное время'];
 
-const GenericTable = ({ headText, bodyText, columns, activeFoolMenu, activeDetailing, setActiveDetailing }) => {
+const GenericTable = ({
+  headText,
+  bodyText,
+  columns,
+  activeFoolMenu,
+  activeDetailing,
+  setActiveDetailing,
+  nextHandler,
+  hasMore,}) => {
   return (
-    <div className={`table-container ${activeFoolMenu ? 'enable' : 'disable'}`}>
-      <table className='tableMarking'>
-        <thead className='thead'>
-          <tr>
-            <th className='start-th-button'></th>
-            {headText.map((item) => (
-              <th key={item} className='сolumn-names'>
-                <div className='сolumn-elements'>
-                  <p className='names'>
-                    {item}
-                  </p>
-                  <button className='button-sort'>
-                    <img className='button-sort-img' src={Sort} alt="Сортировать" />
-                  </button>
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {bodyText.map((row, index) => (
-            <tr
-              key={row.id}
-              className={`table-row ${index % 2 === 0 ? 'even' : 'odd'}`}
-              onClick={() => { setActiveDetailing(!activeDetailing) }}>
-              <td>
-                <button className={`td-button ${index % 2 === 0 ? 'even' : 'odd'}`}>
-                  <img src={Edit} alt="Редактировать" />
-                </button>
-              </td>
-              {columns.map((columnKey, columnIndex) => (
-                <td key={columnIndex} className='td-sum'>
-                  {row[columnKey]}
-                </td>
+    <InfiniteScroll
+      dataLength={bodyText.length}
+      next={nextHandler}
+      hasMore={hasMore}
+
+      scrollableTarget="container"
+    >
+      <div id = "container" className={`table-container ${activeFoolMenu ? 'enable' : 'disable'}`}>
+        <table className='tableMarking'>
+          <thead className='thead'>
+            <tr>
+              <th className='start-th-button'></th>
+              {headText.map((item) => (
+                <th key={item} className='сolumn-names'>
+                  <div className='сolumn-elements'>
+                    <p className='names'>
+                      {item}
+                    </p>
+                    <button className='button-sort'>
+                      <img className='button-sort-img' src={Sort} alt="Сортировать" />
+                    </button>
+                  </div>
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {bodyText.map((row, index) => (
+              <tr
+                key={row.id}
+                className={`table-row ${index % 2 === 0 ? 'even' : 'odd'}`}
+                onClick={() => { setActiveDetailing(!activeDetailing) }}>
+                <td>
+                  <button className={`td-button ${index % 2 === 0 ? 'even' : 'odd'}`}>
+                    <img src={Edit} alt="Редактировать" />
+                  </button>
+                </td>
+                {columns.map((columnKey, columnIndex) => (
+                  <td key={columnIndex} className='td-sum'>
+                    {row[columnKey]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </InfiniteScroll>
   );
 }
 
 function Table({ activeTable, activeFoolMenu }) {
-  const { catalogOfWorks, isCatalogOfWorksLoading } = useSelector(
-    (state) => state.catalogOfWorks
-  );
+  const [activeDetailing, setActiveDetailing] = useState(false);
+
+  const catalogOfWorks = useSelector(state => state.catalogOfWorks.catalogOfWorks);
+  const totalCatalog = useSelector(state => state.catalogOfWorks.totalCatalog);
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+
+  const nextHendler = () => {
+    if (catalogOfWorks.length < totalCatalog) {
+        setPage(prev => prev + 1);
+    } else {
+        console.log("No more data to load");
+    }
+  };
 
   useEffect(() => {
-    dispatch(getCatalogOfWorks());
-  }, [dispatch]);
+    if (activeTable === 'works') {
+      dispatch(getCatalogOfWorks(page));
+    }
+  }, [page, activeTable, dispatch]);
 
-  console.log(catalogOfWorks, "catalogOfWorks");
-
-
-  {/* <FiltreModal />   */ }
-  const [activeDetailing, setActiveDetailing] = useState(false);
+  const hasMoreItems = catalogOfWorks.length < totalCatalog;
   switch (activeTable) {
     case 'main':
       return (
@@ -262,6 +286,8 @@ function Table({ activeTable, activeFoolMenu }) {
             activeFoolMenu={activeFoolMenu}
             activeDetailing={activeDetailing}
             setActiveDetailing={setActiveDetailing}
+            nextHandler={nextHendler}
+            hasMore={hasMoreItems}
           />
           <Detailing
             activeDetailing={activeDetailing}
@@ -349,14 +375,12 @@ function Table({ activeTable, activeFoolMenu }) {
         </>
       );
 
-    // default:
-    // return (
-    //   <h1>Error</h1>
-    // );
+    default:
+    return (
+      <h1>Error</h1>
+    );
   }
-
 }
 
 export default Table;
 
-// привязать реакт куари

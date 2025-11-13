@@ -12,9 +12,21 @@ public class WorkTypepService : IWorkTypepService
         _workTypeRepository = workTypeRepository;
     }
 
-    public async Task<List<WorkType>> GetWorkType()
+    public async Task<List<WorkType>> GetPagedWorkType(int page, int limit)
     {
-        return await _workTypeRepository.Get();
+        var workType = await _workTypeRepository.Get();
+                             
+        var pagedWorkTypes = workType
+                            .Skip((page - 1) * limit)
+                            .Take(limit)
+                            .ToList();
+
+        return pagedWorkTypes;
+    }
+
+    public async Task<int> GetWorkTypeCount()
+    {
+        return await _workTypeRepository.GetCount();
     }
 
     public async Task<int> CreateWorkType(WorkType workType)
