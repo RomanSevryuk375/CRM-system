@@ -2,7 +2,7 @@
 
 namespace CRMSystem.Buisnes.Services
 {
-    public interface IWorkTypepService
+    public interface IWorkTypeService
     {
         Task<int> CreateWorkType(WorkType workType);
         Task<int> DeleteWorkType(int id);

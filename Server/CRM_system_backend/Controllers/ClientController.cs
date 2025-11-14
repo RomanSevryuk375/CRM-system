@@ -22,13 +22,23 @@ public class ClientController : ControllerBase
 
     [HttpGet]
     //[Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<ClientsResponse>>> GetClient()
+    public async Task<ActionResult<List<ClientsResponse>>> GetClient(
+        [FromQuery(Name = "_page")] int page = 1,
+        [FromQuery(Name = "_limit")] int limit = 25)
     {
-        var clients = await _clientService.GetClients();
+        var totalCount = await _clientService.GetClientCount();
+        var clients = await _clientService.GetPagedClients(page, limit);
 
         var response = clients
-            .Select(b => new ClientsResponse(b.Id, b.UserId, b.Name, b.Surname, b.Email, b.PhoneNumber))
-            .ToList(); 
+            .Select(b => new ClientsResponse(
+                b.Id,
+                b.UserId,
+                b.Name,
+                b.Surname,
+                b.Email,
+                b.PhoneNumber)).ToList();
+
+        Response.Headers.Append("x-total-count", totalCount.ToString());
 
         return Ok(response);
     }
@@ -49,7 +59,7 @@ public class ClientController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost("with create user")]
+    [HttpPost("with-user")]
 
     public async Task<ActionResult<int>> CreateClient([FromBody] ClientRegistreRequest request)
     {
@@ -88,10 +98,10 @@ public class ClientController : ControllerBase
         });
     }
 
-    [HttpPut]
+    [HttpPut("{id}")]
     //[Authorize(Policy = "AdminPolicy")]
 
-    public async Task<ActionResult<int>> UpdateClient([FromBody] ClientUpdateRequest clientUpdateRequest, int id)
+    public async Task<ActionResult<int>> UpdateClient(int id, [FromBody] ClientUpdateRequest clientUpdateRequest)
     {
         var result = await _clientService.UpdateClient(
                     id,

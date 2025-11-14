@@ -3,11 +3,11 @@ using CRMSystem.DataAccess.Repositories;
 
 namespace CRMSystem.Buisnes.Services;
 
-public class WorkTypepService : IWorkTypepService
+public class WorkTypeService : IWorkTypeService
 {
     private readonly IWorkTypeRepository _workTypeRepository;
 
-    public WorkTypepService(IWorkTypeRepository workTypeRepository)
+    public WorkTypeService(IWorkTypeRepository workTypeRepository)
     {
         _workTypeRepository = workTypeRepository;
     }

@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux';
 import './Registration.css'
 import { useState, useEffect } from 'react';
 
@@ -12,12 +13,24 @@ const regInputConfig = [
 const autInputConfig = [
     { label: "Логин", input: "Введите логин", type: "text" },
     { label: "Пароль", input: "Введите пароль", type: "password" }
-]
+];
 
 function Registration({ registrationIsOpen, setRegistrationIsOpen, response, setResponse }) {
+    const dispatch = useDispatch();
+    const [regForm, setRegForm] = useState({
+        roleId: 2,
+        name: "",
+        surname: "",
+        phoneNumber: "",
+        email: "",
+        login: "",
+        password: ""
+    })
+
     if (!registrationIsOpen) {
         return null;
     }
+
     useEffect(() => {
         const handleKeyPress = (event) => {
             if (event.key === 'Escape') {

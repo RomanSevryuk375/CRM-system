@@ -9,9 +9,9 @@ namespace CRM_system_backend.Controllers;
 [Route("[controller]")]
 public class WorkTypeController : ControllerBase
 {
-    private readonly IWorkTypepService _workTypepService;
+    private readonly IWorkTypeService _workTypepService;
 
-    public WorkTypeController(IWorkTypepService workTypepService)
+    public WorkTypeController(IWorkTypeService workTypepService)
     {
         _workTypepService = workTypepService;
     }

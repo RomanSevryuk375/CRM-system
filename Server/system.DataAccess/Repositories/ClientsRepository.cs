@@ -33,6 +33,11 @@ public class ClientsRepository : IClientsRepository
         return clients;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.Clients.CountAsync();
+    }
+
     public async Task<List<Client>> GetClientByUserId(int userId)
     {
         var clientEntities = await _context.Clients
