@@ -1,14 +1,7 @@
-import { useDispatch } from 'react-redux';
 import './Registration.css'
+import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-
-const regInputConfig = [
-    { label: "Фамилия", input: "Введите фамилию", type: "text" },
-    { label: "Имя", input: "Введите имя", type: "text" },
-    { label: "Номер телефона", input: "Введите номер телефона", type: "tel" },
-    { label: "Почта", input: "Введите почту", type: "email" },
-    { label: "Пароль", input: "Введите пароль", type: "password" }
-];
+import { createClient } from '../../redux/Actions/clients'
 
 const autInputConfig = [
     { label: "Логин", input: "Введите логин", type: "text" },
@@ -17,6 +10,7 @@ const autInputConfig = [
 
 function Registration({ registrationIsOpen, setRegistrationIsOpen, response, setResponse }) {
     const dispatch = useDispatch();
+
     const [regForm, setRegForm] = useState({
         roleId: 2,
         name: "",
@@ -27,52 +21,80 @@ function Registration({ registrationIsOpen, setRegistrationIsOpen, response, set
         password: ""
     })
 
-    if (!registrationIsOpen) {
-        return null;
-    }
+    const [typeMenu, setTypeMenu] = useState('reg');
 
     useEffect(() => {
         const handleKeyPress = (event) => {
             if (event.key === 'Escape') {
-                setRegistrationIsOpen(!registrationIsOpen)
+                setRegistrationIsOpen(false);
             }
         };
 
         document.addEventListener('keydown', handleKeyPress);
     }, []);
 
-    const [typeMenu, setTypeMenu] = useState('reg')
+    if (!registrationIsOpen) return null;
+
+    const regInputConfig = [
+        { label: "Фамилия", name: "surname", input: "Введите фамилию", type: "text" },
+        { label: "Имя", name: "name", input: "Введите имя", type: "text" },
+        { label: "Номер телефона", name: "phoneNumber", input: "Введите номер телефона", type: "tel" },
+        { label: "Почта", name: "email", input: "Введите почту", type: "email" },
+        { label: "Логин", name: "login", input: "Введите логин", type: "text" },
+        { label: "Пароль", name: "password", input: "Введите пароль", type: "password" },
+    ];
+
+    const change = (e) => {
+        setRegForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const submit = (e) => {
+        e.preventDefault();
+        dispatch(createClient(regForm));
+        setRegistrationIsOpen(false);
+        setResponse(!response);
+    };
+
     switch (typeMenu) {
         case 'reg':
             return (
                 <div className='reg-modal-shadow'>
                     <div className='reg-modal'>
-                        <h1 className='reg-modal-head'>Регистрация</h1>
-                        <div>
-                            {regInputConfig.map((item) => (
-                                <div
-                                    className='reg-element'
-                                    key={item.input}>
-                                    <label
-                                        className='element-name'
-                                        htmlFor="">{item.label}</label>
-                                    <input
-                                        className='element-input'
-                                        type={item.type} placeholder={item.input} />
-                                </div>
-                            ))}
-                        </div>
-                        <div className='reg-modal-button'>
-                            <button className='reg-active-button'
-                                onClick={() => {
-                                    setResponse(!response);
-                                    setRegistrationIsOpen(!registrationIsOpen);
-                                }} //временное решенеие для завершения верстки 
-                            >Зарегистрироваться</button>
-                            <button
-                                className='reg-second-button'
-                                onClick={() => setTypeMenu('aut')}>Авторизация</button>
-                        </div>
+                        <form onSubmit={submit}>
+                            <h1 className='reg-modal-head'>Регистрация</h1>
+                            <div>
+                                {regInputConfig.map((item) => (
+                                    <div
+                                        className='reg-element'
+                                        key={item.name}>
+                                        <label
+                                            className='element-name'
+                                            htmlFor="">{item.label}
+                                        </label>
+                                        <input
+                                            className='element-input'
+                                            placeholder={item.input}
+                                            type={item.type}
+                                            name={item.name}
+                                            value={regForm[item.name]}
+                                            onChange={change}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                            <div className='reg-modal-button'>
+                                <button className='reg-active-button'
+                                    type="submit"
+                                // onClick={() => {
+                                //     setResponse(!response);
+                                //     setRegistrationIsOpen(!registrationIsOpen);
+                                // }} //временное решенеие для завершения верстки 
+                                >Зарегистрироваться</button>
+                                <button
+                                    className='reg-second-button'
+                                    onClick={() => setTypeMenu('aut')}>Авторизация</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             );
@@ -114,4 +136,4 @@ function Registration({ registrationIsOpen, setRegistrationIsOpen, response, set
 
 }
 
-export default Registration
+export default Registration;
