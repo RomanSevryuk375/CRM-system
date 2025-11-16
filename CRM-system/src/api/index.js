@@ -1,10 +1,13 @@
 import { getCatalogOfWorks } from "./catalogOfWorks";
 import { createClient, getClients, getMyClient, updateClient } from "./clients";
-import { getUsers } from "./users";
+import { createUser, deleteUser, loginUser, logoutUser } from "./users";
 
 export const api = {
     users: {
-        getUsers
+        loginUser,
+        logoutUser,
+        createUser,
+        deleteUser,
     },
     catalogOfWorks: {
         getCatalogOfWorks

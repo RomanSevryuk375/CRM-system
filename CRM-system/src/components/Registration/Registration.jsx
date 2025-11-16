@@ -2,11 +2,7 @@ import './Registration.css'
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { createClient } from '../../redux/Actions/clients'
-
-const autInputConfig = [
-    { label: "Логин", input: "Введите логин", type: "text" },
-    { label: "Пароль", input: "Введите пароль", type: "password" }
-];
+import { loginUser } from '../../redux/Actions/users';
 
 function Registration({ registrationIsOpen, setRegistrationIsOpen, response, setResponse }) {
     const dispatch = useDispatch();
@@ -19,7 +15,12 @@ function Registration({ registrationIsOpen, setRegistrationIsOpen, response, set
         email: "",
         login: "",
         password: ""
-    })
+    });
+
+    const [authForm, setAuthForm] = useState({
+        login: "",
+        password: "",
+    });
 
     const [typeMenu, setTypeMenu] = useState('reg');
 
@@ -44,23 +45,39 @@ function Registration({ registrationIsOpen, setRegistrationIsOpen, response, set
         { label: "Пароль", name: "password", input: "Введите пароль", type: "password" },
     ];
 
-    const change = (e) => {
+    const autInputConfig = [
+        { label: "Логин", name: "login", input: "Введите логин", type: "text" },
+        { label: "Пароль", name: "password", input: "Введите пароль", type: "password" },
+    ];
+
+    const changeReg = (e) => {
         setRegForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const submit = (e) => {
+    const changeAuth = (e) => {
+        setAuthForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const submitReg = (e) => {
         e.preventDefault();
         dispatch(createClient(regForm));
         setRegistrationIsOpen(false);
         setResponse(!response);
     };
 
+    const submitAuth = (e) => {
+        e.preventDefault();
+        dispatch(loginUser(authForm.login, authForm.password));
+        setRegistrationIsOpen(false);
+        setResponse(!response);
+    }
+
     switch (typeMenu) {
         case 'reg':
             return (
                 <div className='reg-modal-shadow'>
                     <div className='reg-modal'>
-                        <form onSubmit={submit}>
+                        <form onSubmit={submitReg}>
                             <h1 className='reg-modal-head'>Регистрация</h1>
                             <div>
                                 {regInputConfig.map((item) => (
@@ -77,14 +94,14 @@ function Registration({ registrationIsOpen, setRegistrationIsOpen, response, set
                                             type={item.type}
                                             name={item.name}
                                             value={regForm[item.name]}
-                                            onChange={change}
+                                            onChange={changeReg}
                                         />
                                     </div>
                                 ))}
                             </div>
                             <div className='reg-modal-button'>
                                 <button className='reg-active-button'
-                                    type="submit"
+                                    type="submitReg"
                                 // onClick={() => {
                                 //     setResponse(!response);
                                 //     setRegistrationIsOpen(!registrationIsOpen);
@@ -101,9 +118,9 @@ function Registration({ registrationIsOpen, setRegistrationIsOpen, response, set
         case 'aut':
             return (
                 <div className='reg-modal-shadow'>
-                    <div className='reg-modal'>
-                        <h1 className='reg-modal-head'>Авторизация</h1>
-                        <div>
+                    <form onSubmit={submitAuth}>
+                        <div className='reg-modal'>
+                            <h1 className='reg-modal-head'>Авторизация</h1>
                             {autInputConfig.map((item) => (
                                 <div
                                     className='reg-element'
@@ -113,23 +130,30 @@ function Registration({ registrationIsOpen, setRegistrationIsOpen, response, set
                                         htmlFor="">{item.label}</label>
                                     <input
                                         className='element-input'
-                                        type={item.type} placeholder={item.input} />
+                                        type={item.type}
+                                        name={item.name}
+                                        placeholder={item.input}
+                                        value={authForm[item.name]}
+                                        onChange={changeAuth}
+                                    />
                                 </div>
                             ))}
+
+                            <div className='reg-modal-button'>
+                                <button
+                                    className='reg-active-button'
+                                    type="submitAuth"
+                                // onClick={() => {
+                                //     setResponse(!response);
+                                //     setRegistrationIsOpen(!registrationIsOpen);
+                                // }} //временное решенеие для завершения верстки 
+                                >Войти</button>
+                                <button
+                                    className='reg-second-button'
+                                    onClick={() => setTypeMenu('reg')}>Зарегистрироваться</button>
+                            </div>
                         </div>
-                        <div className='reg-modal-button'>
-                            <button
-                                className='reg-active-button'
-                                onClick={() => {
-                                    setResponse(!response);
-                                    setRegistrationIsOpen(!registrationIsOpen);
-                                }} //временное решенеие для завершения верстки 
-                            >Войти</button>
-                            <button
-                                className='reg-second-button'
-                                onClick={() => setTypeMenu('reg')}>Зарегистрироваться</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             );
     }

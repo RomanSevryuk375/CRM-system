@@ -26,9 +26,9 @@ public class UserController : ControllerBase
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = true, 
+            Secure = true,
             SameSite = SameSiteMode.Strict,
-            Expires = DateTimeOffset.UtcNow.AddHours(12), 
+            Expires = DateTimeOffset.UtcNow.AddHours(12),
             Path = "/",
             IsEssential = true
         };
@@ -46,8 +46,8 @@ public class UserController : ControllerBase
         Response.Cookies.Delete("jwt", new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
+            Secure = false,
+            SameSite = SameSiteMode.Lax,
             Path = "/"
         });
 
@@ -58,8 +58,8 @@ public class UserController : ControllerBase
 
     public async Task<ActionResult<User>> GetUserByLogin(string login)
     {
-            var user = await _userService.GetUsersByLogin(login);
-            return Ok(user);
+        var user = await _userService.GetUsersByLogin(login);
+        return Ok(user);
     }
 
     [HttpPost]
@@ -83,7 +83,7 @@ public class UserController : ControllerBase
         return userId;
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteUser (int id)

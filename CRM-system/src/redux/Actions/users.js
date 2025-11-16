@@ -1,19 +1,56 @@
 import { api } from "../../api";
-import { getUsersFailed, getUsersStarted, getUsersSuccess } from "../actionCreators/users";
+import { createUserFailed, createUserStarted, createUserSuccess, deleteUserFailed, deleteUserStarted, deleteUserSuccess, loginUserFailed, loginUserStarted, loginUserSuccess, logoutUserStarted, logoutUserSuccess } from "../actionCreators/users";
 
-export const getUsers = () => {
+
+export const loginUser = (login, password) => {
     return async (dispatch) => {
         try {
-            dispatch(getUsersStarted);
-            const response = await api.users.getUsers({
-                // params: {
-                //     _page: 0,
-                //     _limit: 1,
-                // },
-            });
-            dispatch(getUsersSuccess(response.data));
+            dispatch(loginUserStarted());
+
+            const response = await api.users.loginUser({ data: { login, password } });
+
+            dispatch(loginUserSuccess(response.data));
         } catch (error) {
-            dispatch(getUsersFailed(error));            
+            dispatch(loginUserFailed(error));
+        }
+    };
+};
+
+export const logoutUser = () => {
+    return async (dispatch) => {
+        dispatch(logoutUserStarted());
+
+        const response = await api.users.logoutUser();
+
+        dispatch(logoutUserSuccess(response));
+    };
+};
+
+export const createUser = (data) => {
+    return async (dispatch) => {
+        try {
+            dispatch(createUserStarted());
+
+            const response = await api.users.createUser({data});
+
+            dispatch(createUserSuccess(response.data));
+        } catch (error) {
+            dispatch(createUserFailed(error));
+        }
+    };
+};
+
+export const deleteUser = (id) => {
+    return async (dispatch) => {
+        try {
+            dispatch(deleteUserStarted());
+
+            const response = await api.users.deleteUser(id, {});
+
+            dispatch(deleteUserSuccess(response.data));
+        }
+        catch (error) {
+            dispatch(deleteUserFailed(error));
         }
     };
 };

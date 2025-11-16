@@ -20,16 +20,14 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy("AllowSpecificOrigin",
-                policy =>
-                {
-
-                    policy.WithOrigins("http://localhost:5173")
-                          .AllowAnyMethod() 
-                          .AllowAnyHeader()
-                          .WithExposedHeaders("x-total-count"); 
-
-                });
+            options.AddPolicy("Frontend", policy =>
+            {
+                policy.WithOrigins("http://localhost:5173")
+                      .AllowAnyMethod()
+                      .AllowAnyHeader()
+                      .AllowCredentials()
+                      .WithExposedHeaders("x-total-count");
+            });
             options.AddPolicy("AllowAllOriginsDevelopment",
                 policy =>
                 {
@@ -91,11 +89,11 @@ public class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-            app.UseCors("AllowAllOriginsDevelopment");
+            app.UseCors("Frontend");
         }
         else
         {
-            app.UseCors("AllowSpecificOrigin");
+            app.UseCors("Frontend");
         }
 
         using (var scope = app.Services.CreateScope())
