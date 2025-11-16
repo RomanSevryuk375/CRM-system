@@ -84,7 +84,7 @@ public class ExpenseController : ControllerBase
         return Ok(expenseId);
     }
 
-    [HttpPut]
+    [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateExpense([FromBody] ExpenseRequest request, int id)
@@ -101,7 +101,7 @@ public class ExpenseController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteExpense(int id)

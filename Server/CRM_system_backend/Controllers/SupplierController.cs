@@ -53,7 +53,7 @@ public class SupplierController : Controller
         return Ok(result);
     }
 
-    [HttpPut]
+    [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateSupplier([FromBody] SupplierRequest supplierRequest, int id)
@@ -63,7 +63,7 @@ public class SupplierController : Controller
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteSupplier(int id)

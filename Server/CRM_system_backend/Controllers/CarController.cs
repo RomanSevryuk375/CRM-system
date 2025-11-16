@@ -55,7 +55,7 @@ public class CarController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("MyCars")]
+    [HttpGet("My")]
     [Authorize(Policy = "UserPolicy")]
 
     public async Task<ActionResult<List<Car>>> GetCarsByOwnerId()
@@ -71,7 +71,7 @@ public class CarController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("WorkCars")]
+    [HttpGet("InWork")]
     [Authorize(Policy = "WorkerPolicy")]
 
     public async Task<ActionResult<List<Car>>> GetCarsByWorker()

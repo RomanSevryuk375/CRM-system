@@ -8,11 +8,11 @@ namespace CRM_system_backend.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TaxContoller : ControllerBase
+public class TaxController : ControllerBase
 {
     private readonly ITaxService _taxService;
 
-    public TaxContoller(ITaxService taxService)
+    public TaxController(ITaxService taxService)
     {
         _taxService = taxService;
     }
@@ -53,7 +53,7 @@ public class TaxContoller : ControllerBase
         return Ok(taxId);
     }
 
-    [HttpPut]
+    [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateTax([FromBody] TaxRequest taxRequest, int id)
@@ -63,7 +63,7 @@ public class TaxContoller : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteTax(int id)

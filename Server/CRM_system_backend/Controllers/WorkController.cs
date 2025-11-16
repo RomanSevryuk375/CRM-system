@@ -102,7 +102,7 @@ public class WorkController : ControllerBase
         return Ok(workId);
     }
 
-    [HttpPut]
+    [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateWork([FromBody] WorkRequest request, int id)
@@ -118,7 +118,7 @@ public class WorkController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteWork(int id)

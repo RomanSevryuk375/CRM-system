@@ -51,7 +51,7 @@ public class SpecializationController : Controller
         return Ok(specializationId);
     }
 
-    [HttpPut]
+    [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateSpecialization([FromBody] SpecializationRequest specializationRequest, int id)

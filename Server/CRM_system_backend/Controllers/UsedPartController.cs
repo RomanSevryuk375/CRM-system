@@ -111,7 +111,7 @@ public class UsedPartController : ControllerBase
         return Ok(usedPartId);
     }
 
-    [HttpPut]
+    [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateUsedPart([FromBody] UsedPartRequest request, int id)
@@ -129,7 +129,7 @@ public class UsedPartController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteUsedPart(int id)

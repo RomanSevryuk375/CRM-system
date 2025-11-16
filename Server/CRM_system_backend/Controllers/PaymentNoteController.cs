@@ -81,7 +81,7 @@ public class PaymentNoteController : ControllerBase
         return Ok(paymentNoteId);
     }
 
-    [HttpPut]
+    [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdatePaymentNote([FromBody] PaymentNoteRequest paymentNoteRequest, int id)
@@ -96,7 +96,7 @@ public class PaymentNoteController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeletePaymentNote(int id)

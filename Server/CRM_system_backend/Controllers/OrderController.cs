@@ -115,7 +115,7 @@ public class OrderController : ControllerBase
         return Ok(orderId);
     }
 
-    [HttpPut]
+    [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateOrder([FromBody] OrderRequest request, int id)
@@ -125,7 +125,7 @@ public class OrderController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteOrder(int id)

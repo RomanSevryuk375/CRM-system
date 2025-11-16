@@ -61,7 +61,7 @@ public class WorkTypeController : ControllerBase
         return Ok(workTypeId);
     }
 
-    [HttpPut]
+    [HttpPut("${id}")]
     //[Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> UpdateWorkType([FromBody] WorkTypeRequest workTypeRequest, int id)
@@ -76,7 +76,7 @@ public class WorkTypeController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpDelete("${id}")]
     //[Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> DeleteWorkType (int id)
