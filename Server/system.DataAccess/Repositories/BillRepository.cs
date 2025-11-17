@@ -32,6 +32,27 @@ public class BillRepository : IBillRepository
         return bill;
     }
 
+    public async Task<List<Bill>> GetPaged(int page, int limit)
+    {
+        var billEntities = await _context.Bills
+            .AsNoTracking()
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var bill = billEntities
+            .Select(b => Bill.Create(
+                b.Id,
+                b.OrderId,
+                b.StatusId,
+                b.Date,
+                b.Amount,
+                b.ActualBillDate).bill)
+            .ToList();
+
+        return bill;
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.Bills.CountAsync();
@@ -42,6 +63,28 @@ public class BillRepository : IBillRepository
         var billEntities = await _context.Bills
             .AsNoTracking()
             .Where(b => orderIds.Contains(b.OrderId))
+            .ToListAsync();
+
+        var bill = billEntities
+            .Select(b => Bill.Create(
+                b.Id,
+                b.OrderId,
+                b.StatusId,
+                b.Date,
+                b.Amount,
+                b.ActualBillDate).bill)
+            .ToList();
+
+        return bill;
+    }
+
+    public async Task<List<Bill>> GetPagedByOrderId(List<int> orderIds, int page, int limit)
+    {
+        var billEntities = await _context.Bills
+            .AsNoTracking()
+            .Where(b => orderIds.Contains(b.OrderId))
+            .Skip((page - 1) * limit)
+            .Take(limit)
             .ToListAsync();
 
         var bill = billEntities

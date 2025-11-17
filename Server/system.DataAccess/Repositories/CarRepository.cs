@@ -18,6 +18,30 @@ public class CarRepository : ICarRepository
         var carEntities = await _context.Cars
             .AsNoTracking()
             .ToListAsync();
+
+        var cars = carEntities
+            .Select(c => Car.Create(
+                c.Id,
+                c.OwnerId,
+                c.Brand,
+                c.Model,
+                c.YearOfManufacture,
+                c.VinNumber,
+                c.StateNumber,
+                c.Mileage).car)
+            .ToList();
+
+        return cars;
+    }
+
+    public async Task<List<Car>> GetPaged(int page, int limit)
+    {
+        var carEntities = await _context.Cars
+            .AsNoTracking()
+            .Skip((page -  1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
         var cars = carEntities
             .Select(c => Car.Create(
                 c.Id,
@@ -37,12 +61,36 @@ public class CarRepository : ICarRepository
     {
         return await _context.Cars.CountAsync();
     }
- 
+
     public async Task<List<Car>> GetByOwnerId(int ownerId)
+    {
+        var carEntity = await _context.Cars
+            .Where(c => c.OwnerId == ownerId)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var cars = carEntity
+            .Select(c => Car.Create(
+                c.Id,
+                c.OwnerId,
+                c.Brand,
+                c.Model,
+                c.YearOfManufacture,
+                c.VinNumber,
+                c.StateNumber,
+                c.Mileage).car)
+            .ToList();
+
+        return cars;
+    }
+
+    public async Task<List<Car>> GetPagedByOwnerId(int ownerId, int page, int limit)
     {
         var carEntity = await _context.Cars
             .Where(c  => c.OwnerId == ownerId)
             .AsNoTracking()
+            .Skip((page - 1) * limit)
+            .Take(limit)
             .ToListAsync();
 
         var cars = carEntity
@@ -66,10 +114,34 @@ public class CarRepository : ICarRepository
     }
 
     public async Task<List<Car>> GetById(List<int> carIds)
+    {
+        var carEntity = await _context.Cars
+            .AsNoTracking()
+            .Where(c => carIds.Contains(c.Id))
+            .ToListAsync();
+
+        var cars = carEntity
+            .Select(c => Car.Create(
+                c.Id,
+                c.OwnerId,
+                c.Brand,
+                c.Model,
+                c.YearOfManufacture,
+                c.VinNumber,
+                c.StateNumber,
+                c.Mileage).car)
+            .ToList();
+
+        return cars;
+    }
+
+    public async Task<List<Car>> GetPagedById(List<int> carIds, int page, int limit)
     { 
         var carEntity = await _context.Cars
             .AsNoTracking()
             .Where(c => carIds.Contains(c.Id))
+            .Skip((page - 1) * limit)
+            .Take(limit)
             .ToListAsync();
 
         var cars = carEntity

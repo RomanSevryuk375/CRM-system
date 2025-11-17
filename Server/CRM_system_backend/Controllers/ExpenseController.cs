@@ -20,7 +20,6 @@ public class ExpenseController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<List<Expense>>> GetExpense()
     {
         var expenses = await _expenseService.GetExpenses();
@@ -41,10 +40,12 @@ public class ExpenseController : ControllerBase
 
     [HttpGet("with-Info")]
     [Authorize(Policy = "AdminPolicy")]
-
-    public async Task<ActionResult<List<ExpensesWitInfoDto>>> GetExpenseWithInfo()
+    public async Task<ActionResult<List<ExpensesWitInfoDto>>> GetExpenseWithInfo(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var dtos = await _expenseService.GetExpensesWithInfo();
+        var dtos = await _expenseService.GetPagedExpensesWithInfo(page, limit);
+        var totalCount = await _expenseService.GetCountExpense();
 
         var response = dtos
             .Select(d => new ExpensesWitInfoDto(
@@ -57,12 +58,13 @@ public class ExpenseController : ControllerBase
                 d.Sum))
             .ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> CreateExpense([FromBody] ExpenseRequest request)
     {
         var (expense, error) = Expense.Create(
@@ -86,7 +88,6 @@ public class ExpenseController : ControllerBase
 
     [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> UpdateExpense([FromBody] ExpenseRequest request, int id)
     {
         var result = await _expenseService.UpdateExpense(
@@ -103,7 +104,6 @@ public class ExpenseController : ControllerBase
 
     [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> DeleteExpense(int id)
     {
         var result = await _expenseService.DeleteExpense(id);

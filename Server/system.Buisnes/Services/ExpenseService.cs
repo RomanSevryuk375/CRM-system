@@ -1,4 +1,5 @@
-﻿using CRMSystem.Buisnes.DTOs;
+﻿
+using CRMSystem.Buisnes.DTOs;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 
@@ -45,6 +46,33 @@ public class ExpenseService : IExpenseService
                             .ToList();
 
         return response;
+    }
+
+    public async Task<List<ExpensesWitInfoDto>> GetPagedExpensesWithInfo(int page, int limit)
+    {
+        var expenses = await _expenseRespository.GetPaged(page, limit);
+        var taxes = await _taxRepository.Get();
+        var usedParts = await _usedPartRepository.Get();
+
+        var response = (from e in expenses
+                        join t in taxes on e.TaxId equals t.Id
+                        join u in usedParts on e.UsedPartId equals u.Id
+                        select new ExpensesWitInfoDto(
+                            e.Id,
+                            e.Date,
+                            e.Category,
+                            t.Name,
+                            $"{u.Name} (({u.Id}) {u.Article})",
+                            e.ExpenseType,
+                            e.Sum))
+                            .ToList();
+
+        return response;
+    }
+
+    public async Task<int> GetCountExpense()
+    {
+        return await _expenseRespository.GetCount();
     }
 
     public async Task<int> CreateExpense(Expense expense)

@@ -21,9 +21,12 @@ public class CarController : ControllerBase
     [HttpGet("All-with-owner")]
     [Authorize(Policy = "AdminPolicy")]
 
-    public async Task<ActionResult<CarWithOwnerDto>> GetCarsWithOwner()
+    public async Task<ActionResult<CarWithOwnerDto>> GetCarsWithOwner(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var dtos = await _carService.GetCarsWithOwner();
+        var dtos = await _carService.GetCarsWithOwner(page, limit);
+        var totalCount = await _carService.GetCountAllCars();
 
         var responses = dtos.Select(d => new CarWithOwnerDto(
             d.Id,
@@ -37,20 +40,27 @@ public class CarController : ControllerBase
             d.Mileage
         )).ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(responses);
     }
 
     [HttpGet("All")]
     [Authorize(Policy = "AdminPolicy")]
 
-    public async Task<ActionResult<List<Car>>> GetCar()
+    public async Task<ActionResult<List<Car>>> GetCar(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var cars = await _carService.GetAllCars();
+        var cars = await _carService.GetAllCars(page, limit);
+        var totalCount = await _carService.GetCountAllCars();
 
         var response = cars
             .Select(b => new CarResponse(
                 b.Id, b.OwnerId, b.Brand, b.Model, b.YearOfManufacture, b.VinNumber, b.StateNumber, b.Mileage))
             .ToList();
+
+        Response.Headers.Append("x-total-count", totalCount.ToString());
 
         return Ok(response);
     }
@@ -58,15 +68,20 @@ public class CarController : ControllerBase
     [HttpGet("My")]
     [Authorize(Policy = "UserPolicy")]
 
-    public async Task<ActionResult<List<Car>>> GetCarsByOwnerId()
+    public async Task<ActionResult<List<Car>>> GetCarsByOwnerId(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
         var userId = int.Parse(User.FindFirst("userId")!.Value);
-        var cars = await _carService.GetCarsByOwnerId(userId);
+        var cars = await _carService.GetCarsByOwnerId(userId, page, limit);
+        var totalCount = await _carService.GetCountCarsByOwnerId(userId);
 
         var response = cars
             .Select(b => new CarResponse(
                 b.Id, b.OwnerId, b.Brand, b.Model, b.YearOfManufacture, b.VinNumber, b.StateNumber, b.Mileage))
             .ToList();
+
+        Response.Headers.Append("x-total-count", totalCount.ToString());
 
         return Ok(response);
     }
@@ -74,7 +89,9 @@ public class CarController : ControllerBase
     [HttpGet("InWork")]
     [Authorize(Policy = "WorkerPolicy")]
 
-    public async Task<ActionResult<List<Car>>> GetCarsByWorker()
+    public async Task<ActionResult<List<Car>>> GetCarsByWorker(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
         var userId = int.Parse(User.FindFirst("userId")!.Value);
         var cars = await _carService.GetCarsForWorker(userId);

@@ -5,6 +5,7 @@ namespace CRMSystem.DataAccess.Repositories
     public interface IExpenseRespository
     {
         Task<List<Expense>> Get();
+        Task<List<Expense>> GetPaged(int page, int limit);
         Task<int> GetCount();
         Task<int> Create(Expense expense);
         Task<int> Delete(int id);

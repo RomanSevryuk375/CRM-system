@@ -27,18 +27,30 @@ public class CarService : ICarService
         _workerRepository = workerRepository;
     }
 
-    public async Task<List<Car>> GetAllCars()
+    public async Task<List<Car>> GetAllCars(int page, int limit)
     {
-        return await _carRepository.Get();
+        return await _carRepository.GetPaged(page, limit);
     }
 
-    public async Task<List<Car>> GetCarsByOwnerId(int userId)
+    public async Task<int> GetCountAllCars()
+    {
+        return await _carRepository.GetCount();
+    }
+
+    public async Task<List<Car>> GetCarsByOwnerId(int userId, int page, int limit)
     {
         var clients = await _clientsRepository.GetClientByUserId(userId);
-
         var ownerId = clients.Select(c => c.Id).FirstOrDefault();
 
-        return await _carRepository.GetByOwnerId(ownerId);
+        return await _carRepository.GetPagedByOwnerId(ownerId, page, limit);
+    }
+
+    public async Task<int> GetCountCarsByOwnerId(int userId)
+    {
+        var clients = await _clientsRepository.GetClientByUserId(userId);
+        var ownerId = clients.Select(c => c.Id).FirstOrDefault();
+
+        return await _carRepository.GetCountByOwnerId(ownerId);
     }
 
     public async Task<List<Car>> GetCarsForWorker(int userId)
@@ -53,9 +65,9 @@ public class CarService : ICarService
         return await _carRepository.GetById(carId);
     }
 
-    public async Task<List<CarWithOwnerDto>> GetCarsWithOwner()
+    public async Task<List<CarWithOwnerDto>> GetCarsWithOwner(int page, int limit)
     {
-        var cars = await _carRepository.Get();
+        var cars = await _carRepository.GetPaged(page, limit);
         var clients = await _clientsRepository.Get();
 
         var response = (from c in cars

@@ -19,14 +19,9 @@ public class ClientService : IClientService
 
     public async Task<List<Client>> GetPagedClients(int page, int limit)
     {
-        var clients = await _clientsRepository.Get();
+        var clients = await _clientsRepository.GetPaged(page, limit);
 
-        var pagedClients = clients
-                                .Skip((page - 1) * limit)
-                                .Take(limit)
-                                .ToList();
-
-        return pagedClients;
+        return clients;
     }
 
     public async Task<int> GetClientCount()

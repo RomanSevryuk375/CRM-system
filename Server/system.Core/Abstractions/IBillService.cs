@@ -4,8 +4,10 @@ namespace CRMSystem.Buisnes.Services
 {
     public interface IBillService
     {
-        Task<List<Bill>> GetBill();
-        Task<List<Bill>> GetBillByUser(int userId);
+        Task<List<Bill>> GetPagedBill(int page, int limit);
+        Task<int> GetBillCount();
+        Task<List<Bill>> GetPagedBillByUser(int userId, int page, int limit);
+        Task<int> GetBillCountByUser(int userId);
         Task<int> CreateBill(Bill bill);
     }
 }
