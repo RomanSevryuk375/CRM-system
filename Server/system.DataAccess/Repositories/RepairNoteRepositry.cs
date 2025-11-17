@@ -30,6 +30,26 @@ public class RepairNoteRepositry : IRepairNoteRepositry
         return repairNote;
     }
 
+    public async Task<List<RepairNote>> GetPaged(int page, int limit)
+    {
+        var repairNoteEntities = await _context.RepairHistories
+            .AsNoTracking()
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var repairNote = repairNoteEntities
+            .Select(rn => RepairNote.Create(
+                rn.Id,
+                rn.OrderId,
+                rn.CarId,
+                rn.WorkDate,
+                rn.ServiceSum).repairHistory)
+            .ToList();
+
+        return repairNote;
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.RepairHistories.CountAsync();
@@ -54,6 +74,26 @@ public class RepairNoteRepositry : IRepairNoteRepositry
         return repairNote;
     }
 
+    public async Task<List<RepairNote>> GetPagedByCarId(List<int> carIds, int page, int limit)
+    {
+        var repairNoteEntity = await _context.RepairHistories
+            .AsNoTracking()
+            .Where(r => carIds.Contains(r.CarId))
+            .Skip((page - 1) * limit)
+            .ToListAsync();
+
+        var repairNote = repairNoteEntity
+            .Select(r => RepairNote.Create(
+                r.Id,
+                r.OrderId,
+                r.CarId,
+                r.WorkDate,
+                r.ServiceSum).repairHistory)
+            .ToList();
+
+        return repairNote;
+    }
+
     public async Task<int> GetCountByCarId(List<int> carIds)
     {
         return await _context.RepairHistories.Where(r => carIds.Contains(r.CarId)).CountAsync();
@@ -64,6 +104,27 @@ public class RepairNoteRepositry : IRepairNoteRepositry
         var repairNoteEntity = await _context.RepairHistories
             .AsNoTracking()
             .Where(r => orderIds.Contains(r.OrderId))
+            .ToListAsync();
+
+        var repairNote = repairNoteEntity
+            .Select(r => RepairNote.Create(
+                r.Id,
+                r.OrderId,
+                r.CarId,
+                r.WorkDate,
+                r.ServiceSum).repairHistory)
+            .ToList();
+
+        return repairNote;
+    }
+
+    public async Task<List<RepairNote>> GetPagedByOrderId(List<int> orderIds, int page, int limit)
+    {
+        var repairNoteEntity = await _context.RepairHistories
+            .AsNoTracking()
+            .Where(r => orderIds.Contains(r.OrderId))
+            .Skip((page - 1) * limit)
+            .Take(limit)
             .ToListAsync();
 
         var repairNote = repairNoteEntity

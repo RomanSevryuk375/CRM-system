@@ -34,7 +34,7 @@ public class WorkService : IWorkService
     }
     public async Task<List<WorkWithInfoDto>> GetInWorkWorks(int userId)
     {
-        var worker = await _workerRepository.GetWorkerIdByUserId(userId);
+        var worker = await _workerRepository.GetWorkerByUserId(userId);
         var workerId = worker.Select(w => w.Id).ToList();
 
         var allWorks = await _workRepository.GetByWorkerId(workerId);

@@ -19,22 +19,25 @@ public class TaxController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-
-    public async Task<ActionResult<List<Tax>>> GetTaxes()
+    public async Task<ActionResult<List<Tax>>> GetTaxes(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var taxes = await _taxService.GetTaxes();
+        var taxes = await _taxService.GetPagedTaxes(page, limit);
+        var totalCount = await _taxService.GetCountTaxes();
 
         var response = taxes
             .Select(t => new TaxResponse(
                 t.Id, t.Name, t.Rate, t.Type))
             .ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> CreateTax([FromBody] TaxRequest taxRequest)
     {
         var (tax, error) = Tax.Create(
@@ -55,7 +58,6 @@ public class TaxController : ControllerBase
 
     [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> UpdateTax([FromBody] TaxRequest taxRequest, int id)
     {
         var result = await _taxService.UpdateTax(id, taxRequest.Name, taxRequest.Rate, taxRequest.Type);
@@ -65,7 +67,6 @@ public class TaxController : ControllerBase
 
     [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> DeleteTax(int id)
     {
         var result = await _taxService.DeleteTax(id);

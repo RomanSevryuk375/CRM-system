@@ -13,6 +13,29 @@ public class UsedPartRepository : IUsedPartRepository
         _context = context;
     }
 
+    public async Task<List<UsedPart>> GetPaged(int page, int limit)
+    {
+        var usedPartEntities = await _context.UsedParts
+            .AsNoTracking()
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var usedPart = usedPartEntities
+            .Select(up => UsedPart.Create(
+                up.Id,
+                up.OrderId,
+                up.SupplierId,
+                up.Name,
+                up.Article,
+                up.Quantity,
+                up.UnitPrice,
+                up.Sum).usedPart)
+            .ToList();
+
+        return usedPart;
+    }
+
     public async Task<List<UsedPart>> Get()
     {
         var usedPartEntities = await _context.UsedParts
@@ -44,6 +67,30 @@ public class UsedPartRepository : IUsedPartRepository
         var usedPartEntities = await _context.UsedParts
             .AsNoTracking()
             .Where(w => orderIds.Contains(w.OrderId))
+            .ToListAsync();
+
+        var usedPart = usedPartEntities
+            .Select(up => UsedPart.Create(
+                up.Id,
+                up.OrderId,
+                up.SupplierId,
+                up.Name,
+                up.Article,
+                up.Quantity,
+                up.UnitPrice,
+                up.Sum).usedPart)
+            .ToList();
+
+        return usedPart;
+    }
+
+    public async Task<List<UsedPart>> GetByPagedOrderId(List<int> orderIds, int page, int limit)
+    {
+        var usedPartEntities = await _context.UsedParts
+            .AsNoTracking()
+            .Where(w => orderIds.Contains(w.OrderId))
+            .Skip((page - 1) * limit)
+            .Take(limit)
             .ToListAsync();
 
         var usedPart = usedPartEntities

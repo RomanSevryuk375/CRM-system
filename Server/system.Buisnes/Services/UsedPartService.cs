@@ -26,14 +26,19 @@ public class UsedPartService : IUsedPartService
         _orderRepository = orderRepository;
     }
 
-    public async Task<List<UsedPart>> GetUsedPart()
+    public async Task<List<UsedPart>> GetPagedUsedPart(int page, int limit)
     {
-        return await _usedPartRepository.Get();
+        return await _usedPartRepository.GetPaged(page, limit);
     }
 
-    public async Task<List<UsedPartWithInfoDto>> GetUsedPartWithInfo()
+    public async Task<int> GetCountUsedPart()
     {
-        var usedParts = await _usedPartRepository.Get();
+        return await _usedPartRepository.GetCount();
+    }
+
+    public async Task<List<UsedPartWithInfoDto>> GetPagedUsedPartWithInfo(int page, int limit)
+    {
+        var usedParts = await _usedPartRepository.GetPaged(page, limit);
         var suppliers = await _supplierRepository.Get();
 
         var response = (from u in usedParts
@@ -51,19 +56,19 @@ public class UsedPartService : IUsedPartService
         return response;
     }
 
-    public async Task<List<UsedPartWithInfoDto>> GetWorkerUsedPart(int userId)
+    public async Task<List<UsedPartWithInfoDto>> GetPagedWorkerUsedPart(int userId, int page, int limit)
     {
-        //worker
-        var worker = await _workerRepository.GetWorkerIdByUserId(userId);
+
+        var worker = await _workerRepository.GetWorkerByUserId(userId);
         var workerId = worker.Select(w => w.Id).ToList();
-        //work
+
         var works = await _workRepository.GetByWorkerId(workerId);
         var workIds = works.Select(w => w.OrderId).ToList();
-        //order
+
         var orders = await _orderRepository.GetById(workIds);
         var orderIds = orders.Select(o => o.Id).ToList();
-        //usedpart
-        var usedParts = await _usedPartRepository.GetByOrderId(orderIds);
+
+        var usedParts = await _usedPartRepository.GetByPagedOrderId(orderIds, page, limit);
         var suppliers = await _supplierRepository.Get();
 
         var response = (from u in usedParts
@@ -79,6 +84,20 @@ public class UsedPartService : IUsedPartService
                             u.Sum)).ToList();
 
         return response;
+    }
+
+    public async Task<int> GetCountWorkerUsedPart(int userId)
+    {
+        var worker = await _workerRepository.GetWorkerByUserId(userId);
+        var workerId = worker.Select(w => w.Id).ToList();
+
+        var works = await _workRepository.GetByWorkerId(workerId);
+        var workIds = works.Select(w => w.OrderId).ToList();
+
+        var orders = await _orderRepository.GetById(workIds);
+        var orderIds = orders.Select(o => o.Id).ToList();
+
+        return await _usedPartRepository.GetCountByOrderId(orderIds);
     }
 
     public async Task<int> CreateUsedPart(UsedPart usedPart)

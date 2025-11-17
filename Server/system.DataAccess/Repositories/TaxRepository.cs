@@ -29,7 +29,26 @@ public class TaxRepository : ITaxRepository
 
         return taxes;
     }
-    
+
+    public async Task<List<Tax>> GetPaged(int page, int limit)
+    {
+        var taxEntities = await _context.Taxes
+            .AsNoTracking()
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var taxes = taxEntities.Select(
+            t => Tax.Create(
+                t.Id,
+                t.Name,
+                t.Rate,
+                t.Type).tax)
+            .ToList();
+
+        return taxes;
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.Taxes.CountAsync();

@@ -30,12 +30,36 @@ public class OrderService : IOrderService
         _workRepository = workRepository;
     }
 
-    public async Task<List<Order>> GetOrders()
+    public async Task<List<Order>> GetPagedOrders(int page, int limit)
     {
-        return await _orderRepository.Get();
+        return await _orderRepository.GetPaged(page, limit);
     }
 
-    public async Task<List<OrderWithInfoDto>> GetUserOrders(int userId)
+    public async Task<int> GetCountOrders()
+    {
+        return await _orderRepository.GetCount();
+    }
+
+    public async Task<List<OrderWithInfoDto>> GetOrderWithInfo(int page, int limit)
+    {
+        var orders = await _orderRepository.GetPaged(page, limit);
+        var cars = await _carRepository.Get();
+        var statuses = await _statusRepository.Get();
+
+        var response = (from o in orders
+                        join c in cars on o.CarId equals c.Id
+                        join s in statuses on o.StatusId equals s.Id
+                        select new OrderWithInfoDto(
+                            o.Id,
+                            s.Name,
+                            $"{c.Brand} {c.Model} ({c.StateNumber})",
+                            o.Date,
+                            o.Priority)).ToList();
+
+        return response;
+    }
+
+    public async Task<List<OrderWithInfoDto>> GetPagedUserOrders(int userId, int page, int limit)
     {
         var client = await _clientsRepository.GetClientByUserId(userId);
         var ownerId = client.Select(c => c.Id).FirstOrDefault();
@@ -43,7 +67,7 @@ public class OrderService : IOrderService
         var cars = await _carRepository.GetByOwnerId(ownerId);
         var carIds = cars.Select(c => c.Id).ToList();
 
-        var orders = await _orderRepository.GetByCarId(carIds);
+        var orders = await _orderRepository.GetPagedByCarId(carIds, page, limit);
 
         var statuses = await _statusRepository.Get();
 
@@ -59,9 +83,20 @@ public class OrderService : IOrderService
         return response;
     }
 
+    public async Task<int> GetCountUserOrders(int userId)
+    {
+        var client = await _clientsRepository.GetClientByUserId(userId);
+        var ownerId = client.Select(c => c.Id).FirstOrDefault();
+
+        var cars = await _carRepository.GetByOwnerId(ownerId);
+        var carIds = cars.Select(c => c.Id).ToList();
+
+        return await _orderRepository.GetCountByCarId(carIds);
+    }
+
     public async Task<List<OrderWithInfoDto>> GetWorkerOrders(int userId)
     {
-        var worker = await _workerRepository.GetWorkerIdByUserId(userId);
+        var worker = await _workerRepository.GetWorkerByUserId(userId);
         var workerId = worker.Select(w => w.Id).ToList();
 
         var works = await _workRepository.GetByWorkerId(workerId);
@@ -81,25 +116,6 @@ public class OrderService : IOrderService
                             $"{c.Brand} {c.Model} ({c.StateNumber})",
                             o.Date,
                             o.Priority)).ToList();
-        return response;
-    }
-
-    public async Task<List<OrderWithInfoDto>> GetOrderWithInfo()
-    {
-        var orders = await _orderRepository.Get();
-        var cars = await _carRepository.Get();
-        var statuses = await _statusRepository.Get();
-
-        var response = (from o in orders
-                        join c in cars on o.CarId equals c.Id
-                        join s in statuses on o.StatusId equals s.Id
-                        select new OrderWithInfoDto(
-                            o.Id,
-                            s.Name,
-                            $"{c.Brand} {c.Model} ({c.StateNumber})",
-                            o.Date,
-                            o.Priority)).ToList();
-
         return response;
     }
 

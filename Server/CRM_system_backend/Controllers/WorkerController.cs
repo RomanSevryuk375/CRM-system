@@ -23,10 +23,12 @@ public class WorkerController : ControllerBase
 
     [HttpGet("with-info")]
     [Authorize(Policy = "AdminPolicy")]
-
-    public async Task<ActionResult<List<WorkerWithInfoDto>>> GetWorkerWithInfo()
+    public async Task<ActionResult<List<WorkerWithInfoDto>>> GetWorkerWithInfo(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var dtos = await _workerService.GetWorkersWithInfo();
+        var dtos = await _workerService.GetPagedWorkersWithInfo(page, limit);
+        var totalCount = await _workerService.GetCountWorker();
 
         var response = dtos.Select(d => new WorkerWithInfoDto(
             d.Id,
@@ -38,18 +40,22 @@ public class WorkerController : ControllerBase
             d.PhoneNumber,
             d.Email
         )).ToList();
+
+        Response.Headers.Append("x-total-count", totalCount.ToString());
 
         return Ok(response);
     }
 
     [HttpGet("My")]
     [Authorize(Policy = "WorkerPolicy")]
-
-    public async Task<ActionResult<List<WorkerWithInfoDto>>> GetUserWorkerInfo()
+    public async Task<ActionResult<List<WorkerWithInfoDto>>> GetUserWorkerInfo(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
         var userId = int.Parse(User.FindFirst("userId")!.Value);
 
-        var dtos = await _workerService.GetWorkerIdByUserId(userId);
+        var dtos = await _workerService.GetPagedWorkerByUserId(userId, page, limit);
+        var totalCount = await _workerService.GetCountWorkerByUserId(userId);
 
         var response = dtos.Select(d => new WorkerWithInfoDto(
             d.Id,
@@ -61,6 +67,8 @@ public class WorkerController : ControllerBase
             d.PhoneNumber,
             d.Email
         )).ToList();
+
+        Response.Headers.Append("x-total-count", totalCount.ToString());
 
         return Ok(response);
 
@@ -68,21 +76,24 @@ public class WorkerController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-
-    public async Task<ActionResult<List<WorkerResponse>>> GetAllWorker()
+    public async Task<ActionResult<List<WorkerResponse>>> GetAllWorker(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var workers = await _workerService.GetAllWorkers();
+        var workers = await _workerService.GetPagedAllWorkers(page, limit);
+        var totalCount = await _workerService.GetCountWorker();
 
         var response = workers
             .Select(w => new WorkerResponse(
                 w.Id, w.UserId, w.SpecializationId, w.Name, w.Surname, w.HourlyRate, w.PhoneNumber, w.Email))
             .ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(response);
     }
 
     [HttpPost("with-user")]
-
     public async Task<ActionResult<int>> CreateWorker([FromBody]  WorkerRegistreRequest request)
     {
         var (user, errorUser) = CRMSystem.Core.Models.User.Create(
@@ -125,7 +136,6 @@ public class WorkerController : ControllerBase
 
     [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> UpdateWorker([FromBody] WorkerRequest workerRequest, int id)
     {
         var result = await _workerService
@@ -144,13 +154,10 @@ public class WorkerController : ControllerBase
 
     [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> DeleteWorker(int id)
     {
         var result = await _workerService.DeleteWorker(id);
 
         return Ok(result);
     }
-
-    //worker get it by id from jwt
 }

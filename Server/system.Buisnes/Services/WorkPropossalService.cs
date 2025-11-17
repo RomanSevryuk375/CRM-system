@@ -33,14 +33,19 @@ public class WorkPropossalService : IWorkPropossalService
         _orderRepository = orderRepository;
     }
 
-    public async Task<List<WorkProposal>> GetWorkProposal()
+    public async Task<List<WorkProposal>> GetPagedWorkProposal(int page, int limit)
     {
-        return await _workPropossal.Get();
+        return await _workPropossal.GetPaged(page, limit);
     }
 
-    public async Task<List<WorkProposalWithInfoDto>> GetWorkProposalWithInfo()
+    public async Task<int> GetCountProposal()
     {
-        var workProposals = await _workPropossal.Get();
+        return await _workPropossal.GetCount();
+    }
+
+    public async Task<List<WorkProposalWithInfoDto>> GetPagedWorkProposalWithInfo(int page, int limit)
+    {
+        var workProposals = await _workPropossal.GetPaged(page, limit);
         var workTypes = await _workTypeRepository.Get();
         var workers = await _workerRepository.Get();
         var statuses = await _statusRepository.Get();
@@ -61,19 +66,19 @@ public class WorkPropossalService : IWorkPropossalService
         return response;
     }
 
-    public async Task<List<WorkProposalWithInfoDto>> GetProposalForClient(int userId)
+    public async Task<List<WorkProposalWithInfoDto>> GetPagedProposalForClient(int userId, int page, int limit)
     {
-        //client
+
         var client = await _clientsRepository.GetClientByUserId(userId);
         var clientId = client.Select(c => c.Id).FirstOrDefault();
-        //car
+
         var cars = await _carRepository.GetByOwnerId(clientId);
         var carIds = cars.Select(c => c.Id).ToList();
-        //Order
+
         var orders = await _orderRepository.GetByCarId(carIds);
         var orderIds = orders.Select(c => c.Id).ToList();
-        //Proposal
-        var workProposals = await _workPropossal.GetByOrderId(orderIds);
+
+        var workProposals = await _workPropossal.GetPagedByOrderId(orderIds, page, limit);
         var workTypes = await _workTypeRepository.Get();
         var workers = await _workerRepository.Get();
         var statuses = await _statusRepository.Get();
@@ -92,6 +97,20 @@ public class WorkPropossalService : IWorkPropossalService
                             wp.Date)).ToList();
 
         return response;
+    }
+
+    public async Task<int> GetCountProposalForClient(int userId)
+    {
+        var client = await _clientsRepository.GetClientByUserId(userId);
+        var clientId = client.Select(c => c.Id).FirstOrDefault();
+
+        var cars = await _carRepository.GetByOwnerId(clientId);
+        var carIds = cars.Select(c => c.Id).ToList();
+
+        var orders = await _orderRepository.GetByCarId(carIds);
+        var orderIds = orders.Select(c => c.Id).ToList();
+
+        return await _workPropossal.GetCountByOrderId(orderIds);
     }
 
     public async Task<int> CreateWorkProposal(WorkProposal workProposal)

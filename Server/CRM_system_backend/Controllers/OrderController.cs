@@ -20,10 +20,12 @@ public class OrderController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-
-    public async Task<ActionResult<List<Order>>> GetOrders()
+    public async Task<ActionResult<List<Order>>> GetOrders(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var orders = await _orderService.GetOrders();
+        var orders = await _orderService.GetPagedOrders(page, limit);
+        var totalCount = await _orderService.GetCountOrders();
 
         var response = orders
             .Select(o => new OrderResponse(
@@ -34,15 +36,19 @@ public class OrderController : ControllerBase
                 o.Priority))
             .ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(response);
     }
 
     [HttpGet("with-info")]
     [Authorize(Policy = "AdminPolicy")]
-
-    public async Task<ActionResult<List<OrderWithInfoDto>>> GetOrderWithInfo()
+    public async Task<ActionResult<List<OrderWithInfoDto>>> GetOrderWithInfo(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var dtos = await _orderService.GetOrderWithInfo();
+        var dtos = await _orderService.GetOrderWithInfo(page, limit);
+        var totalCount = await _orderService.GetCountOrders();
 
         var response = dtos.Select(o => new OrderWithInfoDto(
             o.Id,
@@ -50,18 +56,21 @@ public class OrderController : ControllerBase
             o.CarInfo,
             o.Date,
             o.Priority)).ToList();
+
+        Response.Headers.Append("x-total-count", totalCount.ToString());
 
         return Ok(response);            
     }
 
     [HttpGet("My")]
     [Authorize(Policy = "UserPolicy")]
-
-    public async Task<ActionResult<List<OrderWithInfoDto>>> GetUserOrders()
+    public async Task<ActionResult<List<OrderWithInfoDto>>> GetUserOrders(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
         var userId = int.Parse(User.FindFirst("userId")!.Value);
-
-        var dtos = await _orderService.GetUserOrders(userId);
+        var totalCount = await _orderService.GetCountUserOrders(userId);
+        var dtos = await _orderService.GetPagedUserOrders(userId, page, limit);
 
         var response = dtos.Select(o => new OrderWithInfoDto(
             o.Id,
@@ -70,12 +79,13 @@ public class OrderController : ControllerBase
             o.Date,
             o.Priority)).ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(response);
     }
 
     [HttpGet("InWork")]
     [Authorize(Policy = "WorkerPolicy")]
-
     public async Task<ActionResult<List<OrderWithInfoDto>>> GetWorkerOrders()
     {
         var userId = int.Parse(User.FindFirst("userId")!.Value);
@@ -95,7 +105,6 @@ public class OrderController : ControllerBase
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
     [Authorize(Policy = "UserPolicy")]
-
     public async Task<ActionResult<int>> CreateOrder([FromBody] OrderRequest request)
     {
         var (order, error) = Order.Create(
@@ -117,7 +126,6 @@ public class OrderController : ControllerBase
 
     [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> UpdateOrder([FromBody] OrderRequest request, int id)
     {
         var result = await _orderService.UpdateOrder(id, request.StatusId, request.CarId, request.Date, request.Priority);
@@ -127,7 +135,6 @@ public class OrderController : ControllerBase
 
     [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> DeleteOrder(int id)
     {
         var result = await _orderService.DeleteOrder(id);

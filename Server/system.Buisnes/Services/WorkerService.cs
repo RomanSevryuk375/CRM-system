@@ -15,15 +15,20 @@ public class WorkerService : IWorkerService
         _specializationRepository = specializationRepository;
     }
 
-    public async Task<List<Worker>> GetAllWorkers()
+    public async Task<List<Worker>> GetPagedAllWorkers(int page, int limit)
     {
-        return await _workerRepository.Get();
+        return await _workerRepository.GetPaged(page, limit);
     }
 
-    public async Task<List<WorkerWithInfoDto>> GetWorkerIdByUserId(int userId)
+    public async Task<int> GetCountWorker()
     {
-        var worker = await _workerRepository.GetWorkerIdByUserId(userId);
-        var specializations = await _specializationRepository.Get();
+        return await _workerRepository.GetCount();
+    }
+
+    public async Task<List<WorkerWithInfoDto>> GetPagedWorkerByUserId(int userId, int page, int limit)
+    {
+        var worker = await _workerRepository.GetWorkerByUserId(userId);
+        var specializations = await _specializationRepository.GetPaged(page, limit);
 
         var response = (from w in worker
                         join s in specializations on w.SpecializationId equals s.Id
@@ -41,9 +46,14 @@ public class WorkerService : IWorkerService
         return response;
     }
 
-    public async Task<List<WorkerWithInfoDto>> GetWorkersWithInfo()
+    public async Task<int> GetCountWorkerByUserId(int userId)
     {
-        var workers = await _workerRepository.Get();
+        return await _workerRepository.GetCountWorkerByUserId(userId);
+    }
+
+    public async Task<List<WorkerWithInfoDto>> GetPagedWorkersWithInfo(int page, int limit)
+    {
+        var workers = await _workerRepository.GetPaged(page, limit);
         var specializations = await _specializationRepository.Get();
 
         var response = (from w in workers

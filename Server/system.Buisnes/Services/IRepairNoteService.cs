@@ -5,9 +5,12 @@ namespace CRMSystem.Buisnes.Services
 {
     public interface IRepairNoteService
     {
-        Task<List<RepairNote>> GetRepairNote();
-        Task<List<RepairNoteWithInfoDto>> GetRepairNoteWithInfo();
-        Task<List<RepairNoteWithInfoDto>> GetUserRepairNote(int userId);
-        Task<List<RepairNoteWithInfoDto>> GetWorkerRepairNote(int userId);
+        Task<List<RepairNote>> GetPagedRepairNote(int page, int limit);
+        Task<int> GetCountRepairNote();
+        Task<List<RepairNoteWithInfoDto>> GetPagedRepairNoteWithInfo(int page, int limit);
+        Task<List<RepairNoteWithInfoDto>> GetPagedUserRepairNote(int userId, int page, int limit);
+        Task<int> GetCountUserRepairNote(int userId);
+        Task<List<RepairNoteWithInfoDto>> GetPagedWorkerRepairNote(int userId, int page, int limit);
+        Task<int> GetCountWorkerRepairNote(int userId);
     }
 }

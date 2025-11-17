@@ -19,21 +19,24 @@ public class SupplierController : Controller
 
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-
-    public async Task<ActionResult<List<Supplier>>> GetSuppliers()
+    public async Task<ActionResult<List<Supplier>>> GetSuppliers(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var suppliers = await _supplierService.GetSupplier();
+        var suppliers = await _supplierService.GetPagedSupplier(page, limit);
+        var totalCount = await _supplierService.GetCountSupplier();
 
         var response = suppliers
             .Select(s => new SupplierResponse(s.Id, s.Name, s.Contacts))
             .ToList();
+
+        Response.Headers.Append("x-total-count", totalCount.ToString());
 
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> CreateSupplier ([FromBody] SupplierRequest supplierRequest)
     {
         var (supplier, error) = Supplier.Create
@@ -55,7 +58,6 @@ public class SupplierController : Controller
 
     [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> UpdateSupplier([FromBody] SupplierRequest supplierRequest, int id)
     {
         var result = await _supplierService.UpdateSupplier(id, supplierRequest.Name, supplierRequest.Contacts);
@@ -65,7 +67,6 @@ public class SupplierController : Controller
 
     [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> DeleteSupplier(int id)
     {
         var result = await _supplierService.DeleteSupplier(id);

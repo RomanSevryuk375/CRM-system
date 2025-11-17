@@ -29,6 +29,24 @@ public class SpecializationRepository : ISpecializationRepository
         return specializations;
     }
 
+    public async Task<List<Specialization>> GetPaged(int page, int limit)
+    {
+        var specializationEntities = await _context.Specializations
+                    .AsNoTracking()
+                    .Skip((page - 1) * limit)
+                    .Take(limit)
+                    .ToListAsync();
+
+        var specializations = specializationEntities
+            .Select(s => Specialization.Create(
+                s.Id,
+                s.Name
+                ).specialization)
+            .ToList();
+
+        return specializations;
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.Specializations.CountAsync();

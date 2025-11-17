@@ -6,7 +6,8 @@ namespace CRMSystem.Buisnes.Services
     {
         Task<int> CreateSupplier(Supplier supplier);
         Task<int> DeleteSupplier(int id);
-        Task<List<Supplier>> GetSupplier();
+        Task<List<Supplier>> GetPagedSupplier(int page, int limit);
+        Task<int> GetCountSupplier();
         Task<int> UpdateSupplier(int id, string name, string contacts);
     }
 }

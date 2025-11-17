@@ -33,6 +33,28 @@ public class ExpenseRespository : IExpenseRespository
         return expenses;
     }
 
+    public async Task<List<Expense>> GetPaged(int page, int limit)
+    {
+        var expenseEntities = await _context.Expenses
+            .AsNoTracking()
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var expenses = expenseEntities
+            .Select(e => Expense.Create(
+                e.Id,
+                e.Date,
+                e.Category,
+                e.TaxId,
+                e.UsedPartId,
+                e.ExpenseType,
+                e.Sum).expense)
+            .ToList();
+
+        return expenses;
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.Expenses.CountAsync();

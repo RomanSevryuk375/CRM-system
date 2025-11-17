@@ -21,10 +21,12 @@ public class UsedPartController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-
-    public async Task<ActionResult<List<UsedPart>>> GetUsedPart()
+    public async Task<ActionResult<List<UsedPart>>> GetUsedPart(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var usedParts = await _usedPartService.GetUsedPart();
+        var usedParts = await _usedPartService.GetPagedUsedPart(page, limit);
+        var totalCount = await _usedPartService.GetCountUsedPart();
 
         var response = usedParts
             .Select(u => new UsedPart(
@@ -38,15 +40,19 @@ public class UsedPartController : ControllerBase
                 u.Sum))
             .ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(response);
     }
 
     [HttpGet("with-info")]
     [Authorize(Policy = "AdminPolicy")]
-
-    public async Task<ActionResult<List<UsedPartWithInfoDto>>> GetUsedPartWithInfo()
+    public async Task<ActionResult<List<UsedPartWithInfoDto>>> GetUsedPartWithInfo(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var dtos = await _usedPartService.GetUsedPartWithInfo();
+        var dtos = await _usedPartService.GetPagedUsedPartWithInfo(page, limit);
+        var totalCount = await _usedPartService.GetCountUsedPart();
 
         var response = dtos
             .Select(u => new UsedPartWithInfoDto(
@@ -60,15 +66,19 @@ public class UsedPartController : ControllerBase
                 u.Sum))
             .ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(response);
     }
     [HttpGet("InWork")]
     [Authorize(Policy = "WorkerPolicy")]
-
-    public async Task<ActionResult<List<UsedPartWithInfoDto>>> GetWorkerUsedPart()
+    public async Task<ActionResult<List<UsedPartWithInfoDto>>> GetWorkerUsedPart(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
         var userId = int.Parse(User.FindFirst("userId")!.Value);
-        var usedParts = await _usedPartService.GetWorkerUsedPart(userId);
+        var usedParts = await _usedPartService.GetPagedWorkerUsedPart(userId, page, limit);
+        var totalCount = await _usedPartService.GetCountWorkerUsedPart(userId);
 
         var response = usedParts
             .Select(u => new UsedPartWithInfoDto(
@@ -82,13 +92,14 @@ public class UsedPartController : ControllerBase
                 u.Sum))
             .ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
     //[Authorize(Policy = "WorkerPolicy")]
-
     public async Task<ActionResult<int>> CreateUsedPart([FromBody] UsedPartRequest request)
     {
         var (usedPart, error) = UsedPart.Create(
@@ -113,7 +124,6 @@ public class UsedPartController : ControllerBase
 
     [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> UpdateUsedPart([FromBody] UsedPartRequest request, int id)
     {
         var result = await _usedPartService.UpdateUsedPart(
@@ -131,7 +141,6 @@ public class UsedPartController : ControllerBase
 
     [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> DeleteUsedPart(int id)
     {
         var result = await _usedPartService.DeleteUsedPart(id);

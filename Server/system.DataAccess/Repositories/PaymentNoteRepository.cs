@@ -31,6 +31,26 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         return paymentNote;
     }
 
+    public async Task<List<PaymentNote>> GetPaged(int page, int limit)
+    {
+        var paymentEntities = await _context.PaymentNotes
+            .AsNoTracking()
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var paymentNote = paymentEntities
+            .Select(pn => PaymentNote.Create(
+                pn.Id,
+                pn.BillId,
+                pn.Date,
+                pn.Amount,
+                pn.Method).paymentNote)
+            .ToList();
+
+        return paymentNote;
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.PaymentNotes.CountAsync();
@@ -41,6 +61,27 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         var paymentEntities = await _context.PaymentNotes
            .AsNoTracking()
            .Where(p => billIds.Contains(p.BillId))
+           .ToListAsync();
+
+        var paymentNote = paymentEntities
+            .Select(pn => PaymentNote.Create(
+                pn.Id,
+                pn.BillId,
+                pn.Date,
+                pn.Amount,
+                pn.Method).paymentNote)
+            .ToList();
+
+        return paymentNote;
+    }
+
+    public async Task<List<PaymentNote>> GetPagedByBillId(List<int> billIds, int page, int limit)
+    {
+        var paymentEntities = await _context.PaymentNotes
+           .AsNoTracking()
+           .Where(p => billIds.Contains(p.BillId))
+           .Skip((page - 1) * limit)
+           .Take(limit)
            .ToListAsync();
 
         var paymentNote = paymentEntities

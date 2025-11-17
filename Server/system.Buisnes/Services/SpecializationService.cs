@@ -12,9 +12,14 @@ public class SpecializationService : ISpecializationService
         _specializationRepository = specializationRepository;
     }
 
-    public async Task<List<Specialization>> GetSpecialization()
+    public async Task<List<Specialization>> GetPagedSpecialization(int page, int limit)
     {
-        return await _specializationRepository.Get();
+        return await _specializationRepository.GetPaged(page, limit);
+    }
+
+    public async Task<int> GetCountSpecialization()
+    {
+        return await _specializationRepository.GetCount();
     }
 
     public async Task<int> CreateSpecialization(Specialization specialization)

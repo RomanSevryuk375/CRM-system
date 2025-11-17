@@ -34,12 +34,35 @@ public class WorkerRepository : IWorkerRepository
         return worker;
     }
 
+    public async Task<List<Worker>> GetPaged(int page, int limit)
+    {
+        var workerEntities = await _context.Workers
+            .AsNoTracking()
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var worker = workerEntities
+            .Select(w => Worker.Create(
+                w.Id,
+                w.UserId,
+                w.SpecializationId,
+                w.Name,
+                w.Surname,
+                w.HourlyRate,
+                w.PhoneNumber,
+                w.Email).worker)
+            .ToList();
+
+        return worker;
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.Workers.CountAsync();
     }
 
-    public async Task<List<Worker>> GetWorkerIdByUserId(int userId)
+    public async Task<List<Worker>> GetWorkerByUserId(int userId)
     {
         var workerEntities = await _context.Workers
             .AsNoTracking()
@@ -59,6 +82,35 @@ public class WorkerRepository : IWorkerRepository
             .ToList();
 
         return worker;
+    }
+
+    public async Task<List<Worker>> GetPagedWorkerByUserId(int userId, int page, int limit)
+    {
+        var workerEntities = await _context.Workers
+            .AsNoTracking()
+            .Where(w => w.UserId == userId)
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var worker = workerEntities
+            .Select(w => Worker.Create(
+                w.Id,
+                w.UserId,
+                w.SpecializationId,
+                w.Name,
+                w.Surname,
+                w.HourlyRate,
+                w.PhoneNumber,
+                w.Email).worker)
+            .ToList();
+
+        return worker;
+    }
+
+    public async Task<int> GetCountWorkerByUserId(int userId)
+    {
+        return await _context.Workers.Where(w => w.Id == userId).CountAsync();
     }
 
     public async Task<int> Create(Worker worker)

@@ -55,7 +55,7 @@ public class CarService : ICarService
 
     public async Task<List<Car>> GetCarsForWorker(int userId)
     {
-        var workers = await _workerRepository.GetWorkerIdByUserId(userId);
+        var workers = await _workerRepository.GetWorkerByUserId(userId);
         var workerIds = workers.Select(c => c.Id).ToList();
         var works = await _workRepository.GetByWorkerId(workerIds);
         var orderId = works.Select(works => works.OrderId).ToList();

@@ -29,6 +29,25 @@ public class SupplierRepository : ISupplierRepository
 
         return suppliers;
     }
+
+    public async Task<List<Supplier>> GetPaged(int page, int limit)
+    {
+        var supplierEntitie = await _context.Suppliers
+                    .AsNoTracking()
+                    .Skip((page - 1) * limit)
+                    .Take(limit)
+                    .ToListAsync();
+
+        var suppliers = supplierEntitie
+            .Select(su => Supplier.Create(
+                su.Id,
+                su.Name,
+                su.Contacts
+                ).supplier)
+            .ToList();
+
+        return suppliers;
+    }
     
     public async Task<int> GetCount()
     {

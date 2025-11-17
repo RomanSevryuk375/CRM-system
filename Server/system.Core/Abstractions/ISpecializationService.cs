@@ -4,9 +4,10 @@ namespace CRMSystem.Buisnes.Services
 {
     public interface ISpecializationService
     {
+        Task<List<Specialization>> GetPagedSpecialization(int page, int limit);
+        Task<int> GetCountSpecialization();
         Task<int> CreateSpecialization(Specialization specialization);
         Task<int> DeleteSpecialization(int id);
-        Task<List<Specialization>> GetSpecialization();
         Task<int> UpdateSpecialization(int id, string name);
     }
 }

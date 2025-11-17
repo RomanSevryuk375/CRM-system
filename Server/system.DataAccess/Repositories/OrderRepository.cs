@@ -30,7 +30,27 @@ public class OrderRepository : IOrderRepository
 
         return orders;
     }
-    
+
+    public async Task<List<Order>> GetPaged(int page, int limit)
+    {
+        var orderEntities = await _context.Orders
+            .AsNoTracking()
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var orders = orderEntities
+            .Select(o => Order.Create(
+                o.Id,
+                o.StatusId,
+                o.CarId,
+                o.Date,
+                o.Priority).order)
+            .ToList();
+
+        return orders;
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.Orders.CountAsync();
@@ -54,7 +74,28 @@ public class OrderRepository : IOrderRepository
 
         return orders;
     }
-    
+
+    public async Task<List<Order>> GetPagedById(List<int> orderIds, int page, int limit)
+    {
+        var orderEntities = await _context.Orders
+            .AsNoTracking()
+            .Where(o => orderIds.Contains(o.Id) && (o.StatusId == 5 || o.StatusId == 7)) //not tested but if it disable it work good
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var orders = orderEntities
+            .Select(o => Order.Create(
+                o.Id,
+                o.StatusId,
+                o.CarId,
+                o.Date,
+                o.Priority).order)
+            .ToList();
+
+        return orders;
+    }
+
     public async Task<int> GetCountById(List<int> orderIds)
     {
         return await _context.Orders.Where(o => orderIds.Contains(o.Id)).CountAsync();
@@ -65,6 +106,27 @@ public class OrderRepository : IOrderRepository
         var orderEntities = await _context.Orders
             .AsNoTracking()
             .Where(o => carIds.Contains(o.CarId))
+            .ToListAsync();
+
+        var orders = orderEntities
+            .Select(o => Order.Create(
+                o.Id,
+                o.StatusId,
+                o.CarId,
+                o.Date,
+                o.Priority).order)
+            .ToList();
+
+        return orders;
+    }
+
+    public async Task<List<Order>> GetPagedByCarId(List<int> carIds, int page, int limit)
+    {
+        var orderEntities = await _context.Orders
+            .AsNoTracking()
+            .Where(o => carIds.Contains(o.CarId))
+            .Skip((page - 1) * limit)
+            .Take(limit)
             .ToListAsync();
 
         var orders = orderEntities

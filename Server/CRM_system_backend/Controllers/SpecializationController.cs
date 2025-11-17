@@ -20,21 +20,24 @@ public class SpecializationController : Controller
 
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-
-    public async Task<ActionResult<Specialization>> GetSpecialization()
+    public async Task<ActionResult<Specialization>> GetSpecialization(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var specializations = await _specializationService.GetSpecialization();
+        var specializations = await _specializationService.GetPagedSpecialization(page, limit);
+        var totalCount = _specializationService.GetCountSpecialization();
 
         var response = specializations
             .Select(s => new SpecializationResponse(
                 s.Id, s.Name)).ToList();
+
+        Response.Headers.Append("x-total-count", totalCount.ToString());
 
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> CreateSpecialization([FromBody]SpecializationRequest specializationRequest)
     {
         var (specialization, error) = Specialization.Create(
@@ -53,7 +56,6 @@ public class SpecializationController : Controller
 
     [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> UpdateSpecialization([FromBody] SpecializationRequest specializationRequest, int id)
     {
         var result = await _specializationService.UpdateSpecialization(id, specializationRequest.Name);

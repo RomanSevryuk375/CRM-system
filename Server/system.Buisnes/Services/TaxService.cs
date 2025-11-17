@@ -12,9 +12,14 @@ public class TaxService : ITaxService
         _taxRepository = taxRepository;
     }
 
-    public async Task<List<Tax>> GetTaxes()
+    public async Task<List<Tax>> GetPagedTaxes(int page, int limit)
     {
-        return await _taxRepository.Get();
+        return await _taxRepository.GetPaged(page, limit);
+    }
+
+    public async Task<int> GetCountTaxes()
+    {
+        return await _taxRepository.GetCount();
     }
 
     public async Task<int> CreateTax(Tax tax)

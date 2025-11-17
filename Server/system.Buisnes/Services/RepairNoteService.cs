@@ -30,14 +30,19 @@ public class RepairNoteService : IRepairNoteService
         _orderRepository = orderRepository;
     }
 
-    public async Task<List<RepairNote>> GetRepairNote()
+    public async Task<List<RepairNote>> GetPagedRepairNote(int page, int limit)
     {
-        return await _repairNoteRepositry.Get();
+        return await _repairNoteRepositry.GetPaged(page, limit);
     }
 
-    public async Task<List<RepairNoteWithInfoDto>> GetRepairNoteWithInfo()
+    public async Task<int> GetCountRepairNote()
     {
-        var repairNotes = await _repairNoteRepositry.Get();
+        return await _repairNoteRepositry.GetCount();
+    }
+
+    public async Task<List<RepairNoteWithInfoDto>> GetPagedRepairNoteWithInfo(int page, int limit)
+    {
+        var repairNotes = await _repairNoteRepositry.GetPaged(page, limit);
         var cars = await _carRepository.Get();
 
         var response = (from r in repairNotes
@@ -53,7 +58,7 @@ public class RepairNoteService : IRepairNoteService
         return response;
     }
 
-    public async Task<List<RepairNoteWithInfoDto>> GetUserRepairNote(int userId)
+    public async Task<List<RepairNoteWithInfoDto>> GetPagedUserRepairNote(int userId, int page, int limit)
     {
         var client = await _clientsRepository.GetClientByUserId(userId);
         var clientId = client.Select(c => c.Id).FirstOrDefault();
@@ -61,7 +66,7 @@ public class RepairNoteService : IRepairNoteService
         var cars = await _carRepository.GetByOwnerId(clientId);
         var carIds = cars.Select(c => c.Id).ToList();
 
-        var repairNotes = await _repairNoteRepositry.GetByCarId(carIds);
+        var repairNotes = await _repairNoteRepositry.GetPagedByCarId(carIds, page, limit);
 
         var response = (from r in repairNotes
                         join c in cars on r.CarId equals c.Id
@@ -76,9 +81,20 @@ public class RepairNoteService : IRepairNoteService
         return response;
     }
 
-    public async Task<List<RepairNoteWithInfoDto>> GetWorkerRepairNote(int userId)
+    public async Task<int> GetCountUserRepairNote(int userId)
     {
-        var worker = await _workerRepository.GetWorkerIdByUserId(userId);
+        var client = await _clientsRepository.GetClientByUserId(userId);
+        var clientId = client.Select(c => c.Id).FirstOrDefault();
+
+        var cars = await _carRepository.GetByOwnerId(clientId);
+        var carIds = cars.Select(c => c.Id).ToList();
+
+        return await _repairNoteRepositry.GetCountByCarId(carIds);
+    }
+
+    public async Task<List<RepairNoteWithInfoDto>> GetPagedWorkerRepairNote(int userId, int page, int limit)
+    {
+        var worker = await _workerRepository.GetWorkerByUserId(userId);
         var workerId = worker.Select(w => w.Id).ToList();
 
         var works = await _workRepository.GetByWorkerId(workerId);
@@ -87,7 +103,7 @@ public class RepairNoteService : IRepairNoteService
 
         var orderId = works.Select(works => works.OrderId).ToList();
 
-        var repairNotes = await _repairNoteRepositry.GetByOrderId(orderId);
+        var repairNotes = await _repairNoteRepositry.GetPagedByOrderId(orderId, page, limit);
 
         var response = (from r in repairNotes
                         join c in cars on r.CarId equals c.Id
@@ -100,5 +116,19 @@ public class RepairNoteService : IRepairNoteService
                             .ToList();
 
         return response;
+    }
+
+    public async Task<int> GetCountWorkerRepairNote(int userId)
+    {
+        var worker = await _workerRepository.GetWorkerByUserId(userId);
+        var workerId = worker.Select(w => w.Id).ToList();
+
+        var works = await _workRepository.GetByWorkerId(workerId);
+
+        var cars = await _carRepository.Get();
+
+        var orderId = works.Select(works => works.OrderId).ToList();
+
+        return await _repairNoteRepositry.GetCountByOrderId(orderId);
     }
 }

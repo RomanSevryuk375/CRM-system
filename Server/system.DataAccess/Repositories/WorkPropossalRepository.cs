@@ -33,6 +33,28 @@ public class WorkPropossalRepository : IWorkPropossalRepository
         return workProposals;
     }
 
+    public async Task<List<WorkProposal>> GetPaged(int page, int limit)
+    {
+        var workProposalEntities = await _context.WorkProposals
+            .AsNoTracking()
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var workProposals = workProposalEntities
+            .Select(wp => WorkProposal.Create(
+                wp.Id,
+                wp.OrderId,
+                wp.WorkId,
+                wp.ByWorker,
+                wp.StatusId,
+                wp.DecisionStatusId,
+                wp.Date).workPropossal)
+            .ToList();
+
+        return workProposals;
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.WorkProposals.CountAsync();
@@ -43,6 +65,29 @@ public class WorkPropossalRepository : IWorkPropossalRepository
         var workProposalEntities = await _context.WorkProposals
             .AsNoTracking()
             .Where(p => orderIds.Contains(p.OrderId))
+            .ToListAsync();
+
+        var workProposals = workProposalEntities
+            .Select(wp => WorkProposal.Create(
+                wp.Id,
+                wp.OrderId,
+                wp.WorkId,
+                wp.ByWorker,
+                wp.StatusId,
+                wp.DecisionStatusId,
+                wp.Date).workPropossal)
+            .ToList();
+
+        return workProposals;
+    }
+
+    public async Task<List<WorkProposal>> GetPagedByOrderId(List<int> orderIds, int page, int limit)
+    {
+        var workProposalEntities = await _context.WorkProposals
+            .AsNoTracking()
+            .Where(p => orderIds.Contains(p.OrderId))
+            .Skip((page - 1) * limit)
+            .Take(limit)
             .ToListAsync();
 
         var workProposals = workProposalEntities
