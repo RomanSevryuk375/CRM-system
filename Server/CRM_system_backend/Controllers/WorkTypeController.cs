@@ -1,6 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -17,9 +18,8 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpGet]
-    //[Authorize(Policy = "AdminPolicy")]
-    //[Authorize(Policy = "WorkerPolicy")]
-
+    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "WorkerPolicy")]
     public async Task<ActionResult<List<WorkTypeResponse>>> GetWorkTypes(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -42,8 +42,7 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize(Policy = "AdminPolicy")]
-
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateWorkType([FromBody] WorkTypeRequest workTypeRequest)
     {
         var (workType, error) = WorkType.Create(
@@ -62,8 +61,7 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpPut("${id}")]
-    //[Authorize(Policy = "AdminPolicy")]
-
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateWorkType([FromBody] WorkTypeRequest workTypeRequest, int id)
     {
         var result = await _workTypepService.UpdateWorkType(
@@ -77,8 +75,7 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpDelete("${id}")]
-    //[Authorize(Policy = "AdminPolicy")]
-
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteWorkType (int id)
     {
         var result = await _workTypepService.DeleteWorkType(id);

@@ -23,21 +23,27 @@ public class WorkService : IWorkService
         _workerRepository = workerRepository;
     }
 
-    public async Task<List<Work>> GetWork()
+    public async Task<List<Work>> GetPagedWork(int page, int limit)
     {
-        return await _workRepository.Get();
+        return await _workRepository.GetPaged(page, limit);
     }
 
-    public async Task<List<Work>> GetByWorkerId(List<int> workerId)
+    public async Task<int> GetCountWork()
     {
-        return await _workRepository.GetByWorkerId(workerId);
+        return await _workRepository.GetCount();
     }
-    public async Task<List<WorkWithInfoDto>> GetInWorkWorks(int userId)
+
+    public async Task<List<Work>> GetPagedByWorkerId(List<int> workerId, int page, int limit)
+    {
+        return await _workRepository.GetPagedByWorkerId(workerId, page, limit);
+    }
+
+    public async Task<List<WorkWithInfoDto>> GetPagedInWorkWorks(int userId, int page, int limit)
     {
         var worker = await _workerRepository.GetWorkerByUserId(userId);
-        var workerId = worker.Select(w => w.Id).ToList();
+        var workerIds = worker.Select(w => w.Id).ToList();
 
-        var allWorks = await _workRepository.GetByWorkerId(workerId);
+        var allWorks = await _workRepository.GetPagedByWorkerId(workerIds, page, limit);
         var inWork = allWorks.Where(i => i.StatusId == 3).ToList();
         var statuses = await _statusRepository.Get();
         var workTypes = await _workTypeRepository.Get();
@@ -58,9 +64,18 @@ public class WorkService : IWorkService
 
         return response;
     }
-    public async Task<List<WorkWithInfoDto>> GetWorkWithInfo()
+
+    public async Task<int> GetCoutInWorkWorks(int userId)
     {
-        var works = await _workRepository.Get();
+        var worker = await _workerRepository.GetWorkerByUserId(userId);
+        var workerIds = worker.Select(w => w.Id).ToList();
+
+        return await _workRepository.GetCountByWorkerId(workerIds);
+    }
+
+    public async Task<List<WorkWithInfoDto>> GetPagedWorkWithInfo(int page, int limit)
+    {
+        var works = await _workRepository.GetPaged(page, limit);
         var statuses = await _statusRepository.Get();
         var workTypes = await _workTypeRepository.Get();
         var workers = await _workerRepository.Get();

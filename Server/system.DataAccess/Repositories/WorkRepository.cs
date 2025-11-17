@@ -32,6 +32,27 @@ public class WorkRepository : IWorkRepository
         return work;
     }
 
+    public async Task<List<Work>> GetPaged(int page, int limit)
+    {
+        var workEntities = await _context.Works
+            .AsNoTracking()
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var work = workEntities
+            .Select(w => Work.Create(
+                w.Id,
+                w.OrderId,
+                w.JobId,
+                w.WorkerId,
+                w.TimeSpent,
+                w.StatusId).work)
+            .ToList();
+
+        return work;
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.Works.CountAsync();
@@ -60,6 +81,28 @@ public class WorkRepository : IWorkRepository
     public async Task<int> GetCountByWorkerId(List<int> workerIds)
     {
         return await _context.Works.Where(w => workerIds.Contains(w.WorkerId)).CountAsync();
+    }
+
+    public async Task<List<Work>> GetPagedByWorkerId(List<int> workerIds, int page, int limit)
+    {
+        var workEntities = await _context.Works
+            .AsNoTracking()
+            .Where(w => workerIds.Contains(w.WorkerId))
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        var work = workEntities
+            .Select(w => Work.Create(
+                w.Id,
+                w.OrderId,
+                w.JobId,
+                w.WorkerId,
+                w.TimeSpent,
+                w.StatusId).work)
+            .ToList();
+
+        return work;
     }
 
     public async Task<int> Create(Work work)

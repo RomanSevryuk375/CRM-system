@@ -20,10 +20,12 @@ public class WorkController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-
-    public async Task<ActionResult<List<Work>>> GetWork()
+    public async Task<ActionResult<List<Work>>> GetPagedWork(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var works = await _workService.GetWork();
+        var works = await _workService.GetPagedWork(page, limit);
+        var totalCount = await _workService.GetCountWork();
 
         var response = works 
             .Select(w => new WorkResponse(
@@ -35,17 +37,21 @@ public class WorkController : ControllerBase
                 w.StatusId))
             .ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(response);
     }
 
     [HttpGet("MyWorks")] //not tested
     [Authorize(Policy = "WorkerPolicy")]
-
-    public async Task<ActionResult<List<WorkWithInfoDto>>> GetWorkByWorkerId()
+    public async Task<ActionResult<List<WorkWithInfoDto>>> GetWorkByWorkerId(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
         var userId = int.Parse(User.FindFirst("userId")!.Value);
         //workerId
-        var works = await _workService.GetInWorkWorks(userId);
+        var works = await _workService.GetPagedInWorkWorks(userId, page, limit);
+        var totalCount = await _workService.GetCoutInWorkWorks(userId);
 
         var response = works
             .Select(w => new WorkWithInfoDto(
@@ -57,14 +63,18 @@ public class WorkController : ControllerBase
                 w.StatusName))
             .ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(response);
     }
 
     [HttpGet("with-info")]
-
-    public async Task<ActionResult<List<WorkWithInfoDto>>> GetWorkWithInfo()
+    public async Task<ActionResult<List<WorkWithInfoDto>>> GetWorkWithInfo(
+        [FromQuery(Name = "_page")] int page,
+        [FromQuery(Name = "_limit")] int limit)
     {
-        var dtos = await _workService.GetWorkWithInfo();
+        var dtos = await _workService.GetPagedWorkWithInfo(page, limit);
+        var totalCount = await _workService.GetCountWork();
 
         var response = dtos
             .Select(w => new WorkWithInfoDto(
@@ -76,12 +86,13 @@ public class WorkController : ControllerBase
                 w.StatusName))
             .ToList();
 
+        Response.Headers.Append("x-total-count", totalCount.ToString());
+
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> CreateWork([FromBody] WorkRequest request)
     {
         var (work, error) = Work.Create(
@@ -104,7 +115,6 @@ public class WorkController : ControllerBase
 
     [HttpPut("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> UpdateWork([FromBody] WorkRequest request, int id)
     {
         var result = await _workService.UpdateWork(
@@ -120,7 +130,6 @@ public class WorkController : ControllerBase
 
     [HttpDelete("${id}")]
     [Authorize(Policy = "AdminPolicy")]
-
     public async Task<ActionResult<int>> DeleteWork(int id)
     {
         var result = await _workService.DeleteWork(id);
