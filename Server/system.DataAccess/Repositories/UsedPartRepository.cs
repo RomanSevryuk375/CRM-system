@@ -34,6 +34,11 @@ public class UsedPartRepository : IUsedPartRepository
         return usedPart;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.UsedParts.CountAsync();
+    }
+
     public async Task<List<UsedPart>> GetByOrderId(List<int> orderIds)
     {
         var usedPartEntities = await _context.UsedParts
@@ -54,6 +59,11 @@ public class UsedPartRepository : IUsedPartRepository
             .ToList();
 
         return usedPart;
+    }
+
+    public async Task<int> GetCountByOrderId(List<int> orderIds)
+    {
+        return await _context.UsedParts.Where(u => orderIds.Contains(u.OrderId)).CountAsync();
     }
 
     public async Task<int> Create(UsedPart usedPart)

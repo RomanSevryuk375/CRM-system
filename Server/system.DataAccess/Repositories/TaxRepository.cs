@@ -29,6 +29,11 @@ public class TaxRepository : ITaxRepository
 
         return taxes;
     }
+    
+    public async Task<int> GetCount()
+    {
+        return await _context.Taxes.CountAsync();
+    }
 
     public async Task<int> Create(Tax tax)
     {

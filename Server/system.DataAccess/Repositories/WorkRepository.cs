@@ -32,6 +32,11 @@ public class WorkRepository : IWorkRepository
         return work;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.Works.CountAsync();
+    }
+
     public async Task<List<Work>> GetByWorkerId(List<int> workerIds)
     {
         var workEntities = await _context.Works
@@ -50,6 +55,11 @@ public class WorkRepository : IWorkRepository
             .ToList();
 
         return work;
+    }
+
+    public async Task<int> GetCountByWorkerId(List<int> workerIds)
+    {
+        return await _context.Works.Where(w => workerIds.Contains(w.WorkerId)).CountAsync();
     }
 
     public async Task<int> Create(Work work)

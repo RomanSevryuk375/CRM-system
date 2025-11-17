@@ -34,6 +34,11 @@ public class WorkerRepository : IWorkerRepository
         return worker;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.Workers.CountAsync();
+    }
+
     public async Task<List<Worker>> GetWorkerIdByUserId(int userId)
     {
         var workerEntities = await _context.Workers

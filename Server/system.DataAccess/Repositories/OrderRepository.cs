@@ -30,6 +30,11 @@ public class OrderRepository : IOrderRepository
 
         return orders;
     }
+    
+    public async Task<int> GetCount()
+    {
+        return await _context.Orders.CountAsync();
+    }
 
     public async Task<List<Order>> GetById(List<int> orderIds)
     {
@@ -49,6 +54,11 @@ public class OrderRepository : IOrderRepository
 
         return orders;
     }
+    
+    public async Task<int> GetCountById(List<int> orderIds)
+    {
+        return await _context.Orders.Where(o => orderIds.Contains(o.Id)).CountAsync();
+    }
 
     public async Task<List<Order>> GetByCarId(List<int> carIds)
     {
@@ -67,6 +77,11 @@ public class OrderRepository : IOrderRepository
             .ToList();
 
         return orders;
+    }
+
+    public async Task<int> GetCountByCarId (List<int> carIds)
+    {
+        return await _context.Orders.Where(o => carIds.Contains(o.CarId)).CountAsync();
     }
 
     public async Task<int> Create(Order order)

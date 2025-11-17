@@ -12,6 +12,7 @@ public class CarRepository : ICarRepository
     {
         _context = context;
     }
+
     public async Task<List<Car>> Get()
     {
         var carEntities = await _context.Cars
@@ -32,6 +33,11 @@ public class CarRepository : ICarRepository
         return cars;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.Cars.CountAsync();
+    }
+ 
     public async Task<List<Car>> GetByOwnerId(int ownerId)
     {
         var carEntity = await _context.Cars
@@ -54,6 +60,11 @@ public class CarRepository : ICarRepository
         return cars;
     }
 
+    public async Task<int> GetCountByOwnerId(int ownerId)
+    {
+        return await _context.Cars.CountAsync(c => c.OwnerId == ownerId);
+    }
+
     public async Task<List<Car>> GetById(List<int> carIds)
     { 
         var carEntity = await _context.Cars
@@ -74,6 +85,11 @@ public class CarRepository : ICarRepository
             .ToList();
 
         return cars;
+    }
+
+    public async Task<int> GetCountById(List<int> carIds)
+    {
+        return await _context.Cars.Where(c => carIds.Contains(c.Id)).CountAsync();
     }
 
     public async Task<int> Create(Car car)

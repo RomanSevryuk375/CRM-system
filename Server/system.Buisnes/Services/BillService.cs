@@ -46,7 +46,6 @@ public class BillService : IBillService
         var orderIds = orders.Where(o => carIds.Contains(o.CarId)).Select(o => o.Id).ToList();
 
         return await _billRepository.GetByOrderId(orderIds);
-
     }
 
     public async Task<int> CreateBill(Bill bill)

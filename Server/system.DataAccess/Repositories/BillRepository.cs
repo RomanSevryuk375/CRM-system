@@ -32,6 +32,11 @@ public class BillRepository : IBillRepository
         return bill;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.Bills.CountAsync();
+    }
+
     public async Task<List<Bill>> GetByOrderId(List<int> orderIds)
     {
         var billEntities = await _context.Bills
@@ -50,6 +55,11 @@ public class BillRepository : IBillRepository
             .ToList();
 
         return bill;
+    }
+
+    public async Task<int> GetCountByOrderId(List<int> orderIds)
+    {
+        return await _context.Bills.Where(b => orderIds.Contains(b.OrderId)).CountAsync();
     }
 
     public async Task<int> Create(Bill bill)

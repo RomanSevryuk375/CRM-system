@@ -33,6 +33,11 @@ public class WorkPropossalRepository : IWorkPropossalRepository
         return workProposals;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.WorkProposals.CountAsync();
+    }
+
     public async Task<List<WorkProposal>> GetByOrderId(List<int> orderIds)
     {
         var workProposalEntities = await _context.WorkProposals
@@ -52,6 +57,11 @@ public class WorkPropossalRepository : IWorkPropossalRepository
             .ToList();
 
         return workProposals;
+    }
+
+    public async Task<int> GetCountByOrderId(List<int> orderIds)
+    {
+        return await _context.WorkProposals.Where(p => orderIds.Contains(p.OrderId)).CountAsync();
     }
 
     public async Task<int> Create(WorkProposal workProposal)

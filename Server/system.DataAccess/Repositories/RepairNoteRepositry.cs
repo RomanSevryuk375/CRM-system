@@ -30,6 +30,11 @@ public class RepairNoteRepositry : IRepairNoteRepositry
         return repairNote;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.RepairHistories.CountAsync();
+    }
+
     public async Task<List<RepairNote>> GetByCarId(List<int> carIds)
     {
         var repairNoteEntity = await _context.RepairHistories
@@ -49,6 +54,11 @@ public class RepairNoteRepositry : IRepairNoteRepositry
         return repairNote;
     }
 
+    public async Task<int> GetCountByCarId(List<int> carIds)
+    {
+        return await _context.RepairHistories.Where(r => carIds.Contains(r.CarId)).CountAsync();
+    }
+
     public async Task<List<RepairNote>> GetByOrderId(List<int> orderIds)
     {
         var repairNoteEntity = await _context.RepairHistories
@@ -66,5 +76,10 @@ public class RepairNoteRepositry : IRepairNoteRepositry
             .ToList();
 
         return repairNote;
+    }
+
+    public async Task<int> GetCountByOrderId(List<int> orderIds)
+    {
+        return await _context.RepairHistories.Where(r => orderIds.Contains(r.OrderId)).CountAsync();
     }
 }

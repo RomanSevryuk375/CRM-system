@@ -29,6 +29,11 @@ public class SupplierRepository : ISupplierRepository
 
         return suppliers;
     }
+    
+    public async Task<int> GetCount()
+    {
+        return await _context.Suppliers.CountAsync();
+    }
 
     public async Task<int> Create(Supplier supplier)
     {

@@ -31,6 +31,11 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         return paymentNote;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.PaymentNotes.CountAsync();
+    }
+
     public async Task<List<PaymentNote>> GetByBillId(List<int> billIds)
     {
         var paymentEntities = await _context.PaymentNotes
@@ -48,6 +53,11 @@ public class PaymentNoteRepository : IPaymentNoteRepository
             .ToList();
 
         return paymentNote;
+    }
+
+    public async Task<int> GetCountByBillId(List<int> billIds)
+    {
+        return await _context.PaymentNotes.Where(p => billIds.Contains(p.BillId)).CountAsync();
     }
 
     public async Task<int> Create(PaymentNote paymentNote)

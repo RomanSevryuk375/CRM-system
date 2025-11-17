@@ -33,6 +33,11 @@ public class ExpenseRespository : IExpenseRespository
         return expenses;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.Expenses.CountAsync();
+    }
+
     public async Task<int> Create(Expense expense)
     {
         var (_, error) = Expense.Create(

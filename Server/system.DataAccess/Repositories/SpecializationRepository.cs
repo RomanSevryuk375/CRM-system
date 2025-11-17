@@ -29,6 +29,11 @@ public class SpecializationRepository : ISpecializationRepository
         return specializations;
     }
 
+    public async Task<int> GetCount()
+    {
+        return await _context.Specializations.CountAsync();
+    }
+
     public async Task<int> Create(Specialization specialization)
     {
         var (_, error) = Specialization.Create(

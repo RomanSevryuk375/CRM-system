@@ -13,10 +13,6 @@ public class WorkTypeRepository : IWorkTypeRepository
         _context = context;
     }
 
-    public async Task<int> GetCount()
-    {
-        return await _context.WorkTypes.CountAsync();
-    }
     public async Task<List<WorkType>> Get()
     {
 
@@ -34,6 +30,11 @@ public class WorkTypeRepository : IWorkTypeRepository
             .ToList();
 
         return workTypes;
+    }
+
+    public async Task<int> GetCount()
+    {
+        return await _context.WorkTypes.CountAsync();
     }
 
     public async Task<int> Create(WorkType workType)
