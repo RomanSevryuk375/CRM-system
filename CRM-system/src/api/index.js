@@ -1,9 +1,10 @@
+import { getOrdersInWork } from "../redux/Actions/order";
 import { createBill, getBills, getMyBills } from "./bills";
 import { createCar, deleteCar, getCarsWithInfo, getInWorkCars, getMyCars, updateCar } from "./cars";
 import { createWorkType, deleteWorkType, getCatalogOfWorks, updateWorkType } from "./catalogOfWorks";
 import { createClient, getClients, getMyClient, updateClient } from "./clients";
 import { createExpense, deleteExpense, getExpensesWithInfo, updateExpense } from "./expenses";
-import { createOrder, deleteOrder, getOdersWithInfo, updateOrder } from "./orders";
+import { createOrder, deleteOrder, getOdersWithInfo, getOrdersMy, updateOrder } from "./orders";
 import { createPaymentNote, deletePaymentNote, getMyPaymentNotes, getPaymentNotes, updatePaymentNote } from "./paymentNotes";
 import { getMyRepairNotes, getRepairNotesInWork, getRepairNotesWithInfo } from "./repairNotes";
 import { createSpecialization, deleteSpecialization, getSpecializations, updateSpecialization } from "./specialization";
@@ -51,6 +52,8 @@ export const api = {
     },
     orders: {
         getOdersWithInfo,
+        getOrdersInWork,
+        getOrdersMy,
         createOrder,
         updateOrder,
         deleteOrder,

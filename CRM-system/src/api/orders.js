@@ -14,7 +14,7 @@ export const getOdersInWork = (config) => makeRequest({
     ...config,
 });
 
-export const getOdersMy = (config) => makeRequest({
+export const getOrdersMy = (config) => makeRequest({
     method: "GET",
     url: `${URL}/My`,
     ...config,

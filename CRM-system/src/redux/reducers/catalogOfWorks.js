@@ -13,7 +13,6 @@ export const catalogReducer = (state = initialeState, action) => {
                 ...state,
                 isCatalogOfWorksLoading: true,
             };
-
         case GET_CATALOG_SUCCESS:
             return {
                 ...state,
@@ -23,18 +22,16 @@ export const catalogReducer = (state = initialeState, action) => {
                         : [...state.catalogOfWorks, ...action.payload.data],
                 isCatalogOfWorksLoading: false,
             };
-
         case GET_CATALOG_FAILED:
             return {
                 ...state,
                 isCatalogOfWorksLoading: false,
             };
-
         case SET_CATALOG_TOTAL:
             return {
                 ...state,
                 totalCatalog: action.payload,
-            }
+            };
 
         default:
             return {
