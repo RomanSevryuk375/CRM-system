@@ -1,5 +1,5 @@
 import { api } from "../../api"
-import { createBillFailed, createBillStarted, createBillSuccess, getBillsFailed, getBillsStarted, getBillsSuccess, getMyBillsFailed, getMyBillsStarted, getMyBillsSuccess, setBillsTotal } from "../actionCreators/bills";
+import { createBillFailed, createBillStarted, createBillSuccess, getBillsFailed, getBillsStarted, getBillsSuccess, getMyBillsFailed, getMyBillsStarted, getMyBillsSuccess, setBillsTotal, setMyBillsTotal } from "../actionCreators/bills";
 
 export const getBills = (page = 1) => {
     return async (dispatch) => {
@@ -28,14 +28,27 @@ export const getBills = (page = 1) => {
     };
 };
 
-export const getMyClient = () => {
+export const getMyBills = (page = 1) => {
     return async (dispatch) => {
         try {
             dispatch(getMyBillsStarted())
 
-            const response = await api.bills.getMyBills();
+            const response = await api.clients.getMyBills({
+                params: {
+                    _page: page,
+                    _limit: 25,
+                },
+            });
 
-            dispatch(getMyBillsSuccess(response.data));
+            const totalCount = parseInt(response.headers["x-total-count"], 10);
+            if (!isNaN(totalCount)) {
+                dispatch(setMyBillsTotal(totalCount));
+            }
+
+            dispatch(getMyBillsSuccess({
+                data: response.data,
+                page,
+            }));
         } catch (error) {
             dispatch(getMyBillsFailed(error));
         }
