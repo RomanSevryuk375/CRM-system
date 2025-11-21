@@ -8,6 +8,10 @@ export const loginUser = (login, password) => {
             dispatch(loginUserStarted());
 
             const response = await api.users.loginUser({ data: { login, password } });
+            
+            if (response.data.token) {
+                localStorage.setItem("jwt", response.data.token);
+            }
 
             dispatch(loginUserSuccess(response.data));
         } catch (error) {

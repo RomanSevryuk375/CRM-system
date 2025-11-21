@@ -1,7 +1,7 @@
 import './Registration.css'
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { createClient } from '../../redux/Actions/clients'
+import { createClient, getMyClient } from '../../redux/Actions/clients'
 import { loginUser } from '../../redux/Actions/users';
 
 function Registration({ registrationIsOpen, setRegistrationIsOpen, response, setResponse }) {
@@ -100,13 +100,11 @@ function Registration({ registrationIsOpen, setRegistrationIsOpen, response, set
                                 ))}
                             </div>
                             <div className='reg-modal-button'>
-                                <button className='reg-active-button'
-                                    type="submitReg"
-                                // onClick={() => {
-                                //     setResponse(!response);
-                                //     setRegistrationIsOpen(!registrationIsOpen);
-                                // }} //временное решенеие для завершения верстки 
-                                >Зарегистрироваться</button>
+                                <button
+                                    className='reg-active-button'
+                                    type="submitReg">
+                                    Зарегистрироваться
+                                </button>
                                 <button
                                     className='reg-second-button'
                                     onClick={() => setTypeMenu('aut')}>Авторизация</button>

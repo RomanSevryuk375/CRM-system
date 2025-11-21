@@ -33,7 +33,7 @@ export const getMyClient = () => {
         try {
             dispatch(getMyClientStarted());
 
-            const response = await api.clients.getMyClient();
+            const response = await api.clients.getMyClient({});
 
             dispatch(getMyClientSuccess(response.data));
         } catch (error) {

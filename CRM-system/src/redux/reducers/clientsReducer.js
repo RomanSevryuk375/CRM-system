@@ -16,7 +16,7 @@ import {
 
 const initialeState = {
     clients: [],
-    myClient: [],
+    myClient: {},
     isClientsLoading: true,
     totalClients: 0,
 };
@@ -56,7 +56,7 @@ export const clientsReducer = (state = initialeState, action) => {
         case GETMY_CLIENT_SUCCESS:
             return {
                 ...state,
-                muClients: action.payload,
+                myClient: action.payload,
                 isClientsLoading: false,
             };
         case GETMY_CLIENT_FAILED:

@@ -25,7 +25,7 @@ public class UserController : ControllerBase
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
+            Secure = false,
             SameSite = SameSiteMode.Strict,
             Expires = DateTimeOffset.UtcNow.AddHours(12),
             Path = "/",
@@ -34,7 +34,7 @@ public class UserController : ControllerBase
 
         Response.Cookies.Append("jwt", token, cookieOptions);
 
-        return Ok(new { Message = "Logged in" });
+        return Ok(new { Message = "Logged in", Token = token });
     }
 
     [HttpPost("logout")]

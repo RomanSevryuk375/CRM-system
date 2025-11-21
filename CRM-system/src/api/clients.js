@@ -12,6 +12,7 @@ export const getMyClient = (config) => makeRequest({
     method: "GET",
     url: `${URL}/My`,
     ...config,
+    withCredentials: true,
 })
 
 export const createClient = (data) => makeRequest({
