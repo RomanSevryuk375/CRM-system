@@ -42,7 +42,7 @@ export const getUsedPartsInWork = (page = 1) => {
 
             const totalCount = parseInt(response.headers["x-total-count"], 10);
             if (!isNaN(totalCount)) {
-                dispatch(setUsedPartsWithInfoTotal(totalCount));
+                dispatch(setUsedPartsInWorkTotal(totalCount));
             };
 
             dispatch(getUsedPartsInWorkSuccess({

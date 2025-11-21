@@ -20,7 +20,7 @@ import {
     DELETE_WORK_STARTED,
     DELETE_WORK_SUCCESS,
     DELETE_WORK_FAILED,
-} from "../actions/worksActions";
+} from "../actionCreators/works";
 
 const initialState = {
     worksWithInfo: [],

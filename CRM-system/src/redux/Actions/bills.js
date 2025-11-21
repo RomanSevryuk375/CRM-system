@@ -6,7 +6,7 @@ export const getBills = (page = 1) => {
         try {
             dispatch(getBillsStarted());
 
-            const response = await api.clients.getBills({
+            const response = await api.bills.getBills({
                 params: {
                     _page: page,
                     _limit: 25,
@@ -33,7 +33,7 @@ export const getMyBills = (page = 1) => {
         try {
             dispatch(getMyBillsStarted())
 
-            const response = await api.clients.getMyBills({
+            const response = await api.bills.getMyBills({
                 params: {
                     _page: page,
                     _limit: 25,

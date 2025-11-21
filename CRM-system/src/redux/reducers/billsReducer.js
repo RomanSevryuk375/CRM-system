@@ -73,6 +73,8 @@ export const billsReducer = (state = initialeState, action) => {
             return {
                 ...state,
                 isBillsLoading: false,
-            }
+            };
+        default:
+            return state;
     }
 }

@@ -18,8 +18,8 @@ public class WorkTypeController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    [Authorize(Policy = "WorkerPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "WorkerPolicy")]
     public async Task<ActionResult<List<WorkTypeResponse>>> GetWorkTypes(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)

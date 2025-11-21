@@ -1,7 +1,7 @@
-export const GET_CATALOG_OF_WORKS_STARTED = "GET_CATALOG_OF_WORKS_STARTED";
-export const GET_CATALOG_OF_WORKS_SUCCESS = "GET_CATALOG_OF_WORKS_SUCCESS";
-export const GET_CATALOG_OF_WORKS_FAILED = "GET_CATALOG_OF_WORKS_FAILED";
-export const SET_CATALOG_OF_WORKS_TOTAL = "SET_CATALOG_OF_WORKS_TOTAL";
+export const GET_CATALOG_STARTED = "GET_CATALOG_STARTED";
+export const GET_CATALOG_SUCCESS = "GET_CATALOG_SUCCESS";
+export const GET_CATALOG_FAILED = "GET_CATALOG_FAILED";
+export const SET_CATALOG_TOTAL = "SET_CATALOG_TOTAL";
 
 export const POST_WORK_TYPE_STARTED = "POST_WORK_TYPE_STARTED";
 export const POST_WORK_TYPE_SUCCESS = "POST_WORK_TYPE_SUCCESS";
@@ -15,19 +15,19 @@ export const DELETE_WORK_TYPE_STARTED = "DELETE_WORK_TYPE_STARTED";
 export const DELETE_WORK_TYPE_SUCCESS = "DELETE_WORK_TYPE_SUCCESS";
 export const DELETE_WORK_TYPE_FAILED = "DELETE_WORK_TYPE_FAILED";
 
-export const getCatalogOfWorksStarted = () => ({
-    type: GET_CATALOG_OF_WORKS_STARTED,
+export const getCatalogStarted = () => ({
+    type: GET_CATALOG_STARTED,
 });
-export const getCatalogOfWorksSuccess = (works) => ({
-    type: GET_CATALOG_OF_WORKS_SUCCESS,
-    payload: works,
+export const getCatalogSuccess = (workType) => ({
+    type: GET_CATALOG_SUCCESS,
+    payload: workType,
 });
-export const getCatalogOfWorksFailed = (error) => ({
-    type: GET_CATALOG_OF_WORKS_FAILED,
+export const getCatalogFailed = (error) => ({
+    type: GET_CATALOG_FAILED,
     payload: error,
 });
-export const setCatalogOfWorksTotal = (total) => ({
-    type: SET_CATALOG_OF_WORKS_TOTAL,
+export const setCatalogTotal = (total) => ({
+    type: SET_CATALOG_TOTAL,
     payload: total,
 });
 

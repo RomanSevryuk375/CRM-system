@@ -44,7 +44,9 @@ export const usedPartsReducer = (state = initialState, action) => {
         case GET_USED_PARTS_WITH_INFO_SUCCESS:
             return {
                 ...state,
-                usedPartsWithInfo: action.payload,
+                usedPartsWithInfo: action.payload.page === 1
+                    ? action.payload.data
+                    : [...state.usedPartsInWorkTotal, ...action.payload.data],
                 isUsedPartsWithInfoLoading: false,
             };
 
@@ -69,7 +71,9 @@ export const usedPartsReducer = (state = initialState, action) => {
         case GET_USED_PARTS_IN_WORK_SUCCESS:
             return {
                 ...state,
-                usedPartsInWork: action.payload,
+                usedPartsInWork: action.payload.page === 1
+                    ? action.payload.data
+                    : [...state.usedPartsInWork, ...action.payload.data],
                 isUsedPartsInWorkLoading: false,
             };
 

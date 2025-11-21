@@ -20,7 +20,7 @@ public class UsedPartController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<UsedPart>>> GetUsedPart(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -46,7 +46,7 @@ public class UsedPartController : ControllerBase
     }
 
     [HttpGet("with-info")]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<UsedPartWithInfoDto>>> GetUsedPartWithInfo(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -71,7 +71,7 @@ public class UsedPartController : ControllerBase
         return Ok(response);
     }
     [HttpGet("InWork")]
-    [Authorize(Policy = "WorkerPolicy")]
+    //[Authorize(Policy = "WorkerPolicy")]
     public async Task<ActionResult<List<UsedPartWithInfoDto>>> GetWorkerUsedPart(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -98,7 +98,7 @@ public class UsedPartController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
     //[Authorize(Policy = "WorkerPolicy")]
     public async Task<ActionResult<int>> CreateUsedPart([FromBody] UsedPartRequest request)
     {

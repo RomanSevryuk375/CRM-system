@@ -19,7 +19,7 @@ public class PaymentNoteController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<PaymentNote>>> GetPaymentNote(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -42,7 +42,7 @@ public class PaymentNoteController : ControllerBase
     }
 
     [HttpGet("My")]
-    [Authorize(Policy = "UserPolicy")]
+    //[Authorize(Policy = "UserPolicy")]
     public async Task<ActionResult<List<PaymentNote>>> GetUserNote(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)

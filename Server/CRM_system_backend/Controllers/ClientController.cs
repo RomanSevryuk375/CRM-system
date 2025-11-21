@@ -21,7 +21,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<ClientsResponse>>> GetClient(
         [FromQuery(Name = "_page")] int page = 1,
         [FromQuery(Name = "_limit")] int limit = 25)
@@ -44,7 +44,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet("My")]
-    [Authorize(Policy = "UserPolicy")]
+    //[Authorize(Policy = "UserPolicy")]
     public async Task<ActionResult<List<Client>>> GetClientByUserId()
     {
         var userId = int.Parse(User.FindFirst("userId")!.Value);

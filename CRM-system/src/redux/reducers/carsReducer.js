@@ -112,11 +112,11 @@ export const carsReducer = (state = initialeState, action) => {
                 cars: state.catalogOfWorks.map(item =>
                     item.id === action.payload.id ? action.payload : item),
             };
-        case PUT_CAR_FAILED: 
-        return { 
-            ...state,
-            isCarsLoading: false,
-        };
+        case PUT_CAR_FAILED:
+            return {
+                ...state,
+                isCarsLoading: false,
+            };
 
         case DELETE_CAR_STARTED:
             return {
@@ -129,11 +129,11 @@ export const carsReducer = (state = initialeState, action) => {
                 cars: state.cars.filter(item => item.id !== action.payload),
                 isCarsLoading: false,
             };
-        case DELETE_CAR_FAILED: 
-        return {
-            ...state,
-            isCarsLoading: false,
-        };
+        case DELETE_CAR_FAILED:
+            return {
+                ...state,
+                isCarsLoading: false,
+            };
 
         default:
             return state;

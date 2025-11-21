@@ -1,6 +1,6 @@
 import { makeRequest } from "./makeRequest";
 
-const Url = "/UsedPart";
+const URL = "/UsedPart";
 
 export const getUsedPartsWithInfo = (config) => makeRequest({
     method: "GET",

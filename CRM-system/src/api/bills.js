@@ -1,6 +1,6 @@
 import { makeRequest } from "./makeRequest";
 
-const URL = "Bill";
+const URL = "/Bill";
 
 export const getBills = (config) => makeRequest({
     method: "GET",

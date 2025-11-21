@@ -3,7 +3,7 @@ import { DELETE_EXPENSE_FAILED, DELETE_EXPENSE_STARTED, DELETE_EXPENSE_SUCCESS, 
 const initialeState = {
     expenses: [],
     isExpensesLoading: true,
-    expensesTotal,
+    expensesTotal: 0,
 };
 
 export const expensesReducer = (state = initialeState, action) => {
@@ -40,7 +40,7 @@ export const expensesReducer = (state = initialeState, action) => {
         case POST_EXPENSE_SUCCESS:
             return {
                 ...state,
-                expenses: [action.paylosd, ...state.expenses],
+                expenses: [action.payload, ...state.expenses],
                 isExpensesLoading: false,
             };
         case POST_EXPENSE_FAILED:

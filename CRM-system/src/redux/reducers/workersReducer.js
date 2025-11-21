@@ -43,7 +43,9 @@ export const workersReducer = (state = initialState, action) => {
         case GET_WORKER_WITH_INFO_SUCCESS:
             return {
                 ...state,
-                workersWithInfo: action.payload,
+                workersWithInfo: action.payload.page === 1
+                    ? action.payload.data
+                    : [...state.workersWithInfo, ...action.payload.data],
                 isWorkersWithInfoLoading: false,
             };
 

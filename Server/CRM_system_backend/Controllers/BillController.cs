@@ -18,7 +18,7 @@ public class BillController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<Bill>>> GetBill(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -43,7 +43,7 @@ public class BillController : ControllerBase
     }
 
     [HttpGet("My")]
-    [Authorize(Policy = "UserPolicy")]
+    //[Authorize(Policy = "UserPolicy")]
     public async Task<ActionResult<List<Bill>>> GetBillByUserId(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -68,7 +68,7 @@ public class BillController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
 
     public async Task<ActionResult<int>> CreateBill([FromBody] BillRequest request)
     {

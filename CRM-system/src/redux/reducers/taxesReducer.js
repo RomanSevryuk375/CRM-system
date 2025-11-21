@@ -35,7 +35,9 @@ export const taxesReducer = (state = initialState, action) => {
         case GET_TAXES_SUCCESS:
             return {
                 ...state,
-                taxes: action.payload,
+                taxes: action.payload.page === 1
+                    ? action.payload.data
+                    : [...state.taxes, ...action.payload.data],
                 isTaxesLoading: false,
             };
 

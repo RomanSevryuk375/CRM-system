@@ -18,7 +18,7 @@ public class TaxController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<Tax>>> GetTaxes(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)

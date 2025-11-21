@@ -22,7 +22,7 @@ public class WorkerController : ControllerBase
     }
 
     [HttpGet("with-info")]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<WorkerWithInfoDto>>> GetWorkerWithInfo(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -47,7 +47,7 @@ public class WorkerController : ControllerBase
     }
 
     [HttpGet("My")]
-    [Authorize(Policy = "WorkerPolicy")]
+    //[Authorize(Policy = "WorkerPolicy")]
     public async Task<ActionResult<List<WorkerWithInfoDto>>> GetUserWorkerInfo(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -75,7 +75,7 @@ public class WorkerController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<WorkerResponse>>> GetAllWorker(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
