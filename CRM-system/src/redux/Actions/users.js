@@ -24,9 +24,14 @@ export const logoutUser = () => {
     return async (dispatch) => {
         dispatch(logoutUserStarted());
 
-        const response = await api.users.logoutUser();
+        try {
+            await api.users.logoutUser();
+            localStorage.removeItem("jwt");
 
-        dispatch(logoutUserSuccess(response));
+            dispatch(logoutUserSuccess());
+        } catch (error) {
+            dispatch(logoutUserSuccess(error));
+        }
     };
 };
 
