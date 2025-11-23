@@ -57,7 +57,7 @@ export const carsReducer = (state = initialeState, action) => {
         case SET_MY_CARS_TOTAL:
             return {
                 ...state,
-                isCarsLoading: false,
+                myCarsTotal: action.payload,
             };
 
         case GET_IN_WORK_CARS_STARTED:
@@ -81,7 +81,7 @@ export const carsReducer = (state = initialeState, action) => {
         case SET_IN_WORK_CARS_TOTAL:
             return {
                 ...state,
-                inWorkCars: action.payload,
+                inWorkCarsTotal: action.payload,
             };
 
         case POST_CAR_STARTED:
@@ -109,7 +109,7 @@ export const carsReducer = (state = initialeState, action) => {
         case PUT_CAR_SUCCESS:
             return {
                 ...state,
-                cars: state.catalogOfWorks.map(item =>
+                cars: state.cars.map(item =>
                     item.id === action.payload.id ? action.payload : item),
             };
         case PUT_CAR_FAILED:

@@ -1,8 +1,14 @@
+.infinite-scroll-component {
+    display: contents !important;
+}
+
 .car-card-screen {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: auto;
     margin-top: 106px;
+    margin-left: 0px;
+    margin-right: 0px;
     overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
@@ -23,7 +29,7 @@
     border-radius: 2px;
 }
 
-.add-auto{
+.add-auto {
     width: calc(50% - 16px);
     height: 43vh;
     margin: 8px;
@@ -104,14 +110,14 @@
     color: #333333;
 }
 
-.car-info-cards{
+.car-info-cards {
     margin-top: 44px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-.card-info-card{
+.card-info-card {
     margin: 4px;
     border: 2px solid #999999;
     border-radius: 2px;
@@ -123,19 +129,19 @@
     padding: 8px;
 }
 
-.card-info-label{
+.card-info-label {
     font-family: 'Roboto-regular', sans-serif;
     font-size: 16px;
     margin: 0px;
     color: #333333;
 }
 
-.card-info-img{
+.card-info-img {
     width: 24px;
     height: 24px;
 }
 
-.card-info-span{
+.card-info-span {
     font-family: 'Roboto-regular', sans-serif;
     font-size: 14px;
     margin: 0px;

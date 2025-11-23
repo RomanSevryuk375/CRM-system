@@ -59,7 +59,6 @@ const GenericTable = ({
       dataLength={bodyText.length}
       next={nextHandler}
       hasMore={hasMore}
-
       scrollableTarget="container"
     >
       <div id="container" className={`table-container ${activeFoolMenu ? 'enable' : 'disable'}`}>

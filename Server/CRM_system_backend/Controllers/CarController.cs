@@ -64,7 +64,7 @@ public class CarController : ControllerBase
     }
 
     [HttpGet("My")]
-    [Authorize(Policy = "UserPolicy")]
+    //[Authorize(Policy = "UserPolicy")]
     public async Task<ActionResult<List<Car>>> GetCarsByOwnerId(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)

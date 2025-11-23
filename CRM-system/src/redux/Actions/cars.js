@@ -38,7 +38,7 @@ export const getMyCars = (page = 1) => {
                     _page: page,
                     _limit: 25,
                 }
-            }) ;
+            });
 
             const totalCount = parseInt(response.headers["x-total-count"], 10);
             if (!isNaN(totalCount)) {

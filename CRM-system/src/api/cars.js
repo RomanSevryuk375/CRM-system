@@ -12,6 +12,7 @@ export const getMyCars = (config) => makeRequest({
     method: "GET",
     url: `${URL}/My`,
     ...config,
+    withCredentials: true,
 });
 
 export const getInWorkCars = (config) => makeRequest({

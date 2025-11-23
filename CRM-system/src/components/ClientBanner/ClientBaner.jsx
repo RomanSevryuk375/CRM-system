@@ -3,16 +3,16 @@ import Registration from '../Registration/Registration';
 import { HashLink } from "react-router-hash-link"
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import Vect from '../../assets/svg/Vector.svg';
 import Info from '../../assets/svg/Info.svg';
 import darkMode from '../../assets/svg/DarkMode.svg';
 import Account from '../Account/Account';
+import { useSelector } from 'react-redux';
 
 
 function ClientBanner() {
     const [registrationIsOpen, setRegistrationIsOpen] = useState(false);
-    const [response, setResponse] = useState(false);
+    const isLoggedIn = useSelector(state => state.users.isLoggedIn);
     const navigate = useNavigate();
     return (
         <>
@@ -41,7 +41,6 @@ function ClientBanner() {
                             <button className='profile-button-cli'><img src={Info} alt="Information-cli" /></button>
                             <button className='profile-button-cli'><img src={darkMode} alt="" /></button>
                             <Account
-                                response={response}
                                 registrationIsOpen={registrationIsOpen}
                                 setRegistrationIsOpen={setRegistrationIsOpen}
                             />
@@ -56,16 +55,20 @@ function ClientBanner() {
                             <button
                                 className='banner-button-cli-active'
                                 onClick={() => {
-                                    if (response === true) {
+                                    if (isLoggedIn === true) {
                                         navigate('/personal-page')
+                                    } else {
+                                        setRegistrationIsOpen(!registrationIsOpen)
                                     }
                                 }}
                             >Заказать диагностику</button>
                             <button
                                 className='banner-button-cli'
                                 onClick={() => {
-                                    if (response === true) {
+                                    if (isLoggedIn === true) {
                                         navigate('/personal-page')
+                                    } else {
+                                        setRegistrationIsOpen(!registrationIsOpen)
                                     }
                                 }}
                             >Консультация</button>
@@ -76,10 +79,9 @@ function ClientBanner() {
             <Registration
                 registrationIsOpen={registrationIsOpen}
                 setRegistrationIsOpen={setRegistrationIsOpen}
-                response={response}
-                setResponse={setResponse} />
+            />
         </>
     )
 }
 
-export default ClientBanner 
+export default ClientBanner;

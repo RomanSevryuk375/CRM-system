@@ -1,10 +1,10 @@
 import './Registration.css'
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { createClient, getMyClient } from '../../redux/Actions/clients'
+import { createClient } from '../../redux/Actions/clients'
 import { loginUser } from '../../redux/Actions/users';
 
-function Registration({ registrationIsOpen, setRegistrationIsOpen, response, setResponse }) {
+function Registration({ registrationIsOpen, setRegistrationIsOpen }) {
     const dispatch = useDispatch();
 
     const [regForm, setRegForm] = useState({
@@ -62,14 +62,12 @@ function Registration({ registrationIsOpen, setRegistrationIsOpen, response, set
         e.preventDefault();
         dispatch(createClient(regForm));
         setRegistrationIsOpen(false);
-        setResponse(!response);
     };
 
     const submitAuth = (e) => {
         e.preventDefault();
         dispatch(loginUser(authForm.login, authForm.password));
         setRegistrationIsOpen(false);
-        setResponse(!response);
     }
 
     switch (typeMenu) {
@@ -141,10 +139,6 @@ function Registration({ registrationIsOpen, setRegistrationIsOpen, response, set
                                 <button
                                     className='reg-active-button'
                                     type="submitAuth"
-                                // onClick={() => {
-                                //     setResponse(!response);
-                                //     setRegistrationIsOpen(!registrationIsOpen);
-                                // }} //временное решенеие для завершения верстки 
                                 >Войти</button>
                                 <button
                                     className='reg-second-button'

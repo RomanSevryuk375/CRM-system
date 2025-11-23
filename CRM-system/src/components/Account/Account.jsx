@@ -6,7 +6,7 @@ import { getMyClient } from '../../redux/Actions/clients';
 import { logoutUser } from '../../redux/Actions/users';
 
 
-function Account({ response, registrationIsOpen, setRegistrationIsOpen }) {
+function Account({ registrationIsOpen, setRegistrationIsOpen }) {
     const myClient = useSelector(state => state.clients.myClient);
     const isLoggedIn = useSelector(state => state.users.isLoggedIn);
     const dispatch = useDispatch();
@@ -53,5 +53,5 @@ function Account({ response, registrationIsOpen, setRegistrationIsOpen }) {
 
 }
 
-export default Account
+export default Account;
 
