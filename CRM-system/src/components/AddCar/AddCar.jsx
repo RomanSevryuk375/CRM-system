@@ -1,11 +1,21 @@
 import './Addcar.css'
 import { useEffect, useState } from 'react'
 import Cross from '../../assets/svg/Cross.svg'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createCar } from '../../redux/Actions/cars';
 
-function AddCar({ addCarOpen, setAddCarOpen }) {
+function AddCar({ addCarOpen, setAddCarOpen, isMod, setIsMod, setPage }) {
     const dispatch = useDispatch();
+    const clientId = useSelector(state => state.clients.myClient?.[0]?.id);
+
+    const inputConfig = [
+        { lable: "Марка", name: "brand", input: "Введите марку", type: "text" },
+        { lable: "Модель", name: "model", input: "Введите модель", type: "text" },
+        { lable: "Год", name: "yearOfManufacture", input: "Введите год выпуска", type: "number" },
+        { lable: "VIN номер", name: "vinNumber", input: "Введите VIN номер", type: "text" },
+        { lable: "Государственный номер", name: "stateNumber", input: "Введите номер", type: "text" },
+        { lable: "Пробег", name: "mileage", input: "Введите пробег", type: "number" }
+    ];
 
     const [addForm, setAddForm] = useState({
         ownerId: 0,
@@ -17,9 +27,21 @@ function AddCar({ addCarOpen, setAddCarOpen }) {
         mileage: 0
     });
 
-    if (!addCarOpen) {
-        return null
-    }
+    useEffect(() => {
+        if (addCarOpen && clientId) {
+            setAddForm({
+                ownerId: clientId,
+                brand: "",
+                model: "",
+                yearOfManufacture: 0,
+                vinNumber: "",
+                stateNumber: "",
+                mileage: 0
+            });
+        }
+    }, [addCarOpen, clientId]);
+
+
     useEffect(() => {
         const handleKeyPress = (event) => {
             if (event.key === 'Escape') {
@@ -31,15 +53,9 @@ function AddCar({ addCarOpen, setAddCarOpen }) {
         return () => document.removeEventListener('keydown', handleKeyPress);
     }, []);
 
-
-    const inputConfig = [
-        { lable: "Марка", name: "brand", input: "Введите марку", type: "text" },
-        { lable: "Модель", name: "model", input: "Введите модель", type: "text" },
-        { lable: "Год", name: "yearOfManufacture", input: "Введите год выпуска", type: "text" },
-        { lable: "VIN номер", name: "vinNumber", input: "Введите VIN номер", type: "text" },
-        { lable: "Государственный номер", name: "stateNumber", input: "Введите номер", type: "text" },
-        { lable: "Пробег", name: "mileage", input: "Введите пробег", type: "text" }
-    ];
+    if (!addCarOpen) {
+        return null;
+    }
 
     const changeForm = (e) => {
         const { name, value, type } = e.target;
@@ -51,8 +67,11 @@ function AddCar({ addCarOpen, setAddCarOpen }) {
 
     const submitForm = (e) => {
         e.preventDefault();
-        dispatch(createCar(addForm));
+        dispatch(createCar(addForm)).then(() => {
+            dispatch(getMyCars(1)); 
+        });
         setAddCarOpen(false);
+        setPage(1);
     };
 
     return (
@@ -95,7 +114,7 @@ function AddCar({ addCarOpen, setAddCarOpen }) {
                             Отмена
                         </button>
                         <button
-                            type='submitForm'
+                            type='submit'
                             className='custom-button'>
                             Добавить
                         </button>

@@ -103,8 +103,8 @@ public class CarController : ControllerBase
 
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
-    [Authorize(Policy = "UserPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "UserPolicy")]
     public async Task<ActionResult<int>> CreateCar([FromBody] CarRequest carRequest)
     {
         var (car, error) = Car.Create(
@@ -139,8 +139,8 @@ public class CarController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    [Authorize(Policy = "UserPolicy")]
+    //[Authorize(Policy = "AdminPolicy")]
+    //[Authorize(Policy = "UserPolicy")]
     public async Task<ActionResult<int>> DeleteCar(int id)
     {
         var result = await _carService.DeleteCar(id);

@@ -21,10 +21,10 @@ export const getInWorkCars = (config) => makeRequest({
     ...config,
 });
 
-export const createCar = (config) => makeRequest({
+export const createCar = (data) => makeRequest({
     method: "POST",
     url: URL,
-    ...config,
+    data,
 });
 
 export const updateCar = (id, data) => makeRequest({

@@ -7,21 +7,28 @@ import Milage from '../../assets/svg/Probeg.svg'
 import StatusMin from '../../assets/svg/StatusMin.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { getMyCars } from '../../redux/Actions/cars'
+import { deleteCar, getMyCars } from '../../redux/Actions/cars'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-function CarCard() {
+function CarCard({ isMod, setIsMod, page, setPage }) {
     const myCars = useSelector(state => state.cars.myCars);
     const myCarsTotal = useSelector(state => state.cars.myCarsTotal);
     const isLoggedIn = useSelector(state => state.users.isLoggedIn);
-    const [page, setPage] = useState(1);
     const dispatch = useDispatch();
 
     useEffect(() => {
         if (isLoggedIn) {
             dispatch(getMyCars(page));
         }
-    }, [isLoggedIn, page, dispatch]);
+    }, [isLoggedIn, page, isMod, dispatch]);
+
+    const handleDeleteCar = (carId) => {
+
+        dispatch(deleteCar(carId));
+        setIsMod(!isMod);
+
+        setPage(1);
+    };
 
     const nextHandler = () => {
         if (myCars.length >= myCarsTotal) return;
@@ -48,7 +55,9 @@ function CarCard() {
                             <img className='car-buttons-img' src={Car} />
                             <div className='car-buttons-button-container'>
                                 <button className='car-buttons-button'>История визитов</button>
-                                <button className='car-buttons-delete'>Удалить</button>
+                                <button
+                                    className='car-buttons-delete'
+                                    onClick={() => handleDeleteCar(item.id)}>Удалить</button>
                             </div>
                         </div>
                         <div className='car-info'>

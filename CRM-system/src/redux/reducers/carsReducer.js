@@ -40,6 +40,7 @@ export const carsReducer = (state = initialeState, action) => {
             return {
                 ...state,
                 isCarsLoading: true,
+                myCars: action.page === 1 ? [] : state.myCars,
             };
         case GET_MY_CARS_SUCCESS:
             return {

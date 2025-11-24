@@ -31,7 +31,7 @@ export const getCarsWithInfo = (page = 1) => {
 export const getMyCars = (page = 1) => {
     return async (dispatch) => {
         try {
-            dispatch(getMyCarsStarted());
+            dispatch(getMyCarsStarted(page));
 
             const response = await api.cars.getMyCars({
                 params: {
@@ -90,8 +90,10 @@ export const createCar = (data) => {
             const response = await api.cars.createCar(data);
 
             dispatch(createCarSuccess(response.data));
+            return response.data
         } catch (error) {
             dispatch(createCarFailed(error));
+            return error
         }
     };
 };

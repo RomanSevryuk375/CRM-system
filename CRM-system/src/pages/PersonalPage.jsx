@@ -10,30 +10,41 @@ import ExitModal from "../components/ExitModal/ExitModal"
 function PersonalPage() {
     const [addCarOpen, setAddCarOpen] = useState(false);
     const [activeExitMenu, setActiveExitMenu] = useState(false);
+    const [isMod, setIsMod] = useState(false);
+    const [page, setPage] = useState(1);
     return (
         <>
             <div>
-                <Header 
-                activeExitMenu={activeExitMenu}
-                setActiveExitMenu={setActiveExitMenu}
+                <Header
+                    activeExitMenu={activeExitMenu}
+                    setActiveExitMenu={setActiveExitMenu}
                 />
                 <div className={`toolbar ${'disable'}`}>
                     <div></div>
                     <div>
-                        <button 
-                        onClick={() => setAddCarOpen(!addCarOpen)}
-                        className='toolbar-button'>Добавить автомобиль</button>
+                        <button
+                            onClick={() => setAddCarOpen(!addCarOpen)}
+                            className='toolbar-button'>Добавить автомобиль</button>
                     </div>
                 </div>
-                <AddCar 
-                addCarOpen={addCarOpen}
-                setAddCarOpen={setAddCarOpen}
+                <AddCar
+                    addCarOpen={addCarOpen}
+                    setAddCarOpen={setAddCarOpen}
+                    isMod={isMod}
+                    setIsMod={setIsMod}
+                    page={page}
+                    setPage={setPage}
                 />
-                <CarCard />
+                <CarCard
+                    isMod={isMod}
+                    setIsMod={setIsMod}
+                    page={page}
+                    setPage={setPage}
+                />
                 <PPFooter />
-                <ExitModal 
-                activeExitMenu={activeExitMenu}
-                setActiveExitMenu={setActiveExitMenu}
+                <ExitModal
+                    activeExitMenu={activeExitMenu}
+                    setActiveExitMenu={setActiveExitMenu}
                 />
             </div>
         </>
