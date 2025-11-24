@@ -18,6 +18,7 @@ export const getOrdersMy = (config) => makeRequest({
     method: "GET",
     url: `${URL}/My`,
     ...config,
+    withCredentials: true,
 });
 
 export const createOrder = (data) => makeRequest({

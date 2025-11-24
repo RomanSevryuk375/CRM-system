@@ -1,9 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import './ExitModal.css'
 import Cross from '../../assets/svg/Cross.svg';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../../redux/Actions/users';
 
 function ExitModal({ activeExitMenu, setActiveExitMenu }) {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     if (!activeExitMenu) {
         return null;
@@ -30,7 +33,10 @@ function ExitModal({ activeExitMenu, setActiveExitMenu }) {
                         onClick={() => (setActiveExitMenu(!activeExitMenu))}>Отмена</button>
                     <button
                         className='block-ExitMenu-footer-button'
-                        onClick={() => navigate('/Client')}>Ок
+                        onClick={() => {
+                            dispatch(logoutUser());
+                            navigate('/');
+                        }}>Ок
                     </button>
                 </div>
             </div>

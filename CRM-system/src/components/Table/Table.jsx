@@ -1,21 +1,24 @@
-import Edit from '../../assets/svg/Edit.svg';
-import Sort from '../../assets/svg/Sort.svg';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Main from '../Main/Main';
 import FiltreModal from '../FilreModal/FiltreModal';
 import Detailing from '../Detailing/Detailing';
-import './Table.css'
+import CarCard from '../CarCard/CarCard';
+import PPFooter from '../PPFooter/PPFooter';
+import { getBills, getMyBills } from '../../redux/Actions/bills';
 import { getCatalogOfWorks } from '../../redux/Actions/catalogOfWorks';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useRef, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { getOrdersWithInfo } from '../../redux/Actions/order';
 import { getClients } from '../../redux/Actions/clients';
-import { getWorkerWithInfo } from '../../redux/Actions/workers';
-import { getUsedPartsWithInfo } from '../../redux/Actions/usedParts';
-import { getBills } from '../../redux/Actions/bills';
-import { getPaymentNotes } from '../../redux/Actions/paymentNotes';
-import { getTaxes } from '../../redux/Actions/taxes';
 import { getExpensesWithInwo } from '../../redux/Actions/expenses';
+import { getMyOrders, getOrdersWithInfo } from '../../redux/Actions/order';
+import { getMyPaymentNotes, getPaymentNotes } from '../../redux/Actions/paymentNotes';
+import { getMyRepairNotes } from '../../redux/Actions/repairNotes';
+import { getTaxes } from '../../redux/Actions/taxes';
+import { getUsedPartsWithInfo } from '../../redux/Actions/usedParts';
+import { getWorkerWithInfo } from '../../redux/Actions/workers';
+import Edit from '../../assets/svg/Edit.svg';
+import Sort from '../../assets/svg/Sort.svg';
+import './Table.css';
 
 const columnsParts = ['id', 'orderId', 'supplierName', 'name', 'article', 'quantity', 'unitPrice'];
 const headTextParts = ['№', '№ заказ-наряда', 'Поставщик', 'Наименование детали', 'Артикул', 'Количество', 'Цена за еденицу'];
@@ -44,6 +47,17 @@ const headTextWorkers = ['№', '№ пользователя', 'Специал�
 const columnsClients = ['id', 'user_Id', 'name', 'surname', 'phoneNumber', 'email'];
 const headTextClients = ['№', '№ пользователя', 'Имя', 'Фамилия', 'Телефон', 'Почта'];
 
+const columnsOrdersClient = ['id', 'statusName', 'carInfo', 'date', 'priority'];
+const headTextOrdersClient = ['№', 'Статус', 'Автомобиль', 'Дата', 'Приоритет'];
+
+const columnsHistoryClient = ['id', 'orderId', 'carInfo', 'date', 'serviceSum'];
+const headTextHistoryClient = ['№', '№ Заказ-наряда', 'Автомобиль', 'Дата', 'Стоимость'];
+
+const columnsBillsClient = ['id', 'orderId', 'statusId', 'date', 'amount', 'actualBillDate', 'lastBillDate'];
+const headTextBillsClient = ['№', '№ Заказ-наряда', 'Статус', 'Дата созадния', 'Сумма', 'Дата погашения', 'Погасить до']; //на бэке сделать имя статуса 
+
+const columnsJournalClient = ['id', 'billId', 'date', 'amount', 'method'];
+const headTextJournalClient = ['№', '№ Счёта', 'Дата плтежа', 'Сумма', 'Метод'];
 
 const GenericTable = ({
   headText,
@@ -105,26 +119,35 @@ const GenericTable = ({
   );
 }
 
-function Table({ activeTable, activeFoolMenu }) {
+function Table({ activeTable, activeFoolMenu, isMod, setIsMod,
+}) {
   const [activeDetailing, setActiveDetailing] = useState(false);
 
   const catalogOfWorks = useSelector(state => state.catalogOfWorks.catalogOfWorks);
   const orders = useSelector(state => state.orders.orders);
+  const ordersClient = useSelector(state => state.orders.myOrders);
   const clients = useSelector(state => state.clients.clients);
   const workers = useSelector(state => state.workers.workersWithInfo);
   const parts = useSelector(state => state.usedParts.usedPartsWithInfo);
   const bills = useSelector(state => state.bills.bills);
+  const billsClient = useSelector(state => state.bills.myBills);
   const journal = useSelector(state => state.paymentNotes.paymentNotes);
+  const journalClient = useSelector(state => state.paymentNotes.myPaymentNotes);
+  const repairNotesClient = useSelector(state => state.repairNotes.myRepairNotes);
   const taxes = useSelector(state => state.taxes.taxes);
   const expenses = useSelector(state => state.expenses.expenses);
 
   const totalCatalog = useSelector(state => state.catalogOfWorks.totalCatalog);
   const totalOrders = useSelector(state => state.orders.totalOrders);
+  const totalOrdersClient = useSelector(state => state.orders.myOrdersTotal);
   const totalClients = useSelector(state => state.clients.totalClients);
   const totalWorkers = useSelector(state => state.workers.workersWithInfoTotal);
   const totalParts = useSelector(state => state.usedParts.usedPartsWithInfoTotal);
   const totalBills = useSelector(state => state.bills.billsTotal);
+  const totalBillsClient = useSelector(state => state.bills.myBillsTotal);
   const totalJournal = useSelector(state => state.paymentNotes.paymentNotesTotal);
+  const totalJournalClient = useSelector(state => state.paymentNotes.myPaymentNotesTotal);
+  const totalRepairNotesClient = useSelector(state => state.repairNotes.myRepairNotesTotal);
   const totalTaxes = useSelector(state => state.taxes.totalTaxes);
   const totalExpenses = useSelector(state => state.expenses.expensesTotal);
 
@@ -156,6 +179,10 @@ function Table({ activeTable, activeFoolMenu }) {
       case "orders":
         action = getOrdersWithInfo(page);
         break;
+      
+      case "ordersClient":
+        action = getMyOrders(page);
+        break;
 
       case "clients":
         action = getClients(page);
@@ -177,8 +204,20 @@ function Table({ activeTable, activeFoolMenu }) {
         action = getBills(page);
         break;
 
+      case "billsClient":
+        action = getMyBills(page);
+        break;
+
       case "journal":
         action = getPaymentNotes(page);
+        break;
+
+      case "journalClient":
+        action = getMyPaymentNotes(page);
+        break;
+
+      case "historyClient":
+        action = getMyRepairNotes(page);
         break;
 
       case "taxes":
@@ -208,6 +247,10 @@ function Table({ activeTable, activeFoolMenu }) {
       if (orders.length >= totalOrders) return;
     }
 
+    if (activeTable === "ordersClient") {
+      if (ordersClient.length >= totalOrdersClient) return;
+    }
+
     if (activeTable === "clients") {
       if (clients.length >= totalClients) return;
     }
@@ -228,8 +271,20 @@ function Table({ activeTable, activeFoolMenu }) {
       if (bills.length >= totalBills) return;
     }
 
+    if (activeTable === "billsClient") {
+      if (billsClient.length >= totalBillsClient) return;
+    }
+
     if (activeTable === "journal") {
       if (journal.length >= totalJournal) return;
+    }
+
+    if (activeTable === "journalClient") {
+      if (journalClient.length >= totalJournalClient) return;
+    }
+
+    if (activeTable === "historyClient") {
+      if (repairNotesClient.length >= totalRepairNotesClient) return; 
     }
 
     if (activeTable === "taxes") {
@@ -243,14 +298,18 @@ function Table({ activeTable, activeFoolMenu }) {
     setPage(prev => prev + 1);
   };
 
-  
+
   const hasMoreItemsForOrders = orders.length < totalOrders;
+  const hasMoreItemsForOrdersClient = ordersClient.length < totalOrdersClient;
   const hasMoreItemsForClients = clients.length < totalClients;
   const hasMoreItemsForWorkers = workers.length < totalWorkers;
   const hasMoreItemsForCatalog = catalogOfWorks.length < totalCatalog;
   const hasMoreItemsForParts = parts.length < totalParts;
   const hasMoreItemsForBills = bills.length < totalBills;
+  const hasMoreItemsForBillsClient = billsClient.length < totalBillsClient;
   const hasMoreItemsForJournal = journal.length < totalJournal;
+  const hasMoreItemsForJournalClient = journal.length < totalJournalClient;
+  const hasMoreItemsForRepairNotesClient = repairNotesClient.length < totalRepairNotesClient;
   const hasMoreItemsForTaxes = taxes.length < totalTaxes;
   const hasMoreItemsForExpeses = expenses.length < totalExpenses;
 
@@ -258,6 +317,94 @@ function Table({ activeTable, activeFoolMenu }) {
     case 'main':
       return (
         <Main />
+      );
+    case 'mainClient':
+      return (
+        <>
+          <CarCard
+            isMod={isMod}
+            setIsMod={setIsMod}
+            page={page}
+            setPage={setPage}
+          />
+          <PPFooter />
+        </>
+      );
+    case 'ordersClient':
+      return (
+        <>
+          <GenericTable
+            headText={headTextOrdersClient}
+            bodyText={ordersClient || []}
+            columns={columnsOrdersClient}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+            nextHandler={nextHandler}
+            hasMore={hasMoreItemsForOrdersClient}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu}
+          />
+        </>
+      );
+    case 'historyClient':
+      return (
+        <>
+          <GenericTable
+            headText={headTextHistoryClient}
+            bodyText={repairNotesClient || []}
+            columns={columnsHistoryClient}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+            nextHandler={nextHandler}
+            hasMore={hasMoreItemsForRepairNotesClient}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu}
+          />
+        </>
+      );
+    case 'billsClient':
+      return (
+        <>
+          <GenericTable
+            headText={headTextBillsClient}
+            bodyText={billsClient || []}
+            columns={columnsBillsClient}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+            nextHandler={nextHandler}
+            hasMore={hasMoreItemsForBillsClient}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu}
+          />
+        </>
+      );
+    case 'journalClient':
+      return (
+        <>
+          <GenericTable
+            headText={headTextJournalClient}
+            bodyText={journalClient || []}
+            columns={columnsJournalClient}
+            activeFoolMenu={activeFoolMenu}
+            activeDetailing={activeDetailing}
+            setActiveDetailing={setActiveDetailing}
+            nextHandler={nextHandler}
+            hasMore={hasMoreItemsForJournalClient}
+          />
+          <Detailing
+            activeDetailing={activeDetailing}
+            activeFoolMenu={activeFoolMenu}
+          />
+        </>
       );
     case 'orders':
       return (
@@ -421,7 +568,6 @@ function Table({ activeTable, activeFoolMenu }) {
             activeFoolMenu={activeFoolMenu} />
         </>
       );
-
     default:
       return (
         <h1>Error</h1>

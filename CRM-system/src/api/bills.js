@@ -12,6 +12,7 @@ export const getMyBills = (config) => makeRequest({
     method: "GET",
     url: `${URL}/My`,
     ...config,
+    withCredentials: true,
 });
 
 export const createBill = (data) => makeRequest({

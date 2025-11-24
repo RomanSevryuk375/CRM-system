@@ -55,11 +55,11 @@ function ClientBanner() {
                             <button
                                 className='banner-button-cli-active'
                                 onClick={() => {
-                                    if (isLoggedIn === true) {
+                                    // if (isLoggedIn === true) {
                                         navigate('/personal-page')
-                                    } else {
-                                        setRegistrationIsOpen(!registrationIsOpen)
-                                    }
+                                    // } else {
+                                        // setRegistrationIsOpen(!registrationIsOpen)
+                                    // }
                                 }}
                             >Заказать диагностику</button>
                             <button

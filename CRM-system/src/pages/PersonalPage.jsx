@@ -1,15 +1,30 @@
 import { useState } from "react"
+import Task from "../assets/svg/Task.svg";
+import Rashodi from "../assets/svg/Rashodi.svg";
+import Bills from "../assets/svg/Bills.svg";
+import Home from "../assets/svg/Home.svg";
+import Journal from "../assets/svg/Journal.svg";
+import Header from "../components/Header/Header";
+import CarCard from "../components/CarCard/CarCard";
+import PPFooter from "../components/PPFooter/PPFooter";
+import AddCar from "../components/AddCar/AddCar";
+import ExitModal from "../components/ExitModal/ExitModal";
+import Navigation from "../components/Navigation/Navigation";
+import Table from "../components/Table/Table";
 
-import Header from "../components/Header/Header"
-import CarCard from "../components/CarCard/CarCard"
-import PPFooter from "../components/PPFooter/PPFooter"
-import AddCar from "../components/AddCar/AddCar"
-import ExitModal from "../components/ExitModal/ExitModal"
-
+const navButtonsConfig = [
+    { text: 'Главная', value: 'mainClient', icon: Home },
+    { text: 'Заказ-наряды', value: 'ordersClient', icon: Bills },
+    { text: 'История посещений', value: 'historyClient', icon: Task },
+    { text: 'Счета', value: 'billsClient', icon: Rashodi },
+    { text: 'Журнал оплат', value: 'journalClient', icon: Journal },
+];
 
 function PersonalPage() {
     const [addCarOpen, setAddCarOpen] = useState(false);
+    const [activeFoolMenu, setActiveFoolMenu] = useState(false);
     const [activeExitMenu, setActiveExitMenu] = useState(false);
+    const [activeTable, setActiveTable] = useState('mainClient');
     const [isMod, setIsMod] = useState(false);
     const [page, setPage] = useState(1);
     return (
@@ -18,6 +33,8 @@ function PersonalPage() {
                 <Header
                     activeExitMenu={activeExitMenu}
                     setActiveExitMenu={setActiveExitMenu}
+                    activeFoolMenu={activeFoolMenu}
+                    setActiveFoolMenu={setActiveFoolMenu}
                 />
                 <div className={`toolbar ${'disable'}`}>
                     <div></div>
@@ -27,6 +44,12 @@ function PersonalPage() {
                             className='toolbar-button'>Добавить автомобиль</button>
                     </div>
                 </div>
+                <Navigation
+                    activeFoolMenu={activeFoolMenu}
+                    activeTable={activeTable}
+                    setActiveTable={setActiveTable}
+                    navButtonsConfig={navButtonsConfig}
+                />
                 <AddCar
                     addCarOpen={addCarOpen}
                     setAddCarOpen={setAddCarOpen}
@@ -35,13 +58,12 @@ function PersonalPage() {
                     page={page}
                     setPage={setPage}
                 />
-                <CarCard
+                <Table
                     isMod={isMod}
                     setIsMod={setIsMod}
-                    page={page}
-                    setPage={setPage}
+                    activeTable={activeTable}
+                    activeFoolMenu={activeFoolMenu}
                 />
-                <PPFooter />
                 <ExitModal
                     activeExitMenu={activeExitMenu}
                     setActiveExitMenu={setActiveExitMenu}
@@ -51,4 +73,4 @@ function PersonalPage() {
     )
 }
 
-export default PersonalPage
+export default PersonalPage;

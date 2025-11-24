@@ -11,8 +11,8 @@ function App() {
     <>
       <Provider store={store}>
         <Routes>
-          <Route path='/' element={<Manager />} />
-          <Route path='/client' element={<Client />} />
+          <Route path='/manager' element={<Manager />} />
+          <Route path='/' element={<Client />} />
           <Route path='/personal-page' element={<PersonalPage />} />
         </Routes>
       </Provider>

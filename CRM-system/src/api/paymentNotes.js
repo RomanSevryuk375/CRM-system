@@ -12,6 +12,7 @@ export const getMyPaymentNotes = (config) => makeRequest({
     method: "GET",
     url: `${URL}/My`,
     ...config,
+    withCredentials: true,
 });
 
 export const createPaymentNote = (data) => makeRequest ({

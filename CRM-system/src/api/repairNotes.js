@@ -12,6 +12,7 @@ export const getMyRepairNotes = (config) => makeRequest({
     method: "GET",
     url: `${URL}/My`,
     ...config,
+    withCredentials: true,
 });
 
 export const getRepairNotesInWork = (config) => makeRequest({
