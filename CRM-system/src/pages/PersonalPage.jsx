@@ -11,6 +11,7 @@ import AddCar from "../components/AddCar/AddCar";
 import ExitModal from "../components/ExitModal/ExitModal";
 import Navigation from "../components/Navigation/Navigation";
 import Table from "../components/Table/Table";
+import Toolbar from "../components/Toolbar/Toolbar";
 
 const navButtonsConfig = [
     { text: 'Главная', value: 'mainClient', icon: Home },
@@ -36,14 +37,19 @@ function PersonalPage() {
                     activeFoolMenu={activeFoolMenu}
                     setActiveFoolMenu={setActiveFoolMenu}
                 />
-                <div className={`toolbar ${'disable'}`}>
+                <Toolbar 
+                    activeTable={activeTable}
+                    activeFoolMenu={activeFoolMenu}
+                    setPage={setPage}
+                />
+                {/* <div className={`toolbar ${'disable'}`}>
                     <div></div>
                     <div>
                         <button
                             onClick={() => setAddCarOpen(!addCarOpen)}
                             className='toolbar-button'>Добавить автомобиль</button>
                     </div>
-                </div>
+                </div> */}
                 <Navigation
                     activeFoolMenu={activeFoolMenu}
                     activeTable={activeTable}

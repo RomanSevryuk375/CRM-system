@@ -4,7 +4,7 @@ import PopupMenu from "../../components/Popup_menu/PopupMenu.jsx";
 import './Toolbar.css'
 
 
-function Toolbar({ activeFoolMenu}) {
+function Toolbar({ activeFoolMenu, activeTable, setPage}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     return (
         <>
@@ -21,6 +21,8 @@ function Toolbar({ activeFoolMenu}) {
             <PopupMenu
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                activeTable={activeTable}
+                setPage={setPage}
             />
         </>
     );
