@@ -19,6 +19,7 @@ export const createPaymentNote = (data) => makeRequest ({
     method: "POST",
     url: URL, 
     data,
+    withCredentials: true,
 });
 
 export const updatePaymentNote = (id, data) => makeRequest ({
