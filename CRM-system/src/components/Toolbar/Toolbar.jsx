@@ -14,8 +14,7 @@ function Toolbar({ activeFoolMenu, activeTable, setPage}) {
                     <button className='toolbar-button-filtre'><img src={Filtre} alt="Фильтры" className='toolbar-button-filtre-img' /></button>
                 </div>
                 <div>
-                    <button type="button" className='toolbar-button'>Создать отчет</button>
-                    <button type="button" onClick={() => setIsModalOpen(true)} className='toolbar-button'>Создать заказ</button>
+                    <button type="button" onClick={() => setIsModalOpen(true)} className='toolbar-button'>Создать</button>
                 </div>
             </div>
             <PopupMenu

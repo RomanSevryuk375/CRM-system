@@ -5,9 +5,7 @@ import Bills from "../assets/svg/Bills.svg";
 import Home from "../assets/svg/Home.svg";
 import Journal from "../assets/svg/Journal.svg";
 import Header from "../components/Header/Header";
-import CarCard from "../components/CarCard/CarCard";
 import PPFooter from "../components/PPFooter/PPFooter";
-import AddCar from "../components/AddCar/AddCar";
 import ExitModal from "../components/ExitModal/ExitModal";
 import Navigation from "../components/Navigation/Navigation";
 import Table from "../components/Table/Table";
@@ -22,7 +20,6 @@ const navButtonsConfig = [
 ];
 
 function PersonalPage() {
-    const [addCarOpen, setAddCarOpen] = useState(false);
     const [activeFoolMenu, setActiveFoolMenu] = useState(false);
     const [activeExitMenu, setActiveExitMenu] = useState(false);
     const [activeTable, setActiveTable] = useState('mainClient');
@@ -42,27 +39,11 @@ function PersonalPage() {
                     activeFoolMenu={activeFoolMenu}
                     setPage={setPage}
                 />
-                {/* <div className={`toolbar ${'disable'}`}>
-                    <div></div>
-                    <div>
-                        <button
-                            onClick={() => setAddCarOpen(!addCarOpen)}
-                            className='toolbar-button'>Добавить автомобиль</button>
-                    </div>
-                </div> */}
                 <Navigation
                     activeFoolMenu={activeFoolMenu}
                     activeTable={activeTable}
                     setActiveTable={setActiveTable}
                     navButtonsConfig={navButtonsConfig}
-                />
-                <AddCar
-                    addCarOpen={addCarOpen}
-                    setAddCarOpen={setAddCarOpen}
-                    isMod={isMod}
-                    setIsMod={setIsMod}
-                    page={page}
-                    setPage={setPage}
                 />
                 <Table
                     isMod={isMod}

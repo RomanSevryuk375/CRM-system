@@ -13,14 +13,12 @@
 
 .main-menu {
     width: 442px;
-    /* height: auto; */
     background: white;
     border-radius: 2px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: start;
-    /* padding-bottom: 36px; */
 }
 
 .modal-header {
@@ -50,10 +48,9 @@
 .modal-body {
     box-sizing: border-box;
     width: 100%;
-    padding-left: 16px;
+    padding-left: 15px;
     border-top: 2px solid #EBEDF0;
     border-bottom: 2px solid #EBEDF0;
-    padding-bottom: 16px;
 }
 
 .modal-select {
@@ -61,7 +58,7 @@
     height: 50px;
     display: flex;
     flex-direction: column;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
 }
 
 .custom-select {
@@ -84,11 +81,13 @@
     font-size: 14px;
     vertical-align: middle;
     margin-bottom: 4px;
+    margin-top: 6px;
 }
 
 .modal-img {
     width: 24px;
     height: 24px;
+    background-color: transparent;
 }
 
 .modal-title {
@@ -148,6 +147,13 @@
     box-sizing: border-box;
     color: #112347;
     border-bottom: 2px solid #112347;
+}
+
+.modal-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding-right: 8px;
 }
 
 @font-face {
