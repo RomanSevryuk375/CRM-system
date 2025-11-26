@@ -191,7 +191,7 @@ export const getMyJournalFields = (options) => [
     name: "billId",
     label: "Счет",
     type: "select",
-    options: [{value: 2, label: "test"}],
+    options: [{value: 2, label: "test"}], //options.bills || []
     placeholder: "Выберите счет",
   },
   {
@@ -391,7 +391,7 @@ export const getWorkerFields = (options) => [
     placeholder: "Введите пароль",
   },
 ];
-export const getWorkProposal = (options) => [
+export const getWorkProposalFields = (options) => [
   {
     name: "orderId",
     label: "Заказ-наряд",
@@ -427,7 +427,7 @@ export const getWorkProposal = (options) => [
     defaultValue: DEFAULT_DATE_VALUE,
   },
 ];
-export const getWorkType = () => [
+export const getWorkTypeFields = () => [
   {
     name: "title",
     label: "Название",
