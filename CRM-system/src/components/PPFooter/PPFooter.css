@@ -1,0 +1,65 @@
+.ppfooter {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #112347;
+}
+
+.ppfooter-text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #ffffff;
+    font-size: 14px;
+    margin-top: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.ppfooter-img {
+    width: 20px;
+    height: 20px;
+}
+
+.footer-button-pp {
+    width: 20px;
+    height: 20px;
+    margin-right: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.logo-h1-ppfooter{
+    font-size: 20px;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: bold;
+    margin-left: 16px;
+}
+
+.inc-container{
+    display: flex;
+    align-items: center;
+}
+
+.ppfooter-button-container{
+    display: flex;
+    align-items: center;
+}
+
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
+    font-weight: 900;
+    font-style: normal;
+}

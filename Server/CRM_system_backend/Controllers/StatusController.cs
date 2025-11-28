@@ -18,7 +18,7 @@ public class StatusController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "UniPolicy")]
 
     public async Task<ActionResult<List<Status>>> GetStatuses()
     {

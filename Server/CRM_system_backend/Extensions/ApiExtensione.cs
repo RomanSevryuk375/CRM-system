@@ -49,9 +49,19 @@ public static class ApiExtensions
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("AdminPolicy", policy =>
+            options.AddPolicy("AdminUserPolicy", policy =>
             {
-                policy.RequireClaim("userRoleId", "1");
+                policy.RequireClaim("userRoleId", "1", "2"); 
+            });
+
+            options.AddPolicy("AdminWorkerPlicy", options =>
+            {
+                options.RequireClaim("userRoleId", "1", "3");
+            });
+
+            options.AddPolicy("UniPolicy", options =>
+            {
+                options.RequireClaim("userRoleId", "1", "2", "3");
             });
 
             options.AddPolicy("UserPolicy", policy =>

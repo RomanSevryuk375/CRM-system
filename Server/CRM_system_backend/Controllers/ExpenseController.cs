@@ -19,7 +19,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet]
-    //[Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<Expense>>> GetExpense()
     {
         var expenses = await _expenseService.GetExpenses();
@@ -39,7 +39,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet("with-Info")]
-    //[Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<ExpensesWitInfoDto>>> GetExpenseWithInfo(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)

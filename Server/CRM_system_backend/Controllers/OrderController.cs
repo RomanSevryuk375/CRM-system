@@ -19,7 +19,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
-    //[Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<Order>>> GetOrders(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -42,7 +42,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("with-info")]
-    //[Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<OrderWithInfoDto>>> GetOrderWithInfo(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -63,7 +63,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("My")]
-    //[Authorize(Policy = "UserPolicy")]
+    [Authorize(Policy = "UserPolicy")]
     public async Task<ActionResult<List<OrderWithInfoDto>>> GetUserOrders(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -103,8 +103,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
-    [Authorize(Policy = "UserPolicy")]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<int>> CreateOrder([FromBody] OrderRequest request)
     {
         var (order, error) = Order.Create(

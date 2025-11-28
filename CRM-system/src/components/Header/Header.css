@@ -1,0 +1,135 @@
+.navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 54px;
+    display: flex;
+    z-index: 300;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #112347;
+}
+
+.logo {
+    height: 32px;
+    /* width: 30%; */
+    display: flex;
+    flex-direction: row;
+    margin-top: 11px;
+    margin-left: 10px;
+}
+
+.profile {
+    display: flex;
+    flex-direction: row;
+    /* width: 30%; */
+    justify-content: end;
+}
+
+.profile-user-role {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    margin-left: 18px;
+    margin-right: 18px;
+}
+
+.profile-button {
+    width: 52px;
+    height: 54px;
+    background-color: #112347;
+    border: none;
+}
+
+.profile-button:hover {
+    border: #ffffff;
+    border-width: 1.5px;
+    border-style: solid;
+    transition: 0.3s ease-in-out;
+}
+
+
+
+.menu-button {
+    background-color: #112347;
+    margin: 0;
+    height: 54px;
+    width: 54px;
+    border: none;
+}
+
+.menu-button:hover {
+    background-color: #40516E;
+    border: none;
+}
+
+.logo-img {
+    height: 32px;
+    width: 32px;
+    margin-left: 16px;
+}
+
+.logo-h1 {
+    font-size: 20px;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: bold;
+    margin-top: 6px;
+    margin-left: 6px;
+}
+
+.profile-user {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    margin: 0;
+    color: #ffffff;
+}
+
+.profile-role {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 10px;
+    margin: 0px;
+    color: #ffffff;
+}
+
+.profile-mini-text {
+    color: #000000;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+    margin-top: 15.5px;
+}
+
+.menu-button {
+    margin-top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.profile-mini {
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    background-color: #ffffff;
+    border-radius: 50%;
+    margin-top: 11px;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
+    font-weight: 900;
+    font-style: normal;
+}

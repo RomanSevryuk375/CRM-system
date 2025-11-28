@@ -64,7 +64,7 @@ public class CarController : ControllerBase
     }
 
     [HttpGet("My")]
-    //[Authorize(Policy = "UserPolicy")]
+    [Authorize(Policy = "UserPolicy")]
     public async Task<ActionResult<List<Car>>> GetCarsByOwnerId(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -84,7 +84,7 @@ public class CarController : ControllerBase
     }
 
     [HttpGet("InWork")]
-    [Authorize(Policy = "WorkerPolicy")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<Car>>> GetCarsByWorker(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -103,8 +103,7 @@ public class CarController : ControllerBase
 
 
     [HttpPost]
-    //[Authorize(Policy = "AdminPolicy")]
-    //[Authorize(Policy = "UserPolicy")]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<int>> CreateCar([FromBody] CarRequest carRequest)
     {
         var (car, error) = Car.Create(
@@ -128,9 +127,7 @@ public class CarController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    [Authorize(Policy = "UserPolicy")]
-    [Authorize(Policy = "WorkerPolicy")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<int>> UpdateCar([FromBody] CarUpdateRequest carUpdateRequest, int id)
     {
         var result = await _carService.UpdateCar(id, carUpdateRequest.Brand, carUpdateRequest.Model, carUpdateRequest.YearOfManufacture, carUpdateRequest.VinNumber, carUpdateRequest.StateNumber, carUpdateRequest.Mileage);
@@ -139,8 +136,7 @@ public class CarController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    //[Authorize(Policy = "AdminPolicy")]
-    //[Authorize(Policy = "UserPolicy")]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<int>> DeleteCar(int id)
     {
         var result = await _carService.DeleteCar(id);

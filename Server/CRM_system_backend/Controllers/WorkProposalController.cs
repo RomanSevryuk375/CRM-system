@@ -96,8 +96,7 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
-    [Authorize(Policy = "WorkerPolicy")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<int>> CreateWorkProposal([FromBody] WorkProposalRequest request)
     {
         var (workProposal, error) = WorkProposal.Create(
@@ -135,8 +134,7 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpPut("{id}/accept")]
-    [Authorize(Policy = "AdminPolicy")]
-    [Authorize(Policy = "UserPolicy")]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<int>> AcceptProposal(int id)
     {
         await _workPropossalService.AcceptProposal(id);
@@ -145,8 +143,7 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpPut("{id}/reject")]
-    [Authorize(Policy = "AdminPolicy")]
-    [Authorize(Policy = "UserPolicy")]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<int>> RejectProposal(int id)
     {
         await _workPropossalService.RejectProposal(id);
@@ -156,8 +153,7 @@ public class WorkProposalController : ControllerBase
 
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    [Authorize(Policy = "WorkerPolicy")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<int>> DeleteWorkProposa(int id)
     {
         var result = await _workPropossalService.DeleteWorkProposal(id);

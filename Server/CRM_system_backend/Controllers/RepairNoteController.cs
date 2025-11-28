@@ -63,7 +63,7 @@ public class RepairNoteController : ControllerBase
     }
 
     [HttpGet("My")]
-    //[Authorize(Policy = "UserPolicy")]
+    [Authorize(Policy = "UserPolicy")]
     public async Task<ActionResult<List<RepairNoteWithInfoDto>>> GetUserRepairNote(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
