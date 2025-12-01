@@ -73,6 +73,11 @@ public static class ApiExtensions
             {
                 policy.RequireClaim("userRoleId", "3");
             });
+
+            options.AddPolicy("AdminPolicy", policy =>
+            {
+                policy.RequireClaim("userRoleId", "1");
+            });
         });
     }
 }

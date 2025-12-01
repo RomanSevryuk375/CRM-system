@@ -99,6 +99,58 @@ public class WorkPropossalService : IWorkPropossalService
         return response;
     }
 
+    public async Task<List<WorkProposalWithInfoDto>> GetPagedProposalsForCar(List<int> carIds)
+    {
+        var orders = await _orderRepository.GetByCarId(carIds);
+        var orderIds = orders.Select(c => c.Id).ToList();
+
+        var workProposals = await _workPropossal.GetByOrderId(orderIds);
+        var workTypes = await _workTypeRepository.Get();
+        var workers = await _workerRepository.Get();
+        var statuses = await _statusRepository.Get();
+
+        var response = (from wp in workProposals
+                        join wt in workTypes on wp.WorkId equals wt.Id
+                        join s in statuses on wp.StatusId equals s.Id
+                        join w in workers on wp.ByWorker equals w.Id
+                        select new WorkProposalWithInfoDto(
+                            wp.Id,
+                            wp.OrderId,
+                            wt.Title,
+                            $"{w.Name} {w.Surname}",
+                            s.Name,
+                            s.Name,
+                            wp.Date)).ToList();
+
+        return response;
+    }
+
+    public async Task<List<WorkProposalWithInfoDto>> GetPagedProposalsForCar(int carIds)
+    {
+        var orders = await _orderRepository.GetByCarId(carIds);
+        var orderIds = orders.Select(c => c.Id).ToList();
+
+        var workProposals = await _workPropossal.GetByOrderId(orderIds);
+        var workTypes = await _workTypeRepository.Get();
+        var workers = await _workerRepository.Get();
+        var statuses = await _statusRepository.Get();
+
+        var response = (from wp in workProposals
+                        join wt in workTypes on wp.WorkId equals wt.Id
+                        join s in statuses on wp.StatusId equals s.Id
+                        join w in workers on wp.ByWorker equals w.Id
+                        select new WorkProposalWithInfoDto(
+                            wp.Id,
+                            wp.OrderId,
+                            wt.Title,
+                            $"{w.Name} {w.Surname}",
+                            s.Name,
+                            s.Name,
+                            wp.Date)).ToList();
+
+        return response;
+    }
+
     public async Task<int> GetCountProposalForClient(int userId)
     {
         var client = await _clientsRepository.GetClientByUserId(userId);

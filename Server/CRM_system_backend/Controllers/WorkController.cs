@@ -91,6 +91,25 @@ public class WorkController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("forCar/{carId}")]
+    [Authorize(Policy = "UniPolicy")]
+    public async Task<ActionResult<List<WorkWithInfoDto>>> GetWorksForCar(int carId)
+    {
+        var works = await _workService.GetWorkByCarId(carId);
+
+        var response = works
+            .Select(w => new WorkWithInfoDto(
+                w.Id,
+                w.OrderId,
+                w.JobName,
+                w.WorkerInfo,
+                w.TimeSpent,
+                w.StatusName))
+            .ToList();
+
+        return Ok(response);
+    }
+
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateWork([FromBody] WorkRequest request)

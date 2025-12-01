@@ -43,6 +43,26 @@ public class WorkProposalController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("forCar/{carId}")]
+    [Authorize(Policy = "UniPolicy")]
+    public async Task<ActionResult<List<WorkProposalWithInfoDto>>> GetWorkProposalForCar(int carId)
+    {
+        var workPropossals = await _workPropossalService.GetPagedProposalsForCar(carId);
+
+        var response = workPropossals
+            .Select(d => new WorkProposalWithInfoDto(
+                d.Id,
+                d.OrderId,
+                d.WorkName,
+                d.ByWorker,
+                d.StatusName,
+                d.DecisionStatusName,
+                d.Date))
+            .ToList();
+
+        return Ok(response);
+    }
+
     [HttpGet("with-info")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<WorkProposalWithInfoDto>>> GetWorkProposalWithInfo(

@@ -105,6 +105,26 @@ public class WorkRepository : IWorkRepository
         return work;
     }
 
+    public async Task<List<Work>> GetByOrderId(List<int> orderId)
+    {
+        var workEntities = await _context.Works
+            .AsNoTracking()
+            .Where(w => orderId.Contains(w.OrderId))
+            .ToListAsync();
+
+        var work = workEntities
+            .Select(w => Work.Create(
+                w.Id,
+                w.OrderId,
+                w.JobId,
+                w.WorkerId,
+                w.TimeSpent,
+                w.StatusId).work)
+            .ToList();
+
+        return work;
+    }
+
     public async Task<int> Create(Work work)
     {
         var (_, error) = Work.Create(

@@ -57,6 +57,16 @@ public class BillService : IBillService
         return bills;
     }
 
+    public async Task<List<Bill>> GetBillForCar(int carId)
+    {
+        var orders = await _orderRepository.GetByCarId(carId);
+        var orderIds = orders.Select(o => o.Id).ToList();
+
+        var bills = await _billRepository.GetByOrderId(orderIds);
+
+        return bills;
+    }
+
     public async Task<int> GetBillCountByUser(int userId)
     {
         var client = await _clientsRepository.GetClientByUserId(userId);

@@ -8,6 +8,8 @@ namespace CRMSystem.Buisnes.Services
         Task<List<WorkProposal>> GetPagedWorkProposal(int page, int limit);
         Task<int> GetCountProposal();
         Task<List<WorkProposalWithInfoDto>> GetPagedWorkProposalWithInfo(int page, int limit);
+        Task<List<WorkProposalWithInfoDto>> GetPagedProposalsForCar(List<int> carIds);
+        Task<List<WorkProposalWithInfoDto>> GetPagedProposalsForCar(int carIds);
         Task<List<WorkProposalWithInfoDto>> GetPagedProposalForClient(int userId, int page, int limit);
         Task<int> GetCountProposalForClient(int userId);
         Task<int> CreateWorkProposal(WorkProposal workProposal);

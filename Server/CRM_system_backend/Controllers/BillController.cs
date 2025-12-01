@@ -67,6 +67,25 @@ public class BillController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("forCar/{carId}")]
+    [Authorize(Policy = "UniPolicy")] 
+    public async Task<ActionResult<List<Bill>>> GetBillForCar(int carId)
+    {
+        var bills = await _billService.GetBillForCar(carId);
+
+        var response = bills
+            .Select(b => new BillResponse(
+                b.Id,
+                b.OrderId,
+                b.StatusId,
+                b.Date,
+                b.Amount,
+                b.ActualBillDate))
+            .ToList();
+
+        return Ok(response);
+    }
+
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
 

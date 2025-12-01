@@ -120,6 +120,25 @@ public class OrderRepository : IOrderRepository
         return orders;
     }
 
+    public async Task<List<Order>> GetByCarId(int carIds)
+    {
+        var orderEntities = await _context.Orders
+            .AsNoTracking()
+            .Where(o => o.CarId == carIds)
+            .ToListAsync();
+
+        var orders = orderEntities
+            .Select(o => Order.Create(
+                o.Id,
+                o.StatusId,
+                o.CarId,
+                o.Date,
+                o.Priority).order)
+            .ToList();
+
+        return orders;
+    }
+
     public async Task<List<Order>> GetPagedByCarId(List<int> carIds, int page, int limit)
     {
         var orderEntities = await _context.Orders
