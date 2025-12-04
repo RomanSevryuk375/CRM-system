@@ -8,6 +8,6 @@ namespace CRMSystem.Buisnes.Services
         Task<int> DeleteWorkType(int id);
         Task<List<WorkType>> GetPagedWorkType(int page, int limit);
         Task<int> GetWorkTypeCount();
-        Task<int> UpdateWorkType(int id, string title, string category, string description, decimal standardTime);
+        Task<int> UpdateWorkType(int id, string? title, string? category, string? description, decimal? standardTime);
     }
 }

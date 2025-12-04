@@ -13,6 +13,6 @@ namespace CRMSystem.Buisnes.Services
         Task<List<Car>> GetCarsForWorker(int userId);
         Task<int> CreateCar(Car car);
         Task<int> DeleteCar(int id);
-        Task<int> UpdateCar(int id, string brand, string model, int? yearOfManufacture, string vinNumber, string stateNumber, int? mileage);
+        Task<int> UpdateCar(int id, string? brand, string? model, int? yearOfManufacture, string? vinNumber, string? stateNumber, int? mileage);
     }
 }

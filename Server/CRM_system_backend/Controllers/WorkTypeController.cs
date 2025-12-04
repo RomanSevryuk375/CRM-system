@@ -46,10 +46,10 @@ public class WorkTypeController : ControllerBase
     {
         var (workType, error) = WorkType.Create(
             0,
-            workTypeRequest.Title,
-            workTypeRequest.Category,
-            workTypeRequest.Description,
-            workTypeRequest.StandardTime);
+            workTypeRequest.Title ?? "",
+            workTypeRequest.Category ?? "",
+            workTypeRequest.Description ?? "",
+            workTypeRequest.StandardTime ?? 0m);
 
         if (!string.IsNullOrEmpty(error))
             return BadRequest(error);
@@ -59,7 +59,7 @@ public class WorkTypeController : ControllerBase
         return Ok(workTypeId);
     }
 
-    [HttpPut("${id}")]
+    [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateWorkType([FromBody] WorkTypeRequest workTypeRequest, int id)
     {
@@ -73,7 +73,7 @@ public class WorkTypeController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("${id}")]
+    [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteWorkType (int id)
     {

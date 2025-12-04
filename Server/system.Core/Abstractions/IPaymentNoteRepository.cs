@@ -12,6 +12,6 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> GetCountByBillId(List<int> billIds);
         Task<int> Create(PaymentNote paymentNote);
         Task<int> Delete(int id);
-        Task<int> Update(int id, int? billId, DateTime? date, decimal? amount, string method);
+        Task<int> Update(int id, int? billId, DateTime? date, decimal? amount, string? method);
     }
 }

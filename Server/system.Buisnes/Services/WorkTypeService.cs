@@ -34,7 +34,7 @@ public class WorkTypeService : IWorkTypeService
         return await _workTypeRepository.Create(workType);
     }
 
-    public async Task<int> UpdateWorkType(int id, string title, string category, string description, decimal standardTime)
+    public async Task<int> UpdateWorkType(int id, string? title, string? category, string? description, decimal? standardTime)
     {
         return await _workTypeRepository.Update(id, title, category, description, standardTime);
     }

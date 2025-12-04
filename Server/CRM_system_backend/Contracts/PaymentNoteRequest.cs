@@ -2,8 +2,8 @@
 
 public record PaymentNoteRequest
 (
-    int BillId,
-    DateTime Date,
-    decimal Amount,
-    string Method
+    int? BillId,
+    DateTime? Date,
+    decimal? Amount,
+    string? Method
 );

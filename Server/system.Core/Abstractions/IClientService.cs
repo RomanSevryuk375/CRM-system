@@ -9,6 +9,6 @@ public interface IClientService
     Task<int> GetClientCount();
     Task<List<Client>> GetPagedClients(int page, int limit);
     Task<List<Client>> GetClientByUserId(int userId);
-    Task<int> UpdateClient(int id, string name, string surname, string phoneNumber, string email);
+    Task<int> UpdateClient(int id, string? name, string? surname, string? phoneNumber, string? email);
     Task<int> DeleteClient(int id);
 }

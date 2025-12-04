@@ -170,7 +170,7 @@ public class WorkPropossalService : IWorkPropossalService
         return await _workPropossal.Create(workProposal);
     }
 
-    public async Task<int> UpdateWorkProposal(int id, int orderId, int workId, int byWorker, int statusId, int decisionStatusId, DateTime date)
+    public async Task<int> UpdateWorkProposal(int id, int? orderId, int? workId, int? byWorker, int? statusId, int? decisionStatusId, DateTime? date)
     {
         return await _workPropossal.Update(id, orderId, workId, byWorker, statusId, decisionStatusId, date);
     }

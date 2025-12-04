@@ -21,6 +21,7 @@ public class UserController : ControllerBase
     public async Task<ActionResult<string>> LoginUser([FromBody] LoginRequest loginRequest)
     {
         var token = await _userService.LoginUser(loginRequest.Login, loginRequest.Password);
+        var user = await _userService.GetUsersByLogin(loginRequest.Login);
 
         var cookieOptions = new CookieOptions
         {
@@ -33,8 +34,9 @@ public class UserController : ControllerBase
         };
 
         Response.Cookies.Append("jwt", token, cookieOptions);
+        var userId = user.RoleId;
 
-        return Ok(new { Message = "Logged in", Token = token });
+        return Ok(new { Message = "Logged in", Token = token , RoleId = userId});
     }
 
     [HttpPost("logout")]

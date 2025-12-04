@@ -12,6 +12,6 @@ namespace CRMSystem.Buisnes.Services
         Task<int> GetCountWorkerUsedPart(int userId);
         Task<int> CreateUsedPart(UsedPart usedPart);
         Task<int> DeleteUsedPart(int id);
-        Task<int> UpdateUsedPart(int id, int orderId, int supplierId, string name, string article, decimal quantity, decimal unitPrice, decimal sum);
+        Task<int> UpdateUsedPart(int id, int? orderId, int? supplierId, string? name, string? article, decimal? quantity, decimal? unitPrice, decimal? sum);
     }
 }

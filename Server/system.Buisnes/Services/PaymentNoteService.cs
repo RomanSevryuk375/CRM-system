@@ -75,7 +75,7 @@ public class PaymentNoteService : IPaymentNoteService
         return await _paymentNoteRepository.Create(paymentNote);
     }
 
-    public async Task<int> UpdatePaymentNote(int id, int? billId, DateTime? date, decimal? amount, string method)
+    public async Task<int> UpdatePaymentNote(int id, int? billId, DateTime? date, decimal? amount, string? method)
     {
         return await _paymentNoteRepository.Update(id, billId, date, amount, method);
     }

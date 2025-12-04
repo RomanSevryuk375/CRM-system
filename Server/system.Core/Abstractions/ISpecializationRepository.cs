@@ -9,6 +9,6 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> GetCount();
         Task<int> Create(Specialization specialization);
         Task<int> Delete(int id);
-        Task<int> Update(int id, string name);
+        Task<int> Update(int id, string? name);
     }
 }

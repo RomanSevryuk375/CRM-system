@@ -105,7 +105,7 @@ public class UsedPartService : IUsedPartService
         return await _usedPartRepository.Create(usedPart);
     }
 
-    public async Task<int> UpdateUsedPart(int id, int orderId, int supplierId, string name, string article, decimal quantity, decimal unitPrice, decimal sum)
+    public async Task<int> UpdateUsedPart(int id, int? orderId, int? supplierId, string? name, string? article, decimal? quantity, decimal? unitPrice, decimal? sum)
     {
         return await _usedPartRepository.Update(id, orderId, supplierId, name, article, quantity, unitPrice, sum);
     }

@@ -2,10 +2,10 @@
 
 public record UsedPartRequest
 (
-    int OrderId,
-    int SupplierId,
-    string Name,
-    string Article,
-    decimal Quantity,
-    decimal UnitPrice
+    int? OrderId,
+    int? SupplierId,
+    string? Name,
+    string? Article,
+    decimal? Quantity,
+    decimal? UnitPrice
 );

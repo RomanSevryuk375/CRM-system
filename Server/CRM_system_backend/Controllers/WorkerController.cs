@@ -48,13 +48,11 @@ public class WorkerController : ControllerBase
 
     [HttpGet("My")]
     [Authorize(Policy = "WorkerPolicy")]
-    public async Task<ActionResult<List<WorkerWithInfoDto>>> GetUserWorkerInfo(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
+    public async Task<ActionResult<List<WorkerWithInfoDto>>> GetUserWorkerInfo()
     {
         var userId = int.Parse(User.FindFirst("userId")!.Value);
 
-        var dtos = await _workerService.GetPagedWorkerByUserId(userId, page, limit);
+        var dtos = await _workerService.GetPagedWorkerByUserId(userId, 1, 2);
         var totalCount = await _workerService.GetCountWorkerByUserId(userId);
 
         var response = dtos.Select(d => new WorkerWithInfoDto(
@@ -134,7 +132,7 @@ public class WorkerController : ControllerBase
 
     }
 
-    [HttpPut("${id}")]
+    [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateWorker([FromBody] WorkerRequest workerRequest, int id)
     {
@@ -152,7 +150,7 @@ public class WorkerController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("${id}")]
+    [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteWorker(int id)
     {

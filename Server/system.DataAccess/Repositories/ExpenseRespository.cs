@@ -90,7 +90,7 @@ public class ExpenseRespository : IExpenseRespository
         return expense.Id;
     }
 
-    public async Task<int> Update(int id,DateTime? date, string? category, int? taxId, int? usedPartId, string? expenseType, decimal? sum)
+    public async Task<int> Update(int id, DateTime? date, string? category, int? taxId, int? usedPartId, string? expenseType, decimal? sum)
     {
         var expence = await _context.Expenses.FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new Exception("Expence not found");

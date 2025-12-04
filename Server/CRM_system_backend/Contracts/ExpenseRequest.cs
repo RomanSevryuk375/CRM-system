@@ -2,10 +2,10 @@
 
 public record ExpenseRequest
 (
-    DateTime Date,
-    string Category,
+    DateTime? Date,
+    string? Category,
     int? TaxId,
     int? UsedPartId,
-    string ExpenseType,
-    decimal Sum
+    string? ExpenseType,
+    decimal? Sum
 );

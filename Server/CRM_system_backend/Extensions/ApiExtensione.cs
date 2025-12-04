@@ -54,7 +54,7 @@ public static class ApiExtensions
                 policy.RequireClaim("userRoleId", "1", "2"); 
             });
 
-            options.AddPolicy("AdminWorkerPlicy", options =>
+            options.AddPolicy("AdminWorkerPolicy", options =>
             {
                 options.RequireClaim("userRoleId", "1", "3");
             });

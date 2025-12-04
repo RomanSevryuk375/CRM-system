@@ -14,7 +14,7 @@ namespace CRMSystem.Buisnes.Services
         Task<List<WorkWithInfoDto>> GetPagedWorkWithInfo(int page, int limit);
         Task<List<WorkWithInfoDto>> GetWorkByCarId(int carId);
         Task<int> CreateWork(Work work);
-        Task<int> UpdateWork(int id, int orderId, int jobId, int workerId, decimal timeSpent, int statusId);
+        Task<int> UpdateWork(int id, int? orderId, int? jobId, int? workerId, decimal? timeSpent, int? statusId);
         Task<int> DeleteWork(int id);
     }
 }

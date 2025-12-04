@@ -8,6 +8,6 @@ namespace CRMSystem.Buisnes.Services
         Task<int> GetCountSpecialization();
         Task<int> CreateSpecialization(Specialization specialization);
         Task<int> DeleteSpecialization(int id);
-        Task<int> UpdateSpecialization(int id, string name);
+        Task<int> UpdateSpecialization(int id, string? name);
     }
 }

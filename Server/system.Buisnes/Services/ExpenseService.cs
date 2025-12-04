@@ -80,7 +80,7 @@ public class ExpenseService : IExpenseService
         return await _expenseRespository.Create(expense);
     }
 
-    public async Task<int> UpdateExpense(int id, DateTime date, string category, int? taxId, int? usedPartId, string expenseType, decimal sum)
+    public async Task<int> UpdateExpense(int id, DateTime? date, string? category, int? taxId, int? usedPartId, string? expenseType, decimal? sum)
     {
         return await _expenseRespository.Update(id, date, category, taxId, usedPartId, expenseType, sum);
     }

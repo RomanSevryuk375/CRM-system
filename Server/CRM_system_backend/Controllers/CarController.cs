@@ -130,7 +130,14 @@ public class CarController : ControllerBase
     [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<int>> UpdateCar([FromBody] CarUpdateRequest carUpdateRequest, int id)
     {
-        var result = await _carService.UpdateCar(id, carUpdateRequest.Brand, carUpdateRequest.Model, carUpdateRequest.YearOfManufacture, carUpdateRequest.VinNumber, carUpdateRequest.StateNumber, carUpdateRequest.Mileage);
+        var result = await _carService.UpdateCar(
+            id,
+            carUpdateRequest.Brand,
+            carUpdateRequest.Model,
+            carUpdateRequest.YearOfManufacture,
+            carUpdateRequest.VinNumber,
+            carUpdateRequest.StateNumber,
+            carUpdateRequest.Mileage);
 
         return Ok(result);
     }

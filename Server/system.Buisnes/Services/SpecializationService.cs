@@ -27,7 +27,7 @@ public class SpecializationService : ISpecializationService
         return await _specializationRepository.Create(specialization);
     }
 
-    public async Task<int> UpdateSpecialization(int id, string name)
+    public async Task<int> UpdateSpecialization(int id, string? name)
     {
         return await _specializationRepository.Update(id, name);
     }

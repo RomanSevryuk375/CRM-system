@@ -77,7 +77,7 @@ public class WorkerService : IWorkerService
         return await _workerRepository.Create(worker);
     }
 
-    public async Task<int> UpdateWorker(int id, int? userId, int? specialization, string name, string Surname, decimal? hourlyRate, string phoneNumber, string email)
+    public async Task<int> UpdateWorker(int id, int? userId, int? specialization, string? name, string? Surname, decimal? hourlyRate, string? phoneNumber, string? email)
     {
         return await _workerRepository.Update(id, userId, specialization, name, Surname, hourlyRate, phoneNumber, email);
     }

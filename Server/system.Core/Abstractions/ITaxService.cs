@@ -8,6 +8,6 @@ namespace CRMSystem.Buisnes.Services
         Task<int> GetCountTaxes();
         Task<int> CreateTax(Tax tax);
         Task<int> DeleteTax(int id);
-        Task<int> UpdateTax(int id, string name, decimal? rate, string type);
+        Task<int> UpdateTax(int id, string? name, decimal? rate, string? type);
     }
 }

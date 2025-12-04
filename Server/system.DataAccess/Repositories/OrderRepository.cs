@@ -60,7 +60,7 @@ public class OrderRepository : IOrderRepository
     {
         var orderEntities = await _context.Orders
             .AsNoTracking()
-            .Where(o => orderIds.Contains(o.Id) && (o.StatusId == 5 || o.StatusId == 7)) //not tested but if it disable it work good
+            .Where(o => orderIds.Contains(o.Id) && (o.StatusId == 6 || o.StatusId == 8 || o.StatusId == 4)) //not tested but if it disable it work good
             .ToListAsync();
 
         var orders = orderEntities
@@ -79,7 +79,7 @@ public class OrderRepository : IOrderRepository
     {
         var orderEntities = await _context.Orders
             .AsNoTracking()
-            .Where(o => orderIds.Contains(o.Id) && (o.StatusId == 5 || o.StatusId == 7)) //not tested but if it disable it work good
+            .Where(o => orderIds.Contains(o.Id) && (o.StatusId == 6 || o.StatusId == 8 || o.StatusId == 4)) //not tested but if it disable it work good
             .Skip((page - 1) * limit)
             .Take(limit)
             .ToListAsync();

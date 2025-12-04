@@ -15,6 +15,6 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> GetCountById(List<int> carIds);
         Task<int> Create(Car car);
         Task<int> Delete(int id);
-        Task<int> Update(int id, string brand, string model, int? yearOfManufacture, string vinNumber, string stateNumber, int? mileage);
+        Task<int> Update(int id, string? brand, string? model, int? yearOfManufacture, string? vinNumber, string? stateNumber, int? mileage);
     }
 }

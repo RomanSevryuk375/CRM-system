@@ -73,10 +73,10 @@ public class PaymentNoteController : ControllerBase
     {
         var (paymentNote, error) = PaymentNote.Create(
             0,
-            paymentNoteRequest.BillId,
-            paymentNoteRequest.Date,
-            paymentNoteRequest.Amount,
-            paymentNoteRequest.Method);
+            paymentNoteRequest.BillId ?? 0,
+            paymentNoteRequest.Date ?? DateTime.Now,
+            paymentNoteRequest.Amount ?? 0,
+            paymentNoteRequest.Method ?? "");
 
         if (!string.IsNullOrEmpty(error))
         {
@@ -88,7 +88,7 @@ public class PaymentNoteController : ControllerBase
         return Ok(paymentNoteId);
     }
 
-    [HttpPut("${id}")]
+    [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdatePaymentNote([FromBody] PaymentNoteRequest paymentNoteRequest, int id)
     {
@@ -102,7 +102,7 @@ public class PaymentNoteController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("${id}")]
+    [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeletePaymentNote(int id)
     {

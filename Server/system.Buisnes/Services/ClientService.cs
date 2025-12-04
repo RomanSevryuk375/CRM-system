@@ -39,7 +39,7 @@ public class ClientService : IClientService
         return await _clientsRepository.Create(client);
     }
 
-    public async Task<int> UpdateClient(int id, string name, string surname, string phoneNumber, string email)
+    public async Task<int> UpdateClient(int id, string? name, string? surname, string? phoneNumber, string? email)
     {
         return await _clientsRepository.Update(id, name, surname, phoneNumber, email);
     }

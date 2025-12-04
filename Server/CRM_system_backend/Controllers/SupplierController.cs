@@ -18,7 +18,7 @@ public class SupplierController : Controller
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<Supplier>>> GetSuppliers(
         [FromQuery(Name = "_page")] int page,
         [FromQuery(Name = "_limit")] int limit)
@@ -42,8 +42,8 @@ public class SupplierController : Controller
         var (supplier, error) = Supplier.Create
             (
             0,
-            supplierRequest.Name,
-            supplierRequest.Contacts
+            supplierRequest.Name ?? "",
+            supplierRequest.Contacts ?? ""
             );
 
         if (!string.IsNullOrEmpty(error))
@@ -56,16 +56,19 @@ public class SupplierController : Controller
         return Ok(result);
     }
 
-    [HttpPut("${id}")]
+    [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateSupplier([FromBody] SupplierRequest supplierRequest, int id)
     {
-        var result = await _supplierService.UpdateSupplier(id, supplierRequest.Name, supplierRequest.Contacts);
+        var result = await _supplierService.UpdateSupplier(
+            id,
+            supplierRequest.Name,
+            supplierRequest.Contacts);
 
         return Ok(result);
     }
 
-    [HttpDelete("${id}")]
+    [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteSupplier(int id)
     {

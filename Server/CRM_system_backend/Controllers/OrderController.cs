@@ -108,10 +108,10 @@ public class OrderController : ControllerBase
     {
         var (order, error) = Order.Create(
             0,
-            request.StatusId,
-            request.CarId,
-            request.Date,
-            request.Priority);
+            request.StatusId ?? 0,
+            request.CarId ?? 0,
+            request.Date ?? DateTime.Now,
+            request.Priority ?? "");
 
         if (!string.IsNullOrEmpty(error))
         {
@@ -123,16 +123,21 @@ public class OrderController : ControllerBase
         return Ok(orderId);
     }
 
-    [HttpPut("${id}")]
+    [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateOrder([FromBody] OrderRequest request, int id)
     {
-        var result = await _orderService.UpdateOrder(id, request.StatusId, request.CarId, request.Date, request.Priority);
+        var result = await _orderService.UpdateOrder(
+            id,
+            request.StatusId,
+            request.CarId,
+            request.Date,
+            request.Priority);
 
         return Ok(result);
     }
 
-    [HttpDelete("${id}")]
+    [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteOrder(int id)
     {

@@ -42,7 +42,7 @@ public class SpecializationController : Controller
     {
         var (specialization, error) = Specialization.Create(
             0,
-            specializationRequest.Name);
+            specializationRequest.Name ?? "");
 
         if (!string.IsNullOrEmpty(error))
         {
@@ -54,7 +54,7 @@ public class SpecializationController : Controller
         return Ok(specializationId);
     }
 
-    [HttpPut("${id}")]
+    [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateSpecialization([FromBody] SpecializationRequest specializationRequest, int id)
     {
@@ -63,7 +63,7 @@ public class SpecializationController : Controller
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteSpecialization(int id)
     {

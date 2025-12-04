@@ -2,8 +2,8 @@
 
 public record ClientUpdateRequest
 (
-    string Name,
-    string Surname,
-    string Email,
-    string PhoneNumber
+    string? Name,
+    string? Surname,
+    string? Email,
+    string? PhoneNumber
 );

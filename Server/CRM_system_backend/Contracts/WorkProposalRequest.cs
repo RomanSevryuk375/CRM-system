@@ -2,10 +2,10 @@
 
 public record WorkProposalRequest
 (
-    int OrderId,
-    int WorkId,
-    int ByWorker,
-    int StatusId,
-    int DecisionStatusId,
-    DateTime Date
+    int? OrderId,
+    int? WorkId,
+    int? ByWorker,
+    int? StatusId,
+    int? DecisionStatusId,
+    DateTime? Date
 );

@@ -47,7 +47,7 @@ public class WorkService : IWorkService
         var workerIds = worker.Select(w => w.Id).ToList();
 
         var allWorks = await _workRepository.GetPagedByWorkerId(workerIds, page, limit);
-        var inWork = allWorks.Where(i => i.StatusId == 3).ToList();
+        var inWork = allWorks.Where(i => i.StatusId == 4).ToList();
         var statuses = await _statusRepository.Get();
         var workTypes = await _workTypeRepository.Get();
         var workers = await _workerRepository.Get();
@@ -128,7 +128,7 @@ public class WorkService : IWorkService
         return await _workRepository.Create(work);
     }
 
-    public async Task<int> UpdateWork(int id, int orderId, int jobId, int workerId, decimal timeSpent, int statusId)
+    public async Task<int> UpdateWork(int id, int? orderId, int? jobId, int? workerId, decimal? timeSpent, int? statusId)
     {
         return await _workRepository.Update(id, orderId, jobId, workerId, timeSpent, statusId);
     }

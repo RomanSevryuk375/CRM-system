@@ -3,10 +3,10 @@
 public record WorkerRequest
 (
     int UserId,
-    int SpecializationId,
-    string Name,
-    string Surname,
-    decimal HourlyRate,
-    string PhoneNumber,
-    string Email
+    int? SpecializationId,
+    string? Name,
+    string? Surname,
+    decimal? HourlyRate,
+    string? PhoneNumber,
+    string? Email
 );

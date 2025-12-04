@@ -121,12 +121,12 @@ public class WorkProposalController : ControllerBase
     {
         var (workProposal, error) = WorkProposal.Create(
             0,
-            request.OrderId,
-            request.WorkId,
-            request.ByWorker,
-            request.StatusId,
-            request.DecisionStatusId,
-            request.Date);
+            request.OrderId ?? 0,
+            request.WorkId ?? 0,
+            request.ByWorker ?? 0,
+            request.StatusId ?? 0,
+            request.DecisionStatusId ?? 0,
+            request.Date ?? DateTime.Now);
 
         if (!string.IsNullOrEmpty(error))
         {

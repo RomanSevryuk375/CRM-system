@@ -9,6 +9,6 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> GetCount();
         Task<int> Create(Tax tax);
         Task<int> Delete(int id);
-        Task<int> Update(int id, string name, decimal? rate, string type);
+        Task<int> Update(int id, string? name, decimal? rate, string? type);
     }
 }

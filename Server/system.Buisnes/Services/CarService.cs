@@ -91,7 +91,7 @@ public class CarService : ICarService
         return await _carRepository.Create(car);
     }
 
-    public async Task<int> UpdateCar(int id, string brand, string model, int? yearOfManufacture, string vinNumber, string stateNumber, int? mileage)
+    public async Task<int> UpdateCar(int id, string? brand, string? model, int? yearOfManufacture, string? vinNumber, string? stateNumber, int? mileage)
     {
         return await _carRepository.Update(id, brand, model, yearOfManufacture, vinNumber, stateNumber, mileage);
     }

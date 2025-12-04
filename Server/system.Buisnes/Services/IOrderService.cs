@@ -11,7 +11,7 @@ namespace CRMSystem.Buisnes.Services
         Task<List<OrderWithInfoDto>> GetPagedUserOrders(int userId, int page, int limit);
         Task<int> GetCountUserOrders(int userId);
         Task<List<OrderWithInfoDto>> GetWorkerOrders(int userId);
-        Task<int> UpdateOrder(int id, int statusId, int carId, DateTime date, string priority);
+        Task<int> UpdateOrder(int id, int? statusId, int? carId, DateTime? date, string? priority);
         Task<int> CreateOrder(Order order);
         Task<int> DeleteOrder(int id);
     }

@@ -14,7 +14,7 @@ namespace CRMSystem.DataAccess.Repositories
         Task<List<Order>> GetByCarId(int carIds);
         Task<List<Order>> GetPagedByCarId(List<int> carIds, int page, int limit);
         Task<int> GetCountByCarId(List<int> carIds);
-        Task<int> Update(int id, int? statusId, int? carId, DateTime? date, string priority);
+        Task<int> Update(int id, int? statusId, int? carId, DateTime? date, string? priority);
         Task<int> Create(Order order);
         Task<int> Delete(int id);
     }

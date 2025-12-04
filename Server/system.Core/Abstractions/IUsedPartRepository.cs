@@ -12,6 +12,6 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> GetCountByOrderId(List<int> orderIds);
         Task<int> Create(UsedPart usedPart);
         Task<int> Delete(int id);
-        Task<int> Update(int id, int? orderId, int? supplierId, string name, string article, decimal? quantity, decimal? unitPrice, decimal? sum);
+        Task<int> Update(int id, int? orderId, int? supplierId, string? name, string? article, decimal? quantity, decimal? unitPrice, decimal? sum);
     }
 }

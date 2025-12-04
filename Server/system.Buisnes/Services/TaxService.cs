@@ -27,7 +27,7 @@ public class TaxService : ITaxService
         return await _taxRepository.Create(tax);
     }
 
-    public async Task<int> UpdateTax(int id, string name, decimal? rate, string type)
+    public async Task<int> UpdateTax(int id, string? name, decimal? rate, string? type)
     {
         return await _taxRepository.Update(id, name, rate, type);
     }

@@ -42,9 +42,9 @@ public class TaxController : ControllerBase
     {
         var (tax, error) = Tax.Create(
             0,
-            taxRequest.Name,
-            taxRequest.Rate,
-            taxRequest.Type);
+            taxRequest.Name ?? "",
+            taxRequest.Rate ?? 0,
+            taxRequest.Type ?? "");
 
         if (!string.IsNullOrEmpty(error))
         {
@@ -56,16 +56,20 @@ public class TaxController : ControllerBase
         return Ok(taxId);
     }
 
-    [HttpPut("${id}")]
+    [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateTax([FromBody] TaxRequest taxRequest, int id)
     {
-        var result = await _taxService.UpdateTax(id, taxRequest.Name, taxRequest.Rate, taxRequest.Type);
+        var result = await _taxService.UpdateTax(
+            id,
+            taxRequest.Name, 
+            taxRequest.Rate, 
+            taxRequest.Type);
 
         return Ok(result);
     }
 
-    [HttpDelete("${id}")]
+    [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteTax(int id)
     {

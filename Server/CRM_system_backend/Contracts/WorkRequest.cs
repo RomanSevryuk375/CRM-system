@@ -2,9 +2,9 @@
 
 public record WorkRequest
 (
-    int OrderId,
-    int JobId,
-    int WorkerId,
-    decimal TimeSpent,
-    int StatusId
+    int? OrderId,
+    int? JobId,
+    int? WorkerId,
+    decimal? TimeSpent,
+    int? StatusId
 );

@@ -116,11 +116,11 @@ public class WorkController : ControllerBase
     {
         var (work, error) = Work.Create(
             0,
-            request.OrderId,
-            request.JobId,
-            request.WorkerId,
-            request.TimeSpent,
-            request.StatusId);
+            request.OrderId ?? 0,
+            request.JobId ?? 0,
+            request.WorkerId ?? 0,
+            request.TimeSpent ?? 0m,
+            request.StatusId ?? 0);
 
         if (!string.IsNullOrEmpty(error))
         {
@@ -132,8 +132,8 @@ public class WorkController : ControllerBase
         return Ok(workId);
     }
 
-    [HttpPut("${id}")]
-    [Authorize(Policy = "AdminPolicy")]
+    [HttpPut("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<int>> UpdateWork([FromBody] WorkRequest request, int id)
     {
         var result = await _workService.UpdateWork(

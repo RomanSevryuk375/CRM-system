@@ -124,7 +124,7 @@ public class OrderService : IOrderService
         return await _orderRepository.Create(order);
     }
 
-    public async Task<int> UpdateOrder(int id, int statusId, int carId, DateTime date, string priority)
+    public async Task<int> UpdateOrder(int id, int? statusId, int? carId, DateTime? date, string? priority)
     {
         return await _orderRepository.Update(id, statusId, carId, date, priority);
     }

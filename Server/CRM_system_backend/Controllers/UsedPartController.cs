@@ -103,12 +103,12 @@ public class UsedPartController : ControllerBase
     {
         var (usedPart, error) = UsedPart.Create(
             0,
-            request.OrderId,
-            request.SupplierId,
-            request.Name,
-            request.Article,
-            request.Quantity,
-            request.UnitPrice,
+            request.OrderId ?? 0,
+            request.SupplierId ?? 0,
+            request.Name ?? "",
+            request.Article ?? "",
+            request.Quantity ?? 0,
+            request.UnitPrice ?? 0,
             0);
 
         if (!string.IsNullOrEmpty(error))
@@ -121,7 +121,7 @@ public class UsedPartController : ControllerBase
         return Ok(usedPartId);
     }
 
-    [HttpPut("${id}")]
+    [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateUsedPart([FromBody] UsedPartRequest request, int id)
     {
@@ -138,7 +138,7 @@ public class UsedPartController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("${id}")]
+    [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteUsedPart(int id)
     {

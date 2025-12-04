@@ -12,5 +12,5 @@ public interface IWorkerRepository
     Task<int> GetCountWorkerByUserId(int userId);
     Task<int> Create(Worker worker);
     Task<int> Delete(int id);
-    Task<int> Update(int id, int? userId, int? specialization, string name, string Surname, decimal? hourlyRate, string phoneNumber, string email);
+    Task<int> Update(int id, int? userId, int? specialization, string? name, string? Surname, decimal? hourlyRate, string? phoneNumber, string? email);
 }

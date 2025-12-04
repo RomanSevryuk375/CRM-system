@@ -2,10 +2,10 @@
 
 public record CarUpdateRequest
 (
-    string Brand,
-    string Model,
-    int YearOfManufacture,
-    string VinNumber,
-    string StateNumber,
-    int Mileage
+    string? Brand,
+    string? Model,
+    int? YearOfManufacture,
+    string? VinNumber,
+    string? StateNumber,
+    int? Mileage
 );

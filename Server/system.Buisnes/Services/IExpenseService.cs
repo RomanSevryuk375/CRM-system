@@ -11,6 +11,6 @@ namespace CRMSystem.Buisnes.Services
         Task<List<ExpensesWitInfoDto>> GetExpensesWithInfo();
         Task<List<ExpensesWitInfoDto>> GetPagedExpensesWithInfo(int page, int limit);
         Task<int> GetCountExpense();
-        Task<int> UpdateExpense(int id, DateTime date, string category, int? taxId, int? usedPartId, string expenseType, decimal sum);
+        Task<int> UpdateExpense(int id, DateTime? date, string? category, int? taxId, int? usedPartId, string? expenseType, decimal? sum);
     }
 }

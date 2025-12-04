@@ -2,7 +2,7 @@
 
 public record TaxRequest
 (
-    string Name,
-    decimal Rate,
-    string Type
+    string? Name,
+    decimal? Rate,
+    string? Type
 );

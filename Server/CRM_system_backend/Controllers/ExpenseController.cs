@@ -69,12 +69,12 @@ public class ExpenseController : ControllerBase
     {
         var (expense, error) = Expense.Create(
             0,
-            request.Date,
-            request.Category,
+            request.Date ?? DateTime.Now,
+            request.Category ?? "",
             request.TaxId,
             request.UsedPartId,
-            request.ExpenseType,
-            request.Sum);
+            request.ExpenseType ?? "",
+            request.Sum ?? 0);
 
         if (!string.IsNullOrEmpty(error))
         {
@@ -86,7 +86,7 @@ public class ExpenseController : ControllerBase
         return Ok(expenseId);
     }
 
-    [HttpPut("${id}")]
+    [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateExpense([FromBody] ExpenseRequest request, int id)
     {
@@ -102,7 +102,7 @@ public class ExpenseController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("${id}")]
+    [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteExpense(int id)
     {

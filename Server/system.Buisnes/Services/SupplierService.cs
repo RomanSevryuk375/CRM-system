@@ -27,7 +27,7 @@ public class SupplierService : ISupplierService
         return await _supplierRepository.Create(supplier);
     }
 
-    public async Task<int> UpdateSupplier(int id, string name, string contacts)
+    public async Task<int> UpdateSupplier(int id, string? name, string? contacts)
     {
         return await _supplierRepository.Update(id, name, contacts);
     }
