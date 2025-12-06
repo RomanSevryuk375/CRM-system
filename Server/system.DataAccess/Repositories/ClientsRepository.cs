@@ -22,12 +22,12 @@ public class ClientsRepository : IClientsRepository
 
         var clients = clientEntities
             .Select(c => Client.Create(
-                c.ClientId,
-                c.ClientUserId,
-                c.ClientName,
-                c.ClientSurname,
-                c.ClientPhoneNumber,
-                c.ClientEmail).client)
+                c.Id,
+                c.UserId,
+                c.Name,
+                c.Surname,
+                c.PhoneNumber,
+                c.Email).client)
             .ToList();
 
         return clients;
@@ -43,12 +43,12 @@ public class ClientsRepository : IClientsRepository
 
         var clients = clientEntities
             .Select(c => Client.Create(
-                c.ClientId,
-                c.ClientUserId,
-                c.ClientName,
-                c.ClientSurname,
-                c.ClientPhoneNumber,
-                c.ClientEmail).client)
+                c.Id,
+                c.UserId,
+                c.Name,
+                c.Surname,
+                c.PhoneNumber,
+                c.Email).client)
             .ToList();
 
         return clients;
@@ -62,18 +62,18 @@ public class ClientsRepository : IClientsRepository
     public async Task<List<Client>> GetClientByUserId(int userId)
     {
         var clientEntities = await _context.Clients
-            .Where(c => c.ClientUserId == userId)
+            .Where(c => c.UserId == userId)
             .AsNoTracking()
             .ToListAsync();
 
         var clients = clientEntities
             .Select(c => Client.Create(
-                c.ClientId,
-                c.ClientUserId,
-                c.ClientName,
-                c.ClientSurname,
-                c.ClientPhoneNumber,
-                c.ClientEmail).client)
+                c.Id,
+                c.UserId,
+                c.Name,
+                c.Surname,
+                c.PhoneNumber,
+                c.Email).client)
             .ToList();
 
         return clients;
@@ -94,45 +94,45 @@ public class ClientsRepository : IClientsRepository
 
         var clientEntities = new ClientEntity
         {
-            ClientUserId = client.UserId,
-            ClientName = client.Name,
-            ClientSurname = client.Surname,
-            ClientPhoneNumber = client.PhoneNumber,
-            ClientEmail = client.Email
+            UserId = client.UserId,
+            Name = client.Name,
+            Surname = client.Surname,
+            PhoneNumber = client.PhoneNumber,
+            Email = client.Email
         };
 
         await _context.Clients.AddAsync(clientEntities);
         await _context.SaveChangesAsync();
 
-        return clientEntities.ClientId;
+        return clientEntities.Id;
     }
 
     public async Task<int> Update(int id, string? name, string? surname, string? phoneNumber, string? email)
     {
-        var client = await _context.Clients.FirstOrDefaultAsync(c => c.ClientId == id)
+        var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == id)
             ?? throw new Exception("Client not found");
 
         if (!string.IsNullOrWhiteSpace(name))
-            client.ClientName = name;
+            client.Name = name;
 
         if (!string.IsNullOrWhiteSpace(surname))
-            client.ClientSurname = surname;
+            client.Surname = surname;
 
         if (!string.IsNullOrWhiteSpace(phoneNumber))
-            client.ClientPhoneNumber = phoneNumber;
+            client.PhoneNumber = phoneNumber;
 
         if (!string.IsNullOrWhiteSpace(email))
-            client.ClientEmail = email;
+            client.Email = email;
 
         await _context.SaveChangesAsync();
 
-        return client.ClientId;
+        return client.Id;
     }
 
     public async Task<int> Delete(int id)
     {
         var clientEntity = await _context.Clients
-            .Where(c => c.ClientId == id)
+            .Where(c => c.Id == id)
             .ExecuteDeleteAsync();
 
         return id;

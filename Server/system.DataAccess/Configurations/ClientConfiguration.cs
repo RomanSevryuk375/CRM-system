@@ -11,40 +11,40 @@ public class ClientConfiguration : IEntityTypeConfiguration<ClientEntity>
     {
         builder.ToTable("clients");
 
-        builder.HasKey(x => x.ClientId);
+        builder.HasKey(x => x.Id);
 
-        builder.Property(c => c.ClientId)
+        builder.Property(c => c.Id)
             .HasColumnName("client_id")
             .ValueGeneratedOnAdd()
             .IsRequired();
 
-        builder.Property(c => c.ClientUserId)
+        builder.Property(c => c.UserId)
             .HasColumnName("client_user_id")
             .IsRequired();
 
-        builder.Property(c => c.ClientName)
+        builder.Property(c => c.Name)
             .HasColumnName("client_name")
             .HasMaxLength(Client.MAX_NAME_LENGTH)
             .IsRequired();
 
-        builder.Property(c => c.ClientSurname)
+        builder.Property(c => c.Surname)
             .HasColumnName("client_surname")
             .HasMaxLength(Client.MAX_SURNAME_LENGTH)
             .IsRequired();
 
-        builder.Property(c => c.ClientPhoneNumber)
+        builder.Property(c => c.PhoneNumber)
             .HasColumnName("client_phone_number")
             .HasMaxLength(Client.MAX_PHONE_NUMBER_LENGTH)
             .IsRequired();
 
-        builder.Property(c => c.ClientEmail)
+        builder.Property(c => c.Email)
             .HasColumnName("client_email")
             .HasMaxLength(Client.MAX_EMAIL_LENGTH)
             .IsRequired(false);
 
         builder.HasOne(c => c.User)
            .WithOne(u => u.Client)
-           .HasForeignKey<ClientEntity>(c => c.ClientUserId)
+           .HasForeignKey<ClientEntity>(c => c.UserId)
            .OnDelete(DeleteBehavior.Restrict);
     }
 }

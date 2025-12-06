@@ -24,7 +24,7 @@ public class BillConfiguration : IEntityTypeConfiguration<BillEntity>
             .HasColumnName("bill_status_id")
             .IsRequired();
 
-        builder.Property(b => b.Date)
+        builder.Property(b => b.CreateAt)
             .HasColumnName("bill_date")
             .IsRequired();
 

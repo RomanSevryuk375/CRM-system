@@ -4,19 +4,19 @@ namespace CRMSystem.DataAccess.Entites;
 
 public class BillEntity
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     public int StatusId { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateTime CreateAt { get; set; }
 
     public decimal Amount { get; set; }
 
-    public DateTime? ActualBillDate { get; set; }
+    public DateOnly? ActualBillDate { get; set; }
 
-    [NotMapped] public DateTime LastBillDate => Date.AddDays(14);
+    [NotMapped] public DateTime LastBillDate => CreateAt.AddDays(14);
 
     public StatusEntity? Status { get; set; }
 

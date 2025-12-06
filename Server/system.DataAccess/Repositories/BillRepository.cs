@@ -24,7 +24,7 @@ public class BillRepository : IBillRepository
                 b.Id,
                 b.OrderId,
                 b.StatusId,
-                b.Date,
+                b.CreateAt,
                 b.Amount,
                 b.ActualBillDate).bill)
             .ToList();
@@ -45,7 +45,7 @@ public class BillRepository : IBillRepository
                 b.Id,
                 b.OrderId,
                 b.StatusId,
-                b.Date,
+                b.CreateAt,
                 b.Amount,
                 b.ActualBillDate).bill)
             .ToList();
@@ -123,7 +123,7 @@ public class BillRepository : IBillRepository
             Id = bill.Id,
             OrderId = bill.OrderId,
             StatusId = bill.StatusId,
-            Date = bill.Date,
+            CreateAt = bill.Date,
             Amount = bill.Amount,
             ActualBillDate = bill.ActualBillDate,
         };

@@ -18,7 +18,6 @@ public class OrderEntity
 
     public ICollection<WorkEntity> Works { get; set; } = new HashSet<WorkEntity>();
 
-
     public ICollection<WorkProposalEntity> WorkProposals { get; set; }  = new HashSet<WorkProposalEntity>();
 
     public ICollection<BillEntity> Bills { get; set; } = new List<BillEntity>();

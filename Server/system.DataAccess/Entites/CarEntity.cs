@@ -2,9 +2,11 @@
 
 public class CarEntity
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
 
-    public int OwnerId { get; set; }
+    public long OwnerId { get; set; }
+
+    public int StatusId { get; set; }
 
     public string Brand { get; set; } = string.Empty;
 
