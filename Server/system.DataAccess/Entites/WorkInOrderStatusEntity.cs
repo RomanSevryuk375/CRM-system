@@ -1,9 +1,9 @@
 ﻿namespace CRMSystem.DataAccess.Entites;
 
-public class SpecializationEntity
+public class WorkInOrderStatusEntity
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
 
-    public ICollection<SkillEntity> SkillEntities { get; set; } = new HashSet<SkillEntity>();
+    public ICollection<WorkEntity> Works { get; set; } = new HashSet<WorkEntity>();
 }

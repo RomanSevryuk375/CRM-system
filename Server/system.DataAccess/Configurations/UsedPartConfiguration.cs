@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CRMSystem.DataAccess.Configurations;
 
-public class UsedPartConfiguration : IEntityTypeConfiguration<UsedPartEntity>
+public class UsedPartConfiguration : IEntityTypeConfiguration<PartSetEntity>
 {
-    void IEntityTypeConfiguration<UsedPartEntity>.Configure(EntityTypeBuilder<UsedPartEntity> builder)
+    void IEntityTypeConfiguration<PartSetEntity>.Configure(EntityTypeBuilder<PartSetEntity> builder)
     {
         builder.ToTable("used_parts");
 

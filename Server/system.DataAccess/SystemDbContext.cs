@@ -23,12 +23,12 @@ public class SystemDbContext : DbContext
     public DbSet<StatusEntity> Statuses { get; set; }
     public DbSet<SupplierEntity> Suppliers { get; set; }
     public DbSet<TaxEntity> Taxes { get; set; }
-    public DbSet<UsedPartEntity> UsedParts { get; set; }
+    public DbSet<PartSetEntity> UsedParts { get; set; }
     public DbSet<UserEntity> Users { get; set; }
-    public DbSet<WorkEntity> Works { get; set; }
+    public DbSet<WorkInOrderEntity> Works { get; set; }
     public DbSet<WorkerEntity> Workers { get; set; }
     public DbSet<WorkProposalEntity> WorkProposals { get; set; }
-    public DbSet<WorkTypeEntity> WorkTypes { get; set; }
+    public DbSet<WorkEntity> WorkTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

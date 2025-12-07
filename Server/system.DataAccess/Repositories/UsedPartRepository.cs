@@ -128,7 +128,7 @@ public class UsedPartRepository : IUsedPartRepository
         if (!string.IsNullOrEmpty(error))
             throw new ArgumentException($"Create exception Used part: {error}");
 
-        var usedPartEntity = new UsedPartEntity
+        var usedPartEntity = new PartSetEntity
         {
             OrderId = usedPart.OrderId,
             SupplierId = usedPart.SupplierId,

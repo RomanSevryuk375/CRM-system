@@ -48,7 +48,7 @@ public class WorkTypeRepository : IWorkTypeRepository
         if (!string.IsNullOrEmpty(error))
             throw new ArgumentException($"Create exception WorkType: {error}");
 
-        var workEntities = new WorkTypeEntity
+        var workEntities = new Entites.WorkEntity
         {
             Title = workType.Title,
             Category = workType.Category,

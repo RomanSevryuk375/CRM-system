@@ -1,8 +1,9 @@
 ﻿namespace CRMSystem.DataAccess.Entites;
 
-public class PartCategory
+public class BillStatusEntity
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
+
+    public ICollection<BillEntity> Bills { get; set; } = new List<BillEntity>();
 }

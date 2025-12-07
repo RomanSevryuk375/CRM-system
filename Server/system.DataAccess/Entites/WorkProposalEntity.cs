@@ -2,28 +2,16 @@
 
 public class WorkProposalEntity
 {
-    public int Id { get; set; }
-
-    public int OrderId { get; set; }
-
-    public int WorkId { get; set; }
-
+    public long Id { get; set; }
+    public long OrderId { get; set; }
+    public long JobId { get; set; }
     public int ByWorker { get; set; }
-
     public int StatusId { get; set; }
-
-    public int DecisionStatusId { get; set; }
-
     public DateTime Date { get; set; }
 
     public OrderEntity? Order { get; set; }
-
-    public WorkTypeEntity? WorkType { get; set; }
-
+    public WorkEntity? Work { get; set; }
     public WorkerEntity? Worker { get; set; }
-
-    public StatusEntity? Status { get; set; } 
-
-    public ICollection<ProposedPartEntity> ProposedParts { get; set; } = new List<ProposedPartEntity>();
-
+    public WorkProposalStatusEntity? Status { get; set; } 
+    public PartSetEntity? PartSet { get; set; }
 }

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CRMSystem.DataAccess.Configurations;
 
-public class WorkTypeConfiguration : IEntityTypeConfiguration<WorkTypeEntity>
+public class WorkTypeConfiguration : IEntityTypeConfiguration<WorkEntity>
 {
-    void IEntityTypeConfiguration<WorkTypeEntity>.Configure(EntityTypeBuilder<WorkTypeEntity> builder)
+    void IEntityTypeConfiguration<WorkEntity>.Configure(EntityTypeBuilder<WorkEntity> builder)
     {
         builder.ToTable("catalog_of_works");
 

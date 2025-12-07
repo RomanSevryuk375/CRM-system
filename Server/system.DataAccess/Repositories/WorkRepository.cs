@@ -138,7 +138,7 @@ public class WorkRepository : IWorkRepository
         if (!string.IsNullOrEmpty(error))
             throw new ArgumentException($"Create exception Work: {error}");
 
-        var workEntity = new WorkEntity
+        var workEntity = new WorkInOrderEntity
         {
             OrderId = work.OrderId,
             JobId = work.JobId,

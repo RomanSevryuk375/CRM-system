@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CRMSystem.DataAccess.Configurations;
 
-public class WorkConfiguration : IEntityTypeConfiguration<WorkEntity>
+public class WorkConfiguration : IEntityTypeConfiguration<WorkInOrderEntity>
 {
-    void IEntityTypeConfiguration<WorkEntity>.Configure(EntityTypeBuilder<WorkEntity> builder)
+    void IEntityTypeConfiguration<WorkInOrderEntity>.Configure(EntityTypeBuilder<WorkInOrderEntity> builder)
     {
         builder.ToTable("work_in_order");
 
