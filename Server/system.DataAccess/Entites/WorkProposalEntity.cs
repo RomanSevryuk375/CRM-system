@@ -5,7 +5,7 @@ public class WorkProposalEntity
     public long Id { get; set; }
     public long OrderId { get; set; }
     public long JobId { get; set; }
-    public int ByWorker { get; set; }
+    public int WorkerId { get; set; }
     public int StatusId { get; set; }
     public DateTime Date { get; set; }
 

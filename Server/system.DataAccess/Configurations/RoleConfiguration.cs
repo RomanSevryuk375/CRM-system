@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Enums;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,16 +9,31 @@ public class RoleConfiguration : IEntityTypeConfiguration<RoleEntity>
 {
     void IEntityTypeConfiguration<RoleEntity>.Configure(EntityTypeBuilder<RoleEntity> builder)
     {
+
         builder.ToTable("roles");
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(r => r.Id)
-            .HasColumnName("role_id")
+        builder.Property(r => r.Name)
+            .HasMaxLength(128)
             .IsRequired();
 
-        builder.Property(r => r.Name)
-            .HasColumnName("role_name")
-            .IsRequired();
+        builder.HasData(
+            new RoleEntity
+            {
+                Id = (int)RoleEnum.Manager,
+                Name = "Менеджер"
+            },
+            new RoleEntity
+            {
+                Id = (int)RoleEnum.Client,
+                Name = "Клиент"
+            },
+            new RoleEntity
+            {
+                Id = (int)RoleEnum.Worker,
+                Name = "Работник"
+            });
+
     }
 }

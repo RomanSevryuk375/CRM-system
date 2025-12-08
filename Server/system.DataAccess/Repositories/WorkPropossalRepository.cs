@@ -24,7 +24,7 @@ public class WorkPropossalRepository : IWorkPropossalRepository
                 wp.Id,
                 wp.OrderId,
                 wp.WorkId,
-                wp.ByWorker,
+                wp.WorkerId,
                 wp.StatusId,
                 wp.DecisionStatusId,
                 wp.Date).workPropossal)
@@ -46,7 +46,7 @@ public class WorkPropossalRepository : IWorkPropossalRepository
                 wp.Id,
                 wp.OrderId,
                 wp.WorkId,
-                wp.ByWorker,
+                wp.WorkerId,
                 wp.StatusId,
                 wp.DecisionStatusId,
                 wp.Date).workPropossal)
@@ -127,7 +127,7 @@ public class WorkPropossalRepository : IWorkPropossalRepository
         {
             OrderId = workProposal.OrderId,
             WorkId = workProposal.WorkId,
-            ByWorker = workProposal.ByWorker,
+            WorkerId = workProposal.ByWorker,
             StatusId = workProposal.StatusId,
             DecisionStatusId = workProposal.DecisionStatusId,
             Date = workProposal.Date
@@ -149,7 +149,7 @@ public class WorkPropossalRepository : IWorkPropossalRepository
         if (workId.HasValue)
             workProposal.WorkId = workId.Value;
         if (byWorker.HasValue)
-            workProposal.ByWorker = byWorker.Value;
+            workProposal.WorkerId = byWorker.Value;
         if (statusId.HasValue)
             workProposal.StatusId = statusId.Value;
         if (decisionStatusId.HasValue)

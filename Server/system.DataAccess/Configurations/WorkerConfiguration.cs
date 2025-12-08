@@ -12,36 +12,27 @@ public class WorkerConfiguration : IEntityTypeConfiguration<WorkerEntity>
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(wo => wo.Id)
-            .HasColumnName("worker_id")
-            .IsRequired();
-
-        builder.Property(wo => wo.UserId)
-            .HasColumnName("worker_user_id")
-            .IsRequired();
-
-        builder.Property(wo => wo.SpecializationId)
-            .HasColumnName("worker_specialization_id")
+        builder.Property(wo => wo.UserId)          
             .IsRequired();
 
         builder.Property(wo => wo.Name)
-            .HasColumnName("worker_name")
+            .HasMaxLength(128)
             .IsRequired();
 
         builder.Property(wo => wo.Surname)
-            .HasColumnName("worker_surname")
+            .HasMaxLength(128)
             .IsRequired();
 
         builder.Property(wo => wo.HourlyRate)
-            .HasColumnName("worker_hourly_rate")
+            .HasColumnType("decimal (8, 2)")
             .IsRequired();
 
         builder.Property(wo => wo.PhoneNumber)
-            .HasColumnName("worker_phone")
+            .HasMaxLength(32)
             .IsRequired();
 
         builder.Property(wo => wo.Email)
-            .HasColumnName("worker_email")
+            .HasMaxLength(256)
             .IsRequired();
 
         builder.HasOne(u => u.User)
@@ -49,9 +40,5 @@ public class WorkerConfiguration : IEntityTypeConfiguration<WorkerEntity>
             .HasForeignKey<WorkerEntity>(w => w.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(s => s.Specialization)
-            .WithMany(wo => wo.Workers)
-            .HasForeignKey(wo => wo.SpecializationId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -10,6 +10,6 @@ public class ClientEntity
     public string Email { get; set; } = string.Empty;
 
     public UserEntity? User { get; set; }
-    public ICollection<CarEntity> Cars { get; set; } = new List<CarEntity>();
-    public ICollection<NotificationEntity> Notiffications { get; set; } = new List<NotificationEntity>();
+    public ICollection<CarEntity> Cars { get; set; } = new HashSet<CarEntity>();
+    public ICollection<NotificationEntity> Notifications { get; set; } = new HashSet<NotificationEntity>();
 }

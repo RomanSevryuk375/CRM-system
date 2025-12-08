@@ -13,23 +13,16 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(u => u.Id)
-            .HasColumnName("user_id")
-            .ValueGeneratedOnAdd()
-            .IsRequired();
-
         builder.Property(u => u.RoleId)
-            .HasColumnName("user_role_id")
+            .HasMaxLength(64)
             .IsRequired();
 
         builder.Property(u => u.Login)
-            .HasColumnName("user_login")
-            .HasMaxLength(User.MAX_LOGIN_LENGTH)
+            .HasMaxLength(128)
             .IsRequired();
 
         builder.Property(u => u.PasswordHash)
-            .HasColumnName ("user_password_hash")
-            .HasMaxLength (User.MAX_PASSWORD_LENGTH)
+            .HasMaxLength (256)
             .IsRequired();
 
         builder.HasOne(u => u.Role)

@@ -8,20 +8,18 @@ public class SupplierConfiguration : IEntityTypeConfiguration<SupplierEntity>
 {
     void IEntityTypeConfiguration<SupplierEntity>.Configure(EntityTypeBuilder<SupplierEntity> builder)
     {
+
         builder.ToTable("suppliers");
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(su =>su.Id)
-            .HasColumnName("supplier_id")
-            .IsRequired();
-
         builder.Property(su =>su.Name) 
-            .HasColumnName ("supplier_name")
+            .HasMaxLength(128)
             .IsRequired();
 
         builder.Property(su => su.Contacts)
-            .HasColumnName("supplier_contacts")
+            .HasMaxLength(256)
             .IsRequired();
+
     }
 }

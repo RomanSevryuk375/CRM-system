@@ -11,6 +11,6 @@ public class PositionEntity
 
     public StorageCellEntity? StorageCell { get; set; }
     public PartEntity? Part { get; set; }
-    public ICollection<SupplyEntity> Supplies { get; set; } = new HashSet<SupplyEntity>();
-    public ICollection<PartSetEntity> partSets { get; set; } = new List<PartSetEntity>();
+    public ICollection<SupplySetEntity> SupplySets { get; set; } = new HashSet<SupplySetEntity>();
+    public ICollection<PartSetEntity> PartSets { get; set; } = new HashSet<PartSetEntity>();
 }

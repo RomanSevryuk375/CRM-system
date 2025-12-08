@@ -7,6 +7,6 @@ public class TaxEntity
     public decimal Rate { get; set; }
     public string Type { get; set; } = string.Empty;
 
-    public ICollection<ExpenseEntity> Expenses { get; set; } = new List<ExpenseEntity>();
+    public ICollection<ExpenseEntity> Expenses { get; set; } = new HashSet<ExpenseEntity>();
 
 }

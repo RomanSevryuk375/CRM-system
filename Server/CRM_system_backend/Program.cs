@@ -41,7 +41,8 @@ public class Program
 
         builder.Services.AddDbContext<SystemDbContext>(options =>
         {
-            options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(SystemDbContext)));
+            options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(SystemDbContext)))
+                   .UseSnakeCaseNamingConvention();
         });
 
         builder.Services.AddScoped<IOrderService, OrderService>();

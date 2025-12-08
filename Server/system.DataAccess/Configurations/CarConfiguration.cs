@@ -9,47 +9,48 @@ public class CarConfiguration : IEntityTypeConfiguration<CarEntity>
 {
     void IEntityTypeConfiguration<CarEntity>.Configure(EntityTypeBuilder<CarEntity> builder)
     {
+
         builder.ToTable("cars");
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(c => c.Id)
-            .HasColumnName("car_id")
+        builder.Property(c => c.OwnerId)
             .IsRequired();
 
-        builder.Property(c => c.OwnerId)
-            .HasColumnName("car_owner_id")
+        builder.Property(c => c.StatusId)
             .IsRequired();
 
         builder.Property(c => c.Brand)
-            .HasColumnName("car_brand")
-            .HasMaxLength(Car.MAX_BRAND_LENGTH)
+            .HasMaxLength(128)
             .IsRequired();
 
         builder.Property(c => c.Model)
-            .HasColumnName("car_model")
-            .HasMaxLength(Car.MAX_MODEL_LENGTH)
+            .HasMaxLength(256)
             .IsRequired();
 
         builder.Property(c => c.YearOfManufacture)
-            .HasColumnName("car_year_of_manufacture")
             .IsRequired();
 
         builder.Property(c => c.VinNumber)
-            .HasColumnName("car_vin_number")
+            .HasMaxLength(17)
             .IsRequired();
 
         builder.Property(c => c.StateNumber)
-            .HasColumnName("car_state_number")
+            .HasMaxLength(15)
             .IsRequired();
 
         builder.Property(c => c.Mileage)
-            .HasColumnName("car_milage")
             .IsRequired();
 
         builder.HasOne(c => c.Client)
-            .WithMany(client => client.Cars)
+            .WithMany(cl => cl.Cars)
             .HasForeignKey(c => c.OwnerId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(c => c.Status)
+            .WithMany(s => s.Cars)
+            .HasForeignKey(c => c.StatusId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

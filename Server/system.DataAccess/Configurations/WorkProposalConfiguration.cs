@@ -12,32 +12,23 @@ public class WorkProposalConfiguration : IEntityTypeConfiguration<WorkProposalEn
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(wp => wp.Id)
-            .HasColumnName("proposal_id")
-            .IsRequired();
-
         builder.Property(wp => wp.OrderId)
-            .HasColumnName("order_id")
             .IsRequired();
 
-        builder.Property(wp => wp.WorkId)
-            .HasColumnName("proposed_work_id")
+        builder.Property(wp => wp.JobId)
             .IsRequired();
 
-        builder.Property(wp => wp.ByWorker)
-            .HasColumnName("proposed_by_worker_id")
+        builder.Property(wp => wp.WorkerId)
             .IsRequired();
 
         builder.Property(wp => wp.StatusId)
-            .HasColumnName("proposal_status")
-            .IsRequired();
-
-        builder.Property(wp => wp.DecisionStatusId)
-            .HasColumnName("client_decision")
             .IsRequired();
 
         builder.Property(wp => wp.Date)
-            .HasColumnName("proposed_at")
+            .HasConversion(
+                v => v.ToUniversalTime(),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+                )
             .IsRequired();
 
         builder.HasOne(o => o.Order)
@@ -45,19 +36,20 @@ public class WorkProposalConfiguration : IEntityTypeConfiguration<WorkProposalEn
             .HasForeignKey(o => o.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(w => w.WorkType)
+        builder.HasOne(w => w.Work)
             .WithMany(wp => wp.WorkProposals)
-            .HasForeignKey(wp => wp.WorkId)
+            .HasForeignKey(wp => wp.JobId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(w => w.Worker)
             .WithMany(wp => wp.WorkProposals)
-            .HasForeignKey(wp => wp.ByWorker)
+            .HasForeignKey(wp => wp.WorkerId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(s => s.Status)
-            .WithMany(wp => wp.WorkProposals)
-            .HasForeignKey(wp => wp.DecisionStatusId)
+            .WithMany(wp => wp.Proposals)
+            .HasForeignKey(wp => wp.StatusId)
             .OnDelete(DeleteBehavior.Cascade);
+
     }
 }

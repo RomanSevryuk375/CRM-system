@@ -8,6 +8,6 @@ public class WorkEntity
     public string Description { get; set; } = string.Empty;
     public decimal StandardTime { get; set; }
 
-    public ICollection<WorkInOrderEntity> WorksInOrder { get; set; } = new List<WorkInOrderEntity>();
-    public ICollection<WorkProposalEntity> WorkProposals { get; set; } = new List<WorkProposalEntity>(); 
+    public ICollection<WorkInOrderEntity> WorksInOrder { get; set; } = new HashSet<WorkInOrderEntity>();
+    public ICollection<WorkProposalEntity> WorkProposals { get; set; } = new HashSet<WorkProposalEntity>(); 
 }

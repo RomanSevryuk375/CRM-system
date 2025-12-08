@@ -9,7 +9,7 @@ public class WorkInOrderEntity
     public decimal TimeSpent { get; set; }
     public int StatusId { get; set; }
 
-    public WorkEntity? WorkType { get; set; }
+    public WorkEntity? Work { get; set; }
     public OrderEntity? Order { get; set; }
     public WorkProposalEntity? WorkProposal { get; set; }
     public WorkerEntity? Worker { get; set; }

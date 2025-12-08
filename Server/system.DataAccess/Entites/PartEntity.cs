@@ -13,5 +13,5 @@ public class PartEntity
     public string Applicability { get; set; } = string.Empty;
 
     public PartCategoryEntity? PartCategory { get; set; }
-    public ICollection<PositionEntity> Positions { get; set; } = new List<PositionEntity>();
+    public ICollection<PositionEntity> Positions { get; set; } = new HashSet<PositionEntity>();
 }

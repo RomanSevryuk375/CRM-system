@@ -8,28 +8,22 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
 {
     void IEntityTypeConfiguration<OrderEntity>.Configure(EntityTypeBuilder<OrderEntity> builder)
     {
+
         builder.ToTable("work_orders");
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(o => o.Id)
-            .HasColumnName("work_order_id")
-            .IsRequired();
-
         builder.Property(o => o.StatusId)
-            .HasColumnName("work_order_status_id")
             .IsRequired();
 
         builder.Property(o => o.CarId)
-            .HasColumnName("work_order_car_id")
             .IsRequired();
 
         builder.Property(o => o.Date)
-            .HasColumnName("work_order_creation_date")
             .IsRequired();
 
         builder.Property(o => o.Priority)
-            .HasColumnName("work_order_priority")
+            .HasMaxLength(10)
             .IsRequired();
 
         builder.HasOne(o => o.Car)
@@ -41,5 +35,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
             .WithMany(s => s.Orders)
             .HasForeignKey(o => o.StatusId)
             .OnDelete(DeleteBehavior.SetNull);
+
     }
 }

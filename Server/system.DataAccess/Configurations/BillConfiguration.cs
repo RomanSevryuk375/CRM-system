@@ -8,44 +8,40 @@ public class BillConfiguration : IEntityTypeConfiguration<BillEntity>
 {
     void IEntityTypeConfiguration<BillEntity>.Configure(EntityTypeBuilder<BillEntity> builder)
     {
+
         builder.ToTable("bills");
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(b => b.Id)
-            .HasColumnName("bill_id")
-            .IsRequired();
-
         builder.Property(b => b.OrderId)
-            .HasColumnName("bill_order_id")
             .IsRequired();
 
         builder.Property(b => b.StatusId)
-            .HasColumnName("bill_status_id")
             .IsRequired();
 
-        builder.Property(b => b.CreateAt)
-            .HasColumnName("bill_date")
+        builder.Property(b => b.CreatedAt)
+            .HasConversion(
+                v => v.ToUniversalTime(),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+                )
             .IsRequired();
 
         builder.Property(b => b.Amount)
-            .HasColumnName("bill_total_sum")
-            .ValueGeneratedOnAddOrUpdate()
+            .HasColumnType("decimal(18, 2)")
             .IsRequired();
 
         builder.Property(b => b.ActualBillDate)
-            .HasColumnName("actual_closing_bill_date")
-            .ValueGeneratedOnAddOrUpdate()
             .IsRequired(false);
 
         builder.HasOne(s => s.Status)
             .WithMany(b => b.Bills)
             .HasForeignKey(b => b.StatusId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(o => o.Order)
             .WithMany(b => b.Bills)
             .HasForeignKey(o => o.OrderId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

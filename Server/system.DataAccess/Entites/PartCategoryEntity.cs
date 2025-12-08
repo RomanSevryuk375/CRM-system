@@ -6,5 +6,5 @@ public class PartCategoryEntity
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; } = string.Empty;
 
-    public ICollection<PartEntity> Parts { get; set; } = new List<PartEntity>();
+    public ICollection<PartEntity> Parts { get; set; } = new HashSet<PartEntity>();
 }

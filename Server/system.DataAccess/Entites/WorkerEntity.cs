@@ -11,10 +11,11 @@ public class WorkerEntity
     public string Email { get; set; } = string.Empty;
 
     public UserEntity? User { get; set; }
-    public ICollection<WorkInOrderEntity> WorksInOrder { get; set; } = new List<WorkInOrderEntity>();
-    public ICollection<SkillEntity> Skills { get; set; } = new List<SkillEntity>();
-    public ICollection<AbsenceEntity> Absences { get; set; } = new List<AbsenceEntity>();
-    public ICollection<AttachmentEntity> Attachments { get; set; } = new List<AttachmentEntity>();
-    public ICollection<ScheduleEntity> Schedules { get; set; } = new List<ScheduleEntity>();
-    public ICollection<WorkProposalEntity> WorkProposals { get; set; } = new List<WorkProposalEntity>();
+    public ICollection<WorkInOrderEntity> WorksInOrder { get; set; } = new HashSet<WorkInOrderEntity>();
+    public ICollection<SkillEntity> Skills { get; set; } = new HashSet<SkillEntity>();
+    public ICollection<AbsenceEntity> Absences { get; set; } = new HashSet<AbsenceEntity>();
+    public ICollection<AttachmentEntity> Attachments { get; set; } = new HashSet<AttachmentEntity>();
+    public ICollection<ScheduleEntity> Schedules { get; set; } = new HashSet<ScheduleEntity>();
+    public ICollection<WorkProposalEntity> WorkProposals { get; set; } = new HashSet<WorkProposalEntity>();
+    public ICollection<AcceptanceEntity> Acceptances { get; set; } = new HashSet<AcceptanceEntity>();   
 } 

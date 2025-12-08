@@ -9,7 +9,7 @@ public class PartSetEntity
     public decimal Quantity { get; set; }
     public decimal SoldPrice { get; set; }
 
-    public ICollection<ExpenseEntity> Expenses { get; set; } = new List<ExpenseEntity>();
+    public ICollection<ExpenseEntity> Expenses { get; set; } = new HashSet<ExpenseEntity>();
     public OrderEntity? Order { get; set; }
     public WorkProposalEntity? WorkProposal { get; set; }
     public PositionEntity? Position { get; set; }

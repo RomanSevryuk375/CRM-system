@@ -8,24 +8,22 @@ public class TaxConfiguration : IEntityTypeConfiguration<TaxEntity>
 {
     void IEntityTypeConfiguration<TaxEntity>.Configure(EntityTypeBuilder<TaxEntity> builder)
     {
+
         builder.ToTable("taxes");
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(t => t.Id)
-            .HasColumnName("tax_id")
-            .IsRequired();
-
         builder.Property(t => t.Name) 
-            .HasColumnName("tax_name")
+            .HasMaxLength(64)
             .IsRequired();
 
         builder.Property(t => t.Rate)
-            .HasColumnName("tax_rate")
+            .HasColumnType("decimal(2, 2)")
             .IsRequired();
 
         builder.Property(t => t.Type)
-            .HasColumnName("tax_type")
+            .HasMaxLength(128)
             .IsRequired();
+
     }
 }

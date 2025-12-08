@@ -14,6 +14,6 @@ public class CarEntity
 
     public ClientEntity? Client { get; set; }
     public CarStatusEntity? Status { get; set; }
-    public ICollection<OrderEntity> Orders { get; set; } = new List<OrderEntity>();
-    public ICollection<NotificationEntity> Notifications { get; set; } = new List<NotificationEntity>();
+    public ICollection<OrderEntity> Orders { get; set; } = new HashSet<OrderEntity>();
+    public ICollection<NotificationEntity> Notifications { get; set; } = new HashSet<NotificationEntity>();
 }
