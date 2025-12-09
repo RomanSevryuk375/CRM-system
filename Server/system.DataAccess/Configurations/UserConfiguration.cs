@@ -29,5 +29,8 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
             .WithMany(r => r.Users)
             .HasForeignKey(u => u.RoleId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(u => u.Login)
+            .IsUnique();
     }
 }

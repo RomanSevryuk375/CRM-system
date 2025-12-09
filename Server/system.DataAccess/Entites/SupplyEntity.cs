@@ -3,7 +3,7 @@
 public class SupplyEntity
 {
     public long Id { get; set; }
-    public long SupplierId { get; set; }
+    public int SupplierId { get; set; }
     public DateOnly Date { get; set; }
 
     public SupplierEntity? Supplier { get; set; }

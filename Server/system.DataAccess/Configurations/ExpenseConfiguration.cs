@@ -43,7 +43,7 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<ExpenseEntity>
 
         builder.HasOne(up => up.PartSet)
             .WithMany(e => e.Expenses)
-            .HasForeignKey(e => e.PartSet)
+            .HasForeignKey(e => e.PartSetId)
             .OnDelete(DeleteBehavior.Restrict);
 
     }

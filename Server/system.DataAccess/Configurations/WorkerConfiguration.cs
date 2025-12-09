@@ -40,5 +40,11 @@ public class WorkerConfiguration : IEntityTypeConfiguration<WorkerEntity>
             .HasForeignKey<WorkerEntity>(w => w.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasIndex(wo => wo.Email)
+            .IsUnique();
+
+        builder.HasIndex(wo => wo.PhoneNumber)
+            .IsUnique();
+
     }
 }

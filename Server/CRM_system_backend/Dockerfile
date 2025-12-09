@@ -12,10 +12,13 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["CRM_system_backend.csproj", "."]
-RUN dotnet restore "./CRM_system_backend.csproj"
+COPY ["CRM_system_backend/CRM_system_backend.csproj", "CRM_system_backend/"]
+COPY ["system.Buisnes/CRMSystem.Buisnes.csproj", "system.Buisnes/"]
+COPY ["system.Core/CRMSystem.Core.csproj", "system.Core/"]
+COPY ["system.DataAccess/CRMSystem.DataAccess.csproj", "system.DataAccess/"]
+RUN dotnet restore "./CRM_system_backend/CRM_system_backend.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/CRM_system_backend"
 RUN dotnet build "./CRM_system_backend.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Этот этап используется для публикации проекта службы, который будет скопирован на последний этап

@@ -52,5 +52,11 @@ public class CarConfiguration : IEntityTypeConfiguration<CarEntity>
             .HasForeignKey(c => c.StatusId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasIndex(c => c.VinNumber)
+            .IsUnique();
+
+        builder.HasIndex(c => c.StateNumber)
+            .IsUnique();
+
     }
 }

@@ -37,5 +37,11 @@ public class ClientConfiguration : IEntityTypeConfiguration<ClientEntity>
            .HasForeignKey<ClientEntity>(c => c.UserId)
            .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasIndex(c => c.PhoneNumber)
+            .IsUnique();
+
+        builder.HasIndex(c => c.Email)
+            .IsUnique();
+
     }
 }
