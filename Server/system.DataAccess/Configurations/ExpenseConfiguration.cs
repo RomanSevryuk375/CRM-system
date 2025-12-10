@@ -29,7 +29,8 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<ExpenseEntity>
         builder.Property(e => e.PartSetId)
             .IsRequired(false);
 
-        builder.Property(e => e.ExpenseType)
+        builder.Property(e => e.ExpenseTypeId)
+            .HasConversion<int>()
             .IsRequired();
 
         builder.Property(e => e.Sum)
@@ -44,6 +45,11 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<ExpenseEntity>
         builder.HasOne(up => up.PartSet)
             .WithMany(e => e.Expenses)
             .HasForeignKey(e => e.PartSetId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(et => et.ExpenseType)
+            .WithMany(e => e.Expenses)
+            .HasForeignKey(e => e.ExpenseTypeId)
             .OnDelete(DeleteBehavior.Restrict);
 
     }

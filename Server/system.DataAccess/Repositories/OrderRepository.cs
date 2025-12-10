@@ -25,7 +25,7 @@ public class OrderRepository : IOrderRepository
                 o.StatusId,
                 o.CarId,
                 o.Date,
-                o.Priority).order)
+                o.PriorityId).order)
             .ToList();
 
         return orders;
@@ -45,7 +45,7 @@ public class OrderRepository : IOrderRepository
                 o.StatusId,
                 o.CarId,
                 o.Date,
-                o.Priority).order)
+                o.PriorityId).order)
             .ToList();
 
         return orders;
@@ -133,7 +133,7 @@ public class OrderRepository : IOrderRepository
                 o.StatusId,
                 o.CarId,
                 o.Date,
-                o.Priority).order)
+                o.PriorityId).order)
             .ToList();
 
         return orders;
@@ -182,7 +182,7 @@ public class OrderRepository : IOrderRepository
             StatusId = order.StatusId,
             CarId = order.CarId,
             Date = order.Date,
-            Priority = order.Priority
+            PriorityId = order.Priority
         };
 
         await _context.Orders.AddAsync(orderEntitie);
@@ -203,7 +203,7 @@ public class OrderRepository : IOrderRepository
         if (date.HasValue)
             order.Date = date.Value;
         if (!string.IsNullOrWhiteSpace(priority))
-            order.Priority = priority;
+            order.PriorityId = priority;
 
         await _context.SaveChangesAsync();
 

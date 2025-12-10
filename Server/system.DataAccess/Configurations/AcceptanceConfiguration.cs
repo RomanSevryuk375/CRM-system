@@ -1,4 +1,6 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.Core.Models;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -33,11 +35,11 @@ internal class AcceptanceConfiguration : IEntityTypeConfiguration<AcceptanceEnti
             .IsRequired();
 
         builder.Property(a => a.ExternalDefects) 
-            .HasMaxLength(2000)
+            .HasMaxLength(ValidationConstants.MAX_DESKRIPTION_LENGTH)
             .IsRequired(false);
 
         builder.Property(a => a.InternalDefects)
-            .HasMaxLength(2000)
+            .HasMaxLength(ValidationConstants.MAX_DESKRIPTION_LENGTH)
             .IsRequired(false);
 
         builder.Property(a => a.ClientSign)

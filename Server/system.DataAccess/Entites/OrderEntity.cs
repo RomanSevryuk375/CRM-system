@@ -1,15 +1,18 @@
-﻿namespace CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Enums;
+
+namespace CRMSystem.DataAccess.Entites;
 
 public class OrderEntity
 {
     public long Id { get; set; }
-    public int StatusId { get; set; }
+    public OrderStatusEnum StatusId { get; set; }
     public long CarId { get; set; }
     public DateOnly Date { get; set; }
-    public string Priority { get; set; } = string.Empty;
+    public OrderPriorityEnum PriorityId { get; set; }
 
     public CarEntity? Car { get; set; }
     public OrderStatusEntity? Status { get; set; }
+    public OrderPriorityEntity? OrderPriority { get; set; }
     public ICollection<GuaranteeEntity> Guarantees { get; set; } = new HashSet<GuaranteeEntity>();
     public ICollection<AttachmentEntity> Attachments { get; set; } = new HashSet<AttachmentEntity>();
     public ICollection<AcceptanceEntity> Acceptances { get; set; } = new HashSet<AcceptanceEntity>();

@@ -28,13 +28,19 @@ public class PaymentNoteConfiguration : IEntityTypeConfiguration<PaymentNoteEnti
             .HasColumnType("decimal(18, 2)")
             .IsRequired();
 
-        builder.Property(p => p.Method)
+        builder.Property(p => p.MethodId)
             .IsRequired();
 
         builder.HasOne(p => p.Bill)
             .WithMany(b => b.Payments)
             .HasForeignKey(p => p.BillId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(p => p.Method)
+            .WithMany(pm => pm.PaymentNotes)
+            .HasForeignKey(P => P.MethodId)
+            .OnDelete(DeleteBehavior.Restrict);
+
 
     }
 }

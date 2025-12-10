@@ -14,6 +14,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
         builder.HasKey(x => x.Id);
 
         builder.Property(o => o.StatusId)
+            .HasConversion<int>()
             .IsRequired();
 
         builder.Property(o => o.CarId)
@@ -22,19 +23,25 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
         builder.Property(o => o.Date)
             .IsRequired();
 
-        builder.Property(o => o.Priority)
+        builder.Property(o => o.PriorityId)
+            .HasConversion<int>()
             .HasMaxLength(10)
             .IsRequired();
 
         builder.HasOne(o => o.Car)
             .WithMany(c => c.Orders)
             .HasForeignKey(o => o.CarId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(o => o.Status)
             .WithMany(s => s.Orders)
             .HasForeignKey(o => o.StatusId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(o => o.OrderPriority)
+            .WithMany(c => c.Orders)
+            .HasForeignKey(o => o.PriorityId)
+            .OnDelete(DeleteBehavior.Restrict);
 
     }
 }

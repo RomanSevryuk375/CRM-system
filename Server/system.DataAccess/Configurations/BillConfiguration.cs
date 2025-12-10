@@ -17,6 +17,7 @@ public class BillConfiguration : IEntityTypeConfiguration<BillEntity>
             .IsRequired();
 
         builder.Property(b => b.StatusId)
+            .HasConversion<int>()
             .IsRequired();
 
         builder.Property(b => b.CreatedAt)
@@ -32,6 +33,8 @@ public class BillConfiguration : IEntityTypeConfiguration<BillEntity>
 
         builder.Property(b => b.ActualBillDate)
             .IsRequired(false);
+
+        builder.Ignore(b => b.LastBillDate);
 
         builder.HasOne(s => s.Status)
             .WithMany(b => b.Bills)

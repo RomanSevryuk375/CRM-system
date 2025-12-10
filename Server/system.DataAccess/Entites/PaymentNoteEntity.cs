@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Enums;
+
+namespace CRMSystem.DataAccess.Entites;
 
 public class PaymentNoteEntity
 {
@@ -6,7 +8,8 @@ public class PaymentNoteEntity
     public long BillId { get; set; }
     public DateTime Date { get; set; }
     public decimal Amount { get; set; }
-    public string Method { get; set; } = string.Empty;
+    public PaymentMethodEnum MethodId { get; set; }
 
     public BillEntity? Bill { get; set; }
+    public PaymentMethodEntity? Method { get; set; }
 }

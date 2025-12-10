@@ -17,7 +17,8 @@ public class AbsenceConfiguration : IEntityTypeConfiguration<AbsenceEntity>
         builder.Property(a => a.WorkerId)
             .IsRequired();
 
-        builder.Property(a => a.Type)
+        builder.Property(a => a.TypeId)
+            .HasConversion<int>()
             .HasMaxLength(128)
             .IsRequired();
 
@@ -31,6 +32,11 @@ public class AbsenceConfiguration : IEntityTypeConfiguration<AbsenceEntity>
             .WithMany(w => w.Absences)
             .HasForeignKey(a => a.WorkerId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(a => a.AbsenceType)
+            .WithMany(at => at.Absences)
+            .HasForeignKey(a => a.TypeId)
+            .OnDelete(DeleteBehavior.Restrict);
 
     }
 }

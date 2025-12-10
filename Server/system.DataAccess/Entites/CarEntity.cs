@@ -1,10 +1,12 @@
-﻿namespace CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Enums;
+
+namespace CRMSystem.DataAccess.Entites;
 
 public class CarEntity
 {
     public long Id { get; set; }
     public long OwnerId { get; set; }
-    public int StatusId { get; set; }
+    public CarStatusEnum StatusId { get; set; }
     public string Brand { get; set; } = string.Empty;
     public string Model { get; set; } = string.Empty;
     public int YearOfManufacture { get; set; }

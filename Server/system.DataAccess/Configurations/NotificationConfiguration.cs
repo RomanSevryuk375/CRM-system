@@ -22,7 +22,7 @@ public class NotificationConfiguration : IEntityTypeConfiguration<NotificationEn
         builder.Property(n => n.StatusId)
             .IsRequired();
 
-        builder.Property(n => n.Type)
+        builder.Property(n => n.TypeId)
             .HasMaxLength(32)
             .IsRequired();
 
@@ -40,17 +40,22 @@ public class NotificationConfiguration : IEntityTypeConfiguration<NotificationEn
         builder.HasOne(n => n.Client)
             .WithMany(no => no.Notifications)
             .HasForeignKey(n => n.ClientId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(n => n.Car)
             .WithMany(c => c.Notifications)
             .HasForeignKey(n => n.CarId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(n => n.Status)
             .WithMany(s => s.Notifications)
             .HasForeignKey(n => n.StatusId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(n => n.NotificationType)
+            .WithMany(s => s.Notifications)
+            .HasForeignKey(n => n.TypeId)
+            .OnDelete(DeleteBehavior.Restrict);
 
     }
 }

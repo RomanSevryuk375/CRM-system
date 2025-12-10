@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace CRMSystem.Core.Enums;
 
-namespace CRMSystem.Core.Enums
+public enum NotificationTypeEnum
 {
-    internal class NotificationTypeEnum
-    {
-    }
+    OrderWorkflow = 1,
+    PaymentsFinance = 2,
+    InventoryParts = 3,
+    MaintenanceScheduling = 4,
+    System = 5,
+    Client = 6,
 }

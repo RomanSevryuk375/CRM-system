@@ -21,9 +21,14 @@ public class TaxConfiguration : IEntityTypeConfiguration<TaxEntity>
             .HasColumnType("decimal(2, 2)")
             .IsRequired();
 
-        builder.Property(t => t.Type)
+        builder.Property(t => t.TypeId)
             .HasMaxLength(128)
             .IsRequired();
+
+        builder.HasOne(t => t.TaxType)
+            .WithMany(tt => tt.Taxes)
+            .HasForeignKey(t => t.TypeId)
+            .OnDelete(DeleteBehavior.Restrict);
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -27,7 +28,7 @@ public class AttachmentConfiguration : IEntityTypeConfiguration<AttachmentEntity
             .IsRequired();
 
         builder.Property(a => a.Description)
-            .HasMaxLength(512)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired(false);
 
         builder.HasOne(a => a.Order)
