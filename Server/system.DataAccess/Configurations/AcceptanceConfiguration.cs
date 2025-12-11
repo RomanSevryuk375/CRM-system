@@ -35,11 +35,11 @@ internal class AcceptanceConfiguration : IEntityTypeConfiguration<AcceptanceEnti
             .IsRequired();
 
         builder.Property(a => a.ExternalDefects) 
-            .HasMaxLength(ValidationConstants.MAX_DESKRIPTION_LENGTH)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired(false);
 
         builder.Property(a => a.InternalDefects)
-            .HasMaxLength(ValidationConstants.MAX_DESKRIPTION_LENGTH)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired(false);
 
         builder.Property(a => a.ClientSign)

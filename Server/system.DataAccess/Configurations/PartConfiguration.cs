@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,31 +18,31 @@ public class PartConfiguration : IEntityTypeConfiguration<PartEntity>
             .IsRequired();
 
         builder.Property(p => p.OEMArticle)
-            .HasMaxLength(64)
+            .HasMaxLength(ValidationConstants.MAX_ARTICLE_LENGTH)
             .IsRequired(false);
 
         builder.Property(p => p.ManufacturerArticle)
-            .HasMaxLength(64)
+            .HasMaxLength(ValidationConstants.MAX_ARTICLE_LENGTH)
             .IsRequired(false);
 
         builder.Property(p => p.InternalArticle)
-            .HasMaxLength(64)
+            .HasMaxLength(ValidationConstants.MAX_ARTICLE_LENGTH)
             .IsRequired();
 
         builder.Property(p => p.Description)
-            .HasMaxLength(512)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired(false);
 
         builder.Property(x => x.Name)
-            .HasMaxLength(64)
+            .HasMaxLength(ValidationConstants.MAX_NAME_LENGTH)
             .IsRequired();
 
         builder.Property(p => p.Manufacturer)
-            .HasMaxLength(128)
+            .HasMaxLength(ValidationConstants.MAX_NAME_LENGTH)
             .IsRequired();
 
         builder.Property(x => x.Applicability)
-            .HasMaxLength(128)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired();
 
         builder.HasOne(p => p.PartCategory)

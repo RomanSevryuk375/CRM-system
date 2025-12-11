@@ -1,68 +1,51 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.Core.Enums;
+using CRMSystem.Core.Validation;
+
 
 namespace CRMSystem.Core.Models;
 
 public class Expense
 {
-    public Expense(int id, DateTime date, string category, int? taxId, int? usedPartId, string expenseType, decimal sum)
+    public Expense(long id, DateTime date, string category, int? taxId, long? partSetId, ExpenseTypeEnum expenseTypeId, decimal sum)
     {
         Id = id;
         Date = date;
         Category = category;
         TaxId = taxId;
-        UsedPartId = usedPartId;
-        ExpenseType = expenseType;
+        PartSetId = partSetId;
+        ExpenseTypeId = expenseTypeId;
         Sum = sum;
     }
-    public int Id { get; }
-
-    public DateTime Date { get; }
-
-    public string Category { get; } 
-
+    public long Id { get; }
     public int? TaxId { get; }
+    public long? PartSetId { get; }
+    public DateTime Date { get; }
+    public string Category { get; }
+    public ExpenseTypeEnum ExpenseTypeId { get; }
+    public decimal Sum { get; }
 
-    public int? UsedPartId { get; }
-
-    public string ExpenseType { get; } 
-
-    public decimal Sum { get; } 
-
-    public static (Expense expense, string error) Create (int id, DateTime date, string category, int? taxId, int? usedPartId, string expenseType, decimal sum)
+    public static (Expense? expense, List<string> errors) Create(long id, DateTime date, string category, int? taxId, long? partSetId, ExpenseTypeEnum expenseTypeId, decimal sum)
     {
-        var error = string.Empty;
-        var allowedType = new[] {"Переменный", "Постоянный", "Капитальный"};
-        var allowedCategory = new[] {
-        "Зарплата",
-        "Запчасти",
-        "Аренда",
-        "Коммунальные",
-        "Реклама",
-        "Оборудование",
-        "Хозяйственные",
-        "Налоги",
-        "Ремонт",
-        "Связь",
-        "Страхование"};
+        var errors = new List<string>();
 
-        if (date > DateTime.Now)
-            error = "Date cannot be in the future";
+        var idError = DomainValidator.ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
-        if (string.IsNullOrWhiteSpace(category))
-            error = "Expense category can't be empty";
-        if (!allowedCategory.Contains(category))
-            error = "Invalid expense category";
+        var typeIdError = DomainValidator.ValidateId(expenseTypeId, "typeId");
+        if (!string.IsNullOrEmpty(typeIdError)) errors.Add(typeIdError);
 
-        if (string.IsNullOrWhiteSpace(expenseType))
-            error = "Expense type can't be empty";
-        if (!allowedType.Contains(expenseType))
-            error = "Invalid expense type";
+        var dateError = DomainValidator.ValidateDate(date, "date");
+        if (!string.IsNullOrEmpty(dateError)) errors.Add(dateError);
 
-        if (sum < 0)
-            error = "Sum can't be negative or zero";
+        var categoryError = DomainValidator.ValidateString(category, ValidationConstants.MAX_CATEGORY_LENGTH, "category");
+        if (!string.IsNullOrEmpty(categoryError)) errors.Add(categoryError);
 
-        var expense = new Expense(id, date, category, taxId, usedPartId, expenseType, sum);
+        var sumError = DomainValidator.ValidateMoney(sum, "sum");
+        if (!string.IsNullOrEmpty(sumError)) errors.Add(sumError);
 
-        return (expense, error);
+        var expense = new Expense(id, date, category, taxId, partSetId, expenseTypeId, sum);
+
+        return (expense, new List<string>());
     }
 }

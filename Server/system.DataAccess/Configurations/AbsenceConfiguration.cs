@@ -19,7 +19,6 @@ public class AbsenceConfiguration : IEntityTypeConfiguration<AbsenceEntity>
 
         builder.Property(a => a.TypeId)
             .HasConversion<int>()
-            .HasMaxLength(128)
             .IsRequired();
 
         builder.Property(a => a.StartDate)

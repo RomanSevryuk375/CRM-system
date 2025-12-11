@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -22,22 +23,22 @@ public class CarConfiguration : IEntityTypeConfiguration<CarEntity>
             .IsRequired();
 
         builder.Property(c => c.Brand)
-            .HasMaxLength(128)
+            .HasMaxLength(ValidationConstants.MAX_BRAND_LENGTH)
             .IsRequired();
 
         builder.Property(c => c.Model)
-            .HasMaxLength(256)
+            .HasMaxLength(ValidationConstants.MAX_MODEL_LENGTH)
             .IsRequired();
 
         builder.Property(c => c.YearOfManufacture)
             .IsRequired();
 
         builder.Property(c => c.VinNumber)
-            .HasMaxLength(17)
+            .HasMaxLength(ValidationConstants.MAX_VIN_LENGTH)
             .IsRequired();
 
         builder.Property(c => c.StateNumber)
-            .HasMaxLength(15)
+            .HasMaxLength(ValidationConstants.MAX_STATE_NUMBER_LENGTH)
             .IsRequired();
 
         builder.Property(c => c.Mileage)

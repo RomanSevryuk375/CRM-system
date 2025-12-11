@@ -26,7 +26,7 @@ public static class DomainValidator
 
     public static string ValidateString (string? Value, string FieldName)
     {
-        if (!string.IsNullOrWhiteSpace(Value))
+        if (string.IsNullOrWhiteSpace(Value))
             return $"{FieldName} can't be empty";
 
         return string.Empty;
@@ -34,11 +34,10 @@ public static class DomainValidator
 
     public static string ValidateString(string? Value, int Length, string FieldName)
     {
-        if (!string.IsNullOrWhiteSpace(Value))
+        if (string.IsNullOrWhiteSpace(Value))
             return $"{FieldName} can't be empty";
 
-        if (!string.IsNullOrWhiteSpace(Value))
-            if (Value.Length > Length)
+        if (Value.Length > Length)
             return $"Name can't be longer than {Length} symbols";
 
         return string.Empty;
@@ -54,17 +53,44 @@ public static class DomainValidator
 
         return string.Empty;
     }
+    public static string ValidateDate(DateOnly? Date, string FieldName)
+    {
+        if (!Date.HasValue)
+            return $"{FieldName} can't be empty";
+
+        if (Date > DateOnly.FromDateTime(DateTime.Now))
+            return $"Acceptance date cannot be in the future";
+
+        return string.Empty;
+    }
+
     public static string ValidateDateRange(DateTime DateStart, DateTime? DateEnd)
     {
-        if (DateEnd.HasValue && DateEnd.Value > DateStart)
+        if (DateEnd.HasValue && DateEnd.Value < DateStart)
             return "End date cant be earlier than start date";
 
         return string.Empty;
     }
     public static string ValidateDateRange(DateOnly DateStart, DateOnly? DateEnd)
     {
-        if (DateEnd.HasValue && DateEnd.Value > DateStart)
+        if (DateEnd.HasValue && DateEnd.Value < DateStart)
             return "End date cant be earlier than start date";
+
+        return string.Empty;
+    }
+    public static string ValidateDateRange(DateTime DateStart, DateOnly? DateEnd)
+    {
+        var Value = DateOnly.FromDateTime(DateStart);
+        if (DateEnd.HasValue && DateEnd.Value < Value)
+            return "End date cant be earlier than start date";
+
+        return string.Empty;
+    }
+
+    public static string ValidateMoney(decimal Value, string FieldName)
+    {
+        if (Value < 0)
+            return $"{FieldName} can't be negative";
 
         return string.Empty;
     }

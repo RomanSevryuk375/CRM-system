@@ -1,5 +1,6 @@
 ﻿using CRMSystem.Core.Constants;
 using CRMSystem.Core.Validation;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CRMSystem.Core.Models;
 
@@ -8,9 +9,9 @@ public class Attachment
     public Attachment(long id, long orderId, int workerId, DateTime createAt, string? description)
     {
         Id = id;
-        OrderId = orderId; 
-        WorkerId = workerId; 
-        CreatedAt = createAt; 
+        OrderId = orderId;
+        WorkerId = workerId;
+        CreatedAt = createAt;
         Description = description;
     }
 
@@ -25,17 +26,17 @@ public class Attachment
     {
         var errors = new List<string>();
 
-        var IdError = DomainValidator.ValidateId(id, "id");
-        if (IdError != null) errors.Add(IdError);
+        var idError = DomainValidator.ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
         var orderIdError = DomainValidator.ValidateId(workerId, "workerId");
-        if (orderIdError != null) errors.Add(orderIdError);
+        if (!string.IsNullOrEmpty(orderIdError)) errors.Add(orderIdError);
 
         var createAtError = DomainValidator.ValidateDate(createdAt, "orderIdError");
-        if (createAtError != null) errors.Add(createAtError);
+        if (!string.IsNullOrEmpty(createAtError)) errors.Add(createAtError);
 
         var descriptionError = DomainValidator.ValidateString(description, ValidationConstants.MAX_DESCRIPTION_LENGTH, "description");
-        if (descriptionError != null) errors.Add(descriptionError);
+        if (!string.IsNullOrEmpty(descriptionError)) errors.Add(descriptionError);
 
         if (errors.Any())
             return (null, errors);

@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -21,6 +22,7 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<ExpenseEntity>
             .IsRequired();
 
         builder.Property(e => e.Category)
+            .HasMaxLength(ValidationConstants.MAX_CATEGORY_LENGTH)
             .IsRequired();
 
         builder.Property(e => e.TaxId)

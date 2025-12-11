@@ -24,16 +24,16 @@ public class Absence
         var errors = new List<string>();
 
         var idError = DomainValidator.ValidateId(id, "Absence ID");
-        if (idError != null) errors.Add(idError);
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
         var workerIdError = DomainValidator.ValidateId(workerId, "Worker ID");
-        if (workerIdError != null) errors.Add(workerIdError);
+        if (!string.IsNullOrEmpty(workerIdError)) errors.Add(workerIdError);
 
         var typeIdError = DomainValidator.ValidateId(typeId, "Type ID");
-        if (typeIdError != null) errors.Add(typeIdError);
+        if (!string.IsNullOrEmpty(typeIdError)) errors.Add(typeIdError);
 
         var endDateError = DomainValidator.ValidateDateRange(startDate, endDate);
-        if (endDateError != null) errors.Add(endDateError);
+        if (!string.IsNullOrEmpty(endDateError)) errors.Add(endDateError);
 
         if (errors.Any())
         {

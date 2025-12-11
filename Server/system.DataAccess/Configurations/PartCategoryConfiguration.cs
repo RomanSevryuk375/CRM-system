@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,11 +15,11 @@ public class PartCategoryConfiguration : IEntityTypeConfiguration<PartCategoryEn
         builder.HasKey(x => x.Id);
 
         builder.Property(pc => pc.Name)
-            .HasMaxLength(128)
+            .HasMaxLength(ValidationConstants.MAX_STATUS_NAME)
             .IsRequired();
 
         builder.Property(pc => pc.Description)
-            .HasMaxLength(256)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired();
 
     }

@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -23,11 +24,11 @@ public class GuaranteeConfiguration : IEntityTypeConfiguration<GuaranteeEntity>
             .IsRequired();
 
         builder.Property(g => g.Description)
-            .HasMaxLength(2000)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired(false);
 
         builder.Property(g => g.Terms)
-            .HasMaxLength(2000)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired();
 
         builder.HasOne(g => g.Order)

@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -23,11 +24,11 @@ public class NotificationConfiguration : IEntityTypeConfiguration<NotificationEn
             .IsRequired();
 
         builder.Property(n => n.TypeId)
-            .HasMaxLength(32)
+            .HasConversion<int>()
             .IsRequired();
 
         builder.Property(n => n.Message)
-            .HasMaxLength(2048)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired();
 
         builder.Property(n => n.SendAt)

@@ -19,10 +19,10 @@ public class AbsenceType
         var errors = new List<string>();
 
         var idError = DomainValidator.ValidateId(id, "ID");
-        if (idError != null) errors.Add(idError);
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
         var nameErrors = DomainValidator.ValidateString(name, ValidationConstants.MAX_TYPE_NAME , "Name");
-        if (nameErrors != null) errors.Add(nameErrors);
+        if (!string.IsNullOrEmpty(nameErrors)) errors.Add(nameErrors);
 
         if (errors.Any())
             return (null,errors);

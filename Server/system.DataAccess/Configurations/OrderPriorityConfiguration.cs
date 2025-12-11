@@ -1,4 +1,5 @@
 ﻿
+using CRMSystem.Core.Constants;
 using CRMSystem.Core.Enums;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ public class OrderPriorityConfiguration : IEntityTypeConfiguration<OrderPriority
         builder.HasKey(x => x.Id);
 
         builder.Property(os => os.Name)
-            .HasMaxLength(64)
+            .HasMaxLength(ValidationConstants.MAX_STATUS_NAME)
             .IsRequired();
 
         builder.HasData(

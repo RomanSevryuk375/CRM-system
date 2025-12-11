@@ -25,7 +25,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
 
         builder.Property(o => o.PriorityId)
             .HasConversion<int>()
-            .HasMaxLength(10)
             .IsRequired();
 
         builder.HasOne(o => o.Car)

@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,11 +18,11 @@ public class AcceptanceImgConfiguration : IEntityTypeConfiguration<AcceptanceImg
             .IsRequired();
 
         builder.Property(ai => ai.FilePath)
-            .HasMaxLength(256)
+            .HasMaxLength(ValidationConstants.MAX_PATH_LENGTH)
             .IsRequired();
 
         builder.Property(ai => ai.Description)
-            .HasMaxLength(512)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired(false);
 
         builder.HasOne(ai => ai.Acceptance)

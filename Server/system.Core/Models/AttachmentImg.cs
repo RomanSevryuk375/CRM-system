@@ -3,28 +3,29 @@ using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
 
-public class AcceptanceImg
+public class AttachmentImg
 {
-    public AcceptanceImg(int id, int acceptanceId, string filePath, string? description)
+    public AttachmentImg(int id, int attachmentId, string filePath, string? description)
     {
         Id = id;
-        Description = description;
+        AttachmentId = attachmentId;
         FilePath = filePath;
         Description = description;
     }
+
     public long Id { get; set; }
-    public long AcceptanceId { get; set; }
+    public long AttachmentId { get; set; }
     public string FilePath { get; set; } = string.Empty;
     public string? Description { get; set; } = string.Empty;
 
-    public static (AcceptanceImg? acceptanceImg, List<string>? errors) Create(int id, int acceptanceId, string filePath, string? description)
+    public static (AttachmentImg? attachmentImg, List<string>? errors) CreateAcceptanceImg(int id, int attachmentId, string filePath, string? description)
     {
         var errors = new List<string>();
 
         var idError = DomainValidator.ValidateId(id, "id");
         if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
-        var acceptanceIdError = DomainValidator.ValidateId(acceptanceId, "acceptanceId");
+        var acceptanceIdError = DomainValidator.ValidateId(attachmentId, "acceptanceId");
         if (!string.IsNullOrEmpty(acceptanceIdError)) errors.Add(acceptanceIdError);
 
         var filePathError = DomainValidator.ValidateString(filePath, ValidationConstants.MAX_PATH_LENGTH, "filePath");
@@ -36,8 +37,8 @@ public class AcceptanceImg
         if (!errors.Any())
             return (null, errors);
 
-        var acceptanceImg = new AcceptanceImg(id, acceptanceId, filePath, description);
+        var attachmentImg = new AttachmentImg(id, attachmentId, filePath, description);
 
-        return (acceptanceImg, new List<string>());
+        return (attachmentImg, new List<string>());
     }
 }
