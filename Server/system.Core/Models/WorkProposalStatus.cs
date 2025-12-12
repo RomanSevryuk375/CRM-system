@@ -3,9 +3,9 @@ using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
 
-public class NotificationType
+public class WorkProposalStatus
 {
-    public NotificationType(int id, string name)
+    public WorkProposalStatus(int id, string name)
     {
         Id = id;
         Name = name;
@@ -14,7 +14,7 @@ public class NotificationType
     public int Id { get; }
     public string Name { get; }
 
-    public static (NotificationType? notificationType, List<string>? errors) Create(int id, string name)
+    public static (WorkProposalStatus? workProposalStatus, List<string>? errors) Create(int id, string name)
     {
         var errors = new List<string>();
 
@@ -27,8 +27,8 @@ public class NotificationType
         if (errors.Any())
             return (null, errors);
 
-        var notificationType = new NotificationType(id, name);
+        var workProposalStatus = new WorkProposalStatus(id, name);
 
-        return (notificationType, new List<string>());
+        return (workProposalStatus, new List<string>());
     }
 }

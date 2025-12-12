@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,11 +15,11 @@ public class SupplierConfiguration : IEntityTypeConfiguration<SupplierEntity>
         builder.HasKey(x => x.Id);
 
         builder.Property(su =>su.Name) 
-            .HasMaxLength(128)
+            .HasMaxLength(ValidationConstants.MAX_NAME_LENGTH)
             .IsRequired();
 
         builder.Property(su => su.Contacts)
-            .HasMaxLength(256)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired();
 
     }

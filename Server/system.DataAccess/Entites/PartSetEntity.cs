@@ -3,9 +3,9 @@
 public class PartSetEntity
 {
     public long Id { get; set; }
-    public long OrderId { get; set; }
+    public long? OrderId { get; set; }
     public long PositionId { get; set; }
-    public long ProposalId { get; set; }
+    public long? ProposalId { get; set; }
     public decimal Quantity { get; set; }
     public decimal SoldPrice { get; set; }
 

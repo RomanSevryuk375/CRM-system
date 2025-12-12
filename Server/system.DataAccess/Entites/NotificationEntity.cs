@@ -10,7 +10,7 @@ public class NotificationEntity
     public NotificationTypeEnum TypeId { get; set; }
     public string Message { get; set; } = string.Empty;
     public DateTime SendAt { get; set; }
-    public NotificationStatuseEnum StatusId { get; set; }
+    public NotificationStatusEnum StatusId { get; set; }
 
     public NotificationTypeEntity? NotificationType { get; set; }
     public ClientEntity? Client { get; set; }

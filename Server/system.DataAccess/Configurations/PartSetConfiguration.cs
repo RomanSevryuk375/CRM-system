@@ -14,9 +14,12 @@ public class PartSetConfiguration : IEntityTypeConfiguration<PartSetEntity>
         builder.HasKey(x => x.Id);
 
         builder.Property(ps => ps.OrderId)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(ps => ps.ProposalId)
+            .IsRequired(false);
+
+        builder.Property(ps => ps.PositionId)
             .IsRequired();
 
         builder.Property(ps => ps.Quantity)

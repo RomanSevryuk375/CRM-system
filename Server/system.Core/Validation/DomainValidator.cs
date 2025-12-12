@@ -59,7 +59,7 @@ public static class DomainValidator
             return $"{FieldName} can't be empty";
 
         if (Date > DateOnly.FromDateTime(DateTime.Now))
-            return $"Acceptance date cannot be in the future";
+            return $"{FieldName} can't be in the future";
 
         return string.Empty;
     }
@@ -72,6 +72,13 @@ public static class DomainValidator
         return string.Empty;
     }
     public static string ValidateDateRange(DateOnly DateStart, DateOnly? DateEnd)
+    {
+        if (DateEnd.HasValue && DateEnd.Value < DateStart)
+            return "End date cant be earlier than start date";
+
+        return string.Empty;
+    }
+    public static string ValidateDateRange(TimeOnly DateStart, TimeOnly? DateEnd)
     {
         if (DateEnd.HasValue && DateEnd.Value < DateStart)
             return "End date cant be earlier than start date";

@@ -34,7 +34,7 @@ public class AttachmentImg
         var descriptionError = DomainValidator.ValidateString(description, ValidationConstants.MAX_DESCRIPTION_LENGTH, "description");
         if (!string.IsNullOrEmpty(descriptionError)) errors.Add(descriptionError);
 
-        if (!errors.Any())
+        if (errors.Any())
             return (null, errors);
 
         var attachmentImg = new AttachmentImg(id, attachmentId, filePath, description);

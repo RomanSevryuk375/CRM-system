@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -14,15 +15,13 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
         builder.HasKey(x => x.Id);
 
         builder.Property(u => u.RoleId)
-            .HasMaxLength(64)
             .IsRequired();
 
         builder.Property(u => u.Login)
-            .HasMaxLength(128)
+            .HasMaxLength(ValidationConstants.MAX_NAME_LENGTH)
             .IsRequired();
 
         builder.Property(u => u.PasswordHash)
-            .HasMaxLength (256)
             .IsRequired();
 
         builder.HasOne(u => u.Role)

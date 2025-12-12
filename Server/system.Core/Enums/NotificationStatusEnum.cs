@@ -1,6 +1,6 @@
 ﻿namespace CRMSystem.Core.Enums;
 
-public enum NotificationStatuseEnum
+public enum NotificationStatusEnum
 {
     Sent = 1,
     Read = 2,

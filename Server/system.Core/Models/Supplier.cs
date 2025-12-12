@@ -1,9 +1,10 @@
-﻿namespace CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.Core.Validation;
+
+namespace CRMSystem.Core.Models;
 
 public class Supplier
 {
-    private const int MAX_NAME_LENGTH = 256;
-
     public Supplier(int id, string name, string contacts)
     {
         Id = id;
@@ -11,25 +12,27 @@ public class Supplier
         Contacts = contacts;
     }
     public int Id { get; }
-
     public string Name { get; } 
-
     public string Contacts { get; } 
 
-    public static (Supplier supplier, string error) Create(int id, string name, string contacts)
+    public static (Supplier? supplier, List<string> errors) Create(int id, string name, string contacts)
     {
-        var error = string.Empty;
+        var errors = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(name))
-            error = "Name of supplier can't be empty";
-        if (name.Length > MAX_NAME_LENGTH)
-            error = $"Name of supplier can't be longer than {MAX_NAME_LENGTH} symbols";
+        var idError = DomainValidator.ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
-        if (string.IsNullOrWhiteSpace(contacts))
-            error = "Contacts of supplier can't be empty";
+        var nameError = DomainValidator.ValidateString(name, ValidationConstants.MAX_NAME_LENGTH, "name");
+        if (!string.IsNullOrEmpty(nameError)) errors.Add(nameError);
+
+        var contactsError = DomainValidator.ValidateString(contacts, ValidationConstants.MAX_DESCRIPTION_LENGTH, "contacts");
+        if (!string.IsNullOrEmpty(contactsError)) errors.Add(contactsError);
+
+        if (errors.Any())
+            return (null, errors);
 
         var supplier = new Supplier(id, name, contacts);
 
-        return (supplier, error);
+        return (supplier, new List<string>());
     }
 }

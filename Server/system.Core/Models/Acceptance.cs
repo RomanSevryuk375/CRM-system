@@ -14,7 +14,8 @@ public class Acceptance
         CreateAt = createdAt; 
         Mileage = mileage; 
         FuelLevel = fuelLevel; 
-        InternalDefects = internalDefects; 
+        InternalDefects = internalDefects;
+        ExternalDefects = externalDefects;
         ClientSign = clientSign; 
         WorkerSign = workerSign;
     }

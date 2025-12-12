@@ -2,7 +2,7 @@
 
 public enum PaymentMethodEnum
 {
-    card = 1,
-    cash = 2,
-    ERIP = 3,
+    Сard = 1,
+    Сash = 2,
+    Erip = 3,
 }

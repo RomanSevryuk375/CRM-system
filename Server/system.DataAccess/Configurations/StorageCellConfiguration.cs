@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,11 +15,11 @@ public class StorageCellConfiguration : IEntityTypeConfiguration<StorageCellEnti
         builder.HasKey(x => x.Id);
 
         builder.Property(sc => sc.Rack)
-            .HasMaxLength(16)
+            .HasMaxLength(ValidationConstants.MAX_STORAGE_ITEM_LENGTH)
             .IsRequired();
 
         builder.Property(sc => sc.Shelf)
-            .HasMaxLength(16)
+            .HasMaxLength(ValidationConstants.MAX_STORAGE_ITEM_LENGTH)
             .IsRequired();
 
     }

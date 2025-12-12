@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,15 +15,15 @@ public class WorkConfiguration : IEntityTypeConfiguration<WorkEntity>
         builder.HasKey(x => x.Id);
 
         builder.Property(w => w.Title)
-            .HasMaxLength(128)
+            .HasMaxLength(ValidationConstants.MAX_NAME_LENGTH)
             .IsRequired();
 
         builder.Property(w => w.Category)
-            .HasMaxLength(128)
+            .HasMaxLength(ValidationConstants.MAX_CATEGORY_LENGTH)
             .IsRequired();
 
         builder.Property(w => w.Description)
-            .HasMaxLength(512)
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired();
 
         builder.Property(w => w.StandardTime)

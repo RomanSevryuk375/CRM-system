@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,7 +15,7 @@ public class TaxConfiguration : IEntityTypeConfiguration<TaxEntity>
         builder.HasKey(x => x.Id);
 
         builder.Property(t => t.Name) 
-            .HasMaxLength(64)
+            .HasMaxLength(ValidationConstants.MAX_TYPE_NAME)
             .IsRequired();
 
         builder.Property(t => t.Rate)
@@ -22,7 +23,7 @@ public class TaxConfiguration : IEntityTypeConfiguration<TaxEntity>
             .IsRequired();
 
         builder.Property(t => t.TypeId)
-            .HasMaxLength(128)
+            .HasConversion<int>()
             .IsRequired();
 
         builder.HasOne(t => t.TaxType)

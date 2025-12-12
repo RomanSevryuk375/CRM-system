@@ -14,7 +14,7 @@ public class OrderStatus
     public int Id { get; }
     public string Name { get; }
 
-    public static (OrderStatus? orderStatus, List<string>? erors) Create(int id, string name)
+    public static (OrderStatus? orderStatus, List<string>? errors) Create(int id, string name)
     {
         var errors = new List<string>();
 

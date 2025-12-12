@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Enums;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.Core.Enums;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -14,23 +15,23 @@ public class PaymentMethodConfiguration : IEntityTypeConfiguration<PaymentMethod
         builder.HasKey(x => x.Id);
 
         builder.Property(os => os.Name)
-            .HasMaxLength(64)
+            .HasMaxLength(ValidationConstants.MAX_STATUS_NAME)
             .IsRequired();
 
         builder.HasData(
             new PaymentMethodEntity 
             { 
-                Id = (int)PaymentMethodEnum.card,
+                Id = (int)PaymentMethodEnum.Сard,
                 Name = "Картой"
             },
             new PaymentMethodEntity
             {
-                Id = (int)PaymentMethodEnum.cash,
+                Id = (int)PaymentMethodEnum.Сash,
                 Name = "Наличными"
             },
             new PaymentMethodEntity
             {
-                Id = (int)PaymentMethodEnum.ERIP,
+                Id = (int)PaymentMethodEnum.Erip,
                 Name = "ЕРИП"
             });
     }

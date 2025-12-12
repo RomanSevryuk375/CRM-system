@@ -3,9 +3,9 @@ using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
 
-public class OrderType
+public class PaymentMethod
 {
-    public OrderType(int id, string name)
+    public PaymentMethod(int id, string name)
     {
         Id = id;
         Name = name;
@@ -14,7 +14,7 @@ public class OrderType
     public int Id { get; }
     public string Name { get; }
 
-    public static (OrderType? orderType, List<string>? erors) Create(int id, string name)
+    public static (PaymentMethod? paymentMethod, List<string>? errors) Create(int id, string name)
     {
         var errors = new List<string>();
 
@@ -27,8 +27,8 @@ public class OrderType
         if (errors.Any())
             return (null, errors);
 
-        var orderType = new OrderType(id, name);
+        var paymentMethod = new PaymentMethod(id, name);
 
-        return (orderType, new List<string>());
+        return (paymentMethod, new List<string>());
     }
 }

@@ -2,7 +2,7 @@
 
 public class Role
 {
-    private Role(int id, string name)
+    public Role(int id, string name)
     {
         Id = id;
         Name = name;
@@ -10,5 +10,10 @@ public class Role
 
     public int Id { get; }
 
-    public string Name { get; } 
+    public string Name { get; }
+
+    public static Role Create(int id, string name)
+    {
+        return new Role(id, name);
+    }
 }

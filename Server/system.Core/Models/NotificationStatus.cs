@@ -14,7 +14,7 @@ public class NotificationStatus
     public int Id { get; }
     public string Name { get; }
 
-    public static (NotificationStatus? notificationStatus, List<string>? erors) Create(int id, string name)
+    public static (NotificationStatus? notificationStatus, List<string>? errors) Create(int id, string name)
     {
         var errors = new List<string>();
 

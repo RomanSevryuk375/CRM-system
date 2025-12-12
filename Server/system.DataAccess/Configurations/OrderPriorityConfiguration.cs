@@ -11,7 +11,7 @@ public class OrderPriorityConfiguration : IEntityTypeConfiguration<OrderPriority
 {
     void IEntityTypeConfiguration<OrderPriorityEntity>.Configure(EntityTypeBuilder<OrderPriorityEntity> builder)
     {
-        builder.ToTable("order_prioritiesk");
+        builder.ToTable("order_priorities");
 
         builder.HasKey(x => x.Id);
 

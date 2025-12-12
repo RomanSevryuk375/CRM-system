@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Enums;
+
+namespace CRMSystem.DataAccess.Entites;
 
 public class WorkInOrderEntity
 {
@@ -7,7 +9,7 @@ public class WorkInOrderEntity
     public long JobId { get; set; }
     public int WorkerId { get; set; }
     public decimal TimeSpent { get; set; }
-    public int StatusId { get; set; }
+    public WorkStatusEnum StatusId { get; set; }
 
     public WorkEntity? Work { get; set; }
     public OrderEntity? Order { get; set; }

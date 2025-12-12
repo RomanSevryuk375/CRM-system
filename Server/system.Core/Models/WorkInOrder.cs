@@ -3,25 +3,26 @@ using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
 
-public class WorkProposal
+public class WorkInOrder
 {
-    public WorkProposal(long id, long orderId, long jobId, int wokerId, WorkStatusEnum statusId, DateTime date)
+    public WorkInOrder(long id, long orderId, long jobId, int workerId, WorkStatusEnum statusId, decimal timeSpent)
     {
         Id = id;
         OrderId = orderId;
         JobId = jobId;
-        WorkerId = wokerId;
+        WorkerId = workerId;
         StatusId = statusId;
-        Date = date;
+        TimeSpent = timeSpent;
     }
+
     public long Id { get; }
     public long OrderId { get; }
     public long JobId { get; }
     public int WorkerId { get; }
+    public decimal TimeSpent { get; }
     public WorkStatusEnum StatusId { get; }
-    public DateTime Date { get; }
-
-    public static (WorkProposal? workPropossal, List<string> errors) Create(long id, long orderId, long jobId, int wokerId, WorkStatusEnum statusId, DateTime date)
+    
+    public static (WorkInOrder? workInOrder, List<string> errors) Create(long id, long orderId, long jobId, int workerId, WorkStatusEnum statusId, decimal timeSpent)
     {
         var errors = new List<string>();
 
@@ -34,20 +35,20 @@ public class WorkProposal
         var jobIdError = DomainValidator.ValidateId(jobId, "jobId");
         if (!string.IsNullOrEmpty(jobIdError)) errors.Add(jobIdError);
 
-        var workerIdError = DomainValidator.ValidateId(wokerId, "workerId");
+        var workerIdError = DomainValidator.ValidateId(workerId, "workerId");
         if (!string.IsNullOrEmpty(workerIdError)) errors.Add(workerIdError);
 
-        var statusError = DomainValidator.ValidateId(statusId, "status");
-        if (!string.IsNullOrEmpty(statusError)) errors.Add(statusError);
+        var stutusErrorId = DomainValidator.ValidateId(statusId, "status");
+        if (!string.IsNullOrEmpty(stutusErrorId)) errors.Add(stutusErrorId);
 
-        var dateError = DomainValidator.ValidateDate(date, "date");
-        if (!string.IsNullOrEmpty(dateError)) errors.Add(dateError);
+        var timeSpentError = DomainValidator.ValidateMoney(timeSpent, "time");
+        if (!string.IsNullOrEmpty(timeSpentError)) errors.Add(timeSpentError);
 
         if (errors.Any())
             return (null, errors);
 
-        var workPropossal = new WorkProposal(id, orderId, jobId, wokerId, statusId, date);
+        var workInOrder = new WorkInOrder(id,  orderId, jobId, workerId, statusId, timeSpent);
 
-        return (workPropossal, new List<string>());
+        return (workInOrder, new List<string>());
     }
 }

@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,7 +15,7 @@ public class ShiftConfiguration : IEntityTypeConfiguration<ShiftEntity>
         builder.HasKey(x => x.Id);
 
         builder.Property(s => s.Name)
-            .HasMaxLength(64)
+            .HasMaxLength(ValidationConstants.MAX_TYPE_NAME)
             .IsRequired();
 
         builder.Property(s => s.StartAt)

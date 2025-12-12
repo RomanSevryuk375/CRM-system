@@ -19,12 +19,12 @@ public class BillStatus
         var errors = new List<string>();
 
         var idError = DomainValidator.ValidateId(id, "Id");
-        if (string.IsNullOrEmpty(idError)) errors.Add(idError);
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
         var nameError = DomainValidator.ValidateString(name, ValidationConstants.MAX_STATUS_NAME, "name");
-        if (string.IsNullOrEmpty(nameError)) errors.Add(nameError);
+        if (!string.IsNullOrEmpty(nameError)) errors.Add(nameError);
 
-        if (!errors.Any())
+        if (errors.Any())
             return (null, errors);
 
         var billStatus = new BillStatus(id, name);

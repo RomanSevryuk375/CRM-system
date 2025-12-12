@@ -22,6 +22,7 @@ public class WorkProposalConfiguration : IEntityTypeConfiguration<WorkProposalEn
             .IsRequired();
 
         builder.Property(wp => wp.StatusId)
+            .HasConversion<int>()
             .IsRequired();
 
         builder.Property(wp => wp.Date)

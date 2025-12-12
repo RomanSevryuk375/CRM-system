@@ -27,6 +27,7 @@ public class WorkInOrderConfiguration : IEntityTypeConfiguration<WorkInOrderEnti
             .IsRequired();
 
         builder.Property(w => w.StatusId)
+            .HasConversion<int>()
             .IsRequired();
 
         builder.HasOne(w => w.Order)

@@ -22,12 +22,12 @@ public class NotificationStatusConfiguration : IEntityTypeConfiguration<Notifica
         builder.HasData(
             new BillStatusEntity
             {
-                Id = (int)NotificationStatuseEnum.Sent,
+                Id = (int)NotificationStatusEnum.Sent,
                 Name = "Отправлено",
             },
             new BillStatusEntity
             {
-                Id = (int)NotificationStatuseEnum.Read,
+                Id = (int)NotificationStatusEnum.Read,
                 Name = "Прочитано",
             }
 

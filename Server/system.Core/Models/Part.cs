@@ -48,7 +48,7 @@ public class Part
         if (!string.IsNullOrEmpty(manufacturerError)) errors.Add(manufacturerError);
 
         var applicabilityError = DomainValidator.ValidateString(applicability, ValidationConstants.MAX_DESCRIPTION_LENGTH, "applicability");
-        if (string.IsNullOrEmpty(applicabilityError)) errors.Add(applicabilityError);
+        if (!string.IsNullOrEmpty(applicabilityError)) errors.Add(applicabilityError);
 
         if (errors.Any())
             return (null, errors);

@@ -1,46 +1,48 @@
-﻿namespace CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.Core.Validation;
+
+namespace CRMSystem.Core.Models;
 
 public class Work
 {
-    public Work(int id, int orderId, int jobId, int workerId, decimal timeSpent, int statusId)
+    public Work(long id, string title, string categoty, string description, decimal standartTime)
     {
         Id = id;
-        OrderId = orderId;
-        JobId = jobId;
-        WorkerId = workerId;
-        TimeSpent = timeSpent;
-        StatusId = statusId;
+        Title = title;
+        Category = categoty;
+        Description = description;
+        StandardTime = standartTime;
     }
-    public int Id { get; }
+    public long Id { get; }
+    public string Title { get; }
+    public string Category { get; } 
+    public string Description { get;} 
+    public decimal StandardTime { get; }
 
-    public int OrderId { get; }
-
-    public int JobId { get; }
-
-    public int WorkerId { get; }
-
-    public decimal TimeSpent { get; }
-    
-    public int StatusId { get; }
-
-    public static (Work work, string error) Create (int id, int orderId, int jobId, int workerId, decimal timeSpent, int statusId)
+    public static (Work? work, List<string> errors) Create(long id, string title, string categoty, string description, decimal standartTime)
     {
-        var error = string.Empty;
+        var errors = new List<string>();
 
-        var work = new Work(id, orderId, jobId, workerId, timeSpent, statusId);
+        var idError = DomainValidator.ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
-        if (orderId <= 0)
-            error = "Order Id must be positive";
+        var titleError = DomainValidator.ValidateString(title, ValidationConstants.MAX_NAME_LENGTH, "title");
+        if (!string.IsNullOrEmpty(titleError)) errors.Add(titleError);
 
-        if (jobId <= 0)
-            error = "Job Id must be positive";
+        var categoryError = DomainValidator.ValidateString(categoty, ValidationConstants.MAX_CATEGORY_LENGTH, "category");
+        if (!string.IsNullOrEmpty(categoryError)) errors.Add(categoryError);
 
-        if (workerId <= 0)
-            error = "Worker Id must be positive";
+        var descriptionError = DomainValidator.ValidateString(description, ValidationConstants.MAX_DESCRIPTION_LENGTH, "description");
+        if (!string.IsNullOrEmpty(descriptionError)) errors.Add(descriptionError);
 
-        if (statusId <= 0)
-            error = "Status Id must be positive";
+        var standardTimeError = DomainValidator.ValidateMoney(standartTime, "time");
+        if (!string.IsNullOrEmpty(standardTimeError)) errors.Add(standardTimeError);
 
-        return (work, error);
+        if (errors.Any())
+            return (null, errors);
+
+        var work = new Work(id, title, categoty, description, standartTime);
+
+        return (work, errors);
     }
 }

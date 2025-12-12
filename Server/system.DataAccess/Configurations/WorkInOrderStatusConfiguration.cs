@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Enums;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.Core.Enums;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -15,7 +16,7 @@ public class WorkInOrderStatusConfiguration : IEntityTypeConfiguration<WorkInOrd
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Name)
-            .HasMaxLength(64)
+            .HasMaxLength(ValidationConstants.MAX_STATUS_NAME)
             .IsRequired();
 
         builder.HasData(

@@ -34,12 +34,12 @@ public class AttachmentConfiguration : IEntityTypeConfiguration<AttachmentEntity
         builder.HasOne(a => a.Order)
             .WithMany(o => o.Attachments)
             .HasForeignKey(a => a.OrderId) 
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(a => a.Worker)
             .WithMany(w => w.Attachments)
             .HasForeignKey(a => a.WorkerId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
     }
 }

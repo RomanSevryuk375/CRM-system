@@ -10,7 +10,7 @@ public class AcceptanceImgConfiguration : IEntityTypeConfiguration<AcceptanceImg
     void IEntityTypeConfiguration<AcceptanceImgEntity>.Configure(EntityTypeBuilder<AcceptanceImgEntity> builder)
     {
 
-        builder.ToTable("acceptence_imgs");
+        builder.ToTable("acceptance_imgs");
 
         builder.HasKey(x => x.Id);
 

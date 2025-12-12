@@ -44,6 +44,9 @@ public class Expense
         var sumError = DomainValidator.ValidateMoney(sum, "sum");
         if (!string.IsNullOrEmpty(sumError)) errors.Add(sumError);
 
+        if (errors.Any())
+            return (null, errors);
+
         var expense = new Expense(id, date, category, taxId, partSetId, expenseTypeId, sum);
 
         return (expense, new List<string>());

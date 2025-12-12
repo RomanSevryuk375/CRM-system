@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,11 +17,11 @@ public class WorkerConfiguration : IEntityTypeConfiguration<WorkerEntity>
             .IsRequired();
 
         builder.Property(wo => wo.Name)
-            .HasMaxLength(128)
+            .HasMaxLength(ValidationConstants.MAX_NAME_LENGTH)
             .IsRequired();
 
         builder.Property(wo => wo.Surname)
-            .HasMaxLength(128)
+            .HasMaxLength(ValidationConstants.MAX_NAME_LENGTH)
             .IsRequired();
 
         builder.Property(wo => wo.HourlyRate)
@@ -28,11 +29,11 @@ public class WorkerConfiguration : IEntityTypeConfiguration<WorkerEntity>
             .IsRequired();
 
         builder.Property(wo => wo.PhoneNumber)
-            .HasMaxLength(32)
+            .HasMaxLength(ValidationConstants.MAX_PHONE_LENGTH)
             .IsRequired();
 
         builder.Property(wo => wo.Email)
-            .HasMaxLength(256)
+            .HasMaxLength(ValidationConstants.MAX_EMAIL_LENGTH)
             .IsRequired();
 
         builder.HasOne(u => u.User)

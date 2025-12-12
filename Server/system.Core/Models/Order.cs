@@ -13,11 +13,11 @@ public class Order
         Date = date;
         PriorityId = priorityId;
     }
-    public long Id { get; set; }
-    public OrderStatusEnum StatusId { get; set; }
-    public long CarId { get; set; }
-    public DateOnly Date { get; set; }
-    public OrderPriorityEnum PriorityId { get; set; }
+    public long Id { get; }
+    public OrderStatusEnum StatusId { get; }
+    public long CarId { get; }
+    public DateOnly Date { get; }
+    public OrderPriorityEnum PriorityId { get; }
 
     public static (Order? order, List<string> errors) Create(long id, OrderStatusEnum statusId, long carId, DateOnly date, OrderPriorityEnum priorityId)
     {

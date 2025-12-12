@@ -18,4 +18,6 @@ public static class ValidationConstants
     public const int MAX_SURNAME_LENGTH = 128;
     public const int MAX_PHONE_LENGTH = 32;
     public const int MAX_EMAIL_LENGTH = 128;
+
+    public const int MAX_STORAGE_ITEM_LENGTH = 16;
 }

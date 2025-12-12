@@ -7,7 +7,7 @@ public class PositionEntity
     public int CellId { get; set; }
     public decimal PurchasePrice { get; set; } 
     public decimal SellingPrice { get; set; }
-    public int Quantity { get; set; }
+    public decimal Quantity { get; set; }
 
     public StorageCellEntity? StorageCell { get; set; }
     public PartEntity? Part { get; set; }

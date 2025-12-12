@@ -1,47 +1,48 @@
-﻿namespace CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Enums;
+using CRMSystem.Core.Validation;
+
+namespace CRMSystem.Core.Models;
 
 public class PaymentNote
 {
-    public PaymentNote(int id, int billId, DateTime date, decimal amount, string method)
+    public PaymentNote(long id, long billId, DateTime date, decimal amount, PaymentMethodEnum methodId)
     {
         Id = id;
         BillId = billId;
         Date = date; 
         Amount = amount;
-        Method = method;
+        MethodId = methodId;
     }
-    public int Id { get; }
-
-    public int BillId { get; }
-
+    public long Id { get; }
+    public long BillId { get; }
     public DateTime Date { get; }
-
     public decimal Amount { get; }
+    public PaymentMethodEnum MethodId { get; }
 
-    public string Method { get; } 
-
-    public static (PaymentNote paymentNote, string error) Create (int id, int billId, DateTime date, decimal amount, string method)
+    public static (PaymentNote? paymentNote, List<string> errors) Create(long id, long billId, DateTime date, decimal amount, PaymentMethodEnum methodId)
     {
-        var error = string.Empty;
-        var allowedMethods = new[] { "Картой", "Наличными", "ЕРИП", "Рассрочка", "Другое" };
+        var errors = new List<string>();
 
-        if (billId <= 0)
-            error = "BillId must be positive";
+        var idError = DomainValidator.ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
-        if (date > DateTime.Now)
-            error = "Payment date cannot be in the future";
+        var billIdError = DomainValidator.ValidateId(billId, "billId");
+        if (!string.IsNullOrEmpty(billIdError)) errors.Add(billIdError);
 
-        if (amount <= 0)
-            error = "Payment amount must be greater than 0";
+        var methodIdError = DomainValidator.ValidateId(methodId, "methodId");
+        if (!string.IsNullOrEmpty(methodIdError)) errors.Add(methodIdError);
 
-        if (string.IsNullOrWhiteSpace(method))
-            error = "Payment method cannot be empty";
+        var dateError = DomainValidator.ValidateDate(date, "date");
+        if (!string.IsNullOrEmpty(dateError)) errors.Add(dateError);
 
-        if (!allowedMethods.Contains(method))
-            error = $"Invalid payment method. Allowed: {string.Join(", ", allowedMethods)}";
+        var amountError = DomainValidator.ValidateMoney(amount, "amount");
+        if (!string.IsNullOrEmpty(amountError)) errors.Add(amountError);
 
-        var paymentJournal = new PaymentNote(id, billId, date, amount, method);
+        if (errors.Any())
+            return (null, errors);
 
-        return (paymentJournal, error);
+        var paymentJournal = new PaymentNote(id, billId, date, amount, methodId);
+
+        return (paymentJournal, new List<string>());
     }
 }
