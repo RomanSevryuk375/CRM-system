@@ -19,7 +19,7 @@ public class Absence
     public DateOnly StartDate { get; }
     public DateOnly? EndDate { get; }
 
-    public static (Absence? absence, List<string>? error) Create(int id, int workerId, AbsenceTypeEnum typeId, DateOnly startDate, DateOnly? endDate)
+    public static (Absence? absence, List<string> error) Create(int id, int workerId, AbsenceTypeEnum typeId, DateOnly startDate, DateOnly? endDate)
     {
         var errors = new List<string>();
 

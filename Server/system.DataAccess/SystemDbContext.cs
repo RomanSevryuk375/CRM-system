@@ -11,6 +11,7 @@ public class SystemDbContext : DbContext
     }
 
     public DbSet<AbsenceEntity> Absences { get; set; }
+    public DbSet<AbsenceTypeEntity> AbsenceTypes { get; set; }
     public DbSet<AcceptanceEntity> Acceptances { get; set; }
     public DbSet<AcceptanceImgEntity> AcceptanceImgs { get; set; }
     public DbSet<AttachmentEntity> Attachments { get; set; }

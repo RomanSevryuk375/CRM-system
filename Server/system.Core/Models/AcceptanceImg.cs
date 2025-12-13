@@ -5,19 +5,19 @@ namespace CRMSystem.Core.Models;
 
 public class AcceptanceImg
 {
-    public AcceptanceImg(int id, int acceptanceId, string filePath, string? description)
+    public AcceptanceImg(long id, long acceptanceId, string filePath, string? description)
     {
         Id = id;
-        Description = description;
+        AcceptanceId = acceptanceId;
         FilePath = filePath;
         Description = description;
     }
-    public long Id { get; set; }
-    public long AcceptanceId { get; set; }
-    public string FilePath { get; set; } = string.Empty;
-    public string? Description { get; set; } = string.Empty;
+    public long Id { get; }
+    public long AcceptanceId { get; }
+    public string FilePath { get; } = string.Empty;
+    public string? Description { get; } = string.Empty;
 
-    public static (AcceptanceImg? acceptanceImg, List<string>? errors) Create(int id, int acceptanceId, string filePath, string? description)
+    public static (AcceptanceImg? acceptanceImg, List<string>? errors) Create(long id, long acceptanceId, string filePath, string? description)
     {
         var errors = new List<string>();
 
