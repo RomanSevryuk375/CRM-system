@@ -46,8 +46,12 @@ public class AbsenceRepository : IAbsenceRepository
 
         var projection = query.Select(a => new AbsenceItem(
             a.Id,
-            a.Worker == null ? "" : $"{a.Worker.Name} {a.Worker.Surname}",
-            a.AbsenceType == null ? string.Empty : a.AbsenceType.Name,
+            a.Worker == null 
+                ? "" 
+                : $"{a.Worker.Name} {a.Worker.Surname}",
+            a.AbsenceType == null 
+                ? string.Empty 
+                : a.AbsenceType.Name,
             a.StartDate,
             a.EndDate));
 

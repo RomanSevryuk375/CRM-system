@@ -69,7 +69,7 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
         var entity = await _context.AcceptanceImgs
             .FirstOrDefaultAsync(a => a.Id == id);
 
-        if (entity == null) throw new Exception("Absences not found");
+        if (entity == null) throw new Exception("AcceptanceImg not found");
 
         if (!string.IsNullOrEmpty(filePath)) entity.FilePath = filePath;
         if (!string.IsNullOrEmpty(description)) entity.Description = description;

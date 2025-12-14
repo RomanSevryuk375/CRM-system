@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class AttachmentImg
 {
-    public AttachmentImg(int id, int attachmentId, string filePath, string? description)
+    public AttachmentImg(long id, long attachmentId, string filePath, string? description)
     {
         Id = id;
         AttachmentId = attachmentId;
@@ -18,7 +18,7 @@ public class AttachmentImg
     public string FilePath { get; set; } = string.Empty;
     public string? Description { get; set; } = string.Empty;
 
-    public static (AttachmentImg? attachmentImg, List<string>? errors) CreateAcceptanceImg(int id, int attachmentId, string filePath, string? description)
+    public static (AttachmentImg? attachmentImg, List<string>? errors) CreateAcceptanceImg(long id, long attachmentId, string filePath, string? description)
     {
         var errors = new List<string>();
 

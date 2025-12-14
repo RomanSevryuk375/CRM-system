@@ -1,15 +1,14 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Bill;
+using CRMSystem.Core.Models;
 
 namespace CRMSystem.DataAccess.Repositories
 {
     public interface IBillRepository
     {
-        Task<List<Bill>> Get();
-        Task<List<Bill>> GetPaged(int page, int limit);
-        Task<int> GetCount();
-        Task<List<Bill>> GetByOrderId(List<int> orderIds);
-        Task<List<Bill>> GetPagedByOrderId(List<int> orderIds, int page, int limit);
-        Task<int> GetCountByOrderId(List<int> orderIds);
-        Task<int> Create(Bill bill);
+        Task<long> Create(Bill bill);
+        Task<long> Delete(long id);
+        Task<int> GetCount(BillFilter filter);
+        Task<List<BillItem>> GetPaged(BillFilter filter);
+        Task<long> Update(long id, BillUpdateModel model);
     }
 }

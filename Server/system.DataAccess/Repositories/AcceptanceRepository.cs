@@ -62,7 +62,9 @@ public class AcceptanceRepository : IAcceptanceRepository
         var projection = query.Select(a => new AcceptanceItem(
             a.Id,
             a.OrderId,
-            a.Worker == null ? "" : $"{a.Worker.Name} {a.Worker.Surname}",
+            a.Worker == null 
+                ? "" 
+                : $"{a.Worker.Name} {a.Worker.Surname}",
             a.CreateAt,
             a.Mileage,
             a.FuelLevel,
@@ -110,7 +112,7 @@ public class AcceptanceRepository : IAcceptanceRepository
         var entity = await _context.Acceptances
             .FirstOrDefaultAsync(a => a.Id == id);
 
-        if (entity == null) throw new Exception("Absences not found");
+        if (entity == null) throw new Exception("Acceptance not found");
 
         if (model.mileage.HasValue) entity.Mileage = model.mileage.Value;
         if (model.fuelLevel.HasValue) entity.FuelLevel = model.fuelLevel.Value;

@@ -52,7 +52,7 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
         var entity = await _context.AbsenceTypes
             .FirstOrDefaultAsync(a => a.Id == id);
 
-        if (entity == null) throw new Exception("Absences not found");
+        if (entity == null) throw new Exception("AbsencesType not found");
 
         if (!string.IsNullOrEmpty(name))
             entity.Name = name;

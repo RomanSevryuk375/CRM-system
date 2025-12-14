@@ -17,7 +17,7 @@ public class SystemDbContext : DbContext
     public DbSet<AttachmentEntity> Attachments { get; set; }
     public DbSet<AttachmentImgEntity> AttachmentImgs { get; set; }
     public DbSet<BillEntity> Bills { get; set; }
-    public DbSet<BillStatusEntity> BillsStatuses { get; set; }
+    public DbSet<BillStatusEntity> BillStatuses { get; set; }
     public DbSet<CarEntity> Cars { get; set; }
     public DbSet<CarStatusEntity> CarStatuses { get; set; }
     public DbSet<ClientEntity> Clients { get; set; }

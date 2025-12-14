@@ -1,6 +1,5 @@
 ﻿using CRMSystem.Core.Constants;
 using CRMSystem.Core.Validation;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CRMSystem.Core.Models;
 
