@@ -8,7 +8,7 @@ namespace CRMSystem.DataAccess.Repositories
         Task<long> Create(Car car);
         Task<long> Delete(long id);
         Task<List<CarItem>> Get(CarFilter filter);
-        Task<long> GetCount(CarFilter filter);
+        Task<int> GetCount(CarFilter filter);
         Task<long> Update(long id, CarUpdateModel model);
     }
 }

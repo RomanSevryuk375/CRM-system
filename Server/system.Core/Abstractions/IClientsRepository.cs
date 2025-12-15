@@ -1,14 +1,14 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Client;
+using CRMSystem.Core.Models;
 
-namespace CRMSystem.Core.Abstractions;
-
-public interface IClientsRepository
+namespace CRMSystem.DataAccess.Repositories
 {
-    Task<int> Create(Client client);
-    Task<List<Client>> Get();
-    Task<List<Client>> GetPaged(int page, int limit);
-    Task<int> GetCount();
-    Task<int> Update(int id, string? name, string? surname, string? phoneNumber, string? email);
-    Task<int> Delete(int id);
-    Task<List<Client>> GetClientByUserId(int userId);
+    public interface IClientsRepository
+    {
+        Task<long> Create(Client client);
+        Task<long> Delete(long id);
+        Task<int> GetCount(ClientFilter filter);
+        Task<List<ClientItem>> GetPaged(ClientFilter filter);
+        Task<long> Update(long id, ClientUpdateModel model);
+    }
 }

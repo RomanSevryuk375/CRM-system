@@ -56,7 +56,7 @@ public class AttachmentRepository : IAttachmentRepository
             .ToListAsync();
     }
 
-    public async Task<long> GetCount(AttachmentFilter filter)
+    public async Task<int> GetCount(AttachmentFilter filter)
     {
         var query = _context.Attachments.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -81,10 +81,8 @@ public class AttachmentRepository : IAttachmentRepository
 
     public async Task<long> Update(long id, string? description)
     {
-        var entity = await _context.Attachments
-            .FirstOrDefaultAsync(a => a.Id == id);
-
-        if (entity == null) throw new Exception("Attachment not found");
+        var entity = await _context.Attachments.FirstOrDefaultAsync(a => a.Id == id)
+            ?? throw new Exception("Attachment not found");
 
         if (!string.IsNullOrEmpty(description)) entity.Description = description;
 

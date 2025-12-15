@@ -41,7 +41,7 @@ public class AttachmentImgRepository : IAttachmentImgRepository
             .ToListAsync();
     }
 
-    public async Task<long> GetCount(AttachmentImgFilter filter)
+    public async Task<int> GetCount(AttachmentImgFilter filter)
     {
         var query = _context.AttachmentImgs.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -65,10 +65,8 @@ public class AttachmentImgRepository : IAttachmentImgRepository
 
     public async Task<long> Update(long id, string? filePath, string? description)
     {
-        var entity = await _context.AttachmentImgs
-            .FirstOrDefaultAsync(a => a.Id == id);
-
-        if (entity == null) throw new Exception("AttachmentImg not found");
+        var entity = await _context.AttachmentImgs.FirstOrDefaultAsync(a => a.Id == id) 
+            ?? throw new Exception("AttachmentImg not found");
 
         if (!string.IsNullOrEmpty(filePath)) entity.FilePath = filePath;
         if (!string.IsNullOrEmpty(description)) entity.Description = description;

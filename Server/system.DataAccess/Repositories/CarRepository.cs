@@ -31,17 +31,17 @@ public class CarRepository : ICarRepository
         {
             "owner" => filter.isDescending
                 ? query.OrderByDescending(c => c.Client == null
-                    ? ""
+                    ? string.Empty
                     : c.Client.Name)
                 : query.OrderBy(c => c.Client == null
-                    ? ""
+                    ? string.Empty
                     : c.Client.Name),
             "status" => filter.isDescending
                 ? query.OrderByDescending(c => c.Status == null
-                    ? ""
+                    ? string.Empty
                     : c.Status.Name)
                 : query.OrderBy(c => c.Status == null
-                    ? ""
+                    ? string.Empty
                     : c.Status.Name),
             "brand" => filter.isDescending
                 ? query.OrderByDescending(c => c.Brand)
@@ -70,10 +70,10 @@ public class CarRepository : ICarRepository
         var projection = query.Select(c => new CarItem(
             c.Id,
             c.Client == null
-                ? ""
+                ? string.Empty
                 : $"{c.Client.Name} {c.Client.Surname}",
             c.Status == null
-                ? ""
+                ? string.Empty
                 : c.Status.Name,
             c.Brand,
             c.Model,
@@ -88,7 +88,7 @@ public class CarRepository : ICarRepository
             .ToListAsync();
     }
 
-    public async Task<long> GetCount(CarFilter filter)
+    public async Task<int> GetCount(CarFilter filter)
     {
         var query = _context.Cars.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -100,6 +100,7 @@ public class CarRepository : ICarRepository
         var carEntities = new CarEntity
         {
             OwnerId = car.OwnerId,
+            StatusId = car.StatusId,
             Brand = car.Brand,
             Model = car.Model,
             YearOfManufacture = car.YearOfManufacture,

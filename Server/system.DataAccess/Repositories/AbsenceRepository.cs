@@ -30,8 +30,12 @@ public class AbsenceRepository : IAbsenceRepository
         query = filter.SortBy?.ToLower().Trim() switch
         {
             "type" => filter.isDescending 
-                ? query.OrderByDescending(a => a.AbsenceType == null ? string.Empty : a.AbsenceType.Name) 
-                : query.OrderBy(a => a.AbsenceType == null ? string.Empty : a.AbsenceType.Name),
+                ? query.OrderByDescending(a => a.AbsenceType == null 
+                    ? string.Empty 
+                    : a.AbsenceType.Name) 
+                : query.OrderBy(a => a.AbsenceType == null 
+                    ? string.Empty 
+                    : a.AbsenceType.Name),
             "startdate" => filter.isDescending 
                 ? query.OrderByDescending(a => a.StartDate) 
                 : query.OrderBy(a => a.StartDate),
@@ -47,7 +51,7 @@ public class AbsenceRepository : IAbsenceRepository
         var projection = query.Select(a => new AbsenceItem(
             a.Id,
             a.Worker == null 
-                ? "" 
+                ? string.Empty 
                 : $"{a.Worker.Name} {a.Worker.Surname}",
             a.AbsenceType == null 
                 ? string.Empty 
@@ -61,7 +65,7 @@ public class AbsenceRepository : IAbsenceRepository
             .ToListAsync();
     }
 
-    public async Task<long> GetCount(AbsenceFilter filter)
+    public async Task<int> GetCount(AbsenceFilter filter)
     {
         var query = _context.Absences.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -86,9 +90,8 @@ public class AbsenceRepository : IAbsenceRepository
 
     public async Task<int> Update(AbsenceUpdateModel model)
     {
-        var entity = await _context.Absences.FirstOrDefaultAsync(a => a.Id == model.id);
-
-        if (entity == null) throw new Exception("Absences not found");
+        var entity = await _context.Absences.FirstOrDefaultAsync(a => a.Id == model.id)
+            ?? throw new Exception("Absence not found");
 
         if (model.typeId.HasValue) entity.TypeId = model.typeId.Value;
         if (model.startDate.HasValue) entity.StartDate = model.startDate.Value;

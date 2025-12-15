@@ -1,4 +1,4 @@
-﻿using CRMSystem.Core.Abstractions;
+﻿using CRMSystem.Core.DTOs.Client;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -14,84 +14,62 @@ public class ClientsRepository : IClientsRepository
         _context = context;
     }
 
-    public async Task<List<Client>> Get()
+    private IQueryable<ClientEntity> ApplyFilter(IQueryable<ClientEntity> query, ClientFilter filter)
     {
-        var clientEntities = await _context.Clients
-        .AsNoTracking()
-        .ToListAsync();
+        if (filter.userIds != null && filter.userIds.Any())
+            query = query.Where(c => filter.userIds.Contains(c.UserId));
 
-        var clients = clientEntities
-            .Select(c => Client.Create(
-                c.Id,
-                c.UserId,
-                c.Name,
-                c.Surname,
-                c.PhoneNumber,
-                c.Email).client)
-            .ToList();
-
-        return clients;
+        return query;
     }
 
-    public async Task<List<Client>> GetPaged(int page, int limit)
+    public async Task<List<ClientItem>> GetPaged(ClientFilter filter)
     {
-        var clientEntities = await _context.Clients
-        .AsNoTracking()
-        .Skip((page - 1) * limit)
-        .Take(limit)
-        .ToListAsync();
+        var query = _context.Clients.AsNoTracking();
+        query = ApplyFilter(query, filter);
 
-        var clients = clientEntities
-            .Select(c => Client.Create(
-                c.Id,
-                c.UserId,
-                c.Name,
-                c.Surname,
-                c.PhoneNumber,
-                c.Email).client)
-            .ToList();
+        query = filter.SortBy?.ToLower().Trim() switch
+        {
+            "name" => filter.isDescending
+                ? query.OrderByDescending(c => c.Name)
+                : query.OrderBy(c => c.Name),
+            "surname" => filter.isDescending
+                ? query.OrderByDescending(c => c.Surname)
+                : query.OrderBy(c => c.Surname),
+            "phonenumber" => filter.isDescending
+                ? query.OrderByDescending(c => c.PhoneNumber)
+                : query.OrderBy(c => c.PhoneNumber),
+            "email" => filter.isDescending
+                ? query.OrderByDescending(c => c.Email)
+                : query.OrderBy(c => c.Email),
 
-        return clients;
-    }
+            _ => filter.isDescending
+                ? query.OrderByDescending(c => c.Id)
+                : query.OrderBy(c => c.Id),
+        };
 
-    public async Task<int> GetCount()
-    {
-        return await _context.Clients.CountAsync();
-    }
+        var projection = query.Select(c => new ClientItem(
+            c.Id,
+            c.UserId,
+            c.Name,
+            c.Surname,
+            c.PhoneNumber,
+            c.Email));
 
-    public async Task<List<Client>> GetClientByUserId(int userId)
-    {
-        var clientEntities = await _context.Clients
-            .Where(c => c.UserId == userId)
-            .AsNoTracking()
+        return await projection
+            .Skip((filter.Page - 1) * filter.Limit)
+            .Take(filter.Limit)
             .ToListAsync();
-
-        var clients = clientEntities
-            .Select(c => Client.Create(
-                c.Id,
-                c.UserId,
-                c.Name,
-                c.Surname,
-                c.PhoneNumber,
-                c.Email).client)
-            .ToList();
-
-        return clients;
     }
 
-    public async Task<int> Create(Client client)
+    public async Task<int> GetCount(ClientFilter filter)
     {
-        var (_, error) = Client.Create(
-        0,
-        client.UserId,
-        client.Name,
-        client.Surname,
-        client.PhoneNumber,
-        client.Email);
+        var query = _context.Clients.AsNoTracking();
+        query = ApplyFilter(query, filter);
+        return await query.CountAsync();
+    }
 
-        if (!string.IsNullOrEmpty(error))
-            throw new ArgumentException($"Create exception Client: {error}");
-
+    public async Task<long> Create(Client client)
+    {
         var clientEntities = new ClientEntity
         {
             UserId = client.UserId,
@@ -107,29 +85,22 @@ public class ClientsRepository : IClientsRepository
         return clientEntities.Id;
     }
 
-    public async Task<int> Update(int id, string? name, string? surname, string? phoneNumber, string? email)
+    public async Task<long> Update(long id, ClientUpdateModel model)
     {
-        var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == id)
+        var entity = await _context.Clients.FirstOrDefaultAsync(c => c.Id == id)
             ?? throw new Exception("Client not found");
 
-        if (!string.IsNullOrWhiteSpace(name))
-            client.Name = name;
-
-        if (!string.IsNullOrWhiteSpace(surname))
-            client.Surname = surname;
-
-        if (!string.IsNullOrWhiteSpace(phoneNumber))
-            client.PhoneNumber = phoneNumber;
-
-        if (!string.IsNullOrWhiteSpace(email))
-            client.Email = email;
+        if (!string.IsNullOrWhiteSpace(model.name)) entity.Name = model.name;
+        if (!string.IsNullOrWhiteSpace(model.surname)) entity.Surname = model.surname;
+        if (!string.IsNullOrWhiteSpace(model.phoneNumber)) entity.PhoneNumber = model.phoneNumber;
+        if (!string.IsNullOrWhiteSpace(model.email)) entity.Email = model.email;
 
         await _context.SaveChangesAsync();
 
-        return client.Id;
+        return entity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<long> Delete(long id)
     {
         var clientEntity = await _context.Clients
             .Where(c => c.Id == id)

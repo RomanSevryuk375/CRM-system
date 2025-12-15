@@ -7,7 +7,7 @@ namespace CRMSystem.DataAccess.Repositories
     {
         Task<int> Create(Absence absence);
         Task<int> Delete(int id);
-        Task<long> GetCount(AbsenceFilter filter);
+        Task<int> GetCount(AbsenceFilter filter);
         Task<List<AbsenceItem>> GetPaged(AbsenceFilter filter);
         Task<int> Update(AbsenceUpdateModel model);
     }

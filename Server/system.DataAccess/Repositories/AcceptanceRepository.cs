@@ -63,7 +63,7 @@ public class AcceptanceRepository : IAcceptanceRepository
             a.Id,
             a.OrderId,
             a.Worker == null 
-                ? "" 
+                ? string.Empty 
                 : $"{a.Worker.Name} {a.Worker.Surname}",
             a.CreateAt,
             a.Mileage,
@@ -79,7 +79,7 @@ public class AcceptanceRepository : IAcceptanceRepository
             .ToListAsync();
     }
 
-    public async Task<long> GetCount(AcceptanceFilter filter)
+    public async Task<int> GetCount(AcceptanceFilter filter)
     {
         var query = _context.Acceptances.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -109,10 +109,8 @@ public class AcceptanceRepository : IAcceptanceRepository
 
     public async Task<long> Update(long id, AcceptanceUpdateModel model)
     {
-        var entity = await _context.Acceptances
-            .FirstOrDefaultAsync(a => a.Id == id);
-
-        if (entity == null) throw new Exception("Acceptance not found");
+        var entity = await _context.Acceptances.FirstOrDefaultAsync(a => a.Id == id)
+            ?? throw new Exception("Acceptance not found");
 
         if (model.mileage.HasValue) entity.Mileage = model.mileage.Value;
         if (model.fuelLevel.HasValue) entity.FuelLevel = model.fuelLevel.Value;

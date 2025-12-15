@@ -22,9 +22,11 @@ public class SystemDbContext : DbContext
     public DbSet<CarStatusEntity> CarStatuses { get; set; }
     public DbSet<ClientEntity> Clients { get; set; }
     public DbSet<ExpenseEntity> Expenses { get; set; }
+    public DbSet<ExpenseTypeEntity> ExpenseTypes { get; set; }
     public DbSet<GuaranteeEntity> Guarantees { get; set; }
     public DbSet<NotificationEntity> Notifications { get; set; }
     public DbSet<NotificationStatusEntity> NotificationsStatuses { get; set; }
+    public DbSet<NotificationTypeEntity> NotificationTypes { get; set; }
     public DbSet<OrderEntity> Orders { get; set; }
     public DbSet<OrderStatusEntity> OrderStatuses { get; set; }
     public DbSet<PartCategoryEntity> PartCategories { get; set; }

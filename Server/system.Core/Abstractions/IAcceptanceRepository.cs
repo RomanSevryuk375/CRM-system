@@ -7,7 +7,7 @@ namespace CRMSystem.DataAccess.Repositories
     {
         Task<long> Create(Acceptance acceptance);
         Task<long> Delete(long id);
-        Task<long> GetCount(AcceptanceFilter filter);
+        Task<int> GetCount(AcceptanceFilter filter);
         Task<List<AcceptanceItem>> GetPaged(AcceptanceFilter filter);
         Task<long> Update(long id, AcceptanceUpdateModel model);
     }

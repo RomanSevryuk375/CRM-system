@@ -30,8 +30,12 @@ public class BillRepository : IBillRepository
         query = filter.SortBy?.ToLower().Trim() switch
         {
             "status" => filter.isDescending
-                ? query.OrderByDescending(a => a.StatusId)
-                : query.OrderBy(a => a.StatusId),
+                ? query.OrderByDescending(a => a.Status == null 
+                    ? string.Empty
+                    : a.Status.Name)
+                : query.OrderBy(a => a.Status == null
+                    ? string.Empty
+                    : a.Status.Name),
             "createat" => filter.isDescending
                 ? query.OrderByDescending(a => a.CreatedAt)
                 : query.OrderBy(a => a.CreatedAt),
@@ -51,7 +55,7 @@ public class BillRepository : IBillRepository
             b.Id,
             b.OrderId,
             b.Status == null
-                ? ""
+                ? string.Empty
                 : $"{b.Status.Name}",
             b.CreatedAt,
             b.Amount,
@@ -74,7 +78,6 @@ public class BillRepository : IBillRepository
     {
         var billEntity = new BillEntity
         {
-            Id = bill.Id,
             OrderId = bill.OrderId,
             StatusId = bill.StatusId,
             CreatedAt = bill.CreatedAt,
@@ -90,9 +93,8 @@ public class BillRepository : IBillRepository
 
     public async Task<long> Update(long id, BillUpdateModel model)
     {
-        var entity = await _context.Bills.FirstOrDefaultAsync(b => b.Id == id);
-
-        if (entity == null) throw new Exception("Bill not found");
+        var entity = await _context.Bills.FirstOrDefaultAsync(b => b.Id == id)
+            ?? throw new Exception("Bill not found");
 
         if (model.statusId.HasValue) entity.StatusId = model.statusId.Value;
         if (model.amount.HasValue) entity.Amount = model.amount.Value;

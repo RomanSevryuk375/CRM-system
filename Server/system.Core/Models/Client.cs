@@ -16,12 +16,12 @@ public class Client
         Email = email;
     }
 
-    public long Id { get; set; }
-    public long UserId { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Surname { get; set; } = string.Empty;
-    public string PhoneNumber { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
+    public long Id { get; }
+    public long UserId { get; }
+    public string Name { get; } 
+    public string Surname { get; } 
+    public string PhoneNumber { get; } 
+    public string Email { get; } 
 
     public static (Client? client, List<string>? errors) Create(long id, long userId, string name, string surname, string phoneNumber, string email)
     {

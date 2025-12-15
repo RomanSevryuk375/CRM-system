@@ -7,7 +7,7 @@ namespace CRMSystem.DataAccess.Repositories
     {
         Task<long> Create(Attachment attachment);
         Task<long> Delete(long id);
-        Task<long> GetCount(AttachmentFilter filter);
+        Task<int> GetCount(AttachmentFilter filter);
         Task<List<AttachmentItem>> GetPaged(AttachmentFilter filter);
         Task<long> Update(long id, string? description);
     }

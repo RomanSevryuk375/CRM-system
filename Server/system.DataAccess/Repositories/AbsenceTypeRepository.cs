@@ -49,8 +49,8 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
 
     public async Task<int> Update(int id, string name)
     {
-        var entity = await _context.AbsenceTypes
-            .FirstOrDefaultAsync(a => a.Id == id);
+        var entity = await _context.AbsenceTypes.FirstOrDefaultAsync(a => a.Id == id)
+            ?? throw new Exception("AbsenceType not found");
 
         if (entity == null) throw new Exception("AbsencesType not found");
 

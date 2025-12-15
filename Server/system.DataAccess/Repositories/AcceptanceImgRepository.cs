@@ -42,7 +42,7 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
             .ToListAsync();
     }
 
-    public async Task<long> GetCount(AcceptanceImgFilter filter)
+    public async Task<int> GetCount(AcceptanceImgFilter filter)
     {
         var query = _context.AcceptanceImgs.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -66,8 +66,8 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
 
     public async Task<long> Update(long id, string? filePath, string? description)
     {
-        var entity = await _context.AcceptanceImgs
-            .FirstOrDefaultAsync(a => a.Id == id);
+        var entity = await _context.AcceptanceImgs.FirstOrDefaultAsync(a => a.Id == id) 
+            ?? throw new Exception("AcceptanceImg not found");
 
         if (entity == null) throw new Exception("AcceptanceImg not found");
 

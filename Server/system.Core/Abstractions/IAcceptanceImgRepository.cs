@@ -7,7 +7,7 @@ namespace CRMSystem.DataAccess.Repositories
     {
         Task<long> Create(AcceptanceImg acceptanceImg);
         Task<long> Delete(long id);
-        Task<long> GetCount(AcceptanceImgFilter filter);
+        Task<int> GetCount(AcceptanceImgFilter filter);
         Task<List<AcceptanceImgItem>> GetPaged(AcceptanceImgFilter filter);
         Task<long> Update(long id, string? filePath, string? description);
     }
