@@ -29,6 +29,7 @@ public class SystemDbContext : DbContext
     public DbSet<NotificationTypeEntity> NotificationTypes { get; set; }
     public DbSet<OrderEntity> Orders { get; set; }
     public DbSet<OrderStatusEntity> OrderStatuses { get; set; }
+    public DbSet<OrderPriorityEntity> OrderPriorities { get; set; }
     public DbSet<PartCategoryEntity> PartCategories { get; set; }
     public DbSet<PartEntity> Parts { get; set; }
     public DbSet<PartSetEntity> PartSets { get; set; }
