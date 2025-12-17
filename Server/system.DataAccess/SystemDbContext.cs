@@ -33,6 +33,7 @@ public class SystemDbContext : DbContext
     public DbSet<PartCategoryEntity> PartCategories { get; set; }
     public DbSet<PartEntity> Parts { get; set; }
     public DbSet<PartSetEntity> PartSets { get; set; }
+    public DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
     public DbSet<PaymentNoteEntity> PaymentNotes { get; set; }
     public DbSet<PositionEntity> Positions { get; set; }
     public DbSet<RoleEntity> Roles { get; set; }

@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Supplier;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,56 +14,21 @@ public class SupplierRepository : ISupplierRepository
         _context = context;
     }
 
-    public async Task<List<Supplier>> Get()
+    public async Task<List<SupplierItem>> Get()
     {
-        var supplierEntitie = await _context.Suppliers
-            .AsNoTracking()
-            .ToListAsync();
+        var query = _context.Suppliers.AsNoTracking();
 
-        var suppliers = supplierEntitie
-            .Select(su => Supplier.Create(
+        var suppliers = query.Select(su => new SupplierItem(
                 su.Id,
                 su.Name,
                 su.Contacts
-                ).supplier)
-            .ToList();
+                ));
 
-        return suppliers;
-    }
-
-    public async Task<List<Supplier>> GetPaged(int page, int limit)
-    {
-        var supplierEntitie = await _context.Suppliers
-                    .AsNoTracking()
-                    .Skip((page - 1) * limit)
-                    .Take(limit)
-                    .ToListAsync();
-
-        var suppliers = supplierEntitie
-            .Select(su => Supplier.Create(
-                su.Id,
-                su.Name,
-                su.Contacts
-                ).supplier)
-            .ToList();
-
-        return suppliers;
-    }
-    
-    public async Task<int> GetCount()
-    {
-        return await _context.Suppliers.CountAsync();
+        return await suppliers.ToListAsync();
     }
 
     public async Task<int> Create(Supplier supplier)
     {
-        var (_, error) = Supplier.Create(
-            0,
-            supplier.Name,
-            supplier.Contacts);
-        if (!string.IsNullOrEmpty(error))
-            throw new ArgumentException($"Create exception Supplier: {error}");
-
         var supplierEntity = new SupplierEntity
         {
             Name = supplier.Name,
@@ -75,19 +41,17 @@ public class SupplierRepository : ISupplierRepository
         return supplierEntity.Id;
     }
 
-    public async Task<int> Update(int id, string? name, string? contacts)
+    public async Task<int> Update(int id, SupplierUpdateModel model)
     {
-        var supplier = await _context.Suppliers.FirstOrDefaultAsync(su => su.Id == id)
+        var entity = await _context.Suppliers.FirstOrDefaultAsync(su => su.Id == id)
             ?? throw new ArgumentException("Supplier not found");
 
-        if (!string.IsNullOrWhiteSpace(name))
-            supplier.Name = name;
-        if (!string.IsNullOrWhiteSpace(contacts))
-            supplier.Contacts = contacts;
+        if (!string.IsNullOrWhiteSpace(model.name)) entity.Name = model.name;
+        if (!string.IsNullOrWhiteSpace(model.contacts)) entity.Contacts = model.contacts;
 
         await _context.SaveChangesAsync();
 
-        return supplier.Id;
+        return entity.Id;
     }
 
     public async Task<int> Delete(int id)

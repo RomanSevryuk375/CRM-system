@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,62 +14,29 @@ public class SpecializationRepository : ISpecializationRepository
         _context = context;
     }
 
-    public async Task<List<Specialization>> Get()
+    public async Task<List<SpecializationItem>> Get()
     {
-        var specializationEntities = await _context.Specializations
-            .AsNoTracking()
-            .ToListAsync();
+        var query = _context.Specializations.AsNoTracking();
 
-        var specializations = specializationEntities
-            .Select(s => Specialization.Create(
+        var projection = query
+            .Select(s => new SpecializationItem(
                 s.Id,
-                s.Name
-                ).specialization)
-            .ToList();
+                s.Name));
 
-        return specializations;
-    }
-
-    public async Task<List<Specialization>> GetPaged(int page, int limit)
-    {
-        var specializationEntities = await _context.Specializations
-                    .AsNoTracking()
-                    .Skip((page - 1) * limit)
-                    .Take(limit)
-                    .ToListAsync();
-
-        var specializations = specializationEntities
-            .Select(s => Specialization.Create(
-                s.Id,
-                s.Name
-                ).specialization)
-            .ToList();
-
-        return specializations;
-    }
-
-    public async Task<int> GetCount()
-    {
-        return await _context.Specializations.CountAsync();
+        return await projection.ToListAsync();
     }
 
     public async Task<int> Create(Specialization specialization)
     {
-        var (_, error) = Specialization.Create(
-            0,
-            specialization.Name);
-        if (!string.IsNullOrEmpty(error))
-            throw new ArgumentException($"Create exception Specialization: {error}");
-
-        var specializationEntities = new SpecializationEntity
+        var specEntity = new SpecializationEntity
         {
             Name = specialization.Name,
         };
 
-        await _context.Specializations.AddAsync(specializationEntities);
+        await _context.Specializations.AddAsync(specEntity);
         await _context.SaveChangesAsync();
 
-        return specializationEntities.Id;
+        return specEntity.Id;
     }
 
     public async Task<int> Update(int id, string? name)
