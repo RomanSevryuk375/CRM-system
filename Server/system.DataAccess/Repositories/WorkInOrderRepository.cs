@@ -1,0 +1,140 @@
+﻿using CRMSystem.Core.DTOs.WorkInOrder;
+using CRMSystem.Core.Models;
+using CRMSystem.DataAccess.Entites;
+using Microsoft.EntityFrameworkCore;
+
+namespace CRMSystem.DataAccess.Repositories;
+
+public class WorkInOrderRepository : IWorkInOrderRepository
+{
+    private readonly SystemDbContext _context;
+
+    public WorkInOrderRepository(SystemDbContext context)
+    {
+        _context = context;
+    }
+
+    private IQueryable<WorkInOrderEntity> ApplyFilter(IQueryable<WorkInOrderEntity> query, WorkInOrderFilter filter)
+    {
+        if (filter.orderIds != null && filter.orderIds.Any())
+            query = query.Where(w => filter.orderIds.Contains(w.OrderId));
+
+        if (filter.jobIds != null && filter.jobIds.Any())
+            query = query.Where(w => filter.jobIds.Contains(w.JobId));
+
+        if (filter.workerIds != null && filter.workerIds.Any())
+            query = query.Where(w => filter.workerIds.Contains(w.WorkerId));
+
+        if (filter.statusIds != null && filter.statusIds.Any())
+            query = query.Where(w => filter.statusIds.Contains(w.StatusId));
+
+        return query;
+    }
+
+    public async Task<List<WorkInOrderItem>> GetPaged(WorkInOrderFilter filter)
+    {
+        var query = _context.WorksInOrder.AsNoTracking();
+        query = ApplyFilter(query, filter);
+
+        query = filter.SortBy?.ToLower().Trim() switch
+        {
+            "order" => filter.isDescending
+                ? query.OrderByDescending(w => w.OrderId)
+                : query.OrderBy(w => w.OrderId),
+            "job" => filter.isDescending
+                ? query.OrderByDescending(w => w.Work == null
+                    ? string.Empty
+                    : w.Work.Title)
+                : query.OrderBy(w => w.Work == null
+                    ? string.Empty
+                    : w.Work.Title),
+            "worker" => filter.isDescending
+                ? query.OrderByDescending(w => w.Worker == null
+                    ? string.Empty
+                    : w.Worker.Surname)
+                : query.OrderBy(w => w.Worker == null
+                    ? string.Empty
+                    : w.Worker.Surname),
+            "status" => filter.isDescending
+                ? query.OrderByDescending(w => w.WorkInOrderStatus == null
+                    ? string.Empty
+                    : w.WorkInOrderStatus.Name)
+                : query.OrderBy(w => w.WorkInOrderStatus == null
+                    ? string.Empty
+                    : w.WorkInOrderStatus.Name),
+            "timespent" => filter.isDescending
+                ? query.OrderByDescending(w => w.TimeSpent)
+                : query.OrderBy(w => w.TimeSpent),
+
+            _ => filter.isDescending
+                ? query.OrderByDescending(w => w.Id)
+                : query.OrderBy(w => w.Id),
+        };
+
+        var projection = query.Select(w => new WorkInOrderItem(
+            w.Id,
+            w.OrderId,
+            w.Work == null
+                ? string.Empty
+                : w.Work.Title,
+            w.Worker == null
+                ? string.Empty
+                : $"{w.Worker.Name} {w.Worker.Surname}",
+            w.WorkInOrderStatus == null
+                ? string.Empty
+                : w.WorkInOrderStatus.Name,
+            w.TimeSpent));
+
+        return await projection
+            .Skip((filter.Page - 1) * filter.Limit)
+            .Take(filter.Limit)
+            .ToListAsync();
+    }
+
+    public async Task<int> GetCount(WorkInOrderFilter filter)
+    {
+        var query = _context.WorksInOrder.AsNoTracking();
+        query = ApplyFilter(query, filter);
+        return await query.CountAsync();
+    }
+
+    public async Task<long> Create(WorkInOrder workInOrder)
+    {
+        var workInOrderEntity = new WorkInOrderEntity
+        {
+            OrderId = workInOrder.OrderId,
+            JobId = workInOrder.JobId,
+            WorkerId = workInOrder.WorkerId,
+            StatusId = workInOrder.StatusId,
+            TimeSpent = workInOrder.TimeSpent,
+        };
+
+        await _context.WorksInOrder.AddAsync(workInOrderEntity);
+        await _context.SaveChangesAsync();
+
+        return workInOrderEntity.Id;
+    }
+
+    public async Task<long> Update(long id, WorkInOrderUpdateModel model)
+    {
+        var entity = await _context.WorksInOrder.FirstOrDefaultAsync(x => x.Id == id)
+            ?? throw new ArgumentException("Work in order not found");
+
+        if (model.workerId.HasValue) entity.WorkerId = model.workerId.Value;
+        if (model.statusId.HasValue) entity.StatusId = model.statusId.Value;
+        if (model.timeSpent.HasValue) entity.TimeSpent = model.timeSpent.Value;
+
+        await _context.SaveChangesAsync();
+
+        return entity.Id;
+    }
+
+    public async Task<long> Delete(long id)
+    {
+        var entity = await _context.WorksInOrder
+            .Where(w => w.Id == id)
+            .ExecuteDeleteAsync();
+
+        return id;
+    }
+}

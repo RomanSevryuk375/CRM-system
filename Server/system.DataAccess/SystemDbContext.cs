@@ -46,6 +46,7 @@ public class SystemDbContext : DbContext
     public DbSet<SupplyEntity> Supplies { get; set; }
     public DbSet<SupplySetEntity> SupplySets { get; set; }
     public DbSet<TaxEntity> Taxes { get; set; }
+    public DbSet<TaxTypeEntity> TaxTypes { get; set; }
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<WorkEntity> Works { get; set; }
     public DbSet<WorkerEntity> Workers { get; set; }

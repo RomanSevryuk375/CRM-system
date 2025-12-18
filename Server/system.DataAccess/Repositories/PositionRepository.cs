@@ -97,7 +97,7 @@ public class PositionRepository : IPositionRepository
     public async Task<long> Update(long id, PositionUpdateModel model)
     {
         var entity = await _context.Positions.FirstOrDefaultAsync(p => p.Id == id)
-            ?? throw new Exception("Payment note not found");
+            ?? throw new Exception("Position note not found");
 
         if (model.cellId.HasValue) entity.CellId = model.cellId.Value;
         if (model.purchasePrice.HasValue) entity.PurchasePrice = model.purchasePrice.Value;

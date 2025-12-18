@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Work;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,44 +14,42 @@ public class WorkRepository : IWorkRepository
         _context = context;
     }
 
-    public async Task<List<Work>> Get()
+    public async Task<List<WorkItem>> GetPaged(WorkFilter filter)
     {
-        var workEntities = await _context.Works
-            .AsNoTracking()
+        var query = _context.Works.AsNoTracking();
+
+        query = filter.SortBy?.ToLower().Trim() switch
+        {
+            "title" => filter.isDescending
+                ? query.OrderByDescending(w => w.Title)
+                : query.OrderBy(w => w.Title),
+            "category" => filter.isDescending
+                ? query.OrderByDescending(w => w.Category)
+                : query.OrderBy(w => w.Category),
+            "description" => filter.isDescending
+                ? query.OrderByDescending(w => w.Description)
+                : query.OrderBy(w => w.Description),
+            "standarttime" => filter.isDescending
+                ? query.OrderByDescending(w => w.StandardTime)
+                : query.OrderBy(w => w.StandardTime),
+
+
+            _ => filter.isDescending
+                ? query.OrderByDescending(w => w.Id)
+                : query.OrderBy(w => w.Id),
+        };
+
+        var projection = query.Select(w => new WorkItem(
+            w.Id,
+            w.Title,
+            w.Category,
+            w.Description,
+            w.StandardTime));
+
+        return await projection
+            .Skip((filter.Page - 1) * filter.Limit)
+            .Take(filter.Limit)
             .ToListAsync();
-
-        var work = workEntities
-            .Select(w => Work.Create(
-                w.Id,
-                w.OrderId,
-                w.JobId,
-                w.WorkerId,
-                w.TimeSpent,
-                w.StatusId).work)
-            .ToList();
-
-        return work;
-    }
-
-    public async Task<List<Work>> GetPaged(int page, int limit)
-    {
-        var workEntities = await _context.Works
-            .AsNoTracking()
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var work = workEntities
-            .Select(w => Work.Create(
-                w.Id,
-                w.OrderId,
-                w.JobId,
-                w.WorkerId,
-                w.TimeSpent,
-                w.StatusId).work)
-            .ToList();
-
-        return work;
     }
 
     public async Task<int> GetCount()
@@ -58,93 +57,14 @@ public class WorkRepository : IWorkRepository
         return await _context.Works.CountAsync();
     }
 
-    public async Task<List<Work>> GetByWorkerId(List<int> workerIds)
+    public async Task<long> Create(Work work)
     {
-        var workEntities = await _context.Works
-            .AsNoTracking()
-            .Where(w => workerIds.Contains(w.WorkerId))
-            .ToListAsync();
-
-        var work = workEntities
-            .Select(w => Work.Create(
-                w.Id,
-                w.OrderId,
-                w.JobId,
-                w.WorkerId,
-                w.TimeSpent,
-                w.StatusId).work)
-            .ToList();
-
-        return work;
-    }
-
-    public async Task<int> GetCountByWorkerId(List<int> workerIds)
-    {
-        return await _context.Works.Where(w => workerIds.Contains(w.WorkerId)).CountAsync();
-    }
-
-    public async Task<List<Work>> GetPagedByWorkerId(List<int> workerIds, int page, int limit)
-    {
-        var workEntities = await _context.Works
-            .AsNoTracking()
-            .Where(w => workerIds.Contains(w.WorkerId))
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var work = workEntities
-            .Select(w => Work.Create(
-                w.Id,
-                w.OrderId,
-                w.JobId,
-                w.WorkerId,
-                w.TimeSpent,
-                w.StatusId).work)
-            .ToList();
-
-        return work;
-    }
-
-    public async Task<List<Work>> GetByOrderId(List<int> orderId)
-    {
-        var workEntities = await _context.Works
-            .AsNoTracking()
-            .Where(w => orderId.Contains(w.OrderId))
-            .ToListAsync();
-
-        var work = workEntities
-            .Select(w => Work.Create(
-                w.Id,
-                w.OrderId,
-                w.JobId,
-                w.WorkerId,
-                w.TimeSpent,
-                w.StatusId).work)
-            .ToList();
-
-        return work;
-    }
-
-    public async Task<int> Create(Work work)
-    {
-        var (_, error) = Work.Create(
-            0,
-            work.OrderId,
-            work.JobId,
-            work.WorkerId,
-            work.TimeSpent,
-            work.StatusId);
-
-        if (!string.IsNullOrEmpty(error))
-            throw new ArgumentException($"Create exception Work: {error}");
-
-        var workEntity = new WorkInOrderEntity
+        var workEntity = new WorkEntity
         {
-            OrderId = work.OrderId,
-            JobId = work.JobId,
-            WorkerId = work.WorkerId,
-            TimeSpent = work.TimeSpent,
-            StatusId = work.StatusId
+            Title = work.Title,
+            Category = work.Category,
+            Description = work.Description,
+            StandardTime = work.StandardTime,
         };
 
         await _context.Works.AddAsync(workEntity);
@@ -153,31 +73,25 @@ public class WorkRepository : IWorkRepository
         return workEntity.Id;
     }
 
-    public async Task<int> Update(int id, int? orderId, int? jobId, int? workerId, decimal? timeSpent, int? statusId)
+    public async Task<long> Update(long id, WorkUpdateModel model)
     {
-        var work = await _context.Works.FirstOrDefaultAsync(x => x.Id == id)
-            ?? throw new Exception("Work not found");
+        var entty = await _context.Works.FirstOrDefaultAsync(w => w.Id == id)
+            ?? throw new ArgumentException("Work not found");
 
-        if (orderId.HasValue)
-            work.OrderId = orderId.Value;
-        if (jobId.HasValue)
-            work.JobId = jobId.Value;
-        if (workerId.HasValue)
-            work.WorkerId = workerId.Value;
-        if (timeSpent.HasValue)
-            work.TimeSpent = timeSpent.Value;
-        if (statusId.HasValue)
-            work.StatusId = statusId.Value;
+        if (!string.IsNullOrWhiteSpace(model.title)) entty.Title = model.title;
+        if (!string.IsNullOrWhiteSpace(model.categoty)) entty.Category = model.categoty;
+        if (!string.IsNullOrWhiteSpace(model.description)) entty.Description = model.description;
+        if (model.standartTime.HasValue) entty.StandardTime = model.standartTime.Value;
 
         await _context.SaveChangesAsync();
 
-        return work.Id;
+        return entty.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<long> Delete(long id)
     {
-        var work = await _context.Works
-            .Where(x => x.Id == id)
+        var entoty = await _context.Works
+            .Where(w => w.Id == id)
             .ExecuteDeleteAsync();
 
         return id;

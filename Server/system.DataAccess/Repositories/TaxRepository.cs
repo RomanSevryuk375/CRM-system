@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Tax;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,62 +14,68 @@ public class TaxRepository : ITaxRepository
         _context = context;
     }
 
-    public async Task<List<Tax>> Get()
+    private IQueryable<TaxEntity> ApplyFilter(IQueryable<TaxEntity> query, TaxFilter filter)
     {
-        var taxEntities = await _context.Taxes
-            .AsNoTracking()
-            .ToListAsync();
+        if (filter.taxTyprIds != null && filter.taxTyprIds.Any())
+            query = query.Where(t => filter.taxTyprIds.Contains(t.TypeId));
 
-        var taxes = taxEntities.Select(
-            t => Tax.Create(
+        return query;
+    }
+
+
+    public async Task<List<TaxItem>> Get(TaxFilter filter)
+    {
+        var query = _context.Taxes.AsNoTracking();
+        query = ApplyFilter(query, filter);
+
+        query = filter.SortBy?.ToLower().Trim() switch
+        {
+            "name" => filter.isDescending
+                ? query.OrderByDescending(t => t.Name)
+                : query.OrderBy(t => t.Name),
+            "rate" => filter.isDescending
+                ? query.OrderByDescending(t => t.Rate)
+                : query.OrderBy(t => t.Rate),
+            "type" => filter.isDescending
+                ? query.OrderByDescending(t => t.TaxType == null
+                    ? string.Empty
+                    : t.TaxType.Name)
+                : query.OrderBy(t => t.TaxType == null
+                    ? string.Empty
+                    : t.TaxType.Name),
+
+            _ => filter.isDescending
+                ? query.OrderByDescending(t => t.Id)
+                : query.OrderBy(t => t.Id),
+        };
+
+        var projection = query.Select(
+            t => new TaxItem(
                 t.Id,
                 t.Name,
                 t.Rate,
-                t.Type).tax)
-            .ToList();
+                t.TaxType == null
+                    ? string.Empty
+                    : t.TaxType.Name));
 
-        return taxes;
+        return await projection.ToListAsync();
     }
 
-    public async Task<List<Tax>> GetPaged(int page, int limit)
+    public async Task<int> GetCount(TaxFilter filter)
     {
-        var taxEntities = await _context.Taxes
-            .AsNoTracking()
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var taxes = taxEntities.Select(
-            t => Tax.Create(
-                t.Id,
-                t.Name,
-                t.Rate,
-                t.Type).tax)
-            .ToList();
-
-        return taxes;
-    }
-
-    public async Task<int> GetCount()
-    {
-        return await _context.Taxes.CountAsync();
+        var query = _context.Taxes.AsNoTracking();
+        query = ApplyFilter(query, filter);
+        return await query.CountAsync();
     }
 
     public async Task<int> Create(Tax tax)
     {
-        var (_, error) = Tax.Create(
-            0,
-            tax.Name,
-            tax.Rate,
-            tax.Type);
-        if (!string.IsNullOrEmpty(error))
-            throw new ArgumentException($"Create exception Tax: {error}");
 
         var taxEntitie = new TaxEntity
         {
             Name = tax.Name,
             Rate = tax.Rate,
-            Type = tax.Type,
+            TypeId = tax.TypeId,
         };
 
         await _context.Taxes.AddAsync(taxEntitie);
@@ -77,26 +84,22 @@ public class TaxRepository : ITaxRepository
         return taxEntitie.Id;
     }
 
-    public async Task<int> Update(int id, string? name, decimal? rate, string? type)
+    public async Task<int> Update(int id, TaxUpdateModel model)
     {
-        var tax = _context.Taxes.FirstOrDefault(t => t.Id == id)
+        var entity = _context.Taxes.FirstOrDefault(t => t.Id == id)
             ?? throw new ArgumentException("Tax not found");
 
-        if (!string.IsNullOrWhiteSpace(name))
-            tax.Name = name;
-        if (rate.HasValue)
-            tax.Rate = rate.Value;
-        if (!string.IsNullOrWhiteSpace(type))
-            tax.Type = type;
+        if (!string.IsNullOrWhiteSpace(model.name)) entity.Name = model.name;
+        if (model.rate.HasValue) entity.Rate = model.rate.Value;
 
         await _context.SaveChangesAsync();
 
-        return tax.Id;
+        return entity.Id;
     }
 
     public async Task<int> Delete(int id)
     {
-        var tax = await _context.Taxes
+        var entity = await _context.Taxes
             .Where(t => t.Id == id)
             .ExecuteDeleteAsync();
 

@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.User;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using CRMSystem.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -16,26 +17,36 @@ public class UserRepository : IUserRepository
         _myPasswordHasher = myPasswordHasher;
     }
 
-    public async Task<User> GetByLogin(string login)
-    {
-        var userEntity = await _context.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Login == login) ?? throw new Exception();
+    //public async Task<User> GetByLogin(string login)
+    //{
+    //    var userEntity = await _context.Users
+    //        .AsNoTracking()
+    //        .FirstOrDefaultAsync(u => u.Login == login) ?? throw new Exception();
 
-        return User.Create(userEntity.Id, userEntity.RoleId, userEntity.Login, userEntity.PasswordHash).user;
+
+
+    //    return User.Create(userEntity.Id, userEntity.RoleId, userEntity.Login, userEntity.PasswordHash).user;
+    //}
+
+    public async Task<List<UserItem>> GetByLogin(string login)
+    {
+        var query = _context.Users.AsNoTracking();
+
+        var projection = query.Select(u => new UserItem(
+            u.Id,
+            u.Role == null
+                ? string.Empty
+                : u.Role.Name,
+            u.Login,
+            u.PasswordHash));
+
+        return await projection
+            .Where(u => u.login == login)
+            .ToListAsync();
     }
 
-    public async Task<int> Create(User user)
+    public async Task<long> Create(User user)
     {
-        var (_, error) = User.Create(
-        0,
-        user.RoleId,
-        user.Login,
-        user.PasswordHash);
-
-        if (!string.IsNullOrEmpty(error))
-            throw new ArgumentException($"Create exception User: {error}");
-
         var hashedPassword = _myPasswordHasher.Generate(user.PasswordHash);
 
         var userEntyties = new UserEntity
@@ -46,12 +57,25 @@ public class UserRepository : IUserRepository
         };
 
         await _context.Users.AddAsync(userEntyties);
-        await _context.SaveChangesAsync(); 
+        await _context.SaveChangesAsync();
 
         return userEntyties.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<long> Update(long id, UserUpdateModel model)
+    {
+        var entity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id)
+            ?? throw new ArgumentException("User not found");
+
+        if (!string.IsNullOrWhiteSpace(model.login)) entity.Login = model.login;
+        if (!string.IsNullOrWhiteSpace(model.passwordHash)) entity.PasswordHash = model.passwordHash;
+
+        await _context.SaveChangesAsync();
+
+        return entity.Id;
+    }
+
+    public async Task<long> Delete(long id)
     {
         var user = await _context.Users
             .Where(u => u.Id == id)

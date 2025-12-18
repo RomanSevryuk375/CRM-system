@@ -7,7 +7,7 @@ namespace CRMSystem.Buisnes.Services;
 
 public class WorkPropossalService : IWorkPropossalService
 {
-    private readonly IWorkPropossalRepository _workPropossal;
+    private readonly IWorkProposalRepository _workPropossal;
     private readonly IWorkTypeRepository _workTypeRepository;
     private readonly IStatusRepository _statusRepository;
     private readonly IWorkerRepository _workerRepository;
@@ -16,7 +16,7 @@ public class WorkPropossalService : IWorkPropossalService
     private readonly IOrderRepository _orderRepository;
 
     public WorkPropossalService(
-        IWorkPropossalRepository workPropossal,
+        IWorkProposalRepository workPropossal,
         IWorkTypeRepository workTypeRepository,
         IStatusRepository statusRepository,
         IWorkerRepository workerRepository,

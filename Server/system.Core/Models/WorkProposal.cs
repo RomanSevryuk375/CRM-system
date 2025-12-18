@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class WorkProposal
 {
-    public WorkProposal(long id, long orderId, long jobId, int wokerId, WorkStatusEnum statusId, DateTime date)
+    public WorkProposal(long id, long orderId, long jobId, int wokerId, ProposalStatusEnum statusId, DateTime date)
     {
         Id = id;
         OrderId = orderId;
@@ -18,10 +18,10 @@ public class WorkProposal
     public long OrderId { get; }
     public long JobId { get; }
     public int WorkerId { get; }
-    public WorkStatusEnum StatusId { get; }
+    public ProposalStatusEnum StatusId { get; }
     public DateTime Date { get; }
 
-    public static (WorkProposal? workPropossal, List<string> errors) Create(long id, long orderId, long jobId, int wokerId, WorkStatusEnum statusId, DateTime date)
+    public static (WorkProposal? workPropossal, List<string> errors) Create(long id, long orderId, long jobId, int wokerId, ProposalStatusEnum statusId, DateTime date)
     {
         var errors = new List<string>();
 
