@@ -4,7 +4,8 @@ public record PartSetItem
 (
     long id,
     long? orderId, 
-    string positionId, 
+    string position,
+    long positionId,
     long? proposalId, 
     decimal quantity, 
     decimal soldPrice

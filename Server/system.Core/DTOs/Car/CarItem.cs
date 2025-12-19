@@ -5,6 +5,7 @@ public record CarItem
     long id,
     string owner,
     string status,
+    int statusId,
     string brand,
     string model,
     int yearOfManufacture,

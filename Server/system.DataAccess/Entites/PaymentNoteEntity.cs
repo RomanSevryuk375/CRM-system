@@ -8,7 +8,7 @@ public class PaymentNoteEntity
     public long BillId { get; set; }
     public DateTime Date { get; set; }
     public decimal Amount { get; set; }
-    public PaymentMethodEnum MethodId { get; set; }
+    public int MethodId { get; set; }
 
     public BillEntity? Bill { get; set; }
     public PaymentMethodEntity? Method { get; set; }

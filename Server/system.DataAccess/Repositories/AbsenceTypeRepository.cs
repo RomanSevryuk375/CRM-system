@@ -1,4 +1,5 @@
 ﻿using CRMSystem.Core.DTOs;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,13 +14,13 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
         _context = context;
     }
 
-    public async Task<List<AbcenseTypeItem>> GetPaged(int page, int pageSize)
+    public async Task<List<AbsenceTypeItem>> GetPaged(int page, int pageSize)
     {
         var query = _context.AbsenceTypes
             .AsNoTracking();
 
         var projection = query
-            .Select(x => new AbcenseTypeItem(
+            .Select(x => new AbsenceTypeItem(
             x.Id,
             x.Name));
 
@@ -29,12 +30,25 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
             .ToListAsync();
     }
 
+    public async Task<List<AbsenceTypeItem>> GetByName (string name)
+    {
+        var query = _context.AbsenceTypes
+            .Where(a => a.Name == name)
+            .AsNoTracking();
+
+        var projection = query.Select(a => new AbsenceTypeItem(
+            a.Id,
+            a.Name));
+
+        return await projection.ToListAsync();
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.AbsenceTypes.CountAsync();
     }
 
-    public async Task<int> Create(Core.Models.AbsenceType absenceType)
+    public async Task<int> Create(AbsenceType absenceType)
     {
         var entity = new AbsenceTypeEntity
         {

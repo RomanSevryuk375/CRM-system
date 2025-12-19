@@ -8,7 +8,9 @@ public record ExpenseItem
     DateTime date,
     string category,
     string? tax,
+    int? taxId,
     long? partSetId,
     string expenseType,
+    int expenceTypeId,
     decimal sum
 );

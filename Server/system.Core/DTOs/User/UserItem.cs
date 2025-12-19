@@ -3,7 +3,8 @@
 public record UserItem
 (
     long id,
-    string role, 
+    string role,
+    int roleId,
     string login, 
     string passwordHash
 );

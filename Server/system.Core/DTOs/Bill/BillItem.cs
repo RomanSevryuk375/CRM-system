@@ -7,6 +7,7 @@ public record BillItem
     long id,
     long orderId,
     string status,
+    int statusId,
     DateTime createdAt,
     decimal amount,
     DateOnly? actualBillDate

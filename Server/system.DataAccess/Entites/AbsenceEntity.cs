@@ -6,7 +6,7 @@ public class AbsenceEntity
 {
     public int Id { get; set; }
     public int WorkerId { get; set; }
-    public AbsenceTypeEnum TypeId { get; set; }
+    public int TypeId { get; set; }
     public DateOnly StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
 

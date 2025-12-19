@@ -66,6 +66,7 @@ public class SupplySetRepository : ISupplySetRepository
                     : s.Position.Part == null
                         ? string.Empty
                         : s.Position.Part.Name,
+            s.PositionId,
             s.Quantity,
             s.PurchasePrice));
 

@@ -82,6 +82,14 @@ public class Program
         //builder.Services.AddScoped<IMyPasswordHasher, MyPasswordHasher>();
         //builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
+
+        builder.Services.AddStackExchangeRedisCache(redisOptions =>
+        {
+            var connetion = builder.Configuration
+                .GetConnectionString("Redis");
+
+            redisOptions.Configuration = connetion;
+        });
         //builder.Services.AddApiAuthentication(builder.Configuration);
 
         var app = builder.Build();

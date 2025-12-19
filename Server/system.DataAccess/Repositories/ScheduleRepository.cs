@@ -60,9 +60,11 @@ public class ScheduleRepository : IScheduleRepository
             s.Worker == null
                 ? string.Empty
                 : $"{s.Worker.Name} {s.Worker.Surname}",
+            s.WorkerId,
             s.Shift == null
                 ? string.Empty
                 : s.Shift.Name,
+            s.ShiftId,
             s.Date));
 
         return await projection

@@ -84,15 +84,19 @@ public class NotificationRepository : INotificationRepository
             n.Client == null
                 ? string.Empty
                 : $"{n.Client.Name} {n.Client.Surname}",
+            n.ClientId,
             n.Car == null
                 ? string.Empty
                 : $"{n.Car.Brand} ({n.Car.StateNumber})",
+            n.CarId,
             n.NotificationType == null
                 ? string.Empty
                 : n.NotificationType.Name,
+            n.TypeId,
             n.Status == null
                 ? string.Empty
                 : n.Status.Name,
+            n.StatusId,
             n.Message,
             n.SendAt));
 
@@ -115,8 +119,8 @@ public class NotificationRepository : INotificationRepository
         {
             ClientId = notification.ClientId,
             CarId = notification.CarId,
-            TypeId = notification.TypeId,
-            StatusId = notification.StatusId,
+            TypeId = (int)notification.TypeId,
+            StatusId = (int)notification.StatusId,
             Message = notification.Message,
             SendAt = notification.SendAt,
         };

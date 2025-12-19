@@ -9,7 +9,7 @@ public class ExpenseEntity
     public long? PartSetId { get; set; }
     public DateTime Date { get; set; }
     public string Category { get; set; } = string.Empty;
-    public ExpenseTypeEnum ExpenseTypeId { get; set; } 
+    public int ExpenseTypeId { get; set; } 
     public decimal Sum { get; set; }
 
     public TaxEntity? Tax { get; set; }

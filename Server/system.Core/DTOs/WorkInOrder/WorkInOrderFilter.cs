@@ -7,7 +7,7 @@ public record WorkInOrderFilter
     IEnumerable<long> orderIds,
     IEnumerable<long> jobIds,
     IEnumerable<long> workerIds,
-    IEnumerable<WorkStatusEnum> statusIds,
+    IEnumerable<int> statusIds,
     string? SortBy,
     int Page,
     int Limit,

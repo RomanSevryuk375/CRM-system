@@ -18,7 +18,7 @@ public class AbsenceConfiguration : IEntityTypeConfiguration<AbsenceEntity>
             .IsRequired();
 
         builder.Property(a => a.TypeId)
-            .HasConversion<int>()
+            //.HasConversion<int>()
             .IsRequired();
 
         builder.Property(a => a.StartDate)

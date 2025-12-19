@@ -53,6 +53,7 @@ public class AbsenceRepository : IAbsenceRepository
             a.Worker == null 
                 ? string.Empty 
                 : $"{a.Worker.Name} {a.Worker.Surname}",
+            a.WorkerId,
             a.AbsenceType == null 
                 ? string.Empty 
                 : a.AbsenceType.Name,
@@ -77,7 +78,7 @@ public class AbsenceRepository : IAbsenceRepository
         var absenceEntity = new AbsenceEntity
         {
             WorkerId = absence.WorkerId,
-            TypeId = absence.TypeId,
+            TypeId = (int)absence.TypeId,
             StartDate = absence.StartDate,
             EndDate = absence.EndDate
         };
@@ -93,7 +94,7 @@ public class AbsenceRepository : IAbsenceRepository
         var entity = await _context.Absences.FirstOrDefaultAsync(a => a.Id == model.id)
             ?? throw new Exception("Absence not found");
 
-        if (model.typeId.HasValue) entity.TypeId = model.typeId.Value;
+        if (model.typeId.HasValue) entity.TypeId = (int)model.typeId.Value;
         if (model.startDate.HasValue) entity.StartDate = model.startDate.Value;
         if (model.endDate.HasValue) entity.EndDate = model.endDate.Value;
 

@@ -84,7 +84,7 @@ public class PaymentNoteRepository : IPaymentNoteRepository
             BillId = paymentNote.BillId,
             Date = paymentNote.Date,
             Amount = paymentNote.Amount,
-            MethodId = paymentNote.MethodId,
+            MethodId = (int)paymentNote.MethodId,
         };
 
         await _context.AddAsync(paymentNoteEntity);
@@ -98,7 +98,7 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         var entity = await _context.PaymentNotes.FirstOrDefaultAsync(pn => pn.Id == id)
             ?? throw new Exception("Payment note not found");
 
-        if (method.HasValue) entity.MethodId = method.Value;
+        if (method.HasValue) entity.MethodId = (int)method.Value;
 
         await _context.SaveChangesAsync();
 

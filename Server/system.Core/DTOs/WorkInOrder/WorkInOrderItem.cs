@@ -7,7 +7,10 @@ public record WorkInOrderItem
     long id, 
     long orderId, 
     string job, 
+    long jobId,
     string worker, 
-    string status, 
+    int workerId,
+    string status,
+    int statusId,
     decimal timeSpent
 );

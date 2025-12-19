@@ -6,7 +6,7 @@ public record ExpenseFilter
 (
     IEnumerable<int?> taxIds,
     IEnumerable<long?> partSetIds,
-    IEnumerable<ExpenseTypeEnum> expenseTypeIds,
+    IEnumerable<int> expenseTypeIds,
     string? SortBy,
     int Page,
     int Limit,

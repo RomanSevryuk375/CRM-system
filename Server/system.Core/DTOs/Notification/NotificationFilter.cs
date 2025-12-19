@@ -6,8 +6,8 @@ public record NotificationFilter
 (
     IEnumerable<long> clientIds,
     IEnumerable<long> carIds,
-    IEnumerable<NotificationTypeEnum> typeIds,
-    IEnumerable<NotificationStatusEnum> statusIds,
+    IEnumerable<int> typeIds,
+    IEnumerable<int> statusIds,
     string? SortBy,
     int Page,
     int Limit,

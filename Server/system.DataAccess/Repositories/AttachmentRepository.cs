@@ -47,6 +47,7 @@ public class AttachmentRepository : IAttachmentRepository
             a.Worker == null
                 ? ""
                 : $"{a.Worker.Name} {a.Worker.Surname}",
+            a.WorkerId,
             a.CreatedAt,
             a.Description));
 

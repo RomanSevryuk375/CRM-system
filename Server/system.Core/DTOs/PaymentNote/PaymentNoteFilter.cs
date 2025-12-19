@@ -5,7 +5,7 @@ namespace CRMSystem.Core.DTOs.PaymentNote;
 public record PaymentNoteFilter
 (
     IEnumerable<long?> billIds,
-    IEnumerable<PaymentMethodEnum> methodIds,
+    IEnumerable<int> methodIds,
     string? SortBy,
     int Page,
     int Limit,

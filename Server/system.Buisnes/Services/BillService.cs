@@ -1,26 +1,13 @@
-﻿using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 
 namespace CRMSystem.Buisnes.Services;
 
-public class BillService : IBillService
+public class BillService
 {
-    private readonly IBillRepository _billRepository;
-    private readonly ICarRepository _carRepository;
-    private readonly IOrderRepository _orderRepository;
-    private readonly IClientsRepository _clientsRepository;
-
-    public BillService(
-        IBillRepository billRepository,
-        ICarRepository carRepository,
-        IOrderRepository orderRepository,
-        IClientsRepository clientsRepository)
+    public BillService()
     {
-        _billRepository = billRepository;
-        _carRepository = carRepository;
-        _orderRepository = orderRepository;
-        _clientsRepository = clientsRepository;
+
     }
 
     public async Task<List<Bill>> GetPagedBill(int page, int limit)

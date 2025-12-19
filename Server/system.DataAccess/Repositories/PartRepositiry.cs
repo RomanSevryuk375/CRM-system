@@ -66,6 +66,7 @@ public class PartRepositiry : IPartRepositiry
             p.PartCategory == null
                 ? string.Empty
                 : p.PartCategory.Name,
+            p.CategoryId,
             p.OEMArticle,
             p.ManufacturerArticle,
             p.InternalArticle,

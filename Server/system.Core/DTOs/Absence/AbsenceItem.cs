@@ -6,6 +6,7 @@ public record AbsenceItem
 (
     int Id,
     string WorkerName,
+    int workerId,
     string TypeName,
     DateOnly StartDate,
     DateOnly? EndDate

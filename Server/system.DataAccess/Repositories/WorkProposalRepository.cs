@@ -78,12 +78,15 @@ public class WorkProposalRepository : IWorkProposalRepository
             w.Work == null
                 ? string.Empty
                 : w.Work.Title,
+            w.JobId,
             w.Worker == null
                 ? string.Empty
                 : $"{w.Worker.Name} {w.Worker.Surname}",
+            w.WorkerId,
             w.Status == null
                 ? string.Empty
                 : w.Status.Name,
+            w.StatusId,
             w.Date));
 
         return await projection
@@ -100,7 +103,7 @@ public class WorkProposalRepository : IWorkProposalRepository
             OrderId = workProposal.OrderId,
             JobId = workProposal.JobId,
             WorkerId = workProposal.WorkerId,
-            StatusId = workProposal.StatusId,
+            StatusId = (int)workProposal.StatusId,
             Date = workProposal.Date
         };
 
@@ -115,7 +118,7 @@ public class WorkProposalRepository : IWorkProposalRepository
         var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(x => x.Id == id)
             ?? throw new Exception("Work proposal not found");
 
-        if (statusId.HasValue) workProposal.StatusId = statusId.Value;
+        if (statusId.HasValue) workProposal.StatusId = (int)statusId.Value;
 
         await _context.SaveChangesAsync();
 
@@ -127,7 +130,7 @@ public class WorkProposalRepository : IWorkProposalRepository
         var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(X => X.Id == id)
             ?? throw new Exception("Work proposal not found");
 
-        workProposal.StatusId = ProposalStatusEnum.Accepted;
+        workProposal.StatusId = (int)ProposalStatusEnum.Accepted;
 
         await _context.SaveChangesAsync();
 
@@ -139,7 +142,7 @@ public class WorkProposalRepository : IWorkProposalRepository
         var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(X => X.Id == id)
             ?? throw new Exception("Work proposal not found");
 
-        workProposal.StatusId = ProposalStatusEnum.Rejected;
+        workProposal.StatusId = (int)ProposalStatusEnum.Rejected;
 
         await _context.SaveChangesAsync();
 

@@ -50,6 +50,7 @@ public class SupplyRepository : ISypplyRepository
             s.Supplier == null
                 ? string.Empty
                 : s.Supplier.Name,
+            s.SupplierId,
             s.Date));
 
         return await projection

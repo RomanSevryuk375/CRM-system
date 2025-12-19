@@ -17,7 +17,7 @@ public class BillConfiguration : IEntityTypeConfiguration<BillEntity>
             .IsRequired();
 
         builder.Property(b => b.StatusId)
-            .HasConversion<int>()
+            //.HasConversion<int>()
             .IsRequired();
 
         builder.Property(b => b.CreatedAt)

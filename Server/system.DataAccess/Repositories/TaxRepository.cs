@@ -75,7 +75,7 @@ public class TaxRepository : ITaxRepository
         {
             Name = tax.Name,
             Rate = tax.Rate,
-            TypeId = tax.TypeId,
+            TypeId = (int)tax.TypeId,
         };
 
         await _context.Taxes.AddAsync(taxEntitie);

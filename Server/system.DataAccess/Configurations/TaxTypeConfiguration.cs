@@ -10,7 +10,7 @@ public class TaxTypeConfiguration : IEntityTypeConfiguration<TaxTypeEntity>
 {
     void IEntityTypeConfiguration<TaxTypeEntity>.Configure(EntityTypeBuilder<TaxTypeEntity> builder)
     {
-        builder.ToTable("payment_methods");
+        builder.ToTable("tax_types");
 
         builder.HasKey(x => x.Id);
 

@@ -4,5 +4,7 @@ public record SkillItem
 (
     int id,
     string worker, 
-    string specialization
+    int workerId,
+    string specialization,
+    int specializationId
 );

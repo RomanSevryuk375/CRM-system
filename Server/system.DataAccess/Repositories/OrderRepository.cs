@@ -71,13 +71,16 @@ public class OrderRepository : IOrderRepository
             o.Status == null
                 ? string.Empty
                 : o.Status.Name,
+            o.StatusId,
             o.Car == null
                 ? string.Empty
                 : $"{o.Car.Brand} ({o.Car.StateNumber})",
+            o.CarId,
             o.Date,
             o.OrderPriority == null
                 ? string.Empty
-                : o.OrderPriority.Name));
+                : o.OrderPriority.Name,
+            o.PriorityId));
 
         return await projection
             .Skip((filter.Page - 1) * filter.Limit)
@@ -97,10 +100,10 @@ public class OrderRepository : IOrderRepository
 
         var orderEntitie = new OrderEntity
         {
-            StatusId = order.StatusId,
+            StatusId = (int)order.StatusId,
             CarId = order.CarId,
             Date = order.Date,
-            PriorityId = order.PriorityId
+            PriorityId = (int)order.PriorityId
         };
 
         await _context.Orders.AddAsync(orderEntitie);
@@ -114,7 +117,7 @@ public class OrderRepository : IOrderRepository
         var entity = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new Exception("Order not found");
 
-        if (priorityId.HasValue) entity.PriorityId = priorityId.Value;
+        if (priorityId.HasValue) entity.PriorityId = (int)priorityId.Value;
 
         await _context.SaveChangesAsync();
 

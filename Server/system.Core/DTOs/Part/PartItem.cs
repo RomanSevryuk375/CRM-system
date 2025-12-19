@@ -4,6 +4,7 @@ public record PartItem
 (
     long id,
     string category,
+    int categoryId,
     string? oemArticle,
     string? manufacturerArticle,
     string internalArticle,

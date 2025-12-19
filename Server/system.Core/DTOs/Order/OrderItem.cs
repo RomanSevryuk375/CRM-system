@@ -5,8 +5,11 @@ namespace CRMSystem.Core.DTOs.Order;
 public record OrderItem
 (
     long id,
-    string statusId, 
-    string carId, 
+    string status, 
+    int statusId,
+    string car, 
+    long carId,
     DateOnly date, 
-    string priorityId
+    string priority,
+    int priorityId
 );

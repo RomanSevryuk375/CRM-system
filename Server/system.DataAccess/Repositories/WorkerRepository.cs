@@ -14,9 +14,18 @@ public class WorkerRepository : IWorkerRepository
         _context = context;
     }
 
+    private IQueryable<WorkerEntity> ApplyFilter(IQueryable<WorkerEntity> query, WorkerFilter filter)
+    {
+        if (filter.workerIds != null && filter.workerIds.Any())
+            query = query.Where(w => filter.workerIds.Contains(w.Id));
+
+        return query;
+    }
+
     public async Task<List<WorkerItem>> GetPaged(WorkerFilter filter)
     {
         var query = _context.Workers.AsNoTracking();
+        query = ApplyFilter(query, filter);
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
@@ -56,9 +65,11 @@ public class WorkerRepository : IWorkerRepository
             .ToListAsync();
     }
 
-    public async Task<int> GetCount()
+    public async Task<int> GetCount(WorkerFilter filter)
     {
-        return await _context.Workers.CountAsync();
+        var query = _context.Workers.AsNoTracking();
+        query = ApplyFilter(query, filter);
+        return await query.CountAsync();
     }
 
     public async Task<int> Create(Worker worker)

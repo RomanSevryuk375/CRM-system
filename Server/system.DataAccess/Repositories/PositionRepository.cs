@@ -59,6 +59,7 @@ public class PositionRepository : IPositionRepository
             p.Part == null
                 ? string.Empty
                 : p.Part.Name,
+            p.PartId,
             p.CellId,
             p.PurchasePrice,
             p.SellingPrice,

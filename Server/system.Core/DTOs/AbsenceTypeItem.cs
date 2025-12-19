@@ -1,6 +1,6 @@
 ﻿namespace CRMSystem.Core.DTOs;
 
-public record AbcenseTypeItem
+public record AbsenceTypeItem
 (
     int id,
     string name

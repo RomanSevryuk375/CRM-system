@@ -72,6 +72,7 @@ public class PartSetRepository : IPartSetRepository
                     : p.Position.Part == null
                         ? string.Empty
                         : p.Position.Part.Name,
+            p.PositionId,
             p.ProposalId,
             p.Quantity,
             p.SoldPrice));

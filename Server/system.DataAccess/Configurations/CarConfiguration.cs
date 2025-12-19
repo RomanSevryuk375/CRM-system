@@ -19,7 +19,7 @@ public class CarConfiguration : IEntityTypeConfiguration<CarEntity>
             .IsRequired();
 
         builder.Property(c => c.StatusId)
-            .HasConversion<int>()
+            //.HasConversion<int>()
             .IsRequired();
 
         builder.Property(c => c.Brand)

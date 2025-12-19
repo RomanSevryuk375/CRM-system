@@ -6,7 +6,7 @@ public class BillEntity
 {
     public long Id { get; set; }
     public long OrderId { get; set; }
-    public BillStatusEnum StatusId { get; set; }
+    public int StatusId { get; set; }
     public DateTime CreatedAt { get; set; }
     public decimal Amount { get; set; }
     public DateOnly? ActualBillDate { get; set; }

@@ -2,8 +2,9 @@ services:
 
  postgres:
     image: postgres:18
+    container_name: AUTOService-postgres
     environment:
-      POSTGRES_DB: AUTOServic
+      POSTGRES_DB: AUTOService
       POSTGRES_USER: postgres228
       POSTGRES_PASSWORD: roman228
     ports:
@@ -16,6 +17,12 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
+
+ redis:
+    image: redis
+    container_name: AUTOService-redis
+    ports:
+      - "6379:6379"
 
  # crm_system_backend:
  #    image: ${DOCKER_REGISTRY-}crmsystembackend

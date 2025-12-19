@@ -4,7 +4,8 @@ public record AcceptanceItem
 (
     long id,
     long orderId,
-    string workerId,
+    string worker,
+    int workerId,
     DateTime createdAt,
     int mileage,
     int fuelLevel,

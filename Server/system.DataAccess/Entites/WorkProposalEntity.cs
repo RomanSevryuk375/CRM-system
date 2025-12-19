@@ -8,7 +8,7 @@ public class WorkProposalEntity
     public long OrderId { get; set; }
     public long JobId { get; set; }
     public int WorkerId { get; set; }
-    public ProposalStatusEnum StatusId { get; set; }
+    public int StatusId { get; set; }
     public DateTime Date { get; set; }
 
     public OrderEntity? Order { get; set; }

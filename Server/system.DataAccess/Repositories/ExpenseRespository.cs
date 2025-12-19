@@ -74,10 +74,12 @@ public class ExpenseRespository : IExpenseRespository
             e.Tax == null
                 ? string.Empty
                 : e.Tax.Name,
+            e.TaxId,    
             e.PartSetId,
             e.ExpenseType == null
                 ? string.Empty
                 : e.ExpenseType.Name,
+            e.ExpenseTypeId,
             e.Sum));
 
         return await projection
@@ -101,7 +103,7 @@ public class ExpenseRespository : IExpenseRespository
             Category = expense.Category,
             TaxId = expense.TaxId,
             PartSetId = expense.PartSetId,
-            ExpenseTypeId = expense.ExpenseTypeId,
+            ExpenseTypeId = (int)expense.ExpenseTypeId,
             Sum = expense.Sum
         };
 
@@ -118,7 +120,7 @@ public class ExpenseRespository : IExpenseRespository
 
         if (model.date.HasValue) entity.Date = model.date.Value;
         if (!string.IsNullOrWhiteSpace(model.category)) entity.Category = model.category;
-        if (model.expenseTypeId.HasValue) entity.ExpenseTypeId = model.expenseTypeId.Value;
+        if (model.expenseTypeId.HasValue) entity.ExpenseTypeId = (int)model.expenseTypeId.Value;
         if (model.sum.HasValue) entity.Sum = model.sum.Value;
 
         await _context.SaveChangesAsync();

@@ -2,8 +2,9 @@
 
 public record AcceptanceFilter
 (
-    IEnumerable<int> workerIds,
-    IEnumerable<long> orderIds,
+    IEnumerable<long> acceptanceIds,
+    IEnumerable<int?> workerIds,
+    IEnumerable<long?> orderIds,
     string? SortBy,
     int Page,
     int Limit,

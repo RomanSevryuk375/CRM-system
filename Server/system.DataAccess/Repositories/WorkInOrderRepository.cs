@@ -77,12 +77,15 @@ public class WorkInOrderRepository : IWorkInOrderRepository
             w.Work == null
                 ? string.Empty
                 : w.Work.Title,
+            w.JobId,
             w.Worker == null
                 ? string.Empty
                 : $"{w.Worker.Name} {w.Worker.Surname}",
+            w.WorkerId,
             w.WorkInOrderStatus == null
                 ? string.Empty
                 : w.WorkInOrderStatus.Name,
+            w.StatusId,
             w.TimeSpent));
 
         return await projection
@@ -105,7 +108,7 @@ public class WorkInOrderRepository : IWorkInOrderRepository
             OrderId = workInOrder.OrderId,
             JobId = workInOrder.JobId,
             WorkerId = workInOrder.WorkerId,
-            StatusId = workInOrder.StatusId,
+            StatusId = (int)workInOrder.StatusId,
             TimeSpent = workInOrder.TimeSpent,
         };
 
@@ -121,7 +124,7 @@ public class WorkInOrderRepository : IWorkInOrderRepository
             ?? throw new ArgumentException("Work in order not found");
 
         if (model.workerId.HasValue) entity.WorkerId = model.workerId.Value;
-        if (model.statusId.HasValue) entity.StatusId = model.statusId.Value;
+        if (model.statusId.HasValue) entity.StatusId = (int)model.statusId.Value;
         if (model.timeSpent.HasValue) entity.TimeSpent = model.timeSpent.Value;
 
         await _context.SaveChangesAsync();

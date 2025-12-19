@@ -37,6 +37,7 @@ public class UserRepository : IUserRepository
             u.Role == null
                 ? string.Empty
                 : u.Role.Name,
+            u.RoleId,
             u.Login,
             u.PasswordHash));
 

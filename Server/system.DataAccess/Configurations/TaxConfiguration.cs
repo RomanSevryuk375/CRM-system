@@ -23,7 +23,7 @@ public class TaxConfiguration : IEntityTypeConfiguration<TaxEntity>
             .IsRequired();
 
         builder.Property(t => t.TypeId)
-            .HasConversion<int>()
+            //.HasConversion<int>()
             .IsRequired();
 
         builder.HasOne(t => t.TaxType)

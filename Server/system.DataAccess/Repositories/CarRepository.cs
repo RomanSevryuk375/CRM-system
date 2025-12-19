@@ -75,6 +75,7 @@ public class CarRepository : ICarRepository
             c.Status == null
                 ? string.Empty
                 : c.Status.Name,
+            c.StatusId,
             c.Brand,
             c.Model,
             c.YearOfManufacture,
@@ -100,7 +101,7 @@ public class CarRepository : ICarRepository
         var carEntities = new CarEntity
         {
             OwnerId = car.OwnerId,
-            StatusId = car.StatusId,
+            StatusId = (int)car.StatusId,
             Brand = car.Brand,
             Model = car.Model,
             YearOfManufacture = car.YearOfManufacture,
@@ -124,7 +125,7 @@ public class CarRepository : ICarRepository
         if (!string.IsNullOrWhiteSpace(model.model)) entity.Model = model.model;
         if (model.yearOfManufacture.HasValue) entity.YearOfManufacture = model.yearOfManufacture.Value;
         if (model.mileage.HasValue) entity.Mileage = model.mileage.Value;
-        if (model.statusId.HasValue) entity.StatusId = model.statusId.Value;
+        if (model.statusId.HasValue) entity.StatusId = (int)model.statusId.Value;
 
         await _context.SaveChangesAsync();
 

@@ -5,6 +5,7 @@ public record SupplySetItem
     long id,
     long supplyId,
     string position,
+    long positionId,
     decimal quantity,
     decimal purchasePrice
 );

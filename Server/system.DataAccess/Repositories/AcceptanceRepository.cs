@@ -65,6 +65,7 @@ public class AcceptanceRepository : IAcceptanceRepository
             a.Worker == null 
                 ? string.Empty 
                 : $"{a.Worker.Name} {a.Worker.Surname}",
+            a.WorkerId,
             a.CreateAt,
             a.Mileage,
             a.FuelLevel,

@@ -57,9 +57,11 @@ public class SkillRepository : ISkillRepository
             s.Worker == null
                 ? string.Empty
                 : $"{s.Worker.Name} {s.Worker.Surname}",
+            s.WorkerId,
             s.Specialization == null
                 ? string.Empty
-                : s.Specialization.Name));
+                : s.Specialization.Name,
+            s.SpecializationId));
 
         return await projection.ToListAsync();
     }

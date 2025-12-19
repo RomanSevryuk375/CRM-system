@@ -4,7 +4,7 @@ namespace CRMSystem.Core.DTOs.Tax;
 
 public record TaxFilter
 (
-    IEnumerable<TaxTypeEnum> taxTyprIds,
+    IEnumerable<int> taxTyprIds,
     string? SortBy,
     bool isDescending
 );

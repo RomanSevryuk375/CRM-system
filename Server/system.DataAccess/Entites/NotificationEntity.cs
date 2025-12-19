@@ -7,10 +7,10 @@ public class NotificationEntity
     public long Id { get; set; }
     public long ClientId { get; set; }
     public long CarId { get; set; }
-    public NotificationTypeEnum TypeId { get; set; }
+    public int TypeId { get; set; }
     public string Message { get; set; } = string.Empty;
     public DateTime SendAt { get; set; }
-    public NotificationStatusEnum StatusId { get; set; }
+    public int StatusId { get; set; }
 
     public NotificationTypeEntity? NotificationType { get; set; }
     public ClientEntity? Client { get; set; }

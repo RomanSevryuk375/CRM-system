@@ -32,7 +32,7 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<ExpenseEntity>
             .IsRequired(false);
 
         builder.Property(e => e.ExpenseTypeId)
-            .HasConversion<int>()
+            //.HasConversion<int>()
             .IsRequired();
 
         builder.Property(e => e.Sum)

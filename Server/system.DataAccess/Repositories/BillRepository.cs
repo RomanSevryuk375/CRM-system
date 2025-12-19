@@ -57,6 +57,7 @@ public class BillRepository : IBillRepository
             b.Status == null
                 ? string.Empty
                 : $"{b.Status.Name}",
+            b.StatusId,
             b.CreatedAt,
             b.Amount,
             b.ActualBillDate));
@@ -79,7 +80,7 @@ public class BillRepository : IBillRepository
         var billEntity = new BillEntity
         {
             OrderId = bill.OrderId,
-            StatusId = bill.StatusId,
+            StatusId = (int)bill.StatusId,
             CreatedAt = bill.CreatedAt,
             Amount = bill.Amount,
             ActualBillDate = bill.ActualBillDate,
@@ -96,7 +97,7 @@ public class BillRepository : IBillRepository
         var entity = await _context.Bills.FirstOrDefaultAsync(b => b.Id == id)
             ?? throw new Exception("Bill not found");
 
-        if (model.statusId.HasValue) entity.StatusId = model.statusId.Value;
+        if (model.statusId.HasValue) entity.StatusId = (int)model.statusId.Value;
         if (model.amount.HasValue) entity.Amount = model.amount.Value;
         if (model.actualBillDate.HasValue) entity.ActualBillDate = model.actualBillDate.Value;
 

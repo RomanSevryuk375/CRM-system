@@ -3,7 +3,8 @@
 public record PositionItem
 (
     long id,
-    string part, 
+    string part,
+    long partId,    
     int cellId, 
     decimal purchasePrice, 
     decimal sellingPrice, 
