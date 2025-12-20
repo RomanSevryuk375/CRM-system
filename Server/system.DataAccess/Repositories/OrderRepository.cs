@@ -26,6 +26,9 @@ public class OrderRepository : IOrderRepository
         if (filter.carIds != null && filter.carIds.Any())
             query = query.Where(o => filter.carIds.Contains(o.CarId));
 
+        if (filter.orderIds != null && filter.orderIds.Any())
+            query = query.Where(o => filter.orderIds.Contains(o.Id));
+
         return query;
     }
 

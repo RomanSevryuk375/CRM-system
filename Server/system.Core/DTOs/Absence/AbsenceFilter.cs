@@ -2,7 +2,7 @@
 
 public record AbsenceFilter
 (
-    IEnumerable<int> workerIds,
+    IEnumerable<int>? workerIds,
     string? SortBy,
     int Page,
     int Limit,

@@ -2,10 +2,17 @@
 //using CRMSystem.Buisnes.Extensions;
 //using CRMSystem.Buisnes.Services;
 //using CRMSystem.Core.Abstractions;
+using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Buisnes.Caching;
+using CRMSystem.Buisnes.Services;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess;
+using CRMSystem.DataAccess.Repositories;
+
 //using CRMSystem.DataAccess.Repositories;
 //using CRMSystem.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace CRM_system_backend;
 
@@ -13,6 +20,12 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .WriteTo.Console()
+            .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
@@ -44,6 +57,10 @@ public class Program
             options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(SystemDbContext)))
                    .UseSnakeCaseNamingConvention();
         });
+
+        builder.Services.AddScoped<AbsenceService>();
+        builder.Services.AddScoped<IAbsenceService, CachedAbsenceService>();
+        builder.Services.AddScoped<IAbsenceRepository, AbsenceRepository>();
 
         //builder.Services.AddScoped<IOrderService, OrderService>();
         //builder.Services.AddScoped<IOrderRepository, OrderRepository>();

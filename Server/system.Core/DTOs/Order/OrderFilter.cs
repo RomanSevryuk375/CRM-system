@@ -4,9 +4,10 @@ namespace CRMSystem.Core.DTOs.Order;
 
 public record OrderFilter
 (
-    IEnumerable<int> statusIds,
-    IEnumerable<int> priorityIds,
-    IEnumerable<long> carIds,
+    IEnumerable<long>? orderIds,
+    IEnumerable<int>? statusIds,
+    IEnumerable<int>? priorityIds,
+    IEnumerable<long>? carIds,
     string? SortBy,
     int Page,
     int Limit,

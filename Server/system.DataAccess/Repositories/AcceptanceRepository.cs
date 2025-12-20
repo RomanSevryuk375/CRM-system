@@ -22,6 +22,9 @@ public class AcceptanceRepository : IAcceptanceRepository
         if (filter.orderIds != null && filter.orderIds.Any())
             query = query.Where(x => filter.orderIds.Contains(x.OrderId));
 
+        if (filter.acceptanceIds != null && filter.acceptanceIds.Any())
+            query = query.Where(x => filter.acceptanceIds.Contains(x.Id));
+
         return query;
     }
 

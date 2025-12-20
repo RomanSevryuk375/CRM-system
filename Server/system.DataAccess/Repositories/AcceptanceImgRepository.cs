@@ -1,5 +1,4 @@
-﻿using CRMSystem.Core.DTOs.Acceptance;
-using CRMSystem.Core.DTOs.AcceptanceImg;
+﻿using CRMSystem.Core.DTOs.AcceptanceImg;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;

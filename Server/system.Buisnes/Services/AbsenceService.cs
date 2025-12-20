@@ -3,6 +3,7 @@ using CRMSystem.Core.DTOs.Absence;
 using CRMSystem.Core.DTOs.Worker;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
@@ -10,18 +11,25 @@ public class AbsenceService : IAbsenceService
 {
     private readonly IAbsenceRepository _absenceRepository;
     private readonly IWorkerRepository _workerRepository;
+    private readonly ILogger<AbsenceService> _logger;
 
     public AbsenceService(
         IAbsenceRepository absenceRepository,
-        IWorkerRepository workerRepository)
+        IWorkerRepository workerRepository,
+        ILogger<AbsenceService> logger)
     {
         _absenceRepository = absenceRepository;
         _workerRepository = workerRepository;
+        _logger = logger;
     }
 
     public async Task<List<AbsenceItem>> GetPagedAbsence(AbsenceFilter filter)
     {
+        _logger.LogInformation("Getting absence start");
+
         var absence = await _absenceRepository.GetPaged(filter);
+
+        _logger.LogInformation("Getting absence success");
 
         return absence;
 
@@ -29,12 +37,19 @@ public class AbsenceService : IAbsenceService
 
     public async Task<int> GetCountAbsence(AbsenceFilter filter)
     {
-        return await _absenceRepository.GetCount(filter);
+        _logger.LogInformation("Getting count absence start");
+
+        var count = await _absenceRepository.GetCount(filter);
+
+        _logger.LogInformation("Getting count absence success");
+
+        return count;
     }
 
     public async Task<int> CreateAbsence(Absence absence)
     {
-        // time check date ocerlps
+        _logger.LogInformation("Creating absence start");
+        //check date overlaps
 
         var workerFilter = new WorkerFilter
         (
@@ -45,21 +60,39 @@ public class AbsenceService : IAbsenceService
             true
         );
 
-        var worker = await _workerRepository.GetPaged(workerFilter)
-            ?? throw new Exception($"Worker {absence.WorkerId} not found");
+        var worker = await _workerRepository.GetPaged(workerFilter);
+
+        if (!worker.Any())
+        {
+            _logger.LogInformation("Worker{WorkerId} not found", absence.WorkerId);
+            throw new Exception($"Worker {absence.WorkerId} not found");
+        }
 
         var abcense = await _absenceRepository.Create(absence);
+
+        _logger.LogInformation("Creating absence success");
 
         return abcense;
     }
 
     public async Task<int> UpdateAbsence(AbsenceUpdateModel model)
     {
-        return await _absenceRepository.Update(model);
+        _logger.LogInformation("Updating absence success");
+
+        var absence = await _absenceRepository.Update(model);
+
+        _logger.LogInformation("Updating absence success");
+        return absence;
     }
 
     public async Task<int> DeleteAbsence(int id)
     {
-        return await _absenceRepository.Delete(id);
+        _logger.LogInformation("Deleting absence success");
+
+        var absence = await _absenceRepository.Delete(id);
+
+        _logger.LogInformation("Deleting absence success");
+
+        return absence;
     }
 }
