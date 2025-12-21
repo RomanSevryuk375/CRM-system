@@ -114,4 +114,13 @@ public class WorkerRepository : IWorkerRepository
 
         return id;
     }
+
+    public async Task<bool> Exists(int id)
+    {
+        var exist = await _context.Workers
+            .AsNoTracking()
+            .AnyAsync(a => a.Id == id);
+
+        return exist;
+    }
 }

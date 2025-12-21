@@ -1,5 +1,6 @@
 ﻿using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
@@ -19,27 +20,25 @@ public class AbsenceTypeService : IAbsenceTypeService
         _logger = logger;
     }
 
-    public async Task<List<AbsenceTypeItem>> GetPagedAbsence(int Page, int Limit)
+    public async Task<List<AbsenceTypeItem>> GetAllAbsenceType()
     {
         _logger.LogInformation("Getting absenceType start");
 
-        var absenceType = await _absenceTypeRepository.GetPaged(Page, Limit);
+        var absenceType = await _absenceTypeRepository.GetAll();
 
         _logger.LogInformation("Getting absenceType success");
 
         return absenceType;
     }
 
-    public async Task<int> CretaeAbsence(AbsenceType absenceType)
+    public async Task<int> CretaeAbsenceType(AbsenceType absenceType)
     {
         _logger.LogInformation("Creating absenceType start");
 
-        var existingType = await _absenceTypeRepository.GetByName(absenceType.Name);
-
-        if (existingType is not null)
+        if (await _absenceTypeRepository.GetByName(absenceType.Name) is not null)
         {
             _logger.LogInformation("Absence type {TypeName} is exists", absenceType.Name);
-            throw new Exception($"Absece type {absenceType.Name} is exists");
+            throw new FoundException($"Absece type {absenceType.Name} is exists");
         }
 
         var absenceTypeRes = await _absenceTypeRepository.Create(absenceType);
@@ -49,9 +48,15 @@ public class AbsenceTypeService : IAbsenceTypeService
         return absenceTypeRes;
     }
 
-    public async Task<int> UpdateAbsence(int id, string name)
+    public async Task<int> UpdateAbsenceType(int id, string name)
     {
         _logger.LogInformation("Updating absence start");
+
+        if (await _absenceTypeRepository.GetByName(name) is not null)
+        {
+            _logger.LogInformation("Absence type {TypeName} is exists", name);
+            throw new ConflictException($"Absece type {name} is exists");
+        }
 
         var absenceType = await _absenceTypeRepository.Update(id, name);
 
@@ -60,7 +65,7 @@ public class AbsenceTypeService : IAbsenceTypeService
         return absenceType;
     }
 
-    public async Task<int> DeleteAbsence(int id)
+    public async Task<int> DeleteAbsenceType(int id)
     {
         _logger.LogInformation("Deleting absence start");
 

@@ -10,4 +10,5 @@ public interface IAcceptanceRepository
     Task<int> GetCount(AcceptanceFilter filter);
     Task<List<AcceptanceItem>> GetPaged(AcceptanceFilter filter);
     Task<long> Update(long id, AcceptanceUpdateModel model);
+    Task<bool> Exists(long id);
 }

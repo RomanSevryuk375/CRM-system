@@ -22,6 +22,9 @@ public class AttachmentRepository : IAttachmentRepository
         if (filter.OrderIds != null && filter.OrderIds.Any())
             query = query.Where(a => filter.OrderIds.Contains(a.OrderId));
 
+        if (filter.attachmentIds != null && filter.attachmentIds.Any())
+            query = query.Where(a => filter.attachmentIds.Contains(a.Id));
+
         return query;
     }
 
@@ -99,5 +102,12 @@ public class AttachmentRepository : IAttachmentRepository
             .ExecuteDeleteAsync();
 
         return id;
+    }
+
+    public async Task<bool> Exists (long id)
+    {
+        return await _context.Attachments
+            .AsNoTracking()
+            .AnyAsync(a => a.Id == id);
     }
 }

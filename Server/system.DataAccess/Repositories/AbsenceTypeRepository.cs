@@ -14,7 +14,7 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
         _context = context;
     }
 
-    public async Task<List<AbsenceTypeItem>> GetPaged(int page, int pageSize)
+    public async Task<List<AbsenceTypeItem>> GetAll()
     {
         var query = _context.AbsenceTypes
             .AsNoTracking();
@@ -24,10 +24,7 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
             x.Id,
             x.Name));
 
-        return await projection
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+        return await projection.ToListAsync();
     }
 
     public async Task<List<AbsenceTypeItem>> GetByName (string name)
@@ -41,11 +38,6 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
             a.Name));
 
         return await projection.ToListAsync();
-    }
-
-    public async Task<int> GetCount()
-    {
-        return await _context.AbsenceTypes.CountAsync();
     }
 
     public async Task<int> Create(AbsenceType absenceType)

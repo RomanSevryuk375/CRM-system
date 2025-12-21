@@ -5,8 +5,8 @@ namespace CRMSystem.Buisnes.Abstractions;
 
 public interface IAbsenceTypeService
 {
-    Task<int> CretaeAbsence(AbsenceType absenceType);
-    Task<int> DeleteAbsence(int id);
-    Task<List<AbsenceTypeItem>> GetPagedAbsence(int Page, int Limit);
-    Task<int> UpdateAbsence(int id, string name);
+    Task<int> CretaeAbsenceType(AbsenceType absenceType);
+    Task<int> DeleteAbsenceType(int id);
+    Task<List<AbsenceTypeItem>> GetAllAbsenceType();
+    Task<int> UpdateAbsenceType(int id, string name);
 }

@@ -2,8 +2,9 @@
 
 public record AttachmentFilter
 (
-    IEnumerable<int> WorkerIds,
-    IEnumerable<long> OrderIds,
+    IEnumerable<long>? attachmentIds,
+    IEnumerable<int>? WorkerIds,
+    IEnumerable<long>? OrderIds,
     string? SortBy,
     int Page,
     int Limit,

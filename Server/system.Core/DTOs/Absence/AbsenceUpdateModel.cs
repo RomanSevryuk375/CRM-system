@@ -4,7 +4,7 @@ namespace CRMSystem.Core.DTOs.Absence;
 
 public record AbsenceUpdateModel
 (
-    int id,
+    int workerId,
     AbsenceTypeEnum? typeId,
     DateOnly? startDate,
     DateOnly? endDate

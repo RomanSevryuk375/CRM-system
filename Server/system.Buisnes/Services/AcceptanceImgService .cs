@@ -1,6 +1,6 @@
 ﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Acceptance;
 using CRMSystem.Core.DTOs.AcceptanceImg;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
@@ -47,26 +47,12 @@ public class AcceptanceImgService : IAcceptanceImgService
 
     public async Task<long> CreateAccptanceImg(AcceptanceImg acceptanceImg)
     {
-        _logger.LogInformation("Creating acceptanceImg start");
+        _logger.LogInformation("Creating acceptanceImg start"); 
 
-        var acceptanceFilter = new AcceptanceFilter
-        (
-            new[] { acceptanceImg.AcceptanceId },
-            null,
-            null,
-            null,
-            1,
-            5,
-            true
-        );
-
-        var acceptance = await _acceptanceRepository.GetPaged(acceptanceFilter); 
-
-        if (!acceptance.Any())
+        if (!await _acceptanceRepository.Exists(acceptanceImg.AcceptanceId))
         {
             _logger.LogError("Acceptance {AcceptanceId} not found", acceptanceImg.AcceptanceId);
-
-            throw new Exception($"Acceptance {acceptanceImg.AcceptanceId} not found");
+            throw new NotFoundException($"Acceptance {acceptanceImg.AcceptanceId} not found");
         }
 
         var accptanceImg = await _acceptanceImgRepository.Create(acceptanceImg);

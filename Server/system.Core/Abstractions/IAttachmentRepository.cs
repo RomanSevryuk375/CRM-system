@@ -10,5 +10,6 @@ namespace CRMSystem.DataAccess.Repositories
         Task<int> GetCount(AttachmentFilter filter);
         Task<List<AttachmentItem>> GetPaged(AttachmentFilter filter);
         Task<long> Update(long id, string? description);
+        Task<bool> Exists(long id);
     }
 }

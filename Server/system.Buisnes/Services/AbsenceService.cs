@@ -1,6 +1,6 @@
 ﻿using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Absence;
-using CRMSystem.Core.DTOs.Worker;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
@@ -49,23 +49,17 @@ public class AbsenceService : IAbsenceService
     public async Task<int> CreateAbsence(Absence absence)
     {
         _logger.LogInformation("Creating absence start");
-        //check date overlaps
 
-        var workerFilter = new WorkerFilter
-        (
-            new[] { absence.WorkerId },
-            null,
-            1,
-            5,
-            true
-        );
+        if(await _absenceRepository.HasOverLap(absence.WorkerId, absence.StartDate, absence.EndDate))
+        {
+            _logger.LogInformation("Has date overlaps for worker{WorkerId}", absence.WorkerId);
+            throw new ConflictException($"Has date overlaps for worker{absence.WorkerId}");
+        }
 
-        var worker = await _workerRepository.GetPaged(workerFilter);
-
-        if (!worker.Any())
+        if (!await _workerRepository.Exists(absence.WorkerId))
         {
             _logger.LogInformation("Worker{WorkerId} not found", absence.WorkerId);
-            throw new Exception($"Worker {absence.WorkerId} not found");
+            throw new NotFoundException($"Worker {absence.WorkerId} not found");
         }
 
         var abcense = await _absenceRepository.Create(absence);
@@ -75,13 +69,25 @@ public class AbsenceService : IAbsenceService
         return abcense;
     }
 
-    public async Task<int> UpdateAbsence(AbsenceUpdateModel model)
+    public async Task<int> UpdateAbsence(int id, AbsenceUpdateModel model)
     {
         _logger.LogInformation("Updating absence success");
 
-        var absence = await _absenceRepository.Update(model);
+        var newStartDate = model.startDate;
+
+        if (newStartDate.HasValue)
+        {
+            if (await _absenceRepository.HasOverLap(model.workerId, newStartDate.Value, model.endDate, id))
+            {
+                _logger.LogInformation("Has date overlaps for worker{WorkerId}", model.workerId);
+                throw new ConflictException($"Has date overlaps for worker{model.workerId}");
+            }
+        }
+
+        var absence = await _absenceRepository.Update(id, model);
 
         _logger.LogInformation("Updating absence success");
+
         return absence;
     }
 

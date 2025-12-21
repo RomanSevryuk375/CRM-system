@@ -136,4 +136,11 @@ public class AcceptanceRepository : IAcceptanceRepository
 
         return id;
     }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.Acceptances
+            .AsNoTracking()
+            .AnyAsync(a => a.Id == id);
+    }
 }

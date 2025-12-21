@@ -9,5 +9,7 @@ public interface IAbsenceRepository
     Task<int> Delete(int id);
     Task<int> GetCount(AbsenceFilter filter);
     Task<List<AbsenceItem>> GetPaged(AbsenceFilter filter);
-    Task<int> Update(AbsenceUpdateModel model);
+    Task<int> Update(int id, AbsenceUpdateModel model);
+    Task<bool> Exists(int id);
+    Task<bool> HasOverLap(int workerId, DateOnly start, DateOnly? end, int? excludeId = null);
 }

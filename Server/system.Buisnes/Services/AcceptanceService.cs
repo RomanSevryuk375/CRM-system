@@ -1,7 +1,7 @@
 ﻿using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Acceptance;
-using CRMSystem.Core.DTOs.Order;
-using CRMSystem.Core.DTOs.Worker;
+using CRMSystem.Core.Enums;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
@@ -52,43 +52,24 @@ public class AcceptanceService : IAcceptanceService
     {
         _logger.LogInformation("Creating acceptance start");
 
-        var workerFilter = new WorkerFilter
-        (
-            new[] { acceptance.WorkerId },
-            null,
-            1,
-            5,
-            true
-        );
-
-        var orderFilter = new OrderFilter
-        (
-            new[] { acceptance.OrderId },
-            null,
-            null,
-            null,
-            null,
-            1,
-            5,
-            true
-        );
-
-        var worker = await _workerRepository.GetPaged(workerFilter);
-
-        if(!worker.Any())
+        if(!await _workerRepository.Exists(acceptance.WorkerId))
         { 
             _logger.LogInformation("Worker{WorkerId} not found", acceptance.WorkerId);
-            throw new Exception($"Worker {acceptance.WorkerId} not found");
+            throw new NotFoundException($"Worker {acceptance.WorkerId} not found");
         }
 
-        var order = await _orderRepository.GetPaged(orderFilter);
-
-        if (!order.Any())
+        if (!await _orderRepository.Exists(acceptance.OrderId))
         {
             _logger.LogInformation("Order{OrderId} not found", acceptance.OrderId);
-            throw new Exception($"Order {acceptance.OrderId} not found");
+            throw new NotFoundException($"Order {acceptance.OrderId} not found");
         }
-            
+
+        if (await _orderRepository.GetStatus(acceptance.OrderId) == (int)OrderStatusEnum.Completed ||
+            await _orderRepository.GetStatus(acceptance.OrderId) == (int)OrderStatusEnum.Closed)
+        {
+            _logger.LogInformation("Order{OrderId} is completed or closed", acceptance.OrderId);
+            throw new ConflictException($"Order {acceptance.OrderId} is completed or closed");
+        }
 
         _logger.LogInformation("Creating acceptance success");
 

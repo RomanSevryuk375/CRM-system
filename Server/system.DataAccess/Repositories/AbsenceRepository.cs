@@ -89,9 +89,9 @@ public class AbsenceRepository : IAbsenceRepository
         return absenceEntity.Id;
     }
 
-    public async Task<int> Update(AbsenceUpdateModel model)
+    public async Task<int> Update(int id, AbsenceUpdateModel model)
     {
-        var entity = await _context.Absences.FirstOrDefaultAsync(a => a.Id == model.id)
+        var entity = await _context.Absences.FirstOrDefaultAsync(a => a.Id == id)
             ?? throw new Exception("Absence not found");
 
         if (model.typeId.HasValue) entity.TypeId = (int)model.typeId.Value;
@@ -109,5 +109,27 @@ public class AbsenceRepository : IAbsenceRepository
             .ExecuteDeleteAsync();
 
         return id;
+    }
+
+    public async Task<bool> Exists(int id)
+    {
+        return await _context.Absences
+            .AsNoTracking()
+            .AnyAsync(a => a.Id == id);        
+    }
+
+
+    public async Task<bool> HasOverLap(int workerId, DateOnly start, DateOnly? end, int? excludeId = null)
+    {
+        var query = _context.Absences.AsNoTracking()
+            .Where(a => a.WorkerId == workerId);
+
+        if (excludeId.HasValue)
+            query = query.Where(a => a.Id != excludeId.Value);
+
+        return await query.AnyAsync(a =>
+                start <= (a.EndDate ?? DateOnly.MaxValue)
+                &&
+                a.StartDate <= (end ?? DateOnly.MaxValue));
     }
 }

@@ -135,4 +135,19 @@ public class OrderRepository : IOrderRepository
 
         return id;
     }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.Orders
+            .AnyAsync(x => x.Id == id);
+    }
+
+    public async Task<int?> GetStatus(long id)
+    {
+        return await _context.Orders
+        .AsNoTracking()
+        .Where(o => o.Id == id)
+        .Select(o => o.StatusId)
+        .FirstOrDefaultAsync();
+    }
 }

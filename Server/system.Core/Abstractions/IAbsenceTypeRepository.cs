@@ -7,8 +7,7 @@ public interface IAbsenceTypeRepository
 {
     Task<int> Create(AbsenceType absenceType);
     Task<int> Delete(int id);
-    Task<int> GetCount();
-    Task<List<AbsenceTypeItem>> GetPaged(int page, int pageSize);
+    Task<List<AbsenceTypeItem>> GetAll();
     Task<List<AbsenceTypeItem>> GetByName(string name);
     Task<int> Update(int id, string name);
 }

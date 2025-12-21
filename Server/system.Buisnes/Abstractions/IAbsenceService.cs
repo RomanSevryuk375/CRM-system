@@ -9,5 +9,5 @@ public interface IAbsenceService
     Task<int> DeleteAbsence(int id);
     Task<int> GetCountAbsence(AbsenceFilter filter);
     Task<List<AbsenceItem>> GetPagedAbsence(AbsenceFilter filter);
-    Task<int> UpdateAbsence(AbsenceUpdateModel model);
+    Task<int> UpdateAbsence(int id, AbsenceUpdateModel model);
 }

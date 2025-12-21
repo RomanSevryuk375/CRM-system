@@ -10,4 +10,5 @@ public interface IWorkerRepository
     Task<int> GetCount(WorkerFilter filter);
     Task<List<WorkerItem>> GetPaged(WorkerFilter filter);
     Task<int> Update(int id, WorkerUpdateModel model);
+    Task<bool> Exists(int id);
 }
