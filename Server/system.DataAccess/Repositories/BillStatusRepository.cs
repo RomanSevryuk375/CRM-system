@@ -22,4 +22,11 @@ public class BillStatusRepository : IBillStatusRepository
 
         return await progection.ToListAsync();
     }
+
+    public async Task<bool> Exists (int id)
+    {
+        return await _context.BillStatuses
+            .AsNoTracking()
+            .AnyAsync(b => b.Id == id);
+    }
 }

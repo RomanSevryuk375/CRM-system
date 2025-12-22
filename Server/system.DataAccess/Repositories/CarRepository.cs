@@ -89,6 +89,32 @@ public class CarRepository : ICarRepository
             .ToListAsync();
     }
 
+    public async Task<CarItem?> GetById(long id)
+    {
+        var carItem = await _context.Cars
+            .AsNoTracking()
+            .Where(c => c.Id == id)
+            .Select(c => new CarItem(
+                c.Id,
+                c.Client == null 
+                    ? "" 
+                    : $"{c.Client.Name} {c.Client.Surname}",
+                c.Status == null 
+                    ? "" 
+                    : c.Status.Name,
+                c.StatusId,
+                c.Brand,
+                c.Model,
+                c.YearOfManufacture,
+                c.VinNumber,
+                c.StateNumber,
+                c.Mileage
+            ))
+            .FirstOrDefaultAsync();
+
+        return carItem; 
+    }
+
     public async Task<int> GetCount(CarFilter filter)
     {
         var query = _context.Cars.AsNoTracking();

@@ -10,7 +10,7 @@ public class OrderService : IOrderService
     private readonly IOrderRepository _orderRepository;
     private readonly IStatusRepository _statusRepository;
     private readonly ICarRepository _carRepository;
-    private readonly IClientsRepository _clientsRepository;
+    private readonly IClientRepository _clientsRepository;
     private readonly IWorkerRepository _workerRepository;
     private readonly IWorkRepository _workRepository;
 
@@ -18,7 +18,7 @@ public class OrderService : IOrderService
         IOrderRepository orderRepository,
         IStatusRepository statusRepository,
         ICarRepository carRepository,
-        IClientsRepository clientsRepository,
+        IClientRepository clientsRepository,
         IWorkerRepository workerRepository,
         IWorkRepository workRepository)
     {

@@ -14,7 +14,7 @@ public class CachedAbsenceTypeService : IAbsenceTypeService
     private readonly IDistributedCache _distributed;
     private readonly ILogger<AbsenceTypeService> _logger;
 
-    private const string CACHE_KEY = "dict_absence_types";
+    private const string CACHE_KEY = $"Dict_{nameof(CachedAbsenceTypeService)}";
 
     public CachedAbsenceTypeService(
         IAbsenceTypeService decorated,
@@ -52,7 +52,7 @@ public class CachedAbsenceTypeService : IAbsenceTypeService
         var cacedTypes = await _distributed.
             GetStringAsync(CACHE_KEY);
 
-        List < AbsenceTypeItem >? types;
+        List<AbsenceTypeItem>? types;
 
         if (string.IsNullOrEmpty(cacedTypes))
         {

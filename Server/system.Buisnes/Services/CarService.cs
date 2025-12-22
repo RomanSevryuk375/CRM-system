@@ -1,103 +1,113 @@
-﻿using CRMSystem.Buisnes.DTOs;
-using CRMSystem.Core.Abstractions;
+﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.Car;
+using CRMSystem.Core.Enums;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
 public class CarService : ICarService
 {
     private readonly ICarRepository _carRepository;
-    private readonly IClientsRepository _clientsRepository;
-    private readonly IWorkRepository _workRepository;
-    private readonly IOrderRepository _orderRepository;
-    private readonly IWorkerRepository _workerRepository;
+    private readonly IClientRepository _clientsRepository;
+    private readonly ICarStatusRepository _carStatusRepository;
+    private readonly ILogger<CarService> _logger;
 
     public CarService(
         ICarRepository carRepository,
-        IClientsRepository clientsRepository,
-        IWorkRepository workRepository,
-        IOrderRepository orderRepository,
-        IWorkerRepository workerRepository)
+        IClientRepository clientsRepository,
+        ICarStatusRepository carStatusRepository,
+        ILogger<CarService> logger)
     {
         _carRepository = carRepository;
         _clientsRepository = clientsRepository;
-        _workRepository = workRepository;
-        _orderRepository = orderRepository;
-        _workerRepository = workerRepository;
+        _carStatusRepository = carStatusRepository;
+        _logger = logger;
     }
 
-    public async Task<List<Car>> GetAllCars(int page, int limit)
+    public async Task<List<CarItem>> GetPagedCars(CarFilter filter)
     {
-        return await _carRepository.GetPaged(page, limit);
+        _logger.LogInformation("Car getting success");
+
+        var car = await _carRepository.Get(filter);
+
+        _logger.LogInformation("Car getting success");
+
+        return car;
     }
 
-    public async Task<int> GetCountAllCars()
+    public async Task<int> GetCountCars(CarFilter filter)
     {
-        return await _carRepository.GetCount();
+        _logger.LogInformation("Car getting count start");
+
+        var count = await _carRepository.GetCount(filter);
+
+        _logger.LogInformation("Car getting count success");
+
+        return count;
     }
 
-    public async Task<List<Car>> GetCarsByOwnerId(int userId, int page, int limit)
+    public async Task<CarItem> GetCarById(long id)
     {
-        var clients = await _clientsRepository.GetClientByUserId(userId);
-        var ownerId = clients.Select(c => c.Id).FirstOrDefault();
+        _logger.LogInformation("Car getting by id start");
 
-        return await _carRepository.GetPagedByOwnerId(ownerId, page, limit);
+        var car = await _carRepository.GetById(id);
+        if (car is null)
+        {
+            _logger.LogError("Car{CarId} not found", id);
+            throw new NotFoundException($"Car{id} not found");
+        }
+
+        _logger.LogInformation("Car getting by id sucess");
+
+        return car;
     }
 
-    public async Task<int> GetCountCarsByOwnerId(int userId)
+    public async Task<long> CreateCar(Car car)
     {
-        var clients = await _clientsRepository.GetClientByUserId(userId);
-        var ownerId = clients.Select(c => c.Id).FirstOrDefault();
+        _logger.LogInformation("Creating car started");
 
-        return await _carRepository.GetCountByOwnerId(ownerId);
+        if (!await _clientsRepository.Exists(car.OwnerId))
+        {
+            _logger.LogError("Client{ClientId} not found", car.OwnerId);
+            throw new NotFoundException($"Client{car.OwnerId} not found");
+        }
+
+        if (!await _carStatusRepository.Exists((int)car.StatusId)
+            && car.StatusId is not CarStatusEnum.AtWork)
+        {
+            _logger.LogError("Status{StatusId} not found or invalid status", (int)car.StatusId);
+            throw new NotFoundException($"Car{(int)car.StatusId} not found or invalid status");
+        }
+
+        var Id = await _carRepository.Create(car);
+
+        _logger.LogInformation("Creating car success");
+
+        return Id;
     }
 
-    public async Task<List<Car>> GetCarsForWorker(int userId)
+    public async Task<long> UpdateCar(long id, CarUpdateModel model)
     {
-        var workers = await _workerRepository.GetWorkerByUserId(userId);
-        var workerIds = workers.Select(c => c.Id).ToList();
-        var works = await _workRepository.GetByWorkerId(workerIds);
-        var orderId = works.Select(works => works.OrderId).ToList();
-        var orders = await _orderRepository.GetById(orderId);
-        var carId = orders.Select(orders => orders.CarId).ToList();
+        _logger.LogInformation("Updating car start");
 
-        return await _carRepository.GetById(carId);
+        var Id = await _carRepository.Update(id, model);
+
+        _logger.LogInformation("Updating car success");
+
+        return Id;
     }
 
-    public async Task<List<CarWithOwnerDto>> GetCarsWithOwner(int page, int limit)
+    public async Task<long> DeleteCar(long id)
     {
-        var cars = await _carRepository.GetPaged(page, limit);
-        var clients = await _clientsRepository.Get();
+        _logger.LogInformation("Deleting car start");
 
-        var response = (from c in cars
-                        join cl in clients on c.OwnerId equals cl.Id
-                        select new CarWithOwnerDto(
-                            c.Id,
-                            c.OwnerId,
-                            $"{cl.Name} {cl.Surname}",
-                            c.Brand,
-                            c.Model,
-                            c.YearOfManufacture,
-                            c.VinNumber,
-                            c.StateNumber,
-                            c.Mileage)).ToList();
+        var Id = await _carRepository.Delete(id);
 
-        return response;
-    }
+        _logger.LogInformation("Deleting car success");
 
-    public async Task<int> CreateCar(Car car)
-    {
-        return await _carRepository.Create(car);
-    }
-
-    public async Task<int> UpdateCar(int id, string? brand, string? model, int? yearOfManufacture, string? vinNumber, string? stateNumber, int? mileage)
-    {
-        return await _carRepository.Update(id, brand, model, yearOfManufacture, vinNumber, stateNumber, mileage);
-    }
-
-    public async Task<int> DeleteCar(int id)
-    {
-        return await _carRepository.Delete(id);
+        return Id;
     }
 }

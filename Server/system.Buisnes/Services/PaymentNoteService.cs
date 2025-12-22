@@ -7,14 +7,14 @@ namespace CRMSystem.Buisnes.Services;
 public class PaymentNoteService : IPaymentNoteService
 {
     private readonly IPaymentNoteRepository _paymentNoteRepository;
-    private readonly IClientsRepository _clientsRepository;
+    private readonly IClientRepository _clientsRepository;
     private readonly ICarRepository _carRepository;
     private readonly IOrderRepository _orderRepository;
     private readonly IBillRepository _billRepository;
 
     public PaymentNoteService(
         IPaymentNoteRepository paymentNoteRepository,
-        IClientsRepository clientsRepository,
+        IClientRepository clientsRepository,
         ICarRepository carRepository,
         IOrderRepository orderRepository,
         IBillRepository billRepository)

@@ -1,14 +1,14 @@
 ﻿using CRMSystem.Core.DTOs.Car;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface ICarRepository
 {
-    public interface ICarRepository
-    {
-        Task<long> Create(Car car);
-        Task<long> Delete(long id);
-        Task<List<CarItem>> Get(CarFilter filter);
-        Task<int> GetCount(CarFilter filter);
-        Task<long> Update(long id, CarUpdateModel model);
-    }
+    Task<long> Create(Car car);
+    Task<long> Delete(long id);
+    Task<List<CarItem>> Get(CarFilter filter);
+    Task<int> GetCount(CarFilter filter);
+    Task<long> Update(long id, CarUpdateModel model);
+    Task<CarItem?> GetById(long id);
 }

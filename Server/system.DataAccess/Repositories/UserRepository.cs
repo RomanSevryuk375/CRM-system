@@ -84,6 +84,13 @@ public class UserRepository : IUserRepository
 
         return id;
     }
+
+    public async Task<bool> Exists (long id)
+    {
+        return await _context.Users
+            .AsNoTracking()
+            .AnyAsync(u => u.Id == id);
+    }
 }
 
 

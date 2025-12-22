@@ -9,7 +9,7 @@ public class RepairNoteService : IRepairNoteService
 {
     private readonly IRepairNoteRepositry _repairNoteRepositry;
     private readonly ICarRepository _carRepository;
-    private readonly IClientsRepository _clientsRepository;
+    private readonly IClientRepository _clientsRepository;
     private readonly IWorkerRepository _workerRepository;
     private readonly IWorkRepository _workRepository;
     private readonly IOrderRepository _orderRepository;
@@ -17,7 +17,7 @@ public class RepairNoteService : IRepairNoteService
     public RepairNoteService(
         IRepairNoteRepositry repairNoteRepositry,
         ICarRepository carRepository,
-        IClientsRepository clientsRepository,
+        IClientRepository clientsRepository,
         IWorkerRepository workerRepository,
         IWorkRepository workRepository,
         IOrderRepository orderRepository)

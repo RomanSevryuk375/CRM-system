@@ -11,7 +11,7 @@ public class WorkPropossalService : IWorkPropossalService
     private readonly IWorkTypeRepository _workTypeRepository;
     private readonly IStatusRepository _statusRepository;
     private readonly IWorkerRepository _workerRepository;
-    private readonly IClientsRepository _clientsRepository;
+    private readonly IClientRepository _clientsRepository;
     private readonly ICarRepository _carRepository;
     private readonly IOrderRepository _orderRepository;
 
@@ -20,7 +20,7 @@ public class WorkPropossalService : IWorkPropossalService
         IWorkTypeRepository workTypeRepository,
         IStatusRepository statusRepository,
         IWorkerRepository workerRepository,
-        IClientsRepository clientsRepository,
+        IClientRepository clientsRepository,
         ICarRepository carRepository,
         IOrderRepository orderRepository)
     {

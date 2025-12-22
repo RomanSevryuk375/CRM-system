@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class ClientsRepository : IClientsRepository
+public class ClientsRepository : IClientRepository
 {
     private readonly SystemDbContext _context;
 
@@ -68,6 +68,23 @@ public class ClientsRepository : IClientsRepository
         return await query.CountAsync();
     }
 
+    public async Task<ClientItem?> GetById(long id)
+    {
+        var clientItem = await _context.Clients
+            .AsNoTracking()
+            .Where(c => c.Id == id)
+            .Select(c => new ClientItem(
+            c.Id,
+            c.UserId,
+            c.Name,
+            c.Surname,
+            c.PhoneNumber,
+            c.Email))
+            .FirstOrDefaultAsync();
+
+        return clientItem;
+    }
+
     public async Task<long> Create(Client client)
     {
         var clientEntities = new ClientEntity
@@ -107,5 +124,12 @@ public class ClientsRepository : IClientsRepository
             .ExecuteDeleteAsync();
 
         return id;
+    }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.Clients
+            .AsNoTracking()
+            .AnyAsync(c => c.Id == id);
     }
 }

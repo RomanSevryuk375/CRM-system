@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.DTOs.Order;
+﻿using CRMSystem.Core.DTOs.Bill;
+using CRMSystem.Core.DTOs.Order;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 
@@ -13,5 +14,6 @@ namespace CRMSystem.DataAccess.Repositories
         Task<long> Update(long id, OrderPriorityEnum? priorityId);
         Task<bool> Exists(long id);
         Task<int?> GetStatus(long id);
+        Task Update(long id, BillUpdateModel model);
     }
 }

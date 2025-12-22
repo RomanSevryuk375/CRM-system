@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class CarStatusRepository
+public class CarStatusRepository : ICarStatusRepository
 {
     private readonly SystemDbContext _context;
 
@@ -12,7 +12,7 @@ public class CarStatusRepository
         _context = context;
     }
 
-    public async Task<List<CarStatusItem>> Get ()
+    public async Task<List<CarStatusItem>> Get()
     {
         var query = _context.CarStatuses.AsNoTracking();
 
@@ -21,5 +21,12 @@ public class CarStatusRepository
             c.Name));
 
         return await projection.ToListAsync();
+    }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.CarStatuses
+            .AsNoTracking()
+            .AnyAsync(c => c.Id == id);
     }
 }

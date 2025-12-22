@@ -3,7 +3,6 @@
 //using CRMSystem.Buisnes.Services;
 //using CRMSystem.Core.Abstractions;
 using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Caching;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess;
@@ -58,9 +57,9 @@ public class Program
                    .UseSnakeCaseNamingConvention();
         });
 
-        builder.Services.AddScoped<AbsenceService>();
-        builder.Services.AddScoped<IAbsenceService, CachedAbsenceService>();
-        builder.Services.AddScoped<IAbsenceRepository, AbsenceRepository>();
+        //builder.Services.AddScoped<AbsenceService>();
+        //builder.Services.AddScoped<IAbsenceService, CachedAbsenceService>();
+        //builder.Services.AddScoped<IAbsenceRepository, AbsenceRepository>();
 
         //builder.Services.AddScoped<IOrderService, OrderService>();
         //builder.Services.AddScoped<IOrderRepository, OrderRepository>();
