@@ -1,9 +1,9 @@
 ﻿using CRMSystem.Core.DTOs;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface IExpenseTypeRepository
 {
-    public interface IExpenseTypeRepository
-    {
-        Task<List<ExpenseTypeItem>> Get();
-    }
+    Task<List<ExpenseTypeItem>> Get();
+    Task<bool> Exists(int id);
 }

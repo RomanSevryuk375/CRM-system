@@ -78,6 +78,31 @@ public class ClientService : IClientService
         return Id;
     }
 
+    public async Task<long> CreateClientWithUser(Client client, User user)
+    {
+        var userId = 0L;
+        try
+        {
+            _logger.LogInformation("Creating user start");
+
+            userId = await _userRepository.Create(user);
+            client.SetUserId(userId);
+
+            var Id = await _clientRepository.Create(client);
+
+            _logger.LogInformation("Creating client success");
+
+            return Id;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to create client. Rolling back user.");
+            if (userId > 0)
+                await _userRepository.Delete(userId);
+            throw;
+        }
+    }
+
     public async Task<long> UpdateClient(long id, ClientUpdateModel model)
     {
         _logger.LogInformation("Updating client start");

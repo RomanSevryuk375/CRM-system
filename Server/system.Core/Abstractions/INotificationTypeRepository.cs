@@ -1,9 +1,9 @@
 ﻿using CRMSystem.Core.DTOs;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface INotificationTypeRepository
 {
-    public interface INotificationTypeRepository
-    {
-        Task<List<NotificationTypeItem>> Get();
-    }
+    Task<List<NotificationTypeItem>> Get();
+    Task<bool> Exists(int id);
 }

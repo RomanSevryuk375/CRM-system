@@ -16,8 +16,14 @@ public class Client
         Email = email;
     }
 
+    public void SetUserId(long userId)
+    {
+        if (userId <= 0) throw new ArgumentException("Invalid ID");
+        UserId = userId;
+    }
+
     public long Id { get; }
-    public long UserId { get; }
+    public long UserId { get; private set; }
     public string Name { get; } 
     public string Surname { get; } 
     public string PhoneNumber { get; } 

@@ -22,4 +22,11 @@ public class NotificationStatusRepository : INotificationStatusRepository
 
         return await projection.ToListAsync();
     }
+
+    public async Task<bool> Exists(int id)
+    {
+        return await _context.NotificationsStatuses
+            .AsNoTracking()
+            .AnyAsync(n => n.Id == id);
+    }
 }

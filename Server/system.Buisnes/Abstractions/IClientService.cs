@@ -11,4 +11,5 @@ public interface IClientService
     Task<int> GetCountClients(ClientFilter filter);
     Task<List<ClientItem>> GetPagedCkients(ClientFilter filter);
     Task<long> UpdateClient(long id, ClientUpdateModel model);
+    Task<long> CreateClientWithUser(Client client, User user);
 }

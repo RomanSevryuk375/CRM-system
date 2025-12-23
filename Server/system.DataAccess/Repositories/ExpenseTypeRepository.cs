@@ -22,4 +22,11 @@ public class ExpenseTypeRepository : IExpenseTypeRepository
 
         return await projection.ToListAsync();
     }
+
+    public async Task<bool> Exists (int id)
+    {
+        return await _context.ExpenseTypes
+            .AsNoTracking()
+            .AnyAsync(e => e.Id == id);
+    }
 }

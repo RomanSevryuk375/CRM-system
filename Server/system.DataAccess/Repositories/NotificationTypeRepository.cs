@@ -12,6 +12,13 @@ public class NotificationTypeRepository : INotificationTypeRepository
         _context = context;
     }
 
+    public async Task<bool> Exists(int id)
+    {
+        return await _context.NotificationTypes
+            .AsNoTracking()
+            .AnyAsync(n => n.Id == id);
+    }
+
     public async Task<List<NotificationTypeItem>> Get()
     {
         var query = _context.NotificationTypes.AsNoTracking();

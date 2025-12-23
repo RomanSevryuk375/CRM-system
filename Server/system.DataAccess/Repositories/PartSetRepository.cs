@@ -121,4 +121,11 @@ public class PartSetRepository : IPartSetRepository
 
         return id;
     }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.PartSets
+            .AsNoTracking()
+            .AnyAsync(p => p.Id == id);
+    }
 }

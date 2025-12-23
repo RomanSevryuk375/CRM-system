@@ -105,4 +105,11 @@ public class TaxRepository : ITaxRepository
 
         return id;
     }
+
+    public async Task<bool> Exists (int id)
+    {
+        return await _context.Taxes
+            .AsNoTracking()
+            .AnyAsync(t => t.Id == id);
+    }
 }

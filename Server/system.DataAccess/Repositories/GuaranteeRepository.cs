@@ -85,12 +85,13 @@ public class GuaranteeRepository : IGuaranteeRepository
         return guarantyEntity.Id;
     }
 
-    public async Task<long> Update(long id, string? descroption)
+    public async Task<long> Update(long id, GuaranteeUpdateModel model)
     {
         var entity = await _context.Guarantees.FirstOrDefaultAsync(g => g.Id == id)
             ?? throw new Exception("Guarantee not found");
 
-        if (!string.IsNullOrWhiteSpace(descroption)) entity.Description = descroption;
+        if (!string.IsNullOrWhiteSpace(model.description)) entity.Description = model.description;
+        if (!string.IsNullOrWhiteSpace(model.terms)) entity.Description = model.terms;
 
         await _context.SaveChangesAsync();
 

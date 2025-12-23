@@ -1,92 +1,113 @@
-﻿
-using CRMSystem.Buisnes.DTOs;
+﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.Expense;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
 public class ExpenseService : IExpenseService
 {
     private readonly IExpenseRespository _expenseRespository;
-    private readonly IUsedPartRepository _usedPartRepository;
+    private readonly IExpenseTypeRepository _expenseTypeRepository;
+    private readonly IPartSetRepository _partSetRepository;
     private readonly ITaxRepository _taxRepository;
+    private readonly ILogger<ExpenseService> _logger;
 
     public ExpenseService(
         IExpenseRespository expenseRespository,
-        IUsedPartRepository usedPartRepository,
-        ITaxRepository taxRepository)
+        IExpenseTypeRepository expenseTypeRepository,
+        IPartSetRepository partSetRepository,
+        ITaxRepository taxRepository,
+        ILogger<ExpenseService> logger)
     {
         _expenseRespository = expenseRespository;
-        _usedPartRepository = usedPartRepository;
+        _expenseTypeRepository = expenseTypeRepository;
+        _partSetRepository = partSetRepository;
         _taxRepository = taxRepository;
+        _logger = logger;
     }
 
-    public async Task<List<Expense>> GetExpenses()
+    public async Task<List<ExpenseItem>> GetPagedExpenses(ExpenseFilter filter)
     {
-        return await _expenseRespository.Get();
+        _logger.LogInformation("Getting expenses start");
+
+        var client = await _expenseRespository.GetPaged(filter);
+
+        _logger.LogInformation("Getting expenses success");
+
+        return client;
     }
 
-    public async Task<List<ExpensesWitInfoDto>> GetExpensesWithInfo()
+    public async Task<int> GetCountExpenses(ExpenseFilter filter)
     {
-        var expenses = await _expenseRespository.Get();
-        var taxes = await _taxRepository.Get();
-        var usedParts = await _usedPartRepository.Get();
+        _logger.LogInformation("Getting count expenses start");
 
-        var response = (from e in expenses
-                        join t in taxes on e.TaxId equals t.Id
-                        join u in usedParts on e.UsedPartId equals u.Id
-                        select new ExpensesWitInfoDto(
-                            e.Id,
-                            e.Date,
-                            e.Category,
-                            t.Name,
-                            $"{u.Name} (({u.Id}) {u.Article})",
-                            e.ExpenseType,
-                            e.Sum))
-                            .ToList();
+        var client = await _expenseRespository.GetCount(filter);
 
-        return response;
+        _logger.LogInformation("Getting count expenses success");
+
+        return client;
     }
 
-    public async Task<List<ExpensesWitInfoDto>> GetPagedExpensesWithInfo(int page, int limit)
+    public async Task<long> CreateExpenses(Expense expense)
     {
-        var expenses = await _expenseRespository.GetPaged(page, limit);
-        var taxes = await _taxRepository.Get();
-        var usedParts = await _usedPartRepository.Get();
+        _logger.LogInformation("Creating expenses start");
 
-        var response = (from e in expenses
-                        join t in taxes on e.TaxId equals t.Id
-                        join u in usedParts on e.UsedPartId equals u.Id
-                        select new ExpensesWitInfoDto(
-                            e.Id,
-                            e.Date,
-                            e.Category,
-                            t.Name,
-                            $"{u.Name} (({u.Id}) {u.Article})",
-                            e.ExpenseType,
-                            e.Sum))
-                            .ToList();
+        if (!await _expenseTypeRepository.Exists((int)expense.ExpenseTypeId))
+        {
+            _logger.LogError("Expense{ExpenseTypeId} not found", expense.ExpenseTypeId);
+            throw new NotFoundException($"Expense{(int)expense.ExpenseTypeId} not found");
+        }
 
-        return response;
+        if (expense.TaxId.HasValue
+                && !await _taxRepository.Exists((int)expense.TaxId.Value))
+        {
+            _logger.LogError("Tax{TaxId} not found", (int)expense.TaxId);
+            throw new NotFoundException($"Tax{(int)expense.TaxId} not found");
+        }
+
+        if (expense.PartSetId.HasValue
+                && !await _partSetRepository.Exists(expense.PartSetId.Value))
+        {
+            _logger.LogError("PartSet{PartSetId} not found", (int)expense.PartSetId.Value);
+            throw new NotFoundException($"PartSet{(int)expense.PartSetId.Value} not found");
+        }
+
+        _logger.LogInformation("Creating expenses success");
+
+        var Id = await _expenseRespository.Create(expense);
+
+        return Id;
     }
 
-    public async Task<int> GetCountExpense()
+    public async Task<long> UpdateExpense(long id, ExpenseUpdateModel model)
     {
-        return await _expenseRespository.GetCount();
+        _logger.LogInformation("Updating expenses start");
+
+        if (model.expenseTypeId.HasValue
+                && !await _expenseTypeRepository.Exists((int)model.expenseTypeId.Value))
+        {
+            _logger.LogError("Expense{ExpenseTypeId} not found", model.expenseTypeId.Value);
+            throw new NotFoundException($"Expense{(int)model.expenseTypeId.Value} not found");
+        }
+
+        var Id = await _expenseRespository.Update(id, model);
+
+        _logger.LogInformation("Updating expenses success");
+
+        return Id;
     }
 
-    public async Task<int> CreateExpense(Expense expense)
+    public async Task<long> DeleteExpense(long id)
     {
-        return await _expenseRespository.Create(expense);
-    }
+        _logger.LogInformation("Deleting expenses start");
 
-    public async Task<int> UpdateExpense(int id, DateTime? date, string? category, int? taxId, int? usedPartId, string? expenseType, decimal? sum)
-    {
-        return await _expenseRespository.Update(id, date, category, taxId, usedPartId, expenseType, sum);
-    }
+        var Id = await _expenseRespository.Delete(id);
 
-    public async Task<int> DeleteExpense(int id)
-    {
-        return await _expenseRespository.Delete(id);
+        _logger.LogInformation("Deleting expenses success");
+
+        return Id;
     }
 }

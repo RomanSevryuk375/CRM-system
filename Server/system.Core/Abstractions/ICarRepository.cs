@@ -11,4 +11,5 @@ public interface ICarRepository
     Task<int> GetCount(CarFilter filter);
     Task<long> Update(long id, CarUpdateModel model);
     Task<CarItem?> GetById(long id);
+    Task<bool> Exists(long id);
 }

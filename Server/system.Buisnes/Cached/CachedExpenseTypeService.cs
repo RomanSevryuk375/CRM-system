@@ -6,29 +6,30 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Cached;
 
-public class CachedBillStatusService : IBillStatusService
+public class CachedExpenseTypeService : IExpenseTypeService
 {
-    private readonly IBillStatusService _decorated;
+    private readonly IExpenseTypeService _decorated;
     private readonly IDistributedCache _distributed;
-    private readonly ILogger<CachedBillStatusService> _logger;
+    private readonly ILogger<CachedExpenseTypeService> _logger;
 
-    private const string CACHE_KEY = $"Dict_{nameof(CachedBillStatusService)}";
+    private const string CACHE_KEY = $"Dict_{nameof(CachedExpenseTypeService)}";
 
-    public CachedBillStatusService(
-        IBillStatusService decorated,
+    public CachedExpenseTypeService(
+        IExpenseTypeService decorated,
         IDistributedCache distributed,
-        ILogger<CachedBillStatusService> logger)
+        ILogger<CachedExpenseTypeService> logger)
     {
         _decorated = decorated;
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<List<BillStatusItem>> GetAllBillStatuses()
+
+    public async Task<List<ExpenseTypeItem>> GetExpenseType()
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetAllBillStatuses(),
+            () => _decorated.GetExpenseType(),
             TimeSpan.FromHours(24),
-            _logger) ?? new List<BillStatusItem>();
+            _logger) ?? new List<ExpenseTypeItem>();
     }
 }

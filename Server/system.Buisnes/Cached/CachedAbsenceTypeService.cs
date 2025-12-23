@@ -1,10 +1,10 @@
 ﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Buisnes.Extensions;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.DTOs;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace CRMSystem.Buisnes.Cached;
 
@@ -49,37 +49,11 @@ public class CachedAbsenceTypeService : IAbsenceTypeService
 
     public async Task<List<AbsenceTypeItem>> GetAllAbsenceType()
     {
-        var cacedTypes = await _distributed.
-            GetStringAsync(CACHE_KEY);
-
-        List<AbsenceTypeItem>? types;
-
-        if (string.IsNullOrEmpty(cacedTypes))
-        {
-            _logger.LogInformation("Returning AbsenceTypes from Db");
-
-            types = await _decorated.GetAllAbsenceType();
-
-            if (types is null)
-                return new List<AbsenceTypeItem>();
-
-            await _distributed.SetStringAsync
-                (CACHE_KEY, 
-                JsonConvert.SerializeObject(types),
-                new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24) });
-
-            _logger.LogInformation("Caching AbsenceTypes sucess");
-
-            return types;
-        }
-
-        _logger.LogInformation("Returning AbsenceTypes from cache");
-
-        types = JsonConvert.DeserializeObject<List<AbsenceTypeItem>>(cacedTypes);
-        if (types is null)
-            return new List<AbsenceTypeItem>();
-
-        return types;
+        return await _distributed.GetOrCreateAsync(
+            CACHE_KEY,
+            () => _decorated.GetAllAbsenceType(),
+            TimeSpan.FromHours(24),
+            _logger) ?? new List<AbsenceTypeItem>();
     }
 
     public async Task<int> UpdateAbsenceType(int id, string name)

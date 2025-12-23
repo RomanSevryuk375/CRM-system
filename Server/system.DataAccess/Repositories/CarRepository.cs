@@ -166,4 +166,11 @@ public class CarRepository : ICarRepository
 
         return id;
     }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.Cars
+            .AsNoTracking()
+            .AnyAsync(c => c.Id == id);
+    }
 }

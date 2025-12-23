@@ -1,9 +1,9 @@
 ﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Buisnes.Extensions;
 using CRMSystem.Core.DTOs.Client;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace CRMSystem.Buisnes.Cached;
 
@@ -27,6 +27,11 @@ public class CachedClientService : IClientService
         return await _decorated.CreateClient(client);
     }
 
+    public async Task<long> CreateClientWithUser(Client client, User user)
+    {
+        return await _decorated.CreateClientWithUser(client, user);
+    }
+
     public async Task<long> DeleteClient(long id)
     {
         await _distributed.RemoveAsync($"client_{id}");
@@ -40,36 +45,11 @@ public class CachedClientService : IClientService
     {
         var key = $"client_{id}";
 
-        var cachedClient = await _distributed.GetStringAsync(key);
-
-        ClientItem? clientItem;
-        if (string.IsNullOrEmpty(cachedClient))
-        {
-            _logger.LogInformation("Returning client from Db");
-
-            clientItem = await _decorated.GetClientById(id);
-
-            if (clientItem is null)
-                return clientItem!;
-
-            await _distributed.SetStringAsync(
-                key,
-                JsonConvert.SerializeObject(clientItem),
-                new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
-                });
-
-            _logger.LogInformation("Caching client sucess");
-
-            return clientItem;
-        }
-
-        _logger.LogInformation("Returning client from cache");
-
-        clientItem = JsonConvert.DeserializeObject<ClientItem>(cachedClient);
-
-        return clientItem!;
+        return await _distributed.GetOrCreateAsync(
+            key,
+            () => _decorated.GetClientById(id),
+            TimeSpan.FromMinutes(2),
+            _logger);
     }
 
     public async Task<int> GetCountClients(ClientFilter filter)

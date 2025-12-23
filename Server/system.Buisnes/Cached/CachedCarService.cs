@@ -1,10 +1,9 @@
 ﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Buisnes.Extensions;
 using CRMSystem.Core.DTOs.Car;
-using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace CRMSystem.Buisnes.Cached;
 
@@ -39,39 +38,13 @@ public class CachedCarService : ICarService
 
     public async Task<CarItem> GetCarById(long id)
     {
-        string key = $"car_{id}";
+        var key = $"car_{id}";
 
-        var cachedCar = await _distributed.GetStringAsync(key);
-
-        CarItem? car;
-        if (string.IsNullOrEmpty(cachedCar))
-        {
-            _logger.LogInformation("Returning car from Db");
-
-            car = await _decorated.GetCarById(id);
-
-
-            if (car is null)
-                return car!;
-
-            await _distributed.SetStringAsync(
-                key,
-                JsonConvert.SerializeObject(car),
-                new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2)
-                });
-
-            _logger.LogInformation("Caching car sucess");
-
-            return car;
-        }
-
-        _logger.LogInformation("Returning car from cache");
-
-        car = JsonConvert.DeserializeObject<CarItem>(cachedCar);
-
-        return car!;
+        return await _distributed.GetOrCreateAsync(
+            key,
+            () => _decorated.GetCarById(id),
+            TimeSpan.FromMinutes(2),
+            _logger);
     }
 
     public async Task<int> GetCountCars(CarFilter filter)

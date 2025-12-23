@@ -20,7 +20,7 @@ public class CarStatusService : ICarStatusService
 
     public async Task<List<CarStatusItem>> GetCarStatuses()
     {
-        _logger.LogInformation("Car status getting success");
+        _logger.LogInformation("Car status getting start");
 
         var carSatsus = await _carStatusRepository.Get();
 
