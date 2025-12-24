@@ -11,4 +11,6 @@ public interface IBillRepository
     Task<List<BillItem>> GetPaged(BillFilter filter);
     Task<long> Update(long id, BillUpdateModel model);
     Task<BillItem?> GetByOrderId(long orderId);
+    Task<decimal> RecalculateDebt(long orderId);
+    Task<long> RecalculateAmmount(long orderId);
 }

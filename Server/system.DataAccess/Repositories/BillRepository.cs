@@ -136,7 +136,7 @@ public class BillRepository : IBillRepository
         return id;
     }
 
-    public async Task<long> Recalculate(long orderId)
+    public async Task<long> RecalculateAmmount(long orderId)
     {
         var bill = await _context.Bills.FirstOrDefaultAsync(b => b.OrderId == orderId)
             ?? throw new NotFoundException("Bill not found");
@@ -153,14 +153,24 @@ public class BillRepository : IBillRepository
                 ? b.Work.StandardTime * b.Worker.HourlyRate
                 : 0m);
 
-        var payedSum = await _context.PaymentNotes
-            .Where(p => p.BillId == bill.Id)
-            .SumAsync(p => p.Amount);
-
-        bill.Amount = (newSetSum + newWorkInOrderSum) - payedSum;
+        bill.Amount = newSetSum + newWorkInOrderSum;
 
         await _context.SaveChangesAsync();
 
         return bill.Id;
+    }
+
+    public async Task<decimal> RecalculateDebt(long orderId)
+    {
+        var bill = await _context.Bills.FirstOrDefaultAsync(b => b.OrderId == orderId)
+            ?? throw new NotFoundException("Bill not found");
+
+        var payedSum = await _context.PaymentNotes
+            .Where(p => p.BillId == bill.Id)
+            .SumAsync(p => p.Amount);
+
+        var debt = bill.Amount - payedSum;
+
+        return debt;
     }
 }

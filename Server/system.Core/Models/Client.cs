@@ -1,6 +1,7 @@
 ﻿namespace CRMSystem.Core.Models;
 
 using CRMSystem.Core.Constants;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Validation;
 using System.Text.RegularExpressions;
 
@@ -18,7 +19,7 @@ public class Client
 
     public void SetUserId(long userId)
     {
-        if (userId <= 0) throw new ArgumentException("Invalid ID");
+        if (userId <= 0) throw new ConflictException("Invalid ID");
         UserId = userId;
     }
 

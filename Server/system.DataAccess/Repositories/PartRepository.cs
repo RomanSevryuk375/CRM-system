@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class PartRepositiry : IPartRepositiry
+public class PartRepository : IPartRepository
 {
     private readonly SystemDbContext _context;
 
-    public PartRepositiry(SystemDbContext context)
+    public PartRepository(SystemDbContext context)
     {
         _context = context;
     }
@@ -81,7 +81,7 @@ public class PartRepositiry : IPartRepositiry
             .ToListAsync();
     }
 
-    public async Task<int> GetCoumt(PartFilter filter)
+    public async Task<int> GetCount(PartFilter filter)
     {
         var query = _context.Parts.AsNoTracking();
         query = ApplyFilter(query, filter);

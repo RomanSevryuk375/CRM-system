@@ -3,6 +3,7 @@ using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -95,6 +96,29 @@ public class WorkProposalRepository : IWorkProposalRepository
             .ToListAsync();
     }
 
+    public async Task<WorkProposalItem?> GetById(long id)
+    {
+        return await _context.WorkProposals
+            .AsNoTracking()
+            .Where(p => p.Id == id)
+            .Select(w => new WorkProposalItem(
+            w.Id,
+            w.OrderId,
+            w.Work == null
+                ? string.Empty
+                : w.Work.Title,
+            w.JobId,
+            w.Worker == null
+                ? string.Empty
+                : $"{w.Worker.Name} {w.Worker.Surname}",
+            w.WorkerId,
+            w.Status == null
+                ? string.Empty
+                : w.Status.Name,
+            w.StatusId,
+            w.Date))
+            .FirstOrDefaultAsync();
+    }
 
     public async Task<long> Create(WorkProposal workProposal)
     {
@@ -156,5 +180,12 @@ public class WorkProposalRepository : IWorkProposalRepository
             .ExecuteDeleteAsync();
 
         return id;
+    }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.WorkProposals
+            .AsNoTracking()
+            .AnyAsync(x => x.Id == id);
     }
 }

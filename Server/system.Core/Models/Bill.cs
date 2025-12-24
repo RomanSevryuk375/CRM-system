@@ -1,4 +1,5 @@
 ﻿using CRMSystem.Core.Enums;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
@@ -15,8 +16,14 @@ public class Bill
         ActualBillDate = actualBillDate;
     }
 
+    public void SetOrderId(long orderId)
+    {
+        if(orderId <= 0) throw new ConflictException(nameof(orderId));
+        OrderId = orderId;
+    }
+
     public long Id { get; }
-    public long OrderId { get; }
+    public long OrderId { get; private set; }
     public BillStatusEnum StatusId { get; }
     public DateTime CreatedAt { get; }
     public decimal Amount { get; }

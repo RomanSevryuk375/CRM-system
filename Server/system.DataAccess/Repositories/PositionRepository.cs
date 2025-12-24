@@ -118,4 +118,11 @@ public class PositionRepository : IPositionRepository
 
         return id;
     }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.Positions
+            .AsNoTracking()
+            .AnyAsync(p => p.Id == id);
+    }
 } 

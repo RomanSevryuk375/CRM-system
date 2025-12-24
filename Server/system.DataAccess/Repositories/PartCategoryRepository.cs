@@ -61,4 +61,18 @@ public class PartCategoryRepository : IPartCategoryRepository
 
         return id;
     }
+
+    public async Task<bool> Exists (int id)
+    {
+        return await _context.PartCategories
+            .AsNoTracking()
+            .AnyAsync(p => p.Id == id);
+    }
+
+    public async Task<bool> NameExists (string name)
+    {
+        return await _context.PartCategories
+            .AsNoTracking()
+            .AnyAsync(p => p.Name == name);
+    }
 }
