@@ -101,6 +101,32 @@ public class WorkInOrderRepository : IWorkInOrderRepository
         return await query.CountAsync();
     }
 
+    public async Task<List<WorkInOrderItem>> GetByOrderId(long orderId)
+    {
+        var worksInOrder = await _context.WorksInOrder
+            .AsNoTracking()
+            .Where(w => w.OrderId == orderId)
+            .Select(w => new WorkInOrderItem(
+                w.Id,
+                w.OrderId,
+                w.Work == null
+                    ? string.Empty
+                    : w.Work.Title,
+                w.JobId,
+                w.Worker == null
+                    ? string.Empty
+                    : $"{w.Worker.Name} {w.Worker.Surname}",
+                w.WorkerId,
+                w.WorkInOrderStatus == null
+                    ? string.Empty
+                    : w.WorkInOrderStatus.Name,
+                w.StatusId,
+                w.TimeSpent))
+            .ToListAsync();
+
+        return worksInOrder;
+    }
+
     public async Task<long> Create(WorkInOrder workInOrder)
     {
         var workInOrderEntity = new WorkInOrderEntity

@@ -1,4 +1,5 @@
 ﻿using CRMSystem.Core.DTOs.Bill;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +76,26 @@ public class BillRepository : IBillRepository
         return await query.CountAsync();
     }
 
+    public async Task<BillItem?> GetByOrderId(long orderId)
+    {
+        var bill = await _context.Bills
+            .AsNoTracking()
+            .Where(b => b.OrderId == orderId)
+            .Select(b => new BillItem(
+            b.Id,
+            b.OrderId,
+            b.Status == null
+                ? string.Empty
+                : $"{b.Status.Name}",
+            b.StatusId,
+            b.CreatedAt,
+            b.Amount,
+            b.ActualBillDate))
+            .FirstOrDefaultAsync();
+
+        return bill;
+    }
+
     public async Task<long> Create(Bill bill)
     {
         var billEntity = new BillEntity
@@ -95,7 +116,7 @@ public class BillRepository : IBillRepository
     public async Task<long> Update(long id, BillUpdateModel model)
     {
         var entity = await _context.Bills.FirstOrDefaultAsync(b => b.Id == id)
-            ?? throw new Exception("Bill not found");
+            ?? throw new NotFoundException("Bill not found");
 
         if (model.statusId.HasValue) entity.StatusId = (int)model.statusId.Value;
         if (model.amount.HasValue) entity.Amount = model.amount.Value;
@@ -113,5 +134,33 @@ public class BillRepository : IBillRepository
             .ExecuteDeleteAsync();
 
         return id;
+    }
+
+    public async Task<long> Recalculate(long orderId)
+    {
+        var bill = await _context.Bills.FirstOrDefaultAsync(b => b.OrderId == orderId)
+            ?? throw new NotFoundException("Bill not found");
+
+        var newSetSum = await _context.PartSets
+            .Where(b => b.OrderId == orderId)
+            .SumAsync(b => b.SoldPrice * b.Quantity);
+
+        var newWorkInOrderSum = await _context.WorksInOrder
+            .Include(w => w.Work)
+            .Include(w => w.Worker)
+            .Where(b => b.OrderId == orderId)
+            .SumAsync(b => (b.Work != null && b.Worker != null)
+                ? b.Work.StandardTime * b.Worker.HourlyRate
+                : 0m);
+
+        var payedSum = await _context.PaymentNotes
+            .Where(p => p.BillId == bill.Id)
+            .SumAsync(p => p.Amount);
+
+        bill.Amount = (newSetSum + newWorkInOrderSum) - payedSum;
+
+        await _context.SaveChangesAsync();
+
+        return bill.Id;
     }
 }

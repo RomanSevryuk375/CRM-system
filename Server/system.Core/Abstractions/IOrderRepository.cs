@@ -3,17 +3,19 @@ using CRMSystem.Core.DTOs.Order;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface IOrderRepository
 {
-    public interface IOrderRepository
-    {
-        Task<long> Create(Order order);
-        Task<long> Delete(long id);
-        Task<int> GetCount(OrderFilter filter);
-        Task<List<OrderItem>> GetPaged(OrderFilter filter);
-        Task<long> Update(long id, OrderPriorityEnum? priorityId);
-        Task<bool> Exists(long id);
-        Task<int?> GetStatus(long id);
-        Task Update(long id, BillUpdateModel model);
-    }
+    Task<long> Create(Order order);
+    Task<long> Delete(long id);
+    Task<int> GetCount(OrderFilter filter);
+    Task<List<OrderItem>> GetPaged(OrderFilter filter);
+    Task<long> Update(long id, OrderPriorityEnum? priorityId);
+    Task<bool> Exists(long id);
+    Task<int?> GetStatus(long id);
+    Task<long> Complite(long id);
+    Task<long> Close(long id);
+    Task<bool> PosibleToComplete(long id);
+    Task<bool> PosibleToClose(long id);
 }

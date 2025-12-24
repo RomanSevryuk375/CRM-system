@@ -1,9 +1,9 @@
 ﻿using CRMSystem.Core.DTOs;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface IOrderPriorityRepository
 {
-    public interface IOrderPriorityRepository
-    {
-        Task<List<OrderPriorityItem>> Get();
-    }
+    Task<List<OrderPriorityItem>> Get();
+    Task<bool> Exists(int id);
 }

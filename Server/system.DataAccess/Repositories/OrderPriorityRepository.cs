@@ -22,4 +22,11 @@ public class OrderPriorityRepository : IOrderPriorityRepository
 
         return await projection.ToListAsync();
     }
+
+    public async Task<bool> Exists (int id)
+    {
+        return await _context.OrderPriorities
+            .AsNoTracking()
+            .AnyAsync(o => o.Id == id);
+    }
 }

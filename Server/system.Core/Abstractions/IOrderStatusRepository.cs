@@ -1,9 +1,9 @@
 ﻿using CRMSystem.Core.DTOs;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface IOrderStatusRepository
 {
-    public interface IOrderStatusRepository
-    {
-        Task<List<OrderStatusItem>> Get();
-    }
+    Task<List<OrderStatusItem>> Get();
+    Task<bool> Exists(int id);
 }

@@ -10,4 +10,5 @@ public interface IPartSetRepository
     Task<List<PartSetItem>> GetPaged(PartSetFilter filter);
     Task<long> Update(long id, PartSetUpdateModel model);
     Task<bool> Exists(long id);
+    Task<List<PartSetItem>> GetByOrderId(long orderId);
 }

@@ -83,6 +83,28 @@ public class PartSetRepository : IPartSetRepository
             .ToListAsync();
     }
 
+    public async Task<List<PartSetItem>> GetByOrderId(long orderId)
+    {
+        var partSets = await _context.PartSets
+            .AsNoTracking()
+            .Where(p => p.OrderId == orderId)
+            .Select(p => new PartSetItem(
+                p.Id,
+                p.OrderId,
+                p.Position == null
+                        ? string.Empty
+                        : p.Position.Part == null
+                            ? string.Empty
+                            : p.Position.Part.Name,
+                p.PositionId,
+                p.ProposalId,
+                p.Quantity,
+                p.SoldPrice))
+            .ToListAsync();
+
+        return partSets;
+    }
+ 
     public async Task<long> Create(PartSet partSet)
     {
         var partSetEntity = new PartSetEntity
