@@ -22,4 +22,11 @@ public class PaymentMethodRepository : IPaymentMethodRepository
 
         return await projection.ToListAsync();
     }
+
+    public async Task<bool> Exists(int id)
+    {
+        return await _context.PaymentMethods
+            .AsNoTracking()
+            .AnyAsync(p => p.Id == id);
+    }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CRMSystem.DataAccess.Configurations;
 
-public class Specialization : IEntityTypeConfiguration<SpecializationEntity>
+public class SpecializationConfiguration : IEntityTypeConfiguration<SpecializationEntity>
 {
     void IEntityTypeConfiguration<SpecializationEntity>.Configure(EntityTypeBuilder<SpecializationEntity> builder)
     {

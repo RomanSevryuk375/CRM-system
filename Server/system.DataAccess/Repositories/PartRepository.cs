@@ -134,4 +134,11 @@ public class PartRepository : IPartRepository
 
         return id;
     }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.Parts
+            .AsNoTracking()
+            .AnyAsync(p => p.Id == id);
+    }
 }

@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Validation;
+﻿using CRMSystem.Core.Exceptions;
+using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
 
@@ -11,9 +12,16 @@ public class Schedule
         ShiftId = shiftId;
         Date = dateTime;
     }
+
+    public void SetSshftId(int shiftId)
+    {
+        if (shiftId <= 0) throw new ConflictException("Invalid ID");
+        ShiftId = shiftId;
+    }
+
     public int Id { get; }
     public int WorkerId { get; }
-    public int ShiftId { get; }
+    public int ShiftId { get; private set; }
     public DateTime Date { get; }
 
     public static (Schedule? schedule, List<string> errors) Create(int id, int workerId, int shiftId, DateTime dateTime)

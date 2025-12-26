@@ -61,4 +61,18 @@ public class StorageCellRepository : IStorageCellRepository
 
         return id;
     }
+
+    public async Task<bool> Exists(int id)
+    {
+        return await _context.StorageCells
+            .AsNoTracking()
+            .AnyAsync(p => p.Id == id);
+    }
+
+    public async Task<bool> HasOverlaps(string rack, string shelf)
+    {
+        return await _context.StorageCells
+            .AsNoTracking()
+            .AnyAsync(s => (s.Rack == rack && s.Shelf == shelf));
+    }
 }

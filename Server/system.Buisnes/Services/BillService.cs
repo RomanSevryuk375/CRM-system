@@ -100,12 +100,23 @@ public class BillService : IBillService
 
     public async Task<long> Delete(long id)
     {
-        _logger.LogInformation("Deleting bill success");
+        _logger.LogInformation("Deleting bill start");
 
         var Id = await _billRepository.Delete(id);
 
         _logger.LogInformation("Deleting bill success");
 
         return id;
+    }
+
+    public async Task<decimal> FetchDebtOfBill(long id)
+    {
+        _logger.LogInformation("Recalculating debt of bill start");
+
+        var debt = await _billRepository.RecalculateDebt(id);
+
+        _logger.LogInformation("Recalculating debt of bill success");
+
+        return debt;
     }
 }

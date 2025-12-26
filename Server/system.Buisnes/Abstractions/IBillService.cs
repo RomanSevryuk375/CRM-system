@@ -10,4 +10,5 @@ public interface IBillService
     Task<int> GetCountBills(BillFilter filter);
     Task<List<BillItem>> GetPagedBills(BillFilter filter);
     Task<long> UpdateBill(long id, BillUpdateModel model);
+    Task<decimal> FetchDebtOfBill(long odrerId);
 }

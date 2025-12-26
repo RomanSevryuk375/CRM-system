@@ -1,13 +1,14 @@
 ﻿using CRMSystem.Core.DTOs;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface ISpecializationRepository
 {
-    public interface ISpecializationRepository
-    {
-        Task<int> Create(Specialization specialization);
-        Task<int> Delete(int id);
-        Task<List<SpecializationItem>> Get();
-        Task<int> Update(int id, string? name);
-    }
+    Task<int> Create(Specialization specialization);
+    Task<int> Delete(int id);
+    Task<List<SpecializationItem>> Get();
+    Task<int> Update(int id, string? name);
+    Task<bool> Exists(int id);
+    Task<bool> ExistsByName(string name);
 }

@@ -116,4 +116,12 @@ public class ScheduleRepository : IScheduleRepository
 
         return id;
     }
+
+    public async Task<bool> ExistsByDateAndId(int id, DateTime date)
+    {
+        return await _context.Schedules
+            .AsNoTracking()
+            .Where(s => s.Id == id)
+            .AnyAsync(s => s.Date == date);
+    }
 }

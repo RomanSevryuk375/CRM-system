@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Validation;
+﻿using CRMSystem.Core.Exceptions;
+using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
 
@@ -14,8 +15,14 @@ public class Position
         Quantity = quantity;
     }
 
+    public void SetPartId(long partId)
+    {
+        if (partId <= 0) throw new ConflictException("Invalid ID");
+            PartId = partId;
+    }
+
     public long Id { get; }
-    public long PartId { get; }
+    public long PartId { get; private set; }
     public int CellId { get; }
     public decimal PurchasePrice { get; }
     public decimal SellingPrice { get; }

@@ -64,4 +64,19 @@ public class ShiftRepository : IShiftRepository
 
         return id;
     }
+
+    public async Task<bool> Exists(int id)
+    {
+        return await _context.Shifts
+            .AsNoTracking()
+            .AnyAsync(s => s.Id == id);
+    }
+
+    public async Task<bool> HasOverLap(TimeOnly start, TimeOnly end)
+    {
+        return await _context.Shifts
+            .AsNoTracking()
+            .AnyAsync(s => s.StartAt == start 
+                        && s.EndAt == end);
+    }
 }

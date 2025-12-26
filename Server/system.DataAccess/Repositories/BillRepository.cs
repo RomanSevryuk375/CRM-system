@@ -1,4 +1,5 @@
 ﻿using CRMSystem.Core.DTOs.Bill;
+using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
@@ -136,6 +137,13 @@ public class BillRepository : IBillRepository
         return id;
     }
 
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.Bills
+            .AsNoTracking()
+            .AnyAsync(b => b.Id == id);
+    }
+
     public async Task<long> RecalculateAmmount(long orderId)
     {
         var bill = await _context.Bills.FirstOrDefaultAsync(b => b.OrderId == orderId)
@@ -146,8 +154,6 @@ public class BillRepository : IBillRepository
             .SumAsync(b => b.SoldPrice * b.Quantity);
 
         var newWorkInOrderSum = await _context.WorksInOrder
-            .Include(w => w.Work)
-            .Include(w => w.Worker)
             .Where(b => b.OrderId == orderId)
             .SumAsync(b => (b.Work != null && b.Worker != null)
                 ? b.Work.StandardTime * b.Worker.HourlyRate
@@ -160,9 +166,9 @@ public class BillRepository : IBillRepository
         return bill.Id;
     }
 
-    public async Task<decimal> RecalculateDebt(long orderId)
+    public async Task<decimal> RecalculateDebt(long Id)
     {
-        var bill = await _context.Bills.FirstOrDefaultAsync(b => b.OrderId == orderId)
+        var bill = await _context.Bills.FirstOrDefaultAsync(b => b.Id == Id)
             ?? throw new NotFoundException("Bill not found");
 
         var payedSum = await _context.PaymentNotes
@@ -170,6 +176,15 @@ public class BillRepository : IBillRepository
             .SumAsync(p => p.Amount);
 
         var debt = bill.Amount - payedSum;
+
+        if (debt <= 0)
+            bill.StatusId = (int)BillStatusEnum.Paid;
+        else if (debt == bill.Amount)
+            bill.StatusId = (int)BillStatusEnum.Unpaid;
+        else
+            bill.StatusId = (int)BillStatusEnum.PartiallyPaid;
+
+        await _context.SaveChangesAsync();
 
         return debt;
     }
