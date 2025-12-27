@@ -1,89 +1,127 @@
-﻿using CRMSystem.Buisnes.DTOs;
+﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.Worker;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
 public class WorkerService : IWorkerService
 {
     private readonly IWorkerRepository _workerRepository;
-    private readonly ISpecializationRepository _specializationRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly ILogger<WorkerService> _logger;
 
-    public WorkerService(IWorkerRepository workerRepository, ISpecializationRepository specializationRepository)
+    public WorkerService(
+        IWorkerRepository workerRepository,
+        IUserRepository userRepository,
+        ILogger<WorkerService> logger)
     {
         _workerRepository = workerRepository;
-        _specializationRepository = specializationRepository;
+        _userRepository = userRepository;
+        _logger = logger;
     }
 
-    public async Task<List<Worker>> GetPagedAllWorkers(int page, int limit)
+    public async Task<List<WorkerItem>> GetPagedWorkers(WorkerFilter filter)
     {
-        return await _workerRepository.GetPaged(page, limit);
+        _logger.LogInformation("Getting worker start");
+
+        var worker = await _workerRepository.GetPaged(filter);
+
+        _logger.LogInformation("Getting worker success");
+
+        return worker;
     }
 
-    public async Task<int> GetCountWorker()
+    public async Task<int> GetCountWorkers(WorkerFilter filter)
     {
-        return await _workerRepository.GetCount();
+        _logger.LogInformation("Getting count woker start");
+
+        var count = await _workerRepository.GetCount(filter);
+
+        _logger.LogInformation("Getting count worker success");
+
+        return count;
     }
 
-    public async Task<List<WorkerWithInfoDto>> GetPagedWorkerByUserId(int userId, int page, int limit)
+    public async Task<WorkerItem> GetWorkerById(int id)
     {
-        var worker = await _workerRepository.GetWorkerByUserId(userId);
-        var specializations = await _specializationRepository.GetPaged(page, limit);
+        _logger.LogInformation("Getting worker by id start");
 
-        var response = (from w in worker
-                        join s in specializations on w.SpecializationId equals s.Id
-                        select new WorkerWithInfoDto(
-                            w.Id,
-                            w.UserId,
-                            s.Name,
-                            w.Name,
-                            w.Surname,
-                            w.HourlyRate,
-                            w.PhoneNumber,
-                            w.Email
-                            )).ToList();
+        var worker = await _workerRepository.GetById(id);
+        if (worker is null)
+        {
+            _logger.LogError("Worker{workerId} not found", id);
+            throw new NotFoundException($"Worker{id} not found");
+        }
 
-        return response;
+        _logger.LogInformation("Getting worker by id success");
+
+        return worker;
     }
 
-    public async Task<int> GetCountWorkerByUserId(int userId)
+    public async Task<int> CreateClient(Worker worker)
     {
-        return await _workerRepository.GetCountWorkerByUserId(userId);
+        _logger.LogInformation("Creating worker start");
+
+        if (!await _userRepository.Exists(worker.UserId))
+        {
+            _logger.LogError("User{UserId} not found", worker.UserId);
+            throw new NotFoundException($"User{worker.UserId} not found");
+        }
+
+        var Id = await _workerRepository.Create(worker);
+
+        _logger.LogInformation("Creating worker success");
+
+        return Id;
     }
 
-    public async Task<List<WorkerWithInfoDto>> GetPagedWorkersWithInfo(int page, int limit)
+    public async Task<int> CreateWorkerWithUser(Worker worker, User user)
     {
-        var workers = await _workerRepository.GetPaged(page, limit);
-        var specializations = await _specializationRepository.Get();
+        var userId = 0L;
+        try
+        {
+            _logger.LogInformation("Creating user start");
 
-        var response = (from w in workers
-                        join s in specializations on w.SpecializationId equals s.Id
-                        select new WorkerWithInfoDto(
-                            w.Id,
-                            w.UserId,
-                            s.Name,
-                            w.Name,
-                            w.Surname,
-                            w.HourlyRate,
-                            w.PhoneNumber,
-                            w.Email
-                            )).ToList();
+            userId = await _userRepository.Create(user);
+            worker.SetUserId(userId);
 
-        return response;
+            var Id = await _workerRepository.Create(worker);
+
+            _logger.LogInformation("Creating worker success");
+
+            return Id;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to create worker. Rolling back user.");
+            if (userId > 0)
+                await _userRepository.Delete(userId);
+            throw;
+        }
     }
 
-    public async Task<int> CreateWorker(Worker worker)
+    public async Task<int> UpdateWorker(int id, WorkerUpdateModel model)
     {
-        return await _workerRepository.Create(worker);
-    }
+        _logger.LogInformation("Updating worker start");
 
-    public async Task<int> UpdateWorker(int id, int? userId, int? specialization, string? name, string? Surname, decimal? hourlyRate, string? phoneNumber, string? email)
-    {
-        return await _workerRepository.Update(id, userId, specialization, name, Surname, hourlyRate, phoneNumber, email);
+        var Id = await _workerRepository.Update(id, model);
+
+        _logger.LogInformation("Updating worker success");
+
+        return Id;
     }
 
     public async Task<int> DeleteWorker(int id)
     {
-        return await _workerRepository.Delete(id);
+        _logger.LogInformation("Deleting worker start");
+
+        var Id = await _workerRepository.Delete(id);
+
+        _logger.LogInformation("Deleting worker success");
+
+        return Id;
     }
 }

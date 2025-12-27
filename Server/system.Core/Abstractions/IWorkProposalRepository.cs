@@ -10,6 +10,7 @@ public interface IWorkProposalRepository
     Task<long> Create(WorkProposal workProposal);
     Task<long> Delete(long id);
     Task<List<WorkProposalItem>> Getpaged(WorkProposalFilter filter);
+    Task<int> GetCount(WorkProposalFilter filter);
     Task<long> RejectProposal(long id);
     Task<long> Update(long id, ProposalStatusEnum? statusId);
     Task<WorkProposalItem?> GetById(long id);

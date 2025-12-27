@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Validation;
+﻿using CRMSystem.Core.Exceptions;
+using CRMSystem.Core.Validation;
 using System.Text.RegularExpressions;
 
 namespace CRMSystem.Core.Models;
@@ -16,8 +17,14 @@ public class Worker
         Email = email;
     }
 
+    public void SetUserId (long userId)
+    {
+        if (userId <= 0) throw new ConflictException("Invalid ID");
+        UserId = userId;
+    }
+
     public int Id { get; }
-    public long UserId { get; }
+    public long UserId { get; private set; }
     public string Name { get; }
     public string Surname { get; }
     public decimal HourlyRate { get; }

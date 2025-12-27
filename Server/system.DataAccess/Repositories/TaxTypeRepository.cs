@@ -22,4 +22,11 @@ public class TaxTypeRepository : ITaxTypeRepository
 
         return await projection.ToListAsync();
     }
+
+    public async Task<bool> Exists(int id)
+    {
+        return await _context.TaxTypes
+            .AsNoTracking()
+            .AnyAsync(t => t.Id == id);
+    }
 }

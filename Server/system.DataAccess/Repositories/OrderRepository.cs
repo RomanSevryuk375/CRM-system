@@ -92,6 +92,30 @@ public class OrderRepository : IOrderRepository
             .ToListAsync();
     }
 
+    public async Task<OrderItem?> GetByProposalId(long proposalId)
+    {
+        return await _context.Orders
+            .AsNoTracking()
+            .Where(o => o.PriorityId == proposalId)
+            .Select(o => new OrderItem(
+            o.Id,
+            o.Status == null
+                ? string.Empty
+                : o.Status.Name,
+            o.StatusId,
+            o.Car == null
+                ? string.Empty
+                : $"{o.Car.Brand} ({o.Car.StateNumber})",
+            o.CarId,
+            o.Date,
+            o.OrderPriority == null
+                ? string.Empty
+                : o.OrderPriority.Name,
+            o.PriorityId))
+            .FirstOrDefaultAsync();
+
+    }
+
     public async Task<int> GetCount(OrderFilter filter)
     {
         var query = _context.Orders.AsNoTracking();

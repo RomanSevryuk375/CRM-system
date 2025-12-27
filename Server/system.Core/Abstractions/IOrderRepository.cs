@@ -18,4 +18,5 @@ public interface IOrderRepository
     Task<long> Close(long id);
     Task<bool> PosibleToComplete(long id);
     Task<bool> PosibleToClose(long id);
+    Task<OrderItem?> GetByProposalId(long proposalId);
 }

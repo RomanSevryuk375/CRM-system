@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class SupplyRepository : ISypplyRepository
+public class SupplyRepository : ISupplyRepository
 {
     private readonly SystemDbContext _context;
 
@@ -59,6 +59,13 @@ public class SupplyRepository : ISypplyRepository
             .ToListAsync();
     }
 
+    public async Task<int> GetCount (SupplyFilter filter)
+    {
+        var query = _context.Supplies.AsNoTracking();
+        query = ApplyFilter(query, filter);
+        return await query.CountAsync();
+    }
+
     public async Task<long> Create(Supply supply)
     {
         var sullpyEntity = new SupplyEntity
@@ -80,5 +87,12 @@ public class SupplyRepository : ISypplyRepository
             .ExecuteDeleteAsync();
 
         return id;
+    }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.Supplies
+            .AsNoTracking()
+            .AnyAsync(s => s.Id == id);
     }
 }

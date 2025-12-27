@@ -22,7 +22,6 @@ public class TaxRepository : ITaxRepository
         return query;
     }
 
-
     public async Task<List<TaxItem>> Get(TaxFilter filter)
     {
         var query = _context.Taxes.AsNoTracking();
@@ -59,13 +58,6 @@ public class TaxRepository : ITaxRepository
                     : t.TaxType.Name));
 
         return await projection.ToListAsync();
-    }
-
-    public async Task<int> GetCount(TaxFilter filter)
-    {
-        var query = _context.Taxes.AsNoTracking();
-        query = ApplyFilter(query, filter);
-        return await query.CountAsync();
     }
 
     public async Task<int> Create(Tax tax)

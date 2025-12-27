@@ -94,7 +94,7 @@ public class ClientService : IClientService
 
             return Id;
         }
-        catch (ConflictException ex)
+        catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create client. Rolling back user.");
             if (userId > 0)

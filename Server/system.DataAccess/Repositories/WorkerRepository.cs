@@ -65,6 +65,22 @@ public class WorkerRepository : IWorkerRepository
             .ToListAsync();
     }
 
+    public async Task<WorkerItem?> GetById(int id)
+    {
+        return await _context.Workers
+            .AsNoTracking()
+            .Where(w => w.Id == id)
+            .Select(c => new WorkerItem(
+            c.Id,
+            c.UserId,
+            c.Name,
+            c.Surname,
+            c.HourlyRate,
+            c.PhoneNumber,
+            c.Email))
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<int> GetCount(WorkerFilter filter)
     {
         var query = _context.Workers.AsNoTracking();

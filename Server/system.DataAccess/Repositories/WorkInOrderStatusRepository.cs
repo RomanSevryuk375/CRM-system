@@ -22,4 +22,11 @@ public class WorkInOrderStatusRepository : IWorkInOrderStatusRepository
 
         return await projection.ToListAsync();
     }
+
+    public async Task<bool> Exists(int id)
+    {
+        return await _context.WorkInOrderStatuses
+            .AsNoTracking()
+            .AnyAsync(w => w.Id == id);
+    }
 }

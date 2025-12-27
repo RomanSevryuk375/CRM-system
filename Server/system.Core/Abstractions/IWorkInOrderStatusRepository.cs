@@ -1,9 +1,9 @@
 ﻿using CRMSystem.Core.DTOs;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface IWorkInOrderStatusRepository
 {
-    public interface IWorkInOrderStatusRepository
-    {
-        Task<List<WorkInOrderStatusItem>> Get();
-    }
+    Task<List<WorkInOrderStatusItem>> Get();
+    Task<bool> Exists(int id);
 }

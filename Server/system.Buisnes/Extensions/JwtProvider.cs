@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.User;
+using CRMSystem.Core.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,10 +13,10 @@ public class JwtProvider : IJwtProvider
     private readonly JwtOptions _options;
 
     public JwtProvider(IOptions<JwtOptions> options) => _options = options.Value;
-    public string GenerateToken(User user)
+    public string GenerateToken(UserItem user)
     {
-        Claim[] claims = { new("userId", user.Id.ToString()),
-                           new("userRoleId", user.RoleId.ToString())};
+        Claim[] claims = { new("userId", user.id.ToString()),
+                           new("userRoleId", user.roleId.ToString())};
 
         var singinCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),

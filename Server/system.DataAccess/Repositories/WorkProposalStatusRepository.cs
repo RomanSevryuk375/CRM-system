@@ -22,4 +22,11 @@ public class WorkProposalStatusRepository : IWorkProposalStatusRepository
 
         return await projection.ToListAsync();
     }
+
+    public async Task<bool> Exists(int id)
+    {
+        return await _context.WorkProposalStatuses
+            .AsNoTracking()
+            .AnyAsync(w => w.Id == id);
+    }
 }

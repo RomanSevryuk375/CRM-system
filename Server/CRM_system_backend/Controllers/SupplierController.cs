@@ -1,5 +1,5 @@
 ﻿using CRM_system_backend.Contracts;
-using CRMSystem.Buisnes.Services;
+using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

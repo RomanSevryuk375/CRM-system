@@ -1,192 +1,195 @@
-﻿using CRMSystem.Buisnes.DTOs;
-using CRMSystem.Core.Abstractions;
+﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.WorkProposal;
+using CRMSystem.Core.Enums;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
 public class WorkPropossalService : IWorkPropossalService
 {
-    private readonly IWorkProposalRepository _workPropossal;
-    private readonly IWorkTypeRepository _workTypeRepository;
-    private readonly IStatusRepository _statusRepository;
-    private readonly IWorkerRepository _workerRepository;
-    private readonly IClientRepository _clientsRepository;
-    private readonly ICarRepository _carRepository;
     private readonly IOrderRepository _orderRepository;
+    private readonly IWorkRepository _workRepository;
+    private readonly IWorkerRepository _workerRepository;
+    private readonly IWorkProposalRepository _workProposalRepository;
+    private readonly IWorkProposalStatusRepository _workProposalStatusRepository;
+    private readonly IWorkInOrderRepository _workInOrderRepository;
+    private readonly IPartSetRepository _partSetRepository;
+    private readonly IBillRepository _billRepository;
+    private readonly ILogger<WorkPropossalService> _logger;
 
     public WorkPropossalService(
-        IWorkProposalRepository workPropossal,
-        IWorkTypeRepository workTypeRepository,
-        IStatusRepository statusRepository,
+        IOrderRepository orderRepository,
+        IWorkRepository workRepository,
         IWorkerRepository workerRepository,
-        IClientRepository clientsRepository,
-        ICarRepository carRepository,
-        IOrderRepository orderRepository)
+        IWorkProposalRepository workProposalRepository,
+        IWorkProposalStatusRepository workProposalStatusRepository,
+        IWorkInOrderRepository workInOrderRepository,
+        IPartSetRepository partSetRepository,
+        IBillRepository billRepository,
+        ILogger<WorkPropossalService> logger)
     {
-        _workPropossal = workPropossal;
-        _workTypeRepository = workTypeRepository;
-        _statusRepository = statusRepository;
-        _workerRepository = workerRepository;
-        _clientsRepository = clientsRepository;
-        _carRepository = carRepository;
         _orderRepository = orderRepository;
+        _workRepository = workRepository;
+        _workerRepository = workerRepository;
+        _workProposalRepository = workProposalRepository;
+        _workProposalStatusRepository = workProposalStatusRepository;
+        _workInOrderRepository = workInOrderRepository;
+        _partSetRepository = partSetRepository;
+        _billRepository = billRepository;
+        _logger = logger;
     }
 
-    public async Task<List<WorkProposal>> GetPagedWorkProposal(int page, int limit)
+    public async Task<List<WorkProposalItem>> GetPagedProposals(WorkProposalFilter filter)
     {
-        return await _workPropossal.GetPaged(page, limit);
+        _logger.LogInformation("Getting proposals start");
+
+        var proposals = await _workProposalRepository.Getpaged(filter);
+
+        _logger.LogInformation("Getting proposals success");
+
+        return proposals;
     }
 
-    public async Task<int> GetCountProposal()
+    public async Task<int> GetCountProposals(WorkProposalFilter filter)
     {
-        return await _workPropossal.GetCount();
+        _logger.LogInformation("Getting count proposals start");
+
+        var count = await _workProposalRepository.GetCount(filter);
+
+        _logger.LogInformation("Getting count proposals success");
+
+        return count;
     }
 
-    public async Task<List<WorkProposalWithInfoDto>> GetPagedWorkProposalWithInfo(int page, int limit)
+    public async Task<WorkProposalItem> GetProposalById(long id)
     {
-        var workProposals = await _workPropossal.GetPaged(page, limit);
-        var workTypes = await _workTypeRepository.Get();
-        var workers = await _workerRepository.Get();
-        var statuses = await _statusRepository.Get();
+        _logger.LogInformation("Getting proposal by id start");
 
-        var response = (from wp in workProposals
-                        join wt in workTypes on wp.WorkId equals wt.Id
-                        join s in statuses on wp.StatusId equals s.Id
-                        join w in workers on wp.ByWorker equals w.Id
-                        select new WorkProposalWithInfoDto(
-                            wp.Id,
-                            wp.OrderId,
-                            wt.Title,
-                            $"{w.Name} {w.Surname}",
-                            s.Name,
-                            s.Name,
-                            wp.Date)).ToList();
+        var proposal = await _workProposalRepository.GetById(id);
 
-        return response;
+        if (proposal is null)
+        {
+            _logger.LogError("Proposal{proposalId} not found", id);
+            throw new NotFoundException($"Proposal{id} not found");
+        }
+
+        _logger.LogInformation("Getting proposal by id success");
+
+        return proposal;
     }
 
-    public async Task<List<WorkProposalWithInfoDto>> GetPagedProposalForClient(int userId, int page, int limit)
+    public async Task<long> CreateProposal(WorkProposal workProposal)
     {
+        _logger.LogInformation("Creating proposal start");
 
-        var client = await _clientsRepository.GetClientByUserId(userId);
-        var clientId = client.Select(c => c.Id).FirstOrDefault();
+        if (!await _orderRepository.Exists(workProposal.OrderId))
+        {
+            _logger.LogError("Order{OrderId} not found", workProposal.OrderId);
+            throw new NotFoundException($"Order{workProposal.OrderId} not found");
+        }
 
-        var cars = await _carRepository.GetByOwnerId(clientId);
-        var carIds = cars.Select(c => c.Id).ToList();
+        if (!await _workProposalStatusRepository.Exists((int)workProposal.StatusId))
+        {
+            _logger.LogError("Status{StatusId} not found", workProposal.StatusId);
+            throw new NotFoundException($"Status{workProposal.StatusId} not found");
+        }
 
-        var orders = await _orderRepository.GetByCarId(carIds);
-        var orderIds = orders.Select(c => c.Id).ToList();
+        if (!await _workerRepository.Exists(workProposal.WorkerId))
+        {
+            _logger.LogError("Worker {workerId} not found", workProposal.WorkerId);
+            throw new NotFoundException($"Worker {workProposal.WorkerId} not found");
+        }
 
-        var workProposals = await _workPropossal.GetPagedByOrderId(orderIds, page, limit);
-        var workTypes = await _workTypeRepository.Get();
-        var workers = await _workerRepository.Get();
-        var statuses = await _statusRepository.Get();
+        if (!await _workRepository.Exists(workProposal.JobId))
+        {
+            _logger.LogError("Work {workId} not found", workProposal.JobId);
+            throw new NotFoundException($"Work {workProposal.JobId} not found");
+        }
 
-        var response = (from wp in workProposals
-                        join wt in workTypes on wp.WorkId equals wt.Id
-                        join s in statuses on wp.StatusId equals s.Id
-                        join w in workers on wp.ByWorker equals w.Id
-                        select new WorkProposalWithInfoDto(
-                            wp.Id,
-                            wp.OrderId,
-                            wt.Title,
-                            $"{w.Name} {w.Surname}",
-                            s.Name,
-                            s.Name,
-                            wp.Date)).ToList();
+        var Id = await _workProposalRepository.Create(workProposal);
 
-        return response;
+        _logger.LogInformation("Creating proposal success");
+
+        return Id;
     }
 
-    public async Task<List<WorkProposalWithInfoDto>> GetPagedProposalsForCar(List<int> carIds)
+    public async Task<long> UpdateProposal(long id, ProposalStatusEnum? statusId)
     {
-        var orders = await _orderRepository.GetByCarId(carIds);
-        var orderIds = orders.Select(c => c.Id).ToList();
+        _logger.LogInformation("Updating proposal start");
 
-        var workProposals = await _workPropossal.GetByOrderId(orderIds);
-        var workTypes = await _workTypeRepository.Get();
-        var workers = await _workerRepository.Get();
-        var statuses = await _statusRepository.Get();
+        if (statusId.HasValue && !await _workProposalStatusRepository.Exists((int)statusId.Value))
+        {
+            _logger.LogError("Status{StatusId} not found", statusId);
+            throw new NotFoundException($"Status{statusId} not found");
+        }
 
-        var response = (from wp in workProposals
-                        join wt in workTypes on wp.WorkId equals wt.Id
-                        join s in statuses on wp.StatusId equals s.Id
-                        join w in workers on wp.ByWorker equals w.Id
-                        select new WorkProposalWithInfoDto(
-                            wp.Id,
-                            wp.OrderId,
-                            wt.Title,
-                            $"{w.Name} {w.Surname}",
-                            s.Name,
-                            s.Name,
-                            wp.Date)).ToList();
+        var Id = await _workProposalRepository.Update(id, statusId);
 
-        return response;
+        _logger.LogInformation("Updating proposal success");
+
+        return Id;
     }
 
-    public async Task<List<WorkProposalWithInfoDto>> GetPagedProposalsForCar(int carIds)
+    public async Task<long> DeleteProposal(long id)
     {
-        var orders = await _orderRepository.GetByCarId(carIds);
-        var orderIds = orders.Select(c => c.Id).ToList();
+        _logger.LogInformation("Deleting proposal start");
 
-        var workProposals = await _workPropossal.GetByOrderId(orderIds);
-        var workTypes = await _workTypeRepository.Get();
-        var workers = await _workerRepository.Get();
-        var statuses = await _statusRepository.Get();
+        var Id = await _workProposalRepository.Delete(id);
 
-        var response = (from wp in workProposals
-                        join wt in workTypes on wp.WorkId equals wt.Id
-                        join s in statuses on wp.StatusId equals s.Id
-                        join w in workers on wp.ByWorker equals w.Id
-                        select new WorkProposalWithInfoDto(
-                            wp.Id,
-                            wp.OrderId,
-                            wt.Title,
-                            $"{w.Name} {w.Surname}",
-                            s.Name,
-                            s.Name,
-                            wp.Date)).ToList();
+        _logger.LogInformation("Deleting proposal success");
 
-        return response;
+        return Id;
     }
 
-    public async Task<int> GetCountProposalForClient(int userId)
+    public async Task<long> AcceptProposal(long id)
     {
-        var client = await _clientsRepository.GetClientByUserId(userId);
-        var clientId = client.Select(c => c.Id).FirstOrDefault();
+        _logger.LogInformation("Accepting proposal start");
 
-        var cars = await _carRepository.GetByOwnerId(clientId);
-        var carIds = cars.Select(c => c.Id).ToList();
+        var proposal = await _workProposalRepository.GetById(id);
+        _logger.LogInformation("Getting proposal by id success");
 
-        var orders = await _orderRepository.GetByCarId(carIds);
-        var orderIds = orders.Select(c => c.Id).ToList();
+        var Id = await _workProposalRepository.AcceptProposal(id);
 
-        return await _workPropossal.GetCountByOrderId(orderIds);
+        var transitModel = new WorkInOrder(
+            0,
+            proposal!.orderId,
+            proposal!.jobId,
+            proposal!.statusId,
+            WorkStatusEnum.Pending,
+            0);
+
+        await _workInOrderRepository.Create(transitModel);
+        _logger.LogInformation("Creating works in WiO success");
+
+        await _partSetRepository.MoveFromProposalToOrder(id, proposal.orderId);
+        _logger.LogInformation("Mooving parts success");
+
+        await _billRepository.RecalculateAmmount(proposal.orderId);
+        _logger.LogInformation("Bill recalculating success");
+
+        await _workProposalRepository.Delete(id); // временно
+        _logger.LogInformation("Accepting proposal success");
+
+        return Id;
     }
 
-    public async Task<int> CreateWorkProposal(WorkProposal workProposal)
+    public async Task<long> RejectProposal(long id)
     {
-        return await _workPropossal.Create(workProposal);
-    }
+        _logger.LogInformation("Rejecting proposal start");
 
-    public async Task<int> UpdateWorkProposal(int id, int? orderId, int? workId, int? byWorker, int? statusId, int? decisionStatusId, DateTime? date)
-    {
-        return await _workPropossal.Update(id, orderId, workId, byWorker, statusId, decisionStatusId, date);
-    }
+        var Id = await _workProposalRepository.RejectProposal(id);
 
-    public async Task<int> DeleteWorkProposal(int id)
-    {
-        return await _workPropossal.Delete(id);
-    }
+        await _partSetRepository.DeleteProposedParts(id);
+        _logger.LogInformation("Deleting parts success");
 
-    public async Task<int> AcceptProposal(int id)
-    {
-        return await _workPropossal.AcceptProposal(id);
-    }
+        await _workProposalRepository.Delete(id); // временно
+        _logger.LogInformation("Deleting proposal success");
 
-    public async Task<int> RejectProposal(int id)
-    {
-        return await _workPropossal.RejectProposal(id);
+        _logger.LogInformation("Accepting proposal success");
+
+        return Id;
     }
 }

@@ -52,6 +52,21 @@ public class WorkRepository : IWorkRepository
             .ToListAsync();
     }
 
+    public async Task<WorkItem?> GetById (long id)
+    {
+        return await _context.Works
+            .AsNoTracking()
+            .Where(w => w.Id == id)
+            .Select(w => new WorkItem(
+            w.Id,
+            w.Title,
+            w.Category,
+            w.Description,
+            w.StandardTime))
+            .FirstOrDefaultAsync();
+
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.Works.CountAsync();
@@ -95,5 +110,12 @@ public class WorkRepository : IWorkRepository
             .ExecuteDeleteAsync();
 
         return id;
+    }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.Works
+            .AsNoTracking()
+            .AnyAsync(w => w.Id == id);
     }
 }

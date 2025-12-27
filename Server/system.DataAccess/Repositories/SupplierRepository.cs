@@ -62,4 +62,18 @@ public class SupplierRepository : ISupplierRepository
 
         return id;
     }
+
+    public async Task<bool> Exists(int id)
+    {
+        return await _context.Suppliers
+            .AsNoTracking()
+            .AnyAsync(s => s.Id == id);
+    }
+
+    public async Task<bool> ExistsByName(string name)
+    {
+        return await _context.Suppliers
+            .AsNoTracking()
+            .AnyAsync(s => s.Name == name);
+    }
 }

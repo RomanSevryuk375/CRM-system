@@ -3,7 +3,6 @@ using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -118,6 +117,13 @@ public class WorkProposalRepository : IWorkProposalRepository
             w.StatusId,
             w.Date))
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<int> GetCount(WorkProposalFilter filter)
+    {
+        var query = _context.WorkProposals.AsNoTracking();
+        query = ApplyFilter(query, filter);
+        return await query.CountAsync();
     }
 
     public async Task<long> Create(WorkProposal workProposal)

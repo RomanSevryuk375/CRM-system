@@ -17,33 +17,19 @@ public class UserRepository : IUserRepository
         _myPasswordHasher = myPasswordHasher;
     }
 
-    //public async Task<User> GetByLogin(string login)
-    //{
-    //    var userEntity = await _context.Users
-    //        .AsNoTracking()
-    //        .FirstOrDefaultAsync(u => u.Login == login) ?? throw new Exception();
-
-
-
-    //    return User.Create(userEntity.Id, userEntity.RoleId, userEntity.Login, userEntity.PasswordHash).user;
-    //}
-
-    public async Task<List<UserItem>> GetByLogin(string login)
+    public async Task<UserItem?> GetByLogin(string login)
     {
-        var query = _context.Users.AsNoTracking();
-
-        var projection = query.Select(u => new UserItem(
+        return await _context.Users.AsNoTracking()
+            .Where(u => u.Login == login)
+            .Select(u => new UserItem(
             u.Id,
             u.Role == null
                 ? string.Empty
                 : u.Role.Name,
             u.RoleId,
             u.Login,
-            u.PasswordHash));
-
-        return await projection
-            .Where(u => u.login == login)
-            .ToListAsync();
+            u.PasswordHash))
+            .FirstOrDefaultAsync();
     }
 
     public async Task<long> Create(User user)

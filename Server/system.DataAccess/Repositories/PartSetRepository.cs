@@ -107,7 +107,7 @@ public class PartSetRepository : IPartSetRepository
     {
         return await _context.PartSets
             .AsNoTracking()
-            .Where(p => p.OrderId == id)
+            .Where(p => p.Id == id)
             .Select(p => new PartSetItem(
                 p.Id,
                 p.OrderId,
@@ -126,13 +126,13 @@ public class PartSetRepository : IPartSetRepository
     public async Task<long> Create(PartSet partSet)
     {
         var partSetEntity = new PartSetEntity
-        {
-            OrderId = partSet.OrderId,
-            PositionId = partSet.PositionId,
-            ProposalId = partSet.ProposalId,
-            Quantity = partSet.Quantity,
-            SoldPrice = partSet.SoldPrice,
-        };
+        ( 
+            partSet.OrderId,
+            partSet.PositionId,
+            partSet.ProposalId,
+            partSet.Quantity,
+            partSet.SoldPrice
+        );
 
         await _context.PartSets.AddAsync(partSetEntity);
         await _context.SaveChangesAsync();
@@ -162,10 +162,42 @@ public class PartSetRepository : IPartSetRepository
         return id;
     }
 
+    public async Task<long> DeleteProposedParts(long proposalId)
+    {
+        var query = await _context.PartSets
+            .Where(p => p.ProposalId == proposalId)
+            .ExecuteDeleteAsync();
+
+        return proposalId;
+    }
+
     public async Task<bool> Exists(long id)
     {
         return await _context.PartSets
             .AsNoTracking()
             .AnyAsync(p => p.Id == id);
+    }
+
+    public async Task<long> MoveFromProposalToOrder(long proposalId, long orderId)
+    {
+        var parts = await _context.PartSets
+            .Where(p => p.ProposalId == proposalId)
+            .ToListAsync();
+
+        var transfer = parts.Select(p => new PartSetEntity(
+            orderId,
+            p.PositionId,
+            null,
+            p.Quantity,
+            p.SoldPrice
+        )).ToList();
+
+        await _context.PartSets.AddRangeAsync(transfer);
+        await _context.SaveChangesAsync();
+        await _context.PartSets
+            .Where(p => p.ProposalId == proposalId)
+            .ExecuteDeleteAsync();
+
+        return orderId;
     }
 }
