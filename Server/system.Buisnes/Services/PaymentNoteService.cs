@@ -1,87 +1,108 @@
-﻿using CRMSystem.Core.Abstractions;
+﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.PaymentNote;
+using CRMSystem.Core.Enums;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
 public class PaymentNoteService : IPaymentNoteService
 {
-    private readonly IPaymentNoteRepository _paymentNoteRepository;
-    private readonly IClientsRepository _clientsRepository;
-    private readonly ICarRepository _carRepository;
-    private readonly IOrderRepository _orderRepository;
     private readonly IBillRepository _billRepository;
+    private readonly IPaymentNoteRepository _paymentNoteRepository;
+    private readonly IPaymentMethodRepository _paymentMethodRepository;
+    private readonly ILogger<PaymentNoteService> _logger;
 
     public PaymentNoteService(
+        IBillRepository billRepository,
         IPaymentNoteRepository paymentNoteRepository,
-        IClientsRepository clientsRepository,
-        ICarRepository carRepository,
-        IOrderRepository orderRepository,
-        IBillRepository billRepository)
+        IPaymentMethodRepository paymentMethodRepository,
+        ILogger<PaymentNoteService> logger)
     {
-        _paymentNoteRepository = paymentNoteRepository;
-        _clientsRepository = clientsRepository;
-        _carRepository = carRepository;
-        _orderRepository = orderRepository;
         _billRepository = billRepository;
+        _paymentNoteRepository = paymentNoteRepository;
+        _paymentMethodRepository = paymentMethodRepository;
+        _logger = logger;
     }
 
-    public async Task<List<PaymentNote>> GetPagedPaymentNote(int page, int limit)
+    public async Task<List<PaymentNoteItem>> GetPagedPaymentNotes(PaymentNoteFilter filter)
     {
-        return await _paymentNoteRepository.GetPaged(page, limit);
+        _logger.LogInformation("Getting payment note start");
+
+        var paymentsNote = await _paymentNoteRepository.GetPaged(filter);
+
+        _logger.LogInformation("Getting payment note success");
+
+        return paymentsNote;
     }
 
-    public async Task<int> GetCountPaymentNote()
+    public async Task<int> GetCountPaymentNotes(PaymentNoteFilter filter)
     {
-        return await _paymentNoteRepository.GetCount();
+        _logger.LogInformation("Getting count payment note start");
+
+        var count = await _paymentNoteRepository.GetCount(filter);
+
+        _logger.LogInformation("Getting count payment note success");
+
+        return count;
     }
 
-    public async Task<List<PaymentNote>> GetPagedUserPaymentNote(int userId, int page, int limit)
+    public async Task<long> CreatePaymentNote(PaymentNote paymentNote)
     {
-        var client = await _clientsRepository.GetClientByUserId(userId);
-        var clientId = client.Select(c => c.Id).FirstOrDefault();
+        _logger.LogInformation("Creating payment note start");
 
-        var cars = await _carRepository.GetByOwnerId(clientId);
-        var carIds = cars.Select(c => c.Id).ToList();
+        if (!await _billRepository.Exists(paymentNote.BillId))
+        {
+            _logger.LogError("Bill{billId} not found", paymentNote.BillId);
+            throw new NotFoundException($"Bill {paymentNote.BillId} not found");
+        }
 
-        var orders = await _orderRepository.GetByCarId(carIds);
-        var orderIds = orders.Select(c => c.Id).ToList();
+        if (!await _paymentMethodRepository.Exists((int)paymentNote.MethodId))
+        {
+            _logger.LogError("Method {mrthodId} not found", (int)paymentNote.MethodId);
+            throw new NotFoundException($"Method {(int)paymentNote.MethodId} not found");
+        }
 
-        var bills = await _billRepository.GetByOrderId(orderIds);
-        var billIds = bills.Select(c => c.Id).ToList();
+        var Id = await _paymentNoteRepository.Create(paymentNote);
 
-        return await _paymentNoteRepository.GetPagedByBillId(billIds, page, limit);
+        _logger.LogInformation("Creating payment note success");
+
+        _logger.LogInformation("Recalculating bill{billId} start", paymentNote.BillId);
+
+        await _billRepository.RecalculateDebt(paymentNote.BillId);
+
+        _logger.LogInformation("Recalculating bill{billId} succes", paymentNote.BillId);
+
+        return Id;
     }
 
-    public async Task<int> GetCountUserPaymentNote(int userId)
+    public async Task<long> UpratePaymentNote(long id, PaymentMethodEnum? method)
     {
-        var client = await _clientsRepository.GetClientByUserId(userId);
-        var clientId = client.Select(c => c.Id).FirstOrDefault();
+        _logger.LogInformation("Updating payment note start");
 
-        var cars = await _carRepository.GetByOwnerId(clientId);
-        var carIds = cars.Select(c => c.Id).ToList();
+        if (method.HasValue && !await _paymentMethodRepository.Exists((int)method))
+        {
+            _logger.LogError("Method {mrthodId} not found", (int)method);
+            throw new NotFoundException($"Method {(int)method} not found");
+        }
 
-        var orders = await _orderRepository.GetByCarId(carIds);
-        var orderIds = orders.Select(c => c.Id).ToList();
+        var Id = await _paymentNoteRepository.Update(id, method);
 
-        var bills = await _billRepository.GetByOrderId(orderIds);
-        var billIds = bills.Select(c => c.Id).ToList();
+        _logger.LogInformation("Updating payment note success");
 
-        return await _paymentNoteRepository.GetCountByBillId(billIds);
+        return Id;
     }
 
-    public async Task<int> CreatePaymentNote(PaymentNote paymentNote)
+    public async Task<long> Delete(long id)
     {
-        return await _paymentNoteRepository.Create(paymentNote);
-    }
+        _logger.LogInformation("Deleting payment note start");
 
-    public async Task<int> UpdatePaymentNote(int id, int? billId, DateTime? date, decimal? amount, string? method)
-    {
-        return await _paymentNoteRepository.Update(id, billId, date, amount, method);
-    }
+        var Id = await _paymentNoteRepository.Delete(id);
 
-    public async Task<int> DeletePaymentNote(int id)
-    {
-        return await _paymentNoteRepository.Delete(id);
+        _logger.LogInformation("Deleting payment note success");
+
+        return Id;
     }
 }

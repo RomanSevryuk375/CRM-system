@@ -1,14 +1,13 @@
-﻿using System.Text.RegularExpressions;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.Core.Enums;
+using CRMSystem.Core.Validation;
+using System.Text.RegularExpressions;
 
 namespace CRMSystem.Core.Models;
 
 public class Car
 {
-    public const int MAX_BRAND_LENGTH = 128;
-    public const int MAX_MODEL_LENGTH = 256;
-    public const int MAX_VIN_LENGTH = 17;
-    public const int MAX_STATE_NUMBER_LENGTH = 16;
-    public Car(int id, int ownerId, string brand, string model, int yearOfManufacture, string vinNumber, string stateNumber, int mileage)
+    public Car(long id, long ownerId, CarStatusEnum statusId, string brand, string model, int yearOfManufacture, string vinNumber, string stateNumber, int mileage)
     {
         Id = id;
         OwnerId = ownerId;
@@ -19,62 +18,58 @@ public class Car
         StateNumber = stateNumber;
         Mileage = mileage;
     }
-    public int Id { get; }
-
-    public int OwnerId { get; }
-
-    public string Brand { get; } 
-
-    public string Model { get; }
-    
+    public long Id { get; }
+    public long OwnerId { get; }
+    public CarStatusEnum StatusId { get; }
+    public string Brand { get; }
+    public string Model { get; } 
     public int YearOfManufacture { get; }
+    public string VinNumber { get; }
+    public string StateNumber { get; }
+    public int Mileage { get; }
 
-    public string VinNumber { get; } 
-
-    public string StateNumber { get; } 
-
-    public int Mileage { get; } 
-
-    public static (Car car,string error) Create(int id, int ownerId, string brand, string model, int yearOfManufacture, string vinNumber, string stateNumber, int mileage)
+    public static (Car? car, List<string> errors) Create(long id, long ownerId, CarStatusEnum statusId, string brand, string model, int yearOfManufacture, string vinNumber, string stateNumber, int mileage)
     {
-        var error = string.Empty;
+        var errors = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(brand))
-            error = "Brand can't be empty";
+        var idError = DomainValidator.ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
-        if(brand.Length > MAX_BRAND_LENGTH)
-            error = $"Brand can't be longer than {MAX_BRAND_LENGTH} symbols";
-        if (string.IsNullOrWhiteSpace(model))
-            error = "Model can't be empty";
+        var ownerIdError = DomainValidator.ValidateId(ownerId, "ownerId");
+        if (!string.IsNullOrEmpty(ownerIdError)) errors.Add(ownerIdError);
 
-        if (model.Length > MAX_MODEL_LENGTH)
-            error = $"Model can't be longer than {MAX_MODEL_LENGTH} symbols";
+        var statusIdError = DomainValidator.ValidateId(statusId, "statusID");
+        if (!string.IsNullOrEmpty(statusIdError)) errors.Add(statusIdError);
+
+        var brandError = DomainValidator.ValidateString(brand, ValidationConstants.MAX_BRAND_LENGTH, "brand");
+        if (!string.IsNullOrEmpty(brandError)) errors.Add(brandError);
+
+        var modelError = DomainValidator.ValidateString(model, ValidationConstants.MAX_MODEL_LENGTH, "model");
+        if (!string.IsNullOrEmpty(modelError)) errors.Add(modelError);
+
         if (yearOfManufacture < 1900)
-            error = "We don't repair old junk";
+            errors.Add("We don't repair old junk");
 
-        if (string.IsNullOrWhiteSpace(vinNumber))
-            error = "VIN number can't be empty";
-
-        if (vinNumber.Length != MAX_VIN_LENGTH)
-            error = $"Vin number can't be longer than {MAX_VIN_LENGTH} symbols";
+        var VINError = DomainValidator.ValidateString(vinNumber, ValidationConstants.MAX_VIN_LENGTH, "VIN");
+        if (!string.IsNullOrEmpty(VINError)) errors.Add(VINError);
 
         if (!Regex.IsMatch(vinNumber, @"^[A-HJ-NPR-Z0-9]{17}$"))
-            error = "VIN number in invalid format";
+            errors.Add("VIN number in invalid format");
 
-        if (string.IsNullOrWhiteSpace(stateNumber))
-            error = "State number can't be empty";
-
-        if (stateNumber.Length > MAX_STATE_NUMBER_LENGTH)
-            error = $"State number can't be longer than {MAX_STATE_NUMBER_LENGTH} symbols";
+        var stateNumberError = DomainValidator.ValidateString(stateNumber, ValidationConstants.MAX_STATE_NUMBER_LENGTH, "stateNumber");
+        if (!string.IsNullOrEmpty(stateNumberError)) errors.Add(stateNumberError);
 
         if (!Regex.IsMatch(stateNumber, @"^(\d{4}\s?[ABEIKMHOPCTX]{2}-[1-7]|[ABEIKMHOPCTX]{2}\s?\d{4}-[1-7]|(TA|TT|TY)\d{4}|E\d{3}[ABEIKMHOPCTX]{2}[1-7])$"))
-            error = "State number in invalid format";
+            errors.Add("State number in invalid format");
 
-        if (mileage < 0)
-            error = "Milage can't be negative";
+        var mileageError = DomainValidator.ValidateId(mileage, "mileage");
+        if (!string.IsNullOrEmpty(mileageError)) errors.Add(mileageError);
 
-        var car = new Car(id, ownerId, brand, model, yearOfManufacture, vinNumber, stateNumber, mileage);
+        if (errors.Any())
+            return (null, errors);
 
-        return (car, error);
+        var car = new Car(id, ownerId, statusId, brand, model, yearOfManufacture, vinNumber, stateNumber, mileage);
+
+        return (car, new List<string>());
     }
 }

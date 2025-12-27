@@ -1,17 +1,15 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.PaymentNote;
+using CRMSystem.Core.Enums;
+using CRMSystem.Core.Models;
 
 namespace CRMSystem.DataAccess.Repositories
 {
     public interface IPaymentNoteRepository
     {
-        Task<List<PaymentNote>> Get();
-        Task<List<PaymentNote>> GetPaged(int page, int limit);
-        Task<int> GetCount();
-        Task<List<PaymentNote>> GetByBillId(List<int> billIds);
-        Task<List<PaymentNote>> GetPagedByBillId(List<int> billIds, int page, int limit);
-        Task<int> GetCountByBillId(List<int> billIds);
-        Task<int> Create(PaymentNote paymentNote);
-        Task<int> Delete(int id);
-        Task<int> Update(int id, int? billId, DateTime? date, decimal? amount, string? method);
+        Task<long> Create(PaymentNote paymentNote);
+        Task<long> Delete(long id);
+        Task<int> GetCount(PaymentNoteFilter fIlter);
+        Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter fIlter);
+        Task<long> Update(long id, PaymentMethodEnum? method);
     }
 }

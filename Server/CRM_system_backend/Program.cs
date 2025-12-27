@@ -1,11 +1,17 @@
-using CRM_system_backend.Extensions;
-using CRMSystem.Buisnes.Extensions;
+//using CRM_system_backend.Extensions;
+//using CRMSystem.Buisnes.Extensions;
+//using CRMSystem.Buisnes.Services;
+//using CRMSystem.Core.Abstractions;
+using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Buisnes.Services;
-using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess;
 using CRMSystem.DataAccess.Repositories;
-using CRMSystem.Infrastructure;
+
+//using CRMSystem.DataAccess.Repositories;
+//using CRMSystem.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace CRM_system_backend;
 
@@ -13,6 +19,12 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .WriteTo.Console()
+            .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
@@ -41,47 +53,60 @@ public class Program
 
         builder.Services.AddDbContext<SystemDbContext>(options =>
         {
-            options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(SystemDbContext)));
+            options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(SystemDbContext)))
+                   .UseSnakeCaseNamingConvention();
         });
 
-        builder.Services.AddScoped<IOrderService, OrderService>();
-        builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-        builder.Services.AddScoped<IExpenseService,  ExpenseService>();
-        builder.Services.AddScoped<IExpenseRespository,  ExpenseRespository>();
-        builder.Services.AddScoped<IUsedPartService, UsedPartService>();
-        builder.Services.AddScoped<IUsedPartRepository, UsedPartRepository>();
-        builder.Services.AddScoped<IWorkPropossalService, WorkPropossalService>();
-        builder.Services.AddScoped<IWorkPropossalRepository,  WorkPropossalRepository>();
-        builder.Services.AddScoped<IWorkService, WorkService>();
-        builder.Services.AddScoped<IWorkRepository, WorkRepository>();
-        builder.Services.AddScoped<IPaymentNoteService, PaymentNoteService>();
-        builder.Services.AddScoped<IPaymentNoteRepository, PaymentNoteRepository>();
-        builder.Services.AddScoped<IBillService, BillService>();
-        builder.Services.AddScoped<IBillRepository,  BillRepository>();
-        builder.Services.AddScoped<IStatusService, StatusService>();
-        builder.Services.AddScoped<IStatusRepository, StatusRepository>();
-        builder.Services.AddScoped<IRepairNoteService, RepairNoteService>();
-        builder.Services.AddScoped<IRepairNoteRepositry, RepairNoteRepositry>();
-        builder.Services.AddScoped<IClientService, ClientService>();
-        builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
-        builder.Services.AddScoped<IUserService, UserService>();
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
-        builder.Services.AddScoped<IWorkTypeService, WorkTypeService>();
-        builder.Services.AddScoped<IWorkTypeRepository, WorkTypeRepository>();
-        builder.Services.AddScoped<ICarService, CarService>();
-        builder.Services.AddScoped<ISupplierService, SupplierService>();
-        builder.Services.AddScoped<IWorkerService, WorkerService>();
-        builder.Services.AddScoped<IWorkerRepository, WorkerRepository>();
-        builder.Services.AddScoped<ITaxService, TaxService>();
-        builder.Services.AddScoped<ITaxRepository, TaxRepository>();
-        builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
-        builder.Services.AddScoped<ICarRepository, CarRepository>();
-        builder.Services.AddScoped<ISpecializationService, SpecializationService>();
-        builder.Services.AddScoped<ISpecializationRepository, SpecializationRepository>();
-        builder.Services.AddScoped<IMyPasswordHasher, MyPasswordHasher>();
-        builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+        //builder.Services.AddScoped<AbsenceService>();
+        //builder.Services.AddScoped<IAbsenceService, CachedAbsenceService>();
+        //builder.Services.AddScoped<IAbsenceRepository, AbsenceRepository>();
 
-        builder.Services.AddApiAuthentication(builder.Configuration);
+        //builder.Services.AddScoped<IOrderService, OrderService>();
+        //builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+        //builder.Services.AddScoped<IExpenseService,  ExpenseService>();
+        //builder.Services.AddScoped<IExpenseRespository,  ExpenseRespository>();
+        //builder.Services.AddScoped<IUsedPartService, UsedPartService>();
+        //builder.Services.AddScoped<IUsedPartRepository, UsedPartRepository>();
+        //builder.Services.AddScoped<IWorkPropossalService, WorkPropossalService>();
+        //builder.Services.AddScoped<IWorkPropossalRepository,  WorkPropossalRepository>();
+        //builder.Services.AddScoped<IWorkService, WorkService>();
+        //builder.Services.AddScoped<IWorkRepository, WorkRepository>();
+        //builder.Services.AddScoped<IPaymentNoteService, PaymentNoteService>();
+        //builder.Services.AddScoped<IPaymentNoteRepository, PaymentNoteRepository>();
+        //builder.Services.AddScoped<IBillService, BillService>();
+        //builder.Services.AddScoped<IBillRepository,  BillRepository>();
+        //builder.Services.AddScoped<IStatusService, StatusService>();
+        //builder.Services.AddScoped<IStatusRepository, StatusRepository>();
+        //builder.Services.AddScoped<IRepairNoteService, RepairNoteService>();
+        //builder.Services.AddScoped<IRepairNoteRepositry, RepairNoteRepositry>();
+        //builder.Services.AddScoped<IClientService, ClientService>();
+        //builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
+        //builder.Services.AddScoped<IUserService, UserService>();
+        //builder.Services.AddScoped<IUserRepository, UserRepository>();
+        //builder.Services.AddScoped<IWorkTypeService, WorkTypeService>();
+        //builder.Services.AddScoped<IWorkTypeRepository, WorkTypeRepository>();
+        //builder.Services.AddScoped<ICarService, CarService>();
+        //builder.Services.AddScoped<ISupplierService, SupplierService>();
+        //builder.Services.AddScoped<IWorkerService, WorkerService>();
+        //builder.Services.AddScoped<IWorkerRepository, WorkerRepository>();
+        //builder.Services.AddScoped<ITaxService, TaxService>();
+        //builder.Services.AddScoped<ITaxRepository, TaxRepository>();
+        //builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+        //builder.Services.AddScoped<ICarRepository, CarRepository>();
+        //builder.Services.AddScoped<ISpecializationService, SpecializationService>();
+        //builder.Services.AddScoped<ISpecializationRepository, SpecializationRepository>();
+        //builder.Services.AddScoped<IMyPasswordHasher, MyPasswordHasher>();
+        //builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+
+
+        builder.Services.AddStackExchangeRedisCache(redisOptions =>
+        {
+            var connetion = builder.Configuration
+                .GetConnectionString("Redis");
+
+            redisOptions.Configuration = connetion;
+        });
+        //builder.Services.AddApiAuthentication(builder.Configuration);
 
         var app = builder.Build();
 

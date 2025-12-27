@@ -2,24 +2,12 @@
 
 public class WorkEntity
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string Category { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public decimal StandardTime { get; set; }
 
-    public int OrderId { get; set; }
-
-    public int JobId { get; set; }
-
-    public int WorkerId { get; set; }
-
-    public decimal TimeSpent { get; set; }
-
-    public int StatusId { get; set; }
-
-    public WorkTypeEntity? WorkType { get; set; }
-
-    public OrderEntity? Order { get; set; }
-
-    public StatusEntity? Status { get; set; }
-
-    public WorkerEntity? Worker { get; set; }
-
+    public ICollection<WorkInOrderEntity> WorksInOrder { get; set; } = new HashSet<WorkInOrderEntity>();
+    public ICollection<WorkProposalEntity> WorkProposals { get; set; } = new HashSet<WorkProposalEntity>(); 
 }

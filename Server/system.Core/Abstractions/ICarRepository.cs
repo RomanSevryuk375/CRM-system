@@ -1,20 +1,15 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Car;
+using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface ICarRepository
 {
-    public interface ICarRepository
-    {
-        Task<List<Car>> Get();
-        Task<List<Car>> GetPaged(int page, int limit);
-        Task<int> GetCount();
-        Task<List<Car>> GetByOwnerId(int ownerId);
-        Task<List<Car>> GetPagedByOwnerId(int ownerId, int page, int limit);
-        Task<int> GetCountByOwnerId(int ownerId);
-        Task<List<Car>> GetById(List<int> carIds);
-        Task<List<Car>> GetPagedById(List<int> carIds, int page, int limit);
-        Task<int> GetCountById(List<int> carIds);
-        Task<int> Create(Car car);
-        Task<int> Delete(int id);
-        Task<int> Update(int id, string? brand, string? model, int? yearOfManufacture, string? vinNumber, string? stateNumber, int? mileage);
-    }
+    Task<long> Create(Car car);
+    Task<long> Delete(long id);
+    Task<List<CarItem>> Get(CarFilter filter);
+    Task<int> GetCount(CarFilter filter);
+    Task<long> Update(long id, CarUpdateModel model);
+    Task<CarItem?> GetById(long id);
+    Task<bool> Exists(long id);
 }

@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Worker;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,125 +14,69 @@ public class WorkerRepository : IWorkerRepository
         _context = context;
     }
 
-    public async Task<List<Worker>> Get()
+    private IQueryable<WorkerEntity> ApplyFilter(IQueryable<WorkerEntity> query, WorkerFilter filter)
     {
-        var workerEntities = await _context.Workers
-            .AsNoTracking()
+        if (filter.workerIds != null && filter.workerIds.Any())
+            query = query.Where(w => filter.workerIds.Contains(w.Id));
+
+        return query;
+    }
+
+    public async Task<List<WorkerItem>> GetPaged(WorkerFilter filter)
+    {
+        var query = _context.Workers.AsNoTracking();
+        query = ApplyFilter(query, filter);
+
+        query = filter.SortBy?.ToLower().Trim() switch
+        {
+            "name" => filter.isDescending
+                ? query.OrderByDescending(w => w.Name)
+                : query.OrderBy(w => w.Name),
+            "surname" => filter.isDescending
+                ? query.OrderByDescending(w => w.Surname)
+                : query.OrderBy(w => w.Surname),
+            "phonenumber" => filter.isDescending
+                ? query.OrderByDescending(w => w.PhoneNumber)
+                : query.OrderBy(w => w.PhoneNumber),
+            "email" => filter.isDescending
+                ? query.OrderByDescending(w => w.Email)
+                : query.OrderBy(w => w.Email),
+            "hourlyrate" => filter.isDescending
+                ? query.OrderByDescending(w => w.HourlyRate)
+                : query.OrderBy(w => w.HourlyRate),
+
+            _ => filter.isDescending
+                ? query.OrderByDescending(w => w.Id)
+                : query.OrderBy(w => w.Id),
+        };
+
+        var projection = query.Select(c => new WorkerItem(
+            c.Id,
+            c.UserId,
+            c.Name,
+            c.Surname,
+            c.HourlyRate,
+            c.PhoneNumber,
+            c.Email));
+
+        return await projection
+            .Skip((filter.Page - 1) * filter.Limit)
+            .Take(filter.Limit)
             .ToListAsync();
-
-        var worker = workerEntities
-            .Select(w => Worker.Create(
-                w.Id,
-                w.UserId,
-                w.SpecializationId,
-                w.Name,
-                w.Surname,
-                w.HourlyRate,
-                w.PhoneNumber,
-                w.Email).worker)
-            .ToList();
-
-        return worker;
     }
 
-    public async Task<List<Worker>> GetPaged(int page, int limit)
+    public async Task<int> GetCount(WorkerFilter filter)
     {
-        var workerEntities = await _context.Workers
-            .AsNoTracking()
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var worker = workerEntities
-            .Select(w => Worker.Create(
-                w.Id,
-                w.UserId,
-                w.SpecializationId,
-                w.Name,
-                w.Surname,
-                w.HourlyRate,
-                w.PhoneNumber,
-                w.Email).worker)
-            .ToList();
-
-        return worker;
-    }
-
-    public async Task<int> GetCount()
-    {
-        return await _context.Workers.CountAsync();
-    }
-
-    public async Task<List<Worker>> GetWorkerByUserId(int userId)
-    {
-        var workerEntities = await _context.Workers
-            .AsNoTracking()
-            .Where(w => w.UserId == userId)
-            .ToListAsync();
-
-        var worker = workerEntities
-            .Select(w => Worker.Create(
-                w.Id,
-                w.UserId,
-                w.SpecializationId,
-                w.Name,
-                w.Surname,
-                w.HourlyRate,
-                w.PhoneNumber,
-                w.Email).worker)
-            .ToList();
-
-        return worker;
-    }
-
-    public async Task<List<Worker>> GetPagedWorkerByUserId(int userId, int page, int limit)
-    {
-        var workerEntities = await _context.Workers
-            .AsNoTracking()
-            .Where(w => w.UserId == userId)
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var worker = workerEntities
-            .Select(w => Worker.Create(
-                w.Id,
-                w.UserId,
-                w.SpecializationId,
-                w.Name,
-                w.Surname,
-                w.HourlyRate,
-                w.PhoneNumber,
-                w.Email).worker)
-            .ToList();
-
-        return worker;
-    }
-
-    public async Task<int> GetCountWorkerByUserId(int userId)
-    {
-        return await _context.Workers.Where(w => w.Id == userId).CountAsync();
+        var query = _context.Workers.AsNoTracking();
+        query = ApplyFilter(query, filter);
+        return await query.CountAsync();
     }
 
     public async Task<int> Create(Worker worker)
     {
-        var (_, error) = Worker.Create(
-            0,
-            worker.UserId,
-            worker.SpecializationId,
-            worker.Name,
-            worker.Surname,
-            worker.HourlyRate,
-            worker.PhoneNumber,
-            worker.Email);
-
-        if (!string.IsNullOrEmpty(error))
-            throw new ArgumentException($"Create exception Worker: {error}");
-
         var workerEntities = new WorkerEntity
         {
             UserId = worker.UserId,
-            SpecializationId = worker.SpecializationId,
             Name = worker.Name,
             Surname = worker.Surname,
             HourlyRate = worker.HourlyRate,
@@ -145,25 +90,16 @@ public class WorkerRepository : IWorkerRepository
         return worker.Id;
     }
 
-    public async Task<int> Update(int id, int? userId, int? specialization, string? name, string? Surname, decimal? hourlyRate, string? phoneNumber, string? email)
+    public async Task<int> Update(int id, WorkerUpdateModel model)
     {
         var workerEntity = await _context.Workers.FirstOrDefaultAsync(w => w.Id == id)
             ?? throw new Exception("Payment note not found");
 
-        if (userId.HasValue)
-            workerEntity.UserId = userId.Value;
-        if (specialization.HasValue)
-            workerEntity.SpecializationId = specialization.Value;
-        if (!string.IsNullOrEmpty(name))
-            workerEntity.Name = name;
-        if (!string.IsNullOrEmpty(Surname))
-            workerEntity.Surname = Surname;
-        if (hourlyRate.HasValue)
-            workerEntity.HourlyRate = hourlyRate.Value;
-        if (!string.IsNullOrEmpty(phoneNumber))
-            workerEntity.PhoneNumber = phoneNumber;
-        if (!string.IsNullOrEmpty(email))
-            workerEntity.Email = email;
+        if (!string.IsNullOrWhiteSpace(model.name)) workerEntity.Name = model.name;
+        if (!string.IsNullOrWhiteSpace(model.surname)) workerEntity.Surname = model.surname;
+        if (model.hourlyRate.HasValue) workerEntity.HourlyRate = model.hourlyRate.Value;
+        if (!string.IsNullOrWhiteSpace(model.phoneNumber)) workerEntity.PhoneNumber = model.phoneNumber;
+        if (!string.IsNullOrWhiteSpace(model.email)) workerEntity.Email = model.email;
 
         await _context.SaveChangesAsync();
 
@@ -177,5 +113,14 @@ public class WorkerRepository : IWorkerRepository
             .ExecuteDeleteAsync();
 
         return id;
+    }
+
+    public async Task<bool> Exists(int id)
+    {
+        var exist = await _context.Workers
+            .AsNoTracking()
+            .AnyAsync(a => a.Id == id);
+
+        return exist;
     }
 }

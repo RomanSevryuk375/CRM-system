@@ -1,14 +1,14 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Tax;
+using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface ITaxRepository
 {
-    public interface ITaxRepository
-    {
-        Task<List<Tax>> Get();
-        Task<List<Tax>> GetPaged(int page, int limit);
-        Task<int> GetCount();
-        Task<int> Create(Tax tax);
-        Task<int> Delete(int id);
-        Task<int> Update(int id, string? name, decimal? rate, string? type);
-    }
+    Task<int> Create(Tax tax);
+    Task<int> Delete(int id);
+    Task<List<TaxItem>> Get(TaxFilter filter);
+    Task<int> GetCount(TaxFilter filter);
+    Task<int> Update(int id, TaxUpdateModel model);
+    Task<bool> Exists(int id);
 }

@@ -1,26 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using CRMSystem.Core.Enums;
 
 namespace CRMSystem.DataAccess.Entites;
 
 public class BillEntity
 {
-    public int Id { get; set; }
-
-    public int OrderId { get; set; }
-
+    public long Id { get; set; }
+    public long OrderId { get; set; }
     public int StatusId { get; set; }
-
-    public DateTime Date { get; set; }
-
+    public DateTime CreatedAt { get; set; }
     public decimal Amount { get; set; }
+    public DateOnly? ActualBillDate { get; set; }
+    public DateTime LastBillDate => CreatedAt.AddDays(14);
 
-    public DateTime? ActualBillDate { get; set; }
-
-    [NotMapped] public DateTime LastBillDate => Date.AddDays(14);
-
-    public StatusEntity? Status { get; set; }
-
+    public BillStatusEntity? Status { get; set; }
     public OrderEntity? Order { get; set; }
-
-    public ICollection<PaymentNoteEntity> Payments { get; set; } = new List<PaymentNoteEntity>();
+    public ICollection<PaymentNoteEntity> Payments { get; set; } = new HashSet<PaymentNoteEntity>();
 }

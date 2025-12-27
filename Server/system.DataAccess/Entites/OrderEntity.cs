@@ -1,29 +1,23 @@
-﻿namespace CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Enums;
+
+namespace CRMSystem.DataAccess.Entites;
 
 public class OrderEntity
 {
-    public int Id { get; set; }
-
+    public long Id { get; set; }
     public int StatusId { get; set; }
-
-    public int CarId { get; set; }
-
-    public DateTime Date { get; set; }
-
-    public string Priority { get; set; } = string.Empty;
+    public long CarId { get; set; }
+    public DateOnly Date { get; set; }
+    public int PriorityId { get; set; }
 
     public CarEntity? Car { get; set; }
-
-    public StatusEntity? Status { get; set; }
-
-    public ICollection<WorkEntity> Works { get; set; } = new HashSet<WorkEntity>();
-
-
+    public OrderStatusEntity? Status { get; set; }
+    public OrderPriorityEntity? OrderPriority { get; set; }
+    public ICollection<GuaranteeEntity> Guarantees { get; set; } = new HashSet<GuaranteeEntity>();
+    public ICollection<AttachmentEntity> Attachments { get; set; } = new HashSet<AttachmentEntity>();
+    public ICollection<AcceptanceEntity> Acceptances { get; set; } = new HashSet<AcceptanceEntity>();
+    public ICollection<WorkInOrderEntity> WorksInOrder { get; set; } = new HashSet<WorkInOrderEntity>();
     public ICollection<WorkProposalEntity> WorkProposals { get; set; }  = new HashSet<WorkProposalEntity>();
-
-    public ICollection<BillEntity> Bills { get; set; } = new List<BillEntity>();
-
-    public ICollection<RepairHistoryEntity> RepairHistories { get; set; } = new List<RepairHistoryEntity>();
-
-    public ICollection<UsedPartEntity> UsedParts { get; set; } = new HashSet<UsedPartEntity>();
+    public ICollection<BillEntity> Bills { get; set; } = new HashSet<BillEntity>();
+    public ICollection<PartSetEntity> PartSets { get; set; } = new HashSet<PartSetEntity>();
 }

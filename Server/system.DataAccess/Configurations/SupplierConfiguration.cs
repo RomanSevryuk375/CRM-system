@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,20 +9,18 @@ public class SupplierConfiguration : IEntityTypeConfiguration<SupplierEntity>
 {
     void IEntityTypeConfiguration<SupplierEntity>.Configure(EntityTypeBuilder<SupplierEntity> builder)
     {
+
         builder.ToTable("suppliers");
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(su =>su.Id)
-            .HasColumnName("supplier_id")
-            .IsRequired();
-
         builder.Property(su =>su.Name) 
-            .HasColumnName ("supplier_name")
+            .HasMaxLength(ValidationConstants.MAX_NAME_LENGTH)
             .IsRequired();
 
         builder.Property(su => su.Contacts)
-            .HasColumnName("supplier_contacts")
+            .HasMaxLength(ValidationConstants.MAX_DESCRIPTION_LENGTH)
             .IsRequired();
+
     }
 }

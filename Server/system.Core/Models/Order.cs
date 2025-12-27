@@ -1,44 +1,48 @@
-﻿namespace CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Enums;
+using CRMSystem.Core.Validation;
+
+namespace CRMSystem.Core.Models;
 
 public class Order
 {
-    public Order(int id, int statusId, int carId, DateTime date, string priority)
+    public Order(long id, OrderStatusEnum statusId, long carId, DateOnly date, OrderPriorityEnum priorityId)
     {
         Id = id;
         StatusId = statusId;
         CarId = carId;
         Date = date;
-        Priority = priority;
+        PriorityId = priorityId;
     }
-    public int Id { get; }
+    public long Id { get; }
+    public OrderStatusEnum StatusId { get; }
+    public long CarId { get; }
+    public DateOnly Date { get; }
+    public OrderPriorityEnum PriorityId { get; }
 
-    public int StatusId { get; }
-
-    public int CarId { get; }
-
-    public DateTime Date { get; }
-
-    public string Priority { get; } 
-
-    public static (Order order, string error) Create(int id, int statusId, int carId, DateTime date, string priority)
+    public static (Order? order, List<string> errors) Create(long id, OrderStatusEnum statusId, long carId, DateOnly date, OrderPriorityEnum priorityId)
     {
-        var error = string.Empty;
-        var allowedProirites = new[] {"Повышенный", "Общий", "Низкий"};
+        var errors = new List<string>();
 
-        if (statusId <= 0)
-            error = "Status Id must be positive";
+        var idError = DomainValidator.ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
-        if (carId <= 0)
-            error = "Car Id must be positive";
+        var statusIdError = DomainValidator.ValidateId(statusId, "status");
+        if (!string.IsNullOrEmpty(statusIdError)) errors.Add(statusIdError);
 
-        if (date > DateTime.Now)
-            error = "Order date cannot be in the future";
+        var carIdError = DomainValidator.ValidateId(carId, "carId");
+        if (!string.IsNullOrEmpty(carIdError)) errors.Add(carIdError);
 
-        if (!allowedProirites.Contains(priority))
-            error = "Invalid bill priority";
+        var prioprityIdError = DomainValidator.ValidateId(priorityId, "priorityId");
+        if (!string.IsNullOrEmpty(prioprityIdError)) errors.Add(prioprityIdError);
 
-        var order = new Order(id, statusId, carId, date, priority);
+        var dateError = DomainValidator.ValidateDate(date, "date");
+        if (!string.IsNullOrEmpty(dateError)) errors.Add(dateError);
 
-        return (order, error);
+        if (errors.Any())
+            return (null,  errors);
+
+        var order = new Order(id, statusId, carId, date, priorityId);
+
+        return (order, new List<string>());
      }
 }

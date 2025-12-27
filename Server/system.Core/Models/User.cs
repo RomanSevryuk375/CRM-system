@@ -1,11 +1,11 @@
-﻿namespace CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.Core.Validation;
+
+namespace CRMSystem.Core.Models;
 
 public class User
 {
-    public const int MAX_LOGIN_LENGTH = 128;
-    public const int MAX_PASSWORD_LENGTH = 256;
-    public const int MIN_PASSWORD_LENGTH = 6;
-    private User(int id, int roleId, string login, string passwordHash)
+    public User(long id, int roleId, string login, string passwordHash)
     {
         Id = id;
         RoleId = roleId;    
@@ -13,35 +13,32 @@ public class User
         PasswordHash = passwordHash;
     }
 
-    public int Id { get; }
-
+    public long Id { get; }
     public int RoleId { get; }
-
     public string Login { get; } 
-
     public string PasswordHash { get; } 
 
-    public static (User user, string error) Create(int id, int roleId, string login, string passwordHash)
+    public static (User? user, List<string> errors) Create(long id, int roleId, string login, string passwordHash)
     {
-        var error = string.Empty;
+        var errors = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(login))
-             error = "Login can't be empty";
+        var idError = DomainValidator.ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
-        if (login.Length > MAX_LOGIN_LENGTH)
-            error = $"Login can't be longer than {MAX_LOGIN_LENGTH} symbols";
+        var roleIdError = DomainValidator.ValidateId(roleId, "RoleId");
+        if (!string.IsNullOrEmpty(roleIdError)) errors.Add(roleIdError);
 
-        if (string.IsNullOrWhiteSpace(passwordHash)) 
-            error = "Password can't be empty";
+        var loginError = DomainValidator.ValidateString(login, ValidationConstants.MAX_NAME_LENGTH, "login");
+        if (!string.IsNullOrEmpty(loginError)) errors.Add(loginError);
 
-        if (passwordHash.Length > MAX_PASSWORD_LENGTH)
-            error = $"Password can't be longer than {MAX_PASSWORD_LENGTH} symbols";
+        var passwordError = DomainValidator.ValidateString(passwordHash, "password");
+        if (!string.IsNullOrEmpty(passwordError)) errors.Add(passwordError);
 
-        if (passwordHash.Length < MIN_PASSWORD_LENGTH)
-            error = $"Password can't be shoter than {MIN_PASSWORD_LENGTH} symbols";
+        if(errors.Any())
+            return (null, errors);
 
-            var user = new User(id, roleId, login, passwordHash);
+        var user = new User(id, roleId, login, passwordHash);
 
-        return (user, error); 
+        return (user, new List<string>()); 
     }
 }

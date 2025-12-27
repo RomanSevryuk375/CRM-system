@@ -1,66 +1,73 @@
-﻿namespace CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Enums;
+using CRMSystem.Core.Exceptions;
+using CRMSystem.Core.Validation;
+
+namespace CRMSystem.Core.Models;
 
 public class Bill
 {
-    public Bill(int id, int orderId, int statusId, DateTime date, decimal amount, DateTime? actualBillDate)
+    public Bill(long id, long orderId, BillStatusEnum statusId, DateTime createdAt, decimal amount, DateOnly? actualBillDate)
     {
         Id = id;
         OrderId = orderId;
         StatusId = statusId;
-        Date = date;
+        CreatedAt = createdAt;
         Amount = amount;
         ActualBillDate = actualBillDate;
     }
 
-    public int Id { get; }
-
-    public int OrderId { get; }
-
-    public int StatusId { get; }
-
-    public DateTime Date { get; }
-
-    public decimal Amount { get; }
-
-    public DateTime? ActualBillDate { get; }
-
-    public DateTime LastBillDate => Date.AddDays(14);
-
-    public static (Bill bill, string error) Create (int id, int orderId, int statusId, DateTime date, decimal amount, DateTime? actualBillDate)
+    public void SetOrderId(long orderId)
     {
-        var error = string.Empty;
-        var allowedStatuses = new[] { 1, 2, 3 };
+        if(orderId <= 0) throw new ConflictException(nameof(orderId));
+        OrderId = orderId;
+    }
 
-        if (orderId <= 0)
-            error = "Order ID must be positive";
+    public long Id { get; }
+    public long OrderId { get; private set; }
+    public BillStatusEnum StatusId { get; }
+    public DateTime CreatedAt { get; }
+    public decimal Amount { get; }
+    public DateOnly? ActualBillDate { get; }
+    public DateTime LastBillDate => CreatedAt.AddDays(14);
 
-        if (statusId <= 0)
-            error = "Status ID must be positive";
+    public static (Bill? bill, List<string> errors ) Create (long id, long orderId, BillStatusEnum statusId, DateTime createdAt, decimal amount, DateOnly? actualBillDate)
+    {
+        var errors = new List<string>();
 
-        if (!allowedStatuses.Contains(statusId))
-            error = "Invalid bill status";
+        var idError = DomainValidator.ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
-        if (date > DateTime.Now)
-            error = "Bill date cannot be in the future";
+        var orderIdError = DomainValidator.ValidateId(orderId, "orderId");
+        if (!string.IsNullOrEmpty(orderIdError)) errors.Add(orderIdError); 
 
-        if (actualBillDate.HasValue)
+        var statusIdError = DomainValidator.ValidateId(statusId, "statusId");
+        if (!string.IsNullOrEmpty(statusIdError)) errors.Add(statusIdError);
+
+        var createdAtError = DomainValidator.ValidateDate(createdAt, "createdAt");
+        if (!string.IsNullOrEmpty(createdAtError)) errors.Add(createdAtError);
+
+        var amountError = DomainValidator.ValidateMoney(amount, "amount");
+        if (!string.IsNullOrEmpty(amountError)) errors.Add(amountError);
+
+        if (statusId == BillStatusEnum.Paid && !actualBillDate.HasValue)
         {
-            if (actualBillDate.Value > DateTime.Now)
-                error = "Actual closing date cannot be in the future";
-
-            if (actualBillDate.Value < date)
-                error = "Actual closing date cannot be earlier than bill date";
-
-            if (statusId == 1 && !actualBillDate.HasValue)
-                error = "Actual closing date must be set for paid bills";
+            errors.Add("Actual closing date must be set for paid bills");
         }
-        else
+
+        else if (actualBillDate.HasValue)
         {
-            if (statusId == 1)
-                error = "Actual closing date must be set for paid bills";
+            var actualDateError = DomainValidator.ValidateDate(actualBillDate, "Actual bill date"); 
+            if (!string.IsNullOrEmpty(actualDateError)) errors.Add(actualDateError);
+
+            var actualDateRangeError = DomainValidator.ValidateDateRange(createdAt, actualBillDate);
+            if (!string.IsNullOrEmpty(actualDateRangeError)) errors.Add(actualDateRangeError);
         }
 
-        var bills = new Bill(id, orderId, statusId, date, amount, actualBillDate);
-        return (bills, error);
+        if (errors.Any())
+            return (null, errors);
+
+        var bills = new Bill(id, orderId, statusId, createdAt, amount, actualBillDate);
+
+        return (bills, new List<string>());
     }
 }

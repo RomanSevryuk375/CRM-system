@@ -1,78 +1,63 @@
-﻿using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using CRMSystem.Core.Validation;
+using System.Text.RegularExpressions;
 
 namespace CRMSystem.Core.Models;
 
 public class Worker
 {
-    public const int MAX_NAME_LENGTH = 128;
-    public const int MAX_SURNAME_LENGTH = 128;
-    public const int MAX_EMAIL_LENGTH = 128;
-    public const int MAX_PHONE_NUMBER_LENGTH = 32;
-    public Worker(int id, int userId, int specializationId, string name, string surname, decimal hourlyRate, string phoneNumber, string email)
+    public Worker(int id, long userId, string name, string surname, decimal hourlyRate, string phoneNumber, string email)
     {
         Id = id;
         UserId = userId;
-        SpecializationId = specializationId;
         Name = name;
         Surname = surname;
         HourlyRate = hourlyRate;
         PhoneNumber = phoneNumber;  
         Email = email;
     }
+
     public int Id { get; }
-
-    public int UserId { get; }
-
-    public int SpecializationId { get; }
-
+    public long UserId { get; }
     public string Name { get; }
-
     public string Surname { get; }
-
     public decimal HourlyRate { get; }
+    public string PhoneNumber { get; }
+    public string Email { get; }
 
-    public string PhoneNumber { get; } 
-
-    public string Email { get; } 
-
-    public static (Worker worker, string error) Create (int id, int userId, int specializationId, string name, string surname, decimal hourlyRate, string phoneNumber, string email)
+    public static (Worker? worker, List<string> errors) Create(int id, long userId, string name, string surname, decimal hourlyRate, string phoneNumber, string email)
     {
-        var error = string.Empty;
+        var errors = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(name))
-            error = "Name can't be empty";
+        var idError = DomainValidator.ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
-        if (name.Length > MAX_NAME_LENGTH)
-            error = $"Name cant't be longer than {MAX_NAME_LENGTH} symbols";
+        var userIdError = DomainValidator.ValidateId(userId, "userId");
+        if (!string.IsNullOrEmpty(userIdError)) errors.Add(userIdError);
 
-        if (string.IsNullOrWhiteSpace(surname))
-            error = "Surname can't be empty";
+        var nameError = DomainValidator.ValidateString(name, "name");
+        if (!string.IsNullOrEmpty(nameError)) errors.Add(nameError);
 
-        if (surname.Length > MAX_SURNAME_LENGTH)
-            error = $"Surname can't be longer than {MAX_SURNAME_LENGTH} symbols";
+        var surnameError = DomainValidator.ValidateString(surname, "surname");
+        if (!string.IsNullOrEmpty(surnameError)) errors.Add(surnameError);
 
-        if (string.IsNullOrWhiteSpace(phoneNumber))
-            error = "Phone number can't be empty";
+        var phoneError = DomainValidator.ValidateString(phoneNumber, "phone");
+        if (!string.IsNullOrEmpty(phoneError)) errors.Add(phoneError);
 
-        if (phoneNumber.Length > MAX_PHONE_NUMBER_LENGTH)
-            error = $"Phone number can't be longer than {MAX_PHONE_NUMBER_LENGTH} symbols";
+        if (!Regex.IsMatch(phoneNumber, @"^(375|80)(29|44|33|25)\d{7}$"))
+            errors.Add("Phone number should be in format +375XXXXXXXXX or 80XXXXXXXXX");
 
-        if (!Regex.IsMatch(phoneNumber, @"^(\375|80)(29|44|33|25)\d{7}$"))
-            error = "Phone number should be in format +375XXXXXXXXX or 80XXXXXXXXX";
+        var emailError = DomainValidator.ValidateString(email, "email");
+        if (!string.IsNullOrEmpty(emailError)) errors.Add(emailError);
 
-        if (string.IsNullOrWhiteSpace(email))
-            error = "Email can't be empty";
+        var hourlyRateError = DomainValidator.ValidateMoney(hourlyRate, "hourlyRate");
+        if (!string.IsNullOrEmpty(hourlyRateError)) errors.Add(hourlyRateError);
 
-        if (email.Length > MAX_EMAIL_LENGTH)
-            error = $"Email can't be longer than {MAX_EMAIL_LENGTH} symbols";
+        if (errors.Any())
+            return (null, errors);
 
-        if (hourlyRate <= 0)
-            error = "Hourly rate can't be negative or zero";
+        var worker = new Worker(id, userId, name, surname, hourlyRate, phoneNumber, email);
 
-        var worker = new Worker(id, userId, specializationId, name, surname, hourlyRate, phoneNumber, email);
-
-        return (worker, error);
+        return (worker, new List<string>());
 
     }
 }

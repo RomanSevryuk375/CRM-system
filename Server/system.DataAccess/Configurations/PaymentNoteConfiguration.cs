@@ -9,33 +9,38 @@ public class PaymentNoteConfiguration : IEntityTypeConfiguration<PaymentNoteEnti
 {
     void IEntityTypeConfiguration<PaymentNoteEntity>.Configure(EntityTypeBuilder<PaymentNoteEntity> builder)
     {
+
         builder.ToTable("payment_journal");
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(p => p.Id)
-            .HasColumnName("payment_id")
-            .IsRequired();
-
         builder.Property(p => p.BillId)
-            .HasColumnName("payment_bill_id")
             .IsRequired();
 
         builder.Property(p => p.Date)
-            .HasColumnName("payment_date")
+            .HasConversion(
+                v => v.ToUniversalTime(),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+                )
             .IsRequired();
 
         builder.Property(p => p.Amount)
-            .HasColumnName("payment_amount")
+            .HasColumnType("decimal(18, 2)")
             .IsRequired();
 
-        builder.Property(p => p.Method)
-            .HasColumnName("payment_method")
+        builder.Property(p => p.MethodId)
             .IsRequired();
 
         builder.HasOne(p => p.Bill)
             .WithMany(b => b.Payments)
             .HasForeignKey(p => p.BillId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(p => p.Method)
+            .WithMany(pm => pm.PaymentNotes)
+            .HasForeignKey(P => P.MethodId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
     }
 }

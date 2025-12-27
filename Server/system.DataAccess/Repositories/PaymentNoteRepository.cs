@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.PaymentNote;
+using CRMSystem.Core.Enums;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,140 +15,97 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         _context = context;
     }
 
-    public async Task<List<PaymentNote>> Get()
+    private IQueryable<PaymentNoteEntity> ApplyFilter(IQueryable<PaymentNoteEntity> query, PaymentNoteFilter filter)
     {
-        var paymentEntities = await _context.PaymentNotes
-            .AsNoTracking()
+        if (filter.billIds != null && filter.billIds.Any())
+            query = query.Where(p => filter.billIds.Contains(p.BillId));
+
+        if (filter.methodIds != null && filter.methodIds.Any())
+            query = query.Where(p => filter.methodIds.Contains(p.MethodId));
+
+        return query;
+    }
+
+    public async Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter fIlter)
+    {
+        var query = _context.PaymentNotes.AsNoTracking();
+        query = ApplyFilter(query, fIlter);
+
+        query = fIlter.SortBy?.ToLower().Trim() switch
+        {
+            "bill" => fIlter.isDescending
+                ? query.OrderByDescending(p => p.BillId)
+                : query.OrderBy(p => p.BillId),
+            "date" => fIlter.isDescending
+                ? query.OrderByDescending(p => p.Date)
+                : query.OrderBy(p => p.Date),
+            "amount" => fIlter.isDescending
+                ? query.OrderByDescending(p => p.Amount)
+                : query.OrderBy(p => p.Amount),
+            "method" => fIlter.isDescending
+                ? query.OrderByDescending(p => p.Method == null
+                    ? string.Empty
+                    : p.Method.Name)
+                : query.OrderBy(p => p.Method == null
+                    ? string.Empty
+                    : p.Method.Name),
+
+            _ => fIlter.isDescending
+                ? query.OrderByDescending(p => p.Id)
+                : query.OrderBy(p => p.Id),
+        };
+
+        var projection = query.Select(p => new PaymentNoteItem(
+            p.Id,
+            p.BillId,
+            p.Date,
+            p.Amount,
+            p.Method == null
+                    ? string.Empty
+                    : p.Method.Name));
+
+        return await projection
+            .Skip((fIlter.Page - 1) * fIlter.Limit)
+            .Take(fIlter.Limit)
             .ToListAsync();
-
-        var paymentNote = paymentEntities
-            .Select(pn => PaymentNote.Create(
-                pn.Id,
-                pn.BillId,
-                pn.Date,
-                pn.Amount,
-                pn.Method).paymentNote)
-            .ToList();
-
-        return paymentNote;
     }
 
-    public async Task<List<PaymentNote>> GetPaged(int page, int limit)
+    public async Task<int> GetCount(PaymentNoteFilter fIlter)
     {
-        var paymentEntities = await _context.PaymentNotes
-            .AsNoTracking()
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var paymentNote = paymentEntities
-            .Select(pn => PaymentNote.Create(
-                pn.Id,
-                pn.BillId,
-                pn.Date,
-                pn.Amount,
-                pn.Method).paymentNote)
-            .ToList();
-
-        return paymentNote;
+        var quety = _context.PaymentNotes.AsNoTracking();
+        quety = ApplyFilter(quety, fIlter);
+        return await quety.CountAsync();
     }
 
-    public async Task<int> GetCount()
+    public async Task<long> Create(PaymentNote paymentNote)
     {
-        return await _context.PaymentNotes.CountAsync();
-    }
-
-    public async Task<List<PaymentNote>> GetByBillId(List<int> billIds)
-    {
-        var paymentEntities = await _context.PaymentNotes
-           .AsNoTracking()
-           .Where(p => billIds.Contains(p.BillId))
-           .ToListAsync();
-
-        var paymentNote = paymentEntities
-            .Select(pn => PaymentNote.Create(
-                pn.Id,
-                pn.BillId,
-                pn.Date,
-                pn.Amount,
-                pn.Method).paymentNote)
-            .ToList();
-
-        return paymentNote;
-    }
-
-    public async Task<List<PaymentNote>> GetPagedByBillId(List<int> billIds, int page, int limit)
-    {
-        var paymentEntities = await _context.PaymentNotes
-           .AsNoTracking()
-           .Where(p => billIds.Contains(p.BillId))
-           .Skip((page - 1) * limit)
-           .Take(limit)
-           .ToListAsync();
-
-        var paymentNote = paymentEntities
-            .Select(pn => PaymentNote.Create(
-                pn.Id,
-                pn.BillId,
-                pn.Date,
-                pn.Amount,
-                pn.Method).paymentNote)
-            .ToList();
-
-        return paymentNote;
-    }
-
-    public async Task<int> GetCountByBillId(List<int> billIds)
-    {
-        return await _context.PaymentNotes.Where(p => billIds.Contains(p.BillId)).CountAsync();
-    }
-
-    public async Task<int> Create(PaymentNote paymentNote)
-    {
-        var (_, error) = PaymentNote.Create(
-            0,
-            paymentNote.BillId,
-            paymentNote.Date,
-            paymentNote.Amount,
-            paymentNote.Method);
-
-        if (!string.IsNullOrEmpty(error))
-            throw new ArgumentException($"Create exception Car: {error}");
-
-        var paymentNoteEntites = new PaymentNoteEntity
+        var paymentNoteEntity = new PaymentNoteEntity
         {
             BillId = paymentNote.BillId,
             Date = paymentNote.Date,
             Amount = paymentNote.Amount,
-            Method = paymentNote.Method,
+            MethodId = (int)paymentNote.MethodId,
         };
 
-        await _context.PaymentNotes.AddAsync(paymentNoteEntites);
+        await _context.AddAsync(paymentNoteEntity);
         await _context.SaveChangesAsync();
 
-        return paymentNote.Id;
+        return paymentNoteEntity.Id;
     }
 
-    public async Task<int> Update(int id, int? billId, DateTime? date, decimal? amount, string? method)
+    public async Task<long> Update(long id, PaymentMethodEnum? method)
     {
-        var paymentNote = await _context.PaymentNotes.FirstOrDefaultAsync(pn => pn.Id == id)
+        var entity = await _context.PaymentNotes.FirstOrDefaultAsync(pn => pn.Id == id)
             ?? throw new Exception("Payment note not found");
 
-        if (billId.HasValue)
-            paymentNote.BillId = billId.Value;
-        if (date.HasValue)
-            paymentNote.Date = date.Value;
-        if (amount.HasValue)
-            paymentNote.Amount = amount.Value;
-        if (!string.IsNullOrEmpty(method))
-            paymentNote.Method = method;
+        if (method.HasValue) entity.MethodId = (int)method.Value;
 
         await _context.SaveChangesAsync();
 
-        return paymentNote.Id;
+        return entity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<long> Delete(long id)
     {
         var paymentNote = await _context.PaymentNotes
             .Where(pn => pn.Id == id)

@@ -1,21 +1,21 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Bill;
+using CRMSystem.Core.DTOs.Order;
+using CRMSystem.Core.Enums;
+using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface IOrderRepository
 {
-    public interface IOrderRepository
-    {
-        Task<List<Order>> Get();
-        Task<List<Order>> GetPaged(int page, int limit);
-        Task<int> GetCount();
-        Task<List<Order>> GetById(List<int> orderId);
-        Task<List<Order>> GetPagedById(List<int> orderIds, int page, int limit);
-        Task<int> GetCountById(List<int> orderIds);
-        Task<List<Order>> GetByCarId(List<int> carId);
-        Task<List<Order>> GetByCarId(int carIds);
-        Task<List<Order>> GetPagedByCarId(List<int> carIds, int page, int limit);
-        Task<int> GetCountByCarId(List<int> carIds);
-        Task<int> Update(int id, int? statusId, int? carId, DateTime? date, string? priority);
-        Task<int> Create(Order order);
-        Task<int> Delete(int id);
-    }
+    Task<long> Create(Order order);
+    Task<long> Delete(long id);
+    Task<int> GetCount(OrderFilter filter);
+    Task<List<OrderItem>> GetPaged(OrderFilter filter);
+    Task<long> Update(long id, OrderPriorityEnum? priorityId);
+    Task<bool> Exists(long id);
+    Task<int?> GetStatus(long id);
+    Task<long> Complite(long id);
+    Task<long> Close(long id);
+    Task<bool> PosibleToComplete(long id);
+    Task<bool> PosibleToClose(long id);
 }

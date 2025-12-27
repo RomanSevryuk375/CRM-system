@@ -1,4 +1,7 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Order;
+using CRMSystem.Core.Enums;
+using CRMSystem.Core.Exceptions;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,176 +16,98 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
 
-    public async Task<List<Order>> Get()
+    private IQueryable<OrderEntity> ApplyFilter(IQueryable<OrderEntity> query, OrderFilter filter)
     {
-        var orderEntities = await _context.Orders
-            .AsNoTracking()
+        if (filter.statusIds != null && filter.statusIds.Any())
+            query = query.Where(o => filter.statusIds.Contains(o.StatusId));
+
+        if (filter.priorityIds != null && filter.priorityIds.Any())
+            query = query.Where(o => filter.priorityIds.Contains(o.PriorityId));
+
+        if (filter.carIds != null && filter.carIds.Any())
+            query = query.Where(o => filter.carIds.Contains(o.CarId));
+
+        if (filter.orderIds != null && filter.orderIds.Any())
+            query = query.Where(o => filter.orderIds.Contains(o.Id));
+
+        return query;
+    }
+
+    public async Task<List<OrderItem>> GetPaged(OrderFilter filter)
+    {
+        var query = _context.Orders.AsNoTracking();
+        query = ApplyFilter(query, filter);
+
+        query = filter.SortBy?.ToLower().Trim() switch
+        {
+            "status" => filter.isDescending
+                ? query.OrderByDescending(o => o.Status == null
+                    ? string.Empty
+                    : o.Status.Name)
+                : query.OrderBy(o => o.Status == null
+                    ? string.Empty
+                    : o.Status.Name),
+            "car" => filter.isDescending
+                ? query.OrderByDescending(o => o.Car == null
+                    ? string.Empty
+                    : o.Car.Brand)
+                : query.OrderBy(o => o.Car == null
+                    ? string.Empty
+                    : o.Car.Brand),
+            "date" => filter.isDescending
+                ? query.OrderByDescending(o => o.Date)
+                : query.OrderBy(o => o.Date),
+            "priority" => filter.isDescending
+                ? query.OrderByDescending(o => o.OrderPriority == null
+                    ? string.Empty
+                    : o.OrderPriority.Name)
+                : query.OrderBy(o => o.OrderPriority == null
+                    ? string.Empty
+                    : o.OrderPriority.Name),
+
+            _ => filter.isDescending
+                ? query.OrderByDescending(o => o.Id)
+                : query.OrderBy(o => o.Id),
+        };
+
+        var projection = query.Select(o => new OrderItem(
+            o.Id,
+            o.Status == null
+                ? string.Empty
+                : o.Status.Name,
+            o.StatusId,
+            o.Car == null
+                ? string.Empty
+                : $"{o.Car.Brand} ({o.Car.StateNumber})",
+            o.CarId,
+            o.Date,
+            o.OrderPriority == null
+                ? string.Empty
+                : o.OrderPriority.Name,
+            o.PriorityId));
+
+        return await projection
+            .Skip((filter.Page - 1) * filter.Limit)
+            .Take(filter.Limit)
             .ToListAsync();
-
-        var orders = orderEntities
-            .Select(o => Order.Create(
-                o.Id,
-                o.StatusId,
-                o.CarId,
-                o.Date,
-                o.Priority).order)
-            .ToList();
-
-        return orders;
     }
 
-    public async Task<List<Order>> GetPaged(int page, int limit)
+    public async Task<int> GetCount(OrderFilter filter)
     {
-        var orderEntities = await _context.Orders
-            .AsNoTracking()
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var orders = orderEntities
-            .Select(o => Order.Create(
-                o.Id,
-                o.StatusId,
-                o.CarId,
-                o.Date,
-                o.Priority).order)
-            .ToList();
-
-        return orders;
+        var query = _context.Orders.AsNoTracking();
+        query = ApplyFilter(query, filter);
+        return await query.CountAsync();
     }
 
-    public async Task<int> GetCount()
+    public async Task<long> Create(Order order)
     {
-        return await _context.Orders.CountAsync();
-    }
-
-    public async Task<List<Order>> GetById(List<int> orderIds)
-    {
-        var orderEntities = await _context.Orders
-            .AsNoTracking()
-            .Where(o => orderIds.Contains(o.Id) && (o.StatusId == 6 || o.StatusId == 8 || o.StatusId == 4)) //not tested but if it disable it work good
-            .ToListAsync();
-
-        var orders = orderEntities
-            .Select(o => Order.Create(
-                o.Id,
-                o.StatusId,
-                o.CarId,
-                o.Date,
-                o.Priority).order)
-            .ToList();
-
-        return orders;
-    }
-
-    public async Task<List<Order>> GetPagedById(List<int> orderIds, int page, int limit)
-    {
-        var orderEntities = await _context.Orders
-            .AsNoTracking()
-            .Where(o => orderIds.Contains(o.Id) && (o.StatusId == 6 || o.StatusId == 8 || o.StatusId == 4)) //not tested but if it disable it work good
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var orders = orderEntities
-            .Select(o => Order.Create(
-                o.Id,
-                o.StatusId,
-                o.CarId,
-                o.Date,
-                o.Priority).order)
-            .ToList();
-
-        return orders;
-    }
-
-    public async Task<int> GetCountById(List<int> orderIds)
-    {
-        return await _context.Orders.Where(o => orderIds.Contains(o.Id)).CountAsync();
-    }
-
-    public async Task<List<Order>> GetByCarId(List<int> carIds)
-    {
-        var orderEntities = await _context.Orders
-            .AsNoTracking()
-            .Where(o => carIds.Contains(o.CarId))
-            .ToListAsync();
-
-        var orders = orderEntities
-            .Select(o => Order.Create(
-                o.Id,
-                o.StatusId,
-                o.CarId,
-                o.Date,
-                o.Priority).order)
-            .ToList();
-
-        return orders;
-    }
-
-    public async Task<List<Order>> GetByCarId(int carIds)
-    {
-        var orderEntities = await _context.Orders
-            .AsNoTracking()
-            .Where(o => o.CarId == carIds)
-            .ToListAsync();
-
-        var orders = orderEntities
-            .Select(o => Order.Create(
-                o.Id,
-                o.StatusId,
-                o.CarId,
-                o.Date,
-                o.Priority).order)
-            .ToList();
-
-        return orders;
-    }
-
-    public async Task<List<Order>> GetPagedByCarId(List<int> carIds, int page, int limit)
-    {
-        var orderEntities = await _context.Orders
-            .AsNoTracking()
-            .Where(o => carIds.Contains(o.CarId))
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var orders = orderEntities
-            .Select(o => Order.Create(
-                o.Id,
-                o.StatusId,
-                o.CarId,
-                o.Date,
-                o.Priority).order)
-            .ToList();
-
-        return orders;
-    }
-
-    public async Task<int> GetCountByCarId (List<int> carIds)
-    {
-        return await _context.Orders.Where(o => carIds.Contains(o.CarId)).CountAsync();
-    }
-
-    public async Task<int> Create(Order order)
-    {
-        var (_, error) = Order.Create(
-            0,
-            order.StatusId,
-            order.CarId,
-            order.Date,
-            order.Priority);
-
-        if (!string.IsNullOrEmpty(error))
-            throw new ArgumentException($"Create exception Order: {error}");
 
         var orderEntitie = new OrderEntity
         {
-            StatusId = order.StatusId,
+            StatusId = (int)order.StatusId,
             CarId = order.CarId,
             Date = order.Date,
-            Priority = order.Priority
+            PriorityId = (int)order.PriorityId
         };
 
         await _context.Orders.AddAsync(orderEntitie);
@@ -191,31 +116,78 @@ public class OrderRepository : IOrderRepository
         return orderEntitie.Id;
     }
 
-    public async Task<int> Update(int id, int? statusId, int? carId, DateTime? date, string? priority)
+    public async Task<long> Update(long id, OrderPriorityEnum? priorityId)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id)
-            ?? throw new Exception("Order not found");
+        var entity = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id)
+            ?? throw new NotFoundException("Order not found");
 
-        if (statusId.HasValue)
-            order.StatusId = statusId.Value;
-        if (carId.HasValue)
-            order.CarId = carId.Value;
-        if (date.HasValue)
-            order.Date = date.Value;
-        if (!string.IsNullOrWhiteSpace(priority))
-            order.Priority = priority;
+        if (priorityId.HasValue) entity.PriorityId = (int)priorityId.Value;
 
         await _context.SaveChangesAsync();
 
-        return order.Id;
+        return entity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<long> Complite(long id)
+    {
+        var entity = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id)
+            ?? throw new NotFoundException("Order not found");
+
+        entity.StatusId = (int)OrderStatusEnum.Completed;
+
+        await _context.SaveChangesAsync();
+
+        return entity.Id;
+    }
+
+    public async Task<long> Close(long id)
+    {
+        var entity = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id)
+            ?? throw new NotFoundException("Order not found");
+
+        entity.StatusId = (int)OrderStatusEnum.Closed;
+
+        await _context.SaveChangesAsync();
+
+        return entity.Id;
+    }
+
+    public async Task<long> Delete(long id)
     {
         var order = await _context.Orders
             .Where(x => x.Id == id)
             .ExecuteDeleteAsync();
 
         return id;
+    }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.Orders
+            .AnyAsync(x => x.Id == id);
+    }
+
+    public async Task<int?> GetStatus(long id)
+    {
+        return await _context.Orders
+        .AsNoTracking()
+        .Where(o => o.Id == id)
+        .Select(o => (int?)o.StatusId)
+        .FirstOrDefaultAsync();
+    }
+
+    public async Task<bool> PosibleToComplete(long id)
+    {
+        return !await _context.WorksInOrder
+            .Where(w => w.OrderId == id)
+            .AnyAsync(w => (w.StatusId == (int)WorkStatusEnum.InProgress 
+                            || w.StatusId == (int)WorkStatusEnum.Pending));
+    }
+
+    public async Task<bool> PosibleToClose(long id)
+    {
+        return await _context.Bills
+            .Where(b => b.OrderId == id)
+            .AnyAsync(b => b.Amount <= 0);
     }
 }

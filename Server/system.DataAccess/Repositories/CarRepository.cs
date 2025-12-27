@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Car;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,175 +14,120 @@ public class CarRepository : ICarRepository
         _context = context;
     }
 
-    public async Task<List<Car>> Get()
+    private IQueryable<CarEntity> ApplyFilter(IQueryable<CarEntity> query, CarFilter filter)
     {
-        var carEntities = await _context.Cars
-            .AsNoTracking()
-            .ToListAsync();
+        if (filter.ownerIds != null && filter.ownerIds.Any())
+            query = query.Where(c => filter.ownerIds.Contains(c.OwnerId));
 
-        var cars = carEntities
-            .Select(c => Car.Create(
+        return query;
+    }
+
+    public async Task<List<CarItem>> Get(CarFilter filter)
+    {
+        var query = _context.Cars.AsNoTracking();
+        query = ApplyFilter(query, filter);
+
+        query = filter.SortBy?.ToLower().Trim() switch
+        {
+            "owner" => filter.isDescending
+                ? query.OrderByDescending(c => c.Client == null
+                    ? string.Empty
+                    : c.Client.Name)
+                : query.OrderBy(c => c.Client == null
+                    ? string.Empty
+                    : c.Client.Name),
+            "status" => filter.isDescending
+                ? query.OrderByDescending(c => c.Status == null
+                    ? string.Empty
+                    : c.Status.Name)
+                : query.OrderBy(c => c.Status == null
+                    ? string.Empty
+                    : c.Status.Name),
+            "brand" => filter.isDescending
+                ? query.OrderByDescending(c => c.Brand)
+                : query.OrderBy(c => c.Brand),
+            "model" => filter.isDescending
+                ? query.OrderByDescending(c => c.Model)
+                : query.OrderBy(c => c.Model),
+            "yearofmanufacture" => filter.isDescending
+                ? query.OrderByDescending(c => c.YearOfManufacture)
+                : query.OrderBy(c => c.YearOfManufacture),
+            "vinnumber" => filter.isDescending
+                ? query.OrderByDescending(c => c.VinNumber)
+                : query.OrderBy(c => c.VinNumber),
+            "statenumber" => filter.isDescending
+                ? query.OrderByDescending(c => c.StateNumber)
+                : query.OrderBy(c => c.StateNumber),
+            "mileage" => filter.isDescending
+                ? query.OrderByDescending(c => c.Mileage)
+                : query.OrderBy(c => c.Mileage),
+
+            _ => filter.isDescending
+                ? query.OrderByDescending(c => c.Id)
+                : query.OrderBy(c => c.Id),
+        };
+
+        var projection = query.Select(c => new CarItem(
+            c.Id,
+            c.Client == null
+                ? string.Empty
+                : $"{c.Client.Name} {c.Client.Surname}",
+            c.Status == null
+                ? string.Empty
+                : c.Status.Name,
+            c.StatusId,
+            c.Brand,
+            c.Model,
+            c.YearOfManufacture,
+            c.VinNumber,
+            c.StateNumber,
+            c.Mileage));
+
+        return await projection
+            .Skip((filter.Page - 1) * filter.Limit)
+            .Take(filter.Limit)
+            .ToListAsync();
+    }
+
+    public async Task<CarItem?> GetById(long id)
+    {
+        var carItem = await _context.Cars
+            .AsNoTracking()
+            .Where(c => c.Id == id)
+            .Select(c => new CarItem(
                 c.Id,
-                c.OwnerId,
+                c.Client == null 
+                    ? "" 
+                    : $"{c.Client.Name} {c.Client.Surname}",
+                c.Status == null 
+                    ? "" 
+                    : c.Status.Name,
+                c.StatusId,
                 c.Brand,
                 c.Model,
                 c.YearOfManufacture,
                 c.VinNumber,
                 c.StateNumber,
-                c.Mileage).car)
-            .ToList();
+                c.Mileage
+            ))
+            .FirstOrDefaultAsync();
 
-        return cars;
+        return carItem; 
     }
 
-    public async Task<List<Car>> GetPaged(int page, int limit)
+    public async Task<int> GetCount(CarFilter filter)
     {
-        var carEntities = await _context.Cars
-            .AsNoTracking()
-            .Skip((page -  1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var cars = carEntities
-            .Select(c => Car.Create(
-                c.Id,
-                c.OwnerId,
-                c.Brand,
-                c.Model,
-                c.YearOfManufacture,
-                c.VinNumber,
-                c.StateNumber,
-                c.Mileage).car)
-            .ToList();
-
-        return cars;
+        var query = _context.Cars.AsNoTracking();
+        query = ApplyFilter(query, filter);
+        return await query.CountAsync();
     }
 
-    public async Task<int> GetCount()
+    public async Task<long> Create(Car car)
     {
-        return await _context.Cars.CountAsync();
-    }
-
-    public async Task<List<Car>> GetByOwnerId(int ownerId)
-    {
-        var carEntity = await _context.Cars
-            .Where(c => c.OwnerId == ownerId)
-            .AsNoTracking()
-            .ToListAsync();
-
-        var cars = carEntity
-            .Select(c => Car.Create(
-                c.Id,
-                c.OwnerId,
-                c.Brand,
-                c.Model,
-                c.YearOfManufacture,
-                c.VinNumber,
-                c.StateNumber,
-                c.Mileage).car)
-            .ToList();
-
-        return cars;
-    }
-
-    public async Task<List<Car>> GetPagedByOwnerId(int ownerId, int page, int limit)
-    {
-        var carEntity = await _context.Cars
-            .Where(c  => c.OwnerId == ownerId)
-            .AsNoTracking()
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var cars = carEntity
-            .Select(c => Car.Create(
-                c.Id,
-                c.OwnerId,
-                c.Brand,
-                c.Model,
-                c.YearOfManufacture,
-                c.VinNumber,
-                c.StateNumber,
-                c.Mileage).car)
-            .ToList();
-
-        return cars;
-    }
-
-    public async Task<int> GetCountByOwnerId(int ownerId)
-    {
-        return await _context.Cars.CountAsync(c => c.OwnerId == ownerId);
-    }
-
-    public async Task<List<Car>> GetById(List<int> carIds)
-    {
-        var carEntity = await _context.Cars
-            .AsNoTracking()
-            .Where(c => carIds.Contains(c.Id))
-            .ToListAsync();
-
-        var cars = carEntity
-            .Select(c => Car.Create(
-                c.Id,
-                c.OwnerId,
-                c.Brand,
-                c.Model,
-                c.YearOfManufacture,
-                c.VinNumber,
-                c.StateNumber,
-                c.Mileage).car)
-            .ToList();
-
-        return cars;
-    }
-
-    public async Task<List<Car>> GetPagedById(List<int> carIds, int page, int limit)
-    { 
-        var carEntity = await _context.Cars
-            .AsNoTracking()
-            .Where(c => carIds.Contains(c.Id))
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        var cars = carEntity
-            .Select(c => Car.Create(
-                c.Id,
-                c.OwnerId,
-                c.Brand,
-                c.Model,
-                c.YearOfManufacture,
-                c.VinNumber,
-                c.StateNumber,
-                c.Mileage).car)
-            .ToList();
-
-        return cars;
-    }
-
-    public async Task<int> GetCountById(List<int> carIds)
-    {
-        return await _context.Cars.Where(c => carIds.Contains(c.Id)).CountAsync();
-    }
-
-    public async Task<int> Create(Car car)
-    {
-        var (_, error) = Car.Create(
-            0,
-            car.OwnerId,
-            car.Brand,
-            car.Model,
-            car.YearOfManufacture,
-            car.VinNumber,
-            car.StateNumber,
-            car.Mileage);
-
-        if (!string.IsNullOrEmpty(error))
-            throw new ArgumentException($"Create exception Car: {error}");
-
         var carEntities = new CarEntity
         {
             OwnerId = car.OwnerId,
+            StatusId = (int)car.StatusId,
             Brand = car.Brand,
             Model = car.Model,
             YearOfManufacture = car.YearOfManufacture,
@@ -196,35 +142,35 @@ public class CarRepository : ICarRepository
         return carEntities.Id;
     }
 
-    public async Task<int> Update(int id, string? brand, string? model, int? yearOfManufacture, string? vinNumber, string? stateNumber, int? mileage)
+    public async Task<long> Update(long id, CarUpdateModel model)
     {
-        var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id) 
+        var entity = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id)
             ?? throw new Exception("Car not found");
 
-        if (!string.IsNullOrWhiteSpace(brand))
-            car.Brand = brand;
-        if (!string.IsNullOrWhiteSpace(model))
-            car.Model = model;
-        if (yearOfManufacture.HasValue)
-            car.YearOfManufacture = yearOfManufacture.Value;
-        if (!string.IsNullOrWhiteSpace(vinNumber))
-            car.VinNumber = vinNumber;
-        if (!string.IsNullOrWhiteSpace(stateNumber))
-            car.StateNumber = stateNumber;
-        if (mileage.HasValue)
-            car.Mileage = mileage.Value;
+        if (!string.IsNullOrWhiteSpace(model.brand)) entity.Brand = model.brand;
+        if (!string.IsNullOrWhiteSpace(model.model)) entity.Model = model.model;
+        if (model.yearOfManufacture.HasValue) entity.YearOfManufacture = model.yearOfManufacture.Value;
+        if (model.mileage.HasValue) entity.Mileage = model.mileage.Value;
+        if (model.statusId.HasValue) entity.StatusId = (int)model.statusId.Value;
 
         await _context.SaveChangesAsync();
 
-        return car.Id;
+        return entity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<long> Delete(long id)
     {
         var carEntities = await _context.Cars
             .Where(c => c.Id == id)
             .ExecuteDeleteAsync();
 
         return id;
+    }
+
+    public async Task<bool> Exists(long id)
+    {
+        return await _context.Cars
+            .AsNoTracking()
+            .AnyAsync(c => c.Id == id);
     }
 }

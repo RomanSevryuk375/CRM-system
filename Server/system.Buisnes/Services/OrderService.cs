@@ -1,136 +1,191 @@
-﻿using CRMSystem.Buisnes.DTOs;
-using CRMSystem.Core.Abstractions;
+﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.Order;
+using CRMSystem.Core.Enums;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
 public class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
-    private readonly IStatusRepository _statusRepository;
+    private readonly IOrderStatusRepository _orderStatusRepository;
     private readonly ICarRepository _carRepository;
-    private readonly IClientsRepository _clientsRepository;
-    private readonly IWorkerRepository _workerRepository;
-    private readonly IWorkRepository _workRepository;
+    private readonly IOrderPriorityRepository _orderPriorityRepository;
+    private readonly IBillRepository _billRepository;
+    private readonly ILogger<OrderService> _logger;
 
     public OrderService(
         IOrderRepository orderRepository,
-        IStatusRepository statusRepository,
+        IOrderStatusRepository orderStatusRepository,
         ICarRepository carRepository,
-        IClientsRepository clientsRepository,
-        IWorkerRepository workerRepository,
-        IWorkRepository workRepository)
+        IOrderPriorityRepository orderPriorityRepository,
+        IBillRepository billRepository,
+        ILogger<OrderService> logger)
     {
         _orderRepository = orderRepository;
-        _statusRepository = statusRepository;
+        _orderStatusRepository = orderStatusRepository;
         _carRepository = carRepository;
-        _clientsRepository = clientsRepository;
-        _workerRepository = workerRepository;
-        _workRepository = workRepository;
+        _orderPriorityRepository = orderPriorityRepository;
+        _billRepository = billRepository;
+        _logger = logger;
     }
 
-    public async Task<List<Order>> GetPagedOrders(int page, int limit)
+    public async Task<List<OrderItem>> GetPagedOrders(OrderFilter filter)
     {
-        return await _orderRepository.GetPaged(page, limit);
+        _logger.LogInformation("Getting orders start");
+
+        var orders = await _orderRepository.GetPaged(filter);
+
+        _logger.LogInformation("Getting orders success");
+
+        return orders;
     }
 
-    public async Task<int> GetCountOrders()
+    public async Task<int> GetcountOrders(OrderFilter filter)
     {
-        return await _orderRepository.GetCount();
+        _logger.LogInformation("Getting count orders start");
+
+        var count = await _orderRepository.GetCount(filter);
+
+        _logger.LogInformation("Getting count orders success");
+
+        return count;
     }
 
-    public async Task<List<OrderWithInfoDto>> GetOrderWithInfo(int page, int limit)
+    public async Task<long> CreateOrder(Order order)
     {
-        var orders = await _orderRepository.GetPaged(page, limit);
-        var cars = await _carRepository.Get();
-        var statuses = await _statusRepository.Get();
+        _logger.LogInformation("Creating orders start");
 
-        var response = (from o in orders
-                        join c in cars on o.CarId equals c.Id
-                        join s in statuses on o.StatusId equals s.Id
-                        select new OrderWithInfoDto(
-                            o.Id,
-                            s.Name,
-                            $"{c.Brand} {c.Model} ({c.StateNumber})",
-                            o.Date,
-                            o.Priority)).ToList();
+        if (!await _carRepository.Exists(order.CarId))
+        {
+            _logger.LogError("Car {CarId} not found", order.CarId);
+            throw new NotFoundException($"Car {order.CarId} not found");
+        }
 
-        return response;
+        if (!await _orderPriorityRepository.Exists((int)order.PriorityId))
+        {
+            _logger.LogInformation("Priority {priorityId} not found", (int)order.PriorityId);
+            throw new NotFoundException($"Priority {order.PriorityId} not found");
+        }
+
+        if (!await _orderStatusRepository.Exists((int)order.StatusId))
+        {
+            _logger.LogInformation("Status{statusId} not found", order.StatusId);
+            throw new NotFoundException($"Status {order.StatusId} not found");
+        }
+
+        var Id = await _orderRepository.Create(order);
+
+        _logger.LogInformation("Creating orders success");
+
+        return Id;
     }
 
-    public async Task<List<OrderWithInfoDto>> GetPagedUserOrders(int userId, int page, int limit)
+    public async Task<long> CreateOrderWithBill(Order order, Bill bill)
     {
-        var client = await _clientsRepository.GetClientByUserId(userId);
-        var ownerId = client.Select(c => c.Id).FirstOrDefault();
+        var orderId = 0L;
+        try
+        {
+            _logger.LogInformation("Creating orders start");
 
-        var cars = await _carRepository.GetByOwnerId(ownerId);
-        var carIds = cars.Select(c => c.Id).ToList();
+            if (!await _carRepository.Exists(order.CarId))
+            {
+                _logger.LogError("Car {CarId} not found", order.CarId);
+                throw new NotFoundException($"Car {order.CarId} not found");
+            }
 
-        var orders = await _orderRepository.GetPagedByCarId(carIds, page, limit);
+            if (!await _orderPriorityRepository.Exists((int)order.PriorityId))
+            {
+                _logger.LogInformation("Priority {priorityId} not found", (int)order.PriorityId);
+                throw new NotFoundException($"Priority {order.PriorityId} not found");
+            }
 
-        var statuses = await _statusRepository.Get();
+            if (!await _orderStatusRepository.Exists((int)order.StatusId))
+            {
+                _logger.LogInformation("Status{statusId} not found", order.StatusId);
+                throw new NotFoundException($"Status {order.StatusId} not found");
+            }
 
-        var response = (from o in orders
-                        join c in cars on o.CarId equals c.Id
-                        join s in statuses on o.StatusId equals s.Id
-                        select new OrderWithInfoDto(
-                            o.Id,
-                            s.Name,
-                            $"{c.Brand} {c.Model} ({c.StateNumber})",
-                            o.Date,
-                            o.Priority)).ToList();
-        return response;
+            orderId = await _orderRepository.Create(order);
+
+            bill.SetOrderId(orderId);
+            var newBill = await _billRepository.Create(bill);
+
+            _logger.LogInformation("Creating orders success");
+
+            return orderId;
+        }
+        catch (ConflictException ex)
+        {
+            _logger.LogError(ex, "Failed to creat bill. Rolling back order");
+            if (orderId > 0)
+                await _orderRepository.Delete(orderId);
+            throw;
+        }
     }
 
-    public async Task<int> GetCountUserOrders(int userId)
+    public async Task<long> UpdateOrder(long id, OrderPriorityEnum? priorityId)
     {
-        var client = await _clientsRepository.GetClientByUserId(userId);
-        var ownerId = client.Select(c => c.Id).FirstOrDefault();
+        _logger.LogInformation("Updating orders start");
 
-        var cars = await _carRepository.GetByOwnerId(ownerId);
-        var carIds = cars.Select(c => c.Id).ToList();
+        if (priorityId.HasValue && !await _orderPriorityRepository.Exists((int)priorityId))
+        {
+            _logger.LogInformation("Priority {priorityId} not found", (int)priorityId);
+            throw new NotFoundException($"Priority {priorityId} not found");
+        }
 
-        return await _orderRepository.GetCountByCarId(carIds);
+        var Id = await _orderRepository.Update(id, priorityId);
+
+        _logger.LogInformation("Updating orders success");
+
+        return Id;
     }
 
-    public async Task<List<OrderWithInfoDto>> GetWorkerOrders(int userId)
+    public async Task<long> DeleteOrder(long id)
     {
-        var worker = await _workerRepository.GetWorkerByUserId(userId);
-        var workerId = worker.Select(w => w.Id).ToList();
+        _logger.LogInformation("Deleting orders start");
 
-        var works = await _workRepository.GetByWorkerId(workerId);
-        var orderIds = works.Select(c => c.OrderId).ToList();
+        var Id = await _orderRepository.Delete(id);
 
-        var orders = await _orderRepository.GetById(orderIds);
+        _logger.LogInformation("Deleting orders success");
 
-        var statuses = await _statusRepository.Get();
-        var cars = await _carRepository.Get();
-
-        var response = (from o in orders
-                        join c in cars on o.CarId equals c.Id
-                        join s in statuses on o.StatusId equals s.Id
-                        select new OrderWithInfoDto(
-                            o.Id,
-                            s.Name,
-                            $"{c.Brand} {c.Model} ({c.StateNumber})",
-                            o.Date,
-                            o.Priority)).ToList();
-        return response;
+        return Id;
     }
 
-    public async Task<int> CreateOrder(Order order)
+    public async Task<long> CloseOrder(long id)
     {
-        return await _orderRepository.Create(order);
+        _logger.LogInformation("Closing orders start");
+
+        if (!await _orderRepository.PosibleToClose(id))
+        {
+            _logger.LogInformation("Order{orderId} has not paied bill", id);
+            throw new ConflictException($"Order{id} has not paied bill");
+        }
+
+        var Id = await _orderRepository.Close(id);
+
+        _logger.LogInformation("Closing orders success");
+
+        return Id;
     }
 
-    public async Task<int> UpdateOrder(int id, int? statusId, int? carId, DateTime? date, string? priority)
+    public async Task<long> CompliteOrder(long id)
     {
-        return await _orderRepository.Update(id, statusId, carId, date, priority);
-    }
+        _logger.LogInformation("Closing orders start");
 
-    public async Task<int> DeleteOrder(int id)
-    {
-        return await _orderRepository.Delete(id);
+        if (await _orderRepository.PosibleToComplete(id))
+        {
+            _logger.LogInformation("Order{id} has unfinished complited works", id);
+            throw new ConflictException("Order has unfinished complited works");
+        }
+
+        var Id = await _orderRepository.Complite(id);
+
+        _logger.LogInformation("Closing orders success");
+
+        return Id;
     }
 }

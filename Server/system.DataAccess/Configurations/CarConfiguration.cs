@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -9,47 +10,55 @@ public class CarConfiguration : IEntityTypeConfiguration<CarEntity>
 {
     void IEntityTypeConfiguration<CarEntity>.Configure(EntityTypeBuilder<CarEntity> builder)
     {
+
         builder.ToTable("cars");
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(c => c.Id)
-            .HasColumnName("car_id")
+        builder.Property(c => c.OwnerId)
             .IsRequired();
 
-        builder.Property(c => c.OwnerId)
-            .HasColumnName("car_owner_id")
+        builder.Property(c => c.StatusId)
+            //.HasConversion<int>()
             .IsRequired();
 
         builder.Property(c => c.Brand)
-            .HasColumnName("car_brand")
-            .HasMaxLength(Car.MAX_BRAND_LENGTH)
+            .HasMaxLength(ValidationConstants.MAX_BRAND_LENGTH)
             .IsRequired();
 
         builder.Property(c => c.Model)
-            .HasColumnName("car_model")
-            .HasMaxLength(Car.MAX_MODEL_LENGTH)
+            .HasMaxLength(ValidationConstants.MAX_MODEL_LENGTH)
             .IsRequired();
 
         builder.Property(c => c.YearOfManufacture)
-            .HasColumnName("car_year_of_manufacture")
             .IsRequired();
 
         builder.Property(c => c.VinNumber)
-            .HasColumnName("car_vin_number")
+            .HasMaxLength(ValidationConstants.MAX_VIN_LENGTH)
             .IsRequired();
 
         builder.Property(c => c.StateNumber)
-            .HasColumnName("car_state_number")
+            .HasMaxLength(ValidationConstants.MAX_STATE_NUMBER_LENGTH)
             .IsRequired();
 
         builder.Property(c => c.Mileage)
-            .HasColumnName("car_milage")
             .IsRequired();
 
         builder.HasOne(c => c.Client)
-            .WithMany(client => client.Cars)
+            .WithMany(cl => cl.Cars)
             .HasForeignKey(c => c.OwnerId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(c => c.Status)
+            .WithMany(s => s.Cars)
+            .HasForeignKey(c => c.StatusId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(c => c.VinNumber)
+            .IsUnique();
+
+        builder.HasIndex(c => c.StateNumber)
+            .IsUnique();
+
     }
 }

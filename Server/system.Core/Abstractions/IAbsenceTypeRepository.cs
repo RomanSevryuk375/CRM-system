@@ -1,0 +1,13 @@
+﻿using CRMSystem.Core.DTOs;
+using CRMSystem.Core.Models;
+
+namespace CRMSystem.DataAccess.Repositories;
+
+public interface IAbsenceTypeRepository
+{
+    Task<int> Create(AbsenceType absenceType);
+    Task<int> Delete(int id);
+    Task<List<AbsenceTypeItem>> GetAll();
+    Task<List<AbsenceTypeItem>> GetByName(string name);
+    Task<int> Update(int id, string name);
+}

@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Constants;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,24 +9,27 @@ public class TaxConfiguration : IEntityTypeConfiguration<TaxEntity>
 {
     void IEntityTypeConfiguration<TaxEntity>.Configure(EntityTypeBuilder<TaxEntity> builder)
     {
+
         builder.ToTable("taxes");
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(t => t.Id)
-            .HasColumnName("tax_id")
-            .IsRequired();
-
         builder.Property(t => t.Name) 
-            .HasColumnName("tax_name")
+            .HasMaxLength(ValidationConstants.MAX_TYPE_NAME)
             .IsRequired();
 
         builder.Property(t => t.Rate)
-            .HasColumnName("tax_rate")
+            .HasColumnType("decimal(2, 2)")
             .IsRequired();
 
-        builder.Property(t => t.Type)
-            .HasColumnName("tax_type")
+        builder.Property(t => t.TypeId)
+            //.HasConversion<int>()
             .IsRequired();
+
+        builder.HasOne(t => t.TaxType)
+            .WithMany(tt => tt.Taxes)
+            .HasForeignKey(t => t.TypeId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

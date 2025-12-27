@@ -1,55 +1,53 @@
-﻿namespace CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Enums;
+using CRMSystem.Core.Validation;
+
+namespace CRMSystem.Core.Models;
 
 public class WorkProposal
 {
-    public WorkProposal(int id, int orderId, int workId, int byWorker, int statusId, int decisionStatusId, DateTime date)
+    public WorkProposal(long id, long orderId, long jobId, int wokerId, ProposalStatusEnum statusId, DateTime date)
     {
         Id = id;
         OrderId = orderId;
-        WorkId = workId;
-        ByWorker = byWorker;
+        JobId = jobId;
+        WorkerId = wokerId;
         StatusId = statusId;
-        DecisionStatusId = decisionStatusId;
         Date = date;
     }
-    public int Id { get; }
-    
-    public int OrderId { get; }
-
-    public int WorkId { get; }
-
-    public int ByWorker { get; }
-
-    public int StatusId { get; }
-
-    public int DecisionStatusId {  get; }
-
+    public long Id { get; }
+    public long OrderId { get; }
+    public long JobId { get; }
+    public int WorkerId { get; }
+    public ProposalStatusEnum StatusId { get; }
     public DateTime Date { get; }
 
-    public static (WorkProposal workPropossal, string error) Create (int id, int orderId, int workId, int byWorker, int statusId, int decisionStatusId, DateTime date)
+    public static (WorkProposal? workPropossal, List<string> errors) Create(long id, long orderId, long jobId, int wokerId, ProposalStatusEnum statusId, DateTime date)
     {
-        var error = string.Empty;
+        var errors = new List<string>();
 
-        if (orderId < 0)
-            error = "Order Id must be positive";
+        var idError = DomainValidator.ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
 
-        if (workId < 0)
-            error = "Work Id must be positive";
+        var orderIdError = DomainValidator.ValidateId(orderId, "orderId");
+        if (!string.IsNullOrEmpty(orderIdError)) errors.Add(orderIdError);
 
-        if (byWorker < 0)
-            error = "By worker Id must be positive";
+        var jobIdError = DomainValidator.ValidateId(jobId, "jobId");
+        if (!string.IsNullOrEmpty(jobIdError)) errors.Add(jobIdError);
 
-        if (statusId < 0)
-            error = "Status Id must be positive";
+        var workerIdError = DomainValidator.ValidateId(wokerId, "workerId");
+        if (!string.IsNullOrEmpty(workerIdError)) errors.Add(workerIdError);
 
-        if (decisionStatusId >= 6 && decisionStatusId <= 8)
-            error = "Dicision Id must be";
+        var statusError = DomainValidator.ValidateId(statusId, "status");
+        if (!string.IsNullOrEmpty(statusError)) errors.Add(statusError);
 
-        if (date > DateTime.Now)
-            error = "Propossed at can't be in future";
+        var dateError = DomainValidator.ValidateDate(date, "date");
+        if (!string.IsNullOrEmpty(dateError)) errors.Add(dateError);
 
-        var workPropossal = new WorkProposal(id, orderId, workId, byWorker, statusId, decisionStatusId, date);
+        if (errors.Any())
+            return (null, errors);
 
-        return (workPropossal, error);
+        var workPropossal = new WorkProposal(id, orderId, jobId, wokerId, statusId, date);
+
+        return (workPropossal, new List<string>());
     }
 }

@@ -1,14 +1,14 @@
-﻿using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs.Expense;
+using CRMSystem.Core.Models;
 
 namespace CRMSystem.DataAccess.Repositories
 {
     public interface IExpenseRespository
     {
-        Task<List<Expense>> Get();
-        Task<List<Expense>> GetPaged(int page, int limit);
-        Task<int> GetCount();
-        Task<int> Create(Expense expense);
-        Task<int> Delete(int id);
-        Task<int> Update(int id, DateTime? date, string? category, int? taxId, int? usedPartId, string? expenseType, decimal? sum);
+        Task<long> Create(Expense expense);
+        Task<long> Delete(long id);
+        Task<int> GetCount(ExpenseFilter filter);
+        Task<List<ExpenseItem>> GetPaged(ExpenseFilter filter);
+        Task<long> Update(long id, ExpenseUpdateModel model);
     }
 }
