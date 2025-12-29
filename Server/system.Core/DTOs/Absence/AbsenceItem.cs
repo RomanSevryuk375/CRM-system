@@ -8,6 +8,7 @@ public record AbsenceItem
     string WorkerName,
     int workerId,
     string TypeName,
+    int typeId,
     DateOnly StartDate,
     DateOnly? EndDate
 );

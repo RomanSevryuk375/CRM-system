@@ -57,6 +57,7 @@ public class AbsenceRepository : IAbsenceRepository
             a.AbsenceType == null 
                 ? string.Empty 
                 : a.AbsenceType.Name,
+            a.TypeId,
             a.StartDate,
             a.EndDate));
 

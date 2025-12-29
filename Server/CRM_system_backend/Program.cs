@@ -2,6 +2,7 @@
 //using CRMSystem.Buisnes.Extensions;
 //using CRMSystem.Buisnes.Services;
 //using CRMSystem.Core.Abstractions;
+using CRM_system_backend.Middlewares;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Buisnes.Services;
 using CRMSystem.Core.Models;
@@ -133,6 +134,8 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseCustomException();
 
         app.UseHttpsRedirection();
 

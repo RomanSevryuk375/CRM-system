@@ -1,4 +1,4 @@
-﻿namespace CRM_system_backend.Contracts;
+﻿namespace CRM_system_backend.Contracts.Bill;
 
 public record BillResponse
 (

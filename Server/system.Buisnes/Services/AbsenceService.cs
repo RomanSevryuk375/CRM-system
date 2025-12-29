@@ -77,10 +77,10 @@ public class AbsenceService : IAbsenceService
 
         if (newStartDate.HasValue)
         {
-            if (await _absenceRepository.HasOverLap(model.workerId, newStartDate.Value, model.endDate, id))
+            if (await _absenceRepository.HasOverLap(id, newStartDate.Value, model.endDate, id))
             {
-                _logger.LogInformation("Has date overlaps for worker{WorkerId}", model.workerId);
-                throw new ConflictException($"Has date overlaps for worker{model.workerId}");
+                _logger.LogInformation("Has date overlaps for worker{WorkerId}", id);
+                throw new ConflictException($"Has date overlaps for worker{id}");
             }
         }
 
