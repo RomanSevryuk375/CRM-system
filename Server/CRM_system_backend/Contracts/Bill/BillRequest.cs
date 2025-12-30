@@ -1,8 +1,13 @@
-﻿namespace CRM_system_backend.Contracts.Bill;
+﻿using CRMSystem.Core.Enums;
+
+namespace CRM_system_backend.Contracts.Bill;
 
 public record BillRequest
 (
-     int OrderId, 
-     int StatusId, 
-     DateTime Date
+    long orderId,
+    string status,
+    BillStatusEnum statusId,
+    DateTime createdAt,
+    decimal amount,
+    DateOnly? actualBillDate
 );

@@ -1,6 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
+using CRM_system_backend.Contracts.Expense;
 using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.DTOs;
+using CRMSystem.Core.DTOs.Expense;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ExpenseController : ControllerBase 
 {
     private readonly IExpenseService _expenseService;
@@ -19,92 +20,67 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<Expense>>> GetExpense()
+    public async Task<ActionResult<List<ExpenseItem>>> GetPagedExpense([FromQuery] ExpenseFilter filter)
     {
-        var expenses = await _expenseService.GetExpenses();
+        var dto = await _expenseService.GetPagedExpenses(filter);
+        var count = await _expenseService.GetCountExpenses(filter);
 
-        var response = expenses
+        var response = dto
             .Select(e => new ExpenseResponse(
-                e.Id,
-                e.Date,
-                e.Category,
-                e.TaxId,
-                e.UsedPartId,
-                e.ExpenseType,
-                e.Sum))
-            .ToList();
+                e.id,
+                e.date,
+                e.category,
+                e.tax,
+                e.taxId,
+                e.partSetId,
+                e.expenseType,
+                e.expenceTypeId,
+                e.sum));
 
-        return Ok(response);
-    }
-
-    [HttpGet("with-Info")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<ExpensesWitInfoDto>>> GetExpenseWithInfo(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
-    {
-        var dtos = await _expenseService.GetPagedExpensesWithInfo(page, limit);
-        var totalCount = await _expenseService.GetCountExpense();
-
-        var response = dtos
-            .Select(d => new ExpensesWitInfoDto(
-                d.Id,
-                d.Date,
-                d.Category,
-                d.TaxName,
-                d.UsedPartInfo,
-                d.ExpenseType,
-                d.Sum))
-            .ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
+        Response.Headers.Append("x-total-count", count.ToString());
 
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> CreateExpense([FromBody] ExpenseRequest request)
+    public async Task<ActionResult<long>> CreateExpense([FromBody] ExpenseRequest request)
     {
-        var (expense, error) = Expense.Create(
+        var (expense, errors) = Expense.Create(
             0,
-            request.Date ?? DateTime.Now,
-            request.Category ?? "",
-            request.TaxId,
-            request.UsedPartId,
-            request.ExpenseType ?? "",
-            request.Sum ?? 0);
+            request.date,
+            request.category,
+            request.taxId,
+            request.partSetId,
+            request.expenseTypeId,
+            request.sum);
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            return BadRequest(new { error });
-        }
+        if (errors is not null && errors.Any())
+            return BadRequest(errors);
 
-        var expenseId = await _expenseService.CreateExpense(expense);
+        var Id = await _expenseService.CreateExpenses(expense!);
 
-        return Ok(expenseId);
+        return Ok(Id);
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateExpense([FromBody] ExpenseRequest request, int id)
+    public async Task<ActionResult<long>> UpdateExpense(int id, [FromBody] ExpenseUpdateRequest request)
     {
-        var result = await _expenseService.UpdateExpense(
-            id,
-            request.Date,
-            request.Category,
-            request.TaxId,
-            request.UsedPartId,
-            request.ExpenseType,
-            request.Sum);
+        var model = new ExpenseUpdateModel(
+            request.date,
+            request.category,
+            request.expenseTypeId,
+            request.sum);
 
-        return Ok(result);
+        var Id = await _expenseService.UpdateExpense(id, model);
+
+        return Ok(Id);
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> DeleteExpense(int id)
+    public async Task<ActionResult<long>> DeleteExpense(long id)
     {
         var result = await _expenseService.DeleteExpense(id);
 

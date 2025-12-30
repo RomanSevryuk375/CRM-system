@@ -3,5 +3,5 @@
 public record GuaranteeUpdateModel
 (
     string? description,
-    string terms
+    string? terms
 );

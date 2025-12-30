@@ -1,4 +1,4 @@
-﻿using CRMSystem.Core.DTOs.Attachment;
+﻿using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.AttachmentImg;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
-public class AttachmentImgService
+public class AttachmentImgService : IAttachmentImgService
 {
     private readonly IAttachmentImgRepository _attachmentImgRepository;
     private readonly IAttachmentRepository _attachmentRepository;
@@ -34,7 +34,7 @@ public class AttachmentImgService
         return attachmentImg;
     }
 
-    public async Task<int> GetCountAttachmentImg (AttachmentImgFilter filter)
+    public async Task<int> GetCountAttachmentImg(AttachmentImgFilter filter)
     {
         _logger.LogInformation("AttachmentImg getting count start");
 
@@ -45,13 +45,13 @@ public class AttachmentImgService
         return count;
     }
 
-    public async Task<long> CreateAttachmentImg (AttachmentImg attachmentImg)
+    public async Task<long> CreateAttachmentImg(AttachmentImg attachmentImg)
     {
         _logger.LogInformation("AttachmentImg creating strart");
 
         if (!await _attachmentRepository.Exists(attachmentImg.AttachmentId))
         {
-            _logger.LogInformation("Attachment{AttachmentId} not found" ,attachmentImg.AttachmentId);
+            _logger.LogInformation("Attachment{AttachmentId} not found", attachmentImg.AttachmentId);
             throw new NotFoundException($"Attachment {attachmentImg.AttachmentId} not found");
         }
 

@@ -1,112 +1,115 @@
-﻿using CRM_system_backend.Contracts;
+﻿using CRM_system_backend.Contracts.Client;
 using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.DTOs.Client;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ClientController : ControllerBase
 {
     private readonly IClientService _clientService;
-    private readonly IUserService _userService;
 
-    public ClientController(IClientService clientService, IUserService userService)
+    public ClientController(IClientService clientService)
     {
         _clientService = clientService;
-        _userService = userService;
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<ClientsResponse>>> GetClient(
-        [FromQuery(Name = "_page")] int page = 1,
-        [FromQuery(Name = "_limit")] int limit = 25)
+    public async Task<ActionResult<List<ClientItem>>> GetPagedClient([FromQuery] ClientFilter filter)
     {
-        var totalCount = await _clientService.GetClientCount();
-        var clients = await _clientService.GetPagedClients(page, limit);
+        var dto = await _clientService.GetPagedCkients(filter);
+        var count = await _clientService.GetCountClients(filter);
 
-        var response = clients
-            .Select(b => new ClientsResponse(
-                b.Id,
-                b.UserId,
-                b.Name,
-                b.Surname,
-                b.Email,
-                b.PhoneNumber)).ToList();
+        var response = dto.Select(b => new ClientsResponse(
+                b.id,
+                b.userId,
+                b.name,
+                b.surname,
+                b.email,
+                b.phoneNumber));
 
-        Response.Headers.Append("x-total-count", totalCount.ToString());
+        Response.Headers.Append("x-total-count", count.ToString());
 
         return Ok(response);
     }
 
-    [HttpGet("My")]
-    [Authorize(Policy = "UserPolicy")]
-    public async Task<ActionResult<List<Client>>> GetClientByUserId()
+    [HttpGet("{id}")]
+    public async Task<ActionResult<List<Client>>> GetClientById(long id)
     {
-        var userId = int.Parse(User.FindFirst("userId")!.Value);
-
-        var clients = await _clientService.GetClientByUserId(userId);
-
-        var response = clients
-            .Select(b => new ClientsResponse(b.Id, b.UserId, b.Name, b.Surname, b.Email, b.PhoneNumber))
-            .ToList();
+        var response = await _clientService.GetClientById(id);
 
         return Ok(response);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<long>> CreateClient(ClientsRequest request)
+    {
+        var (client, errors) = Client.Create(
+            0,
+            request.userId,
+            request.name,
+            request.surname,
+            request.phoneNumber,
+            request.email);
+
+        if (errors is not null && errors.Any())
+            return BadRequest(errors);
+
+        var Id = await _clientService.CreateClient(client!);
+
+        return Ok(Id);
     }
 
     [HttpPost("with-user")]
-    public async Task<ActionResult<int>> CreateClient([FromBody] ClientRegistreRequest request)
+    public async Task<ActionResult<int>> CreateClientWithUser([FromBody] ClientRegistreRequest request)
     {
-        var (user, errorUser) = CRMSystem.Core.Models.User.Create(
+        var (user, errorsUser) = CRMSystem.Core.Models.User.Create(
             0,
-            request.RoleId,
-            request.Login,
-            request.Password);
+            request.roleId,
+            request.login,
+            request.password);
 
-        if (!string.IsNullOrEmpty(errorUser))
-            return BadRequest(errorUser);
+        if (errorsUser is not null && errorsUser.Any())
+            return BadRequest(errorsUser);
 
-        var userId = await _userService.CreateUser(user);
-
-        var (client, error) = Client.Create(
+        var (client, errorsClient) = Client.Create(
             0,
-            userId,
-            request.Name,
-            request.Surname,
-            request.PhoneNumber,
-            request.Email);
+            0,
+            request.name,
+            request.surname,
+            request.phoneNumber,
+            request.email);
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            await _userService.DeleteUser(userId);
-            return BadRequest(error);
-        }
+        if (errorsClient is not null && errorsClient.Any())
+            return BadRequest(errorsClient);
 
-        var clientId = await _clientService.CreateClient(client);
+        var clientId = await _clientService.CreateClientWithUser(client!, user!);
 
-        return Ok(new
-        {
-            Message = "Registration successful",
-            UserId = userId,
-            ClientId = clientId
-        });
+        return Ok(clientId);
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateClient(int id, [FromBody] ClientUpdateRequest clientUpdateRequest)
+    public async Task<ActionResult<long>> UpdateClient(long id, [FromBody] ClientUpdateRequest request)
     {
-        var result = await _clientService.UpdateClient(
-                    id,
-                    clientUpdateRequest.Name,
-                    clientUpdateRequest.Surname,
-                    clientUpdateRequest.PhoneNumber,
-                    clientUpdateRequest.Email);
+        var model = new ClientUpdateModel(
+            request.name,
+            request.surname,
+            request.phoneNumber,
+            request.email);
 
-            return Ok(result);
+        var Id = await _clientService.UpdateClient(id, model);
+
+        return Ok(Id);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<long>> DeleteClient(long id)
+    {
+         var Id = await _clientService.DeleteClient(id);
+
+        return Ok(Id);
     }
 }

@@ -1,14 +1,13 @@
-﻿using CRM_system_backend.Contracts;
+﻿using CRM_system_backend.Contracts.Car;
 using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.DTOs;
+using CRMSystem.Core.DTOs.Car;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class CarController : ControllerBase
 {
     private readonly ICarService _carService;
@@ -18,137 +17,79 @@ public class CarController : ControllerBase
         _carService = carService;
     }
 
-    [HttpGet("All-with-owner")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<CarWithOwnerDto>> GetCarsWithOwner(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
+    [HttpGet]
+    public async Task<ActionResult<List<CarItem>>> GetPagedCars([FromQuery]CarFilter filter)
     {
-        var dtos = await _carService.GetCarsWithOwner(page, limit);
-        var totalCount = await _carService.GetCountAllCars();
+        var dto = await _carService.GetPagedCars(filter);
+        var cout = await _carService.GetCountCars(filter);
 
-        var responses = dtos.Select(d => new CarWithOwnerDto(
-            d.Id,
-            d.OwnerId,
-            d.OwnerFullName,
-            d.Brand,
-            d.Model,
-            d.YearOfManufacture,
-            d.VinNumber,
-            d.StateNumber,
-            d.Mileage
-        )).ToList();
+        var response = dto.Select(c => new CarResponse(
+            c.id,
+            c.owner,
+            c.status,
+            c.statusId,
+            c.brand,
+            c.model,
+            c.yearOfManufacture,
+            c.vinNumber,
+            c.stateNumber,
+            c.mileage));
 
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(responses);
-    }
-
-    [HttpGet("All")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<Car>>> GetCar(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
-    {
-        var cars = await _carService.GetAllCars(page, limit);
-        var totalCount = await _carService.GetCountAllCars();
-
-        var response = cars
-            .Select(b => new CarResponse(
-                b.Id, b.OwnerId, b.Brand, b.Model, b.YearOfManufacture, b.VinNumber, b.StateNumber, b.Mileage))
-            .ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
+        Response.Headers.Append("x-total-count", cout.ToString());
 
         return Ok(response);
     }
 
-    [HttpGet("My")]
-    [Authorize(Policy = "UserPolicy")]
-    public async Task<ActionResult<List<Car>>> GetCarsByOwnerId(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<CarItem>> GetCarById(long id)
     {
-        var userId = int.Parse(User.FindFirst("userId")!.Value);
-        var cars = await _carService.GetCarsByOwnerId(userId, page, limit);
-        var totalCount = await _carService.GetCountCarsByOwnerId(userId);
+        var car = await _carService.GetCarById(id);
 
-        var response = cars
-            .Select(b => new CarResponse(
-                b.Id, b.OwnerId, b.Brand, b.Model, b.YearOfManufacture, b.VinNumber, b.StateNumber, b.Mileage))
-            .ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);
+        return Ok(car);
     }
-
-    [HttpGet("InWork")]
-    [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<Car>>> GetCarsByWorker(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
-    {
-        var userId = int.Parse(User.FindFirst("userId")!.Value);
-        var cars = await _carService.GetCarsForWorker(userId);
-
-        var response = cars
-            .Select(b => new CarResponse(
-                b.Id, b.OwnerId, b.Brand, b.Model, b.YearOfManufacture, b.VinNumber, b.StateNumber, b.Mileage))
-            .ToList();
-
-        return Ok(response);
-    }
-
-
 
     [HttpPost]
-    [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<int>> CreateCar([FromBody] CarRequest carRequest)
+    public async Task<ActionResult<long>> CreateCar([FromBody]CarRequest request)
     {
-        var (car, error) = Car.Create(
+        var (car, errors) = Car.Create(
             0,
-            carRequest.OwnerId,
-            carRequest.Brand,
-            carRequest.Model,
-            carRequest.YearOfManufacture,
-            carRequest.VinNumber,
-            carRequest.StateNumber,
-            carRequest.Mileage);
+            request.ownerId,
+            request.statusId,
+            request.brand,
+            request.model,
+            request.yearOfManufacture,
+            request.vinNumber,
+            request.stateNumber,
+            request.mileage);
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            return BadRequest(new { error });
-        }
+        if(errors is not null && errors.Any())
+            return BadRequest(errors);
 
-        var carId = await _carService.CreateCar(car);
+        var Id = await _carService.CreateCar(car!);
 
-        return Ok(carId);
+        return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<int>> UpdateCar([FromBody] CarUpdateRequest carUpdateRequest, int id)
+    public async Task<ActionResult<long>> UpdateCar(long id, [FromBody]CarUpdateRequest request)
     {
-        var result = await _carService.UpdateCar(
-            id,
-            carUpdateRequest.Brand,
-            carUpdateRequest.Model,
-            carUpdateRequest.YearOfManufacture,
-            carUpdateRequest.VinNumber,
-            carUpdateRequest.StateNumber,
-            carUpdateRequest.Mileage);
+        var model = new CarUpdateModel(
+            request.statusId,
+            request.brand,
+            request.model,
+            request.yearOfManufacture,
+            request.mileage);
 
-        return Ok(result);
+        var Id = await _carService.UpdateCar(id, model);
+
+        return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<int>> DeleteCar(int id)
+    public async Task<ActionResult<long>> DeleteCar(long id)
     {
-        var result = await _carService.DeleteCar(id);
+        var Id = await _carService.DeleteCar(id);
 
-        return Ok(result);
+        return Ok(Id);
     }
-
 }

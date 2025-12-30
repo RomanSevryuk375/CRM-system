@@ -2,10 +2,11 @@
 
 public record BillResponse
 (
-  int Id,
-  int OrderId,
-  int StatusId,
-  DateTime Date,
-  decimal Amount,
-  DateTime? ActualBillDate
+    long id,
+    long orderId,
+    string status,
+    int statusId,
+    DateTime createdAt,
+    decimal amount,
+    DateOnly? actualBillDate
 );

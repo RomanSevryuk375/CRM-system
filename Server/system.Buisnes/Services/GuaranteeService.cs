@@ -1,8 +1,6 @@
 ﻿using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Guarantee;
-using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
-using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
@@ -36,7 +34,7 @@ public class GuaranteeService : IGuaranteeService
         return guarantee;
     }
 
-    public async Task<int> GeeCountGuarantees(GuaranteeFilter filter)
+    public async Task<int> GetCountGuarantees(GuaranteeFilter filter)
     {
         _logger.LogInformation("Getting count guarantees start"); 
 

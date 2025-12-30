@@ -76,7 +76,7 @@ public class AcceptanceService : IAcceptanceService
         return await _acceptanceRepository.Create(acceptance);
     }
 
-    public async Task<long> UpdateAccptance(long id, AcceptanceUpdateModel model)
+    public async Task<long> UpdateAcceptance(long id, AcceptanceUpdateModel model)
     {
         _logger.LogInformation("Getting acceptance start");
 

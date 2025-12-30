@@ -1,5 +1,8 @@
 ﻿namespace CRM_system_backend.Contracts.AcceptanceImg;
 
-public class AcceptanceImgRequest
-{
-}
+public record AcceptanceImgRequest
+(
+    long acceptanceId,
+    string filePath,
+    string? description
+);

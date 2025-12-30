@@ -62,7 +62,7 @@ public class AcceptanceImgService : IAcceptanceImgService
         return accptanceImg;
     }
 
-    public async Task<long> Update(long id, string? filePath, string? description)
+    public async Task<long> UpdateAccptanceImg(long id, string? filePath, string? description)
     {
         _logger.LogInformation("Updating Acceptance{AcceptanceId} start", id);
 
@@ -73,7 +73,7 @@ public class AcceptanceImgService : IAcceptanceImgService
         return acceptance;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> DeleteAccptanceImg(long id)
     {
         _logger.LogInformation("Deleting Acceptance{AcceptanceId} start", id);
 

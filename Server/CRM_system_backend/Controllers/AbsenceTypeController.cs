@@ -37,7 +37,7 @@ public class AbsenceTypeController : ControllerBase
             0,
             request.name);
 
-        if (errors.Any())
+        if (errors is not null && errors.Any())
             return BadRequest(errors);
 
         var Id = await _absenceTypeService.CretaeAbsenceType(absenceType!);
@@ -45,7 +45,7 @@ public class AbsenceTypeController : ControllerBase
         return Ok(Id);
     }
 
-    [HttpPut]
+    [HttpPut("{id}")]
     public async Task<ActionResult<int>> UpdateAbsenceType(int id, [FromBody] AbsenceTypeUpdateRequest request)
     {
         var Id = await _absenceTypeService.UpdateAbsenceType(id, request.name);
@@ -53,7 +53,7 @@ public class AbsenceTypeController : ControllerBase
         return Ok(Id);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<ActionResult<int>> DeleteAbsenceType(int id)
     {
         var Id = await _absenceTypeService.DeleteAbsenceType(id);

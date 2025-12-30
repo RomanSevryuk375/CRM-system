@@ -9,5 +9,5 @@ public interface IAcceptanceService
     Task<long> DeleteAcceptance(long id);
     Task<int> GetCountAcceptance(AcceptanceFilter filter);
     Task<List<AcceptanceItem>> GetPagedAcceptance(AcceptanceFilter filter);
-    Task<long> UpdateAccptance(long id, AcceptanceUpdateModel model);
+    Task<long> UpdateAcceptance(long id, AcceptanceUpdateModel model);
 }
