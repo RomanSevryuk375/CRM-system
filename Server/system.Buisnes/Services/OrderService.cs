@@ -44,7 +44,7 @@ public class OrderService : IOrderService
         return orders;
     }
 
-    public async Task<int> GetcountOrders(OrderFilter filter)
+    public async Task<int> GetCountOrders(OrderFilter filter)
     {
         _logger.LogInformation("Getting count orders start");
 

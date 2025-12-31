@@ -1,14 +1,16 @@
-﻿using CRM_system_backend.Contracts;
+﻿using CRM_system_backend.Contracts.Order;
 using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.DTOs;
+using CRMSystem.Core.DTOs.Order;
+using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
@@ -19,127 +21,100 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<Order>>> GetOrders(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
+    public async Task<ActionResult<List<OrderItem>>> GetOrders([FromQuery] OrderFilter filter)
     {
-        var orders = await _orderService.GetPagedOrders(page, limit);
-        var totalCount = await _orderService.GetCountOrders();
+        var dto = await _orderService.GetPagedOrders(filter);
+        var count = await _orderService.GetCountOrders(filter);
 
-        var response = orders
+        var response = dto
             .Select(o => new OrderResponse(
-                o.Id,
-                o.StatusId,
-                o.CarId,
-                o.Date,
-                o.Priority))
-            .ToList();
+                o.id,
+                o.status,
+                o.statusId,
+                o.car,
+                o.carId,
+                o.date,
+                o.priority,
+                o.priorityId));
 
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);
-    }
-
-    [HttpGet("with-info")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<OrderWithInfoDto>>> GetOrderWithInfo(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
-    {
-        var dtos = await _orderService.GetOrderWithInfo(page, limit);
-        var totalCount = await _orderService.GetCountOrders();
-
-        var response = dtos.Select(o => new OrderWithInfoDto(
-            o.Id,
-            o.StatusName,
-            o.CarInfo,
-            o.Date,
-            o.Priority)).ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);            
-    }
-
-    [HttpGet("My")]
-    [Authorize(Policy = "UserPolicy")]
-    public async Task<ActionResult<List<OrderWithInfoDto>>> GetUserOrders(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
-    {
-        var userId = int.Parse(User.FindFirst("userId")!.Value);
-        var totalCount = await _orderService.GetCountUserOrders(userId);
-        var dtos = await _orderService.GetPagedUserOrders(userId, page, limit);
-
-        var response = dtos.Select(o => new OrderWithInfoDto(
-            o.Id,
-            o.StatusName,
-            o.CarInfo,
-            o.Date,
-            o.Priority)).ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);
-    }
-
-    [HttpGet("InWork")]
-    [Authorize(Policy = "WorkerPolicy")]
-    public async Task<ActionResult<List<OrderWithInfoDto>>> GetWorkerOrders()
-    {
-        var userId = int.Parse(User.FindFirst("userId")!.Value);
-
-        var dtos = await _orderService.GetWorkerOrders(userId);
-
-        var response = dtos.Select(o => new OrderWithInfoDto(
-            o.Id,
-            o.StatusName,
-            o.CarInfo,
-            o.Date,
-            o.Priority)).ToList();
+        Response.Headers.Append("x-total-count", count.ToString());
 
         return Ok(response);
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<int>> CreateOrder([FromBody] OrderRequest request)
+    public async Task<ActionResult<long>> CreateOrder([FromBody] OrderRequest request)
     {
-        var (order, error) = Order.Create(
+        var (order, errors) = Order.Create(
             0,
-            request.StatusId ?? 0,
-            request.CarId ?? 0,
-            request.Date ?? DateTime.Now,
-            request.Priority ?? "");
+            request.statusId,
+            request.carId,
+            request.date,
+            request.priorityId);
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            return BadRequest(new { error });
-        }
+        if (errors is not null && errors.Any())
+            return BadRequest(errors);
 
-        var orderId = await _orderService.CreateOrder(order);
+        var Id = await _orderService.CreateOrder(order!);
 
-        return Ok(orderId);
+        return Ok(Id);
+    }
+
+    [HttpPost("/with-bill")]
+    public async Task<ActionResult<long>> CreateOrderWithBill([FromBody] OrderWithBillRequest request)
+    {
+        var (order, errorsOrder) = Order.Create(
+            0,
+            request.orderStatusId,
+            request.carId,
+            request.date,
+            request.priorityId);
+
+        if (errorsOrder is not null && errorsOrder.Any())
+            return BadRequest(errorsOrder);
+
+        var (bill, errorsBill) = Bill.Create(
+            0,
+            0,
+            request.billStatusId,
+            request.createdAt,
+            request.amount,
+            request.actualBillDate);
+
+        if (errorsBill is not null && errorsBill.Any())
+            return BadRequest(errorsBill);
+
+        var Id = await _orderService.CreateOrderWithBill(order!, bill!);
+
+        return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateOrder([FromBody] OrderRequest request, int id)
+    public async Task<ActionResult<long>> UpdateOrder([FromBody] OrderUpdateReuqest reuqest, int id)
     {
-        var result = await _orderService.UpdateOrder(
-            id,
-            request.StatusId,
-            request.CarId,
-            request.Date,
-            request.Priority);
+        var Id = await _orderService.UpdateOrder(id, reuqest.priorityId);
 
-        return Ok(result);
+        return Ok(Id);
+    }
+
+    [HttpPatch("close/{id}")]
+    public async Task<ActionResult<long>> CloseOrder(long id)
+    {
+        var Id = await _orderService.CloseOrder(id);
+
+        return Ok(Id);
+    }
+
+    [HttpPatch("complite/{id}")]
+    public async Task<ActionResult<long>> CompliteOrder(long id)
+    {
+        var Id = await _orderService.CompliteOrder(id);
+
+        return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> DeleteOrder(int id)
+    public async Task<ActionResult<long>> DeleteOrder(long id)
     {
         var result = await _orderService.DeleteOrder(id);
 

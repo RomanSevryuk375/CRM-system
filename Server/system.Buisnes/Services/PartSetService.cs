@@ -71,7 +71,18 @@ public class PartSetService : IPartSetService
         return partSet;
     }
 
-    public async Task<long> AddtoPartSet(PartSet partSet)
+    public async Task<int> GetCountPartSets(PartSetFilter filter)
+    {
+        _logger.LogInformation("Getting count part set start");
+
+        var count = await _partSetRepository.GetCount(filter);
+
+        _logger.LogInformation("Getting count part set success");
+
+        return count;
+    }
+
+    public async Task<long> AddToPartSet(PartSet partSet)
     {
         _logger.LogInformation("Adding to part set start");
 

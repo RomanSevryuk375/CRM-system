@@ -95,7 +95,7 @@ public class PaymentNoteService : IPaymentNoteService
         return Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> DeletePaymentNote(long id)
     {
         _logger.LogInformation("Deleting payment note start");
 

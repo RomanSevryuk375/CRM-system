@@ -1,0 +1,90 @@
+﻿using CRM_system_backend.Contracts.Part;
+using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.Order;
+using CRMSystem.Core.DTOs.Part;
+using CRMSystem.Core.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CRM_system_backend.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class PartController : ControllerBase
+{
+    private readonly IPartService _partService;
+
+    public PartController(IPartService partService)
+    {
+        _partService = partService;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<List<PartItem>>> GetPagedParts([FromQuery]PartFilter filter)
+    {
+        var dto = await _partService.GetPagedParts(filter);
+        var count = await _partService.GetCountParts(filter);
+
+        var response = dto.Select(p => new PartResponse(
+            p.id,
+            p.category,
+            p.categoryId,
+            p.oemArticle,
+            p.manufacturer,
+            p.internalArticle,
+            p.description,
+            p.name,
+            p.manufacturer,
+            p.applicability));
+
+        Response.Headers.Append("x-total-count", count.ToString());
+
+        return Ok(response);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<long>> CreatePart([FromBody] PartRequest request)
+    {
+        var (part, errors) = Part.Create(
+            0,
+            request.categoryId,
+            request.oemArticle,
+            request.manufacturerArticle,
+            request.internalArticle,
+            request.description,
+            request.name,
+            request.manufacturer,
+            request.applicability);
+
+        if(errors is not null && errors.Any())
+            return BadRequest(errors);
+
+        var Id = await _partService.CreatePart(part!);
+
+        return Ok(Id);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<long>> UpdatePart(long id, [FromBody] PartUpdateRequest request)
+    {
+        var model = new PartUpdateModel(
+            request.oemArticle,
+            request.manufacturerArticle,
+            request.internalArticle,
+            request.description,
+            request.name,
+            request.manufacturer,
+            request.applicability);
+
+        var Id = await _partService.UpdatePart(id, model);
+
+        return Ok(Id);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<long>> DeletePart(long id)
+    {
+        var Id = await _partService.DeletePart(id);
+
+        return Ok(Id);
+    }
+}

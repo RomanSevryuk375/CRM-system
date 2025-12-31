@@ -123,6 +123,13 @@ public class PartSetRepository : IPartSetRepository
             .FirstOrDefaultAsync();
     }
 
+    public async Task<int> GetCount(PartSetFilter filter)
+    {
+        var query = _context.PartSets.AsNoTracking();
+        query = ApplyFilter(query, filter);
+        return await query.CountAsync();
+    }
+
     public async Task<long> Create(PartSet partSet)
     {
         var partSetEntity = new PartSetEntity

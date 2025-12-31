@@ -1,5 +1,8 @@
 ﻿using CRM_system_backend.Contracts;
+using CRM_system_backend.Contracts.PaymentNote;
 using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.PaymentNote;
+using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class PaymentNoteController : ControllerBase
 {
     private readonly IPaymentNoteService _paymentNoteService;
@@ -19,91 +22,51 @@ public class PaymentNoteController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<PaymentNote>>> GetPaymentNote(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
+    public async Task<ActionResult<List<PaymentNote>>> GetPaymentNote([FromQuery] PaymentNoteFilter filter)
     {
-        var paymentNotes  = await _paymentNoteService.GetPagedPaymentNote(page, limit);
-        var totalCount = await _paymentNoteService.GetCountPaymentNote();
+        var dto  = await _paymentNoteService.GetPagedPaymentNotes(filter);
+        var count = await _paymentNoteService.GetCountPaymentNotes(filter);
 
-        var  response = paymentNotes
+        var  response = dto
             .Select(p => new PaymentNoteResponse(
-                p.Id,
-                p.BillId,
-                p.Date,
-                p.Amount,
-                p.Method))
-            .ToList();
+                p.id,
+                p.billId,
+                p.date,
+                p.amount,
+                p.method));
 
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);
-    }
-
-    [HttpGet("My")]
-    [Authorize(Policy = "UserPolicy")]
-    public async Task<ActionResult<List<PaymentNote>>> GetUserNote(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
-    {
-        var userId = int.Parse(User.FindFirst("userId")!.Value);
-
-        var paymentNotes = await _paymentNoteService.GetPagedUserPaymentNote(userId, page, limit);
-        var totalCount = await _paymentNoteService.GetCountUserPaymentNote(userId);
-
-        var response = paymentNotes
-            .Select(p => new PaymentNoteResponse(
-                p.Id,
-                p.BillId,
-                p.Date,
-                p.Amount,
-                p.Method))
-            .ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
+        Response.Headers.Append("x-total-count", count.ToString());
 
         return Ok(response);
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminUserPolicy")]
-
-    public async Task<ActionResult<int>> CreatePaymentNote([FromBody] PaymentNoteRequest paymentNoteRequest)
+    public async Task<ActionResult<long>> CreatePaymentNote([FromBody] PaymentNoteRequest request)
     {
-        var (paymentNote, error) = PaymentNote.Create(
+        var (paymentNote, errors) = PaymentNote.Create(
             0,
-            paymentNoteRequest.BillId ?? 0,
-            paymentNoteRequest.Date ?? DateTime.Now,
-            paymentNoteRequest.Amount ?? 0,
-            paymentNoteRequest.Method ?? "");
+            request.billId,
+            request.date,
+            request.amount,
+            request.methodId);
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            return BadRequest(new { error });
-        }
+        if (errors is not null && errors.Any())
+            return BadRequest(errors);
 
-        var paymentNoteId = await _paymentNoteService.CreatePaymentNote(paymentNote);
+        var Id = await _paymentNoteService.CreatePaymentNote(paymentNote!);
 
-        return Ok(paymentNoteId);
+        return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdatePaymentNote([FromBody] PaymentNoteRequest paymentNoteRequest, int id)
+    public async Task<ActionResult<int>> UpdatePaymentNote(long id, [FromBody] PaymentMethodEnum? method)
     {
-        var result = await _paymentNoteService.UpdatePaymentNote(
-            id,
-            paymentNoteRequest.BillId,
-            paymentNoteRequest.Date,
-            paymentNoteRequest.Amount,
-            paymentNoteRequest.Method);
+        var Id = await _paymentNoteService.UpratePaymentNote(id, method);
         
-        return Ok(result);
+        return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeletePaymentNote(int id)
     {
         var result = await _paymentNoteService.DeletePaymentNote(id);

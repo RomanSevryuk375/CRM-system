@@ -22,7 +22,7 @@ public class CachedPartSetService : IPartSetService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<long> AddtoPartSet(PartSet partSet)
+    public async Task<long> AddToPartSet(PartSet partSet)
     {
         var key = $"dict_{partSet.OrderId}";
 
@@ -30,7 +30,7 @@ public class CachedPartSetService : IPartSetService
 
         _logger.LogInformation("Removing cache success");
 
-        return await _decorated.AddtoPartSet(partSet);
+        return await _decorated.AddToPartSet(partSet);
     }
 
     public async Task<long> DeleteFromPartSet(long id)

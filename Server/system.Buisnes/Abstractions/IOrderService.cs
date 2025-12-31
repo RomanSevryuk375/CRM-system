@@ -11,7 +11,7 @@ public interface IOrderService
     Task<long> CreateOrder(Order order);
     Task<long> CreateOrderWithBill(Order order, Bill bill);
     Task<long> DeleteOrder(long id);
-    Task<int> GetcountOrders(OrderFilter filter);
+    Task<int> GetCountOrders(OrderFilter filter);
     Task<List<OrderItem>> GetPagedOrders(OrderFilter filter);
     Task<long> UpdateOrder(long id, OrderPriorityEnum? priorityId);
 }

@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.DTOs.Order;
+﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.Order;
 using CRMSystem.Core.DTOs.Part;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
-public class PartService
+public class PartService : IPartService
 {
     private readonly IPartRepository _partRepository;
     private readonly IPartCategoryRepository _partCategoryRepository;
@@ -77,7 +78,7 @@ public class PartService
     {
         _logger.LogInformation("Deleting part start");
 
-        var Id =  await _partRepository.Delete(id);
+        var Id = await _partRepository.Delete(id);
 
         _logger.LogInformation("Deleting part success");
 
