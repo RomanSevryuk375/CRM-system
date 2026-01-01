@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
-public class PositionSevice : IPositionSevice
+public class PositionSevice : IPositionSrevice
 {
     private readonly IPositionRepository _positionRepository;
     private readonly IPartRepository _partRepository;

@@ -5,7 +5,7 @@ namespace CRMSystem.Buisnes.Abstractions;
 
 public interface IWorkerService
 {
-    Task<int> CreateClient(Worker worker);
+    Task<int> CreateWorker(Worker worker);
     Task<int> CreateWorkerWithUser(Worker worker, User user);
     Task<int> DeleteWorker(int id);
     Task<int> GetCountWorkers(WorkerFilter filter);

@@ -46,6 +46,11 @@ public class CachedPartSetService : IPartSetService
         return await _decorated.DeleteFromPartSet(id);
     }
 
+    public async Task<int> GetCountPartSets(PartSetFilter filter)
+    {
+        return await _decorated.GetCountPartSets(filter);
+    }
+
     public async Task<List<PartSetItem>> GetPagedPartSets(PartSetFilter filter)
     {
         return await _decorated.GetPagedPartSets(filter);

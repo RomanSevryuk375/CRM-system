@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.DTOs.Shift;
+﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.Shift;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
-public class ShiftService
+public class ShiftService : IShiftService
 {
     private readonly IShiftRepository _shiftRepository;
     private readonly ILogger<ShiftService> _logger;

@@ -1,6 +1,6 @@
-﻿using CRM_system_backend.Contracts;
+﻿using CRM_system_backend.Contracts.Worker;
 using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.DTOs;
+using CRMSystem.Core.DTOs.Worker;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,149 +9,110 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class WorkerController : ControllerBase
 {
     private readonly IWorkerService _workerService;
-    private readonly IUserService _userService;
 
-    public WorkerController(IWorkerService workerService, IUserService userService)
+    public WorkerController(IWorkerService workerService)
     {
         _workerService = workerService;
-        _userService = userService;
-    }
-
-    [HttpGet("with-info")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<WorkerWithInfoDto>>> GetWorkerWithInfo(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
-    {
-        var dtos = await _workerService.GetPagedWorkersWithInfo(page, limit);
-        var totalCount = await _workerService.GetCountWorker();
-
-        var response = dtos.Select(d => new WorkerWithInfoDto(
-            d.Id,
-            d.UserId,
-            d.SpecializationName,
-            d.Name,
-            d.Surname,
-            d.HourlyRate,
-            d.PhoneNumber,
-            d.Email
-        )).ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);
-    }
-
-    [HttpGet("My")]
-    [Authorize(Policy = "WorkerPolicy")]
-    public async Task<ActionResult<List<WorkerWithInfoDto>>> GetUserWorkerInfo()
-    {
-        var userId = int.Parse(User.FindFirst("userId")!.Value);
-
-        var dtos = await _workerService.GetPagedWorkerByUserId(userId, 1, 2);
-        var totalCount = await _workerService.GetCountWorkerByUserId(userId);
-
-        var response = dtos.Select(d => new WorkerWithInfoDto(
-            d.Id,
-            d.UserId,
-            d.SpecializationName,
-            d.Name,
-            d.Surname,
-            d.HourlyRate,
-            d.PhoneNumber,
-            d.Email
-        )).ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);
-
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<WorkerResponse>>> GetAllWorker(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
+    public async Task<ActionResult<List<WorkerItem>>> GetPagedWorkers([FromQuery] WorkerFilter filter)
     {
-        var workers = await _workerService.GetPagedAllWorkers(page, limit);
-        var totalCount = await _workerService.GetCountWorker();
+        var dto = await _workerService.GetPagedWorkers(filter);
+        var count = await _workerService.GetCountWorkers(filter);
 
-        var response = workers
-            .Select(w => new WorkerResponse(
-                w.Id, w.UserId, w.SpecializationId, w.Name, w.Surname, w.HourlyRate, w.PhoneNumber, w.Email))
-            .ToList();
+        var response = dto.Select(w => new WorkerResponse(
+            w.id,
+            w.userId,
+            w.name,
+            w.surname,
+            w.hourlyRate,
+            w.phoneNumber,
+            w.email));
 
-        Response.Headers.Append("x-total-count", totalCount.ToString());
+        Response.Headers.Append("x-total-count", count.ToString());
 
         return Ok(response);
     }
 
-    [HttpPost("with-user")]
-    public async Task<ActionResult<int>> CreateWorker([FromBody]  WorkerRegistreRequest request)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<WorkerItem>> GetWorkerById(int id)
     {
-        var (user, errorUser) = CRMSystem.Core.Models.User.Create(
+        var response = await _workerService.GetWorkerById(id);
+
+        return Ok(response);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<int>> CreateWorker([FromBody] WorkerRequest request)
+    {
+        var (worker, errorsWorker) = Worker.Create(
             0,
-            request.RoleId,
-            request.Login,
-            request.Password);
+            request.userId,
+            request.name,
+            request.surname,
+            request.hourlyRate,
+            request.phoneNumber,
+            request.email);
 
-        if (!string.IsNullOrEmpty(errorUser))
-            return BadRequest(errorUser);
+        if (errorsWorker is not null && errorsWorker.Any())
+            return BadRequest(errorsWorker);
 
-        var userId = await _userService.CreateUser(user);
+        var Id = await _workerService.CreateWorker(worker!);
 
-        var (worker, error) = Worker.Create(
+        return Ok(Id);
+    }
+
+    [HttpPost("with-user")]
+    public async Task<ActionResult<int>> CreateWorker([FromBody]  WorkerWithUserRequest request)
+    {
+        var (user, errorsUser) = CRMSystem.Core.Models.User.Create(
             0,
-            userId,
-            request.SpecializationId,
-            request.Name,
-            request.Surname,
-            request.HourlyRate,
-            request.PhoneNumber,
-            request.Email);
+            request.roleId,
+            request.login,
+            request.password);
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            await _userService.DeleteUser(userId);
-            return BadRequest(error);
-        }
+        if (errorsUser is not null && errorsUser.Any())
+            return BadRequest(errorsUser);
 
-        var workerId = await _workerService.CreateWorker(worker);
+        var (worker, errorsWorker) = Worker.Create(
+            0,
+            1,
+            request.name,
+            request.surname,
+            request.hourlyRate,
+            request.phoneNumber,
+            request.email);
 
-        return Ok(new
-        {
-            Message = "Registration successful",
-            UserId = userId,
-            WorkerId = workerId
-        });
+        if (errorsWorker is not null && errorsWorker.Any())
+            return BadRequest(errorsWorker);
+
+        var Id = await _workerService.CreateWorkerWithUser(worker!, user!);
+
+        return Ok(Id);
 
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateWorker([FromBody] WorkerRequest workerRequest, int id)
+    public async Task<ActionResult<int>> UpdateWorker(int id, [FromBody] WorkerRequest request)
     {
-        var result = await _workerService
-            .UpdateWorker(
-            id,
-            workerRequest.UserId,
-            workerRequest.SpecializationId,
-            workerRequest.Name,
-            workerRequest.Surname,
-            workerRequest.HourlyRate,
-            workerRequest.PhoneNumber,
-            workerRequest.Email);
+        var model = new WorkerUpdateModel(
+            request.name,
+            request.surname,
+            request.hourlyRate,
+            request.phoneNumber,
+            request.email);
+
+        var result = await _workerService.UpdateWorker(id, model);
 
         return Ok(result);
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteWorker(int id)
     {
         var result = await _workerService.DeleteWorker(id);

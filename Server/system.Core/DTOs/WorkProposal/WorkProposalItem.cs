@@ -8,7 +8,7 @@ public record WorkProposalItem
     long orderId, 
     string job,
     long jobId,
-    string woker,
+    string worker,
     int workerId,
     string status,
     int statusId,

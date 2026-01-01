@@ -26,27 +26,35 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateOnly?>("EndDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("end_date");
 
                     b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("start_date");
 
                     b.Property<int>("TypeId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("type_id");
 
                     b.Property<int>("WorkerId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("worker_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_absences");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("TypeId")
+                        .HasDatabaseName("ix_absences_type_id");
 
-                    b.HasIndex("WorkerId");
+                    b.HasIndex("WorkerId")
+                        .HasDatabaseName("ix_absences_worker_id");
 
                     b.ToTable("absences", (string)null);
                 });
@@ -55,16 +63,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_absence_types");
 
                     b.ToTable("absence_types", (string)null);
 
@@ -95,44 +106,57 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool?>("ClientSign")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("client_sign");
 
                     b.Property<DateTime>("CreateAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_at");
 
                     b.Property<string>("ExternalDefects")
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("external_defects");
 
                     b.Property<int>("FuelLevel")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("fuel_level");
 
                     b.Property<string>("InternalDefects")
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("internal_defects");
 
                     b.Property<int>("Mileage")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("mileage");
 
                     b.Property<long>("OrderId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("order_id");
 
                     b.Property<int>("WorkerId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("worker_id");
 
                     b.Property<bool?>("WorkerSign")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("worker_sign");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_acceptances");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_acceptances_order_id");
 
-                    b.HasIndex("WorkerId");
+                    b.HasIndex("WorkerId")
+                        .HasDatabaseName("ix_acceptances_worker_id");
 
                     b.ToTable("acceptances", (string)null);
                 });
@@ -141,25 +165,31 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("AcceptanceId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("acceptance_id");
 
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("description");
 
                     b.Property<string>("FilePath")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("file_path");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_acceptance_imgs");
 
-                    b.HasIndex("AcceptanceId");
+                    b.HasIndex("AcceptanceId")
+                        .HasDatabaseName("ix_acceptance_imgs_acceptance_id");
 
                     b.ToTable("acceptance_imgs", (string)null);
                 });
@@ -168,28 +198,36 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("description");
 
                     b.Property<long>("OrderId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("order_id");
 
                     b.Property<int>("WorkerId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("worker_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_attachments");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_attachments_order_id");
 
-                    b.HasIndex("WorkerId");
+                    b.HasIndex("WorkerId")
+                        .HasDatabaseName("ix_attachments_worker_id");
 
                     b.ToTable("attachments", (string)null);
                 });
@@ -198,25 +236,31 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("AttachmentId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("attachment_id");
 
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("description");
 
                     b.Property<string>("FilePath")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("file_path");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_attachment_imgs");
 
-                    b.HasIndex("AttachmentId");
+                    b.HasIndex("AttachmentId")
+                        .HasDatabaseName("ix_attachment_imgs_attachment_id");
 
                     b.ToTable("attachment_imgs", (string)null);
                 });
@@ -225,30 +269,39 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateOnly?>("ActualBillDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("actual_bill_date");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("amount");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<long>("OrderId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("order_id");
 
                     b.Property<int>("StatusId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("status_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_bills");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_bills_order_id");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("StatusId")
+                        .HasDatabaseName("ix_bills_status_id");
 
                     b.ToTable("bills", (string)null);
                 });
@@ -257,16 +310,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_bill_statuses");
 
                     b.ToTable("bill_statuses", (string)null);
 
@@ -292,53 +348,67 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Brand")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("brand");
 
                     b.Property<int>("Mileage")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("mileage");
 
                     b.Property<string>("Model")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("model");
 
                     b.Property<long>("OwnerId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("owner_id");
 
                     b.Property<string>("StateNumber")
                         .IsRequired()
                         .HasMaxLength(15)
-                        .HasColumnType("character varying(15)");
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("state_number");
 
                     b.Property<int>("StatusId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("status_id");
 
                     b.Property<string>("VinNumber")
                         .IsRequired()
                         .HasMaxLength(17)
-                        .HasColumnType("character varying(17)");
+                        .HasColumnType("character varying(17)")
+                        .HasColumnName("vin_number");
 
                     b.Property<int>("YearOfManufacture")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("year_of_manufacture");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_cars");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("OwnerId")
+                        .HasDatabaseName("ix_cars_owner_id");
 
                     b.HasIndex("StateNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_cars_state_number");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("StatusId")
+                        .HasDatabaseName("ix_cars_status_id");
 
                     b.HasIndex("VinNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_cars_vin_number");
 
                     b.ToTable("cars", (string)null);
                 });
@@ -347,16 +417,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_car_statuses");
 
                     b.ToTable("car_statuses", (string)null);
 
@@ -377,42 +450,52 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Email")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("email");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("name");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("phone_number");
 
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("surname");
 
                     b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_clients");
 
                     b.HasIndex("Email")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_clients_email");
 
                     b.HasIndex("PhoneNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_clients_phone_number");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_clients_user_id");
 
                     b.ToTable("clients", (string)null);
                 });
@@ -421,37 +504,48 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("category");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date");
 
                     b.Property<int>("ExpenseTypeId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("expense_type_id");
 
                     b.Property<long?>("PartSetId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("part_set_id");
 
                     b.Property<decimal>("Sum")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("sum");
 
                     b.Property<int?>("TaxId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("tax_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_expenses");
 
-                    b.HasIndex("ExpenseTypeId");
+                    b.HasIndex("ExpenseTypeId")
+                        .HasDatabaseName("ix_expenses_expense_type_id");
 
-                    b.HasIndex("PartSetId");
+                    b.HasIndex("PartSetId")
+                        .HasDatabaseName("ix_expenses_part_set_id");
 
-                    b.HasIndex("TaxId");
+                    b.HasIndex("TaxId")
+                        .HasDatabaseName("ix_expenses_tax_id");
 
                     b.ToTable("expenses", (string)null);
                 });
@@ -460,16 +554,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_expense_types");
 
                     b.ToTable("expense_types", (string)null);
 
@@ -525,31 +622,39 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateOnly>("DateEnd")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("date_end");
 
                     b.Property<DateOnly>("DateStart")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("date_start");
 
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("description");
 
                     b.Property<long>("OrderId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("order_id");
 
                     b.Property<string>("Terms")
                         .IsRequired()
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("terms");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_guarantees");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_guarantees_order_id");
 
                     b.ToTable("guarantees", (string)null);
                 });
@@ -558,39 +663,51 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("CarId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("car_id");
 
                     b.Property<long>("ClientId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("client_id");
 
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("message");
 
                     b.Property<DateTime>("SendAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("send_at");
 
                     b.Property<int>("StatusId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("status_id");
 
                     b.Property<int>("TypeId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("type_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_notifications");
 
-                    b.HasIndex("CarId");
+                    b.HasIndex("CarId")
+                        .HasDatabaseName("ix_notifications_car_id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId")
+                        .HasDatabaseName("ix_notifications_client_id");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("StatusId")
+                        .HasDatabaseName("ix_notifications_status_id");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("TypeId")
+                        .HasDatabaseName("ix_notifications_type_id");
 
                     b.ToTable("notifications", (string)null);
                 });
@@ -599,16 +716,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_notification_statuses");
 
                     b.ToTable("notification_statuses", (string)null);
 
@@ -629,16 +749,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_notification_types");
 
                     b.ToTable("notification_types", (string)null);
 
@@ -679,29 +802,38 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("CarId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("car_id");
 
                     b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("date");
 
                     b.Property<int>("PriorityId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("priority_id");
 
                     b.Property<int>("StatusId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("status_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_work_orders");
 
-                    b.HasIndex("CarId");
+                    b.HasIndex("CarId")
+                        .HasDatabaseName("ix_work_orders_car_id");
 
-                    b.HasIndex("PriorityId");
+                    b.HasIndex("PriorityId")
+                        .HasDatabaseName("ix_work_orders_priority_id");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("StatusId")
+                        .HasDatabaseName("ix_work_orders_status_id");
 
                     b.ToTable("work_orders", (string)null);
                 });
@@ -710,16 +842,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_order_priorities");
 
                     b.ToTable("order_priorities", (string)null);
 
@@ -745,16 +880,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_order_statuses");
 
                     b.ToTable("order_statuses", (string)null);
 
@@ -795,21 +933,25 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_part_categories");
 
                     b.ToTable("part_categories", (string)null);
                 });
@@ -818,48 +960,59 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Applicability")
                         .IsRequired()
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("applicability");
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("category_id");
 
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("description");
 
                     b.Property<string>("InternalArticle")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("internal_article");
 
                     b.Property<string>("Manufacturer")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("manufacturer");
 
                     b.Property<string>("ManufacturerArticle")
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("manufacturer_article");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("name");
 
                     b.Property<string>("OEMArticle")
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("oem_article");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_parts");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_parts_category_id");
 
                     b.ToTable("parts", (string)null);
                 });
@@ -868,33 +1021,43 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long?>("OrderId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("order_id");
 
                     b.Property<long>("PositionId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("position_id");
 
                     b.Property<long?>("ProposalId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("proposal_id");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(8, 2)");
+                        .HasColumnType("decimal(8, 2)")
+                        .HasColumnName("quantity");
 
                     b.Property<decimal>("SoldPrice")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("sold_price");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_part_sets");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_part_sets_order_id");
 
-                    b.HasIndex("PositionId");
+                    b.HasIndex("PositionId")
+                        .HasDatabaseName("ix_part_sets_position_id");
 
                     b.HasIndex("ProposalId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_part_sets_proposal_id");
 
                     b.ToTable("part_sets", (string)null);
                 });
@@ -903,16 +1066,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_payment_methods");
 
                     b.ToTable("payment_methods", (string)null);
 
@@ -938,27 +1104,35 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("amount");
 
                     b.Property<long>("BillId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("bill_id");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date");
 
                     b.Property<int>("MethodId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("method_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_payment_journal");
 
-                    b.HasIndex("BillId");
+                    b.HasIndex("BillId")
+                        .HasDatabaseName("ix_payment_journal_bill_id");
 
-                    b.HasIndex("MethodId");
+                    b.HasIndex("MethodId")
+                        .HasDatabaseName("ix_payment_journal_method_id");
 
                     b.ToTable("payment_journal", (string)null);
                 });
@@ -967,30 +1141,39 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<int>("CellId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("cell_id");
 
                     b.Property<long>("PartId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("part_id");
 
                     b.Property<decimal>("PurchasePrice")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("purchase_price");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("quantity");
 
                     b.Property<decimal>("SellingPrice")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("selling_price");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_positions");
 
-                    b.HasIndex("CellId");
+                    b.HasIndex("CellId")
+                        .HasDatabaseName("ix_positions_cell_id");
 
-                    b.HasIndex("PartId");
+                    b.HasIndex("PartId")
+                        .HasDatabaseName("ix_positions_part_id");
 
                     b.ToTable("positions", (string)null);
                 });
@@ -999,16 +1182,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_roles");
 
                     b.ToTable("roles", (string)null);
 
@@ -1034,24 +1220,31 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date");
 
                     b.Property<int>("ShiftId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("shift_id");
 
                     b.Property<int>("WorkerId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("worker_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_schedules");
 
-                    b.HasIndex("ShiftId");
+                    b.HasIndex("ShiftId")
+                        .HasDatabaseName("ix_schedules_shift_id");
 
-                    b.HasIndex("WorkerId");
+                    b.HasIndex("WorkerId")
+                        .HasDatabaseName("ix_schedules_worker_id");
 
                     b.ToTable("schedules", (string)null);
                 });
@@ -1060,22 +1253,27 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<TimeOnly>("EndAt")
-                        .HasColumnType("time without time zone");
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("end_at");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
                     b.Property<TimeOnly>("StartAt")
-                        .HasColumnType("time without time zone");
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("start_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_shifts");
 
                     b.ToTable("shifts", (string)null);
                 });
@@ -1084,21 +1282,27 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("SpecializationId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("specialization_id");
 
                     b.Property<int>("WorkerId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("worker_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_skills");
 
-                    b.HasIndex("SpecializationId");
+                    b.HasIndex("SpecializationId")
+                        .HasDatabaseName("ix_skills_specialization_id");
 
-                    b.HasIndex("WorkerId");
+                    b.HasIndex("WorkerId")
+                        .HasDatabaseName("ix_skills_worker_id");
 
                     b.ToTable("skills", (string)null);
                 });
@@ -1107,16 +1311,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_specializations");
 
                     b.ToTable("specializations", (string)null);
 
@@ -1172,21 +1379,25 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Rack")
                         .IsRequired()
                         .HasMaxLength(16)
-                        .HasColumnType("character varying(16)");
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("rack");
 
                     b.Property<string>("Shelf")
                         .IsRequired()
                         .HasMaxLength(16)
-                        .HasColumnType("character varying(16)");
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("shelf");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_storage_cells");
 
                     b.ToTable("storage_cells", (string)null);
                 });
@@ -1195,21 +1406,25 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Contacts")
                         .IsRequired()
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("contacts");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_suppliers");
 
                     b.ToTable("suppliers", (string)null);
                 });
@@ -1218,19 +1433,24 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("date");
 
                     b.Property<int>("SupplierId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("supplier_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_supplies");
 
-                    b.HasIndex("SupplierId");
+                    b.HasIndex("SupplierId")
+                        .HasDatabaseName("ix_supplies_supplier_id");
 
                     b.ToTable("supplies", (string)null);
                 });
@@ -1239,27 +1459,35 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("PositionId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("position_id");
 
                     b.Property<decimal>("PurchasePrice")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("purchase_price");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("quantity");
 
                     b.Property<long>("SupplyId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("supply_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_supply_sets");
 
-                    b.HasIndex("PositionId");
+                    b.HasIndex("PositionId")
+                        .HasDatabaseName("ix_supply_sets_position_id");
 
-                    b.HasIndex("SupplyId");
+                    b.HasIndex("SupplyId")
+                        .HasDatabaseName("ix_supply_sets_supply_id");
 
                     b.ToTable("supply_sets", (string)null);
                 });
@@ -1268,24 +1496,30 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
                     b.Property<decimal>("Rate")
-                        .HasColumnType("decimal(2, 2)");
+                        .HasColumnType("decimal(2, 2)")
+                        .HasColumnName("rate");
 
                     b.Property<int>("TypeId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("type_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_taxes");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("TypeId")
+                        .HasDatabaseName("ix_taxes_type_id");
 
                     b.ToTable("taxes", (string)null);
                 });
@@ -1294,16 +1528,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_tax_types");
 
                     b.ToTable("tax_types", (string)null);
 
@@ -1349,28 +1586,35 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("login");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("password_hash");
 
                     b.Property<int>("RoleId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_users");
 
                     b.HasIndex("Login")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_login");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_users_role_id");
 
                     b.ToTable("users", (string)null);
                 });
@@ -1379,29 +1623,35 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("category");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("description");
 
                     b.Property<decimal>("StandardTime")
-                        .HasColumnType("decimal(4, 2)");
+                        .HasColumnType("decimal(4, 2)")
+                        .HasColumnName("standard_time");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("title");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_works_catalog");
 
                     b.ToTable("works_catalog", (string)null);
                 });
@@ -1410,39 +1660,52 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("JobId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("job_id");
 
                     b.Property<long>("OrderId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("order_id");
 
                     b.Property<int>("StatusId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("status_id");
 
                     b.Property<decimal>("TimeSpent")
-                        .HasColumnType("decimal(4, 2)");
+                        .HasColumnType("decimal(4, 2)")
+                        .HasColumnName("time_spent");
 
                     b.Property<long?>("WorkProposalId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("work_proposal_id");
 
                     b.Property<int>("WorkerId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("worker_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_works_in_order");
 
-                    b.HasIndex("JobId");
+                    b.HasIndex("JobId")
+                        .HasDatabaseName("ix_works_in_order_job_id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_works_in_order_order_id");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("StatusId")
+                        .HasDatabaseName("ix_works_in_order_status_id");
 
-                    b.HasIndex("WorkProposalId");
+                    b.HasIndex("WorkProposalId")
+                        .HasDatabaseName("ix_works_in_order_work_proposal_id");
 
-                    b.HasIndex("WorkerId");
+                    b.HasIndex("WorkerId")
+                        .HasDatabaseName("ix_works_in_order_worker_id");
 
                     b.ToTable("works_in_order", (string)null);
                 });
@@ -1451,16 +1714,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_work_in_order_statuses");
 
                     b.ToTable("work_in_order_statuses", (string)null);
 
@@ -1486,34 +1752,45 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date");
 
                     b.Property<long>("JobId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("job_id");
 
                     b.Property<long>("OrderId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("order_id");
 
                     b.Property<int>("StatusId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("status_id");
 
                     b.Property<int>("WorkerId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("worker_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_additional_work_proposals");
 
-                    b.HasIndex("JobId");
+                    b.HasIndex("JobId")
+                        .HasDatabaseName("ix_additional_work_proposals_job_id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_additional_work_proposals_order_id");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("StatusId")
+                        .HasDatabaseName("ix_additional_work_proposals_status_id");
 
-                    b.HasIndex("WorkerId");
+                    b.HasIndex("WorkerId")
+                        .HasDatabaseName("ix_additional_work_proposals_worker_id");
 
                     b.ToTable("additional_work_proposals", (string)null);
                 });
@@ -1522,16 +1799,19 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_work_proposal_statuses");
 
                     b.ToTable("work_proposal_statuses", (string)null);
 
@@ -1557,46 +1837,57 @@ namespace CRMSystem.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("email");
 
                     b.Property<decimal>("HourlyRate")
-                        .HasColumnType("decimal (8, 2)");
+                        .HasColumnType("decimal (8, 2)")
+                        .HasColumnName("hourly_rate");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("name");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("phone_number");
 
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("surname");
 
                     b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_workers");
 
                     b.HasIndex("Email")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_workers_email");
 
                     b.HasIndex("PhoneNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_workers_phone_number");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_workers_user_id");
 
                     b.ToTable("workers", (string)null);
                 });
@@ -1607,13 +1898,15 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Absences")
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_absences_absence_types_type_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.WorkerEntity", "Worker")
                         .WithMany("Absences")
                         .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_absences_workers_worker_id");
 
                     b.Navigation("AbsenceType");
 
@@ -1626,13 +1919,15 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Acceptances")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_acceptances_orders_order_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.WorkerEntity", "Worker")
                         .WithMany("Acceptances")
                         .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_acceptances_workers_worker_id");
 
                     b.Navigation("Order");
 
@@ -1645,7 +1940,8 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Imgs")
                         .HasForeignKey("AcceptanceId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_acceptance_imgs_acceptances_acceptance_id");
 
                     b.Navigation("Acceptance");
                 });
@@ -1656,13 +1952,15 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Attachments")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_attachments_orders_order_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.WorkerEntity", "Worker")
                         .WithMany("Attachments")
                         .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_attachments_workers_worker_id");
 
                     b.Navigation("Order");
 
@@ -1675,7 +1973,8 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Imgs")
                         .HasForeignKey("AttachmentId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_attachment_imgs_attachments_attachment_id");
 
                     b.Navigation("Attachment");
                 });
@@ -1686,13 +1985,15 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Bills")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_bills_orders_order_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.BillStatusEntity", "Status")
                         .WithMany("Bills")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_bills_bill_statuses_status_id");
 
                     b.Navigation("Order");
 
@@ -1705,13 +2006,15 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Cars")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_cars_clients_owner_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.CarStatusEntity", "Status")
                         .WithMany("Cars")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_cars_car_statuses_status_id");
 
                     b.Navigation("Client");
 
@@ -1724,7 +2027,8 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithOne("Client")
                         .HasForeignKey("CRMSystem.DataAccess.Entites.ClientEntity", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_clients_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -1735,17 +2039,20 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Expenses")
                         .HasForeignKey("ExpenseTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_expenses_expense_types_expense_type_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.PartSetEntity", "PartSet")
                         .WithMany("Expenses")
                         .HasForeignKey("PartSetId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_expenses_part_sets_part_set_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.TaxEntity", "Tax")
                         .WithMany("Expenses")
                         .HasForeignKey("TaxId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_expenses_taxes_tax_id");
 
                     b.Navigation("ExpenseType");
 
@@ -1760,7 +2067,8 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Guarantees")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_guarantees_orders_order_id");
 
                     b.Navigation("Order");
                 });
@@ -1771,25 +2079,29 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Notifications")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_notifications_cars_car_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.ClientEntity", "Client")
                         .WithMany("Notifications")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_notifications_clients_client_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.NotificationStatusEntity", "Status")
                         .WithMany("Notifications")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_notifications_notifications_statuses_status_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.NotificationTypeEntity", "NotificationType")
                         .WithMany("Notifications")
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_notifications_notification_types_type_id");
 
                     b.Navigation("Car");
 
@@ -1806,19 +2118,22 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Orders")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_work_orders_cars_car_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.OrderPriorityEntity", "OrderPriority")
                         .WithMany("Orders")
                         .HasForeignKey("PriorityId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_work_orders_order_priorities_priority_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.OrderStatusEntity", "Status")
                         .WithMany("Orders")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_work_orders_order_statuses_status_id");
 
                     b.Navigation("Car");
 
@@ -1833,7 +2148,8 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Parts")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_parts_part_categories_category_id");
 
                     b.Navigation("PartCategory");
                 });
@@ -1843,18 +2159,21 @@ namespace CRMSystem.DataAccess.Migrations
                     b.HasOne("CRMSystem.DataAccess.Entites.OrderEntity", "Order")
                         .WithMany("PartSets")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_part_sets_orders_order_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.PositionEntity", "Position")
                         .WithMany("PartSets")
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_part_sets_positions_position_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.WorkProposalEntity", "WorkProposal")
                         .WithOne("PartSet")
                         .HasForeignKey("CRMSystem.DataAccess.Entites.PartSetEntity", "ProposalId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_part_sets_work_proposals_proposal_id");
 
                     b.Navigation("Order");
 
@@ -1869,13 +2188,15 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Payments")
                         .HasForeignKey("BillId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_payment_journal_bills_bill_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.PaymentMethodEntity", "Method")
                         .WithMany("PaymentNotes")
                         .HasForeignKey("MethodId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_payment_journal_payment_methods_method_id");
 
                     b.Navigation("Bill");
 
@@ -1888,13 +2209,15 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Positions")
                         .HasForeignKey("CellId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_positions_storage_cells_cell_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.PartEntity", "Part")
                         .WithMany("Positions")
                         .HasForeignKey("PartId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_positions_parts_part_id");
 
                     b.Navigation("Part");
 
@@ -1907,13 +2230,15 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Schedules")
                         .HasForeignKey("ShiftId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_schedules_shifts_shift_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.WorkerEntity", "Worker")
                         .WithMany("Schedules")
                         .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_schedules_workers_worker_id");
 
                     b.Navigation("Shift");
 
@@ -1926,13 +2251,15 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Skills")
                         .HasForeignKey("SpecializationId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_skills_specializations_specialization_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.WorkerEntity", "Worker")
                         .WithMany("Skills")
                         .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_skills_workers_worker_id");
 
                     b.Navigation("Specialization");
 
@@ -1945,7 +2272,8 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Supplies")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_supplies_suppliers_supplier_id");
 
                     b.Navigation("Supplier");
                 });
@@ -1956,13 +2284,15 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("SupplySets")
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_supply_sets_positions_position_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.SupplyEntity", "Supply")
                         .WithMany("SupplySets")
                         .HasForeignKey("SupplyId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_supply_sets_supplies_supply_id");
 
                     b.Navigation("Position");
 
@@ -1975,7 +2305,8 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Taxes")
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_taxes_tax_types_type_id");
 
                     b.Navigation("TaxType");
                 });
@@ -1986,7 +2317,8 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_users_roles_role_id");
 
                     b.Navigation("Role");
                 });
@@ -1997,29 +2329,34 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("WorksInOrder")
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_works_in_order_works_catalog_job_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.OrderEntity", "Order")
                         .WithMany("WorksInOrder")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_works_in_order_orders_order_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.WorkInOrderStatusEntity", "WorkInOrderStatus")
                         .WithMany("Works")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_works_in_order_work_in_order_statuses_status_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.WorkProposalEntity", "WorkProposal")
                         .WithMany()
-                        .HasForeignKey("WorkProposalId");
+                        .HasForeignKey("WorkProposalId")
+                        .HasConstraintName("fk_works_in_order_work_proposals_work_proposal_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.WorkerEntity", "Worker")
                         .WithMany("WorksInOrder")
                         .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_works_in_order_workers_worker_id");
 
                     b.Navigation("Order");
 
@@ -2038,25 +2375,29 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithMany("WorkProposals")
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_additional_work_proposals_works_catalog_job_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.OrderEntity", "Order")
                         .WithMany("WorkProposals")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_additional_work_proposals_work_orders_order_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.WorkProposalStatusEntity", "Status")
                         .WithMany("Proposals")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_additional_work_proposals_work_proposal_statuses_status_id");
 
                     b.HasOne("CRMSystem.DataAccess.Entites.WorkerEntity", "Worker")
                         .WithMany("WorkProposals")
                         .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_additional_work_proposals_workers_worker_id");
 
                     b.Navigation("Order");
 
@@ -2073,7 +2414,8 @@ namespace CRMSystem.DataAccess.Migrations
                         .WithOne("Worker")
                         .HasForeignKey("CRMSystem.DataAccess.Entites.WorkerEntity", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_workers_users_user_id");
 
                     b.Navigation("User");
                 });

@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.DTOs.Tax;
+﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.Tax;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
-public class TaxService 
+public class TaxService : ITaxService
 {
     private readonly ITaxRepository _taxRepository;
     private readonly ITaxTypeRepository _taxTypeRepository;
@@ -61,7 +62,7 @@ public class TaxService
         return Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<int> DeleteTax(int id)
     {
         _logger.LogInformation("Deleting tax start");
 

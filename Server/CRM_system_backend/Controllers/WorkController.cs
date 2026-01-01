@@ -1,6 +1,7 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper.Configuration.Annotations;
+using CRM_system_backend.Contracts.Work;
 using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.DTOs;
+using CRMSystem.Core.DTOs.Work;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class WorkController : ControllerBase
 {
     private readonly IWorkService _workService;
@@ -19,140 +20,60 @@ public class WorkController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<Work>>> GetPagedWork(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
+    public async Task<ActionResult<List<WorkItem>>> GetPagedWork([FromQuery] WorkFilter filter)
     {
-        var works = await _workService.GetPagedWork(page, limit);
-        var totalCount = await _workService.GetCountWork();
+        var dto = await _workService.GetPagedWork(filter);
+        var count = await _workService.GetCountWork();
 
-        var response = works 
-            .Select(w => new WorkResponse(
-                w.Id,
-                w.OrderId,
-                w.JobId,
-                w.WorkerId,
-                w.TimeSpent,
-                w.StatusId))
-            .ToList();
+        var response = dto.Select(w => new WorkResponse(
+                w.id,
+                w.title,
+                w.categoty,
+                w.description,
+                w.standartTime));
 
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);
-    }
-
-    [HttpGet("MyWorks")] //not tested
-    [Authorize(Policy = "WorkerPolicy")]
-    public async Task<ActionResult<List<WorkWithInfoDto>>> GetWorkByWorkerId(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
-    {
-        var userId = int.Parse(User.FindFirst("userId")!.Value);
-        //workerId
-        var works = await _workService.GetPagedInWorkWorks(userId, page, limit);
-        var totalCount = await _workService.GetCoutInWorkWorks(userId);
-
-        var response = works
-            .Select(w => new WorkWithInfoDto(
-                w.Id,
-                w.OrderId,
-                w.JobName,
-                w.WorkerInfo,
-                w.TimeSpent,
-                w.StatusName))
-            .ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);
-    }
-
-    [HttpGet("with-info")]
-    public async Task<ActionResult<List<WorkWithInfoDto>>> GetWorkWithInfo(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
-    {
-        var dtos = await _workService.GetPagedWorkWithInfo(page, limit);
-        var totalCount = await _workService.GetCountWork();
-
-        var response = dtos
-            .Select(w => new WorkWithInfoDto(
-                w.Id,
-                w.OrderId,
-                w.JobName,
-                w.WorkerInfo,
-                w.TimeSpent,
-                w.StatusName))
-            .ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);
-    }
-
-    [HttpGet("forCar/{carId}")]
-    [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<List<WorkWithInfoDto>>> GetWorksForCar(int carId)
-    {
-        var works = await _workService.GetWorkByCarId(carId);
-
-        var response = works
-            .Select(w => new WorkWithInfoDto(
-                w.Id,
-                w.OrderId,
-                w.JobName,
-                w.WorkerInfo,
-                w.TimeSpent,
-                w.StatusName))
-            .ToList();
+        Response.Headers.Append("x-total-count", count.ToString());
 
         return Ok(response);
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> CreateWork([FromBody] WorkRequest request)
+    public async Task<ActionResult<long>> CreateWork([FromBody] WorkRequest request)
     {
-        var (work, error) = Work.Create(
+        var (work, errors) = Work.Create(
             0,
-            request.OrderId ?? 0,
-            request.JobId ?? 0,
-            request.WorkerId ?? 0,
-            request.TimeSpent ?? 0m,
-            request.StatusId ?? 0);
+            request.title,
+            request.categoty,
+            request.description,
+            request.standartTime);
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            return BadRequest(new { error });
-        }
+        if (errors is not null && errors.Any())
+            return BadRequest(errors);
 
-        var workId = await _workService.CreateWork(work);
+        var workId = await _workService.CreateWork(work!);
 
         return Ok(workId);
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<int>> UpdateWork([FromBody] WorkRequest request, int id)
+    public async Task<ActionResult<long>> UpdateWork(long id, [FromBody] WorkRequest request)
     {
-        var result = await _workService.UpdateWork(
-            id,
-            request.OrderId,
-            request.JobId,
-            request.WorkerId,
-            request.TimeSpent,
-            request.StatusId);
+        var model = new WorkUpdateModel(
+            request.title,
+            request.categoty,
+            request.description,
+            request.standartTime);
 
-        return Ok(result);
+        var Id = await _workService.UpdateWork(id, model);
+
+        return Ok(Id);
     }
 
     [HttpDelete("${id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> DeleteWork(int id)
+    public async Task<ActionResult<long>> DeleteWork(long id)
     {
-        var result = await _workService.DeleteWork(id);
+        var Id = await _workService.DeleteWork(id);
 
-        return Ok(result);
+        return Ok(Id);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
+using CRM_system_backend.Contracts.Supplier;
 using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.Supplier;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRM_system_backend.Controllers;
 
 [Controller]
-[Route("[controller]")]
-public class SupplierController : Controller
+[Route("api/[controller]")]
+public class SupplierController : ControllerBase
 {
     private readonly ISupplierService _supplierService;
 
@@ -18,58 +20,47 @@ public class SupplierController : Controller
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<Supplier>>> GetSuppliers(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
+    public async Task<ActionResult<List<SupplierItem>>> GetSuppliers()
     {
-        var suppliers = await _supplierService.GetPagedSupplier(page, limit);
-        var totalCount = await _supplierService.GetCountSupplier();
+        var dto = await _supplierService.GetSuppliers();
 
-        var response = suppliers
-            .Select(s => new SupplierResponse(s.Id, s.Name, s.Contacts))
-            .ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
+        var response = dto.Select(s => new SupplierResponse(
+            s.id, 
+            s.name, 
+            s.contacts));
 
         return Ok(response);
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> CreateSupplier ([FromBody] SupplierRequest supplierRequest)
+    public async Task<ActionResult<int>> CreateSupplier ([FromBody] SupplierRequest request)
     {
-        var (supplier, error) = Supplier.Create
-            (
+        var (supplier, errors) = Supplier.Create(
             0,
-            supplierRequest.Name ?? "",
-            supplierRequest.Contacts ?? ""
-            );
+            request.name,
+            request.contacts);
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            return BadRequest(error);
-        }
+        if (errors is not null && errors.Any())
+            return BadRequest(errors);
 
-        var result = await _supplierService.CreateSupplier(supplier);
+        var Id = await _supplierService.CreateSupplier(supplier!);
 
-        return Ok(result);
+        return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateSupplier([FromBody] SupplierRequest supplierRequest, int id)
+    public async Task<ActionResult<int>> UpdateSupplier(int id, [FromBody] SupplierUpdateRequest request)
     {
-        var result = await _supplierService.UpdateSupplier(
-            id,
-            supplierRequest.Name,
-            supplierRequest.Contacts);
+        var model = new SupplierUpdateModel(
+            request.name,
+            request.contacts);
 
-        return Ok(result);
+        var Id = await _supplierService.UpdateSupplier(id, model);
+
+        return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteSupplier(int id)
     {
         var result = await _supplierService.DeleteSupplier(id);

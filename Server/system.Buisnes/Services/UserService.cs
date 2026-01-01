@@ -1,4 +1,5 @@
-﻿using CRMSystem.Buisnes.Extensions;
+﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Buisnes.Extensions;
 using CRMSystem.Core.DTOs.User;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IJwtProvider _jwtProvider;
@@ -17,7 +18,7 @@ public class UserService
 
     public UserService(
         IUserRepository userRepository,
-        IJwtProvider jwtProvider, 
+        IJwtProvider jwtProvider,
         IMyPasswordHasher myPasswordHasher,
         ILogger<UserService> logger)
     {
@@ -54,7 +55,7 @@ public class UserService
 
         var user = await _userRepository.GetByLogin(login);
 
-        if(user is null)
+        if (user is null)
         {
             _logger.LogError("User{userLogin} not found", login);
             throw new NotFoundException($"User {login} not found");

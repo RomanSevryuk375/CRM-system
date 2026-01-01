@@ -2,7 +2,6 @@
 
 public record SupplierUpdateModel
 (
-    string name,
-    string contacts
-
+    string? name,
+    string? contacts
 );

@@ -1,5 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
+using CRM_system_backend.Contracts.Specialization;
 using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 
-public class SpecializationController : Controller
+public class SpecializationController : ControllerBase
 {
     private readonly ISpecializationService _specializationService;
 
@@ -19,56 +21,46 @@ public class SpecializationController : Controller
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<Specialization>> GetSpecialization(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
+    public async Task<ActionResult<List<SpecializationItem>>> GetSpecialization()
     {
-        var specializations = await _specializationService.GetPagedSpecialization(page, limit);
-        var totalCount = _specializationService.GetCountSpecialization();
+        var specializations = await _specializationService.GetSpecializations();
 
         var response = specializations
             .Select(s => new SpecializationResponse(
-                s.Id, s.Name)).ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
+                s.id,
+                s.Name));
 
         return Ok(response);
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> CreateSpecialization([FromBody]SpecializationRequest specializationRequest)
+    public async Task<ActionResult<int>> CreateSpecialization([FromBody]SpecializationRequest request)
     {
-        var (specialization, error) = Specialization.Create(
+        var (specialization, errors) = Specialization.Create(
             0,
-            specializationRequest.Name ?? "");
+            request.Name);
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            return BadRequest(new { error });
-        }
+        if (errors is not null && errors.Any())
+            return BadRequest(errors);
 
-        var specializationId = await _specializationService.CreateSpecialization(specialization);
+        var Id = await _specializationService.CreateSpecialization(specialization!);
 
-        return Ok(specializationId);
+        return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateSpecialization([FromBody] SpecializationRequest specializationRequest, int id)
+    public async Task<ActionResult<int>> UpdateSpecialization([FromBody] SpecializationUpdateRequest request, int id)
     {
-        var result = await _specializationService.UpdateSpecialization(id, specializationRequest.Name);
+        var Id = await _specializationService.UpdateSpecialization(id, request.Name);
 
-        return Ok(result);
+        return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteSpecialization(int id)
     {
-        var result = await _specializationService.DeleteSpecialization(id);
+        var Id = await _specializationService.DeleteSpecialization(id);
 
-        return Ok(result);
+        return Ok(Id);
     }
 }

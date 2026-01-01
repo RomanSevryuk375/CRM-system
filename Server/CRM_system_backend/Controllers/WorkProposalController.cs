@@ -1,6 +1,6 @@
-﻿using CRM_system_backend.Contracts;
+﻿using CRM_system_backend.Contracts.WorkPropossal;
 using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.DTOs;
+using CRMSystem.Core.DTOs.WorkProposal;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class WorkProposalController : ControllerBase
 {
     private readonly IWorkPropossalService _workPropossalService;
@@ -19,143 +19,58 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<WorkProposal>>> GetWorkProposal(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
+    public async Task<ActionResult<List<WorkProposalItem>>> GetPagedProposals([FromQuery] WorkProposalFilter filter)
     {
-        var workPropossals = await _workPropossalService.GetPagedWorkProposal(page, limit);
-        var totalCount = await _workPropossalService.GetCountProposal();
+        var dto = await _workPropossalService.GetPagedProposals(filter);
+        var count = await _workPropossalService.GetCountProposals(filter);
 
-        var response = workPropossals
-            .Select(wp => new WorkProposalResponse(
-                wp.Id,
-                wp.OrderId,
-                wp.WorkId,
-                wp.ByWorker,
-                wp.StatusId,
-                wp.DecisionStatusId,
-                wp.Date))
+        var response = dto
+            .Select(w => new WorkProposalResponse(
+                w.id,
+                w.orderId,
+                w.job,
+                w.jobId,
+                w.worker,
+                w.workerId,
+                w.status,
+                w.statusId,
+                w.date))
             .ToList();
 
-        Response.Headers.Append("x-total-count", totalCount.ToString());
+        Response.Headers.Append("x-total-count", count.ToString());
 
         return Ok(response);
     }
 
-    [HttpGet("forCar/{carId}")]
-    [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<List<WorkProposalWithInfoDto>>> GetWorkProposalForCar(int carId)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<WorkProposalItem>> GetProposalById(long id)
     {
-        var workPropossals = await _workPropossalService.GetPagedProposalsForCar(carId);
+        var dto = await _workPropossalService.GetProposalById(id);
 
-        var response = workPropossals
-            .Select(d => new WorkProposalWithInfoDto(
-                d.Id,
-                d.OrderId,
-                d.WorkName,
-                d.ByWorker,
-                d.StatusName,
-                d.DecisionStatusName,
-                d.Date))
-            .ToList();
-
-        return Ok(response);
-    }
-
-    [HttpGet("with-info")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<WorkProposalWithInfoDto>>> GetWorkProposalWithInfo(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
-    {
-        var dtos = await _workPropossalService.GetPagedWorkProposalWithInfo(page, limit);
-        var totalCount = await _workPropossalService.GetCountProposal();
-
-        var response = dtos
-            .Select(d => new WorkProposalWithInfoDto(
-                d.Id,
-                d.OrderId,
-                d.WorkName,
-                d.ByWorker,
-                d.StatusName,
-                d.DecisionStatusName,
-                d.Date))
-            .ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);
-    }
-
-    [HttpGet("InWork")]
-    [Authorize(Policy = "WorkerPolicy")]
-    public async Task<ActionResult<List<WorkerWithInfoDto>>> GetProposalForClient(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
-    {
-        var userId = int.Parse(User.FindFirst("userId")!.Value);
-
-        var proposals = await _workPropossalService.GetPagedProposalForClient(userId, page, limit);
-        var totalCount = await _workPropossalService.GetCountProposalForClient(userId);
-
-        var response = proposals
-            .Select(d => new WorkProposalWithInfoDto(
-                d.Id,
-                d.OrderId,
-                d.WorkName,
-                d.ByWorker,
-                d.StatusName,
-                d.DecisionStatusName,
-                d.Date))
-            .ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
-
-        return Ok(response);
+        return Ok(dto);
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<int>> CreateWorkProposal([FromBody] WorkProposalRequest request)
+    public async Task<ActionResult<long>> CreateProposal([FromBody] WorkProposalRequest request)
     {
-        var (workProposal, error) = WorkProposal.Create(
+        var (workProposal, errors) = WorkProposal.Create(
             0,
-            request.OrderId ?? 0,
-            request.WorkId ?? 0,
-            request.ByWorker ?? 0,
-            request.StatusId ?? 0,
-            request.DecisionStatusId ?? 0,
-            request.Date ?? DateTime.Now);
+            request.orderId,
+            request.jobId,
+            request.workerId,
+            request.statusId,
+            request.date);
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            return BadRequest(new { error });
-        }
+        if (errors is not null && errors.Any())
+            return BadRequest(errors);
 
-        var workProposalId = await _workPropossalService.CreateWorkProposal(workProposal);
+        var Id = await _workPropossalService.CreateProposal(workProposal!);
 
-        return Ok(workProposalId);
-    }
-
-    [HttpPut("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateWorkProposa([FromBody]WorkProposalRequest request, int id)
-    {
-        var result = await _workPropossalService.UpdateWorkProposal(id, 
-            request.OrderId,
-            request.WorkId,
-            request.ByWorker,
-            request.StatusId,
-            request.DecisionStatusId,
-            request.Date);
-
-        return Ok(result);
+        return Ok(Id);
     }
 
     [HttpPut("{id}/accept")]
-    [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<int>> AcceptProposal(int id)
+    public async Task<ActionResult<long>> AcceptProposal(long id)
     {
         await _workPropossalService.AcceptProposal(id);
 
@@ -163,8 +78,7 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpPut("{id}/reject")]
-    [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<int>> RejectProposal(int id)
+    public async Task<ActionResult<long>> RejectProposal(long id)
     {
         await _workPropossalService.RejectProposal(id);
 
@@ -174,9 +88,9 @@ public class WorkProposalController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<int>> DeleteWorkProposa(int id)
+    public async Task<ActionResult<long>> DeleteWorkProposa(long id)
     {
-        var result = await _workPropossalService.DeleteWorkProposal(id);
+        var result = await _workPropossalService.DeleteProposal(id);
 
         return Ok(result);
     }

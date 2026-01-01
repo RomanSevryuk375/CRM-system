@@ -61,7 +61,7 @@ public class WorkerService : IWorkerService
         return worker;
     }
 
-    public async Task<int> CreateClient(Worker worker)
+    public async Task<int> CreateWorker(Worker worker)
     {
         _logger.LogInformation("Creating worker start");
 

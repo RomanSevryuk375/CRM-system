@@ -1,13 +1,13 @@
-﻿using CRM_system_backend.Contracts;
-using CRMSystem.Buisnes.Services;
+﻿using CRM_system_backend.Contracts.Tax;
+using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.Tax;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class TaxController : ControllerBase
 {
     private readonly ITaxService _taxService;
@@ -18,59 +18,49 @@ public class TaxController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<Tax>>> GetTaxes(
-        [FromQuery(Name = "_page")] int page,
-        [FromQuery(Name = "_limit")] int limit)
+    public async Task<ActionResult<List<TaxItem>>> GetTaxes([FromQuery] TaxFilter filter)
     {
-        var taxes = await _taxService.GetPagedTaxes(page, limit);
-        var totalCount = await _taxService.GetCountTaxes();
+        var dto = await _taxService.GetTaxes(filter);
 
-        var response = taxes
-            .Select(t => new TaxResponse(
-                t.Id, t.Name, t.Rate, t.Type))
-            .ToList();
-
-        Response.Headers.Append("x-total-count", totalCount.ToString());
+        var response = dto.Select(t => new TaxResponse(
+                t.id,
+                t.name,
+                t.rate,
+                t.type));
 
         return Ok(response);
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateTax([FromBody] TaxRequest taxRequest)
     {
-        var (tax, error) = Tax.Create(
+        var (tax, errors) = Tax.Create(
             0,
-            taxRequest.Name ?? "",
-            taxRequest.Rate ?? 0,
-            taxRequest.Type ?? "");
+            taxRequest.name,
+            taxRequest.rate,
+            taxRequest.typeId);
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            return BadRequest(new { error });
-        }
+        if (errors is not null && errors.Any())
+            return BadRequest(errors);
 
-        var taxId = await _taxService.CreateTax(tax);
+        var Id = await _taxService.CreateTax(tax!);
 
-        return Ok(taxId);
+        return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateTax([FromBody] TaxRequest taxRequest, int id)
+    public async Task<ActionResult<int>> UpdateTax(int id, [FromBody] TaxUpdateRequest request)
     {
-        var result = await _taxService.UpdateTax(
-            id,
-            taxRequest.Name, 
-            taxRequest.Rate, 
-            taxRequest.Type);
+        var model = new TaxUpdateModel(
+            request.name,
+            request.rate);
+
+        var result = await _taxService.UpdateTax(id, model);
 
         return Ok(result);
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteTax(int id)
     {
         var result = await _taxService.DeleteTax(id);

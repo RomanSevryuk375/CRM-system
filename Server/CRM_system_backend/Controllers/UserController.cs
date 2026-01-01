@@ -1,5 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
-using CRMSystem.Buisnes.Services;
+using CRM_system_backend.Contracts.User;
+using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.User;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +36,7 @@ public class UserController : ControllerBase
         };
 
         Response.Cookies.Append("jwt", token, cookieOptions);
-        var userId = user.RoleId;
+        var userId = user.roleId;
 
         return Ok(new { Message = "Logged in", Token = token , RoleId = userId});
     }
@@ -55,35 +57,33 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("by-login/{login}")]
-    public async Task<ActionResult<User>> GetUserByLogin(string login)
+    public async Task<ActionResult<UserItem>> GetUserByLogin(string login)
     {
         var user = await _userService.GetUsersByLogin(login);
         return Ok(user);
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreateUser([FromBody] UserRequest request)
+    public async Task<ActionResult<long>> CreateUser([FromBody] UserRequest request)
     {
-        var (user, error) = CRMSystem.Core.Models.User.Create(
+        var (user, errors) = CRMSystem.Core.Models.User.Create(
             0,
-            request.RoleId,
-            request.Login,
-            request.Password);
+            request.roleId,
+            request.login,
+            request.password);
 
 
-        if (!string.IsNullOrEmpty(error))
-        {
-            return BadRequest(error);
-        }
+        if (errors is not null && errors.Any())
+            return BadRequest(errors);
 
-        var userId = await _userService.CreateUser(user);
+        var userId = await _userService.CreateUser(user!);
 
         return userId;
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> DeleteUser (int id)
+    public async Task<ActionResult<long>> DeleteUser (int id)
     {
         var result = await _userService.DeleteUser(id);
 

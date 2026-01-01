@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.DTOs.StorageCell;
+﻿using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs.StorageCell;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Buisnes.Services;
 
-public class StorageCellService
+public class StorageCellService : IStorageCellService
 {
     private readonly IStorageCellRepository _storageCellRepository;
     private readonly ILogger<StorageCellService> _logger;
