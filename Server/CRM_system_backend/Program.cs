@@ -4,6 +4,8 @@ using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Buisnes.Cached;
 using CRMSystem.Buisnes.Extensions;
 using CRMSystem.Buisnes.Services;
+using CRMSystem.Buisness.Abstractions;
+using CRMSystem.Buisness.Services;
 using CRMSystem.DataAccess;
 using CRMSystem.DataAccess.Repositories;
 using CRMSystem.Infrastructure;
@@ -57,6 +59,7 @@ public class Program
 
         builder.Services.AddScoped<IJwtProvider, JwtProvider>();
         builder.Services.AddScoped<IMyPasswordHasher, MyPasswordHasher>();
+        builder.Services.AddScoped<IFileService, MinioFileService>();
 
         builder.Services.AddScoped<IAbsenceRepository, AbsenceRepository>();
         builder.Services.AddScoped<IAbsenceTypeRepository, AbsenceTypeRepository>();

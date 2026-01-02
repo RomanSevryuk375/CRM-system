@@ -75,8 +75,8 @@ public class CarService : ICarService
             throw new NotFoundException($"Client{car.OwnerId} not found");
         }
 
-        if (!await _carStatusRepository.Exists((int)car.StatusId)
-            && car.StatusId is not CarStatusEnum.AtWork)
+        if (!await _carStatusRepository.Exists((int)car.StatusId))
+        //&& car.StatusId is not CarStatusEnum.AtWork)
         {
             _logger.LogError("Status{StatusId} not found or invalid status", (int)car.StatusId);
             throw new NotFoundException($"Car{(int)car.StatusId} not found or invalid status");

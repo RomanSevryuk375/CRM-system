@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="15.0.1" />
+    <PackageReference Include="AWSSDK.S3" Version="4.0.16.1" />
     <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
@@ -30,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\system.Buisnes\CRMSystem.Buisnes.csproj" />
+    <ProjectReference Include="..\system.Buisnes\CRMSystem.Buisness.csproj" />
     <ProjectReference Include="..\system.Core\CRMSystem.Core.csproj" />
     <ProjectReference Include="..\system.DataAccess\CRMSystem.DataAccess.csproj" />
 

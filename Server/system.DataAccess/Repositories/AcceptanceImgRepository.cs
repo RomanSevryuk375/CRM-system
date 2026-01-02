@@ -41,6 +41,20 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
             .ToListAsync();
     }
 
+    public async Task<AcceptanceImgItem?> GetById(long id)
+    {
+        return await _context.AcceptanceImgs
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .Select(a => new AcceptanceImgItem(
+            a.Id,
+            a.AcceptanceId,
+            a.FilePath,
+            a.Description))
+            .FirstOrDefaultAsync();
+            
+    }
+
     public async Task<int> GetCount(AcceptanceImgFilter filter)
     {
         var query = _context.AcceptanceImgs.AsNoTracking();

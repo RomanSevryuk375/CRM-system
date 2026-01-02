@@ -1,6 +1,7 @@
 ﻿using CRM_system_backend.Contracts.Car;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Car;
+using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,16 +25,16 @@ public class CarController : ControllerBase
         var cout = await _carService.GetCountCars(filter);
 
         var response = dto.Select(c => new CarResponse(
-            c.id,
-            c.owner,
-            c.status,
-            c.statusId,
-            c.brand,
-            c.model,
-            c.yearOfManufacture,
-            c.vinNumber,
-            c.stateNumber,
-            c.mileage));
+            c.Id,
+            c.Owner,
+            c.Status,
+            c.StatusId,
+            c.Brand,
+            c.Model,
+            c.YearOfManufacture,
+            c.VinNumber,
+            c.StateNumber,
+            c.Mileage));
 
         Response.Headers.Append("x-total-count", cout.ToString());
 
@@ -51,16 +52,17 @@ public class CarController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<long>> CreateCar([FromBody]CarRequest request)
     {
+        Console.WriteLine($"CONTROLLER DEBUG: Recieved JSON mapped to: OwnerId={request.OwnerId}, StatusId={request.StatusId}");
         var (car, errors) = Car.Create(
             0,
-            request.ownerId,
-            request.statusId,
-            request.brand,
-            request.model,
-            request.yearOfManufacture,
-            request.vinNumber,
-            request.stateNumber,
-            request.mileage);
+            request.OwnerId,
+            (CarStatusEnum)request.StatusId,
+            request.Brand,
+            request.Model,
+            request.YearOfManufacture,
+            request.VinNumber,
+            request.StateNumber,
+            request.Mileage);
 
         if(errors is not null && errors.Any())
             return BadRequest(errors);

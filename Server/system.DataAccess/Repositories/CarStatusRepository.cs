@@ -25,8 +25,8 @@ public class CarStatusRepository : ICarStatusRepository
 
     public async Task<bool> Exists(long id)
     {
-        return await _context.CarStatuses
-            .AsNoTracking()
-            .AnyAsync(c => c.Id == id);
+        var exists = await _context.CarStatuses.AnyAsync(c => c.Id == id);
+        Console.WriteLine($"DEBUG: Checking status {id}. Exists in DB? {exists}");
+        return exists;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CRM_system_backend.Contracts.AttachmentImg;
 using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.DTOs;
 using CRMSystem.Core.DTOs.AttachmentImg;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -34,19 +35,24 @@ public class AttachmentImgController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("{id}/download")]
+    public async Task<IActionResult> DownloadImage(long id)
+    {
+        var (stream, contentType) = await _attachmentImgService.GetImageStream(id);
+
+        return File(stream, contentType, $"attachment_{id}.jpg");
+    }
+
     [HttpPost]
     public async Task<ActionResult<long>> CreateAttachmentImg([FromBody] AttachmentImgRequest request)
     {
-        var (attachmentImg, errors) = AttachmentImg.Create(
-            0,
-            request.attachmentId,
-            request.filePath,
-            request.description);
+        if(request.File is null || request.File.Length == 0)
+            return BadRequest("File is required");
 
-        if (errors is not null && errors.Any())
-            return BadRequest(errors);
+        using var stream = request.File.OpenReadStream();
+        var fileItem = new FileItem(stream, request.File.FileName, request.File.ContentType);
 
-        var Id = await _attachmentImgService.CreateAttachmentImg(attachmentImg!);
+        var Id = await _attachmentImgService.CreateAttachmentImg(request.AttachmentId, fileItem, request.Description);
 
         return Ok(Id);
     }

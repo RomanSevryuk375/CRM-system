@@ -4,14 +4,14 @@ public static class DomainValidator
 {
     public static string ValidateId (int Id, string FieldName)
     {
-        if (Id <= 0)
+        if (Id < 0)
             return $"{FieldName} must be positive";
 
         return string.Empty;
     }
     public static string ValidateId(long Id, string FieldName)
     {
-        if (Id <= 0)
+        if (Id < 0)
             return $"{FieldName} must be positive";
 
         return string.Empty;

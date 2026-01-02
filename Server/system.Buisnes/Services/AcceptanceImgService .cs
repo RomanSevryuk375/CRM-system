@@ -1,4 +1,6 @@
-﻿using CRMSystem.Buisnes.Abstractions;
+﻿
+using CRMSystem.Buisness.Abstractions;
+using CRMSystem.Core.DTOs;
 using CRMSystem.Core.DTOs.AcceptanceImg;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
@@ -12,26 +14,42 @@ public class AcceptanceImgService : IAcceptanceImgService
     private readonly IAcceptanceImgRepository _acceptanceImgRepository;
     private readonly IAcceptanceRepository _acceptanceRepository;
     private readonly ILogger<AcceptanceImgService> _logger;
+    private readonly IFileService _fileService;
 
     public AcceptanceImgService(
         IAcceptanceImgRepository acceptanceImgRepository,
         IAcceptanceRepository acceptanceRepository,
-        ILogger<AcceptanceImgService> logger)
+        ILogger<AcceptanceImgService> logger,
+        IFileService fileService)
     {
         _acceptanceImgRepository = acceptanceImgRepository;
         _acceptanceRepository = acceptanceRepository;
         _logger = logger;
+        _fileService = fileService;
     }
 
     public async Task<List<AcceptanceImgItem>> GetAcceptanceIng(AcceptanceImgFilter filter)
     {
         _logger.LogInformation("Getting acceptanceImg start");
 
-        var acceptance = await _acceptanceImgRepository.GetPaged(filter);
+        var acceptanceImg = await _acceptanceImgRepository.GetPaged(filter);
 
         _logger.LogInformation("Getting acceptanceImg success");
 
-        return acceptance;
+        return acceptanceImg;
+    }
+
+    public async Task<(Stream FileStream, string ContentType)> GetImageStream(long id)
+    {
+        var img = await _acceptanceImgRepository.GetById(id);
+        if (img == null)
+            throw new NotFoundException($"Image {id} not found");
+
+        var stream = await _fileService.GetFile(img.filePath);
+
+        string contentType = "application/octet-stream";
+
+        return (stream, contentType);
     }
 
     public async Task<int> GetCountAccptnceImg(AcceptanceImgFilter filter)
@@ -45,17 +63,43 @@ public class AcceptanceImgService : IAcceptanceImgService
         return count;
     }
 
-    public async Task<long> CreateAccptanceImg(AcceptanceImg acceptanceImg)
+    public async Task<long> CreateAccptanceImg(long AcceptanceId, FileItem file, string? description)
     {
-        _logger.LogInformation("Creating acceptanceImg start"); 
+        _logger.LogInformation("Creating acceptanceImg start");
 
-        if (!await _acceptanceRepository.Exists(acceptanceImg.AcceptanceId))
+        if (!await _acceptanceRepository.Exists(AcceptanceId))
         {
-            _logger.LogError("Acceptance {AcceptanceId} not found", acceptanceImg.AcceptanceId);
-            throw new NotFoundException($"Acceptance {acceptanceImg.AcceptanceId} not found");
+            _logger.LogError("Acceptance {AcceptanceId} not found", AcceptanceId);
+            throw new NotFoundException($"Acceptance {AcceptanceId} not found");
         }
 
-        var accptanceImg = await _acceptanceImgRepository.Create(acceptanceImg);
+        string path;
+        try
+        {
+            path = await _fileService.UploadFile(file.Content, file.FileName, file.ContentType);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to upload file to storage");
+            throw new Exception("File storage error");
+        }
+
+        var (acceptanceImg, errors) = AcceptanceImg.Create(
+            0,
+            AcceptanceId,
+            path,
+            description);
+
+        if ((errors is not null && errors.Any()) || acceptanceImg == null)
+        {
+            await _fileService.DeleteFile(path);
+
+            var errorMsg = string.Join(", ", errors!);
+            _logger.LogError("AttachmentImg validation failed: {Errors}", errorMsg);
+            throw new ConflictException($"Validation failed: {errorMsg}");
+        }
+
+        var accptanceImg = await _acceptanceImgRepository.Create(acceptanceImg!);
 
         _logger.LogInformation("Creating acceptanceImg success");
 
@@ -76,6 +120,16 @@ public class AcceptanceImgService : IAcceptanceImgService
     public async Task<long> DeleteAccptanceImg(long id)
     {
         _logger.LogInformation("Deleting Acceptance{AcceptanceId} start", id);
+
+        var img = await _acceptanceImgRepository.GetById(id);
+
+        if (img is null)
+        {
+            _logger.LogInformation("AcceptanceImg{AcceptanceImgId} not found", id);
+            throw new NotFoundException($"AcceptanceImg {id} not found");
+        }
+
+        await _fileService.DeleteFile(img.filePath);
 
         var Id = await _acceptanceImgRepository.Delete(id);
 

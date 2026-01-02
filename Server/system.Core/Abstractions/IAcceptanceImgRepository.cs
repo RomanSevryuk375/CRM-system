@@ -9,5 +9,6 @@ public interface IAcceptanceImgRepository
     Task<long> Delete(long id);
     Task<int> GetCount(AcceptanceImgFilter filter);
     Task<List<AcceptanceImgItem>> GetPaged(AcceptanceImgFilter filter);
+    Task<AcceptanceImgItem?> GetById(long id);
     Task<long> Update(long id, string? filePath, string? description);
 }

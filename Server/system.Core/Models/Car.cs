@@ -11,6 +11,7 @@ public class Car
     {
         Id = id;
         OwnerId = ownerId;
+        StatusId = statusId;
         Brand = brand;
         Model = model;
         YearOfManufacture = yearOfManufacture;

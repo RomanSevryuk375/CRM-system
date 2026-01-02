@@ -2,6 +2,7 @@
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -39,6 +40,19 @@ public class AttachmentImgRepository : IAttachmentImgRepository
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
+    }
+
+    public async Task<AttachmentImgItem?> GetById(long  id)
+    {
+        return await _context.AttachmentImgs
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .Select(a => new AttachmentImgItem(
+            a.Id,
+            a.AttachmentId,
+            a.FilePath,
+            a.Description))
+            .FirstOrDefaultAsync();
     }
 
     public async Task<int> GetCount(AttachmentImgFilter filter)

@@ -1,5 +1,8 @@
 ﻿using CRM_system_backend.Contracts.AcceptanceImg;
 using CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Buisnes.Services;
+using CRMSystem.Buisness.Abstractions;
+using CRMSystem.Core.DTOs;
 using CRMSystem.Core.DTOs.AcceptanceImg;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -34,19 +37,24 @@ public class AcceptanceImgController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost]
-    public async Task<ActionResult<long>> CreateAcceptanceImg([FromBody] AcceptanceImgRequest request)
+    [HttpGet("{id}/download")]
+    public async Task<IActionResult> DownloadImage(long id)
     {
-        var (acceptanceImg, errors) = AcceptanceImg.Create(
-            0,
-            request.acceptanceId,
-            request.filePath,
-            request.description);
+        var (stream, contentType) = await _acceptanceImgService.GetImageStream(id);
 
-        if (errors is not null && errors.Any()) 
-            return BadRequest(errors);
+        return File(stream, contentType, $"attachment_{id}.jpg");
+    }
 
-        var Id = await _acceptanceImgService.CreateAccptanceImg(acceptanceImg!);
+    [HttpPost]
+    public async Task<ActionResult<long>> CreateAcceptanceImg([FromForm] CreateAcceptanceImgRequest request)
+    {
+        if (request.File is null || request.File.Length == 0) 
+            return BadRequest("File is required");
+
+        using var strem = request.File.OpenReadStream();
+        var fileItem = new FileItem(strem, request.File.FileName, request.File.ContentType);
+
+        var Id = await _acceptanceImgService.CreateAccptanceImg(request.AcceptanceId, fileItem, request.Description);
 
         return Ok(Id);
     }

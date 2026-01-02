@@ -1,11 +1,12 @@
-﻿using CRMSystem.Core.DTOs.AttachmentImg;
-using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.DTOs;
+using CRMSystem.Core.DTOs.AttachmentImg;
 
 namespace CRMSystem.Buisnes.Abstractions;
 
 public interface IAttachmentImgService
 {
-    Task<long> CreateAttachmentImg(AttachmentImg attachmentImg);
+    Task<long> CreateAttachmentImg(long attachmentId, FileItem file, string? description);
+    Task<(Stream FileStream, string ContentType)> GetImageStream(long id);
     Task<long> DeleteAttachmentImg(long id);
     Task<int> GetCountAttachmentImg(AttachmentImgFilter filter);
     Task<List<AttachmentImgItem>> GetPagedAttachmentImg(AttachmentImgFilter filter);

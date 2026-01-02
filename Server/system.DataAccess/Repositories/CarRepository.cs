@@ -137,6 +137,7 @@ public class CarRepository : ICarRepository
         };
 
         await _context.Cars.AddAsync(carEntities);
+        Console.WriteLine($"DEBUG: Saving Car with StatusId = {carEntities.StatusId}");
         await _context.SaveChangesAsync();
 
         return carEntities.Id;
