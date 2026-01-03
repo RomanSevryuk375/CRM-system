@@ -2,6 +2,6 @@
 
 public record OrderStatusItem
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

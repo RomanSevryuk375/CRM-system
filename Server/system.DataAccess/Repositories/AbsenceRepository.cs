@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Absence;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Absence;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,16 +10,20 @@ namespace CRMSystem.DataAccess.Repositories;
 public class AbsenceRepository : IAbsenceRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public AbsenceRepository(SystemDbContext context)
+    public AbsenceRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<AbsenceEntity> ApplyFilter(IQueryable<AbsenceEntity> query, AbsenceFilter filter)
     {
-        if (filter.workerIds != null && filter.workerIds.Any())
-            query = query.Where(x => filter.workerIds.Contains(x.WorkerId));
+        if (filter.WorkerIds != null && filter.WorkerIds.Any())
+            query = query.Where(x => filter.WorkerIds.Contains(x.WorkerId));
 
         return query;
     }
@@ -29,39 +35,40 @@ public class AbsenceRepository : IAbsenceRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "type" => filter.isDescending 
+            "type" => filter.IsDescending 
                 ? query.OrderByDescending(a => a.AbsenceType == null 
                     ? string.Empty 
                     : a.AbsenceType.Name) 
                 : query.OrderBy(a => a.AbsenceType == null 
                     ? string.Empty 
                     : a.AbsenceType.Name),
-            "startdate" => filter.isDescending 
+            "startdate" => filter.IsDescending 
                 ? query.OrderByDescending(a => a.StartDate) 
                 : query.OrderBy(a => a.StartDate),
-            "enddate" => filter.isDescending 
+            "enddate" => filter.IsDescending 
                 ? query.OrderByDescending(a => a.EndDate) 
                 : query.OrderBy(a => a.EndDate),
 
-            _ => filter.isDescending 
+            _ => filter.IsDescending 
             ? query.OrderByDescending(a => a.Id) 
             : query.OrderBy(a => a.Id)
         };
 
-        var projection = query.Select(a => new AbsenceItem(
-            a.Id,
-            a.Worker == null 
-                ? string.Empty 
-                : $"{a.Worker.Name} {a.Worker.Surname}",
-            a.WorkerId,
-            a.AbsenceType == null 
-                ? string.Empty 
-                : a.AbsenceType.Name,
-            a.TypeId,
-            a.StartDate,
-            a.EndDate));
+        //var projection = query.Select(a => new AbsenceItem(
+        //    a.Id,
+        //    a.Worker == null 
+        //        ? string.Empty 
+        //        : $"{a.Worker.Name} {a.Worker.Surname}",
+        //    a.WorkerId,
+        //    a.AbsenceType == null 
+        //        ? string.Empty 
+        //        : a.AbsenceType.Name,
+        //    a.TypeId,
+        //    a.StartDate,
+        //    a.EndDate));
 
-        return await projection
+        return await query
+            .ProjectTo<AbsenceItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -95,9 +102,9 @@ public class AbsenceRepository : IAbsenceRepository
         var entity = await _context.Absences.FirstOrDefaultAsync(a => a.Id == id)
             ?? throw new Exception("Absence not found");
 
-        if (model.typeId.HasValue) entity.TypeId = (int)model.typeId.Value;
-        if (model.startDate.HasValue) entity.StartDate = model.startDate.Value;
-        if (model.endDate.HasValue) entity.EndDate = model.endDate.Value;
+        if (model.TypeId.HasValue) entity.TypeId = (int)model.TypeId.Value;
+        if (model.StartDate.HasValue) entity.StartDate = model.StartDate.Value;
+        if (model.EndDate.HasValue) entity.EndDate = model.EndDate.Value;
 
         await _context.SaveChangesAsync();
         return entity.Id;
@@ -119,6 +126,13 @@ public class AbsenceRepository : IAbsenceRepository
             .AnyAsync(a => a.Id == id);        
     }
 
+    public async Task<int?> GetWorkerId(int id)
+    {
+        return await _context.Absences
+            .Where(a => a.Id == id)
+            .Select(a => a.WorkerId)
+            .FirstOrDefaultAsync();
+    }
 
     public async Task<bool> HasOverLap(int workerId, DateOnly start, DateOnly? end, int? excludeId = null)
     {

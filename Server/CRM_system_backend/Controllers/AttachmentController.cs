@@ -25,12 +25,12 @@ public class AttachmentController : ControllerBase
         var count = await _attachmentService.GetCountAttchment(filter);
 
         var response = dto.Select(a => new AttachmentResponse(
-            a.id,
-            a.orderId,
-            a.worker,
-            a.workerId,
-            a.createAt,
-            a.description));
+            a.Id,
+            a.OrderId,
+            a.Worker,
+            a.WorkerId,
+            a.CreateAt,
+            a.Description));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -42,10 +42,10 @@ public class AttachmentController : ControllerBase
     {
         var (attachment, errors) = Attachment.Create(
             0,
-            request.orderId,
-            request.workerId,
-            request.createAt,
-            request.description);
+            request.OrderId,
+            request.WorkerId,
+            request.CreateAt,
+            request.Description);
 
         if(errors is not null && errors.Any())
             return BadRequest(errors);
@@ -58,7 +58,7 @@ public class AttachmentController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<long>> UpdateAttachment(long id, [FromBody] AttachmentUpdateRequest request)
     {
-        var Id = await _attachmentService.UpdateAttachment(id, request.description);
+        var Id = await _attachmentService.UpdateAttachment(id, request.Description);
 
         return Ok(Id);
     }

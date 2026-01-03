@@ -2,6 +2,6 @@
 
 public record StorageCellUpdateRequest
 (
-    string? rack,
-    string? shelf
+    string? Rack,
+    string? Shelf
 );

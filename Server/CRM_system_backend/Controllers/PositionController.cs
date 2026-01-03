@@ -26,13 +26,13 @@ public class PositionController : ControllerBase
         var count = await _positionSrevice.GetCountPositions(positionFilter);
 
         var response = dto.Select(p => new PositionResponse(
-            p.id,
-            p.part,
-            p.partId,
-            p.cellId,
-            p.purchasePrice,
-            p.sellingPrice,
-            p.quantity));
+            p.Id,
+            p.Part,
+            p.PartId,
+            p.CellId,
+            p.PurchasePrice,
+            p.SellingPrice,
+            p.Quantity));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -44,14 +44,14 @@ public class PositionController : ControllerBase
     {
         var (part, partErrors) = Part.Create(
             0,
-            request.categoryId,
-            request.oemArticle,
-            request.manufacturerArticle,
-            request.internalArticle,
-            request.description,
-            request.name,
-            request.manufacturer,
-            request.applicability);
+            request.CategoryId,
+            request.OemArticle,
+            request.ManufacturerArticle,
+            request.InternalArticle,
+            request.Description,
+            request.Name,
+            request.Manufacturer,
+            request.Applicability);
 
         if(partErrors is not null && partErrors.Any()) 
             return BadRequest(partErrors);
@@ -59,10 +59,10 @@ public class PositionController : ControllerBase
         var (position, positionErrors) = Position.Create(
             0,
             1,
-            request.cellId,
-            request.purchasePrice,
-            request.sellingPrice,
-            request.quantity);
+            request.CellId,
+            request.PurchasePrice,
+            request.SellingPrice,
+            request.Quantity);
 
         if(positionErrors is not null && positionErrors.Any()) 
             return BadRequest(positionErrors);
@@ -76,10 +76,10 @@ public class PositionController : ControllerBase
     public async Task<ActionResult<long>> UpdatePosition(long id,[FromBody] PositionUpdateRequest request)
     {
         var model = new PositionUpdateModel(
-            request.cellId,
-            request.purchasePrice,
-            request.purchasePrice,
-            request.quantity);
+            request.CellId,
+            request.PurchasePrice,
+            request.PurchasePrice,
+            request.Quantity);
 
         var Id = await _positionSrevice.UpdatePosition(id, model);
 

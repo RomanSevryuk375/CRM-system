@@ -2,8 +2,8 @@
 
 public record TaxResponse
 (
-    int id,
-    string name,
-    decimal rate,
-    string type
+    int Id,
+    string Name,
+    decimal Rate,
+    string Type
 );

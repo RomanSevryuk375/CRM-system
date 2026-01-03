@@ -1,11 +1,11 @@
 ﻿using CRMSystem.Core.Enums;
 
-namespace CRM_system_backend.Contracts.Absence;
+namespace CRMSystem.Core.DTOs.Absence;
 
 public record AbsenceRequest
 (
+    int Id,
     int WorkerId,
-    int workerId,
     AbsenceTypeEnum TypeId,
     DateOnly StartDate,
     DateOnly? EndDate

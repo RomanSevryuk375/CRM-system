@@ -4,11 +4,11 @@ namespace CRMSystem.Core.DTOs.Expense;
 
 public record ExpenseFilter
 (
-    IEnumerable<int?> taxIds,
-    IEnumerable<long?> partSetIds,
-    IEnumerable<int> expenseTypeIds,
+    IEnumerable<int?> TaxIds,
+    IEnumerable<long?> PartSetIds,
+    IEnumerable<int> ExpenseTypeIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

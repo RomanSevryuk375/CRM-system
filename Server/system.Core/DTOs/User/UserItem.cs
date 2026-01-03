@@ -2,10 +2,10 @@
 
 public record UserItem
 (
-    long id,
-    string role,
-    int roleId,
-    string login, 
-    string passwordHash
+    long Id,
+    string Role,
+    int RoleId,
+    string login,
+    string PasswordHash
 );
 

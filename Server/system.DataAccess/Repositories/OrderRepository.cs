@@ -18,17 +18,17 @@ public class OrderRepository : IOrderRepository
 
     private IQueryable<OrderEntity> ApplyFilter(IQueryable<OrderEntity> query, OrderFilter filter)
     {
-        if (filter.statusIds != null && filter.statusIds.Any())
-            query = query.Where(o => filter.statusIds.Contains(o.StatusId));
+        if (filter.StatusIds != null && filter.StatusIds.Any())
+            query = query.Where(o => filter.StatusIds.Contains(o.StatusId));
 
-        if (filter.priorityIds != null && filter.priorityIds.Any())
-            query = query.Where(o => filter.priorityIds.Contains(o.PriorityId));
+        if (filter.PriorityIds != null && filter.PriorityIds.Any())
+            query = query.Where(o => filter.PriorityIds.Contains(o.PriorityId));
 
-        if (filter.carIds != null && filter.carIds.Any())
-            query = query.Where(o => filter.carIds.Contains(o.CarId));
+        if (filter.CarIds != null && filter.CarIds.Any())
+            query = query.Where(o => filter.CarIds.Contains(o.CarId));
 
-        if (filter.orderIds != null && filter.orderIds.Any())
-            query = query.Where(o => filter.orderIds.Contains(o.Id));
+        if (filter.OrderIds != null && filter.OrderIds.Any())
+            query = query.Where(o => filter.OrderIds.Contains(o.Id));
 
         return query;
     }
@@ -40,24 +40,24 @@ public class OrderRepository : IOrderRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "status" => filter.isDescending
+            "status" => filter.IsDescending
                 ? query.OrderByDescending(o => o.Status == null
                     ? string.Empty
                     : o.Status.Name)
                 : query.OrderBy(o => o.Status == null
                     ? string.Empty
                     : o.Status.Name),
-            "car" => filter.isDescending
+            "car" => filter.IsDescending
                 ? query.OrderByDescending(o => o.Car == null
                     ? string.Empty
                     : o.Car.Brand)
                 : query.OrderBy(o => o.Car == null
                     ? string.Empty
                     : o.Car.Brand),
-            "date" => filter.isDescending
+            "date" => filter.IsDescending
                 ? query.OrderByDescending(o => o.Date)
                 : query.OrderBy(o => o.Date),
-            "priority" => filter.isDescending
+            "priority" => filter.IsDescending
                 ? query.OrderByDescending(o => o.OrderPriority == null
                     ? string.Empty
                     : o.OrderPriority.Name)
@@ -65,7 +65,7 @@ public class OrderRepository : IOrderRepository
                     ? string.Empty
                     : o.OrderPriority.Name),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(o => o.Id)
                 : query.OrderBy(o => o.Id),
         };

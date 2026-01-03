@@ -1,6 +1,6 @@
 ﻿using CRM_system_backend.Contracts.AbsenceType;
 using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs;
+using CRMSystem.Core.DTOs.AbsenceType;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,8 +24,8 @@ public class AbsenceTypeController : ControllerBase
         var dto = await _absenceTypeService.GetAllAbsenceType();
 
         var response = dto.Select(a => new AbsenceTypeResponse(
-            a.id,
-            a.name));
+            a.Id,
+            a.Name));
 
         return Ok(response);
     }
@@ -35,7 +35,7 @@ public class AbsenceTypeController : ControllerBase
     {
         var (absenceType, errors) = AbsenceType.Create(
             0,
-            request.name);
+            request.Name);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);
@@ -48,7 +48,7 @@ public class AbsenceTypeController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<int>> UpdateAbsenceType(int id, [FromBody] AbsenceTypeUpdateRequest request)
     {
-        var Id = await _absenceTypeService.UpdateAbsenceType(id, request.name);
+        var Id = await _absenceTypeService.UpdateAbsenceType(id, request.Name);
 
         return Ok(Id);
     }

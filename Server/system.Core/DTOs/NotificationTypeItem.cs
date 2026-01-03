@@ -2,6 +2,6 @@
 
 public record NotificationTypeItem
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

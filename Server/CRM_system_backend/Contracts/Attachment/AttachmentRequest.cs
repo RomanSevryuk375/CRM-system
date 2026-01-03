@@ -2,9 +2,9 @@
 
 public record AttachmentRequest
 (
-    long orderId,
-    string worker,
-    int workerId,
-    DateTime createAt,
-    string? description
+    long OrderId,
+    string Worker,
+    int WorkerId,
+    DateTime CreateAt,
+    string? Description
 );

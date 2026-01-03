@@ -2,6 +2,6 @@
 
 public record WorkProposalStatusResponse
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

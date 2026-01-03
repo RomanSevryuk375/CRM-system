@@ -24,17 +24,17 @@ public class NotificationController : ControllerBase
         var count = await _notificationService.GetCountNotifications(filter);
 
         var response = dto.Select(n => new NotificationResponse(
-            n.id,
-            n.client,
-            n.clientId,
-            n.car,
-            n.carId,
-            n.type,
-            n.typeId,
-            n.status,
-            n.statusId,
-            n.message,
-            n.sendAt));
+            n.Id,
+            n.Client,
+            n.ClientId,
+            n.Car,
+            n.CarId,
+            n.Type,
+            n.TypeId,
+            n.Status,
+            n.StatusId,
+            n.Message,
+            n.SendAt));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -46,12 +46,12 @@ public class NotificationController : ControllerBase
     {
         var (notification, errors) = Notification.Create(
             0,
-            request.clientId,
-            request.carId,
-            request.typeId,
-            request.statusId,
-            request.message,
-            request.sendAt);
+            request.ClientId,
+            request.CarId,
+            request.TypeId,
+            request.StatusId,
+            request.Message,
+            request.SendAt);
 
         if(errors is not null && errors.Any())
             return BadRequest(errors);

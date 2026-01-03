@@ -16,11 +16,11 @@ public class ScheduleRepository : IScheduleRepository
 
     private IQueryable<ScheduleEntity> ApplyFilter(IQueryable<ScheduleEntity> query, ScheduleFilter filter)
     {
-        if (filter.workerIds != null && filter.workerIds.Any())
-            query = query.Where(s => filter.workerIds.Contains(s.WorkerId));
+        if (filter.WorkerIds != null && filter.WorkerIds.Any())
+            query = query.Where(s => filter.WorkerIds.Contains(s.WorkerId));
 
-        if (filter.shiftIds != null && filter.shiftIds.Any())
-            query = query.Where(s => filter.shiftIds.Contains(s.ShiftId));
+        if (filter.ShiftIds != null && filter.ShiftIds.Any())
+            query = query.Where(s => filter.ShiftIds.Contains(s.ShiftId));
 
         return query;
     }
@@ -32,25 +32,25 @@ public class ScheduleRepository : IScheduleRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "worker" => filter.isDescending
+            "worker" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Worker == null
                     ? string.Empty
                     : s.Worker.Name)
                 : query.OrderBy(s => s.Worker == null
                     ? string.Empty
                     : s.Worker.Name),
-            "shift" => filter.isDescending
+            "shift" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Shift == null
                     ? string.Empty
                     : s.Shift.Name)
                 : query.OrderByDescending(s => s.Shift == null
                     ? string.Empty
                     : s.Shift.Name),
-            "datetime" => filter.isDescending
+            "datetime" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Date)
                 : query.OrderBy(s => s.Date),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(s => s.Id)
                 : query.OrderBy(s => s.Id)
         };
@@ -100,8 +100,8 @@ public class ScheduleRepository : IScheduleRepository
         var entity = await _context.Schedules.FirstOrDefaultAsync(s => s.Id == id)
             ?? throw new Exception("Schedule note not found");
 
-        if (model.shiftId.HasValue) entity.ShiftId = model.shiftId.Value;
-        if (model.dateTime.HasValue) entity.Date = model.dateTime.Value;
+        if (model.ShiftId.HasValue) entity.ShiftId = model.ShiftId.Value;
+        if (model.DateTime.HasValue) entity.Date = model.DateTime.Value;
 
         await _context.SaveChangesAsync();
 

@@ -4,8 +4,8 @@ namespace CRMSystem.Core.DTOs.Expense;
 
 public record ExpenseUpdateModel
 (
-    DateTime? date,
+    DateTime? Date,
     string? category,
-    ExpenseTypeEnum? expenseTypeId,
-    decimal? sum
+    ExpenseTypeEnum? ExpenseTypeId,
+    decimal? Sum
 );

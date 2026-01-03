@@ -24,9 +24,9 @@ public class StorageCellController : ControllerBase
         var dto = await _storageCellService.GetStorageCells();
 
         var response = dto.Select(s => new StorageCellResponse(
-            s.id,
-            s.rack,
-            s.shelf));
+            s.Id,
+            s.Rack,
+            s.Shelf));
 
         return Ok(response);
     }
@@ -36,8 +36,8 @@ public class StorageCellController : ControllerBase
     {
         var (cell, errors) = StorageCell.Create(
             0,
-            request.rack,
-            request.shelf);
+            request.Rack,
+            request.Shelf);
         
         if(errors is not null && errors.Any())
             return BadRequest(errors);
@@ -51,8 +51,8 @@ public class StorageCellController : ControllerBase
     public async Task<ActionResult<int>> UpdateStorageCell(int id, [FromBody] StorageCellUpdateRequest request)
     {
         var model = new StorageCellUpdateModel(
-            request.rack,
-            request.shelf);
+            request.Rack,
+            request.Shelf);
 
         var Id = await _storageCellService.UpdateStorageCell(id, model);
 

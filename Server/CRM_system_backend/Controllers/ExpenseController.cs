@@ -27,15 +27,15 @@ public class ExpenseController : ControllerBase
 
         var response = dto
             .Select(e => new ExpenseResponse(
-                e.id,
-                e.date,
-                e.category,
-                e.tax,
-                e.taxId,
-                e.partSetId,
-                e.expenseType,
-                e.expenceTypeId,
-                e.sum));
+                e.Id,
+                e.Date,
+                e.Category,
+                e.Tax,
+                e.TaxId,
+                e.PartSetId,
+                e.ExpenseType,
+                e.ExpenceTypeId,
+                e.Sum));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -48,12 +48,12 @@ public class ExpenseController : ControllerBase
     {
         var (expense, errors) = Expense.Create(
             0,
-            request.date,
-            request.category,
-            request.taxId,
-            request.partSetId,
-            request.expenseTypeId,
-            request.sum);
+            request.Date,
+            request.Category,
+            request.TaxId,
+            request.PartSetId,
+            request.ExpenseTypeId,
+            request.Sum);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);
@@ -68,10 +68,10 @@ public class ExpenseController : ControllerBase
     public async Task<ActionResult<long>> UpdateExpense(int id, [FromBody] ExpenseUpdateRequest request)
     {
         var model = new ExpenseUpdateModel(
-            request.date,
-            request.category,
-            request.expenseTypeId,
-            request.sum);
+            request.Date,
+            request.Category,
+            request.ExpenseTypeId,
+            request.Sum);
 
         var Id = await _expenseService.UpdateExpense(id, model);
 

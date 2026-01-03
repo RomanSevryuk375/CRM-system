@@ -16,14 +16,14 @@ public class ExpenseRespository : IExpenseRespository
 
     private IQueryable<ExpenseEntity> ApplyFilter(IQueryable<ExpenseEntity> query, ExpenseFilter filter)
     {
-        if (filter.taxIds != null && filter.taxIds.Any())
-            query = query.Where(e => filter.taxIds.Contains(e.TaxId));
+        if (filter.TaxIds != null && filter.TaxIds.Any())
+            query = query.Where(e => filter.TaxIds.Contains(e.TaxId));
 
-        if (filter.partSetIds != null && filter.partSetIds.Any())
-            query = query.Where(e => filter.partSetIds.Contains(e.PartSetId));
+        if (filter.PartSetIds != null && filter.PartSetIds.Any())
+            query = query.Where(e => filter.PartSetIds.Contains(e.PartSetId));
 
-        if (filter.expenseTypeIds != null && filter.expenseTypeIds.Any())
-            query = query.Where(e => filter.expenseTypeIds.Contains(e.ExpenseTypeId));
+        if (filter.ExpenseTypeIds != null && filter.ExpenseTypeIds.Any())
+            query = query.Where(e => filter.ExpenseTypeIds.Contains(e.ExpenseTypeId));
 
         return query;
     }
@@ -35,34 +35,34 @@ public class ExpenseRespository : IExpenseRespository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "date" => filter.isDescending
+            "date" => filter.IsDescending
                 ? query.OrderByDescending(e => e.Date)
                 : query.OrderBy(e => e.Date),
-            "category" => filter.isDescending
+            "category" => filter.IsDescending
                 ? query.OrderByDescending(e => e.Category)
                 : query.OrderBy(e => e.Category),
-            "tax" => filter.isDescending
+            "tax" => filter.IsDescending
                 ? query.OrderByDescending(e => e.Tax == null
                     ? string.Empty
                     : e.Tax.Name)
                 : query.OrderBy(e => e.Tax == null
                     ? string.Empty
                     : e.Tax.Name),
-            "partset" => filter.isDescending
+            "partset" => filter.IsDescending
                 ? query.OrderByDescending(e => e.PartSetId)
                 : query.OrderBy(e => e.PartSetId),
-            "expensetype" => filter.isDescending
+            "expensetype" => filter.IsDescending
                 ? query.OrderByDescending(e => e.ExpenseType == null
                     ? string.Empty
                     : e.ExpenseType.Name)
                 : query.OrderBy(e => e.ExpenseType == null
                     ? string.Empty
                     : e.ExpenseType.Name),
-            "sum" => filter.isDescending
+            "sum" => filter.IsDescending
                 ? query.OrderByDescending(e => e.Sum)
                 : query.OrderBy(e => e.Sum),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(e => e.Id)
                 : query.OrderBy(e => e.Id),
         };
@@ -118,10 +118,10 @@ public class ExpenseRespository : IExpenseRespository
         var entity = await _context.Expenses.FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new Exception("Expence not found");
 
-        if (model.date.HasValue) entity.Date = model.date.Value;
+        if (model.Date.HasValue) entity.Date = model.Date.Value;
         if (!string.IsNullOrWhiteSpace(model.category)) entity.Category = model.category;
-        if (model.expenseTypeId.HasValue) entity.ExpenseTypeId = (int)model.expenseTypeId.Value;
-        if (model.sum.HasValue) entity.Sum = model.sum.Value;
+        if (model.ExpenseTypeId.HasValue) entity.ExpenseTypeId = (int)model.ExpenseTypeId.Value;
+        if (model.Sum.HasValue) entity.Sum = model.Sum.Value;
 
         await _context.SaveChangesAsync();
 

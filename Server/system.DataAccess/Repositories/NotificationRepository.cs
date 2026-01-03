@@ -17,17 +17,17 @@ public class NotificationRepository : INotificationRepository
     private IQueryable<NotificationEntity> ApplyFilter
         (IQueryable<NotificationEntity> query, NotificationFilter filter)
     {
-        if (filter.clientIds != null && filter.clientIds.Any())
-            query = query.Where(n => filter.clientIds.Contains(n.ClientId));
+        if (filter.ClientIds != null && filter.ClientIds.Any())
+            query = query.Where(n => filter.ClientIds.Contains(n.ClientId));
 
-        if (filter.carIds != null && filter.carIds.Any())
-            query = query.Where(n => filter.carIds.Contains(n.CarId));
+        if (filter.CarIds != null && filter.CarIds.Any())
+            query = query.Where(n => filter.CarIds.Contains(n.CarId));
 
-        if (filter.typeIds != null && filter.typeIds.Any())
-            query = query.Where(n => filter.typeIds.Contains(n.TypeId));
+        if (filter.TypeIds != null && filter.TypeIds.Any())
+            query = query.Where(n => filter.TypeIds.Contains(n.TypeId));
 
-        if (filter.statusIds != null && filter.statusIds.Any())
-            query = query.Where(n => filter.statusIds.Contains(n.StatusId));
+        if (filter.StatusIds != null && filter.StatusIds.Any())
+            query = query.Where(n => filter.StatusIds.Contains(n.StatusId));
 
         return query;
     }
@@ -39,42 +39,42 @@ public class NotificationRepository : INotificationRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "client" => filter.isDescending
+            "client" => filter.IsDescending
                 ? query.OrderByDescending(n => n.Client == null
                     ? string.Empty
                     : n.Client.Surname)
                 : query.OrderBy(n => n.Client == null
                     ? string.Empty
                     : n.Client.Surname),
-            "car" => filter.isDescending
+            "car" => filter.IsDescending
                 ? query.OrderByDescending(n => n.Car == null
                     ? string.Empty
                     : n.Car.Brand)
                 : query.OrderBy(n => n.Car == null
                     ? string.Empty
                     : n.Car.Brand),
-            "type" => filter.isDescending
+            "type" => filter.IsDescending
                 ? query.OrderByDescending(n => n.NotificationType == null
                     ? string.Empty
                     : n.NotificationType.Name)
                 : query.OrderBy(n => n.NotificationType == null
                     ? string.Empty
                     : n.NotificationType.Name),
-            "status" => filter.isDescending
+            "status" => filter.IsDescending
                 ? query.OrderByDescending(n => n.Status == null
                     ? string.Empty
                     : n.Status.Name)
                 : query.OrderBy(n => n.Status == null
                     ? string.Empty
                     : n.Status.Name),
-            "message" => filter.isDescending
+            "message" => filter.IsDescending
                 ? query.OrderByDescending(n => n.Message)
                 : query.OrderBy(n => n.Message),
-            "sendat" => filter.isDescending
+            "sendat" => filter.IsDescending
                 ? query.OrderByDescending(n => n.SendAt)
                 : query.OrderBy(n => n.SendAt),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(n => n.Id)
                 : query.OrderBy(n => n.Id),
         };

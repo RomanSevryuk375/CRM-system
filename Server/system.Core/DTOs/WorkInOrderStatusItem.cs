@@ -2,6 +2,6 @@
 
 public record WorkInOrderStatusItem
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

@@ -4,12 +4,12 @@ namespace CRMSystem.Core.DTOs.WorkProposal;
 
 public record WorkProposalFilter
 (
-    IEnumerable<long> orderIds,
-    IEnumerable<long> jobIds,
-    IEnumerable<long> workerIds,
-    IEnumerable<int> statusIds,
+    IEnumerable<long> OrderIds,
+    IEnumerable<long> JobIds,
+    IEnumerable<long> WorkerIds,
+    IEnumerable<int> StatusIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

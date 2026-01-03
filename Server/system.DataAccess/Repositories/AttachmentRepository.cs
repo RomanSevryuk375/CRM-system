@@ -22,8 +22,8 @@ public class AttachmentRepository : IAttachmentRepository
         if (filter.OrderIds != null && filter.OrderIds.Any())
             query = query.Where(a => filter.OrderIds.Contains(a.OrderId));
 
-        if (filter.attachmentIds != null && filter.attachmentIds.Any())
-            query = query.Where(a => filter.attachmentIds.Contains(a.Id));
+        if (filter.AttachmentIds != null && filter.AttachmentIds.Any())
+            query = query.Where(a => filter.AttachmentIds.Contains(a.Id));
 
         return query;
     }

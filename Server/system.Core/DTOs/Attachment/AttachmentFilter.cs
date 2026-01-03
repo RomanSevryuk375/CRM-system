@@ -2,7 +2,7 @@
 
 public record AttachmentFilter
 (
-    IEnumerable<long>? attachmentIds,
+    IEnumerable<long>? AttachmentIds,
     IEnumerable<int>? WorkerIds,
     IEnumerable<long>? OrderIds,
     string? SortBy,

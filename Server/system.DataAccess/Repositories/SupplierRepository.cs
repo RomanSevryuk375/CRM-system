@@ -46,8 +46,8 @@ public class SupplierRepository : ISupplierRepository
         var entity = await _context.Suppliers.FirstOrDefaultAsync(su => su.Id == id)
             ?? throw new ArgumentException("Supplier not found");
 
-        if (!string.IsNullOrWhiteSpace(model.name)) entity.Name = model.name;
-        if (!string.IsNullOrWhiteSpace(model.contacts)) entity.Contacts = model.contacts;
+        if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
+        if (!string.IsNullOrWhiteSpace(model.Contacts)) entity.Contacts = model.Contacts;
 
         await _context.SaveChangesAsync();
 

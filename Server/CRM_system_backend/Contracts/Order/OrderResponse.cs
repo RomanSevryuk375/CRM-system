@@ -1,13 +1,13 @@
-﻿namespace CRM_system_backend.Contracts.Order;
+﻿namespace CRMSystem.Core.DTOs.Order;
 
 public record OrderResponse
 (
-    long id,
-    string status,
-    int statusId,
-    string car,
-    long carId,
-    DateOnly date,
-    string priority,
-    int priorityId
+    long Id,
+    string Status,
+    int StatusId,
+    string Car,
+    long CarId,
+    DateOnly Date,
+    string Priority,
+    int PriorityId
 );

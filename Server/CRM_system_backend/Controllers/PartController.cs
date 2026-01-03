@@ -25,16 +25,16 @@ public class PartController : ControllerBase
         var count = await _partService.GetCountParts(filter);
 
         var response = dto.Select(p => new PartResponse(
-            p.id,
-            p.category,
-            p.categoryId,
-            p.oemArticle,
-            p.manufacturer,
-            p.internalArticle,
-            p.description,
-            p.name,
-            p.manufacturer,
-            p.applicability));
+            p.Id,
+            p.Category,
+            p.CategoryId,
+            p.OemArticle,
+            p.Manufacturer,
+            p.InternalArticle,
+            p.Description,
+            p.Name,
+            p.Manufacturer,
+            p.Applicability));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -46,14 +46,14 @@ public class PartController : ControllerBase
     {
         var (part, errors) = Part.Create(
             0,
-            request.categoryId,
-            request.oemArticle,
-            request.manufacturerArticle,
-            request.internalArticle,
-            request.description,
-            request.name,
-            request.manufacturer,
-            request.applicability);
+            request.CategoryId,
+            request.OemArticle,
+            request.ManufacturerArticle,
+            request.InternalArticle,
+            request.Description,
+            request.Name,
+            request.Manufacturer,
+            request.Applicability);
 
         if(errors is not null && errors.Any())
             return BadRequest(errors);
@@ -67,13 +67,13 @@ public class PartController : ControllerBase
     public async Task<ActionResult<long>> UpdatePart(long id, [FromBody] PartUpdateRequest request)
     {
         var model = new PartUpdateModel(
-            request.oemArticle,
-            request.manufacturerArticle,
-            request.internalArticle,
-            request.description,
-            request.name,
+            request.OemArticle,
+            request.ManufacturerArticle,
+            request.InternalArticle,
+            request.Description,
+            request.Name,
             request.manufacturer,
-            request.applicability);
+            request.Applicability);
 
         var Id = await _partService.UpdatePart(id, model);
 

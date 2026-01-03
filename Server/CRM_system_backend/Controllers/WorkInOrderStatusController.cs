@@ -22,8 +22,8 @@ public class WorkInOrderStatusController : ControllerBase
         var dto = await _service.GetWiOStatuses();
 
         var response = dto.Select(w => new WorkInOrderStatusResponse(
-            w.id,
-            w.name));
+            w.Id,
+            w.Name));
 
         return Ok(response);
     }

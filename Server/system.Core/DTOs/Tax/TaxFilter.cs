@@ -1,10 +1,8 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.Tax;
+﻿namespace CRMSystem.Core.DTOs.Tax;
 
 public record TaxFilter
 (
-    IEnumerable<int> taxTyprIds,
+    IEnumerable<int> TaxTyprIds,
     string? SortBy,
-    bool isDescending
+    bool IsDescending
 );

@@ -45,8 +45,8 @@ public class StorageCellRepository : IStorageCellRepository
         var entity = await _context.StorageCells.FirstOrDefaultAsync(s => s.Id == id)
             ?? throw new Exception("StorageCell not found");
 
-        if (!string.IsNullOrWhiteSpace(model.rack)) entity.Rack = model.rack;
-        if (!string.IsNullOrWhiteSpace(model.shelf)) entity.Shelf = model.shelf;
+        if (!string.IsNullOrWhiteSpace(model.Rack)) entity.Rack = model.Rack;
+        if (!string.IsNullOrWhiteSpace(model.Shelf)) entity.Shelf = model.Shelf;
 
         await _context.SaveChangesAsync();
 

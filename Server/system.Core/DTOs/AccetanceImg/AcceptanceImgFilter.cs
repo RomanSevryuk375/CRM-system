@@ -2,7 +2,7 @@
 
 public record AcceptanceImgFilter
 (
-    IEnumerable<long> acceptanceIds,
+    IEnumerable<long> AcceptanceIds,
     int Page,
     int Limit
 );

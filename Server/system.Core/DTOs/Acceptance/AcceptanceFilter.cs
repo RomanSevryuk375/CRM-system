@@ -2,11 +2,11 @@
 
 public record AcceptanceFilter
 (
-    IEnumerable<long>? acceptanceIds,
-    IEnumerable<int>? workerIds,
-    IEnumerable<long>? orderIds,
+    IEnumerable<long>? AcceptanceIds,
+    IEnumerable<int>? WorkerIds,
+    IEnumerable<long>? OrderIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

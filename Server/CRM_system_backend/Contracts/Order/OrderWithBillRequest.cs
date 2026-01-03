@@ -1,17 +1,17 @@
 ﻿using CRMSystem.Core.Enums;
 
-namespace CRM_system_backend.Contracts.Order;
+namespace CRMSystem.Core.DTOs.Order;
 
 public record OrderWithBillRequest
 (
-    long id,
-    OrderStatusEnum orderStatusId, 
-    long carId, 
-    DateOnly date, 
-    OrderPriorityEnum priorityId, 
-    long orderId, 
-    BillStatusEnum billStatusId, 
-    DateTime createdAt, 
-    decimal amount,
-    DateOnly? actualBillDate
+    long Id,
+    OrderStatusEnum OrderStatusId,
+    long CarId,
+    DateOnly Date,
+    OrderPriorityEnum PriorityId,
+    long OrderId,
+    BillStatusEnum BillStatusId,
+    DateTime CreatedAt,
+    decimal Amount,
+    DateOnly? ActualBillDate
 );

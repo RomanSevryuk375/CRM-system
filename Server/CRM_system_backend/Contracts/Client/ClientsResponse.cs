@@ -1,11 +1,11 @@
-﻿namespace CRM_system_backend.Contracts.Client;
+﻿namespace CRMSystem.Core.DTOs.Client;
 
 public record ClientsResponse
 (
-    long id,
-    long userId,
-    string name,
-    string surname,
-    string phoneNumber,
-    string email
+    long Id,
+    long UserId,
+    string Name,
+    string Surname,
+    string PhoneNumber,
+    string Email
 );

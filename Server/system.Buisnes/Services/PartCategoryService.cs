@@ -52,10 +52,10 @@ public class PartCategoryService : IPartCategoryService
     {
         _logger.LogInformation("Updating part category start");
 
-        if (!string.IsNullOrEmpty(model.name) && await _repo.NameExists(model.name))
+        if (!string.IsNullOrEmpty(model.Name) && await _repo.NameExists(model.Name))
         {
-            _logger.LogError("Category with this this name{Name} is exist", model.name);
-            throw new ConflictException($"Category with this this name{model.name} is exist");
+            _logger.LogError("Category with this this name{Name} is exist", model.Name);
+            throw new ConflictException($"Category with this this name{model.Name} is exist");
         }
 
         var Id = await _repo.Update(id, model);

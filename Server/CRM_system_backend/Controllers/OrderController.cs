@@ -28,14 +28,14 @@ public class OrderController : ControllerBase
 
         var response = dto
             .Select(o => new OrderResponse(
-                o.id,
-                o.status,
-                o.statusId,
-                o.car,
-                o.carId,
-                o.date,
-                o.priority,
-                o.priorityId));
+                o.Id,
+                o.Status,
+                o.StatusId,
+                o.Car,
+                o.CarId,
+                o.Date,
+                o.Priority,
+                o.PriorityId));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -47,10 +47,10 @@ public class OrderController : ControllerBase
     {
         var (order, errors) = Order.Create(
             0,
-            request.statusId,
-            request.carId,
-            request.date,
-            request.priorityId);
+            request.StatusId,
+            request.CarId,
+            request.Date,
+            request.PriorityId);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);
@@ -65,10 +65,10 @@ public class OrderController : ControllerBase
     {
         var (order, errorsOrder) = Order.Create(
             0,
-            request.orderStatusId,
-            request.carId,
-            request.date,
-            request.priorityId);
+            request.OrderStatusId,
+            request.CarId,
+            request.Date,
+            request.PriorityId);
 
         if (errorsOrder is not null && errorsOrder.Any())
             return BadRequest(errorsOrder);
@@ -76,10 +76,10 @@ public class OrderController : ControllerBase
         var (bill, errorsBill) = Bill.Create(
             0,
             0,
-            request.billStatusId,
-            request.createdAt,
-            request.amount,
-            request.actualBillDate);
+            request.BillStatusId,
+            request.CreatedAt,
+            request.Amount,
+            request.ActualBillDate);
 
         if (errorsBill is not null && errorsBill.Any())
             return BadRequest(errorsBill);
@@ -92,7 +92,7 @@ public class OrderController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<long>> UpdateOrder([FromBody] OrderUpdateReuqest reuqest, int id)
     {
-        var Id = await _orderService.UpdateOrder(id, reuqest.priorityId);
+        var Id = await _orderService.UpdateOrder(id, reuqest.PriorityId);
 
         return Ok(Id);
     }

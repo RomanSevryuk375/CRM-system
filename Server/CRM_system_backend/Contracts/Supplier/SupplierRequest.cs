@@ -2,6 +2,6 @@
 
 public record SupplierRequest
 (
-    string name,
-    string contacts
+    string Name,
+    string Contacts
 );

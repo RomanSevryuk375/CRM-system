@@ -1,4 +1,4 @@
-﻿using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Core.DTOs.AbsenceType;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;

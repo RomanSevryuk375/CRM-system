@@ -1,7 +1,7 @@
-﻿namespace CRM_system_backend.Contracts.AttachmentImg;
+﻿namespace CRMSystem.Core.DTOs.AttachmentImg;
 
 public record AttachmentImgUpdateRequest
 (
-    string? filePath,
-    string? description
+    string? FilePath,
+    string? Description
 );

@@ -2,6 +2,6 @@
 
 public record WorkProposalStatusItem
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

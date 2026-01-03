@@ -2,9 +2,9 @@
 
 public record WorkItem
 (
-    long id, 
-    string title, 
-    string categoty, 
-    string description, 
-    decimal standartTime
+    long Id,
+    string Title,
+    string Categoty,
+    string Description,
+    decimal StandartTime
 );

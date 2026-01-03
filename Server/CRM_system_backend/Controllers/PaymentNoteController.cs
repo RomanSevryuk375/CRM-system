@@ -29,11 +29,11 @@ public class PaymentNoteController : ControllerBase
 
         var  response = dto
             .Select(p => new PaymentNoteResponse(
-                p.id,
-                p.billId,
-                p.date,
-                p.amount,
-                p.method));
+                p.Id,
+                p.BillId,
+                p.Date,
+                p.Amount,
+                p.Method));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -45,10 +45,10 @@ public class PaymentNoteController : ControllerBase
     {
         var (paymentNote, errors) = PaymentNote.Create(
             0,
-            request.billId,
-            request.date,
-            request.amount,
-            request.methodId);
+            request.BillId,
+            request.Date,
+            request.Amount,
+            request.MethodId);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);

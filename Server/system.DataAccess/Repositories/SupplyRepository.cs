@@ -16,8 +16,8 @@ public class SupplyRepository : ISupplyRepository
 
     private IQueryable<SupplyEntity> ApplyFilter(IQueryable<SupplyEntity> query, SupplyFilter filter)
     {
-        if (filter.suplierIds != null && filter.suplierIds.Any())
-            query = query.Where(s => filter.suplierIds.Contains(s.SupplierId));
+        if (filter.SuplierIds != null && filter.SuplierIds.Any())
+            query = query.Where(s => filter.SuplierIds.Contains(s.SupplierId));
 
         return query;
     }
@@ -29,18 +29,18 @@ public class SupplyRepository : ISupplyRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "supplier" => filter.isDescending
+            "supplier" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Supplier == null
                     ? string.Empty
                     : s.Supplier.Name)
                 : query.OrderBy(s => s.Supplier == null
                     ? string.Empty
                     : s.Supplier.Name),
-            "date" => filter.isDescending
+            "date" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Date)
                 : query.OrderBy(s => s.Date),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(s => s.Id)
                 : query.OrderBy(s => s.Id),
         };

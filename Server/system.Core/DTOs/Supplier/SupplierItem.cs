@@ -2,7 +2,7 @@
 
 public record SupplierItem
 (
-    int id, 
-    string name, 
-    string contacts
+    int Id,
+    string Name,
+    string Contacts
 );

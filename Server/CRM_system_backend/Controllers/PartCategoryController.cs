@@ -23,20 +23,20 @@ public class PartCategoryController : ControllerBase
         var dto = await _partCategoryService.GetPartCategories();
 
         var response = dto.Select(p => new PartCategoryResponse(
-            p.id,
-            p.name,
-            p.description));
+            p.Id,
+            p.Name,
+            p.Description));
 
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreatePartCategory([FromBody]PartCategoryRequest request)
+    public async Task<ActionResult<int>> CreatePartCategory([FromBody] PartCategoryRequest request)
     {
         var (partCategory, errors) = PartCategory.Create(
             0,
-            request.name,
-            request.description);
+            request.Name,
+            request.Description);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);
@@ -50,8 +50,8 @@ public class PartCategoryController : ControllerBase
     public async Task<ActionResult<int>> UpdatePartCategory(int id, [FromBody]PartCategoryUpdateRequest request)
     {
         var model = new PartCategoryUpdateModel(
-            request.name,
-            request.description);
+            request.Name,
+            request.Description);
 
         var Id = await _partCategoryService.UpdatePartCategory(id, model);
 

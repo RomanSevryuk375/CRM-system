@@ -4,13 +4,13 @@ namespace CRMSystem.Core.DTOs.WorkInOrder;
 
 public record WorkInOrderItem
 (
-    long id, 
-    long orderId, 
-    string job, 
-    long jobId,
-    string worker, 
-    int workerId,
-    string status,
-    int statusId,
-    decimal timeSpent
+    long Id,
+    long OrderId,
+    string job,
+    long JobId,
+    string Worker,
+    int WorkerId,
+    string Status,
+    int StatusId,
+    decimal TimeSpent
 );

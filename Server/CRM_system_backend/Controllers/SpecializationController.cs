@@ -27,7 +27,7 @@ public class SpecializationController : ControllerBase
 
         var response = specializations
             .Select(s => new SpecializationResponse(
-                s.id,
+                s.Id,
                 s.Name));
 
         return Ok(response);

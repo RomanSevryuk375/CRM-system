@@ -45,8 +45,8 @@ public class PartCategoryRepository : IPartCategoryRepository
         var entity = await _context.PartCategories.FirstOrDefaultAsync(p => p.Id == id)
             ?? throw new Exception("PartCategory not found");
 
-        if (!string.IsNullOrWhiteSpace(model.name)) entity.Name = model.name;
-        if (!string.IsNullOrWhiteSpace(model.description)) entity.Description = model.description;
+        if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
+        if (!string.IsNullOrWhiteSpace(model.Description)) entity.Description = model.Description;
 
         await _context.SaveChangesAsync();
 

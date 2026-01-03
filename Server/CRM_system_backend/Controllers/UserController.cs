@@ -36,7 +36,7 @@ public class UserController : ControllerBase
         };
 
         Response.Cookies.Append("jwt", token, cookieOptions);
-        var userId = user.roleId;
+        var userId = user.RoleId;
 
         return Ok(new { Message = "Logged in", Token = token , RoleId = userId});
     }
@@ -68,9 +68,9 @@ public class UserController : ControllerBase
     {
         var (user, errors) = CRMSystem.Core.Models.User.Create(
             0,
-            request.roleId,
-            request.login,
-            request.password);
+            request.RoleId,
+            request.Login,
+            request.Password);
 
 
         if (errors is not null && errors.Any())

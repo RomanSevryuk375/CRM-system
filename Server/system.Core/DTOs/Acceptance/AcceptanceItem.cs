@@ -2,15 +2,15 @@
 
 public record AcceptanceItem
 (
-    long id,
-    long orderId,
-    string worker,
-    int workerId,
-    DateTime createdAt,
-    int mileage,
-    int fuelLevel,
-    string? externalDefects,
-    string? internalDefects,
-    bool? clientSign,
-    bool? workerSign
+    long Id,
+    long OrderId,
+    string Worker,
+    int WorkerId,
+    DateTime CreatedAt,
+    int Mileage,
+    int FuelLevel,
+    string? ExternalDefects,
+    string? InternalDefects,
+    bool? ClientSign,
+    bool? WorkerSign
 );

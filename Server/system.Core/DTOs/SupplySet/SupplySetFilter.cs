@@ -2,10 +2,10 @@
 
 public record SupplySetFilter
 (
-    IEnumerable<long> supplyIds,
-    IEnumerable<long> positionIds,
+    IEnumerable<long> SupplyIds,
+    IEnumerable<long> PositionIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

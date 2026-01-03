@@ -2,10 +2,10 @@
 
 public record ScheduleFilter
 (
-    IEnumerable<long> workerIds,
-    IEnumerable<long> shiftIds,
+    IEnumerable<long> WorkerIds,
+    IEnumerable<long> ShiftIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

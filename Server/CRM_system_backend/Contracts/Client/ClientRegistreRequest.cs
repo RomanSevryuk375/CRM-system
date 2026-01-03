@@ -2,12 +2,12 @@
 
 public record ClientRegistreRequest
 (
-    long userId,
-    string name,
-    string surname,
-    string phoneNumber, 
-    string email, 
-    int roleId, 
-    string login, 
-    string password
+    long UserId,
+    string Name,
+    string Surname,
+    string PhoneNumber,
+    string Email,
+    int RoleId,
+    string Login,
+    string Password
 );

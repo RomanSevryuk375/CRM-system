@@ -2,6 +2,6 @@
 
 public record SkillUpdateModel
 (
-    int? workerId,
-    int? specializationId
+    int? WorkerId,
+    int? SpecializationId
 );

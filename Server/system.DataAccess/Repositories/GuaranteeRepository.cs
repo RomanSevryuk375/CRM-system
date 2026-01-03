@@ -16,8 +16,8 @@ public class GuaranteeRepository : IGuaranteeRepository
 
     private IQueryable<GuaranteeEntity> ApplyFilter(IQueryable<GuaranteeEntity> query, GuaranteeFilter filter)
     {
-        if (filter.orderIds != null && filter.orderIds.Any())
-            query = query.Where(g => filter.orderIds.Contains(g.OrderId));
+        if (filter.OrderIds != null && filter.OrderIds.Any())
+            query = query.Where(g => filter.OrderIds.Contains(g.OrderId));
 
         return query;
     }
@@ -29,20 +29,20 @@ public class GuaranteeRepository : IGuaranteeRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "datestart" => filter.isDescending
+            "datestart" => filter.IsDescending
                 ? query.OrderByDescending(g => g.DateStart)
                 : query.OrderBy(g => g.DateStart),
-            "dateend" => filter.isDescending
+            "dateend" => filter.IsDescending
                 ? query.OrderByDescending(g => g.DateEnd)
                 : query.OrderBy(g => g.DateStart),
-            "terms" => filter.isDescending
+            "terms" => filter.IsDescending
                 ? query.OrderByDescending(g => g.Terms)
                 : query.OrderBy(g => g.Terms),
-            "description" => filter.isDescending
+            "description" => filter.IsDescending
                 ? query.OrderByDescending(g => g.Description)
                 : query.OrderBy(g => g.Description),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(g => g.Id)
                 : query.OrderBy(g => g.Id),
         };
@@ -90,8 +90,8 @@ public class GuaranteeRepository : IGuaranteeRepository
         var entity = await _context.Guarantees.FirstOrDefaultAsync(g => g.Id == id)
             ?? throw new Exception("Guarantee not found");
 
-        if (!string.IsNullOrWhiteSpace(model.description)) entity.Description = model.description;
-        if (!string.IsNullOrWhiteSpace(model.terms)) entity.Description = model.terms;
+        if (!string.IsNullOrWhiteSpace(model.Description)) entity.Description = model.Description;
+        if (!string.IsNullOrWhiteSpace(model.Terms)) entity.Description = model.Terms;
 
         await _context.SaveChangesAsync();
 

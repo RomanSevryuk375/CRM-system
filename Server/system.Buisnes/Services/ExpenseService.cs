@@ -86,11 +86,11 @@ public class ExpenseService : IExpenseService
     {
         _logger.LogInformation("Updating expenses start");
 
-        if (model.expenseTypeId.HasValue
-                && !await _expenseTypeRepository.Exists((int)model.expenseTypeId.Value))
+        if (model.ExpenseTypeId.HasValue
+                && !await _expenseTypeRepository.Exists((int)model.ExpenseTypeId.Value))
         {
-            _logger.LogError("Expense{ExpenseTypeId} not found", model.expenseTypeId.Value);
-            throw new NotFoundException($"Expense{(int)model.expenseTypeId.Value} not found");
+            _logger.LogError("Expense{ExpenseTypeId} not found", model.ExpenseTypeId.Value);
+            throw new NotFoundException($"Expense{(int)model.ExpenseTypeId.Value} not found");
         }
 
         var Id = await _expenseRespository.Update(id, model);

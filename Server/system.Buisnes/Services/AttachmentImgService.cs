@@ -45,7 +45,7 @@ public class AttachmentImgService : IAttachmentImgService
         if (img == null)
             throw new NotFoundException($"Image {id} not found");
 
-        var stream = await _fileService.GetFile(img.filePath);
+        var stream = await _fileService.GetFile(img.FilePath);
 
         string contentType = "application/octet-stream";
 
@@ -129,7 +129,7 @@ public class AttachmentImgService : IAttachmentImgService
             throw new NotFoundException($"AttachmentImg {id} not found");
         }
 
-        await _fileService.DeleteFile(img.filePath);
+        await _fileService.DeleteFile(img.FilePath);
 
         var attachmentImg = await _attachmentImgRepository.Delete(id);
 

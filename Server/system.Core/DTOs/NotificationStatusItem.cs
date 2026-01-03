@@ -2,6 +2,6 @@
 
 public record NotificationStatusItem
 (
-    int id, 
-    string name
+    int Id,
+    string Name
 );

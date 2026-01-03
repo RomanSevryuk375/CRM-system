@@ -2,6 +2,6 @@
 
 public record CarStatusResponse
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

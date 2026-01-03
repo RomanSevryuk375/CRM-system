@@ -1,10 +1,10 @@
 ﻿using CRMSystem.Core.Enums;
 
-namespace CRM_system_backend.Contracts.Bill;
+namespace CRMSystem.Core.DTOs.Bill;
 
 public record BillUpdateRequest
 (
-    BillStatusEnum? statusId,
-    decimal? amount,
-    DateOnly? actualBillDate
+    BillStatusEnum? StatusId,
+    decimal? Amount,
+    DateOnly? ActualBillDate
 );

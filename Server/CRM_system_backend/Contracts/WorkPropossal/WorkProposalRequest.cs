@@ -4,10 +4,10 @@ namespace CRM_system_backend.Contracts.WorkPropossal;
 
 public record WorkProposalRequest
 (
-    long id,
-    long orderId,
-    long jobId,
-    int workerId,
-    ProposalStatusEnum statusId,
-    DateTime date
+    long Id,
+    long OrderId,
+    long JobId,
+    int WorkerId,
+    ProposalStatusEnum StatusId,
+    DateTime Date
 );

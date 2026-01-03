@@ -1,7 +1,7 @@
-﻿namespace CRM_system_backend.Contracts.PartCategory;
+﻿namespace CRMSystem.Core.DTOs.PartCategory;
 
 public record PartCategoryUpdateRequest
 (
-    string? name,
-    string? description
+    string? Name,
+    string? Description
 );

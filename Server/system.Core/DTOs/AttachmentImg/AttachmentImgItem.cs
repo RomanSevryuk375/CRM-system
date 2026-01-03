@@ -2,8 +2,8 @@
 
 public record AttachmentImgItem
 (
-    long id,
-    long attachmentId,
-    string filePath,
-    string? description
+    long Id,
+    long AttachmentId,
+    string FilePath,
+    string? Description
 );

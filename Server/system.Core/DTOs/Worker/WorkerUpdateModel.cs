@@ -2,9 +2,9 @@
 
 public record WorkerUpdateModel
 (
-    string? name, 
-    string? surname, 
-    decimal? hourlyRate, 
-    string? phoneNumber, 
-    string? email
+    string? Name,
+    string? Surname,
+    decimal? HourlyRate,
+    string? PhoneNumber,
+    string? Email
 );

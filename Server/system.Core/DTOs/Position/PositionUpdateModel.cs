@@ -2,8 +2,8 @@
 
 public record PositionUpdateModel
 (
-    int? cellId,
-    decimal? purchasePrice,
-    decimal? sellingPrice,
-    decimal? quantity
+    int? CellId,
+    decimal? PurchasePrice,
+    decimal? SellingPrice,
+    decimal? Quantity
 );

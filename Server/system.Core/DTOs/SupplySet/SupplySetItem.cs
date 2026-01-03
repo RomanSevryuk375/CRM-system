@@ -2,10 +2,10 @@
 
 public record SupplySetItem
 (
-    long id,
-    long supplyId,
-    string position,
-    long positionId,
-    decimal quantity,
-    decimal purchasePrice
+    long Id,
+    long SupplyId,
+    string Position,
+    long PositionId,
+    decimal Quantity,
+    decimal PurchasePrice
 );

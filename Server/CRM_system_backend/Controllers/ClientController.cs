@@ -24,12 +24,12 @@ public class ClientController : ControllerBase
         var count = await _clientService.GetCountClients(filter);
 
         var response = dto.Select(b => new ClientsResponse(
-                b.id,
-                b.userId,
-                b.name,
-                b.surname,
-                b.email,
-                b.phoneNumber));
+                b.Id,
+                b.UserId,
+                b.Name,
+                b.Surname,
+                b.Email,
+                b.PhoneNumber));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -49,11 +49,11 @@ public class ClientController : ControllerBase
     {
         var (client, errors) = Client.Create(
             0,
-            request.userId,
-            request.name,
-            request.surname,
-            request.phoneNumber,
-            request.email);
+            request.UserId,
+            request.Name,
+            request.Surname,
+            request.PhoneNumber,
+            request.Email);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);
@@ -68,9 +68,9 @@ public class ClientController : ControllerBase
     {
         var (user, errorsUser) = CRMSystem.Core.Models.User.Create(
             0,
-            request.roleId,
-            request.login,
-            request.password);
+            request.RoleId,
+            request.Login,
+            request.Password);
 
         if (errorsUser is not null && errorsUser.Any())
             return BadRequest(errorsUser);
@@ -78,10 +78,10 @@ public class ClientController : ControllerBase
         var (client, errorsClient) = Client.Create(
             0,
             0,
-            request.name,
-            request.surname,
-            request.phoneNumber,
-            request.email);
+            request.Name,
+            request.Surname,
+            request.PhoneNumber,
+            request.Email);
 
         if (errorsClient is not null && errorsClient.Any())
             return BadRequest(errorsClient);
@@ -95,10 +95,10 @@ public class ClientController : ControllerBase
     public async Task<ActionResult<long>> UpdateClient(long id, [FromBody] ClientUpdateRequest request)
     {
         var model = new ClientUpdateModel(
-            request.name,
-            request.surname,
-            request.phoneNumber,
-            request.email);
+            request.Name,
+            request.Surname,
+            request.PhoneNumber,
+            request.Email);
 
         var Id = await _clientService.UpdateClient(id, model);
 

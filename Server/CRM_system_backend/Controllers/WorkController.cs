@@ -26,11 +26,11 @@ public class WorkController : ControllerBase
         var count = await _workService.GetCountWork();
 
         var response = dto.Select(w => new WorkResponse(
-                w.id,
-                w.title,
-                w.categoty,
-                w.description,
-                w.standartTime));
+                w.Id,
+                w.Title,
+                w.Categoty,
+                w.Description,
+                w.StandartTime));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -42,10 +42,10 @@ public class WorkController : ControllerBase
     {
         var (work, errors) = Work.Create(
             0,
-            request.title,
-            request.categoty,
-            request.description,
-            request.standartTime);
+            request.Title,
+            request.Categoty,
+            request.Description,
+            request.StandartTime);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);
@@ -59,10 +59,10 @@ public class WorkController : ControllerBase
     public async Task<ActionResult<long>> UpdateWork(long id, [FromBody] WorkRequest request)
     {
         var model = new WorkUpdateModel(
-            request.title,
-            request.categoty,
-            request.description,
-            request.standartTime);
+            request.Title,
+            request.Categoty,
+            request.Description,
+            request.StandartTime);
 
         var Id = await _workService.UpdateWork(id, model);
 

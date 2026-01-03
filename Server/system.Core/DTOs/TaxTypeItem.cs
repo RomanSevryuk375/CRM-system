@@ -2,6 +2,6 @@
 
 public record TaxTypeItem
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

@@ -24,11 +24,11 @@ public class SupplySetController : ControllerBase
         var count = await _supplySetService.GetCountSupplySets(filter);
 
         var response = dto.Select(s => new SupplySet(
-            s.id,
-            s.supplyId,
-            s.positionId,
-            s.quantity,
-            s.purchasePrice));
+            s.Id,
+            s.SupplyId,
+            s.PositionId,
+            s.Quantity,
+            s.PurchasePrice));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -40,10 +40,10 @@ public class SupplySetController : ControllerBase
     {
         var (supplySet, errors) = SupplySet.Create(
             0,
-            request.supplyId,
-            request.positionId,
-            request.quantity,
-            request.purchasePrice);
+            request.SupplyId,
+            request.PositionId,
+            request.Quantity,
+            request.PurchasePrice);
 
         if(errors is not null && errors.Any())
             return BadRequest(errors);
@@ -57,8 +57,8 @@ public class SupplySetController : ControllerBase
     public async Task<ActionResult<long>> UpdateSupplySet(long id, [FromBody] SupplySetUpdateRequest request)
     {
         var model = new SupplySetUpdateModel(
-            request.quantity,
-            request.purchasePrice);
+            request.Quantity,
+            request.PurchasePrice);
 
         var Id = await _supplySetService.UpdateSupplySet(id, model);
 

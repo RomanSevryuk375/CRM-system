@@ -2,9 +2,9 @@
 
 public record PaymentNoteResponse
 (
-    long id,
-    long billId,
-    DateTime date,
-    decimal amount,
-    string method
+    long Id,
+    long BillId,
+    DateTime Date,
+    decimal Amount,
+    string Method
 );

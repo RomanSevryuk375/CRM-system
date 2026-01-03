@@ -2,11 +2,11 @@
 
 public record ScheduleWithShiftRequest
 (
-    int id,
-    int workerId, 
-    int shiftId, 
-    DateTime dateTime, 
-    string name, 
-    TimeOnly startAt, 
-    TimeOnly endAt
+    int Id,
+    int WorkerId,
+    int ShiftId,
+    DateTime DateTime,
+    string Name,
+    TimeOnly StartAt,
+    TimeOnly EndAt
 );

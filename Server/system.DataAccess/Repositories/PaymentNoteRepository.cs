@@ -17,11 +17,11 @@ public class PaymentNoteRepository : IPaymentNoteRepository
 
     private IQueryable<PaymentNoteEntity> ApplyFilter(IQueryable<PaymentNoteEntity> query, PaymentNoteFilter filter)
     {
-        if (filter.billIds != null && filter.billIds.Any())
-            query = query.Where(p => filter.billIds.Contains(p.BillId));
+        if (filter.BillIds != null && filter.BillIds.Any())
+            query = query.Where(p => filter.BillIds.Contains(p.BillId));
 
-        if (filter.methodIds != null && filter.methodIds.Any())
-            query = query.Where(p => filter.methodIds.Contains(p.MethodId));
+        if (filter.MethodIds != null && filter.MethodIds.Any())
+            query = query.Where(p => filter.MethodIds.Contains(p.MethodId));
 
         return query;
     }
@@ -33,16 +33,16 @@ public class PaymentNoteRepository : IPaymentNoteRepository
 
         query = fIlter.SortBy?.ToLower().Trim() switch
         {
-            "bill" => fIlter.isDescending
+            "bill" => fIlter.IsDescending
                 ? query.OrderByDescending(p => p.BillId)
                 : query.OrderBy(p => p.BillId),
-            "date" => fIlter.isDescending
+            "date" => fIlter.IsDescending
                 ? query.OrderByDescending(p => p.Date)
                 : query.OrderBy(p => p.Date),
-            "amount" => fIlter.isDescending
+            "amount" => fIlter.IsDescending
                 ? query.OrderByDescending(p => p.Amount)
                 : query.OrderBy(p => p.Amount),
-            "method" => fIlter.isDescending
+            "method" => fIlter.IsDescending
                 ? query.OrderByDescending(p => p.Method == null
                     ? string.Empty
                     : p.Method.Name)
@@ -50,7 +50,7 @@ public class PaymentNoteRepository : IPaymentNoteRepository
                     ? string.Empty
                     : p.Method.Name),
 
-            _ => fIlter.isDescending
+            _ => fIlter.IsDescending
                 ? query.OrderByDescending(p => p.Id)
                 : query.OrderBy(p => p.Id),
         };

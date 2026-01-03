@@ -49,7 +49,7 @@ public class ShiftRepository : IShiftRepository
 
         if (!string.IsNullOrWhiteSpace(model.name)) entity.Name = model.name;
         if (model.startAt.HasValue) entity.StartAt = model.startAt.Value;
-        if (model.endAt.HasValue) entity.EndAt = model.endAt.Value;
+        if (model.EndAt.HasValue) entity.EndAt = model.EndAt.Value;
 
         await _context.SaveChangesAsync();
 

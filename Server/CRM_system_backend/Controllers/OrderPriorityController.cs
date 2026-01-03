@@ -22,8 +22,8 @@ public class OrderPriorityController : ControllerBase
         var dto = await _orderPriorityService.GetPrioritys();
 
         var response = dto.Select(o => new OrderPriorityResponse(
-            o.id,
-            o.name));
+            o.Id,
+            o.Name));
 
         return Ok(response);
     }

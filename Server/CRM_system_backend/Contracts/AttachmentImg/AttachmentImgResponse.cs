@@ -1,9 +1,9 @@
-﻿namespace CRM_system_backend.Contracts.AttachmentImg;
+﻿namespace CRMSystem.Core.DTOs.AttachmentImg;
 
 public record AttachmentImgResponse
 (
-    long id,
-    long attachmentId,
-    string filePath,
-    string? description
+    long Id,
+    long AttachmentId,
+    string FilePath,
+    string? Description
 );

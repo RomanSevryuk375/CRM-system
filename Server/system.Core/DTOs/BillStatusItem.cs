@@ -2,6 +2,6 @@
 
 public record BillStatusItem
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

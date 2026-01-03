@@ -2,8 +2,8 @@
 
 public record AcceptanceImgItem
 (
-    long id,
-    long acceptanceId, 
-    string filePath, 
-    string? description
+    long Id,
+    long acceptanceId,
+    string FilePath,
+    string? Description
 );

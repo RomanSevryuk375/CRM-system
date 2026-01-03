@@ -2,7 +2,7 @@
 
 public record AttachmentImgFilter
 (
-    IEnumerable<long> attachmentIds,
+    IEnumerable<long> AttachmentIds,
     int Page,
     int Limit
 );

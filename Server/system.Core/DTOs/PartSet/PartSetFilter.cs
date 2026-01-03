@@ -2,11 +2,11 @@
 
 public record PartSetFilter
 (
-    IEnumerable<long?> orderIds,
-    IEnumerable<long> positionIds,
-    IEnumerable<long?> proposalIds,
+    IEnumerable<long?> OrderIds,
+    IEnumerable<long> PositionIds,
+    IEnumerable<long?> ProposalIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

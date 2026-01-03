@@ -1,5 +1,5 @@
 ﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs;
+using CRMSystem.Core.DTOs.AbsenceType;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;

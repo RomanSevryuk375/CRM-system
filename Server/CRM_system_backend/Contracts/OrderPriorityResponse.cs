@@ -2,6 +2,6 @@
 
 public record OrderPriorityResponse
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

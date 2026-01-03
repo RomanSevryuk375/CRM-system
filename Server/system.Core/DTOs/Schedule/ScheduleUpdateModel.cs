@@ -2,6 +2,6 @@
 
 public record ScheduleUpdateModel
 (
-    int? shiftId,
-    DateTime? dateTime
+    int? ShiftId,
+    DateTime? DateTime
 );

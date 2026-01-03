@@ -2,6 +2,6 @@
 
 public record SpecializationItem
 (
-    int id,
+    int Id,
     string Name
 );

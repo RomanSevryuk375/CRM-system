@@ -1,15 +1,15 @@
-﻿namespace CRM_system_backend.Contracts.Acceptance;
+﻿namespace CRMSystem.Core.DTOs.Acceptance;
 
 public record AcceptanceRequest
 (
-    long orderId,
-    string worker,
-    int workerId,
-    DateTime createdAt,
-    int mileage,
-    int fuelLevel,
-    string? externalDefects,
-    string? internalDefects,
-    bool? clientSign,
-    bool? workerSign
+    long OrderId,
+    string Worker,
+    int WorkerId,
+    DateTime CreatedAt,
+    int Mileage,
+    int FuelLevel,
+    string? ExternalDefects,
+    string? InternalDefects,
+    bool? ClientSign,
+    bool? WorkerSign
 );

@@ -6,5 +6,5 @@ public record BillFilter
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

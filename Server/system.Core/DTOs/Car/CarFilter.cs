@@ -2,10 +2,10 @@
 
 public record CarFilter
 (
-    IEnumerable<long> ownerIds,
+    IEnumerable<long> OwnerIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );
 

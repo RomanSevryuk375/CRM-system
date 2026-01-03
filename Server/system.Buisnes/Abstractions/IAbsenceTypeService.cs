@@ -1,4 +1,4 @@
-﻿using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Core.DTOs.AbsenceType;
 using CRMSystem.Core.Models;
 
 namespace CRMSystem.Buisnes.Abstractions;

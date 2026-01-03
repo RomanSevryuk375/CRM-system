@@ -2,6 +2,6 @@
 
 public record OrderStatusResponse
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

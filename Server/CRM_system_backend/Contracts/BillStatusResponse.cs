@@ -2,6 +2,6 @@
 
 public record BillStatusResponse
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

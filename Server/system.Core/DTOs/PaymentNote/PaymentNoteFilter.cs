@@ -4,10 +4,10 @@ namespace CRMSystem.Core.DTOs.PaymentNote;
 
 public record PaymentNoteFilter
 (
-    IEnumerable<long?> billIds,
-    IEnumerable<int> methodIds,
+    IEnumerable<long?> BillIds,
+    IEnumerable<int> MethodIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

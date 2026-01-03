@@ -2,10 +2,10 @@
 
 public record ClientItem
 (
-    long id,
-    long userId,
-    string name,
-    string surname,
-    string phoneNumber,
-    string email
+    long Id,
+    long UserId,
+    string Name,
+    string Surname,
+    string PhoneNumber,
+    string Email
 );

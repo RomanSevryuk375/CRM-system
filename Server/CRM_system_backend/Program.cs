@@ -11,6 +11,7 @@ using CRMSystem.DataAccess.Repositories;
 using CRMSystem.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace CRM_system_backend;
@@ -30,6 +31,11 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddAutoMapper(cfg =>
+        {
+            cfg.AddMaps(typeof(Program).Assembly);                                                // cfg.AddMaps(typeof(AbsenceService).Assembly); // Если профили в Business
+        });
+
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("Frontend", policy =>

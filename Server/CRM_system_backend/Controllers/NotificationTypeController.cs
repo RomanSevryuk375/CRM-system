@@ -25,8 +25,8 @@ public class NotificationTypeController : ControllerBase
         var dto = await _notificationTypeService.GetNotificationTypes();
 
         var response = dto.Select(n => new NotificationTypeResponse(
-            n.id,
-            n.name));
+            n.Id,
+            n.Name));
 
         return Ok(response);
     }

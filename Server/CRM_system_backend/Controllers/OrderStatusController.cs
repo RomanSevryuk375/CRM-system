@@ -22,8 +22,8 @@ public class OrderStatusController : ControllerBase
         var dto = await _orderStatusService.GetOrderStatuses();
 
         var response = dto.Select(o => new OrderStatusResponse(
-            o.id,
-            o.name));
+            o.Id,
+            o.Name));
 
         return Ok(response);
     }

@@ -2,6 +2,6 @@
 
 public record SupplyRequest
 (
-    int supplierId,
-    DateOnly date
+    int SupplierId,
+    DateOnly Date
 );

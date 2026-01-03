@@ -2,11 +2,11 @@
 
 public record AttachmentItem
 (
-    long id,
-    long orderId,
-    string worker,
-    int workerId,
-    DateTime createAt,
-    string? description
+    long Id,
+    long OrderId,
+    string Worker,
+    int WorkerId,
+    DateTime CreateAt,
+    string? Description
 );
 

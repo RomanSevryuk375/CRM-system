@@ -126,10 +126,10 @@ public class PartSetService : IPartSetService
 
         var partSet = await _partSetRepository.GetById(id);
 
-        if (partSet is not null && partSet.orderId.HasValue)
+        if (partSet is not null && partSet.OrderId.HasValue)
         {
             _logger.LogInformation("Recalculating bill srart");
-            await _billRepository.RecalculateAmmount(partSet.orderId.Value);
+            await _billRepository.RecalculateAmmount(partSet.OrderId.Value);
             _logger.LogInformation("Recalculating bill success");
         }
 
@@ -146,10 +146,10 @@ public class PartSetService : IPartSetService
 
         var partSet = await _partSetRepository.GetById(id);
 
-        if (partSet is not null && partSet.orderId.HasValue)
+        if (partSet is not null && partSet.OrderId.HasValue)
         {
             _logger.LogInformation("Recalculating bill srart");
-            await _billRepository.RecalculateAmmount(partSet.orderId.Value);
+            await _billRepository.RecalculateAmmount(partSet.OrderId.Value);
             _logger.LogInformation("Recalculating bill success");
         }
 

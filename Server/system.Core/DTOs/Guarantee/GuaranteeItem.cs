@@ -2,10 +2,10 @@
 
 public record GuaranteeItem
 (
-    long id,
-    long orderId,
-    DateOnly dateStart, 
-    DateOnly dateEnd, 
-    string? description, 
-    string terms
+    long Id,
+    long OrderId,
+    DateOnly DateStart,
+    DateOnly DateEnd,
+    string? Description,
+    string Terms
 );

@@ -2,6 +2,6 @@
 
 public record TaxUpdateModel
 (
-    string? name,
-    decimal? rate
+    string? Name,
+    decimal? Rate
 );

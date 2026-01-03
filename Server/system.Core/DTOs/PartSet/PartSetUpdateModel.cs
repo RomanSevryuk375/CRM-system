@@ -2,6 +2,6 @@
 
 public record PartSetUpdateModel
 (
-    decimal? quantity,
-    decimal? soldPrice
+    decimal? Quantity,
+    decimal? SoldPrice
 );

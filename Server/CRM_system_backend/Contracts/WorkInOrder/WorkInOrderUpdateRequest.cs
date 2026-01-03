@@ -4,7 +4,7 @@ namespace CRM_system_backend.Contracts.WorkInOrder;
 
 public record WorkInOrderUpdateRequest
 (
-    int? workerId,
-    WorkStatusEnum? statusId,
-    decimal? timeSpent
+    int? WorkerId,
+    WorkStatusEnum? StatusId,
+    decimal? TimeSpent
 );

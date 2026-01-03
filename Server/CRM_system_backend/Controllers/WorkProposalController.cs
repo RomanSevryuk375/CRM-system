@@ -26,15 +26,15 @@ public class WorkProposalController : ControllerBase
 
         var response = dto
             .Select(w => new WorkProposalResponse(
-                w.id,
-                w.orderId,
-                w.job,
-                w.jobId,
-                w.worker,
-                w.workerId,
-                w.status,
-                w.statusId,
-                w.date))
+                w.Id,
+                w.OrderId,
+                w.Job,
+                w.JobId,
+                w.Worker,
+                w.WorkerId,
+                w.Status,
+                w.StatusId,
+                w.Date))
             .ToList();
 
         Response.Headers.Append("x-total-count", count.ToString());
@@ -55,11 +55,11 @@ public class WorkProposalController : ControllerBase
     {
         var (workProposal, errors) = WorkProposal.Create(
             0,
-            request.orderId,
-            request.jobId,
-            request.workerId,
-            request.statusId,
-            request.date);
+            request.OrderId,
+            request.JobId,
+            request.WorkerId,
+            request.StatusId,
+            request.Date);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);

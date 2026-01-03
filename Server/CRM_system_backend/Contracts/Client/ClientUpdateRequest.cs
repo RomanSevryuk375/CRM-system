@@ -1,9 +1,9 @@
-﻿namespace CRM_system_backend.Contracts.Client;
+﻿namespace CRMSystem.Core.DTOs.Client;
 
 public record ClientUpdateRequest
 (
-    string? name,
-    string? surname,
-    string? phoneNumber,
-    string? email
+    string? Name,
+    string? Surname,
+    string? PhoneNumber,
+    string? Email
 );

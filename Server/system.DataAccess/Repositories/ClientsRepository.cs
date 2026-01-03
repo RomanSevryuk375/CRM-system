@@ -16,8 +16,8 @@ public class ClientsRepository : IClientRepository
 
     private IQueryable<ClientEntity> ApplyFilter(IQueryable<ClientEntity> query, ClientFilter filter)
     {
-        if (filter.userIds != null && filter.userIds.Any())
-            query = query.Where(c => filter.userIds.Contains(c.UserId));
+        if (filter.UserIds != null && filter.UserIds.Any())
+            query = query.Where(c => filter.UserIds.Contains(c.UserId));
 
         return query;
     }
@@ -29,20 +29,20 @@ public class ClientsRepository : IClientRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "name" => filter.isDescending
+            "name" => filter.IsDescending
                 ? query.OrderByDescending(c => c.Name)
                 : query.OrderBy(c => c.Name),
-            "surname" => filter.isDescending
+            "surname" => filter.IsDescending
                 ? query.OrderByDescending(c => c.Surname)
                 : query.OrderBy(c => c.Surname),
-            "phonenumber" => filter.isDescending
+            "phonenumber" => filter.IsDescending
                 ? query.OrderByDescending(c => c.PhoneNumber)
                 : query.OrderBy(c => c.PhoneNumber),
-            "email" => filter.isDescending
+            "email" => filter.IsDescending
                 ? query.OrderByDescending(c => c.Email)
                 : query.OrderBy(c => c.Email),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(c => c.Id)
                 : query.OrderBy(c => c.Id),
         };
@@ -107,10 +107,10 @@ public class ClientsRepository : IClientRepository
         var entity = await _context.Clients.FirstOrDefaultAsync(c => c.Id == id)
             ?? throw new Exception("Client not found");
 
-        if (!string.IsNullOrWhiteSpace(model.name)) entity.Name = model.name;
-        if (!string.IsNullOrWhiteSpace(model.surname)) entity.Surname = model.surname;
-        if (!string.IsNullOrWhiteSpace(model.phoneNumber)) entity.PhoneNumber = model.phoneNumber;
-        if (!string.IsNullOrWhiteSpace(model.email)) entity.Email = model.email;
+        if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
+        if (!string.IsNullOrWhiteSpace(model.Surname)) entity.Surname = model.Surname;
+        if (!string.IsNullOrWhiteSpace(model.PhoneNumber)) entity.PhoneNumber = model.PhoneNumber;
+        if (!string.IsNullOrWhiteSpace(model.Email)) entity.Email = model.Email;
 
         await _context.SaveChangesAsync();
 

@@ -1,8 +1,7 @@
-﻿using CRM_system_backend.Contracts.Absence;
+﻿using AutoMapper;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Absence;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -12,10 +11,14 @@ namespace CRM_system_backend.Controllers;
 public class AbsenceController : ControllerBase
 {
     private readonly IAbsenceService _absenceService;
+    private readonly IMapper _mapper;
 
-    public AbsenceController(IAbsenceService absenceService)
+    public AbsenceController(
+        IAbsenceService absenceService,
+        IMapper mapper)
     {
         _absenceService = absenceService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,13 +27,7 @@ public class AbsenceController : ControllerBase
     {
         var dto = await _absenceService.GetPagedAbsence(filter);
 
-        var response = dto.Select(a => new AbsenceResponse(
-            a.Id,
-            a.WorkerName,
-            a.workerId,
-            a.typeId,
-            a.StartDate,
-            a.EndDate));
+        var response = _mapper.Map<List<AbsenceResponse>>(dto);
 
         var count = await _absenceService.GetCountAbsence(filter);
         Response.Headers.Append("x-total-count", count.ToString());
@@ -48,7 +45,7 @@ public class AbsenceController : ControllerBase
             request.StartDate,
             request.EndDate);
 
-        if (errors is not null && errors.Any()) 
+        if (errors is not null && errors.Any())
             return BadRequest(errors);
 
         var Id = await _absenceService.CreateAbsence(absence!);
@@ -59,12 +56,7 @@ public class AbsenceController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<int>> UpdateAbsence(int id, [FromBody] AbsenceUpdateRequest request)
     {
-        var model = new AbsenceUpdateModel
-            (
-                request.typeId,
-                request.startDate,
-                request.endDate
-            );
+        var model = _mapper.Map<AbsenceUpdateModel>(request);
 
         var Id = await _absenceService.UpdateAbsence(id, model);
 

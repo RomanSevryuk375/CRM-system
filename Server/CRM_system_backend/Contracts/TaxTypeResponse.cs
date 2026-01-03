@@ -2,6 +2,6 @@
 
 public record TaxTypeResponse
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

@@ -2,9 +2,9 @@
 
 public record SupplySetRequest
 (
-    long id,
-    long supplyId,
-    long positionId,
-    decimal quantity,
-    decimal purchasePrice
+    long Id,
+    long SupplyId,
+    long PositionId,
+    decimal Quantity,
+    decimal PurchasePrice
 );

@@ -2,6 +2,6 @@
 
 public record SupplySetUpdateRequest
 (
-    decimal? quantity,
-    decimal? purchasePrice
+    decimal? Quantity,
+    decimal? PurchasePrice
 );

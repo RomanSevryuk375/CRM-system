@@ -4,12 +4,12 @@ namespace CRMSystem.Core.DTOs.Notification;
 
 public record NotificationFilter
 (
-    IEnumerable<long> clientIds,
-    IEnumerable<long> carIds,
-    IEnumerable<int> typeIds,
-    IEnumerable<int> statusIds,
+    IEnumerable<long> ClientIds,
+    IEnumerable<long> CarIds,
+    IEnumerable<int> TypeIds,
+    IEnumerable<int> StatusIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

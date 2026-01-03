@@ -1,7 +1,7 @@
-﻿namespace CRM_system_backend.Contracts.AbsenceType;
+﻿namespace CRMSystem.Core.DTOs.AbsenceType;
 
 public record AbsenceTypeResponse
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

@@ -23,8 +23,8 @@ public class BillStatusController : ControllerBase
         var dto = await _billStatusService.GetAllBillStatuses();
 
         var response = dto.Select(b => new BillStatusResponse(
-            b.id,
-            b.name));
+            b.Id,
+            b.Name));
 
         return Ok(response);
     }

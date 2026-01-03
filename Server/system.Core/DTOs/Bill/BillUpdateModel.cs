@@ -4,7 +4,7 @@ namespace CRMSystem.Core.DTOs.Bill;
 
 public record BillUpdateModel
 (
-    BillStatusEnum? statusId,
-    decimal? amount,
-    DateOnly? actualBillDate
+    BillStatusEnum? StatusId,
+    decimal? Amount,
+    DateOnly? ActualBillDate
 );

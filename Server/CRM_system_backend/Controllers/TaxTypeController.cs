@@ -23,8 +23,8 @@ public class TaxTypeController : ControllerBase
         var dto = await _taxTypeService.GetTaxTypes();
 
         var response = dto.Select(t => new TaxTypeResponse(
-            t.id,
-            t.name));
+            t.Id,
+            t.Name));
 
         return Ok(response);
     }

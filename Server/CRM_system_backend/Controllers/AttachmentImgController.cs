@@ -25,10 +25,10 @@ public class AttachmentImgController : ControllerBase
         var count = await _attachmentImgService.GetCountAttachmentImg(filter);
 
         var response = dto.Select(a => new AttachmentImgResponse(
-            a.id,
-            a.attachmentId,
-            a.filePath,
-            a.description));
+            a.Id,
+            a.AttachmentId,
+            a.FilePath,
+            a.Description));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -60,7 +60,7 @@ public class AttachmentImgController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<long>> UpdateAttaachmentImg(long id, [FromBody] AttachmentImgUpdateRequest request)
     {
-        var Id = await _attachmentImgService.UpdateAttaachmentImg(id, request.filePath, request.description);
+        var Id = await _attachmentImgService.UpdateAttaachmentImg(id, request.FilePath, request.Description);
 
         return Ok(Id);
     }

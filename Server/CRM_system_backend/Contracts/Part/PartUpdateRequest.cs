@@ -1,12 +1,12 @@
-﻿namespace CRM_system_backend.Contracts.Part;
+﻿namespace CRMSystem.Core.DTOs.Part;
 
 public record PartUpdateRequest
 (
-    string? oemArticle,
-    string? manufacturerArticle,
-    string? internalArticle,
-    string? description,
-    string? name,
+    string? OemArticle,
+    string? ManufacturerArticle,
+    string? InternalArticle,
+    string? Description,
+    string? Name,
     string? manufacturer,
-    string? applicability
+    string? Applicability
 );

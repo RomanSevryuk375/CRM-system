@@ -16,8 +16,8 @@ public class SkillRepository : ISkillRepository
 
     private IQueryable<SkillEntity> ApplyFilter(IQueryable<SkillEntity> query, SkillFilter filter)
     {
-        if (filter.workerIds != null && filter.workerIds.Any())
-            query = query.Where(s => filter.workerIds.Contains(s.WorkerId));
+        if (filter.WorkerIds != null && filter.WorkerIds.Any())
+            query = query.Where(s => filter.WorkerIds.Contains(s.WorkerId));
 
         if (filter.specializationIds != null && filter.specializationIds.Any())
             query = query.Where(s => filter.specializationIds.Contains(s.SpecializationId));
@@ -32,14 +32,14 @@ public class SkillRepository : ISkillRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "worker" => filter.isDescending
+            "worker" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Worker == null
                     ? string.Empty
                     : s.Worker.Name)
                 : query.OrderBy(s => s.Worker == null
                     ? string.Empty
                     : s.Worker.Name),
-            "specialization" => filter.isDescending
+            "specialization" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Specialization == null
                     ? string.Empty
                     : s.Specialization.Name)
@@ -47,7 +47,7 @@ public class SkillRepository : ISkillRepository
                     ? string.Empty
                     : s.Specialization.Name),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(s => s.Id)
                 : query.OrderBy(s => s.Id),
         };
@@ -92,8 +92,8 @@ public class SkillRepository : ISkillRepository
         var entity = await _context.Skills.FirstOrDefaultAsync(s => s.Id == id)
             ?? throw new Exception("Schedule note not found");
 
-        if (model.workerId.HasValue) entity.WorkerId = model.workerId.Value;
-        if (model.specializationId.HasValue) entity.SpecializationId = model.specializationId.Value;
+        if (model.WorkerId.HasValue) entity.WorkerId = model.WorkerId.Value;
+        if (model.SpecializationId.HasValue) entity.SpecializationId = model.SpecializationId.Value;
 
         await _context.SaveChangesAsync();
 

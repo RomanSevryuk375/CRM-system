@@ -4,7 +4,7 @@ namespace CRMSystem.Core.DTOs.WorkInOrder;
 
 public record WorkInOrderUpdateModel
 (
-    int? workerId,
-    WorkStatusEnum? statusId,
-    decimal? timeSpent
+    int? WorkerId,
+    WorkStatusEnum? StatusId,
+    decimal? TimeSpent
 );

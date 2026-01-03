@@ -2,5 +2,5 @@
 
 public record AbsenceTypeRequest
 (
-  string name  
+  string Name
 );

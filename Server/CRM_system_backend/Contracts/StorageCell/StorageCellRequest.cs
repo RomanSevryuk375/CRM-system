@@ -2,6 +2,6 @@
 
 public record StorageCellRequest
 (
-    string rack,
-    string shelf
+    string Rack,
+    string Shelf
 );

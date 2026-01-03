@@ -2,10 +2,10 @@
 
 public record WorkerRequest
 (
-    long userId,
-    string name,
-    string surname,
-    decimal hourlyRate,
-    string phoneNumber,
-    string email
+    long UserId,
+    string Name,
+    string Surname,
+    decimal HourlyRate,
+    string PhoneNumber,
+    string Email
 );

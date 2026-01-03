@@ -2,6 +2,6 @@
 
 public record PartCategoryRequest
 (
-    string name,
-    string? description
+    string Name,
+    string? Description
 );

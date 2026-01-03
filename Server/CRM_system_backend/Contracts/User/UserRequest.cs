@@ -2,8 +2,8 @@
 
 public record UserRequest
 (
-    int roleId,
-    string login,
-    string password
+    int RoleId,
+    string Login,
+    string Password
 );
 

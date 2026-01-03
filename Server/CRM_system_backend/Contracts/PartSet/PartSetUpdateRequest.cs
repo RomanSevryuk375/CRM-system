@@ -1,7 +1,7 @@
-﻿namespace CRM_system_backend.Contracts.PartSet;
+﻿namespace CRMSystem.Core.DTOs.PartSet;
 
 public record PartSetUpdateRequest
 (
-    decimal? quantity,
-    decimal? soldPrice
+    decimal? Quantity,
+    decimal? SoldPrice
 );

@@ -1,6 +1,6 @@
-﻿namespace CRM_system_backend.Contracts.Attachment;
+﻿namespace CRMSystem.Core.DTOs.Attachment;
 
 public record AttachmentUpdateRequest
 (
-    string? description
+    string? Description
 );

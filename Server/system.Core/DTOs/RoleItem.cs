@@ -2,6 +2,6 @@
 
 public record RoleItem
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

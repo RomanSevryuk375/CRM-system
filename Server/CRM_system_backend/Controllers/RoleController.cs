@@ -23,8 +23,8 @@ public class RoleController : ControllerBase
         var dto = await _roleService.GetRoles();
 
         var response = dto.Select(r => new RoleResponse(
-            r.id,
-            r.name));
+            r.Id,
+            r.Name));
 
         return Ok(response);
     }

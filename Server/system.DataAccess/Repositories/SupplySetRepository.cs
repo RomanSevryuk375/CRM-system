@@ -16,11 +16,11 @@ public class SupplySetRepository : ISupplySetRepository
 
     private IQueryable<SupplySetEntity> ApplyFilter(IQueryable<SupplySetEntity> query, SupplySetFilter filter)
     {
-        if (filter.supplyIds != null && filter.supplyIds.Any())
-            query = query.Where(s => filter.supplyIds.Contains(s.SupplyId));
+        if (filter.SupplyIds != null && filter.SupplyIds.Any())
+            query = query.Where(s => filter.SupplyIds.Contains(s.SupplyId));
 
-        if (filter.positionIds != null && filter.positionIds.Any())
-            query = query.Where(s => filter.positionIds.Contains(s.PositionId));
+        if (filter.PositionIds != null && filter.PositionIds.Any())
+            query = query.Where(s => filter.PositionIds.Contains(s.PositionId));
 
         return query;
     }
@@ -32,10 +32,10 @@ public class SupplySetRepository : ISupplySetRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "supply" => filter.isDescending
+            "supply" => filter.IsDescending
                 ? query.OrderByDescending(s => s.SupplyId)
                 : query.OrderBy(s => s.SupplyId),
-            "position" => filter.isDescending
+            "position" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Position == null
                     ? string.Empty
                     : s.Position.Part == null
@@ -46,14 +46,14 @@ public class SupplySetRepository : ISupplySetRepository
                     : s.Position.Part == null
                         ? string.Empty
                         : s.Position.Part.Name),
-            "quantity" => filter.isDescending
+            "quantity" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Quantity)
                 : query.OrderBy(s => s.Quantity),
-            "purchaseprice" => filter.isDescending
+            "purchaseprice" => filter.IsDescending
                 ? query.OrderByDescending(s => s.PurchasePrice)
                 : query.OrderBy(s => s.PurchasePrice),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(s => s.Id)
                 : query.OrderBy(s => s.Id),
         };
@@ -103,8 +103,8 @@ public class SupplySetRepository : ISupplySetRepository
         var entity = await _context.SupplySets.FirstOrDefaultAsync(s => s.Id == id)
             ?? throw new Exception("SupplySet note not found");
 
-        if (model.quantity.HasValue) entity.Quantity = model.quantity.Value;
-        if (model.purchasePrice.HasValue) entity.PurchasePrice = model.purchasePrice.Value;
+        if (model.Quantity.HasValue) entity.Quantity = model.Quantity.Value;
+        if (model.PurchasePrice.HasValue) entity.PurchasePrice = model.PurchasePrice.Value;
 
         await _context.SaveChangesAsync();
 

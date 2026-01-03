@@ -2,13 +2,13 @@
 
 public record WorkProposalResponse
 (
-    long id,
-    long orderId,
-    string job,
-    long jobId,
-    string woker,
-    int workerId,
-    string status,
-    int statusId,
-    DateTime date
+    long Id,
+    long OrderId,
+    string Job,
+    long JobId,
+    string Woker,
+    int WorkerId,
+    string Status,
+    int StatusId,
+    DateTime Date
 );

@@ -2,12 +2,12 @@
 
 public record WorkerWithUserRequest
 (
-    string name, 
-    string surname, 
-    decimal hourlyRate, 
-    string phoneNumber, 
-    string email,  
-    int roleId, 
-    string login, 
-    string password
+    string Name,
+    string Surname,
+    decimal HourlyRate,
+    string PhoneNumber,
+    string Email,
+    int RoleId,
+    string Login,
+    string Password
 );

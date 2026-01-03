@@ -2,8 +2,8 @@
 
 public record SupplyItem
 (
-    long id, 
-    string supplier, 
-    int supplierId,
-    DateOnly date
+    long Id,
+    string Supplier,
+    int SupplierId,
+    DateOnly Date
 );

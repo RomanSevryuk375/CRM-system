@@ -2,6 +2,6 @@
 
 public record PartCategoryUpdateModel
 (
-    string? name, 
-    string? description
+    string? Name,
+    string? Description
 );

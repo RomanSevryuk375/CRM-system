@@ -20,21 +20,21 @@ public class WorkRepository : IWorkRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "title" => filter.isDescending
+            "title" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Title)
                 : query.OrderBy(w => w.Title),
-            "category" => filter.isDescending
+            "category" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Category)
                 : query.OrderBy(w => w.Category),
-            "description" => filter.isDescending
+            "description" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Description)
                 : query.OrderBy(w => w.Description),
-            "standarttime" => filter.isDescending
+            "standarttime" => filter.IsDescending
                 ? query.OrderByDescending(w => w.StandardTime)
                 : query.OrderBy(w => w.StandardTime),
 
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(w => w.Id)
                 : query.OrderBy(w => w.Id),
         };
@@ -93,10 +93,10 @@ public class WorkRepository : IWorkRepository
         var entty = await _context.Works.FirstOrDefaultAsync(w => w.Id == id)
             ?? throw new ArgumentException("Work not found");
 
-        if (!string.IsNullOrWhiteSpace(model.title)) entty.Title = model.title;
-        if (!string.IsNullOrWhiteSpace(model.categoty)) entty.Category = model.categoty;
-        if (!string.IsNullOrWhiteSpace(model.description)) entty.Description = model.description;
-        if (model.standartTime.HasValue) entty.StandardTime = model.standartTime.Value;
+        if (!string.IsNullOrWhiteSpace(model.Title)) entty.Title = model.Title;
+        if (!string.IsNullOrWhiteSpace(model.Categoty)) entty.Category = model.Categoty;
+        if (!string.IsNullOrWhiteSpace(model.Description)) entty.Description = model.Description;
+        if (model.StandartTime.HasValue) entty.StandardTime = model.StandartTime.Value;
 
         await _context.SaveChangesAsync();
 

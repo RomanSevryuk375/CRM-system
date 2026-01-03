@@ -23,8 +23,8 @@ public class CarStatusController : ControllerBase
         var dto = await _carStatusService.GetCarStatuses();
 
         var response = dto.Select(c => new CarStatusResponse(
-            c.id,
-            c.name));
+            c.Id,
+            c.Name));
 
         return Ok(response);
     }

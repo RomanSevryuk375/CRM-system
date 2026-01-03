@@ -2,9 +2,9 @@
 
 public record PositionRequest
 (
-    long partId,
-    int cellId,
-    decimal purchasePrice,
-    decimal sellingPrice,
-    decimal quantity
+    long PartId,
+    int CellId,
+    decimal PurchasePrice,
+    decimal SellingPrice,
+    decimal Quantity
 );

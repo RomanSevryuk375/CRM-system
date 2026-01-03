@@ -24,13 +24,13 @@ public class PartSetController : ControllerBase
         var count = await _partSetService.GetCountPartSets(filter);
 
         var response = dto.Select(p => new PartSetResponse(
-            p.id,
-            p.orderId,
-            p.position,
-            p.positionId,
-            p.proposalId,
-            p.quantity,
-            p.soldPrice));
+            p.Id,
+            p.OrderId,
+            p.Position,
+            p.PositionId,
+            p.ProposalId,
+            p.Quantity,
+            p.SoldPrice));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -51,13 +51,13 @@ public class PartSetController : ControllerBase
         var dto = await _partSetService.GetPartSetsByOrderId(orderId);
 
         var response = dto.Select(p => new PartSetResponse(
-            p.id,
-            p.orderId,
-            p.position,
-            p.positionId,
-            p.proposalId,
-            p.quantity,
-            p.soldPrice));
+            p.Id,
+            p.OrderId,
+            p.Position,
+            p.PositionId,
+            p.ProposalId,
+            p.Quantity,
+            p.SoldPrice));
 
         return Ok(response);
     }
@@ -67,11 +67,11 @@ public class PartSetController : ControllerBase
     {
         var (partSet, errors) = PartSet.Create(
             0,
-            request.orderId,
-            request.positionId,
-            request.proposalId,
-            request.quantity,
-            request.soldPrice);
+            request.OrderId,
+            request.PositionId,
+            request.ProposalId,
+            request.Quantity,
+            request.SoldPrice);
 
         if(errors is not null && errors.Any())
             return BadRequest(errors);
@@ -85,8 +85,8 @@ public class PartSetController : ControllerBase
     public async Task<ActionResult<long>> UpdatePartSet(long id, [FromBody] PartSetUpdateRequest request)
     {
         var model = new PartSetUpdateModel(
-            request.quantity,
-            request.soldPrice);
+            request.Quantity,
+            request.SoldPrice);
 
         var Id = await _partSetService.UpdatePartSet(id, model);
 

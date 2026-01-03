@@ -4,10 +4,10 @@ namespace CRM_system_backend.Contracts.Expense;
 
 public record ExpenseRequest
 (
-    DateTime date,
-    string category,
-    int? taxId,
-    long? partSetId,
-    ExpenseTypeEnum expenseTypeId,
-    decimal sum
+    DateTime Date,
+    string Category,
+    int? TaxId,
+    long? PartSetId,
+    ExpenseTypeEnum ExpenseTypeId,
+    decimal Sum
 );

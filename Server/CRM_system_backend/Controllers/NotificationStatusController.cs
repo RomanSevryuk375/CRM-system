@@ -22,8 +22,8 @@ public class NotificationStatusController : ControllerBase
         var dto = await _notificationStatusService.GetNotificationStatuses();
 
         var response = dto.Select(n => new NotificationStatusResponse(
-            n.id,
-            n.name));
+            n.Id,
+            n.Name));
 
         return Ok(response);
     }

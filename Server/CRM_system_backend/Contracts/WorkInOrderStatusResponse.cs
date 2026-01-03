@@ -2,6 +2,6 @@
 
 public record WorkInOrderStatusResponse
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

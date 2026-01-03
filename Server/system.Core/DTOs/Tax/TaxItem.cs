@@ -1,11 +1,9 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.Tax;
+﻿namespace CRMSystem.Core.DTOs.Tax;
 
 public record TaxItem
 (
-    int id, 
-    string name, 
-    decimal rate, 
-    string type
+    int Id,
+    string Name,
+    decimal Rate,
+    string Type
 );

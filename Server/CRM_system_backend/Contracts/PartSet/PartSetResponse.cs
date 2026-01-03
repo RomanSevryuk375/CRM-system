@@ -1,12 +1,12 @@
-﻿namespace CRM_system_backend.Contracts.PartSet;
+﻿namespace CRMSystem.Core.DTOs.PartSet;
 
 public record PartSetResponse
 (
-    long id,
-    long? orderId,
-    string position,
-    long positionId,
-    long? proposalId,
-    decimal quantity,
-    decimal soldPrice
+    long Id,
+    long? OrderId,
+    string Position,
+    long PositionId,
+    long? ProposalId,
+    decimal Quantity,
+    decimal SoldPrice
 );

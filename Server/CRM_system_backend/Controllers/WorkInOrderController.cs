@@ -24,15 +24,15 @@ public class WorkInOrderController : ControllerBase
         var count = await _workInOrderService.GetCountWiO(filter);
 
         var response = dto.Select(w => new WorkInOrderItem(
-            w.id,
-            w.orderId,
+            w.Id,
+            w.OrderId,
             w.job,
-            w.jobId,
-            w.worker,
-            w.workerId,
-            w.status,
-            w.statusId,
-            w.timeSpent));
+            w.JobId,
+            w.Worker,
+            w.WorkerId,
+            w.Status,
+            w.StatusId,
+            w.TimeSpent));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -45,15 +45,15 @@ public class WorkInOrderController : ControllerBase
         var dto = await _workInOrderService.GetWiOByOrderId(orderId);
 
         var response = dto.Select(w => new WorkInOrderItem(
-            w.id,
-            w.orderId,
+            w.Id,
+            w.OrderId,
             w.job,
-            w.jobId,
-            w.worker,
-            w.workerId,
-            w.status,
-            w.statusId,
-            w.timeSpent));
+            w.JobId,
+            w.Worker,
+            w.WorkerId,
+            w.Status,
+            w.StatusId,
+            w.TimeSpent));
 
         return Ok(response);
     }
@@ -63,11 +63,11 @@ public class WorkInOrderController : ControllerBase
     {
         var (work, errors) = WorkInOrder.Create(
             0,
-            request.orderId,
-            request.jobId,
-            request.workerId,
-            request.statusId,
-            request.timeSpent);
+            request.OrderId,
+            request.JobId,
+            request.WorkerId,
+            request.StatusId,
+            request.TimeSpent);
 
         if(errors is not null && errors.Any())
             return BadRequest(errors);
@@ -81,9 +81,9 @@ public class WorkInOrderController : ControllerBase
     public async Task<ActionResult<long>> UpdateWiO(long id, [FromBody] WorkInOrderUpdateRequest request)
     {
         var model = new WorkInOrderUpdateModel(
-            request.workerId,
-            request.statusId,
-            request.timeSpent);
+            request.WorkerId,
+            request.StatusId,
+            request.TimeSpent);
 
         var Id = await _workInOrderService.UpdateWiO(id, model);
 

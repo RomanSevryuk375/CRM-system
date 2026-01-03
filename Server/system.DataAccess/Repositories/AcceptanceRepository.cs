@@ -16,14 +16,14 @@ public class AcceptanceRepository : IAcceptanceRepository
 
     private IQueryable<AcceptanceEntity> ApplyFilter(IQueryable<AcceptanceEntity> query, AcceptanceFilter filter)
     {
-        if (filter.workerIds != null && filter.workerIds.Any())
-            query = query.Where(x => filter.workerIds.Contains(x.WorkerId));
+        if (filter.WorkerIds != null && filter.WorkerIds.Any())
+            query = query.Where(x => filter.WorkerIds.Contains(x.WorkerId));
 
-        if (filter.orderIds != null && filter.orderIds.Any())
-            query = query.Where(x => filter.orderIds.Contains(x.OrderId));
+        if (filter.OrderIds != null && filter.OrderIds.Any())
+            query = query.Where(x => filter.OrderIds.Contains(x.OrderId));
 
-        if (filter.acceptanceIds != null && filter.acceptanceIds.Any())
-            query = query.Where(x => filter.acceptanceIds.Contains(x.Id));
+        if (filter.AcceptanceIds != null && filter.AcceptanceIds.Any())
+            query = query.Where(x => filter.AcceptanceIds.Contains(x.Id));
 
         return query;
     }
@@ -35,29 +35,29 @@ public class AcceptanceRepository : IAcceptanceRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "createdAt" => filter.isDescending
+            "createdAt" => filter.IsDescending
                 ? query.OrderByDescending(a => a.CreateAt)
                 : query.OrderBy(a => a.CreateAt),
-            "mileage" => filter.isDescending
+            "mileage" => filter.IsDescending
                 ? query.OrderByDescending(a => a.Mileage)
                 : query.OrderBy(a => a.Mileage),
-            "fuelLevel" => filter.isDescending
+            "fuelLevel" => filter.IsDescending
                 ? query.OrderByDescending(a => a.FuelLevel)
                 : query.OrderBy(a => a.FuelLevel),
-            "externalDefects" => filter.isDescending
+            "externalDefects" => filter.IsDescending
                 ? query.OrderByDescending(a => a.ExternalDefects)
                 : query.OrderBy(a => a.ExternalDefects),
-            "internalDefects" => filter.isDescending
+            "internalDefects" => filter.IsDescending
                 ? query.OrderByDescending(a => a.InternalDefects)
                 : query.OrderBy(a => a.InternalDefects),
-            "clientSign" => filter.isDescending
+            "clientSign" => filter.IsDescending
                 ? query.OrderByDescending(a => a.ClientSign)
                 : query.OrderBy(a => a.ClientSign),
-            "workerSign" => filter.isDescending
+            "workerSign" => filter.IsDescending
                 ? query.OrderByDescending(a => a.WorkerSign)
                 : query.OrderBy(a => a.WorkerSign),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(a => a.Id)
                 : query.OrderBy(a => a.Id),
         };
@@ -116,12 +116,12 @@ public class AcceptanceRepository : IAcceptanceRepository
         var entity = await _context.Acceptances.FirstOrDefaultAsync(a => a.Id == id)
             ?? throw new Exception("Acceptance not found");
 
-        if (model.mileage.HasValue) entity.Mileage = model.mileage.Value;
-        if (model.fuelLevel.HasValue) entity.FuelLevel = model.fuelLevel.Value;
-        if (!string.IsNullOrEmpty(model.externalDefects)) entity.ExternalDefects = model.externalDefects;
-        if (!string.IsNullOrEmpty(model.internalDefects)) entity.InternalDefects = model.internalDefects;
-        if (model.clientSign.HasValue) entity.ClientSign = model.clientSign.Value;
-        if (model.workerSign.HasValue) entity.WorkerSign = model.workerSign.Value;
+        if (model.Mileage.HasValue) entity.Mileage = model.Mileage.Value;
+        if (model.FuelLevel.HasValue) entity.FuelLevel = model.FuelLevel.Value;
+        if (!string.IsNullOrEmpty(model.ExternalDefects)) entity.ExternalDefects = model.ExternalDefects;
+        if (!string.IsNullOrEmpty(model.InternalDefects)) entity.InternalDefects = model.InternalDefects;
+        if (model.ClientSign.HasValue) entity.ClientSign = model.ClientSign.Value;
+        if (model.WorkerSign.HasValue) entity.WorkerSign = model.WorkerSign.Value;
 
         await _context.SaveChangesAsync();
 

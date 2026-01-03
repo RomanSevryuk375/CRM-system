@@ -25,10 +25,10 @@ public class SupplyController : ControllerBase
         var count = await _supplyService.GetCountSupplies(filter);
 
         var response = dto.Select(s => new SupplyResponse(
-            s.id,
-            s.supplier,
-            s.supplierId,
-            s.date));
+            s.Id,
+            s.Supplier,
+            s.SupplierId,
+            s.Date));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -40,8 +40,8 @@ public class SupplyController : ControllerBase
     {
         var (supply, errors) = Supply.Create(
             0,
-            request.supplierId,
-            request.date);
+            request.SupplierId,
+            request.Date);
 
         if(errors is not null && errors.Any())
             return BadRequest(errors);

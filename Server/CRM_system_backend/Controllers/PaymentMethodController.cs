@@ -22,8 +22,8 @@ public class PaymentMethodController : ControllerBase
         var dto = await _paymentMethodService.GetPaymentMethods();
 
         var response = dto.Select(p => new PaymentMethodResponse(
-            p.id,
-            p.name));
+            p.Id,
+            p.Name));
 
         return Ok(response);
     }

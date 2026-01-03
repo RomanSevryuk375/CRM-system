@@ -4,6 +4,7 @@ using CRMSystem.Buisnes.Services;
 using CRMSystem.Buisness.Abstractions;
 using CRMSystem.Core.DTOs;
 using CRMSystem.Core.DTOs.AcceptanceImg;
+using CRMSystem.Core.DTOs.AccetanceImg;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,10 +28,10 @@ public class AcceptanceImgController : ControllerBase
         var count = await _acceptanceImgService.GetCountAccptnceImg(filter);
 
         var response = dto.Select(a => new AcceptanceImgResponse(
-            a.id,
+            a.Id,
             a.acceptanceId,
-            a.filePath,
-            a.description));
+            a.FilePath,
+            a.Description));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -62,7 +63,7 @@ public class AcceptanceImgController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<long>> UpdateAcceptanceImg(long id, [FromBody] AcceptanceImgUpdateRequest request)
     {
-        var Id = await _acceptanceImgService.UpdateAccptanceImg(id, request.filePath, request.description);
+        var Id = await _acceptanceImgService.UpdateAccptanceImg(id, request.FilePath, request.Description);
 
         return Ok(Id);
     }

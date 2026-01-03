@@ -1,12 +1,12 @@
 ﻿using CRMSystem.Core.Enums;
 
-namespace CRM_system_backend.Contracts.Car;
+namespace CRMSystem.Core.DTOs.Car;
 
 public record CarUpdateRequest
 (
-    CarStatusEnum? statusId,
-    string? brand,
-    string? model,
-    int? yearOfManufacture,
-    int? mileage
+    CarStatusEnum? StatusId,
+    string? Brand,
+    string? Model,
+    int? YearOfManufacture,
+    int? Mileage
 );

@@ -4,9 +4,9 @@ namespace CRMSystem.Core.DTOs.Position;
 
 public record PositionFilter
 (
-    IEnumerable<long?> partIds,
+    IEnumerable<long?> PartIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

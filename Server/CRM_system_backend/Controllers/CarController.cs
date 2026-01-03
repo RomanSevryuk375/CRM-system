@@ -50,7 +50,7 @@ public class CarController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateCar([FromBody]CarRequest request)
+    public async Task<ActionResult<long>> CreateCar([FromBody] CarRequest request)
     {
         Console.WriteLine($"CONTROLLER DEBUG: Recieved JSON mapped to: OwnerId={request.OwnerId}, StatusId={request.StatusId}");
         var (car, errors) = Car.Create(
@@ -76,11 +76,11 @@ public class CarController : ControllerBase
     public async Task<ActionResult<long>> UpdateCar(long id, [FromBody]CarUpdateRequest request)
     {
         var model = new CarUpdateModel(
-            request.statusId,
-            request.brand,
-            request.model,
-            request.yearOfManufacture,
-            request.mileage);
+            request.StatusId,
+            request.Brand,
+            request.Model,
+            request.YearOfManufacture,
+            request.Mileage);
 
         var Id = await _carService.UpdateCar(id, model);
 

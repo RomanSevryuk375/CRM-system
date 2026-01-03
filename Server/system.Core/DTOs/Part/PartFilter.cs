@@ -2,9 +2,9 @@
 
 public record PartFilter
 (
-    IEnumerable<long> categoryIds,
+    IEnumerable<long> CategoryIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

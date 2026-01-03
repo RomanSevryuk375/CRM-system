@@ -2,6 +2,6 @@
 
 public record ScheduleUpdateRequest
 (
-    int? shiftId,
-    DateTime? dateTime
+    int? ShiftId,
+    DateTime? DateTime
 );

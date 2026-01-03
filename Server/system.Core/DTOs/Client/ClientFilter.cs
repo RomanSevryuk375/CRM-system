@@ -2,9 +2,9 @@
 
 public record ClientFilter
 (
-    IEnumerable<long> userIds,
+    IEnumerable<long> UserIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

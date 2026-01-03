@@ -2,6 +2,6 @@
 
 public record StorageCellUpdateModel
 (
-    string? rack,
-    string? shelf
+    string? Rack,
+    string? Shelf
 );

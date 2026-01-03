@@ -2,18 +2,18 @@
 
 public record PositionWithPartRequest
 (
-    long id,
-    long partId, 
-    int cellId, 
-    decimal purchasePrice, 
-    decimal sellingPrice, 
-    decimal quantity, 
-    int categoryId, 
-    string? oemArticle, 
-    string? manufacturerArticle, 
-    string internalArticle, 
-    string? description, 
-    string name, 
-    string manufacturer, 
-    string applicability
+    long Id,
+    long PartId,
+    int CellId,
+    decimal PurchasePrice,
+    decimal SellingPrice,
+    decimal Quantity,
+    int CategoryId,
+    string? OemArticle,
+    string? ManufacturerArticle,
+    string InternalArticle,
+    string? Description,
+    string Name,
+    string Manufacturer,
+    string Applicability
 );

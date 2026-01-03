@@ -1,15 +1,15 @@
-﻿namespace CRM_system_backend.Contracts.Part;
+﻿namespace CRMSystem.Core.DTOs.Part;
 
 public record PartResponse
 (
-    long id,
-    string category,
-    int categoryId,
-    string? oemArticle,
-    string? manufacturerArticle,
-    string internalArticle,
-    string? description,
-    string name,
-    string manufacturer,
-    string applicability
+    long Id,
+    string Category,
+    int CategoryId,
+    string? OemArticle,
+    string? ManufacturerArticle,
+    string InternalArticle,
+    string? Description,
+    string Name,
+    string Manufacturer,
+    string Applicability
 );

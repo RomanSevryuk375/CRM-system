@@ -4,9 +4,9 @@ namespace CRMSystem.Core.DTOs.PaymentNote;
 
 public record PaymentNoteItem
 (
-    long id,
-    long billId,
-    DateTime date,
-    decimal amount,
-    string method
+    long Id,
+    long BillId,
+    DateTime Date,
+    decimal Amount,
+    string Method
 );

@@ -2,9 +2,9 @@
 
 public record SupplyFilter
 (
-    IEnumerable<long> suplierIds,
+    IEnumerable<long> SuplierIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

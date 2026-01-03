@@ -2,6 +2,6 @@
 
 public record NotificationTypeResponse
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

@@ -54,8 +54,8 @@ public class UserRepository : IUserRepository
         var entity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id)
             ?? throw new ArgumentException("User not found");
 
-        if (!string.IsNullOrWhiteSpace(model.login)) entity.Login = model.login;
-        if (!string.IsNullOrWhiteSpace(model.passwordHash)) entity.PasswordHash = model.passwordHash;
+        if (!string.IsNullOrWhiteSpace(model.Login)) entity.Login = model.Login;
+        if (!string.IsNullOrWhiteSpace(model.Password)) entity.PasswordHash = model.Password;
 
         await _context.SaveChangesAsync();
 

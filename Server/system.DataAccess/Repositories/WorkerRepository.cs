@@ -16,8 +16,8 @@ public class WorkerRepository : IWorkerRepository
 
     private IQueryable<WorkerEntity> ApplyFilter(IQueryable<WorkerEntity> query, WorkerFilter filter)
     {
-        if (filter.workerIds != null && filter.workerIds.Any())
-            query = query.Where(w => filter.workerIds.Contains(w.Id));
+        if (filter.WorkerIds != null && filter.WorkerIds.Any())
+            query = query.Where(w => filter.WorkerIds.Contains(w.Id));
 
         return query;
     }
@@ -29,23 +29,23 @@ public class WorkerRepository : IWorkerRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "name" => filter.isDescending
+            "name" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Name)
                 : query.OrderBy(w => w.Name),
-            "surname" => filter.isDescending
+            "surname" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Surname)
                 : query.OrderBy(w => w.Surname),
-            "phonenumber" => filter.isDescending
+            "phonenumber" => filter.IsDescending
                 ? query.OrderByDescending(w => w.PhoneNumber)
                 : query.OrderBy(w => w.PhoneNumber),
-            "email" => filter.isDescending
+            "email" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Email)
                 : query.OrderBy(w => w.Email),
-            "hourlyrate" => filter.isDescending
+            "hourlyrate" => filter.IsDescending
                 ? query.OrderByDescending(w => w.HourlyRate)
                 : query.OrderBy(w => w.HourlyRate),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(w => w.Id)
                 : query.OrderBy(w => w.Id),
         };
@@ -111,11 +111,11 @@ public class WorkerRepository : IWorkerRepository
         var workerEntity = await _context.Workers.FirstOrDefaultAsync(w => w.Id == id)
             ?? throw new Exception("Payment note not found");
 
-        if (!string.IsNullOrWhiteSpace(model.name)) workerEntity.Name = model.name;
-        if (!string.IsNullOrWhiteSpace(model.surname)) workerEntity.Surname = model.surname;
-        if (model.hourlyRate.HasValue) workerEntity.HourlyRate = model.hourlyRate.Value;
-        if (!string.IsNullOrWhiteSpace(model.phoneNumber)) workerEntity.PhoneNumber = model.phoneNumber;
-        if (!string.IsNullOrWhiteSpace(model.email)) workerEntity.Email = model.email;
+        if (!string.IsNullOrWhiteSpace(model.Name)) workerEntity.Name = model.Name;
+        if (!string.IsNullOrWhiteSpace(model.Surname)) workerEntity.Surname = model.Surname;
+        if (model.HourlyRate.HasValue) workerEntity.HourlyRate = model.HourlyRate.Value;
+        if (!string.IsNullOrWhiteSpace(model.PhoneNumber)) workerEntity.PhoneNumber = model.PhoneNumber;
+        if (!string.IsNullOrWhiteSpace(model.Email)) workerEntity.Email = model.Email;
 
         await _context.SaveChangesAsync();
 

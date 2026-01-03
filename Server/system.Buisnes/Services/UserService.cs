@@ -34,7 +34,7 @@ public class UserService : IUserService
 
         var user = await GetUsersByLogin(login);
 
-        var result = _myPasswordHasher.Verify(password, user.passwordHash);
+        var result = _myPasswordHasher.Verify(password, user.PasswordHash);
 
         if (result == false)
         {

@@ -2,6 +2,6 @@
 
 public record PaymentMethodResponse
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

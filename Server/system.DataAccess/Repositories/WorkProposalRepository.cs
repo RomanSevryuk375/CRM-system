@@ -17,17 +17,17 @@ public class WorkProposalRepository : IWorkProposalRepository
 
     private IQueryable<WorkProposalEntity> ApplyFilter(IQueryable<WorkProposalEntity> query, WorkProposalFilter filter)
     {
-        if (filter.orderIds != null && filter.orderIds.Any())
-            query = query.Where(w => filter.orderIds.Contains(w.OrderId));
+        if (filter.OrderIds != null && filter.OrderIds.Any())
+            query = query.Where(w => filter.OrderIds.Contains(w.OrderId));
 
-        if (filter.jobIds != null && filter.jobIds.Any())
-            query = query.Where(w => filter.jobIds.Contains(w.JobId));
+        if (filter.JobIds != null && filter.JobIds.Any())
+            query = query.Where(w => filter.JobIds.Contains(w.JobId));
 
-        if (filter.workerIds != null && filter.workerIds.Any())
-            query = query.Where(w => filter.workerIds.Contains(w.WorkerId));
+        if (filter.WorkerIds != null && filter.WorkerIds.Any())
+            query = query.Where(w => filter.WorkerIds.Contains(w.WorkerId));
 
-        if (filter.statusIds != null && filter.statusIds.Any())
-            query = query.Where(w => filter.statusIds.Contains(w.StatusId));
+        if (filter.StatusIds != null && filter.StatusIds.Any())
+            query = query.Where(w => filter.StatusIds.Contains(w.StatusId));
 
         return query;
     }
@@ -39,35 +39,35 @@ public class WorkProposalRepository : IWorkProposalRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "order" => filter.isDescending
+            "order" => filter.IsDescending
                 ? query.OrderByDescending(w => w.OrderId)
                 : query.OrderBy(w => w.OrderId),
-            "job" => filter.isDescending
+            "job" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Work == null
                     ? string.Empty
                     : w.Work.Title)
                 : query.OrderBy(w => w.Work == null
                     ? string.Empty
                     : w.Work.Title),
-            "worker" => filter.isDescending
+            "worker" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Worker == null
                     ? string.Empty
                     : w.Worker.Surname)
                 : query.OrderBy(w => w.Worker == null
                     ? string.Empty
                     : w.Worker.Surname),
-            "status" => filter.isDescending
+            "status" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Status == null
                     ? string.Empty
                     : w.Status.Name)
                 : query.OrderBy(w => w.Status == null
                     ? string.Empty
                     : w.Status.Name),
-            "date" => filter.isDescending
+            "date" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Date)
                 : query.OrderBy(w => w.Date),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(w => w.Id)
                 : query.OrderBy(w => w.Id),
         };

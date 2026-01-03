@@ -2,11 +2,11 @@
 
 public record PartUpdateModel
 (
-    string? oemArticle,
-    string? manufacturerArticle,
-    string? internalArticle,
-    string? description,
-    string? name,
-    string? manufacturer,
-    string? applicability
+    string? OemArticle,
+    string? ManufacturerArticle,
+    string? InternalArticle,
+    string? Description,
+    string? Name,
+    string? Manufacturer,
+    string? Applicability
 );

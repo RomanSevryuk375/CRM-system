@@ -2,9 +2,9 @@
 
 public record GuaranteeRequest
 (
-    long orderId,
-    DateOnly dateStart,
-    DateOnly dateEnd,
-    string? description,
-    string terms
+    long OrderId,
+    DateOnly DateStart,
+    DateOnly DateEnd,
+    string? Description,
+    string Terms
 );

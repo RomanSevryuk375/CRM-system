@@ -2,8 +2,8 @@
 
 public record SkillFilter
 (
-    IEnumerable<int> workerIds,
+    IEnumerable<int> WorkerIds,
     IEnumerable<int> specializationIds,
     string? SortBy,
-    bool isDescending
+    bool IsDescending
 );

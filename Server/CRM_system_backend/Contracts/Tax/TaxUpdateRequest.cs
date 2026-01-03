@@ -2,6 +2,6 @@
 
 public record TaxUpdateRequest
 (
-    string? name,
-    decimal? rate
+    string? Name,
+    decimal? Rate
 );

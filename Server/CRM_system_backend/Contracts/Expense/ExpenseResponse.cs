@@ -1,14 +1,14 @@
-﻿namespace CRM_system_backend.Contracts.Expense;
+﻿namespace CRMSystem.Core.DTOs.Expense;
 
 public record ExpenseResponse
 (
-    long id,
-    DateTime date,
-    string category,
-    string? tax,
-    int? taxId,
-    long? partSetId,
-    string expenseType,
-    int expenceTypeId,
-    decimal sum
+    long Id,
+    DateTime Date,
+    string Category,
+    string? Tax,
+    int? TaxId,
+    long? PartSetId,
+    string ExpenseType,
+    int ExpenceTypeId,
+    decimal Sum
 );

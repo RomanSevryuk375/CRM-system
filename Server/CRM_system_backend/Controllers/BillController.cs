@@ -25,13 +25,13 @@ public class BillController : ControllerBase
         var count = await _billService.GetCountBills(filter);
 
         var response = dto.Select(b => new BillResponse(
-            b.id,
-            b.orderId,
-            b.status,
-            b.statusId,
-            b.createdAt,
-            b.amount,
-            b.actualBillDate));
+            b.Id,
+            b.OrderId,
+            b.Status,
+            b.StatusId,
+            b.CreatedAt,
+            b.Amount,
+            b.ActualBillDate));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -39,15 +39,15 @@ public class BillController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateBill([FromBody]BillRequest request)
+    public async Task<ActionResult<long>> CreateBill([FromBody] BillRequest request)
     {
         var (bill, errors) = Bill.Create(
             0,
-            request.orderId,
-            request.statusId,
-            request.createdAt,
-            request.amount,
-            request.actualBillDate);
+            request.OrderId,
+            request.StatusId,
+            request.CreatedAt,
+            request.Amount,
+            request.ActualBillDate);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);
@@ -61,9 +61,9 @@ public class BillController : ControllerBase
     public async Task<ActionResult<long>> UpdateBill(long id, [FromBody]BillUpdateRequest request)
     {
         var model = new BillUpdateModel(
-            request.statusId,
-            request.amount,
-            request.actualBillDate);
+            request.StatusId,
+            request.Amount,
+            request.ActualBillDate);
 
         var Id = await _billService.UpdateBill(id, model);
 

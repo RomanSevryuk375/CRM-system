@@ -2,8 +2,8 @@
 
 public record ClientUpdateModel
 (
-    string? name,
-    string? surname,
-    string? phoneNumber,
-    string? email
+    string? Name,
+    string? Surname,
+    string? PhoneNumber,
+    string? Email
 );

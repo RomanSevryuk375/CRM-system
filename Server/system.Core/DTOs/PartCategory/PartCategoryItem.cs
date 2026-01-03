@@ -2,7 +2,7 @@
 
 public record PartCategoryItem
 (
-    int id,
-    string name,
-    string? description
+    int Id,
+    string Name,
+    string? Description
 );

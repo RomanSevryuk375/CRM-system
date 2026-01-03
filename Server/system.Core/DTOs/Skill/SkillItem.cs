@@ -2,9 +2,9 @@
 
 public record SkillItem
 (
-    int id,
-    string worker, 
-    int workerId,
-    string specialization,
-    int specializationId
+    int Id,
+    string worker,
+    int WorkerId,
+    string Specialization,
+    int SpecializationId
 );

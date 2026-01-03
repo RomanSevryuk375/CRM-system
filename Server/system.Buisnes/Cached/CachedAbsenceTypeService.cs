@@ -1,7 +1,7 @@
 ﻿using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Buisnes.Extensions;
 using CRMSystem.Buisnes.Services;
-using CRMSystem.Core.DTOs;
+using CRMSystem.Core.DTOs.AbsenceType;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;

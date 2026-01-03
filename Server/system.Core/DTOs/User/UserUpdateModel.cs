@@ -2,6 +2,6 @@
 
 public record UserUpdateModel
 (
-    string login,
-    string passwordHash
+    string Login,
+    string Password
 );

@@ -82,12 +82,12 @@ public class BillService : IBillService
     {
         _logger.LogInformation("Updating bill start");
 
-        if (model.statusId is not null)
+        if (model.StatusId is not null)
         {
-            if (!await _statusRepository.Exists((int)model.statusId))
+            if (!await _statusRepository.Exists((int)model.StatusId))
             {
-                _logger.LogError("Status{StatusId} not found", (int)model.statusId);
-                throw new NotFoundException($"Status{(int)model.statusId} not found");
+                _logger.LogError("Status{StatusId} not found", (int)model.StatusId);
+                throw new NotFoundException($"Status{(int)model.StatusId} not found");
             }
         }
 

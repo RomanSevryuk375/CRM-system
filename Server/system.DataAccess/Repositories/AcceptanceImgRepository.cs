@@ -16,8 +16,8 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
 
     private IQueryable<AcceptanceImgEntity> ApplyFilter(IQueryable<AcceptanceImgEntity> query, AcceptanceImgFilter filter)
     {
-        if (filter.acceptanceIds != null && filter.acceptanceIds.Any())
-            query = query.Where(a => filter.acceptanceIds.Contains(a.AcceptanceId));
+        if (filter.AcceptanceIds != null && filter.AcceptanceIds.Any())
+            query = query.Where(a => filter.AcceptanceIds.Contains(a.AcceptanceId));
 
         return query;
     }

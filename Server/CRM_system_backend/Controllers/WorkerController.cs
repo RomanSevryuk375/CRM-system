@@ -26,13 +26,13 @@ public class WorkerController : ControllerBase
         var count = await _workerService.GetCountWorkers(filter);
 
         var response = dto.Select(w => new WorkerResponse(
-            w.id,
-            w.userId,
-            w.name,
-            w.surname,
-            w.hourlyRate,
-            w.phoneNumber,
-            w.email));
+            w.Id,
+            w.UserId,
+            w.Name,
+            w.Surname,
+            w.HourlyRate,
+            w.PhoneNumber,
+            w.Email));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -52,12 +52,12 @@ public class WorkerController : ControllerBase
     {
         var (worker, errorsWorker) = Worker.Create(
             0,
-            request.userId,
-            request.name,
-            request.surname,
-            request.hourlyRate,
-            request.phoneNumber,
-            request.email);
+            request.UserId,
+            request.Name,
+            request.Surname,
+            request.HourlyRate,
+            request.PhoneNumber,
+            request.Email);
 
         if (errorsWorker is not null && errorsWorker.Any())
             return BadRequest(errorsWorker);
@@ -72,9 +72,9 @@ public class WorkerController : ControllerBase
     {
         var (user, errorsUser) = CRMSystem.Core.Models.User.Create(
             0,
-            request.roleId,
-            request.login,
-            request.password);
+            request.RoleId,
+            request.Login,
+            request.Password);
 
         if (errorsUser is not null && errorsUser.Any())
             return BadRequest(errorsUser);
@@ -82,11 +82,11 @@ public class WorkerController : ControllerBase
         var (worker, errorsWorker) = Worker.Create(
             0,
             1,
-            request.name,
-            request.surname,
-            request.hourlyRate,
-            request.phoneNumber,
-            request.email);
+            request.Name,
+            request.Surname,
+            request.HourlyRate,
+            request.PhoneNumber,
+            request.Email);
 
         if (errorsWorker is not null && errorsWorker.Any())
             return BadRequest(errorsWorker);
@@ -101,11 +101,11 @@ public class WorkerController : ControllerBase
     public async Task<ActionResult<int>> UpdateWorker(int id, [FromBody] WorkerRequest request)
     {
         var model = new WorkerUpdateModel(
-            request.name,
-            request.surname,
-            request.hourlyRate,
-            request.phoneNumber,
-            request.email);
+            request.Name,
+            request.Surname,
+            request.HourlyRate,
+            request.PhoneNumber,
+            request.Email);
 
         var result = await _workerService.UpdateWorker(id, model);
 

@@ -2,8 +2,8 @@
 
 public record ScheduleRequest
 (
-    int id,
-    int workerId,
-    int shiftId,
-    DateTime dateTime
+    int Id,
+    int WorkerId,
+    int ShiftId,
+    DateTime DateTime
 );

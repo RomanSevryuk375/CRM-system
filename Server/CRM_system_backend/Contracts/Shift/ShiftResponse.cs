@@ -2,8 +2,8 @@
 
 public record ShiftResponse
 (
-   int id,
-   string name,
-   TimeOnly startAt,
-   TimeOnly endAt
+   int Id,
+   string Name,
+   TimeOnly StartAt,
+   TimeOnly EndAt
 );

@@ -24,10 +24,10 @@ public class ShiftController : ControllerBase
         var dto = await _shiftService.GetShifts();
 
         var response = dto.Select(s => new ShiftResponse(
-            s.id,
-            s.name,
-            s.startAt,
-            s.endAt));
+            s.Id,
+            s.Name,
+            s.StartAt,
+            s.EndAt));
 
         return Ok(response);
     }
@@ -37,9 +37,9 @@ public class ShiftController : ControllerBase
     {
         var (shift, errors) = Shift.Create(
             0,
-            request.name,
-            request.startAt,
-            request.endAt);
+            request.Name,
+            request.StartAt,
+            request.EndAt);
 
         if(errors is not null && errors.Any()) 
             return BadRequest(errors);
@@ -53,9 +53,9 @@ public class ShiftController : ControllerBase
     public async Task<ActionResult<int>> UpdateShift(int id, [FromBody]ShiftUpdateRequest request)
     {
         var model = new ShiftUpdateModel(
-            request.name,
-            request.startAt,
-            request.endAt);
+            request.Name,
+            request.StartAt,
+            request.EndAt);
 
         var Id = await _shiftService.UpdateShift(id, model);
 

@@ -16,8 +16,8 @@ public class TaxRepository : ITaxRepository
 
     private IQueryable<TaxEntity> ApplyFilter(IQueryable<TaxEntity> query, TaxFilter filter)
     {
-        if (filter.taxTyprIds != null && filter.taxTyprIds.Any())
-            query = query.Where(t => filter.taxTyprIds.Contains(t.TypeId));
+        if (filter.TaxTyprIds != null && filter.TaxTyprIds.Any())
+            query = query.Where(t => filter.TaxTyprIds.Contains(t.TypeId));
 
         return query;
     }
@@ -29,13 +29,13 @@ public class TaxRepository : ITaxRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "name" => filter.isDescending
+            "name" => filter.IsDescending
                 ? query.OrderByDescending(t => t.Name)
                 : query.OrderBy(t => t.Name),
-            "rate" => filter.isDescending
+            "rate" => filter.IsDescending
                 ? query.OrderByDescending(t => t.Rate)
                 : query.OrderBy(t => t.Rate),
-            "type" => filter.isDescending
+            "type" => filter.IsDescending
                 ? query.OrderByDescending(t => t.TaxType == null
                     ? string.Empty
                     : t.TaxType.Name)
@@ -43,7 +43,7 @@ public class TaxRepository : ITaxRepository
                     ? string.Empty
                     : t.TaxType.Name),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(t => t.Id)
                 : query.OrderBy(t => t.Id),
         };
@@ -81,8 +81,8 @@ public class TaxRepository : ITaxRepository
         var entity = _context.Taxes.FirstOrDefault(t => t.Id == id)
             ?? throw new ArgumentException("Tax not found");
 
-        if (!string.IsNullOrWhiteSpace(model.name)) entity.Name = model.name;
-        if (model.rate.HasValue) entity.Rate = model.rate.Value;
+        if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
+        if (model.Rate.HasValue) entity.Rate = model.Rate.Value;
 
         await _context.SaveChangesAsync();
 

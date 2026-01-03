@@ -24,12 +24,12 @@ public class ScheduleController : ControllerBase
         var count = await _scheduleService.GetCountSchedules(filter);
 
         var responce = dto.Select(s => new ScheduleResponse(
-            s.id,
-            s.worker,
-            s.workerId,
-            s.shift,
-            s.shiftId,
-            s.dateTime));
+            s.Id,
+            s.Worker,
+            s.WorkerId,
+            s.Shift,
+            s.ShiftId,
+            s.DateTime));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -41,9 +41,9 @@ public class ScheduleController : ControllerBase
     {
         var (schedule, errors) = Schedule.Create(
             0,
-            request.workerId,
-            request.shiftId,
-            request.dateTime);
+            request.WorkerId,
+            request.ShiftId,
+            request.DateTime);
 
         if(errors is not null &&  errors.Any()) 
             return BadRequest(errors);
@@ -58,18 +58,18 @@ public class ScheduleController : ControllerBase
     {
         var(schedule, errorsSchedule) = Schedule.Create(
             0,
-            request.workerId,
+            request.WorkerId,
             0,
-            request.dateTime);
+            request.DateTime);
 
         if (errorsSchedule is not null && errorsSchedule.Any())
             return BadRequest(errorsSchedule);
 
         var (shift, errorsShift) = Shift.Create(
             0,
-            request.name,
-            request.startAt,
-            request.endAt);
+            request.Name,
+            request.StartAt,
+            request.EndAt);
 
         if (errorsShift is not null && errorsShift.Any())
             return BadRequest(errorsShift);
@@ -83,8 +83,8 @@ public class ScheduleController : ControllerBase
     public async Task<ActionResult<int>> UpdateSchedule(int id, ScheduleUpdateRequest request)
     {
         var model = new ScheduleUpdateModel(
-            request.shiftId,
-            request.dateTime);
+            request.ShiftId,
+            request.DateTime);
 
         var Id = await _scheduleService.UpdateSchedule(id, model);
 

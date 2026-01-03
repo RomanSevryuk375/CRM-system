@@ -2,10 +2,10 @@
 
 public record ScheduleResponse
 (
-    int id,
-    string worker,
-    int workerId,
-    string shift,
-    int shiftId,
-    DateTime dateTime
+    int Id,
+    string Worker,
+    int WorkerId,
+    string Shift,
+    int ShiftId,
+    DateTime DateTime
 );

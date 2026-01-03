@@ -25,17 +25,17 @@ public class AcceptanceController : ControllerBase
         var count = await _acceptanceService.GetCountAcceptance(filter);
 
         var response = dto.Select(a => new AcceptanceResponse(
-            a.id,
-            a.orderId,
-            a.worker,
-            a.workerId,
-            a.createdAt,
-            a.mileage,
-            a.fuelLevel,
-            a.externalDefects,
-            a.internalDefects,
-            a.clientSign,
-            a.workerSign));
+            a.Id,
+            a.OrderId,
+            a.Worker,
+            a.WorkerId,
+            a.CreatedAt,
+            a.Mileage,
+            a.FuelLevel,
+            a.ExternalDefects,
+            a.InternalDefects,
+            a.ClientSign,
+            a.WorkerSign));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -47,15 +47,15 @@ public class AcceptanceController : ControllerBase
     {
         var (acceptance, errors) = Acceptance.Create(
             0,
-            request.orderId,
-            request.workerId,
-            request.createdAt,
-            request.mileage,
-            request.fuelLevel,
-            request.externalDefects,
-            request.internalDefects,
-            request.clientSign,
-            request.workerSign);
+            request.OrderId,
+            request.WorkerId,
+            request.CreatedAt,
+            request.Mileage,
+            request.FuelLevel,
+            request.ExternalDefects,
+            request.InternalDefects,
+            request.ClientSign,
+            request.WorkerSign);
 
         if(errors is not null && errors.Any())
             return BadRequest(errors);
@@ -70,12 +70,12 @@ public class AcceptanceController : ControllerBase
     {
         var model = new AcceptanceUpdateModel
         (
-            request.mileage,
-            request.fuelLevel,
-            request.externalDefects,
-            request.internalDefects,
-            request.clientSign,
-            request.workerSign
+            request.Mileage,
+            request.FuelLevel,
+            request.ExternalDefects,
+            request.InternalDefects,
+            request.ClientSign,
+            request.WorkerSign
         );
 
         var Id = await _acceptanceService.UpdateAcceptance(id, model);

@@ -2,7 +2,7 @@
 
 public record ShiftUpdateRequest
 (
-  string? name,
-  TimeOnly? startAt,
-  TimeOnly? endAt
+  string? Name,
+  TimeOnly? StartAt,
+  TimeOnly? EndAt
 );

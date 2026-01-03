@@ -2,7 +2,7 @@
 
 public record StorageCellItem
 (
-    int id,
-    string rack,
-    string shelf
+    int Id,
+    string Rack,
+    string Shelf
 );

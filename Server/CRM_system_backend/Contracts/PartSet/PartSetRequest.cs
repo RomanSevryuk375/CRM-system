@@ -2,9 +2,9 @@
 
 public record PartSetRequest
 (
-    long? orderId,
-    long positionId,
-    long? proposalId,
-    decimal quantity,
-    decimal soldPrice
+    long? OrderId,
+    long PositionId,
+    long? ProposalId,
+    decimal Quantity,
+    decimal SoldPrice
 );

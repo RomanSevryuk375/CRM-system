@@ -1,10 +1,10 @@
 ﻿using CRMSystem.Core.Enums;
 
-namespace CRM_system_backend.Contracts.Absence;
+namespace CRMSystem.Core.DTOs.Absence;
 
 public record AbsenceUpdateRequest
 (
-    AbsenceTypeEnum? typeId,
-    DateOnly? startDate,
-    DateOnly? endDate
+    AbsenceTypeEnum? TypeId,
+    DateOnly? StartDate,
+    DateOnly? EndDate
 );

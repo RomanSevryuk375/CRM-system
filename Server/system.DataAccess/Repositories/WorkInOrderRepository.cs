@@ -16,17 +16,17 @@ public class WorkInOrderRepository : IWorkInOrderRepository
 
     private IQueryable<WorkInOrderEntity> ApplyFilter(IQueryable<WorkInOrderEntity> query, WorkInOrderFilter filter)
     {
-        if (filter.orderIds != null && filter.orderIds.Any())
-            query = query.Where(w => filter.orderIds.Contains(w.OrderId));
+        if (filter.OrderIds != null && filter.OrderIds.Any())
+            query = query.Where(w => filter.OrderIds.Contains(w.OrderId));
 
-        if (filter.jobIds != null && filter.jobIds.Any())
-            query = query.Where(w => filter.jobIds.Contains(w.JobId));
+        if (filter.JobIds != null && filter.JobIds.Any())
+            query = query.Where(w => filter.JobIds.Contains(w.JobId));
 
-        if (filter.workerIds != null && filter.workerIds.Any())
-            query = query.Where(w => filter.workerIds.Contains(w.WorkerId));
+        if (filter.WorkerIds != null && filter.WorkerIds.Any())
+            query = query.Where(w => filter.WorkerIds.Contains(w.WorkerId));
 
-        if (filter.statusIds != null && filter.statusIds.Any())
-            query = query.Where(w => filter.statusIds.Contains(w.StatusId));
+        if (filter.StatusIds != null && filter.StatusIds.Any())
+            query = query.Where(w => filter.StatusIds.Contains(w.StatusId));
 
         return query;
     }
@@ -38,35 +38,35 @@ public class WorkInOrderRepository : IWorkInOrderRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "order" => filter.isDescending
+            "order" => filter.IsDescending
                 ? query.OrderByDescending(w => w.OrderId)
                 : query.OrderBy(w => w.OrderId),
-            "job" => filter.isDescending
+            "job" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Work == null
                     ? string.Empty
                     : w.Work.Title)
                 : query.OrderBy(w => w.Work == null
                     ? string.Empty
                     : w.Work.Title),
-            "worker" => filter.isDescending
+            "worker" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Worker == null
                     ? string.Empty
                     : w.Worker.Surname)
                 : query.OrderBy(w => w.Worker == null
                     ? string.Empty
                     : w.Worker.Surname),
-            "status" => filter.isDescending
+            "status" => filter.IsDescending
                 ? query.OrderByDescending(w => w.WorkInOrderStatus == null
                     ? string.Empty
                     : w.WorkInOrderStatus.Name)
                 : query.OrderBy(w => w.WorkInOrderStatus == null
                     ? string.Empty
                     : w.WorkInOrderStatus.Name),
-            "timespent" => filter.isDescending
+            "timespent" => filter.IsDescending
                 ? query.OrderByDescending(w => w.TimeSpent)
                 : query.OrderBy(w => w.TimeSpent),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(w => w.Id)
                 : query.OrderBy(w => w.Id),
         };
@@ -149,9 +149,9 @@ public class WorkInOrderRepository : IWorkInOrderRepository
         var entity = await _context.WorksInOrder.FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new ArgumentException("Work in order not found");
 
-        if (model.workerId.HasValue) entity.WorkerId = model.workerId.Value;
-        if (model.statusId.HasValue) entity.StatusId = (int)model.statusId.Value;
-        if (model.timeSpent.HasValue) entity.TimeSpent = model.timeSpent.Value;
+        if (model.WorkerId.HasValue) entity.WorkerId = model.WorkerId.Value;
+        if (model.StatusId.HasValue) entity.StatusId = (int)model.StatusId.Value;
+        if (model.TimeSpent.HasValue) entity.TimeSpent = model.TimeSpent.Value;
 
         await _context.SaveChangesAsync();
 

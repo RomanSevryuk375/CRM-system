@@ -37,7 +37,7 @@ public class CachedPartSetService : IPartSetService
     {
         var partSet = await _decorated.GetPartSetById(id);
 
-        var key = $"dict_{partSet.orderId}";
+        var key = $"dict_{partSet.OrderId}";
 
         await _distributed.RemoveAsync(key);
 
@@ -76,7 +76,7 @@ public class CachedPartSetService : IPartSetService
     {
         var partSet = await _decorated.GetPartSetById(id);
 
-        var key = $"dict_{partSet.orderId}";
+        var key = $"dict_{partSet.OrderId}";
 
         await _distributed.RemoveAsync(key);
 

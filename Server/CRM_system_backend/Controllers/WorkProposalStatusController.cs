@@ -23,8 +23,8 @@ public class WorkProposalStatusController : ControllerBase
         var dto = await _service.GetProposalStatuses();
 
         var response = dto.Select(p => new WorkProposalStatusResponse(
-            p.id,
-            p.name));
+            p.Id,
+            p.Name));
 
         return Ok(response);
     }

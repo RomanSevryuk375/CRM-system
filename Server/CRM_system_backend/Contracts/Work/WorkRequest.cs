@@ -2,8 +2,8 @@
 
 public record WorkRequest
 (
-    string title,
-    string categoty,
-    string description,
-    decimal standartTime
+    string Title,
+    string Categoty,
+    string Description,
+    decimal StandartTime
 );

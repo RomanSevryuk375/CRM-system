@@ -16,8 +16,8 @@ public class CarRepository : ICarRepository
 
     private IQueryable<CarEntity> ApplyFilter(IQueryable<CarEntity> query, CarFilter filter)
     {
-        if (filter.ownerIds != null && filter.ownerIds.Any())
-            query = query.Where(c => filter.ownerIds.Contains(c.OwnerId));
+        if (filter.OwnerIds != null && filter.OwnerIds.Any())
+            query = query.Where(c => filter.OwnerIds.Contains(c.OwnerId));
 
         return query;
     }
@@ -29,40 +29,40 @@ public class CarRepository : ICarRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "owner" => filter.isDescending
+            "owner" => filter.IsDescending
                 ? query.OrderByDescending(c => c.Client == null
                     ? string.Empty
                     : c.Client.Name)
                 : query.OrderBy(c => c.Client == null
                     ? string.Empty
                     : c.Client.Name),
-            "status" => filter.isDescending
+            "status" => filter.IsDescending
                 ? query.OrderByDescending(c => c.Status == null
                     ? string.Empty
                     : c.Status.Name)
                 : query.OrderBy(c => c.Status == null
                     ? string.Empty
                     : c.Status.Name),
-            "brand" => filter.isDescending
+            "brand" => filter.IsDescending
                 ? query.OrderByDescending(c => c.Brand)
                 : query.OrderBy(c => c.Brand),
-            "model" => filter.isDescending
+            "model" => filter.IsDescending
                 ? query.OrderByDescending(c => c.Model)
                 : query.OrderBy(c => c.Model),
-            "yearofmanufacture" => filter.isDescending
+            "yearofmanufacture" => filter.IsDescending
                 ? query.OrderByDescending(c => c.YearOfManufacture)
                 : query.OrderBy(c => c.YearOfManufacture),
-            "vinnumber" => filter.isDescending
+            "vinnumber" => filter.IsDescending
                 ? query.OrderByDescending(c => c.VinNumber)
                 : query.OrderBy(c => c.VinNumber),
-            "statenumber" => filter.isDescending
+            "statenumber" => filter.IsDescending
                 ? query.OrderByDescending(c => c.StateNumber)
                 : query.OrderBy(c => c.StateNumber),
-            "mileage" => filter.isDescending
+            "mileage" => filter.IsDescending
                 ? query.OrderByDescending(c => c.Mileage)
                 : query.OrderBy(c => c.Mileage),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(c => c.Id)
                 : query.OrderBy(c => c.Id),
         };
@@ -148,11 +148,11 @@ public class CarRepository : ICarRepository
         var entity = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id)
             ?? throw new Exception("Car not found");
 
-        if (!string.IsNullOrWhiteSpace(model.brand)) entity.Brand = model.brand;
-        if (!string.IsNullOrWhiteSpace(model.model)) entity.Model = model.model;
-        if (model.yearOfManufacture.HasValue) entity.YearOfManufacture = model.yearOfManufacture.Value;
-        if (model.mileage.HasValue) entity.Mileage = model.mileage.Value;
-        if (model.statusId.HasValue) entity.StatusId = (int)model.statusId.Value;
+        if (!string.IsNullOrWhiteSpace(model.Brand)) entity.Brand = model.Brand;
+        if (!string.IsNullOrWhiteSpace(model.Model)) entity.Model = model.Model;
+        if (model.YearOfManufacture.HasValue) entity.YearOfManufacture = model.YearOfManufacture.Value;
+        if (model.Mileage.HasValue) entity.Mileage = model.Mileage.Value;
+        if (model.StatusId.HasValue) entity.StatusId = (int)model.StatusId.Value;
 
         await _context.SaveChangesAsync();
 

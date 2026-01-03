@@ -2,9 +2,9 @@
 
 public record UserResponse
 (
-    long id,
-    string role,
-    int roleId,
-    string login,
-    string passwordHash
+    long Id,
+    string Role,
+    int RoleId,
+    string Login,
+    string PasswordHash
 );

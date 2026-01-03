@@ -1,8 +1,8 @@
-﻿namespace CRM_system_backend.Contracts.PartCategory;
+﻿namespace CRMSystem.Core.DTOs.PartCategory;
 
 public record PartCategoryResponse
 (
-    int id,
-    string name,
-    string? description
+    int Id,
+    string Name,
+    string? Description
 );

@@ -25,9 +25,9 @@ public class SupplierController : ControllerBase
         var dto = await _supplierService.GetSuppliers();
 
         var response = dto.Select(s => new SupplierResponse(
-            s.id, 
-            s.name, 
-            s.contacts));
+            s.Id, 
+            s.Name, 
+            s.Contacts));
 
         return Ok(response);
     }
@@ -37,8 +37,8 @@ public class SupplierController : ControllerBase
     {
         var (supplier, errors) = Supplier.Create(
             0,
-            request.name,
-            request.contacts);
+            request.Name,
+            request.Contacts);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);
@@ -52,8 +52,8 @@ public class SupplierController : ControllerBase
     public async Task<ActionResult<int>> UpdateSupplier(int id, [FromBody] SupplierUpdateRequest request)
     {
         var model = new SupplierUpdateModel(
-            request.name,
-            request.contacts);
+            request.Name,
+            request.Contacts);
 
         var Id = await _supplierService.UpdateSupplier(id, model);
 

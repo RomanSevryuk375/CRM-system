@@ -25,12 +25,12 @@ public class GuaranteeController : ControllerBase
         var count = await _guaranteeService.GetCountGuarantees(filter);
 
         var response = dto.Select(g => new GuaranteeResponse(
-            g.id,
-            g.orderId,
-            g.dateStart,
-            g.dateEnd,
-            g.description,
-            g.terms));
+            g.Id,
+            g.OrderId,
+            g.DateStart,
+            g.DateEnd,
+            g.Description,
+            g.Terms));
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -42,11 +42,11 @@ public class GuaranteeController : ControllerBase
     {
         var (guarantee, errors) = Guarantee.Create(
             0,
-            request.orderId,
-            request.dateStart,
-            request.dateEnd, 
-            request.description, 
-            request.terms);
+            request.OrderId,
+            request.DateStart,
+            request.DateEnd, 
+            request.Description, 
+            request.Terms);
 
         if(errors is not null && errors.Any())
             return BadRequest(errors);
@@ -60,8 +60,8 @@ public class GuaranteeController : ControllerBase
     public async Task<ActionResult<long>> UpdateGuarantee(long id, GuaranteeUpdateRequest request)
     {
         var model = new GuaranteeUpdateModel(
-            request.description,
-            request.terms);
+            request.Description,
+            request.Terms);
 
         var Id = await _guaranteeService.UpdateGuarantee(id, model);
 

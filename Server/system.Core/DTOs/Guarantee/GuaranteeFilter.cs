@@ -2,9 +2,9 @@
 
 public record GuaranteeFilter
 (
-    IEnumerable<long> orderIds,
+    IEnumerable<long> OrderIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

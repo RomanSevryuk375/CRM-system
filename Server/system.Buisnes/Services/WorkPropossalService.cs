@@ -155,19 +155,19 @@ public class WorkPropossalService : IWorkPropossalService
 
         var transitModel = new WorkInOrder(
             0,
-            proposal!.orderId,
-            proposal!.jobId,
-            proposal!.statusId,
+            proposal!.OrderId,
+            proposal!.JobId,
+            proposal!.StatusId,
             WorkStatusEnum.Pending,
             0);
 
         await _workInOrderRepository.Create(transitModel);
         _logger.LogInformation("Creating works in WiO success");
 
-        await _partSetRepository.MoveFromProposalToOrder(id, proposal.orderId);
+        await _partSetRepository.MoveFromProposalToOrder(id, proposal.OrderId);
         _logger.LogInformation("Mooving parts success");
 
-        await _billRepository.RecalculateAmmount(proposal.orderId);
+        await _billRepository.RecalculateAmmount(proposal.OrderId);
         _logger.LogInformation("Bill recalculating success");
 
         await _workProposalRepository.Delete(id); // временно

@@ -1,12 +1,12 @@
-﻿namespace CRM_system_backend.Contracts.Bill;
+﻿namespace CRMSystem.Core.DTOs.Bill;
 
 public record BillResponse
 (
-    long id,
-    long orderId,
-    string status,
-    int statusId,
-    DateTime createdAt,
-    decimal amount,
-    DateOnly? actualBillDate
+    long Id,
+    long OrderId,
+    string Status,
+    int StatusId,
+    DateTime CreatedAt,
+    decimal Amount,
+    DateOnly? ActualBillDate
 );

@@ -96,10 +96,10 @@ public class PositionSevice : IPositionSrevice
     {
         _logger.LogInformation("Updating position start");
 
-        if (model.cellId.HasValue && !await _cellRepository.Exists(model.cellId.Value))
+        if (model.CellId.HasValue && !await _cellRepository.Exists(model.CellId.Value))
         {
-            _logger.LogError("Cell {cellId} not found", model.cellId);
-            throw new NotFoundException($"Cell {model.cellId} not found");
+            _logger.LogError("Cell {cellId} not found", model.CellId);
+            throw new NotFoundException($"Cell {model.CellId} not found");
         }
 
         var Id = await _positionRepository.Update(id, model);

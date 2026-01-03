@@ -16,8 +16,8 @@ public class PositionRepository : IPositionRepository
 
     private IQueryable<PositionEntity> ApplyFilter(IQueryable<PositionEntity> query, PositionFilter filter)
     {
-        if (filter.partIds != null && filter.partIds.Any())
-            query = query.Where(p => filter.partIds.Contains(p.PartId));
+        if (filter.PartIds != null && filter.PartIds.Any())
+            query = query.Where(p => filter.PartIds.Contains(p.PartId));
 
         return query;
     }
@@ -29,27 +29,27 @@ public class PositionRepository : IPositionRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "part" => filter.isDescending
+            "part" => filter.IsDescending
                 ? query.OrderByDescending(p => p.Part == null
                     ? string.Empty
                     : p.Part.Name)
                 : query.OrderBy(p => p.Part == null
                     ? string.Empty
                     : p.Part.Name),
-            "purchaseprice" => filter.isDescending
+            "purchaseprice" => filter.IsDescending
                 ? query.OrderByDescending(p => p.PurchasePrice)
                 : query.OrderBy(p => p.PurchasePrice),
-            "sellingprice" => filter.isDescending
+            "sellingprice" => filter.IsDescending
                 ? query.OrderByDescending(p => p.SellingPrice)
                 : query.OrderBy(p => p.SellingPrice),
-            "quantity" => filter.isDescending
+            "quantity" => filter.IsDescending
                 ? query.OrderByDescending(p => p.Quantity)
                 : query.OrderBy(p => p.Quantity),
-            "cell" => filter.isDescending
+            "cell" => filter.IsDescending
                 ? query.OrderByDescending(p => p.CellId)
                 : query.OrderBy(p => p.CellId),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(p => p.Id)
                 : query.OrderBy(p => p.Id),
         };
@@ -100,10 +100,10 @@ public class PositionRepository : IPositionRepository
         var entity = await _context.Positions.FirstOrDefaultAsync(p => p.Id == id)
             ?? throw new Exception("Position note not found");
 
-        if (model.cellId.HasValue) entity.CellId = model.cellId.Value;
-        if (model.purchasePrice.HasValue) entity.PurchasePrice = model.purchasePrice.Value;
-        if (model.sellingPrice.HasValue) entity.SellingPrice = model.sellingPrice.Value;
-        if (model.quantity.HasValue) entity.Quantity = model.quantity.Value;
+        if (model.CellId.HasValue) entity.CellId = model.CellId.Value;
+        if (model.PurchasePrice.HasValue) entity.PurchasePrice = model.PurchasePrice.Value;
+        if (model.SellingPrice.HasValue) entity.SellingPrice = model.SellingPrice.Value;
+        if (model.Quantity.HasValue) entity.Quantity = model.Quantity.Value;
 
         await _context.SaveChangesAsync();
 

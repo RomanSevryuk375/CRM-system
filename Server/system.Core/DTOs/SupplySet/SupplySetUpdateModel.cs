@@ -2,6 +2,6 @@
 
 public record SupplySetUpdateModel
 (
-    decimal? quantity,
-    decimal? purchasePrice
+    decimal? Quantity,
+    decimal? PurchasePrice
 );

@@ -17,8 +17,8 @@ public class AttachmentImgRepository : IAttachmentImgRepository
 
     private IQueryable<AttachmentImgEntity> ApplyFilter(IQueryable<AttachmentImgEntity> query, AttachmentImgFilter filter)
     {
-        if (filter.attachmentIds != null && filter.attachmentIds.Any())
-            query = query.Where(a => filter.attachmentIds.Contains(a.AttachmentId));
+        if (filter.AttachmentIds != null && filter.AttachmentIds.Any())
+            query = query.Where(a => filter.AttachmentIds.Contains(a.AttachmentId));
 
         return query;
     }

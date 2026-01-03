@@ -31,24 +31,24 @@ public class BillRepository : IBillRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "status" => filter.isDescending
+            "status" => filter.IsDescending
                 ? query.OrderByDescending(a => a.Status == null 
                     ? string.Empty
                     : a.Status.Name)
                 : query.OrderBy(a => a.Status == null
                     ? string.Empty
                     : a.Status.Name),
-            "createat" => filter.isDescending
+            "createat" => filter.IsDescending
                 ? query.OrderByDescending(a => a.CreatedAt)
                 : query.OrderBy(a => a.CreatedAt),
-            "amount" => filter.isDescending
+            "amount" => filter.IsDescending
                 ? query.OrderByDescending(a => a.Amount)
                 : query.OrderBy(a => a.Amount),
-            "actualbilldate" => filter.isDescending
+            "actualbilldate" => filter.IsDescending
                 ? query.OrderByDescending(a => a.ActualBillDate)
                 : query.OrderBy(a => a.ActualBillDate),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(a => a.Id)
                 : query.OrderBy(a => a.Id),
         };
@@ -119,9 +119,9 @@ public class BillRepository : IBillRepository
         var entity = await _context.Bills.FirstOrDefaultAsync(b => b.Id == id)
             ?? throw new NotFoundException("Bill not found");
 
-        if (model.statusId.HasValue) entity.StatusId = (int)model.statusId.Value;
-        if (model.amount.HasValue) entity.Amount = model.amount.Value;
-        if (model.actualBillDate.HasValue) entity.ActualBillDate = model.actualBillDate.Value;
+        if (model.StatusId.HasValue) entity.StatusId = (int)model.StatusId.Value;
+        if (model.Amount.HasValue) entity.Amount = model.Amount.Value;
+        if (model.ActualBillDate.HasValue) entity.ActualBillDate = model.ActualBillDate.Value;
 
         await _context.SaveChangesAsync();
 

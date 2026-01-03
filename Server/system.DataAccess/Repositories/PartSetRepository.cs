@@ -16,14 +16,14 @@ public class PartSetRepository : IPartSetRepository
 
     private IQueryable<PartSetEntity> ApplyFilter(IQueryable<PartSetEntity> query, PartSetFilter filter)
     {
-        if (filter.orderIds != null && filter.orderIds.Any())
-            query = query.Where(p => filter.orderIds.Contains(p.OrderId));
+        if (filter.OrderIds != null && filter.OrderIds.Any())
+            query = query.Where(p => filter.OrderIds.Contains(p.OrderId));
 
-        if (filter.positionIds != null && filter.positionIds.Any())
-            query = query.Where(p => filter.positionIds.Contains(p.PositionId));
+        if (filter.PositionIds != null && filter.PositionIds.Any())
+            query = query.Where(p => filter.PositionIds.Contains(p.PositionId));
 
-        if (filter.proposalIds != null && filter.proposalIds.Any())
-            query = query.Where(p => filter.proposalIds.Contains(p.ProposalId));
+        if (filter.ProposalIds != null && filter.ProposalIds.Any())
+            query = query.Where(p => filter.ProposalIds.Contains(p.ProposalId));
 
         return query;
     }
@@ -35,10 +35,10 @@ public class PartSetRepository : IPartSetRepository
 
         query = filter.SortBy?.ToLower().Trim() switch
         {
-            "order" => filter.isDescending
+            "order" => filter.IsDescending
                 ? query.OrderByDescending(p => p.OrderId)
                 : query.OrderBy(p => p.OrderId),
-            "position" => filter.isDescending
+            "position" => filter.IsDescending
                 ? query.OrderByDescending(p => p.Position == null
                     ? string.Empty
                     : p.Position.Part == null
@@ -49,17 +49,17 @@ public class PartSetRepository : IPartSetRepository
                     : p.Position.Part == null
                         ? string.Empty
                         : p.Position.Part.Name),
-            "proposal" => filter.isDescending
+            "proposal" => filter.IsDescending
                 ? query.OrderByDescending(p => p.ProposalId)
                 : query.OrderBy(p => p.ProposalId),
-            "quantity" => filter.isDescending
+            "quantity" => filter.IsDescending
                 ? query.OrderByDescending(p => p.Quantity)
                 : query.OrderBy(p => p.Quantity),
-            "soldprice" => filter.isDescending
+            "soldprice" => filter.IsDescending
                 ? query.OrderByDescending(p => p.SoldPrice)
                 : query.OrderBy(p => p.SoldPrice),
 
-            _ => filter.isDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(p => p.Id)
                 : query.OrderBy(p => p.Id),
         };
@@ -152,8 +152,8 @@ public class PartSetRepository : IPartSetRepository
         var entity = await _context.PartSets.FirstOrDefaultAsync(p => p.Id == id)
             ?? throw new Exception("Part not found");
 
-        if (model.soldPrice.HasValue) entity.SoldPrice = model.soldPrice.Value;
-        if (model.quantity.HasValue) entity.Quantity = model.quantity.Value;
+        if (model.SoldPrice.HasValue) entity.SoldPrice = model.SoldPrice.Value;
+        if (model.Quantity.HasValue) entity.Quantity = model.Quantity.Value;
 
         await _context.SaveChangesAsync();
 

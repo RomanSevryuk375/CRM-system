@@ -2,7 +2,7 @@
 
 public record OrderPriorityItem
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );
 

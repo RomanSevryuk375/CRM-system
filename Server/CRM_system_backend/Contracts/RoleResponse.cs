@@ -2,6 +2,6 @@
 
 public record RoleResponse
 (
-    int id,
-    string name
+    int Id,
+    string Name
 );

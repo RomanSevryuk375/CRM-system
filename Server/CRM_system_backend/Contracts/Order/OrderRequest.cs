@@ -4,9 +4,9 @@ namespace CRM_system_backend.Contracts.Order;
 
 public record OrderRequest
 (
-    long id,
-    OrderStatusEnum statusId,
-    long carId,
-    DateOnly date,
-    OrderPriorityEnum priorityId
+    long Id,
+    OrderStatusEnum StatusId,
+    long CarId,
+    DateOnly Date,
+    OrderPriorityEnum PriorityId
 );

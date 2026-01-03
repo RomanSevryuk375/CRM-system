@@ -12,4 +12,6 @@ public interface IAbsenceRepository
     Task<int> Update(int id, AbsenceUpdateModel model);
     Task<bool> Exists(int id);
     Task<bool> HasOverLap(int workerId, DateOnly start, DateOnly? end, int? excludeId = null);
+    Task<int?> GetWorkerId(int id);
+
 }

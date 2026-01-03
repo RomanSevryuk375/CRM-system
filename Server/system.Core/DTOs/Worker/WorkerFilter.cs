@@ -2,9 +2,9 @@
 
 public record WorkerFilter
 (
-    IEnumerable<int> workerIds,
+    IEnumerable<int> WorkerIds,
     string? SortBy,
     int Page,
     int Limit,
-    bool isDescending
+    bool IsDescending
 );

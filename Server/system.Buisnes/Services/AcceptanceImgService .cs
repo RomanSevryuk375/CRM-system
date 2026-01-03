@@ -45,7 +45,7 @@ public class AcceptanceImgService : IAcceptanceImgService
         if (img == null)
             throw new NotFoundException($"Image {id} not found");
 
-        var stream = await _fileService.GetFile(img.filePath);
+        var stream = await _fileService.GetFile(img.FilePath);
 
         string contentType = "application/octet-stream";
 
@@ -129,7 +129,7 @@ public class AcceptanceImgService : IAcceptanceImgService
             throw new NotFoundException($"AcceptanceImg {id} not found");
         }
 
-        await _fileService.DeleteFile(img.filePath);
+        await _fileService.DeleteFile(img.FilePath);
 
         var Id = await _acceptanceImgRepository.Delete(id);
 

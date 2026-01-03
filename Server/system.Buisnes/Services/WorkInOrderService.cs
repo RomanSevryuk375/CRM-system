@@ -104,16 +104,16 @@ public class WorkInOrderService : IWorkInOrderService
     {
         _logger.LogInformation("Updating work in order start");
 
-        if (model.statusId.HasValue && !await _workInOrderStatusRepository.Exists((int)model.statusId.Value))
+        if (model.StatusId.HasValue && !await _workInOrderStatusRepository.Exists((int)model.StatusId.Value))
         {
-            _logger.LogError("Status{StatusId} not found", (int)model.statusId);
-            throw new NotFoundException($"Status{(int)model.statusId} not found");
+            _logger.LogError("Status{StatusId} not found", (int)model.StatusId);
+            throw new NotFoundException($"Status{(int)model.StatusId} not found");
         }
 
-        if (model.workerId.HasValue && !await _workerRepository.Exists(model.workerId.Value))
+        if (model.WorkerId.HasValue && !await _workerRepository.Exists(model.WorkerId.Value))
         {
-            _logger.LogError("Worker {workerId} not found", model.workerId);
-            throw new NotFoundException($"Worker {model.workerId} not found");
+            _logger.LogError("Worker {workerId} not found", model.WorkerId);
+            throw new NotFoundException($"Worker {model.WorkerId} not found");
         }
 
         var Id = await _workInOrderRepository.Update(id, model);

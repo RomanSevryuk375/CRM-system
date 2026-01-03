@@ -2,6 +2,6 @@
 
 public record SupplierUpdateRequest
 (
-    string? name,
-    string? contacts
+    string? Name,
+    string? Contacts
 );

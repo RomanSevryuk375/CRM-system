@@ -1,8 +1,8 @@
 ﻿using CRMSystem.Core.Enums;
 
-namespace CRM_system_backend.Contracts.Order;
+namespace CRMSystem.Core.DTOs.Order;
 
 public record OrderUpdateReuqest
 (
-    OrderPriorityEnum priorityId
+    OrderPriorityEnum PriorityId
 );

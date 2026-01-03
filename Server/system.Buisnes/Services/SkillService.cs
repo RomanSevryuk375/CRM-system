@@ -75,16 +75,16 @@ public class SkillService : ISkillService
     {
         _logger.LogInformation("Updating skill start");
 
-        if (model.workerId.HasValue && !await _workerRepository.Exists(model.workerId.Value))
+        if (model.WorkerId.HasValue && !await _workerRepository.Exists(model.WorkerId.Value))
         {
-            _logger.LogError("Worker {workerId} not found", model.workerId);
-            throw new NotFoundException($"Worker {model.workerId} not found");
+            _logger.LogError("Worker {workerId} not found", model.WorkerId);
+            throw new NotFoundException($"Worker {model.WorkerId} not found");
         }
 
-        if (model.specializationId.HasValue && !await _specializationRepository.Exists(model.specializationId.Value))
+        if (model.SpecializationId.HasValue && !await _specializationRepository.Exists(model.SpecializationId.Value))
         {
-            _logger.LogError("Specialization {specializationId} not found", model.specializationId);
-            throw new NotFoundException($"Specialization {model.specializationId} not found");
+            _logger.LogError("Specialization {specializationId} not found", model.SpecializationId);
+            throw new NotFoundException($"Specialization {model.SpecializationId} not found");
         }
 
         _logger.LogInformation("Updating skill success");

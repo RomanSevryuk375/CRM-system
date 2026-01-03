@@ -2,8 +2,8 @@
 
 public record SupplyResponse
 (
-    long id,
-    string supplier,
-    int supplierId,
-    DateOnly date
+    long Id,
+    string Supplier,
+    int SupplierId,
+    DateOnly Date
 );

@@ -23,10 +23,10 @@ public class TaxController : ControllerBase
         var dto = await _taxService.GetTaxes(filter);
 
         var response = dto.Select(t => new TaxResponse(
-                t.id,
-                t.name,
-                t.rate,
-                t.type));
+                t.Id,
+                t.Name,
+                t.Rate,
+                t.Type));
 
         return Ok(response);
     }
@@ -36,9 +36,9 @@ public class TaxController : ControllerBase
     {
         var (tax, errors) = Tax.Create(
             0,
-            taxRequest.name,
-            taxRequest.rate,
-            taxRequest.typeId);
+            taxRequest.Name,
+            taxRequest.Rate,
+            taxRequest.TypeId);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);
@@ -52,8 +52,8 @@ public class TaxController : ControllerBase
     public async Task<ActionResult<int>> UpdateTax(int id, [FromBody] TaxUpdateRequest request)
     {
         var model = new TaxUpdateModel(
-            request.name,
-            request.rate);
+            request.Name,
+            request.Rate);
 
         var result = await _taxService.UpdateTax(id, model);
 
