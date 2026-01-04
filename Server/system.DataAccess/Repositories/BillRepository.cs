@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Bill;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Bill;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
@@ -10,10 +12,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class BillRepository : IBillRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public BillRepository(SystemDbContext context)
+    public BillRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<BillEntity> ApplyFilter(IQueryable<BillEntity> query, BillFilter filter)
@@ -53,18 +59,8 @@ public class BillRepository : IBillRepository
                 : query.OrderBy(a => a.Id),
         };
 
-        var projection = query.Select(b => new BillItem(
-            b.Id,
-            b.OrderId,
-            b.Status == null
-                ? string.Empty
-                : $"{b.Status.Name}",
-            b.StatusId,
-            b.CreatedAt,
-            b.Amount,
-            b.ActualBillDate));
-
-        return await projection
+        return await query
+            .ProjectTo<BillItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -82,16 +78,7 @@ public class BillRepository : IBillRepository
         var bill = await _context.Bills
             .AsNoTracking()
             .Where(b => b.OrderId == orderId)
-            .Select(b => new BillItem(
-            b.Id,
-            b.OrderId,
-            b.Status == null
-                ? string.Empty
-                : $"{b.Status.Name}",
-            b.StatusId,
-            b.CreatedAt,
-            b.Amount,
-            b.ActualBillDate))
+            .ProjectTo<BillItem>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
 
         return bill;

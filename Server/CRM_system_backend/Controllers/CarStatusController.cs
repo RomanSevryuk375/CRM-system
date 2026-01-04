@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class CarStatusController : ControllerBase
 {
     private readonly ICarStatusService _carStatusService;
+    private readonly IMapper _mapper;
 
-    public CarStatusController(ICarStatusService carStatusService)
+    public CarStatusController(
+        ICarStatusService carStatusService,
+        IMapper mapper)
     {
         _carStatusService = carStatusService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -22,9 +27,7 @@ public class CarStatusController : ControllerBase
     {
         var dto = await _carStatusService.GetCarStatuses();
 
-        var response = dto.Select(c => new CarStatusResponse(
-            c.Id,
-            c.Name));
+        var response = _mapper.Map<List<CarStatusResponse>>(dto);
 
         return Ok(response);
     }

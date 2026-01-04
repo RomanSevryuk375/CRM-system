@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.Notification;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Notification;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Notification;
 using CRMSystem.Core.Models;
@@ -11,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class NotificationController : ControllerBase
 {
     private readonly INotificationService _notificationService;
+    private readonly IMapper _mapper;
 
-    public NotificationController(INotificationService notificationService)
+    public NotificationController(
+        INotificationService notificationService,
+        IMapper mapper)
     {
         _notificationService = notificationService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -23,18 +28,7 @@ public class NotificationController : ControllerBase
         var dto = await _notificationService.GetPagedNotifications(filter);
         var count = await _notificationService.GetCountNotifications(filter);
 
-        var response = dto.Select(n => new NotificationResponse(
-            n.Id,
-            n.Client,
-            n.ClientId,
-            n.Car,
-            n.CarId,
-            n.Type,
-            n.TypeId,
-            n.Status,
-            n.StatusId,
-            n.Message,
-            n.SendAt));
+        var response = _mapper.Map<List<NotificationResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

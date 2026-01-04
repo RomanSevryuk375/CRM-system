@@ -1,13 +1,13 @@
 ﻿namespace CRMSystem.Core.DTOs.Order;
 
 public record OrderResponse
-(
-    long Id,
-    string Status,
-    int StatusId,
-    string Car,
-    long CarId,
-    DateOnly Date,
-    string Priority,
-    int PriorityId
-);
+{
+    public long Id { get; init; }
+    public string Status { get; init; } = string.Empty;
+    public int StatusId { get; init; }
+    public string Car { get; init; } = string.Empty;
+    public long CarId { get; init; }
+    public DateOnly Date { get; init; }
+    public string Priority { get; init; } = string.Empty;
+    public int PriorityId { get; init; }
+};

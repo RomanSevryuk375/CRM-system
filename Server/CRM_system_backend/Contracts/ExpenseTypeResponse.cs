@@ -1,7 +1,7 @@
 ﻿namespace CRM_system_backend.Contracts;
 
 public record ExpenseTypeResponse
-(
-    int Id,
-    string Name
-);
+{
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+};

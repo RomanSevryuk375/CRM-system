@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Car;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Car;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class CarRepository : ICarRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public CarRepository(SystemDbContext context)
+    public CarRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<CarEntity> ApplyFilter(IQueryable<CarEntity> query, CarFilter filter)
@@ -67,23 +73,8 @@ public class CarRepository : ICarRepository
                 : query.OrderBy(c => c.Id),
         };
 
-        var projection = query.Select(c => new CarItem(
-            c.Id,
-            c.Client == null
-                ? string.Empty
-                : $"{c.Client.Name} {c.Client.Surname}",
-            c.Status == null
-                ? string.Empty
-                : c.Status.Name,
-            c.StatusId,
-            c.Brand,
-            c.Model,
-            c.YearOfManufacture,
-            c.VinNumber,
-            c.StateNumber,
-            c.Mileage));
-
-        return await projection
+        return await query
+            .ProjectTo<CarItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -91,28 +82,11 @@ public class CarRepository : ICarRepository
 
     public async Task<CarItem?> GetById(long id)
     {
-        var carItem = await _context.Cars
+        return await _context.Cars
             .AsNoTracking()
             .Where(c => c.Id == id)
-            .Select(c => new CarItem(
-                c.Id,
-                c.Client == null 
-                    ? "" 
-                    : $"{c.Client.Name} {c.Client.Surname}",
-                c.Status == null 
-                    ? "" 
-                    : c.Status.Name,
-                c.StatusId,
-                c.Brand,
-                c.Model,
-                c.YearOfManufacture,
-                c.VinNumber,
-                c.StateNumber,
-                c.Mileage
-            ))
+            .ProjectTo<CarItem>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
-
-        return carItem; 
     }
 
     public async Task<int> GetCount(CarFilter filter)

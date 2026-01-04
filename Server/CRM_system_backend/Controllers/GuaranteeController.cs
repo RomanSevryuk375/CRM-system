@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.Guarantee;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Guarantee;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Guarantee;
 using CRMSystem.DataAccess.Models;
@@ -12,10 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class GuaranteeController : ControllerBase
 {
     private readonly IGuaranteeService _guaranteeService;
+    private readonly IMapper _mapper;
 
-    public GuaranteeController(IGuaranteeService guaranteeService)
+    public GuaranteeController(
+        IGuaranteeService guaranteeService,
+        IMapper mapper)
     {
         _guaranteeService = guaranteeService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,13 +29,7 @@ public class GuaranteeController : ControllerBase
         var dto = await _guaranteeService.GetPagedGuarantees(filter);
         var count = await _guaranteeService.GetCountGuarantees(filter);
 
-        var response = dto.Select(g => new GuaranteeResponse(
-            g.Id,
-            g.OrderId,
-            g.DateStart,
-            g.DateEnd,
-            g.Description,
-            g.Terms));
+        var response = _mapper.Map<List<GuaranteeResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

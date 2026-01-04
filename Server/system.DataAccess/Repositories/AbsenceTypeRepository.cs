@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.AbsenceType;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.AbsenceType;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,23 +10,22 @@ namespace CRMSystem.DataAccess.Repositories;
 public class AbsenceTypeRepository : IAbsenceTypeRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public AbsenceTypeRepository(SystemDbContext context)
+    public AbsenceTypeRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<List<AbsenceTypeItem>> GetAll()
     {
-        var query = _context.AbsenceTypes
-            .AsNoTracking();
-
-        var projection = query
-            .Select(x => new AbsenceTypeItem(
-            x.Id,
-            x.Name));
-
-        return await projection.ToListAsync();
+        return await _context.AbsenceTypes
+            .AsNoTracking()
+            .ProjectTo<AbsenceTypeItem>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<List<AbsenceTypeItem>> GetByName (string name)
@@ -33,11 +34,11 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
             .Where(a => a.Name == name)
             .AsNoTracking();
 
-        var projection = query.Select(a => new AbsenceTypeItem(
-            a.Id,
-            a.Name));
-
-        return await projection.ToListAsync();
+        return await _context.AbsenceTypes
+            .Where(a => a.Name == name)
+            .AsNoTracking()
+            .ProjectTo<AbsenceTypeItem>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<int> Create(AbsenceType absenceType)

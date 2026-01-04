@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.Acceptance;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Acceptance;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Acceptance;
 using CRMSystem.Core.Models;
@@ -12,10 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class AcceptanceController : ControllerBase
 {
     private readonly IAcceptanceService _acceptanceService;
+    private readonly IMapper _mapper;
 
-    public AcceptanceController(IAcceptanceService acceptanceService)
+    public AcceptanceController(
+        IAcceptanceService acceptanceService,
+        IMapper mapper)
     {
         _acceptanceService = acceptanceService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,18 +29,7 @@ public class AcceptanceController : ControllerBase
         var dto = await _acceptanceService.GetPagedAcceptance(filter);
         var count = await _acceptanceService.GetCountAcceptance(filter);
 
-        var response = dto.Select(a => new AcceptanceResponse(
-            a.Id,
-            a.OrderId,
-            a.Worker,
-            a.WorkerId,
-            a.CreatedAt,
-            a.Mileage,
-            a.FuelLevel,
-            a.ExternalDefects,
-            a.InternalDefects,
-            a.ClientSign,
-            a.WorkerSign));
+        var response = _mapper.Map<List<AcceptanceResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -68,15 +62,7 @@ public class AcceptanceController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<long>> UpdateAcceptance(long id, [FromBody] AcceptanceUpdateRequest request)
     {
-        var model = new AcceptanceUpdateModel
-        (
-            request.Mileage,
-            request.FuelLevel,
-            request.ExternalDefects,
-            request.InternalDefects,
-            request.ClientSign,
-            request.WorkerSign
-        );
+        var model = _mapper.Map<AcceptanceUpdateModel>(request);
 
         var Id = await _acceptanceService.UpdateAcceptance(id, model);
 

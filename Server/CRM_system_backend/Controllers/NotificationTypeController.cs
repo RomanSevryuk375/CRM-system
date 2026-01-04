@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -13,10 +14,14 @@ namespace CRM_system_backend.Controllers;
 public class NotificationTypeController : ControllerBase
 {
     private readonly INotificationTypeService _notificationTypeService;
+    private readonly IMapper _mapper;
 
-    public NotificationTypeController(INotificationTypeService notificationTypeService)
+    public NotificationTypeController(
+        INotificationTypeService notificationTypeService,
+        IMapper mapper)
     {
         _notificationTypeService = notificationTypeService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,9 +29,7 @@ public class NotificationTypeController : ControllerBase
     {
         var dto = await _notificationTypeService.GetNotificationTypes();
 
-        var response = dto.Select(n => new NotificationTypeResponse(
-            n.Id,
-            n.Name));
+        var response = _mapper.Map<NotificationTypeResponse>(dto);
 
         return Ok(response);
     }

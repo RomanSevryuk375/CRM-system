@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.AcceptanceImg;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.AcceptanceImg;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class AcceptanceImgRepository : IAcceptanceImgRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public AcceptanceImgRepository(SystemDbContext context)
+    public AcceptanceImgRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<AcceptanceImgEntity> ApplyFilter(IQueryable<AcceptanceImgEntity> query, AcceptanceImgFilter filter)
@@ -29,13 +35,8 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
 
         query = query.OrderByDescending(a => a.Id);
 
-        var projection = query.Select(a => new AcceptanceImgItem(
-            a.Id,
-            a.AcceptanceId,
-            a.FilePath,
-            a.Description));
-
-        return await projection
+        return await query
+            .ProjectTo<AcceptanceImgItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -46,11 +47,7 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
         return await _context.AcceptanceImgs
             .AsNoTracking()
             .Where(a => a.Id == id)
-            .Select(a => new AcceptanceImgItem(
-            a.Id,
-            a.AcceptanceId,
-            a.FilePath,
-            a.Description))
+            .ProjectTo<AcceptanceImgItem>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
             
     }

@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,14 @@ namespace CRM_system_backend.Controllers;
 public class NotificationStatusController : ControllerBase
 {
     private readonly INotificationStatusService _notificationStatusService;
+    private readonly IMapper _mapper;
 
-    public NotificationStatusController(INotificationStatusService notificationStatusService)
+    public NotificationStatusController(
+        INotificationStatusService notificationStatusService,
+        IMapper mapper)
     {
         _notificationStatusService = notificationStatusService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -21,9 +26,7 @@ public class NotificationStatusController : ControllerBase
     {
         var dto = await _notificationStatusService.GetNotificationStatuses();
 
-        var response = dto.Select(n => new NotificationStatusResponse(
-            n.Id,
-            n.Name));
+        var response = _mapper.Map<NotificationStatusResponse>(dto);
 
         return Ok(response);
     }

@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.Part;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Part;
 using CRM_system_backend.Contracts.Position;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Position;
@@ -13,10 +14,14 @@ namespace CRM_system_backend.Controllers;
 public class PositionController : ControllerBase
 {
     private readonly IPositionSrevice _positionSrevice;
+    private readonly IMapper _mapper;
 
-    public PositionController(IPositionSrevice positionSrevice)
+    public PositionController(
+        IPositionSrevice positionSrevice,
+        IMapper mapper)
     {
         _positionSrevice = positionSrevice;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -25,14 +30,7 @@ public class PositionController : ControllerBase
         var dto = await _positionSrevice.GetGagedPositions(positionFilter);
         var count = await _positionSrevice.GetCountPositions(positionFilter);
 
-        var response = dto.Select(p => new PositionResponse(
-            p.Id,
-            p.Part,
-            p.PartId,
-            p.CellId,
-            p.PurchasePrice,
-            p.SellingPrice,
-            p.Quantity));
+        var response = _mapper.Map<List<PositionResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

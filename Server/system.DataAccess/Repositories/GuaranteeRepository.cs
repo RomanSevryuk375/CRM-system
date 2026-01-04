@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Guarantee;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Guarantee;
 using CRMSystem.DataAccess.Entites;
 using CRMSystem.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class GuaranteeRepository : IGuaranteeRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public GuaranteeRepository(SystemDbContext context)
+    public GuaranteeRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<GuaranteeEntity> ApplyFilter(IQueryable<GuaranteeEntity> query, GuaranteeFilter filter)
@@ -47,15 +53,8 @@ public class GuaranteeRepository : IGuaranteeRepository
                 : query.OrderBy(g => g.Id),
         };
 
-        var projection = query.Select(g => new GuaranteeItem(
-            g.Id,
-            g.OrderId,
-            g.DateStart,
-            g.DateEnd,
-            g.Description,
-            g.Terms));
-
-        return await projection
+        return await query
+            .ProjectTo<GuaranteeItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();

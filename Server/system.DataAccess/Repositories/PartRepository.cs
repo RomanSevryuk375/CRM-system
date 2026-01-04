@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Order;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Order;
 using CRMSystem.Core.DTOs.Part;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
@@ -9,10 +11,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class PartRepository : IPartRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public PartRepository(SystemDbContext context)
+    public PartRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<PartEntity> ApplyFilter(IQueryable<PartEntity> query, PartFilter filter)
@@ -61,21 +67,8 @@ public class PartRepository : IPartRepository
                 : query.OrderBy(p => p.Id),
         };
 
-        var projection = query.Select(p => new PartItem(
-            p.Id,
-            p.PartCategory == null
-                ? string.Empty
-                : p.PartCategory.Name,
-            p.CategoryId,
-            p.OEMArticle,
-            p.ManufacturerArticle,
-            p.InternalArticle,
-            p.Description,
-            p.Name,
-            p.Manufacturer,
-            p.Applicability));
-
-        return await projection
+        return await query
+            .ProjectTo<PartItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();

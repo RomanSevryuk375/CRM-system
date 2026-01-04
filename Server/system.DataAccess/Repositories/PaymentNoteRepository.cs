@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.PaymentNote;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.PaymentNote;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
@@ -9,10 +11,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class PaymentNoteRepository : IPaymentNoteRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public PaymentNoteRepository(SystemDbContext context)
+    public PaymentNoteRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<PaymentNoteEntity> ApplyFilter(IQueryable<PaymentNoteEntity> query, PaymentNoteFilter filter)
@@ -55,16 +61,8 @@ public class PaymentNoteRepository : IPaymentNoteRepository
                 : query.OrderBy(p => p.Id),
         };
 
-        var projection = query.Select(p => new PaymentNoteItem(
-            p.Id,
-            p.BillId,
-            p.Date,
-            p.Amount,
-            p.Method == null
-                    ? string.Empty
-                    : p.Method.Name));
-
-        return await projection
+        return await query
+            .ProjectTo<PaymentNoteItem>(_mapper.ConfigurationProvider)
             .Skip((fIlter.Page - 1) * fIlter.Limit)
             .Take(fIlter.Limit)
             .ToListAsync();

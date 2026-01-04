@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.PartCategory;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.PartCategory;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,22 +10,22 @@ namespace CRMSystem.DataAccess.Repositories;
 public class PartCategoryRepository : IPartCategoryRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public PartCategoryRepository(SystemDbContext context)
+    public PartCategoryRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<List<PartCategoryItem>> Get()
     {
-        var query = _context.PartCategories.AsNoTracking();
-
-        var projection = query.Select(p => new PartCategoryItem(
-            p.Id,
-            p.Name,
-            p.Description));
-
-        return await projection.ToListAsync();
+        return await _context.PartCategories
+            .AsNoTracking()
+            .ProjectTo<PartCategoryItem>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<int> Create(PartCategory category)

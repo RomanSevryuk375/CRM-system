@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Notification;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Notification;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class NotificationRepository : INotificationRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public NotificationRepository(SystemDbContext context)
+    public NotificationRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<NotificationEntity> ApplyFilter
@@ -79,28 +85,8 @@ public class NotificationRepository : INotificationRepository
                 : query.OrderBy(n => n.Id),
         };
 
-        var projection = query.Select(n => new NotificationItem(
-            n.Id,
-            n.Client == null
-                ? string.Empty
-                : $"{n.Client.Name} {n.Client.Surname}",
-            n.ClientId,
-            n.Car == null
-                ? string.Empty
-                : $"{n.Car.Brand} ({n.Car.StateNumber})",
-            n.CarId,
-            n.NotificationType == null
-                ? string.Empty
-                : n.NotificationType.Name,
-            n.TypeId,
-            n.Status == null
-                ? string.Empty
-                : n.Status.Name,
-            n.StatusId,
-            n.Message,
-            n.SendAt));
-
-        return await projection
+        return await query
+            .ProjectTo<NotificationItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();

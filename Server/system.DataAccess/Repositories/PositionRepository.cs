@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Position;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Position;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class PositionRepository : IPositionRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public PositionRepository(SystemDbContext context)
+    public PositionRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<PositionEntity> ApplyFilter(IQueryable<PositionEntity> query, PositionFilter filter)
@@ -54,18 +60,8 @@ public class PositionRepository : IPositionRepository
                 : query.OrderBy(p => p.Id),
         };
 
-        var projection = query.Select(p => new PositionItem(
-            p.Id,
-            p.Part == null
-                ? string.Empty
-                : p.Part.Name,
-            p.PartId,
-            p.CellId,
-            p.PurchasePrice,
-            p.SellingPrice,
-            p.Quantity));
-
-        return await projection
+        return await query
+            .ProjectTo<PositionItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();

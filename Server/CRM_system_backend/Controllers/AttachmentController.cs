@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.Attachment;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Attachment;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Attachment;
 using CRMSystem.Core.Models;
@@ -12,10 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class AttachmentController : ControllerBase
 {
     private readonly IAttachmentService _attachmentService;
+    private readonly IMapper _mapper;
 
-    public AttachmentController(IAttachmentService attachmentService)
+    public AttachmentController(
+        IAttachmentService attachmentService,
+        IMapper mapper)
     {
         _attachmentService = attachmentService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,13 +29,7 @@ public class AttachmentController : ControllerBase
         var dto = await _attachmentService.GetPagedAttachments(filter);
         var count = await _attachmentService.GetCountAttchment(filter);
 
-        var response = dto.Select(a => new AttachmentResponse(
-            a.Id,
-            a.OrderId,
-            a.Worker,
-            a.WorkerId,
-            a.CreateAt,
-            a.Description));
+        var response = _mapper.Map<List<AttachmentResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

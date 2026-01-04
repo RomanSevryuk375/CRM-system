@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.PartSet;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.PartSet;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class PartSetRepository : IPartSetRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public PartSetRepository(SystemDbContext context)
+    public PartSetRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<PartSetEntity> ApplyFilter(IQueryable<PartSetEntity> query, PartSetFilter filter)
@@ -64,20 +70,8 @@ public class PartSetRepository : IPartSetRepository
                 : query.OrderBy(p => p.Id),
         };
 
-        var projection = query.Select(p => new PartSetItem(
-            p.Id,
-            p.OrderId,
-            p.Position == null
-                    ? string.Empty
-                    : p.Position.Part == null
-                        ? string.Empty
-                        : p.Position.Part.Name,
-            p.PositionId,
-            p.ProposalId,
-            p.Quantity,
-            p.SoldPrice));
-
-        return await projection
+        return await query
+            .ProjectTo<PartSetItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -88,18 +82,7 @@ public class PartSetRepository : IPartSetRepository
         return await _context.PartSets
             .AsNoTracking()
             .Where(p => p.OrderId == orderId)
-            .Select(p => new PartSetItem(
-                p.Id,
-                p.OrderId,
-                p.Position == null
-                        ? string.Empty
-                        : p.Position.Part == null
-                            ? string.Empty
-                            : p.Position.Part.Name,
-                p.PositionId,
-                p.ProposalId,
-                p.Quantity,
-                p.SoldPrice))
+            .ProjectTo<PartSetItem>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 
@@ -108,18 +91,7 @@ public class PartSetRepository : IPartSetRepository
         return await _context.PartSets
             .AsNoTracking()
             .Where(p => p.Id == id)
-            .Select(p => new PartSetItem(
-                p.Id,
-                p.OrderId,
-                p.Position == null
-                        ? string.Empty
-                        : p.Position.Part == null
-                            ? string.Empty
-                            : p.Position.Part.Name,
-                p.PositionId,
-                p.ProposalId,
-                p.Quantity,
-                p.SoldPrice))
+            .ProjectTo<PartSetItem>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }
 

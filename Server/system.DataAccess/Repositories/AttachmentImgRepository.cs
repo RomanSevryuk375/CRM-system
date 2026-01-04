@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.AttachmentImg;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.AttachmentImg;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +11,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class AttachmentImgRepository : IAttachmentImgRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public AttachmentImgRepository(SystemDbContext context)
+    public AttachmentImgRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<AttachmentImgEntity> ApplyFilter(IQueryable<AttachmentImgEntity> query, AttachmentImgFilter filter)
@@ -30,13 +36,8 @@ public class AttachmentImgRepository : IAttachmentImgRepository
 
         query = query.OrderByDescending(a => a.Id);
 
-        var projection = query.Select(a => new AttachmentImgItem(
-            a.Id,
-            a.AttachmentId,
-            a.FilePath,
-            a.Description));
-
-        return await projection
+        return await query
+            .ProjectTo<AttachmentImgItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -47,11 +48,7 @@ public class AttachmentImgRepository : IAttachmentImgRepository
         return await _context.AttachmentImgs
             .AsNoTracking()
             .Where(a => a.Id == id)
-            .Select(a => new AttachmentImgItem(
-            a.Id,
-            a.AttachmentId,
-            a.FilePath,
-            a.Description))
+            .ProjectTo<AttachmentImgItem>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }
 

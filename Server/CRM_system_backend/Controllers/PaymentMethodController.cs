@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,14 @@ namespace CRM_system_backend.Controllers;
 public class PaymentMethodController : ControllerBase
 {
     private readonly IPaymentMethodService _paymentMethodService;
+    private readonly IMapper _mapper;
 
-    public PaymentMethodController(IPaymentMethodService paymentMethodService)
+    public PaymentMethodController(
+        IPaymentMethodService paymentMethodService,
+        IMapper mapper)
     {
         _paymentMethodService = paymentMethodService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -21,9 +26,7 @@ public class PaymentMethodController : ControllerBase
     {
         var dto = await _paymentMethodService.GetPaymentMethods();
 
-        var response = dto.Select(p => new PaymentMethodResponse(
-            p.Id,
-            p.Name));
+        var response = _mapper.Map<List<PaymentMethodResponse>>(dto);
 
         return Ok(response);
     }

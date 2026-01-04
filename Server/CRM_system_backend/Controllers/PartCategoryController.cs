@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.PartCategory;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.PartCategory;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.PartCategory;
 using CRMSystem.Core.Models;
@@ -11,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class PartCategoryController : ControllerBase
 {
     private readonly IPartCategoryService _partCategoryService;
+    private readonly IMapper _mapper;
 
-    public PartCategoryController(IPartCategoryService partCategoryService)
+    public PartCategoryController(
+        IPartCategoryService partCategoryService,
+        IMapper mapper)
     {
         _partCategoryService = partCategoryService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -22,10 +27,7 @@ public class PartCategoryController : ControllerBase
     {
         var dto = await _partCategoryService.GetPartCategories();
 
-        var response = dto.Select(p => new PartCategoryResponse(
-            p.Id,
-            p.Name,
-            p.Description));
+        var response = _mapper.Map<PartCategoryResponse>(dto);
 
         return Ok(response);
     }

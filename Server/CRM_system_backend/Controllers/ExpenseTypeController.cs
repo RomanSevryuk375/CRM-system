@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,14 @@ namespace CRM_system_backend.Controllers;
 public class ExpenseTypeController : ControllerBase
 {
     private readonly IExpenseTypeService _expenseTypeService;
+    private readonly IMapper _mapper;
 
-    public ExpenseTypeController(IExpenseTypeService expenseTypeService)
+    public ExpenseTypeController(
+        IExpenseTypeService expenseTypeService,
+        IMapper mapper)
     {
         _expenseTypeService = expenseTypeService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -21,9 +26,7 @@ public class ExpenseTypeController : ControllerBase
     {
         var dto = await _expenseTypeService.GetExpenseType();
 
-        var response = dto.Select(e => new ExpenseTypeResponse(
-            e.Id,
-            e.Name));
+        var response = _mapper.Map<List<ExpenseTypeResponse>>(dto);
 
         return Ok(response);
     }

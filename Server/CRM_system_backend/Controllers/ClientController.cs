@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.Client;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Client;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Client;
 using CRMSystem.Core.Models;
@@ -11,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class ClientController : ControllerBase
 {
     private readonly IClientService _clientService;
+    private readonly IMapper _mapper;
 
-    public ClientController(IClientService clientService)
+    public ClientController(
+        IClientService clientService,
+        IMapper mapper)
     {
         _clientService = clientService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -23,13 +28,7 @@ public class ClientController : ControllerBase
         var dto = await _clientService.GetPagedCkients(filter);
         var count = await _clientService.GetCountClients(filter);
 
-        var response = dto.Select(b => new ClientsResponse(
-                b.Id,
-                b.UserId,
-                b.Name,
-                b.Surname,
-                b.Email,
-                b.PhoneNumber));
+        var response = _mapper.Map<List<ClientsResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

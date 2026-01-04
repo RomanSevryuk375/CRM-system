@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.Schedule;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Schedule;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Schedule;
 using CRMSystem.Core.Models;
@@ -11,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class ScheduleController : ControllerBase
 {
     private readonly IScheduleService _scheduleService;
+    private readonly IMapper _mapper;
 
-    public ScheduleController(IScheduleService scheduleService)
+    public ScheduleController(
+        IScheduleService scheduleService,
+        IMapper mapper)
     {
         _scheduleService = scheduleService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -23,13 +28,7 @@ public class ScheduleController : ControllerBase
         var dto = await _scheduleService.GetPagedSchedules(filter);
         var count = await _scheduleService.GetCountSchedules(filter);
 
-        var responce = dto.Select(s => new ScheduleResponse(
-            s.Id,
-            s.Worker,
-            s.WorkerId,
-            s.Shift,
-            s.ShiftId,
-            s.DateTime));
+        var responce = _mapper.Map<List<ScheduleResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

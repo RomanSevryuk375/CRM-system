@@ -1,11 +1,10 @@
-﻿using CRM_system_backend.Contracts.Order;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Order;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Order;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CRM_system_backend.Controllers;
 
@@ -14,10 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
+    private readonly IMapper _mapper;
 
-    public OrderController(IOrderService orderService)
+    public OrderController(
+        IOrderService orderService,
+        IMapper mapper)
     {
         _orderService = orderService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -26,16 +29,7 @@ public class OrderController : ControllerBase
         var dto = await _orderService.GetPagedOrders(filter);
         var count = await _orderService.GetCountOrders(filter);
 
-        var response = dto
-            .Select(o => new OrderResponse(
-                o.Id,
-                o.Status,
-                o.StatusId,
-                o.Car,
-                o.CarId,
-                o.Date,
-                o.Priority,
-                o.PriorityId));
+        var response = _mapper.Map<List<OrderResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

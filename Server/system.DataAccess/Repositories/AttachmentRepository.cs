@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Attachment;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Attachment;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class AttachmentRepository : IAttachmentRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public AttachmentRepository(SystemDbContext context)
+    public AttachmentRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<AttachmentEntity> ApplyFilter(IQueryable<AttachmentEntity> query, AttachmentFilter filter)
@@ -44,17 +50,8 @@ public class AttachmentRepository : IAttachmentRepository
                 : query.OrderBy(a => a.Id),
         };
 
-        var projection = query.Select(a => new AttachmentItem(
-            a.Id,
-            a.OrderId,
-            a.Worker == null
-                ? ""
-                : $"{a.Worker.Name} {a.Worker.Surname}",
-            a.WorkerId,
-            a.CreatedAt,
-            a.Description));
-
-        return await projection
+        return await query
+            .ProjectTo<AttachmentItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();

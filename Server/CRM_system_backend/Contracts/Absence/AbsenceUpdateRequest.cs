@@ -3,8 +3,8 @@
 namespace CRMSystem.Core.DTOs.Absence;
 
 public record AbsenceUpdateRequest
-(
-    AbsenceTypeEnum? TypeId,
-    DateOnly? StartDate,
-    DateOnly? EndDate
-);
+{
+    public AbsenceTypeEnum? TypeId { get; init; }
+    public DateOnly? StartDate { get; init; }
+    public DateOnly? EndDate { get; init; }
+};

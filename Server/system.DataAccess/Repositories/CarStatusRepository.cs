@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
@@ -6,21 +8,22 @@ namespace CRMSystem.DataAccess.Repositories;
 public class CarStatusRepository : ICarStatusRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public CarStatusRepository(SystemDbContext context)
+    public CarStatusRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<List<CarStatusItem>> Get()
     {
-        var query = _context.CarStatuses.AsNoTracking();
-
-        var projection = query.Select(c => new CarStatusItem(
-            c.Id,
-            c.Name));
-
-        return await projection.ToListAsync();
+        return await _context.CarStatuses
+            .AsNoTracking()
+            .ProjectTo<CarStatusItem>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<bool> Exists(long id)

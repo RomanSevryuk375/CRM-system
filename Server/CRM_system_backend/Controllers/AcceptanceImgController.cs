@@ -1,11 +1,9 @@
-﻿using CRM_system_backend.Contracts.AcceptanceImg;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Services;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.AcceptanceImg;
 using CRMSystem.Buisness.Abstractions;
 using CRMSystem.Core.DTOs;
 using CRMSystem.Core.DTOs.AcceptanceImg;
 using CRMSystem.Core.DTOs.AccetanceImg;
-using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -15,10 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class AcceptanceImgController : ControllerBase
 {
     private readonly IAcceptanceImgService _acceptanceImgService;
+    private readonly IMapper _mapper;
 
-    public AcceptanceImgController(IAcceptanceImgService acceptanceImgService)
+    public AcceptanceImgController(
+        IAcceptanceImgService acceptanceImgService,
+        IMapper mapper)
     {
         _acceptanceImgService = acceptanceImgService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -27,11 +29,7 @@ public class AcceptanceImgController : ControllerBase
         var dto = await _acceptanceImgService.GetAcceptanceIng(filter);
         var count = await _acceptanceImgService.GetCountAccptnceImg(filter);
 
-        var response = dto.Select(a => new AcceptanceImgResponse(
-            a.Id,
-            a.acceptanceId,
-            a.FilePath,
-            a.Description));
+        var response = _mapper.Map<List<AcceptanceImgResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

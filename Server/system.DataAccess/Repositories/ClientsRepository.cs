@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Client;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Client;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class ClientsRepository : IClientRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public ClientsRepository(SystemDbContext context)
+    public ClientsRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<ClientEntity> ApplyFilter(IQueryable<ClientEntity> query, ClientFilter filter)
@@ -47,15 +53,8 @@ public class ClientsRepository : IClientRepository
                 : query.OrderBy(c => c.Id),
         };
 
-        var projection = query.Select(c => new ClientItem(
-            c.Id,
-            c.UserId,
-            c.Name,
-            c.Surname,
-            c.PhoneNumber,
-            c.Email));
-
-        return await projection
+        return await query
+            .ProjectTo<ClientItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -70,19 +69,11 @@ public class ClientsRepository : IClientRepository
 
     public async Task<ClientItem?> GetById(long id)
     {
-        var clientItem = await _context.Clients
+        return await _context.Clients
             .AsNoTracking()
             .Where(c => c.Id == id)
-            .Select(c => new ClientItem(
-            c.Id,
-            c.UserId,
-            c.Name,
-            c.Surname,
-            c.PhoneNumber,
-            c.Email))
+            .ProjectTo<ClientItem>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
-
-        return clientItem;
     }
 
     public async Task<long> Create(Client client)

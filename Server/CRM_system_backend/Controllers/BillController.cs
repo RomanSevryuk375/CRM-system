@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.Bill;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Bill;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Bill;
 using CRMSystem.Core.Models;
@@ -12,10 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class BillController : ControllerBase
 {
     private readonly IBillService _billService;
+    private readonly IMapper _mapper;
 
-    public BillController(IBillService billService)
+    public BillController(
+        IBillService billService,
+        IMapper mapper)
     {
         _billService = billService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,14 +29,7 @@ public class BillController : ControllerBase
         var dto = await _billService.GetPagedBills(filter);
         var count = await _billService.GetCountBills(filter);
 
-        var response = dto.Select(b => new BillResponse(
-            b.Id,
-            b.OrderId,
-            b.Status,
-            b.StatusId,
-            b.CreatedAt,
-            b.Amount,
-            b.ActualBillDate));
+        var response = _mapper.Map<List<BillResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -60,10 +58,7 @@ public class BillController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<long>> UpdateBill(long id, [FromBody]BillUpdateRequest request)
     {
-        var model = new BillUpdateModel(
-            request.StatusId,
-            request.Amount,
-            request.ActualBillDate);
+        var model = _mapper.Map<BillUpdateModel>(request);
 
         var Id = await _billService.UpdateBill(id, model);
 

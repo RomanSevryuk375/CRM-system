@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.AttachmentImg;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.AttachmentImg;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
 using CRMSystem.Core.DTOs.AttachmentImg;
@@ -12,10 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class AttachmentImgController : ControllerBase
 {
     private readonly IAttachmentImgService _attachmentImgService;
+    private readonly IMapper _mapper;
 
-    public AttachmentImgController(IAttachmentImgService attachmentImgService)
+    public AttachmentImgController(
+        IAttachmentImgService attachmentImgService,
+        IMapper mapper)
     {
         _attachmentImgService = attachmentImgService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,11 +29,7 @@ public class AttachmentImgController : ControllerBase
         var dto = await _attachmentImgService.GetPagedAttachmentImg(filter);
         var count = await _attachmentImgService.GetCountAttachmentImg(filter);
 
-        var response = dto.Select(a => new AttachmentImgResponse(
-            a.Id,
-            a.AttachmentId,
-            a.FilePath,
-            a.Description));
+        var response = _mapper.Map<List<AttachmentImgResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

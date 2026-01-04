@@ -1,7 +1,7 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -11,10 +11,14 @@ namespace CRM_system_backend.Controllers;
 public class RoleController : ControllerBase
 {
     private readonly IRoleService _roleService;
+    private readonly IMapper _mapper;
 
-    public RoleController(IRoleService roleService)
+    public RoleController(
+        IRoleService roleService,
+        IMapper mapper)
     {
         _roleService = roleService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -22,9 +26,7 @@ public class RoleController : ControllerBase
     {
         var dto = await _roleService.GetRoles();
 
-        var response = dto.Select(r => new RoleResponse(
-            r.Id,
-            r.Name));
+        var response = _mapper.Map<List<RoleResponse>>(dto);
 
         return Ok(response);
     }

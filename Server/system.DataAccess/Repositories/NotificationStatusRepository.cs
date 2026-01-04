@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
@@ -6,21 +8,22 @@ namespace CRMSystem.DataAccess.Repositories;
 public class NotificationStatusRepository : INotificationStatusRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public NotificationStatusRepository(SystemDbContext context)
+    public NotificationStatusRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<List<NotificationStatusItem>> Get()
     {
-        var query = _context.NotificationsStatuses.AsNoTracking();
-
-        var projection = query.Select(n => new NotificationStatusItem(
-            n.Id,
-            n.Name));
-
-        return await projection.ToListAsync();
+        return await _context.NotificationsStatuses
+            .AsNoTracking()
+            .ProjectTo<NotificationStatusItem>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<bool> Exists(int id)

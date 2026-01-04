@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.AbsenceType;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.AbsenceType;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.AbsenceType;
 using CRMSystem.Core.Models;
@@ -11,11 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class AbsenceTypeController : ControllerBase
 {
     private readonly IAbsenceTypeService _absenceTypeService;
+    private readonly IMapper _mapper;
 
     public AbsenceTypeController(
-        IAbsenceTypeService absenceTypeService)
+        IAbsenceTypeService absenceTypeService,
+        IMapper mapper)
     {
         _absenceTypeService = absenceTypeService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -23,9 +27,7 @@ public class AbsenceTypeController : ControllerBase
     {
         var dto = await _absenceTypeService.GetAllAbsenceType();
 
-        var response = dto.Select(a => new AbsenceTypeResponse(
-            a.Id,
-            a.Name));
+        var response = _mapper.Map<List<AbsenceTypeResponse>>(dto);
 
         return Ok(response);
     }

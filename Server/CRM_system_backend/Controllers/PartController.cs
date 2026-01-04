@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.Part;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Part;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Order;
 using CRMSystem.Core.DTOs.Part;
@@ -12,10 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class PartController : ControllerBase
 {
     private readonly IPartService _partService;
+    private readonly IMapper _mapper;
 
-    public PartController(IPartService partService)
+    public PartController(
+        IPartService partService,
+        IMapper mapper)
     {
         _partService = partService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,17 +29,7 @@ public class PartController : ControllerBase
         var dto = await _partService.GetPagedParts(filter);
         var count = await _partService.GetCountParts(filter);
 
-        var response = dto.Select(p => new PartResponse(
-            p.Id,
-            p.Category,
-            p.CategoryId,
-            p.OemArticle,
-            p.Manufacturer,
-            p.InternalArticle,
-            p.Description,
-            p.Name,
-            p.Manufacturer,
-            p.Applicability));
+        var response = _mapper.Map<List<PartResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

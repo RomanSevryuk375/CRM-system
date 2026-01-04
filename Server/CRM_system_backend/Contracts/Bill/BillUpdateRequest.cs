@@ -3,8 +3,8 @@
 namespace CRMSystem.Core.DTOs.Bill;
 
 public record BillUpdateRequest
-(
-    BillStatusEnum? StatusId,
-    decimal? Amount,
-    DateOnly? ActualBillDate
-);
+{
+    public BillStatusEnum? StatusId { get; init; }
+    public decimal? Amount { get; init; }
+    public DateOnly? ActualBillDate { get; init; }
+};

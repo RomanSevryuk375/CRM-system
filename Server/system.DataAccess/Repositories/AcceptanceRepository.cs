@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Acceptance;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Acceptance;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class AcceptanceRepository : IAcceptanceRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public AcceptanceRepository(SystemDbContext context)
+    public AcceptanceRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<AcceptanceEntity> ApplyFilter(IQueryable<AcceptanceEntity> query, AcceptanceFilter filter)
@@ -62,22 +68,8 @@ public class AcceptanceRepository : IAcceptanceRepository
                 : query.OrderBy(a => a.Id),
         };
 
-        var projection = query.Select(a => new AcceptanceItem(
-            a.Id,
-            a.OrderId,
-            a.Worker == null 
-                ? string.Empty 
-                : $"{a.Worker.Name} {a.Worker.Surname}",
-            a.WorkerId,
-            a.CreateAt,
-            a.Mileage,
-            a.FuelLevel,
-            a.ExternalDefects,
-            a.InternalDefects,
-            a.ClientSign,
-            a.WorkerSign));
-
-        return await projection
+        return await query
+            .ProjectTo<AcceptanceItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();

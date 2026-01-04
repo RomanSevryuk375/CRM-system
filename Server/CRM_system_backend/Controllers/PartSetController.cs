@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.PartSet;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.PartSet;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.PartSet;
 using CRMSystem.Core.Models;
@@ -11,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class PartSetController : ControllerBase
 {
     private readonly IPartSetService _partSetService;
+    private readonly IMapper _mapper;
 
-    public PartSetController(IPartSetService partSetService)
+    public PartSetController(
+        IPartSetService partSetService,
+        IMapper mapper)
     {
         _partSetService = partSetService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -23,14 +28,7 @@ public class PartSetController : ControllerBase
         var dto = await _partSetService.GetPagedPartSets(filter);
         var count = await _partSetService.GetCountPartSets(filter);
 
-        var response = dto.Select(p => new PartSetResponse(
-            p.Id,
-            p.OrderId,
-            p.Position,
-            p.PositionId,
-            p.ProposalId,
-            p.Quantity,
-            p.SoldPrice));
+        var response = _mapper.Map<List<PartSetResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -50,14 +48,7 @@ public class PartSetController : ControllerBase
     {
         var dto = await _partSetService.GetPartSetsByOrderId(orderId);
 
-        var response = dto.Select(p => new PartSetResponse(
-            p.Id,
-            p.OrderId,
-            p.Position,
-            p.PositionId,
-            p.ProposalId,
-            p.Quantity,
-            p.SoldPrice));
+        var response = _mapper.Map<List<PartSetResponse>>(dto);
 
         return Ok(response);
     }

@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,14 @@ namespace CRM_system_backend.Controllers;
 public class OrderPriorityController : ControllerBase
 {
     private readonly IOrderPriorityService _orderPriorityService;
+    private readonly IMapper _mapper;
 
-    public OrderPriorityController(IOrderPriorityService orderPriorityService)
+    public OrderPriorityController(
+        IOrderPriorityService orderPriorityService,
+        IMapper mapper)
     {
         _orderPriorityService = orderPriorityService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -21,9 +26,7 @@ public class OrderPriorityController : ControllerBase
     {
         var dto = await _orderPriorityService.GetPrioritys();
 
-        var response = dto.Select(o => new OrderPriorityResponse(
-            o.Id,
-            o.Name));
+        var response = _mapper.Map<List<OrderPriorityResponse>>(dto);
 
         return Ok(response);
     }

@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Schedule;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Schedule;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class ScheduleRepository : IScheduleRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public ScheduleRepository(SystemDbContext context)
+    public ScheduleRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<ScheduleEntity> ApplyFilter(IQueryable<ScheduleEntity> query, ScheduleFilter filter)
@@ -55,19 +61,8 @@ public class ScheduleRepository : IScheduleRepository
                 : query.OrderBy(s => s.Id)
         };
 
-        var projection = query.Select(s => new ScheduleItem(
-            s.Id,
-            s.Worker == null
-                ? string.Empty
-                : $"{s.Worker.Name} {s.Worker.Surname}",
-            s.WorkerId,
-            s.Shift == null
-                ? string.Empty
-                : s.Shift.Name,
-            s.ShiftId,
-            s.Date));
-
-        return await projection
+        return await query
+            .ProjectTo<ScheduleItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();

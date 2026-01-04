@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.Car;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Car;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Car;
 using CRMSystem.Core.Enums;
@@ -12,10 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class CarController : ControllerBase
 {
     private readonly ICarService _carService;
+    private readonly IMapper _mapper;
 
-    public CarController(ICarService carService)
+    public CarController(
+        ICarService carService,
+        IMapper mapper)
     {
         _carService = carService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,17 +29,7 @@ public class CarController : ControllerBase
         var dto = await _carService.GetPagedCars(filter);
         var cout = await _carService.GetCountCars(filter);
 
-        var response = dto.Select(c => new CarResponse(
-            c.Id,
-            c.Owner,
-            c.Status,
-            c.StatusId,
-            c.Brand,
-            c.Model,
-            c.YearOfManufacture,
-            c.VinNumber,
-            c.StateNumber,
-            c.Mileage));
+        var response = _mapper.Map<List<CarResponse>>(dto);
 
         Response.Headers.Append("x-total-count", cout.ToString());
 

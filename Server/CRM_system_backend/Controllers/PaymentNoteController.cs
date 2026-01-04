@@ -1,10 +1,9 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
 using CRM_system_backend.Contracts.PaymentNote;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.PaymentNote;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -14,11 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class PaymentNoteController : ControllerBase
 {
     private readonly IPaymentNoteService _paymentNoteService;
+    private readonly IMapper _mapper;
 
-    public PaymentNoteController(IPaymentNoteService paymentNoteService)
+    public PaymentNoteController(
+        IPaymentNoteService paymentNoteService,
+        IMapper mapper)
     {
         _paymentNoteService = paymentNoteService;
-        
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -27,13 +29,7 @@ public class PaymentNoteController : ControllerBase
         var dto  = await _paymentNoteService.GetPagedPaymentNotes(filter);
         var count = await _paymentNoteService.GetCountPaymentNotes(filter);
 
-        var  response = dto
-            .Select(p => new PaymentNoteResponse(
-                p.Id,
-                p.BillId,
-                p.Date,
-                p.Amount,
-                p.Method));
+        var  response = _mapper.Map<List<PaymentNoteResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

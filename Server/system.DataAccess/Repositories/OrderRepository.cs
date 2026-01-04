@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Order;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Order;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
@@ -10,10 +12,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class OrderRepository : IOrderRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public OrderRepository(SystemDbContext context)
+    public OrderRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<OrderEntity> ApplyFilter(IQueryable<OrderEntity> query, OrderFilter filter)
@@ -70,23 +76,8 @@ public class OrderRepository : IOrderRepository
                 : query.OrderBy(o => o.Id),
         };
 
-        var projection = query.Select(o => new OrderItem(
-            o.Id,
-            o.Status == null
-                ? string.Empty
-                : o.Status.Name,
-            o.StatusId,
-            o.Car == null
-                ? string.Empty
-                : $"{o.Car.Brand} ({o.Car.StateNumber})",
-            o.CarId,
-            o.Date,
-            o.OrderPriority == null
-                ? string.Empty
-                : o.OrderPriority.Name,
-            o.PriorityId));
-
-        return await projection
+        return await query
+            .ProjectTo<OrderItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -97,21 +88,7 @@ public class OrderRepository : IOrderRepository
         return await _context.Orders
             .AsNoTracking()
             .Where(o => o.PriorityId == proposalId)
-            .Select(o => new OrderItem(
-            o.Id,
-            o.Status == null
-                ? string.Empty
-                : o.Status.Name,
-            o.StatusId,
-            o.Car == null
-                ? string.Empty
-                : $"{o.Car.Brand} ({o.Car.StateNumber})",
-            o.CarId,
-            o.Date,
-            o.OrderPriority == null
-                ? string.Empty
-                : o.OrderPriority.Name,
-            o.PriorityId))
+            .ProjectTo<OrderItem>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
 
     }

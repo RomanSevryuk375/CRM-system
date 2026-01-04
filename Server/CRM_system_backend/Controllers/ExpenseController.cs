@@ -1,4 +1,4 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
 using CRM_system_backend.Contracts.Expense;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Expense;
@@ -13,10 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class ExpenseController : ControllerBase 
 {
     private readonly IExpenseService _expenseService;
+    private readonly IMapper _mapper;
 
-    public ExpenseController(IExpenseService expenseService)
+    public ExpenseController(
+        IExpenseService expenseService,
+        IMapper mapper)
     {
         _expenseService = expenseService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -25,17 +29,7 @@ public class ExpenseController : ControllerBase
         var dto = await _expenseService.GetPagedExpenses(filter);
         var count = await _expenseService.GetCountExpenses(filter);
 
-        var response = dto
-            .Select(e => new ExpenseResponse(
-                e.Id,
-                e.Date,
-                e.Category,
-                e.Tax,
-                e.TaxId,
-                e.PartSetId,
-                e.ExpenseType,
-                e.ExpenceTypeId,
-                e.Sum));
+        var response = _mapper.Map<List<ExpenseResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

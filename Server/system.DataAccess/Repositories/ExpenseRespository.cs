@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Expense;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Expense;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class ExpenseRespository : IExpenseRespository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public ExpenseRespository(SystemDbContext context)
+    public ExpenseRespository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<ExpenseEntity> ApplyFilter(IQueryable<ExpenseEntity> query, ExpenseFilter filter)
@@ -67,22 +73,8 @@ public class ExpenseRespository : IExpenseRespository
                 : query.OrderBy(e => e.Id),
         };
 
-        var projection = query.Select(e => new ExpenseItem(
-            e.Id,
-            e.Date,
-            e.Category,
-            e.Tax == null
-                ? string.Empty
-                : e.Tax.Name,
-            e.TaxId,    
-            e.PartSetId,
-            e.ExpenseType == null
-                ? string.Empty
-                : e.ExpenseType.Name,
-            e.ExpenseTypeId,
-            e.Sum));
-
-        return await projection
+        return await query
+            .ProjectTo<ExpenseItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
