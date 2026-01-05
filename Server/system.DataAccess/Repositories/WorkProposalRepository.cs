@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.WorkProposal;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.WorkProposal;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
@@ -9,10 +11,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class WorkProposalRepository : IWorkProposalRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public WorkProposalRepository(SystemDbContext context)
+    public WorkProposalRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<WorkProposalEntity> ApplyFilter(IQueryable<WorkProposalEntity> query, WorkProposalFilter filter)
@@ -72,24 +78,8 @@ public class WorkProposalRepository : IWorkProposalRepository
                 : query.OrderBy(w => w.Id),
         };
 
-        var projection = query.Select(w => new WorkProposalItem(
-            w.Id,
-            w.OrderId,
-            w.Work == null
-                ? string.Empty
-                : w.Work.Title,
-            w.JobId,
-            w.Worker == null
-                ? string.Empty
-                : $"{w.Worker.Name} {w.Worker.Surname}",
-            w.WorkerId,
-            w.Status == null
-                ? string.Empty
-                : w.Status.Name,
-            w.StatusId,
-            w.Date));
-
-        return await projection
+        return await query
+            .ProjectTo<WorkProposalItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -100,22 +90,7 @@ public class WorkProposalRepository : IWorkProposalRepository
         return await _context.WorkProposals
             .AsNoTracking()
             .Where(p => p.Id == id)
-            .Select(w => new WorkProposalItem(
-            w.Id,
-            w.OrderId,
-            w.Work == null
-                ? string.Empty
-                : w.Work.Title,
-            w.JobId,
-            w.Worker == null
-                ? string.Empty
-                : $"{w.Worker.Name} {w.Worker.Surname}",
-            w.WorkerId,
-            w.Status == null
-                ? string.Empty
-                : w.Status.Name,
-            w.StatusId,
-            w.Date))
+            .ProjectTo<WorkProposalItem>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }
 

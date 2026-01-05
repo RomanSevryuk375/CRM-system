@@ -1,8 +1,8 @@
 ﻿namespace CRMSystem.Core.DTOs.Supplier;
 
 public record SupplierItem
-(
-    int Id,
-    string Name,
-    string Contacts
-);
+{
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public string Contacts { get; init; } = string.Empty;
+};

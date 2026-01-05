@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRM_system_backend.Contracts.Supplier;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Supplier;
@@ -13,10 +14,14 @@ namespace CRM_system_backend.Controllers;
 public class SupplierController : ControllerBase
 {
     private readonly ISupplierService _supplierService;
+    private readonly IMapper _mapper;
 
-    public SupplierController(ISupplierService supplierService)
+    public SupplierController(
+        ISupplierService supplierService,
+        IMapper mapper)
     {
         _supplierService = supplierService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,10 +29,7 @@ public class SupplierController : ControllerBase
     {
         var dto = await _supplierService.GetSuppliers();
 
-        var response = dto.Select(s => new SupplierResponse(
-            s.Id, 
-            s.Name, 
-            s.Contacts));
+        var response = _mapper.Map<List<SupplierResponse>>(dto);
 
         return Ok(response);
     }

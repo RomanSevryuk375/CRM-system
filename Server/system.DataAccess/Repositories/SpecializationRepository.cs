@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,22 +10,22 @@ namespace CRMSystem.DataAccess.Repositories;
 public class SpecializationRepository : ISpecializationRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public SpecializationRepository(SystemDbContext context)
+    public SpecializationRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<List<SpecializationItem>> Get()
     {
-        var query = _context.Specializations.AsNoTracking();
-
-        var projection = query
-            .Select(s => new SpecializationItem(
-                s.Id,
-                s.Name));
-
-        return await projection.ToListAsync();
+        return await _context.Specializations
+            .AsNoTracking()
+            .ProjectTo<SpecializationItem>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<int> Create(Specialization specialization)

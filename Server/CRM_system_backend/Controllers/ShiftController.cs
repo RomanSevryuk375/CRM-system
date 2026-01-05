@@ -1,8 +1,8 @@
-﻿using CRM_system_backend.Contracts.Shift;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Shift;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Shift;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -12,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class ShiftController : ControllerBase
 {
     private readonly IShiftService _shiftService;
+    private readonly IMapper _mapper;
 
-    public ShiftController(IShiftService shiftService)
+    public ShiftController(
+        IShiftService shiftService,
+        IMapper mapper)
     {
         _shiftService = shiftService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -23,11 +27,7 @@ public class ShiftController : ControllerBase
     {
         var dto = await _shiftService.GetShifts();
 
-        var response = dto.Select(s => new ShiftResponse(
-            s.Id,
-            s.Name,
-            s.StartAt,
-            s.EndAt));
+        var response = _mapper.Map<List<ShiftResponse>>(dto);
 
         return Ok(response);
     }

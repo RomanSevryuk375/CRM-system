@@ -1,8 +1,8 @@
-﻿using CRM_system_backend.Contracts.Supply;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Supply;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Supply;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -12,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class SupplyController : ControllerBase
 {
     private readonly ISupplyService _supplyService;
+    private readonly IMapper _mapper;
 
-    public SupplyController(ISupplyService supplyService)
+    public SupplyController(
+        ISupplyService supplyService,
+        IMapper mapper)
     {
         _supplyService = supplyService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,11 +28,7 @@ public class SupplyController : ControllerBase
         var dto = await _supplyService.GetPagedSupplies(filter);
         var count = await _supplyService.GetCountSupplies(filter);
 
-        var response = dto.Select(s => new SupplyResponse(
-            s.Id,
-            s.Supplier,
-            s.SupplierId,
-            s.Date));
+        var response = _mapper.Map<SupplyResponse>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

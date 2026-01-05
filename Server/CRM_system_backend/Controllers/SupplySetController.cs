@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.SupplySet;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.SupplySet;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.SupplySet;
 using CRMSystem.Core.Models;
@@ -11,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class SupplySetController : ControllerBase
 {
     private readonly ISupplySetService _supplySetService;
+    private readonly IMapper _mapper;
 
-    public SupplySetController(ISupplySetService supplySetService)
+    public SupplySetController(
+        ISupplySetService supplySetService,
+        IMapper mapper)
     {
         _supplySetService = supplySetService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -23,12 +28,7 @@ public class SupplySetController : ControllerBase
         var dto = await _supplySetService.GetPagetSupplySets(filter);
         var count = await _supplySetService.GetCountSupplySets(filter);
 
-        var response = dto.Select(s => new SupplySet(
-            s.Id,
-            s.SupplyId,
-            s.PositionId,
-            s.Quantity,
-            s.PurchasePrice));
+        var response = _mapper.Map<List<SupplySetResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

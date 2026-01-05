@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
@@ -6,21 +8,22 @@ namespace CRMSystem.DataAccess.Repositories;
 public class WorkProposalStatusRepository : IWorkProposalStatusRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public WorkProposalStatusRepository(SystemDbContext context)
+    public WorkProposalStatusRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<List<WorkProposalStatusItem>> Get()
     {
-        var query = _context.WorkProposalStatuses.AsNoTracking();
-
-        var projection = query.Select(w => new WorkProposalStatusItem(
-            w.Id,
-            w.Name));
-
-        return await projection.ToListAsync();
+        return await _context.WorkProposalStatuses
+            .AsNoTracking()
+            .ProjectTo<WorkProposalStatusItem>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<bool> Exists(int id)

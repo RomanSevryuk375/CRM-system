@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
 using Microsoft.AspNetCore.Http;
@@ -11,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class TaxTypeController : ControllerBase
 {
     private readonly ITaxTypeService _taxTypeService;
+    private readonly IMapper _mapper;
 
-    public TaxTypeController(ITaxTypeService taxTypeService)
+    public TaxTypeController(
+        ITaxTypeService taxTypeService,
+        IMapper mapper)
     {
         _taxTypeService = taxTypeService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -22,9 +27,7 @@ public class TaxTypeController : ControllerBase
     {
         var dto = await _taxTypeService.GetTaxTypes();
 
-        var response = dto.Select(t => new TaxTypeResponse(
-            t.Id,
-            t.Name));
+        var response = _mapper.Map<List<TaxTypeResponse>>(dto);
 
         return Ok(response);
     }

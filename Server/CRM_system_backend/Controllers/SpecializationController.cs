@@ -1,9 +1,8 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
 using CRM_system_backend.Contracts.Specialization;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -14,21 +13,22 @@ namespace CRM_system_backend.Controllers;
 public class SpecializationController : ControllerBase
 {
     private readonly ISpecializationService _specializationService;
+    private readonly IMapper _mapper;
 
-    public SpecializationController(ISpecializationService specializationService)
+    public SpecializationController(
+        ISpecializationService specializationService,
+        IMapper mapper)
     {
         _specializationService = specializationService;
+        _mapper = mapper;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<SpecializationItem>>> GetSpecialization()
     {
-        var specializations = await _specializationService.GetSpecializations();
+        var dto = await _specializationService.GetSpecializations();
 
-        var response = specializations
-            .Select(s => new SpecializationResponse(
-                s.Id,
-                s.Name));
+        var response = _mapper.Map<List<SpecializationResponse>>(dto);
 
         return Ok(response);
     }

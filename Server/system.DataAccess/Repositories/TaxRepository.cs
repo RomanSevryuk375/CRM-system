@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Tax;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Tax;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class TaxRepository : ITaxRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public TaxRepository(SystemDbContext context)
+    public TaxRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<TaxEntity> ApplyFilter(IQueryable<TaxEntity> query, TaxFilter filter)
@@ -48,16 +54,9 @@ public class TaxRepository : ITaxRepository
                 : query.OrderBy(t => t.Id),
         };
 
-        var projection = query.Select(
-            t => new TaxItem(
-                t.Id,
-                t.Name,
-                t.Rate,
-                t.TaxType == null
-                    ? string.Empty
-                    : t.TaxType.Name));
-
-        return await projection.ToListAsync();
+        return await query
+            .ProjectTo<TaxItem>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<int> Create(Tax tax)

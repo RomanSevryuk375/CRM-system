@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.WorkInOrder;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.WorkInOrder;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class WorkInOrderRepository : IWorkInOrderRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public WorkInOrderRepository(SystemDbContext context)
+    public WorkInOrderRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<WorkInOrderEntity> ApplyFilter(IQueryable<WorkInOrderEntity> query, WorkInOrderFilter filter)
@@ -71,24 +77,8 @@ public class WorkInOrderRepository : IWorkInOrderRepository
                 : query.OrderBy(w => w.Id),
         };
 
-        var projection = query.Select(w => new WorkInOrderItem(
-            w.Id,
-            w.OrderId,
-            w.Work == null
-                ? string.Empty
-                : w.Work.Title,
-            w.JobId,
-            w.Worker == null
-                ? string.Empty
-                : $"{w.Worker.Name} {w.Worker.Surname}",
-            w.WorkerId,
-            w.WorkInOrderStatus == null
-                ? string.Empty
-                : w.WorkInOrderStatus.Name,
-            w.StatusId,
-            w.TimeSpent));
-
-        return await projection
+        return await query
+            .ProjectTo<WorkInOrderItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -106,22 +96,7 @@ public class WorkInOrderRepository : IWorkInOrderRepository
         var worksInOrder = await _context.WorksInOrder
             .AsNoTracking()
             .Where(w => w.OrderId == orderId)
-            .Select(w => new WorkInOrderItem(
-                w.Id,
-                w.OrderId,
-                w.Work == null
-                    ? string.Empty
-                    : w.Work.Title,
-                w.JobId,
-                w.Worker == null
-                    ? string.Empty
-                    : $"{w.Worker.Name} {w.Worker.Surname}",
-                w.WorkerId,
-                w.WorkInOrderStatus == null
-                    ? string.Empty
-                    : w.WorkInOrderStatus.Name,
-                w.StatusId,
-                w.TimeSpent))
+            .ProjectTo<WorkInOrderItem>(_mapper.ConfigurationProvider)
             .ToListAsync();
 
         return worksInOrder;

@@ -1,10 +1,10 @@
 ﻿namespace CRMSystem.Core.DTOs.Work;
 
 public record WorkItem
-(
-    long Id,
-    string Title,
-    string Categoty,
-    string Description,
-    decimal StandartTime
-);
+{
+    public long Id { get; init; }
+    public string Title { get; init; } = string.Empty;
+    public string Categoty { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
+    public decimal StandartTime { get; init; }
+};

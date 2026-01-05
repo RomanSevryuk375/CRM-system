@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Work;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Work;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class WorkRepository : IWorkRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public WorkRepository(SystemDbContext context)
+    public WorkRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<List<WorkItem>> GetPaged(WorkFilter filter)
@@ -39,14 +45,8 @@ public class WorkRepository : IWorkRepository
                 : query.OrderBy(w => w.Id),
         };
 
-        var projection = query.Select(w => new WorkItem(
-            w.Id,
-            w.Title,
-            w.Category,
-            w.Description,
-            w.StandardTime));
-
-        return await projection
+        return await query
+            .ProjectTo<WorkItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -57,12 +57,7 @@ public class WorkRepository : IWorkRepository
         return await _context.Works
             .AsNoTracking()
             .Where(w => w.Id == id)
-            .Select(w => new WorkItem(
-            w.Id,
-            w.Title,
-            w.Category,
-            w.Description,
-            w.StandardTime))
+            .ProjectTo<WorkItem>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
 
     }

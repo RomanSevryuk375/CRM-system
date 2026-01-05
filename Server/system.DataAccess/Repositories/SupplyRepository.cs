@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Supply;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Supply;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class SupplyRepository : ISupplyRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public SupplyRepository(SystemDbContext context)
+    public SupplyRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<SupplyEntity> ApplyFilter(IQueryable<SupplyEntity> query, SupplyFilter filter)
@@ -45,15 +51,8 @@ public class SupplyRepository : ISupplyRepository
                 : query.OrderBy(s => s.Id),
         };
 
-        var projection = query.Select(s => new SupplyItem(
-            s.Id,
-            s.Supplier == null
-                ? string.Empty
-                : s.Supplier.Name,
-            s.SupplierId,
-            s.Date));
-
-        return await projection
+        return await query
+            .ProjectTo<SupplyItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();

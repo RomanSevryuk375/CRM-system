@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Shift;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Shift;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,23 +10,22 @@ namespace CRMSystem.DataAccess.Repositories;
 public class ShiftRepository : IShiftRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public ShiftRepository(SystemDbContext context)
+    public ShiftRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<List<ShiftItem>> Get()
     {
-        var query = _context.Shifts.AsNoTracking();
-
-        var projection = query.Select(s => new ShiftItem(
-            s.Id,
-            s.Name,
-            s.StartAt,
-            s.EndAt));
-
-        return await projection.ToListAsync();
+        return await _context.Shifts
+            .AsNoTracking()
+            .ProjectTo<ShiftItem>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<int> Create(Shift shift)

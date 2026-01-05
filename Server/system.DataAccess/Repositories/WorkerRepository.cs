@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Worker;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Worker;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,14 @@ namespace CRMSystem.DataAccess.Repositories;
 public class WorkerRepository : IWorkerRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public WorkerRepository(SystemDbContext context)
+    public WorkerRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     private IQueryable<WorkerEntity> ApplyFilter(IQueryable<WorkerEntity> query, WorkerFilter filter)
@@ -50,16 +56,8 @@ public class WorkerRepository : IWorkerRepository
                 : query.OrderBy(w => w.Id),
         };
 
-        var projection = query.Select(c => new WorkerItem(
-            c.Id,
-            c.UserId,
-            c.Name,
-            c.Surname,
-            c.HourlyRate,
-            c.PhoneNumber,
-            c.Email));
-
-        return await projection
+        return await query
+            .ProjectTo<WorkerItem>(_mapper.ConfigurationProvider)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync();
@@ -70,14 +68,7 @@ public class WorkerRepository : IWorkerRepository
         return await _context.Workers
             .AsNoTracking()
             .Where(w => w.Id == id)
-            .Select(c => new WorkerItem(
-            c.Id,
-            c.UserId,
-            c.Name,
-            c.Surname,
-            c.HourlyRate,
-            c.PhoneNumber,
-            c.Email))
+            .ProjectTo<WorkerItem>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }
 

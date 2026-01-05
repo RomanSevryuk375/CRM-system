@@ -1,9 +1,9 @@
 ﻿namespace CRM_system_backend.Contracts.Shift;
 
 public record ShiftResponse
-(
-   int Id,
-   string Name,
-   TimeOnly StartAt,
-   TimeOnly EndAt
-);
+{
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public TimeOnly StartAt { get; init; }
+    public TimeOnly EndAt { get; init; }
+};

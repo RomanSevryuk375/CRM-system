@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.StorageCell;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.StorageCell;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.StorageCell;
 using CRMSystem.Core.Models;
@@ -12,10 +13,14 @@ namespace CRM_system_backend.Controllers;
 public class StorageCellController : ControllerBase
 {
     private readonly IStorageCellService _storageCellService;
+    private readonly IMapper _mapper;
 
-    public StorageCellController(IStorageCellService storageCellService)
+    public StorageCellController(
+        IStorageCellService storageCellService,
+        IMapper mapper)
     {
         _storageCellService = storageCellService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -23,10 +28,7 @@ public class StorageCellController : ControllerBase
     {
         var dto = await _storageCellService.GetStorageCells();
 
-        var response = dto.Select(s => new StorageCellResponse(
-            s.Id,
-            s.Rack,
-            s.Shelf));
+        var response = _mapper.Map<List<StorageCellResponse>>(dto);
 
         return Ok(response);
     }

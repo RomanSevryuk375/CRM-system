@@ -1,8 +1,8 @@
-﻿using CRM_system_backend.Contracts.WorkPropossal;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.WorkPropossal;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.WorkProposal;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -12,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class WorkProposalController : ControllerBase
 {
     private readonly IWorkPropossalService _workPropossalService;
+    private readonly IMapper _mapper;
 
-    public WorkProposalController(IWorkPropossalService workPropossalService)
+    public WorkProposalController(
+        IWorkPropossalService workPropossalService,
+        IMapper mapper)
     {
         _workPropossalService = workPropossalService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,18 +28,7 @@ public class WorkProposalController : ControllerBase
         var dto = await _workPropossalService.GetPagedProposals(filter);
         var count = await _workPropossalService.GetCountProposals(filter);
 
-        var response = dto
-            .Select(w => new WorkProposalResponse(
-                w.Id,
-                w.OrderId,
-                w.Job,
-                w.JobId,
-                w.Worker,
-                w.WorkerId,
-                w.Status,
-                w.StatusId,
-                w.Date))
-            .ToList();
+        var response = _mapper.Map<List<WorkProposalResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -87,7 +80,6 @@ public class WorkProposalController : ControllerBase
 
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> DeleteWorkProposa(long id)
     {
         var result = await _workPropossalService.DeleteProposal(id);

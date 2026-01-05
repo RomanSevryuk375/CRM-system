@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.DTOs.Supplier;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.DTOs.Supplier;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -8,23 +10,22 @@ namespace CRMSystem.DataAccess.Repositories;
 public class SupplierRepository : ISupplierRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public SupplierRepository(SystemDbContext context)
+    public SupplierRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<List<SupplierItem>> Get()
     {
-        var query = _context.Suppliers.AsNoTracking();
-
-        var suppliers = query.Select(su => new SupplierItem(
-                su.Id,
-                su.Name,
-                su.Contacts
-                ));
-
-        return await suppliers.ToListAsync();
+        return await _context.Suppliers
+            .AsNoTracking()
+            .ProjectTo<SupplierItem>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<int> Create(Supplier supplier)

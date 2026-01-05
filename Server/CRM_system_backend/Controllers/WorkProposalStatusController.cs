@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs;
 using CRMSystem.Core.Models;
@@ -11,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class WorkProposalStatusController : ControllerBase
 {
     private readonly IWorkProposalStatusService _service;
+    private readonly IMapper _mapper;
 
-    public WorkProposalStatusController(IWorkProposalStatusService service)
+    public WorkProposalStatusController(
+        IWorkProposalStatusService service,
+        IMapper mapper)
     {
         _service = service;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -22,9 +27,7 @@ public class WorkProposalStatusController : ControllerBase
     {
         var dto = await _service.GetProposalStatuses();
 
-        var response = dto.Select(p => new WorkProposalStatusResponse(
-            p.Id,
-            p.Name));
+        var response = _mapper.Map<List<WorkProposalStatusResponse>>(dto);
 
         return Ok(response);
     }

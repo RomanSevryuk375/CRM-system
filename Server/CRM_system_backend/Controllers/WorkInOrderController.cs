@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.WorkInOrder;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.WorkInOrder;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.WorkInOrder;
 using CRMSystem.Core.Models;
@@ -11,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class WorkInOrderController : ControllerBase
 {
     private readonly IWorkInOrderService _workInOrderService;
+    private readonly IMapper _mapper;
 
-    public WorkInOrderController(IWorkInOrderService workInOrderService)
+    public WorkInOrderController(
+        IWorkInOrderService workInOrderService,
+        IMapper mapper)
     {
         _workInOrderService = workInOrderService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -23,16 +28,7 @@ public class WorkInOrderController : ControllerBase
         var dto = await _workInOrderService.GetPagedWiO(filter);
         var count = await _workInOrderService.GetCountWiO(filter);
 
-        var response = dto.Select(w => new WorkInOrderItem(
-            w.Id,
-            w.OrderId,
-            w.job,
-            w.JobId,
-            w.Worker,
-            w.WorkerId,
-            w.Status,
-            w.StatusId,
-            w.TimeSpent));
+        var response = _mapper.Map<List<WorkInOrderResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -44,16 +40,7 @@ public class WorkInOrderController : ControllerBase
     {
         var dto = await _workInOrderService.GetWiOByOrderId(orderId);
 
-        var response = dto.Select(w => new WorkInOrderItem(
-            w.Id,
-            w.OrderId,
-            w.job,
-            w.JobId,
-            w.Worker,
-            w.WorkerId,
-            w.Status,
-            w.StatusId,
-            w.TimeSpent));
+        var response = _mapper.Map<List<WorkInOrderResponse>>(dto);
 
         return Ok(response);
     }

@@ -1,9 +1,8 @@
-﻿using AutoMapper.Configuration.Annotations;
+﻿using AutoMapper;
 using CRM_system_backend.Contracts.Work;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Work;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -13,10 +12,14 @@ namespace CRM_system_backend.Controllers;
 public class WorkController : ControllerBase
 {
     private readonly IWorkService _workService;
+    private readonly IMapper _mapper;
 
-    public WorkController(IWorkService workService)
+    public WorkController(
+        IWorkService workService,
+        IMapper mapper)
     {
         _workService = workService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -25,12 +28,7 @@ public class WorkController : ControllerBase
         var dto = await _workService.GetPagedWork(filter);
         var count = await _workService.GetCountWork();
 
-        var response = dto.Select(w => new WorkResponse(
-                w.Id,
-                w.Title,
-                w.Categoty,
-                w.Description,
-                w.StandartTime));
+        var response = _mapper.Map<List<WorkResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 

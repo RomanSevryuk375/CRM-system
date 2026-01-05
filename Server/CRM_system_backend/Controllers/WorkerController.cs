@@ -1,4 +1,5 @@
-﻿using CRM_system_backend.Contracts.Worker;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts.Worker;
 using CRMSystem.Buisnes.Abstractions;
 using CRMSystem.Core.DTOs.Worker;
 using CRMSystem.Core.Models;
@@ -13,10 +14,14 @@ namespace CRM_system_backend.Controllers;
 public class WorkerController : ControllerBase
 {
     private readonly IWorkerService _workerService;
+    private readonly IMapper _mapper;
 
-    public WorkerController(IWorkerService workerService)
+    public WorkerController(
+        IWorkerService workerService,
+        IMapper mapper)
     {
         _workerService = workerService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -25,14 +30,7 @@ public class WorkerController : ControllerBase
         var dto = await _workerService.GetPagedWorkers(filter);
         var count = await _workerService.GetCountWorkers(filter);
 
-        var response = dto.Select(w => new WorkerResponse(
-            w.Id,
-            w.UserId,
-            w.Name,
-            w.Surname,
-            w.HourlyRate,
-            w.PhoneNumber,
-            w.Email));
+        var response = _mapper.Map<List<WorkerResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
