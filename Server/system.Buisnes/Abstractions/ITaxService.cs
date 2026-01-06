@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Tax;
+﻿using CRMSystem.Core.ProjectionModels.Tax;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface ITaxService
 {

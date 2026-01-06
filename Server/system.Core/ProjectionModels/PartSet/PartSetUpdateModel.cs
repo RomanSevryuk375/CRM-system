@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.PartSet;
+﻿namespace CRMSystem.Core.ProjectionModels.PartSet;
 
 public record PartSetUpdateModel
 (

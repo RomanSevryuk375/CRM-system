@@ -1,9 +1,9 @@
-﻿namespace CRMSystem.Core.DTOs.Skill;
+﻿namespace CRMSystem.Core.ProjectionModels.Skill;
 
 public record SkillFilter
 (
     IEnumerable<int> WorkerIds,
-    IEnumerable<int> specializationIds,
+    IEnumerable<int> SpecializationIds,
     string? SortBy,
     bool IsDescending
 );

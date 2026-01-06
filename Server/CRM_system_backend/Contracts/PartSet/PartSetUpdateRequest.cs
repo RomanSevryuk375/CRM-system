@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.PartSet;
+﻿namespace CRM_system_backend.Contracts.PartSet;
 
 public record PartSetUpdateRequest
 (

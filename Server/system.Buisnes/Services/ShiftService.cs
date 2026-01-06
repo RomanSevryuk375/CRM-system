@@ -1,11 +1,11 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Shift;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Shift;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class ShiftService : IShiftService
 {

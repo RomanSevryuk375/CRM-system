@@ -1,10 +1,12 @@
-﻿using Amazon.S3;
+﻿// Ignore Spelling: Minio
+
+using Amazon.S3;
 using Amazon.S3.Transfer;
-using CRMSystem.Buisness.Abstractions;
+using CRMSystem.Business.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisness.Services;
+namespace CRMSystem.Business.Services;
 
 public class MinioFileService : IFileService
 {
@@ -53,7 +55,7 @@ public class MinioFileService : IFileService
         }
     }
 
-    public async Task<string> UploadFile(Stream fileStrim, string fileName, string contentType)
+    public async Task<string> UploadFile(Stream fileStream, string fileName, string contentType)
     {
         var uniqueFileName = $"{Guid.NewGuid()}_{fileName}";
 
@@ -63,7 +65,7 @@ public class MinioFileService : IFileService
 
             await transferUtility.UploadAsync(new TransferUtilityUploadRequest
             {
-                InputStream = fileStrim,
+                InputStream = fileStream,
                 Key = uniqueFileName,
                 BucketName = _bucketName,
                 ContentType = contentType,

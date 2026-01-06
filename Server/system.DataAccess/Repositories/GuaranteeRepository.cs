@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using CRMSystem.Core.DTOs.Guarantee;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Guarantee;
+using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
-using CRMSystem.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;

@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.User;
+﻿namespace CRMSystem.Core.ProjectionModels.User;
 
 public record UserUpdateModel
 (

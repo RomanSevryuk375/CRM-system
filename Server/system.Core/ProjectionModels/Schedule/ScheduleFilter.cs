@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Schedule;
+﻿namespace CRMSystem.Core.ProjectionModels.Schedule;
 
 public record ScheduleFilter
 (

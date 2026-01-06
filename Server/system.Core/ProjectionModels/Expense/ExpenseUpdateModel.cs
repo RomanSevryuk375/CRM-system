@@ -1,11 +1,11 @@
 ﻿using CRMSystem.Core.Enums;
 
-namespace CRMSystem.Core.DTOs.Expense;
+namespace CRMSystem.Core.ProjectionModels.Expense;
 
 public record ExpenseUpdateModel
 (
     DateTime? Date,
-    string? category,
+    string? Category,
     ExpenseTypeEnum? ExpenseTypeId,
     decimal? Sum
 );

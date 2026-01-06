@@ -1,8 +1,7 @@
 ﻿using CRM_system_backend.Contracts;
 using CRM_system_backend.Contracts.User;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.User;
-using CRMSystem.Core.Models;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

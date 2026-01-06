@@ -1,6 +1,4 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.Bill;
+﻿namespace CRMSystem.Core.ProjectionModels.Bill;
 
 public record BillItem
 {

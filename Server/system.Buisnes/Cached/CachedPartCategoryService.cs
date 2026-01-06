@@ -1,11 +1,11 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Core.DTOs.PartCategory;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.PartCategory;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using CRMSystem.Business.Extensions;
 
-namespace CRMSystem.Buisnes.Cached;
+namespace CRMSystem.Business.Cached;
 
 public class CachedPartCategoryService : IPartCategoryService
 {
@@ -52,7 +52,7 @@ public class CachedPartCategoryService : IPartCategoryService
             CACHE_KEY,
             () => _decorated.GetPartCategories(),
             TimeSpan.FromHours(24),
-            _logger) ?? new List<PartCategoryItem>();
+            _logger) ?? [];
     }
 
     public async Task<int> UpdatePartCategory(int id, PartCategoryUpdateModel model)

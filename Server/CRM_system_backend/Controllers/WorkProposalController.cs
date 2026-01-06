@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.WorkPropossal;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.WorkProposal;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.WorkProposal;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,14 +11,14 @@ namespace CRM_system_backend.Controllers;
 [Route("api/[controller]")]
 public class WorkProposalController : ControllerBase
 {
-    private readonly IWorkPropossalService _workPropossalService;
+    private readonly IWorkProposalService _workPropossalService;
     private readonly IMapper _mapper;
 
     public WorkProposalController(
-        IWorkPropossalService workPropossalService,
+        IWorkProposalService workProposalService,
         IMapper mapper)
     {
-        _workPropossalService = workPropossalService;
+        _workPropossalService = workProposalService;
         _mapper = mapper;
     }
 
@@ -80,7 +80,7 @@ public class WorkProposalController : ControllerBase
 
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteWorkProposa(long id)
+    public async Task<ActionResult<long>> DeleteWorkProposal(long id)
     {
         var result = await _workPropossalService.DeleteProposal(id);
 

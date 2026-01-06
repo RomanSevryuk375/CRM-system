@@ -1,9 +1,10 @@
-﻿using AutoMapper;
+﻿// Ignore Spelling: Img
+
+using AutoMapper;
 using CRM_system_backend.Contracts.AcceptanceImg;
-using CRMSystem.Buisness.Abstractions;
-using CRMSystem.Core.DTOs;
-using CRMSystem.Core.DTOs.AcceptanceImg;
-using CRMSystem.Core.DTOs.AccetanceImg;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.AccetanceImg;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -27,7 +28,7 @@ public class AcceptanceImgController : ControllerBase
     public async Task<ActionResult<List<AcceptanceImgItem>>> GetAcceptanceIng([FromQuery]AcceptanceImgFilter filter)
     {
         var dto = await _acceptanceImgService.GetAcceptanceIng(filter);
-        var count = await _acceptanceImgService.GetCountAccptnceImg(filter);
+        var count = await _acceptanceImgService.GetCountAcceptanceImg(filter);
 
         var response = _mapper.Map<List<AcceptanceImgResponse>>(dto);
 
@@ -53,7 +54,7 @@ public class AcceptanceImgController : ControllerBase
         using var strem = request.File.OpenReadStream();
         var fileItem = new FileItem(strem, request.File.FileName, request.File.ContentType);
 
-        var Id = await _acceptanceImgService.CreateAccptanceImg(request.AcceptanceId, fileItem, request.Description);
+        var Id = await _acceptanceImgService.CreateAcceptanceImg(request.AcceptanceId, fileItem, request.Description);
 
         return Ok(Id);
     }
@@ -61,7 +62,7 @@ public class AcceptanceImgController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<long>> UpdateAcceptanceImg(long id, [FromBody] AcceptanceImgUpdateRequest request)
     {
-        var Id = await _acceptanceImgService.UpdateAccptanceImg(id, request.FilePath, request.Description);
+        var Id = await _acceptanceImgService.UpdateAcceptanceImg(id, request.FilePath, request.Description);
 
         return Ok(Id);
     }
@@ -69,7 +70,7 @@ public class AcceptanceImgController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<long>> DeleteAcceptanceImg(long id)
     {
-        var Id = await _acceptanceImgService.DeleteAccptanceImg(id);
+        var Id = await _acceptanceImgService.DeleteAcceptanceImg(id);
 
         return Ok(Id);
     }

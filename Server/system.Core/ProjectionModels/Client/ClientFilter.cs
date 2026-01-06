@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Client;
+﻿namespace CRMSystem.Core.ProjectionModels.Client;
 
 public record ClientFilter
 (

@@ -1,10 +1,10 @@
-﻿using CRMSystem.Core.DTOs.WorkProposal;
+﻿using CRMSystem.Core.ProjectionModels.WorkProposal;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
-public interface IWorkPropossalService
+public interface IWorkProposalService
 {
     Task<long> AcceptProposal(long id);
     Task<long> CreateProposal(WorkProposal workProposal);

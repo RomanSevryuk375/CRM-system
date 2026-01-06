@@ -1,10 +1,9 @@
-﻿using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Core.ProjectionModels;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.Core.Abstractions;
+
+public interface IBillStatusRepository
 {
-    public interface IBillStatusRepository
-    {
-        Task<List<BillStatusItem>> Get();
-        Task<bool> Exists(int id);
-    }
+    Task<List<BillStatusItem>> Get();
+    Task<bool> Exists(int id);
 }

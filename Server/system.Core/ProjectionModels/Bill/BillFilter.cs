@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Bill;
+﻿namespace CRMSystem.Core.ProjectionModels.Bill;
 
 public record BillFilter
 (

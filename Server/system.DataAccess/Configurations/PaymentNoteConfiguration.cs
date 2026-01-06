@@ -1,5 +1,4 @@
-﻿using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

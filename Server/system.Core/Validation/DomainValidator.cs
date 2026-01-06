@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.Core.Validation;
+﻿// Ignore Spelling: Validator
+
+namespace CRMSystem.Core.Validation;
 
 public static class DomainValidator
 {

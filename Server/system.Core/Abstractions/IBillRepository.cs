@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Bill;
+﻿using CRMSystem.Core.ProjectionModels.Bill;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IBillRepository
 {
@@ -12,6 +12,6 @@ public interface IBillRepository
     Task<long> Update(long id, BillUpdateModel model);
     Task<BillItem?> GetByOrderId(long orderId);
     Task<decimal> RecalculateDebt(long Id);
-    Task<long> RecalculateAmmount(long orderId);
+    Task<long> RecalculateAmount(long orderId);
     Task<bool> Exists(long id);
 }

@@ -1,8 +1,9 @@
-﻿namespace CRMSystem.Infrastructure
+﻿// Ignore Spelling: Hasher
+
+namespace CRMSystem.Core.Abstractions;
+
+public interface IMyPasswordHasher
 {
-    public interface IMyPasswordHasher
-    {
-        string Generate(string password);
-        bool Verify(string password, string passwordHash);
-    }
+    string Generate(string password);
+    bool Verify(string password, string passwordHash);
 }

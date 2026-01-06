@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using CRMSystem.Core.DTOs.Expense;
+using CRM_system_backend.Contracts.Expense;
+using CRMSystem.Core.ProjectionModels.Expense;
 using CRMSystem.DataAccess.Entites;
 
 namespace CRM_system_backend.MapProfiles;

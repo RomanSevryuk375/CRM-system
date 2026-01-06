@@ -1,10 +1,10 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using CRMSystem.Business.Extensions;
 
-namespace CRMSystem.Buisnes.Cached;
+namespace CRMSystem.Business.Cached;
 
 public class CachedNotificationStatusService : INotificationStatusService
 {
@@ -29,6 +29,6 @@ public class CachedNotificationStatusService : INotificationStatusService
             CACHE_KEY,
             () => _decorated.GetNotificationStatuses(),
             TimeSpan.FromHours(24),
-            _logger) ?? new List<NotificationStatusItem>();
+            _logger) ?? [];
     }
 }

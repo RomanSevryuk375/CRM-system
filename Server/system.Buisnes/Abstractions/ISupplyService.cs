@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Supply;
+﻿using CRMSystem.Core.ProjectionModels.Supply;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface ISupplyService
 {

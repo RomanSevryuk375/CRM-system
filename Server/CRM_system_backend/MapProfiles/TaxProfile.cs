@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Tax;
-using CRMSystem.Core.DTOs.Tax;
+using CRMSystem.Core.ProjectionModels.Tax;
 using CRMSystem.DataAccess.Entites;
 
 namespace CRM_system_backend.MapProfiles;

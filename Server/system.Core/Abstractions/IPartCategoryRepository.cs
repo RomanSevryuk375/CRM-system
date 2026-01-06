@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.PartCategory;
+﻿using CRMSystem.Core.ProjectionModels.PartCategory;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IPartCategoryRepository
 {

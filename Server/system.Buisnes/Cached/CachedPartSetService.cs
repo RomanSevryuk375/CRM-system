@@ -1,11 +1,11 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Core.DTOs.PartSet;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Extensions;
+using CRMSystem.Core.ProjectionModels.PartSet;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Cached;
+namespace CRMSystem.Business.Cached;
 
 public class CachedPartSetService : IPartSetService
 {
@@ -69,7 +69,7 @@ public class CachedPartSetService : IPartSetService
             key,
             () => _decorated.GetPartSetsByOrderId(orderId),
             TimeSpan.FromMinutes(15),
-            _logger) ?? new List<PartSetItem>();
+            _logger) ?? [];
     }
 
     public async Task<long> UpdatePartSet(long id, PartSetUpdateModel model)

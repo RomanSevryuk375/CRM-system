@@ -1,7 +1,9 @@
-﻿using CRMSystem.Core.DTOs.AcceptanceImg;
-using CRMSystem.Core.Models;
+﻿// Ignore Spelling: Img
 
-namespace CRMSystem.DataAccess.Repositories;
+using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.AccetanceImg;
+
+namespace CRMSystem.Core.Abstractions;
 
 public interface IAcceptanceImgRepository
 {

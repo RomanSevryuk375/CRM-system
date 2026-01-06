@@ -1,12 +1,11 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Order;
-using CRMSystem.Core.DTOs.Part;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Part;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class PartService : IPartService
 {
@@ -15,11 +14,11 @@ public class PartService : IPartService
     private readonly ILogger<PartService> _logger;
 
     public PartService(
-        IPartRepository partRepositiry,
+        IPartRepository partRepository,
         IPartCategoryRepository partCategoryRepository,
         ILogger<PartService> logger)
     {
-        _partRepository = partRepositiry;
+        _partRepository = partRepository;
         _partCategoryRepository = partCategoryRepository;
         _logger = logger;
     }

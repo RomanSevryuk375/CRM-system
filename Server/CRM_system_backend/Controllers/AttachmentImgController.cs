@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿// Ignore Spelling: Img
+
+using AutoMapper;
 using CRM_system_backend.Contracts.AttachmentImg;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs;
-using CRMSystem.Core.DTOs.AttachmentImg;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.AttachmentImg;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,9 +61,9 @@ public class AttachmentImgController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateAttaachmentImg(long id, [FromBody] AttachmentImgUpdateRequest request)
+    public async Task<ActionResult<long>> UpdateAttachmentImg(long id, [FromBody] AttachmentImgUpdateRequest request)
     {
-        var Id = await _attachmentImgService.UpdateAttaachmentImg(id, request.FilePath, request.Description);
+        var Id = await _attachmentImgService.UpdateAttachmentImg(id, request.FilePath, request.Description);
 
         return Ok(Id);
     }

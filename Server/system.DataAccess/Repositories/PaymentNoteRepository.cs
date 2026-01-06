@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using CRMSystem.Core.DTOs.PaymentNote;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.PaymentNote;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
@@ -32,23 +33,23 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         return query;
     }
 
-    public async Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter fIlter)
+    public async Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter filter)
     {
         var query = _context.PaymentNotes.AsNoTracking();
-        query = ApplyFilter(query, fIlter);
+        query = ApplyFilter(query, filter);
 
-        query = fIlter.SortBy?.ToLower().Trim() switch
+        query = filter.SortBy?.ToLower().Trim() switch
         {
-            "bill" => fIlter.IsDescending
+            "bill" => filter.IsDescending
                 ? query.OrderByDescending(p => p.BillId)
                 : query.OrderBy(p => p.BillId),
-            "date" => fIlter.IsDescending
+            "date" => filter.IsDescending
                 ? query.OrderByDescending(p => p.Date)
                 : query.OrderBy(p => p.Date),
-            "amount" => fIlter.IsDescending
+            "amount" => filter.IsDescending
                 ? query.OrderByDescending(p => p.Amount)
                 : query.OrderBy(p => p.Amount),
-            "method" => fIlter.IsDescending
+            "method" => filter.IsDescending
                 ? query.OrderByDescending(p => p.Method == null
                     ? string.Empty
                     : p.Method.Name)
@@ -56,22 +57,22 @@ public class PaymentNoteRepository : IPaymentNoteRepository
                     ? string.Empty
                     : p.Method.Name),
 
-            _ => fIlter.IsDescending
+            _ => filter.IsDescending
                 ? query.OrderByDescending(p => p.Id)
                 : query.OrderBy(p => p.Id),
         };
 
         return await query
             .ProjectTo<PaymentNoteItem>(_mapper.ConfigurationProvider)
-            .Skip((fIlter.Page - 1) * fIlter.Limit)
-            .Take(fIlter.Limit)
+            .Skip((filter.Page - 1) * filter.Limit)
+            .Take(filter.Limit)
             .ToListAsync();
     }
 
-    public async Task<int> GetCount(PaymentNoteFilter fIlter)
+    public async Task<int> GetCount(PaymentNoteFilter filter)
     {
         var quety = _context.PaymentNotes.AsNoTracking();
-        quety = ApplyFilter(quety, fIlter);
+        quety = ApplyFilter(quety, filter);
         return await quety.CountAsync();
     }
 

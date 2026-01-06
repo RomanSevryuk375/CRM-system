@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Supplier;
+﻿namespace CRMSystem.Core.ProjectionModels.Supplier;
 
 public record SupplierUpdateModel
 (

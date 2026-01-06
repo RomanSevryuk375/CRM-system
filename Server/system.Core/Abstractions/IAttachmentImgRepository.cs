@@ -1,7 +1,9 @@
-﻿using CRMSystem.Core.DTOs.AttachmentImg;
+﻿// Ignore Spelling: Img
+
+using CRMSystem.Core.ProjectionModels.AttachmentImg;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IAttachmentImgRepository
 {

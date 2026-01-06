@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts;
 using CRM_system_backend.Contracts.Supplier;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Supplier;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Supplier;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;

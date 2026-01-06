@@ -5,12 +5,12 @@ namespace CRMSystem.Core.Models;
 
 public class WorkProposal
 {
-    public WorkProposal(long id, long orderId, long jobId, int wokerId, ProposalStatusEnum statusId, DateTime date)
+    public WorkProposal(long id, long orderId, long jobId, int workerId, ProposalStatusEnum statusId, DateTime date)
     {
         Id = id;
         OrderId = orderId;
         JobId = jobId;
-        WorkerId = wokerId;
+        WorkerId = workerId;
         StatusId = statusId;
         Date = date;
     }
@@ -21,7 +21,7 @@ public class WorkProposal
     public ProposalStatusEnum StatusId { get; }
     public DateTime Date { get; }
 
-    public static (WorkProposal? workPropossal, List<string> errors) Create(long id, long orderId, long jobId, int wokerId, ProposalStatusEnum statusId, DateTime date)
+    public static (WorkProposal? workPropossal, List<string> errors) Create(long id, long orderId, long jobId, int workerId, ProposalStatusEnum statusId, DateTime date)
     {
         var errors = new List<string>();
 
@@ -34,7 +34,7 @@ public class WorkProposal
         var jobIdError = DomainValidator.ValidateId(jobId, "jobId");
         if (!string.IsNullOrEmpty(jobIdError)) errors.Add(jobIdError);
 
-        var workerIdError = DomainValidator.ValidateId(wokerId, "workerId");
+        var workerIdError = DomainValidator.ValidateId(workerId, "workerId");
         if (!string.IsNullOrEmpty(workerIdError)) errors.Add(workerIdError);
 
         var statusError = DomainValidator.ValidateId(statusId, "status");
@@ -46,7 +46,7 @@ public class WorkProposal
         if (errors.Any())
             return (null, errors);
 
-        var workPropossal = new WorkProposal(id, orderId, jobId, wokerId, statusId, date);
+        var workPropossal = new WorkProposal(id, orderId, jobId, workerId, statusId, date);
 
         return (workPropossal, new List<string>());
     }

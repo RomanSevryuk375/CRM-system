@@ -1,11 +1,12 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Schedule;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class ScheduleService : IScheduleService
 {
@@ -13,17 +14,20 @@ public class ScheduleService : IScheduleService
     private readonly IWorkerRepository _workerRepository;
     private readonly IShiftRepository _shiftRepository;
     private readonly ILogger<ScheduleService> _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
     public ScheduleService(
         IScheduleRepository scheduleRepository,
         IWorkerRepository workerRepository,
         IShiftRepository shiftRepository,
-        ILogger<ScheduleService> logger)
+        ILogger<ScheduleService> logger,
+        IUnitOfWork unitOfWork)
     {
         _scheduleRepository = scheduleRepository;
         _workerRepository = workerRepository;
         _shiftRepository = shiftRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<List<ScheduleItem>> GetPagedSchedules(ScheduleFilter filter)
@@ -43,7 +47,7 @@ public class ScheduleService : IScheduleService
 
         var count = await _scheduleRepository.GetCount(filter);
 
-        _logger.LogInformation("Getting count schedules start");
+        _logger.LogInformation("Getting count schedules success");
 
         return count;
     }
@@ -66,14 +70,16 @@ public class ScheduleService : IScheduleService
 
         var Id = await _scheduleRepository.Create(schedule);
 
-        _logger.LogInformation("Creating schedule succes");
+        _logger.LogInformation("Creating schedule success");
 
         return Id;
     }
 
     public async Task<int> CreateWithShift(Schedule schedule, Shift shift)
     {
-        var shiftId = 0;
+        await _unitOfWork.BeginTransactionAsync();
+
+        int shiftId;
         try
         {
             _logger.LogInformation("Creating shift start");
@@ -90,18 +96,21 @@ public class ScheduleService : IScheduleService
 
             _logger.LogInformation("Creating schedule start");
 
-            schedule.SetSshftId(shiftId);
+            schedule.SetShiftId(shiftId);
             var scheduleId = await _scheduleRepository.Create(schedule);
 
             _logger.LogInformation("Creating schedule success");
+
+            await _unitOfWork.CommitTransactionAsync();
 
             return scheduleId;
         }
         catch (ConflictException ex)
         {
-            _logger.LogError(ex, "Failed to creat schedule. Rolling back shift");
-            if (shiftId > 0)
-                await _shiftRepository.Delete(shiftId);
+            _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
+            
+            await _unitOfWork.RollbackAsync();
+
             throw;
         }
     }

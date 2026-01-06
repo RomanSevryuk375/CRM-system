@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Schedule;
+﻿using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IScheduleRepository
 {

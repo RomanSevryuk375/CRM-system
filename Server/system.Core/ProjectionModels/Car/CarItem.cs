@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.Core.DTOs.Car;
+﻿// Ignore Spelling: Vin
+
+namespace CRMSystem.Core.ProjectionModels.Car;
 
 public record CarItem
 {

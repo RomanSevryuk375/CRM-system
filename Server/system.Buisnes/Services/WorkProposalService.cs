@@ -1,14 +1,15 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.WorkProposal;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.WorkProposal;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
-public class WorkPropossalService : IWorkPropossalService
+public class WorkProposalService : IWorkProposalService
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IWorkRepository _workRepository;
@@ -18,9 +19,10 @@ public class WorkPropossalService : IWorkPropossalService
     private readonly IWorkInOrderRepository _workInOrderRepository;
     private readonly IPartSetRepository _partSetRepository;
     private readonly IBillRepository _billRepository;
-    private readonly ILogger<WorkPropossalService> _logger;
+    private readonly ILogger<WorkProposalService> _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public WorkPropossalService(
+    public WorkProposalService(
         IOrderRepository orderRepository,
         IWorkRepository workRepository,
         IWorkerRepository workerRepository,
@@ -29,7 +31,8 @@ public class WorkPropossalService : IWorkPropossalService
         IWorkInOrderRepository workInOrderRepository,
         IPartSetRepository partSetRepository,
         IBillRepository billRepository,
-        ILogger<WorkPropossalService> logger)
+        ILogger<WorkProposalService> logger,
+        IUnitOfWork unitOfWork)
     {
         _orderRepository = orderRepository;
         _workRepository = workRepository;
@@ -40,13 +43,14 @@ public class WorkPropossalService : IWorkPropossalService
         _partSetRepository = partSetRepository;
         _billRepository = billRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<List<WorkProposalItem>> GetPagedProposals(WorkProposalFilter filter)
     {
         _logger.LogInformation("Getting proposals start");
 
-        var proposals = await _workProposalRepository.Getpaged(filter);
+        var proposals = await _workProposalRepository.GetPaged(filter);
 
         _logger.LogInformation("Getting proposals success");
 
@@ -146,50 +150,81 @@ public class WorkPropossalService : IWorkPropossalService
 
     public async Task<long> AcceptProposal(long id)
     {
-        _logger.LogInformation("Accepting proposal start");
+        await _unitOfWork.BeginTransactionAsync();
 
-        var proposal = await _workProposalRepository.GetById(id);
-        _logger.LogInformation("Getting proposal by id success");
+        try
+        {
+            _logger.LogInformation("Accepting proposal start");
 
-        var Id = await _workProposalRepository.AcceptProposal(id);
+            var proposal = await _workProposalRepository.GetById(id);
+            _logger.LogInformation("Getting proposal by id success");
 
-        var transitModel = new WorkInOrder(
-            0,
-            proposal!.OrderId,
-            proposal!.JobId,
-            proposal!.StatusId,
-            WorkStatusEnum.Pending,
-            0);
+            if (proposal == null)
+                throw new NotFoundException($"Proposal {id} not found");
 
-        await _workInOrderRepository.Create(transitModel);
-        _logger.LogInformation("Creating works in WiO success");
+            var Id = await _workProposalRepository.AcceptProposal(id);
 
-        await _partSetRepository.MoveFromProposalToOrder(id, proposal.OrderId);
-        _logger.LogInformation("Mooving parts success");
+            var transitModel = new WorkInOrder(
+                0,
+                proposal.OrderId,
+                proposal.JobId,
+                proposal.StatusId,
+                WorkStatusEnum.Pending,
+                0);
 
-        await _billRepository.RecalculateAmmount(proposal.OrderId);
-        _logger.LogInformation("Bill recalculating success");
+            await _workInOrderRepository.Create(transitModel);
+            _logger.LogInformation("Creating works in WiO success");
 
-        await _workProposalRepository.Delete(id); // временно
-        _logger.LogInformation("Accepting proposal success");
+            await _partSetRepository.MoveFromProposalToOrder(id, proposal.OrderId);
+            _logger.LogInformation("Mooving parts success");
 
-        return Id;
+            await _billRepository.RecalculateAmount(proposal.OrderId);
+            _logger.LogInformation("Bill recalculating success");
+
+            await _workProposalRepository.Delete(id); 
+            _logger.LogInformation("Accepting proposal success");
+
+            await _unitOfWork.CommitTransactionAsync();
+
+            return Id;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
+
+            await _unitOfWork.RollbackAsync();
+            throw;
+        }
     }
 
     public async Task<long> RejectProposal(long id)
     {
-        _logger.LogInformation("Rejecting proposal start");
+        await _unitOfWork.BeginTransactionAsync();
 
-        var Id = await _workProposalRepository.RejectProposal(id);
+        try
+        {
+            _logger.LogInformation("Rejecting proposal start");
 
-        await _partSetRepository.DeleteProposedParts(id);
-        _logger.LogInformation("Deleting parts success");
+            var Id = await _workProposalRepository.RejectProposal(id);
 
-        await _workProposalRepository.Delete(id); // временно
-        _logger.LogInformation("Deleting proposal success");
+            await _partSetRepository.DeleteProposedParts(id);
+            _logger.LogInformation("Deleting parts success");
 
-        _logger.LogInformation("Accepting proposal success");
+            await _workProposalRepository.Delete(id); 
+            _logger.LogInformation("Deleting proposal success");
 
-        return Id;
+            _logger.LogInformation("Rejecting proposal success");
+
+            await _unitOfWork.CommitTransactionAsync();
+
+            return Id;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
+
+            await _unitOfWork.RollbackAsync();
+            throw;
+        }
     }
 }

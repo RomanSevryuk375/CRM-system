@@ -1,9 +1,12 @@
-﻿using AutoMapper;
+﻿// Ignore Spelling: Img
+
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using CRMSystem.Core.DTOs.AcceptanceImg;
+using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.ProjectionModels.AccetanceImg;
 
 namespace CRMSystem.DataAccess.Repositories;
 

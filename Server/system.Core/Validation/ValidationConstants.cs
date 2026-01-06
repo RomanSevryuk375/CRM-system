@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.Core.Constants;
+﻿// Ignore Spelling: VIN
+
+namespace CRMSystem.Core.Constants;
 
 public static class ValidationConstants
 {

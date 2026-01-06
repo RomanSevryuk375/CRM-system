@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Shift;
+﻿namespace CRMSystem.Core.ProjectionModels.Shift;
 
 public record ShiftItem
 {

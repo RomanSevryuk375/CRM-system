@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using CRMSystem.Core.DTOs.Notification;
+using CRM_system_backend.Contracts.Notification;
+using CRMSystem.Core.ProjectionModels.Notification;
 using CRMSystem.DataAccess.Entites;
 
 namespace CRM_system_backend.MapProfile;

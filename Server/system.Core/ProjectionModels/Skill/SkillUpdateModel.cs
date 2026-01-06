@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Skill;
+﻿namespace CRMSystem.Core.ProjectionModels.Skill;
 
 public record SkillUpdateModel
 (

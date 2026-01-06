@@ -1,6 +1,4 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.PaymentNote;
+﻿namespace CRMSystem.Core.ProjectionModels.PaymentNote;
 
 public record PaymentNoteFilter
 (

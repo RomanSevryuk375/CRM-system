@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Car;
+﻿using CRMSystem.Core.ProjectionModels.Car;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface ICarService
 {

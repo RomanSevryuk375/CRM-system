@@ -24,7 +24,6 @@ public class NotificationConfiguration : IEntityTypeConfiguration<NotificationEn
             .IsRequired();
 
         builder.Property(n => n.TypeId)
-            //.HasConversion<int>()
             .IsRequired();
 
         builder.Property(n => n.Message)

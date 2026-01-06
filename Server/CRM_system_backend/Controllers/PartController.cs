@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Part;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Order;
-using CRMSystem.Core.DTOs.Part;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Part;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,7 +66,7 @@ public class PartController : ControllerBase
             request.InternalArticle,
             request.Description,
             request.Name,
-            request.manufacturer,
+            request.Manufacturer,
             request.Applicability);
 
         var Id = await _partService.UpdatePart(id, model);

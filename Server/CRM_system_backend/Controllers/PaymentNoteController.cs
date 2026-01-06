@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.PaymentNote;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.PaymentNote;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.PaymentNote;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;

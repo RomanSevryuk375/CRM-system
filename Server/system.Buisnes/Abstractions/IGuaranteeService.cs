@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Guarantee;
-using CRMSystem.DataAccess.Models;
+﻿using CRMSystem.Core.ProjectionModels.Guarantee;
+using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IGuaranteeService
 {

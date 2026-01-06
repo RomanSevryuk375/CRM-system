@@ -1,11 +1,12 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Skill;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Skill;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class SkillService : ISkillService
 {
@@ -50,7 +51,7 @@ public class SkillService : ISkillService
 
     public async Task<int> CreateSkill(Skill skill)
     {
-        _logger.LogInformation("Cretaing skill start");
+        _logger.LogInformation("Creating skill start");
 
         if (!await _workerRepository.Exists(skill.WorkerId))
         {
@@ -66,7 +67,7 @@ public class SkillService : ISkillService
 
         var Id = await _skillRepository.Create(skill);
 
-        _logger.LogInformation("Cretaing skill success");
+        _logger.LogInformation("Creating skill success");
 
         return Id;
     }

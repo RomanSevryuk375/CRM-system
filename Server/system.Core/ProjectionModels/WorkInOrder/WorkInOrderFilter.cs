@@ -1,6 +1,4 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.WorkInOrder;
+﻿namespace CRMSystem.Core.ProjectionModels.WorkInOrder;
 
 public record WorkInOrderFilter
 (

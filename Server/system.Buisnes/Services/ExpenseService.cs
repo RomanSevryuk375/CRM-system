@@ -1,28 +1,28 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Expense;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Expense;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class ExpenseService : IExpenseService
 {
-    private readonly IExpenseRespository _expenseRespository;
+    private readonly IExpenseRepository _expenseRespository;
     private readonly IExpenseTypeRepository _expenseTypeRepository;
     private readonly IPartSetRepository _partSetRepository;
     private readonly ITaxRepository _taxRepository;
     private readonly ILogger<ExpenseService> _logger;
 
     public ExpenseService(
-        IExpenseRespository expenseRespository,
+        IExpenseRepository expenseRepository,
         IExpenseTypeRepository expenseTypeRepository,
         IPartSetRepository partSetRepository,
         ITaxRepository taxRepository,
         ILogger<ExpenseService> logger)
     {
-        _expenseRespository = expenseRespository;
+        _expenseRespository = expenseRepository;
         _expenseTypeRepository = expenseTypeRepository;
         _partSetRepository = partSetRepository;
         _taxRepository = taxRepository;

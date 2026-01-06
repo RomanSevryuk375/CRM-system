@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Attachment;
+﻿namespace CRMSystem.Core.ProjectionModels.Attachment;
 
 public record AttachmentItem
 {

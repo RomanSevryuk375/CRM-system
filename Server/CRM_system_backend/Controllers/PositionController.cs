@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.Part;
 using CRM_system_backend.Contracts.Position;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Position;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Position;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -13,21 +11,21 @@ namespace CRM_system_backend.Controllers;
 [ApiController]
 public class PositionController : ControllerBase
 {
-    private readonly IPositionSrevice _positionSrevice;
+    private readonly IPositionService _positionSrevice;
     private readonly IMapper _mapper;
 
     public PositionController(
-        IPositionSrevice positionSrevice,
+        IPositionService positionService,
         IMapper mapper)
     {
-        _positionSrevice = positionSrevice;
+        _positionSrevice = positionService;
         _mapper = mapper;
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<PositionItem>>> GetGagedPositions([FromQuery]PositionFilter positionFilter)
+    public async Task<ActionResult<List<PositionItem>>> GetPagedPositions([FromQuery] PositionFilter positionFilter)
     {
-        var dto = await _positionSrevice.GetGagedPositions(positionFilter);
+        var dto = await _positionSrevice.GetPagedPositions(positionFilter);
         var count = await _positionSrevice.GetCountPositions(positionFilter);
 
         var response = _mapper.Map<List<PositionResponse>>(dto);
@@ -62,7 +60,7 @@ public class PositionController : ControllerBase
             request.SellingPrice,
             request.Quantity);
 
-        if(positionErrors is not null && positionErrors.Any()) 
+        if (positionErrors is not null && positionErrors.Any())
             return BadRequest(positionErrors);
 
         var Id = await _positionSrevice.CreatePositionWithPart(position!, part!);

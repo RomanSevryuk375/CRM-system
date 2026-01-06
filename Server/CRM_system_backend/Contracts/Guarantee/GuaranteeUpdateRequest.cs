@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Guarantee;
+﻿namespace CRM_system_backend.Contracts.Guarantee;
 
 public record GuaranteeUpdateRequest
 (

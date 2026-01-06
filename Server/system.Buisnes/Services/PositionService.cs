@@ -1,35 +1,38 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Position;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Position;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
-public class PositionSevice : IPositionSrevice
+public class PositionService : IPositionService
 {
     private readonly IPositionRepository _positionRepository;
     private readonly IPartRepository _partRepository;
     private readonly IStorageCellRepository _cellRepository;
     private readonly IPartCategoryRepository _partCategoryRepository;
-    private readonly ILogger<PositionSevice> _logger;
+    private readonly ILogger<PositionService> _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public PositionSevice(
+    public PositionService(
         IPositionRepository positionRepository,
         IPartRepository partRepository,
         IStorageCellRepository cellRepository,
         IPartCategoryRepository partCategoryRepository,
-        ILogger<PositionSevice> logger)
+        ILogger<PositionService> logger,
+        IUnitOfWork unitOfWork)
     {
         _positionRepository = positionRepository;
         _partRepository = partRepository;
         _cellRepository = cellRepository;
         _partCategoryRepository = partCategoryRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<PositionItem>> GetGagedPositions(PositionFilter positionFilter)
+    public async Task<List<PositionItem>> GetPagedPositions(PositionFilter positionFilter)
     {
         _logger.LogInformation("Getting positions start");
 
@@ -53,7 +56,9 @@ public class PositionSevice : IPositionSrevice
 
     public async Task<long> CreatePositionWithPart(Position position, Part part)
     {
-        var newPartId = 0L;
+        await _unitOfWork.BeginTransactionAsync();
+
+        long newPartId;
         try
         {
             _logger.LogInformation("Creating part start");
@@ -81,13 +86,16 @@ public class PositionSevice : IPositionSrevice
 
             _logger.LogInformation("Creating position success");
 
+            await _unitOfWork.CommitTransactionAsync();
+
             return newPositionId;
         }
         catch (ConflictException ex)
         {
-            _logger.LogError(ex, "Failed to creat part. Rolling back position");
-            if (newPartId > 0)
-                await _partRepository.Delete(newPartId);
+            _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
+            
+            await _unitOfWork.RollbackAsync();
+
             throw;
         }
     }

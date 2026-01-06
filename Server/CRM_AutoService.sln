@@ -5,9 +5,9 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM_system_backend", "CRM_system_backend\CRM_system_backend.csproj", "{8DD87907-CF9C-4A0D-A4CB-4C1E616ECDCF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "system.Buisness", "system.Buisness", "{8CF8A2C0-6E5A-2645-0905-F9FA8E666CFA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "system.Business", "system.Business", "{8CF8A2C0-6E5A-2645-0905-F9FA8E666CFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRMSystem.Buisness", "system.Buisnes\CRMSystem.Buisness.csproj", "{62855923-DED2-447D-9D65-0030987A4657}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRMSystem.Business", "system.Buisnes\CRMSystem.Business.csproj", "{62855923-DED2-447D-9D65-0030987A4657}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "system.Core", "system.Core", "{6BF3463B-995D-0847-FE12-55FDF4447814}"
 EndProject
@@ -97,5 +97,8 @@ Global
 		{62855923-DED2-447D-9D65-0030987A4657} = {8CF8A2C0-6E5A-2645-0905-F9FA8E666CFA}
 		{14AD777B-8821-4F6C-B369-75EE498162BE} = {6BF3463B-995D-0847-FE12-55FDF4447814}
 		{15CD7F78-92EE-4923-9F33-BD0124937F2A} = {03C6C1DD-2E68-9BC2-C459-7A4547502FB8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AE6B4F0A-FB1C-48B3-8891-AFB71376CF0A}
 	EndGlobalSection
 EndGlobal

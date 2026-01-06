@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.DataAccess.Entites;
+﻿// Ignore Spelling: Imgs
+
+namespace CRMSystem.DataAccess.Entites;
 
 public class AcceptanceEntity
 {

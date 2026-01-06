@@ -1,4 +1,5 @@
-﻿using CRMSystem.Core.DTOs.Skill;
+﻿using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Skill;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +20,8 @@ public class SkillRepository : ISkillRepository
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
             query = query.Where(s => filter.WorkerIds.Contains(s.WorkerId));
 
-        if (filter.specializationIds != null && filter.specializationIds.Any())
-            query = query.Where(s => filter.specializationIds.Contains(s.SpecializationId));
+        if (filter.SpecializationIds != null && filter.SpecializationIds.Any())
+            query = query.Where(s => filter.SpecializationIds.Contains(s.SpecializationId));
 
         return query;
     }

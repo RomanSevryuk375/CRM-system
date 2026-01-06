@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace CRMSystem.Buisnes.Extensions;
+namespace CRMSystem.Business.Extensions;
 
-public static class CachedExtenntion
+public static class CachedExtension
 {
     public static async Task<T> GetOrCreateAsync<T>(
         this IDistributedCache cache,

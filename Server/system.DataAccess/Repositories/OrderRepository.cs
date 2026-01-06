@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using CRMSystem.Core.DTOs.Order;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Order;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
@@ -129,7 +130,7 @@ public class OrderRepository : IOrderRepository
         return entity.Id;
     }
 
-    public async Task<long> Complite(long id)
+    public async Task<long> Complete(long id)
     {
         var entity = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new NotFoundException("Order not found");
@@ -177,7 +178,7 @@ public class OrderRepository : IOrderRepository
         .FirstOrDefaultAsync();
     }
 
-    public async Task<bool> PosibleToComplete(long id)
+    public async Task<bool> PossibleToComplete(long id)
     {
         return !await _context.WorksInOrder
             .Where(w => w.OrderId == id)
@@ -185,7 +186,7 @@ public class OrderRepository : IOrderRepository
                             || w.StatusId == (int)WorkStatusEnum.Pending));
     }
 
-    public async Task<bool> PosibleToClose(long id)
+    public async Task<bool> PossibleToClose(long id)
     {
         return await _context.Bills
             .Where(b => b.OrderId == id)

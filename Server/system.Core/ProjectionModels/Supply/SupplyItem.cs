@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Supply;
+﻿namespace CRMSystem.Core.ProjectionModels.Supply;
 
 public record SupplyItem
 {

@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Worker;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Worker;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Worker;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 

@@ -1,6 +1,4 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.Expense;
+﻿namespace CRMSystem.Core.ProjectionModels.Expense;
 
 public record ExpenseItem
 {
@@ -11,6 +9,6 @@ public record ExpenseItem
     public int? TaxId { get; init; }
     public long? PartSetId { get; init; }
     public string ExpenseType { get; init; } = string.Empty;
-    public int ExpenceTypeId { get; init; }
+    public int ExpenseTypeId { get; init; }
     public decimal Sum { get; init; }
 };

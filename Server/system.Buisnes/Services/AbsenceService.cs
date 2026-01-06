@@ -1,11 +1,11 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Absence;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Absence;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class AbsenceService : IAbsenceService
 {
@@ -73,16 +73,14 @@ public class AbsenceService : IAbsenceService
     {
         _logger.LogInformation("Updating absence success");
 
-        var workerId = await _absenceRepository.GetWorkerId(id);
-        if (workerId is null) 
-            throw new NotFoundException($"Absence {id} not found");
-
+        var workerId = await _absenceRepository.GetWorkerId(id)
+            ?? throw new NotFoundException($"Absence {id} not found");
         var newStartDate = model.StartDate;
 
 
         if (newStartDate.HasValue)
         {
-            if (await _absenceRepository.HasOverLap(workerId.Value, newStartDate.Value, model.EndDate, id))
+            if (await _absenceRepository.HasOverLap(workerId, newStartDate.Value, model.EndDate, id))
             {
                 _logger.LogInformation("Has date overlaps for worker{WorkerId}", id);
                 throw new ConflictException($"Has date overlaps for worker{id}");

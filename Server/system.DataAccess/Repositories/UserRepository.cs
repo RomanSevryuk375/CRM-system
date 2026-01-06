@@ -1,7 +1,9 @@
-﻿using CRMSystem.Core.DTOs.User;
+﻿// Ignore Spelling: Hasher
+
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.User;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
-using CRMSystem.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;

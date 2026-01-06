@@ -1,18 +1,19 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using CRMSystem.Core.DTOs.Expense;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Expense;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class ExpenseRespository : IExpenseRespository
+public class ExpenseRepository : IExpenseRepository
 {
     private readonly SystemDbContext _context;
     private readonly IMapper _mapper;
 
-    public ExpenseRespository(
+    public ExpenseRepository(
         SystemDbContext context,
         IMapper mapper)
     {
@@ -111,7 +112,7 @@ public class ExpenseRespository : IExpenseRespository
             ?? throw new Exception("Expence not found");
 
         if (model.Date.HasValue) entity.Date = model.Date.Value;
-        if (!string.IsNullOrWhiteSpace(model.category)) entity.Category = model.category;
+        if (!string.IsNullOrWhiteSpace(model.Category)) entity.Category = model.Category;
         if (model.ExpenseTypeId.HasValue) entity.ExpenseTypeId = (int)model.ExpenseTypeId.Value;
         if (model.Sum.HasValue) entity.Sum = model.Sum.Value;
 

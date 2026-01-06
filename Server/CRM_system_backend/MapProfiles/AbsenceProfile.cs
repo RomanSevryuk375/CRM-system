@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using CRMSystem.Core.DTOs.Absence;
+using CRM_system_backend.Contracts.Absence;
+using CRMSystem.Core.ProjectionModels.Absence;
 using CRMSystem.DataAccess.Entites;
 
 namespace CRM_system_backend.MapProfiles;

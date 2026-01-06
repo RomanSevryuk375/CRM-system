@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.WorkInOrder;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.WorkInOrder;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +23,7 @@ public class WorkInOrderController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<WorkInOrderItem>>> GetPagetWiO([FromQuery] WorkInOrderFilter filter)
+    public async Task<ActionResult<List<WorkInOrderItem>>> GetPagedWiO([FromQuery] WorkInOrderFilter filter)
     {
         var dto = await _workInOrderService.GetPagedWiO(filter);
         var count = await _workInOrderService.GetCountWiO(filter);

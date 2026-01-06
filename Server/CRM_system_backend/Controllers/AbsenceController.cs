@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Absence;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Absence;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using CRM_system_backend.Contracts.Absence;
 
 namespace CRM_system_backend.Controllers;
 
@@ -64,7 +65,7 @@ public class AbsenceController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<int>> DeleteAbsnce(int id)
+    public async Task<ActionResult<int>> DeleteAbsence(int id)
     {
         var Id = await _absenceService.DeleteAbsence(id);
 

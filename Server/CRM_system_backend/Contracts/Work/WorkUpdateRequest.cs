@@ -3,7 +3,7 @@
 public record WorkUpdateRequest
 (
     string? Title,
-    string? Categoty,
+    string? Category,
     string? Description,
     decimal? StandartTime
 );

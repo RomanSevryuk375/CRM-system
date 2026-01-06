@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs;
+﻿namespace CRMSystem.Core.ProjectionModels;
 
 public record WorkInOrderStatusItem
 {

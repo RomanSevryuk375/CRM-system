@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.Constants;
+﻿// Ignore Spelling: Img
+
+using CRMSystem.Core.Constants;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

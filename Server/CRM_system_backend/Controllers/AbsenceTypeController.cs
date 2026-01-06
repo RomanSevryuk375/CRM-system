@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.AbsenceType;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.AbsenceType;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.AbsenceType;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +33,7 @@ public class AbsenceTypeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CretaeAbsenceType([FromBody] AbsenceTypeRequest request)
+    public async Task<ActionResult<int>> CreateAbsenceType([FromBody] AbsenceTypeRequest request)
     {
         var (absenceType, errors) = AbsenceType.Create(
             0,
@@ -42,7 +42,7 @@ public class AbsenceTypeController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _absenceTypeService.CretaeAbsenceType(absenceType!);
+        var Id = await _absenceTypeService.CreateAbsenceType(absenceType!);
 
         return Ok(Id);
     }

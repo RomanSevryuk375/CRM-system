@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Car;
+﻿using CRMSystem.Core.ProjectionModels.Car;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface ICarRepository
 {

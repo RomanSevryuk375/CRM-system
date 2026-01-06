@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.AbsenceType;
+﻿namespace CRM_system_backend.Contracts.AbsenceType;
 
 public record AbsenceTypeResponse
 {

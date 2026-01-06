@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.PaymentNote;
-using CRMSystem.Core.DTOs.PaymentNote;
+using CRMSystem.Core.ProjectionModels.PaymentNote;
 using CRMSystem.DataAccess.Entites;
 
 namespace CRM_system_backend.MapProfiles;

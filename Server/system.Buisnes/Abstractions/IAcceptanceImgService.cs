@@ -1,14 +1,16 @@
-﻿using CRMSystem.Core.DTOs;
-using CRMSystem.Core.DTOs.AcceptanceImg;
+﻿// Ignore Spelling: Img
 
-namespace CRMSystem.Buisness.Abstractions;
+using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.AccetanceImg;
+
+namespace CRMSystem.Business.Abstractions;
 
 public interface IAcceptanceImgService
 {
-    Task<long> CreateAccptanceImg(long AcceptanceId, FileItem file, string? description);
-    Task<long> DeleteAccptanceImg(long id);
+    Task<long> CreateAcceptanceImg(long AcceptanceId, FileItem file, string? description);
+    Task<long> DeleteAcceptanceImg(long id);
     Task<List<AcceptanceImgItem>> GetAcceptanceIng(AcceptanceImgFilter filter);
-    Task<int> GetCountAccptnceImg(AcceptanceImgFilter filter);
+    Task<int> GetCountAcceptanceImg(AcceptanceImgFilter filter);
     Task<(Stream FileStream, string ContentType)> GetImageStream(long id);
-    Task<long> UpdateAccptanceImg(long id, string? filePath, string? description);
+    Task<long> UpdateAcceptanceImg(long id, string? filePath, string? description);
 }

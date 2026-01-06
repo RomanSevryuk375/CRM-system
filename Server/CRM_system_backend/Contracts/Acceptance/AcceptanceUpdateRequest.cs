@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Acceptance;
+﻿namespace CRM_system_backend.Contracts.Acceptance;
 
 public record AcceptanceUpdateRequest
 {

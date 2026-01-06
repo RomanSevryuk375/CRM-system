@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.StorageCell;
+﻿using CRMSystem.Core.ProjectionModels.StorageCell;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IStorageCellService
 {

@@ -1,7 +1,8 @@
-﻿using CRMSystem.Core.DTOs.User;
-using CRMSystem.Core.Models;
+﻿// Ignore Spelling: Jwt
 
-namespace CRMSystem.Buisnes.Extensions;
+using CRMSystem.Core.ProjectionModels.User;
+
+namespace CRMSystem.Core.Abstractions;
 
 public interface IJwtProvider
 {

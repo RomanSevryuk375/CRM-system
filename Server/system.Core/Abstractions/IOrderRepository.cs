@@ -1,9 +1,8 @@
-﻿using CRMSystem.Core.DTOs.Bill;
-using CRMSystem.Core.DTOs.Order;
+﻿using CRMSystem.Core.ProjectionModels.Order;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IOrderRepository
 {
@@ -14,9 +13,9 @@ public interface IOrderRepository
     Task<long> Update(long id, OrderPriorityEnum? priorityId);
     Task<bool> Exists(long id);
     Task<int?> GetStatus(long id);
-    Task<long> Complite(long id);
+    Task<long> Complete(long id);
     Task<long> Close(long id);
-    Task<bool> PosibleToComplete(long id);
-    Task<bool> PosibleToClose(long id);
+    Task<bool> PossibleToComplete(long id);
+    Task<bool> PossibleToClose(long id);
     Task<OrderItem?> GetByProposalId(long proposalId);
 }

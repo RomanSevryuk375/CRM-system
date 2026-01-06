@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Position;
+﻿using CRMSystem.Core.ProjectionModels.Position;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IPositionRepository
 {

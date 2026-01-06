@@ -1,13 +1,14 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Core.DTOs.User;
+﻿// Ignore Spelling: jwt Hasher
+
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.User;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
-using CRMSystem.Infrastructure;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class UserService : IUserService
 {
@@ -30,7 +31,7 @@ public class UserService : IUserService
 
     public async Task<string> LoginUser(string login, string password)
     {
-        _logger.LogInformation("Loggining user start");
+        _logger.LogInformation("Logging user start");
 
         var user = await GetUsersByLogin(login);
 
@@ -44,7 +45,7 @@ public class UserService : IUserService
 
         var token = _jwtProvider.GenerateToken(user);
 
-        _logger.LogInformation("Loggining user success");
+        _logger.LogInformation("Logging user success");
 
         return token;
     }

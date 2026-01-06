@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.StorageCell;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.StorageCell;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.StorageCell;
 using CRMSystem.Core.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;

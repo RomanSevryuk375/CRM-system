@@ -1,10 +1,10 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Extensions;
+using CRMSystem.Core.ProjectionModels;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Cached;
+namespace CRMSystem.Business.Cached;
 
 public class CacheRoleService : IRoleService
 {
@@ -30,6 +30,6 @@ public class CacheRoleService : IRoleService
             CACHE_KEY,
             () => _decorated.GetRoles(),
             TimeSpan.FromHours(24),
-            _logger) ?? new List<RoleItem>();
+            _logger) ?? [];
     }
 }

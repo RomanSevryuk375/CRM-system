@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Client;
+﻿namespace CRM_system_backend.Contracts.Client;
 
 public record ClientUpdateRequest
 (

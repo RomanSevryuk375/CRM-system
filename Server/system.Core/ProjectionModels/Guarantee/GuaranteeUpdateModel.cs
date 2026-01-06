@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Guarantee;
+﻿namespace CRMSystem.Core.ProjectionModels.Guarantee;
 
 public record GuaranteeUpdateModel
 (

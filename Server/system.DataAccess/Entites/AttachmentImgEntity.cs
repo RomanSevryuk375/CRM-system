@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.DataAccess.Entites;
+﻿// Ignore Spelling: Img
+
+namespace CRMSystem.DataAccess.Entites;
 
 public class AttachmentImgEntity
 {

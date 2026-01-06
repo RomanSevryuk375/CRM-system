@@ -1,13 +1,14 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisness.Abstractions;
-using CRMSystem.Core.DTOs;
-using CRMSystem.Core.DTOs.AttachmentImg;
+﻿// Ignore Spelling: Img
+
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.AttachmentImg;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class AttachmentImgService : IAttachmentImgService
 {
@@ -41,9 +42,8 @@ public class AttachmentImgService : IAttachmentImgService
 
     public async Task<(Stream FileStream, string ContentType)> GetImageStream(long id)
     {
-        var img = await _attachmentImgRepository.GetById(id);
-        if (img == null)
-            throw new NotFoundException($"Image {id} not found");
+        var img = await _attachmentImgRepository.GetById(id) 
+            ?? throw new NotFoundException($"Image {id} not found");
 
         var stream = await _fileService.GetFile(img.FilePath);
 
@@ -65,7 +65,7 @@ public class AttachmentImgService : IAttachmentImgService
 
     public async Task<long> CreateAttachmentImg(long attachmentId, FileItem file, string? description)
     {
-        _logger.LogInformation("AttachmentImg creating strart");
+        _logger.LogInformation("AttachmentImg creating start");
 
         if (!await _attachmentRepository.Exists(attachmentId))
         {
@@ -90,7 +90,7 @@ public class AttachmentImgService : IAttachmentImgService
             path,
             description);
 
-        if ((errors is not null && errors.Any()) || attachmentImg == null)
+        if (errors is not null && errors.Any() || attachmentImg == null)
         {
             await _fileService.DeleteFile(path);
 
@@ -106,9 +106,9 @@ public class AttachmentImgService : IAttachmentImgService
         return attachmentImgRes;
     }
 
-    public async Task<long> UpdateAttaachmentImg(long id, string? filePath, string? description)
+    public async Task<long> UpdateAttachmentImg(long id, string? filePath, string? description)
     {
-        _logger.LogInformation("AttachmentImg updating strart");
+        _logger.LogInformation("AttachmentImg updating start");
 
         var attachmentImg = await _attachmentImgRepository.Update(id, filePath, description);
 
@@ -119,7 +119,7 @@ public class AttachmentImgService : IAttachmentImgService
 
     public async Task<long> DeleteAttachmentImg(long id)
     {
-        _logger.LogInformation("AttachmentImg deleting strart");
+        _logger.LogInformation("AttachmentImg deleting start");
 
         var img = await _attachmentImgRepository.GetById(id);
 
@@ -133,7 +133,7 @@ public class AttachmentImgService : IAttachmentImgService
 
         var attachmentImg = await _attachmentImgRepository.Delete(id);
 
-        _logger.LogInformation("AttachmentImg deleting strart");
+        _logger.LogInformation("AttachmentImg deleting start");
 
         return attachmentImg;
     }

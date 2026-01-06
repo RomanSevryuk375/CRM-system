@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Part;
+﻿namespace CRMSystem.Core.ProjectionModels.Part;
 
 public record PartFilter
 (

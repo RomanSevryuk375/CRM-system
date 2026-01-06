@@ -1,5 +1,4 @@
 ﻿using CRMSystem.Core.Constants;
-using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -19,7 +18,6 @@ public class CarConfiguration : IEntityTypeConfiguration<CarEntity>
             .IsRequired();
 
         builder.Property(c => c.StatusId)
-            //.HasConversion<int>()
             .IsRequired();
 
         builder.Property(c => c.Brand)

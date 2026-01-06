@@ -1,11 +1,12 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Attachment;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Attachment;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class AttachmentService : IAttachmentService
 {
@@ -37,9 +38,9 @@ public class AttachmentService : IAttachmentService
         return attachment;
     }
 
-    public async Task<int> GetCountAttchment(AttachmentFilter filter)
+    public async Task<int> GetCountAttachment(AttachmentFilter filter)
     {
-        _logger.LogInformation("Getting count attachments success");
+        _logger.LogInformation("Getting count attachments start");
 
         var count = await _attachmentRepository.GetCount(filter);
 
@@ -73,7 +74,7 @@ public class AttachmentService : IAttachmentService
 
     public async Task<long> UpdateAttachment(long id, string? description)
     {
-        _logger.LogInformation("Updating attachments success");
+        _logger.LogInformation("Updating attachments start");
 
         var Id = await _attachmentRepository.Update(id, description);
 
@@ -82,9 +83,9 @@ public class AttachmentService : IAttachmentService
         return Id;
     }
 
-    public async Task<long> DeleteingAttachment(long id)
+    public async Task<long> DeletingAttachment(long id)
     {
-        _logger.LogInformation("Deleting attachments success");
+        _logger.LogInformation("Deleting attachments start");
 
         var Id = await _attachmentRepository.Delete(id);
 

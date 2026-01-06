@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Tax;
+﻿namespace CRMSystem.Core.ProjectionModels.Tax;
 
 public record TaxItem
 {

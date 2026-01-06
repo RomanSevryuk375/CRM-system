@@ -1,6 +1,6 @@
-﻿using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Core.ProjectionModels;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface ITaxTypeService
 {

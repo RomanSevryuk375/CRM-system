@@ -1,29 +1,33 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Client;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Client;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class ClientService : IClientService
 {
     private readonly IClientRepository _clientRepository;
     private readonly IUserRepository _userRepository;
     private readonly ILogger<ClientService> _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
     public ClientService(
         IClientRepository clientRepository,
         IUserRepository userRepository,
-        ILogger<ClientService> logger)
+        ILogger<ClientService> logger,
+        IUnitOfWork unitOfWork)
     {
         _clientRepository = clientRepository;
         _userRepository = userRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<ClientItem>> GetPagedCkients(ClientFilter filter)
+    public async Task<List<ClientItem>> GetPagedClients(ClientFilter filter)
     {
         _logger.LogInformation("Getting client start");
 
@@ -80,7 +84,9 @@ public class ClientService : IClientService
 
     public async Task<long> CreateClientWithUser(Client client, User user)
     {
-        var userId = 0L;
+        await _unitOfWork.BeginTransactionAsync();
+
+        long userId;
         try
         {
             _logger.LogInformation("Creating user start");
@@ -92,13 +98,16 @@ public class ClientService : IClientService
 
             _logger.LogInformation("Creating client success");
 
+            await _unitOfWork.CommitTransactionAsync();
+
             return Id;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to create client. Rolling back user.");
-            if (userId > 0)
-                await _userRepository.Delete(userId);
+            _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
+            
+            await _unitOfWork.RollbackAsync();
+
             throw;
         }
     }

@@ -1,6 +1,6 @@
 ﻿using CRMSystem.Core.Enums;
 
-namespace CRMSystem.Core.DTOs.Order;
+namespace CRM_system_backend.Contracts.Order;
 
 public record OrderWithBillRequest
 (

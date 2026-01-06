@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.PartCategory;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.PartCategory;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.PartCategory;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 

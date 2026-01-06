@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.Enums;
+﻿// Ignore Spelling: Vin
+
+using CRMSystem.Core.Enums;
 
 namespace CRMSystem.DataAccess.Entites;
 

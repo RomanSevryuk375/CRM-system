@@ -1,6 +1,6 @@
 ﻿namespace CRM_system_backend.Contracts.Client;
 
-public record ClientRegistreRequest
+public record ClientRegisterRequest
 (
     long UserId,
     string Name,

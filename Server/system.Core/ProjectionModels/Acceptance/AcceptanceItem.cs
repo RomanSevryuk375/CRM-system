@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Acceptance;
+﻿namespace CRMSystem.Core.ProjectionModels.Acceptance;
 
 public record AcceptanceItem
 {

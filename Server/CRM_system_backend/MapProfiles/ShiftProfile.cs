@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Shift;
-using CRMSystem.Core.DTOs.Shift;
+using CRMSystem.Core.ProjectionModels.Shift;
 using CRMSystem.DataAccess.Entites;
 
 namespace CRM_system_backend.MapProfiles;

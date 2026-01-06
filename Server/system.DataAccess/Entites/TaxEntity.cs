@@ -1,6 +1,4 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.DataAccess.Entites;
+﻿namespace CRMSystem.DataAccess.Entites;
 
 public class TaxEntity
 {

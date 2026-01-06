@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Work;
+﻿using CRMSystem.Core.ProjectionModels.Work;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IWorkService
 {

@@ -1,9 +1,10 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class WorkProposalStatusService : IWorkProposalStatusService
 {
@@ -20,11 +21,11 @@ public class WorkProposalStatusService : IWorkProposalStatusService
 
     public async Task<List<WorkProposalStatusItem>> GetProposalStatuses()
     {
-        _logger.LogInformation("Getting proposal statses start");
+        _logger.LogInformation("Getting proposal statuses start");
 
         var statuses = await _workProposalStatusRepository.Get();
 
-        _logger.LogInformation("Getting proposal statses success");
+        _logger.LogInformation("Getting proposal statuses success");
 
         return statuses;
     }

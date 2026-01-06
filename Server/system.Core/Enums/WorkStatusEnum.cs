@@ -1,8 +1,8 @@
 ﻿namespace CRMSystem.Core.Enums;
 
-public enum WorkStatusEnum : int
+public enum WorkStatusEnum 
 {
-    InProgress = 1, //В работе
-    Pending = 2, //В ожидании
-    Completed = 3, //завершен
+    InProgress = 1, 
+    Pending = 2, 
+    Completed = 3,
 }

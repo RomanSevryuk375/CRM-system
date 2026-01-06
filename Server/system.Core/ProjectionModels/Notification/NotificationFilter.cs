@@ -1,6 +1,4 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.Notification;
+﻿namespace CRMSystem.Core.ProjectionModels.Notification;
 
 public record NotificationFilter
 (

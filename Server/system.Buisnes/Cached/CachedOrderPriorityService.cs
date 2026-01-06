@@ -1,10 +1,10 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Extensions;
+using CRMSystem.Core.ProjectionModels;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Cached;
+namespace CRMSystem.Business.Cached;
 
 public class CachedOrderPriorityService : IOrderPriorityService
 {
@@ -23,12 +23,12 @@ public class CachedOrderPriorityService : IOrderPriorityService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<List<OrderPriorityItem>> GetPrioritys()
+    public async Task<List<OrderPriorityItem>> GetPriorities()
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetPrioritys(),
+            () => _decorated.GetPriorities(),
             TimeSpan.FromHours(24),
-            _logger) ?? new List<OrderPriorityItem>();
+            _logger) ?? [];
     }
 }

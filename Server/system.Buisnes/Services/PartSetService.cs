@@ -1,11 +1,12 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.PartSet;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.PartSet;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class PartSetService : IPartSetService
 {
@@ -38,7 +39,7 @@ public class PartSetService : IPartSetService
 
         var partSets = await _partSetRepository.GetPaged(filter);
 
-        _logger.LogInformation("Getting partset success");
+        _logger.LogInformation("Getting part set success");
 
         return partSets;
     }
@@ -110,8 +111,8 @@ public class PartSetService : IPartSetService
 
         if (partSet.OrderId.HasValue)
         {
-            _logger.LogInformation("Recalculating bill srart");
-            await _billRepository.RecalculateAmmount(partSet.OrderId.Value);
+            _logger.LogInformation("Recalculating bill start");
+            await _billRepository.RecalculateAmount(partSet.OrderId.Value);
             _logger.LogInformation("Recalculating bill success");
         }
 
@@ -128,8 +129,8 @@ public class PartSetService : IPartSetService
 
         if (partSet is not null && partSet.OrderId.HasValue)
         {
-            _logger.LogInformation("Recalculating bill srart");
-            await _billRepository.RecalculateAmmount(partSet.OrderId.Value);
+            _logger.LogInformation("Recalculating bill start");
+            await _billRepository.RecalculateAmount(partSet.OrderId.Value);
             _logger.LogInformation("Recalculating bill success");
         }
 
@@ -148,8 +149,8 @@ public class PartSetService : IPartSetService
 
         if (partSet is not null && partSet.OrderId.HasValue)
         {
-            _logger.LogInformation("Recalculating bill srart");
-            await _billRepository.RecalculateAmmount(partSet.OrderId.Value);
+            _logger.LogInformation("Recalculating bill start");
+            await _billRepository.RecalculateAmount(partSet.OrderId.Value);
             _logger.LogInformation("Recalculating bill success");
         }
 

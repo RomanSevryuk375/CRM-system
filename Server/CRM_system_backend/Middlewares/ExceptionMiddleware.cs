@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.Exceptions;
+﻿// Ignore Spelling: Middleware
+
+using CRMSystem.Core.Exceptions;
 
 namespace CRM_system_backend.Middlewares;
 

@@ -1,10 +1,10 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Extensions;
+using CRMSystem.Core.ProjectionModels;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Cached;
+namespace CRMSystem.Business.Cached;
 
 public class CachedWorkProposalStatusService : IWorkProposalStatusService
 {
@@ -29,6 +29,6 @@ public class CachedWorkProposalStatusService : IWorkProposalStatusService
             CACHE_KEY,
             () => _decorated.GetProposalStatuses(),
             TimeSpan.FromHours(24),
-            _logger) ?? new List<WorkProposalStatusItem>();
+            _logger) ?? [];
     }
 }

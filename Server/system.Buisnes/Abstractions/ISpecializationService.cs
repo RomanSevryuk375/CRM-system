@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface ISpecializationService
 {

@@ -1,12 +1,13 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Order;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Order;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class OrderService : IOrderService
 {
@@ -16,6 +17,7 @@ public class OrderService : IOrderService
     private readonly IOrderPriorityRepository _orderPriorityRepository;
     private readonly IBillRepository _billRepository;
     private readonly ILogger<OrderService> _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
     public OrderService(
         IOrderRepository orderRepository,
@@ -23,7 +25,8 @@ public class OrderService : IOrderService
         ICarRepository carRepository,
         IOrderPriorityRepository orderPriorityRepository,
         IBillRepository billRepository,
-        ILogger<OrderService> logger)
+        ILogger<OrderService> logger,
+        IUnitOfWork unitOfWork)
     {
         _orderRepository = orderRepository;
         _orderStatusRepository = orderStatusRepository;
@@ -31,6 +34,7 @@ public class OrderService : IOrderService
         _orderPriorityRepository = orderPriorityRepository;
         _billRepository = billRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<List<OrderItem>> GetPagedOrders(OrderFilter filter)
@@ -86,7 +90,9 @@ public class OrderService : IOrderService
 
     public async Task<long> CreateOrderWithBill(Order order, Bill bill)
     {
-        var orderId = 0L;
+        await _unitOfWork.BeginTransactionAsync();
+
+        long orderId;
         try
         {
             _logger.LogInformation("Creating orders start");
@@ -116,13 +122,16 @@ public class OrderService : IOrderService
 
             _logger.LogInformation("Creating orders success");
 
+            await _unitOfWork.CommitTransactionAsync();
+
             return orderId;
         }
         catch (ConflictException ex)
         {
-            _logger.LogError(ex, "Failed to creat bill. Rolling back order");
-            if (orderId > 0)
-                await _orderRepository.Delete(orderId);
+            _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
+            
+            await _unitOfWork.RollbackAsync();
+
             throw;
         }
     }
@@ -159,10 +168,10 @@ public class OrderService : IOrderService
     {
         _logger.LogInformation("Closing orders start");
 
-        if (!await _orderRepository.PosibleToClose(id))
+        if (!await _orderRepository.PossibleToClose(id))
         {
-            _logger.LogInformation("Order{orderId} has not paied bill", id);
-            throw new ConflictException($"Order{id} has not paied bill");
+            _logger.LogInformation("Order{orderId} has not paid bill", id);
+            throw new ConflictException($"Order{id} has not paid bill");
         }
 
         var Id = await _orderRepository.Close(id);
@@ -172,17 +181,17 @@ public class OrderService : IOrderService
         return Id;
     }
 
-    public async Task<long> CompliteOrder(long id)
+    public async Task<long> CompleteOrder(long id)
     {
         _logger.LogInformation("Closing orders start");
 
-        if (await _orderRepository.PosibleToComplete(id))
+        if (await _orderRepository.PossibleToComplete(id))
         {
-            _logger.LogInformation("Order{id} has unfinished complited works", id);
-            throw new ConflictException("Order has unfinished complited works");
+            _logger.LogInformation("Order{id} has unfinished works", id);
+            throw new ConflictException("Order has unfinished works");
         }
 
-        var Id = await _orderRepository.Complite(id);
+        var Id = await _orderRepository.Complete(id);
 
         _logger.LogInformation("Closing orders success");
 

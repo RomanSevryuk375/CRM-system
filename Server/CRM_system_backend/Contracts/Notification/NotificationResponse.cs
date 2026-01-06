@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Notification;
+﻿namespace CRM_system_backend.Contracts.Notification;
 
 public record NotificationResponse
 {

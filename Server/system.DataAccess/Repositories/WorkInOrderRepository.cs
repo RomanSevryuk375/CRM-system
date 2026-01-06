@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using CRMSystem.Core.DTOs.WorkInOrder;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;

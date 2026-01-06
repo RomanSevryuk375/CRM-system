@@ -1,4 +1,8 @@
-﻿namespace CRMSystem.Infrastructure;
+﻿// Ignore Spelling: Hasher
+
+using CRMSystem.Core.Abstractions;
+
+namespace CRMSystem.Business.Extensions;
 
 public class MyPasswordHasher : IMyPasswordHasher
 {

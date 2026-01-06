@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CRMSystem.DataAccess.Configurations;
 
-public class BillStatusConfiguretion : IEntityTypeConfiguration<BillStatusEntity>
+public class BillStatusConfiguration : IEntityTypeConfiguration<BillStatusEntity>
 {
     void IEntityTypeConfiguration<BillStatusEntity>.Configure(EntityTypeBuilder<BillStatusEntity> builder)
     {

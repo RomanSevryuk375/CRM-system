@@ -1,8 +1,8 @@
-﻿using CRMSystem.Core.DTOs.PaymentNote;
+﻿using CRMSystem.Core.ProjectionModels.PaymentNote;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IPaymentNoteService
 {

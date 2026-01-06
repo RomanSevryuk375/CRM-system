@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Order;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Order;
-using CRMSystem.Core.Enums;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Order;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -84,9 +83,9 @@ public class OrderController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateOrder([FromBody] OrderUpdateReuqest reuqest, int id)
+    public async Task<ActionResult<long>> UpdateOrder([FromBody] OrderUpdateRequest request, int id)
     {
-        var Id = await _orderService.UpdateOrder(id, reuqest.PriorityId);
+        var Id = await _orderService.UpdateOrder(id, request.PriorityId);
 
         return Ok(Id);
     }
@@ -99,10 +98,10 @@ public class OrderController : ControllerBase
         return Ok(Id);
     }
 
-    [HttpPatch("complite/{id}")]
-    public async Task<ActionResult<long>> CompliteOrder(long id)
+    [HttpPatch("complete/{id}")]
+    public async Task<ActionResult<long>> CompleteOrder(long id)
     {
-        var Id = await _orderService.CompliteOrder(id);
+        var Id = await _orderService.CompleteOrder(id);
 
         return Ok(Id);
     }

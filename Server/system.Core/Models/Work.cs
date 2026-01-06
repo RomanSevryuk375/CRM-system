@@ -5,13 +5,13 @@ namespace CRMSystem.Core.Models;
 
 public class Work
 {
-    public Work(long id, string title, string categoty, string description, decimal standartTime)
+    public Work(long id, string title, string category, string description, decimal standardTime)
     {
         Id = id;
         Title = title;
-        Category = categoty;
+        Category = category;
         Description = description;
-        StandardTime = standartTime;
+        StandardTime = standardTime;
     }
     public long Id { get; }
     public string Title { get; }
@@ -19,7 +19,7 @@ public class Work
     public string Description { get;} 
     public decimal StandardTime { get; }
 
-    public static (Work? work, List<string> errors) Create(long id, string title, string categoty, string description, decimal standartTime)
+    public static (Work? work, List<string> errors) Create(long id, string title, string category, string description, decimal standardTime)
     {
         var errors = new List<string>();
 
@@ -29,19 +29,19 @@ public class Work
         var titleError = DomainValidator.ValidateString(title, ValidationConstants.MAX_NAME_LENGTH, "title");
         if (!string.IsNullOrEmpty(titleError)) errors.Add(titleError);
 
-        var categoryError = DomainValidator.ValidateString(categoty, ValidationConstants.MAX_CATEGORY_LENGTH, "category");
+        var categoryError = DomainValidator.ValidateString(category, ValidationConstants.MAX_CATEGORY_LENGTH, "category");
         if (!string.IsNullOrEmpty(categoryError)) errors.Add(categoryError);
 
         var descriptionError = DomainValidator.ValidateString(description, ValidationConstants.MAX_DESCRIPTION_LENGTH, "description");
         if (!string.IsNullOrEmpty(descriptionError)) errors.Add(descriptionError);
 
-        var standardTimeError = DomainValidator.ValidateMoney(standartTime, "time");
+        var standardTimeError = DomainValidator.ValidateMoney(standardTime, "time");
         if (!string.IsNullOrEmpty(standardTimeError)) errors.Add(standardTimeError);
 
         if (errors.Any())
             return (null, errors);
 
-        var work = new Work(id, title, categoty, description, standartTime);
+        var work = new Work(id, title, category, description, standardTime);
 
         return (work, errors);
     }

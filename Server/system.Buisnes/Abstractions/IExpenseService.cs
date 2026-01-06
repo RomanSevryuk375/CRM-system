@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Expense;
+﻿using CRMSystem.Core.ProjectionModels.Expense;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IExpenseService
 {

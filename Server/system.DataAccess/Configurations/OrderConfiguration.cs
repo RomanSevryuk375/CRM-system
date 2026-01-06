@@ -14,7 +14,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
         builder.HasKey(x => x.Id);
 
         builder.Property(o => o.StatusId)
-            //.HasConversion<int>()
             .IsRequired();
 
         builder.Property(o => o.CarId)
@@ -24,7 +23,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
             .IsRequired();
 
         builder.Property(o => o.PriorityId)
-            //.HasConversion<int>()
             .IsRequired();
 
         builder.HasOne(o => o.Car)

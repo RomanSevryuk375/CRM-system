@@ -1,8 +1,8 @@
-﻿namespace CRMSystem.Core.DTOs.Shift;
+﻿namespace CRMSystem.Core.ProjectionModels.Shift;
 
 public record ShiftUpdateModel
 (
-  string? name,
-  TimeOnly? startAt,
+  string? Name,
+  TimeOnly? StartAt,
   TimeOnly? EndAt
 );

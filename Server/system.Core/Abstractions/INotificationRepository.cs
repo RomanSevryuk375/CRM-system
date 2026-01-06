@@ -1,13 +1,12 @@
-﻿using CRMSystem.Core.DTOs.Notification;
+﻿using CRMSystem.Core.ProjectionModels.Notification;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories
+namespace CRMSystem.Core.Abstractions;
+
+public interface INotificationRepository
 {
-    public interface INotificationRepository
-    {
-        Task<long> Create(Notification notification);
-        Task<long> Delete(long id);
-        Task<int> GetCount(NotificationFilter filter);
-        Task<List<NotificationItem>> GetPaged(NotificationFilter filter);
-    }
+    Task<long> Create(Notification notification);
+    Task<long> Delete(long id);
+    Task<int> GetCount(NotificationFilter filter);
+    Task<List<NotificationItem>> GetPaged(NotificationFilter filter);
 }

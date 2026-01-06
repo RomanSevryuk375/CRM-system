@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using CRMSystem.Core.DTOs.Bill;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Bill;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
@@ -131,7 +132,7 @@ public class BillRepository : IBillRepository
             .AnyAsync(b => b.Id == id);
     }
 
-    public async Task<long> RecalculateAmmount(long orderId)
+    public async Task<long> RecalculateAmount(long orderId)
     {
         var bill = await _context.Bills.FirstOrDefaultAsync(b => b.OrderId == orderId)
             ?? throw new NotFoundException("Bill not found");

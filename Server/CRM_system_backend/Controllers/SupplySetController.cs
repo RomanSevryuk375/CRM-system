@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.SupplySet;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.SupplySet;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.SupplySet;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,9 +23,9 @@ public class SupplySetController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<SupplySetItem>>> GetPagetSupplySets([FromQuery] SupplySetFilter filter)
+    public async Task<ActionResult<List<SupplySetItem>>> GetPagedSupplySets([FromQuery] SupplySetFilter filter)
     {
-        var dto = await _supplySetService.GetPagetSupplySets(filter);
+        var dto = await _supplySetService.GetPagedSupplySets(filter);
         var count = await _supplySetService.GetCountSupplySets(filter);
 
         var response = _mapper.Map<List<SupplySetResponse>>(dto);

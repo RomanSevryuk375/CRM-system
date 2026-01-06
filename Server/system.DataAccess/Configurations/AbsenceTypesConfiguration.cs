@@ -1,6 +1,5 @@
 ﻿using CRMSystem.Core.Constants;
 using CRMSystem.Core.Enums;
-using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

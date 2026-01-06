@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\system.Buisnes\CRMSystem.Buisness.csproj" />
+    <ProjectReference Include="..\system.Buisnes\CRMSystem.Business.csproj" />
     <ProjectReference Include="..\system.Core\CRMSystem.Core.csproj" />
     <ProjectReference Include="..\system.DataAccess\CRMSystem.DataAccess.csproj" />
 

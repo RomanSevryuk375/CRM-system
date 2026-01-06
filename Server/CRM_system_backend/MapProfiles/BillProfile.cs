@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using CRMSystem.Core.DTOs.Bill;
+using CRM_system_backend.Contracts.Bill;
+using CRMSystem.Core.ProjectionModels.Bill;
 using CRMSystem.DataAccess.Entites;
 
 namespace CRM_system_backend.MapProfiles;
@@ -13,7 +14,7 @@ public class BillProfile : Profile
         CreateMap<BillUpdateRequest, BillUpdateModel>();
 
         CreateMap<BillEntity, BillItem>()
-            .ForMember(dest => dest,
+            .ForMember(dest => dest.Status,
                         opt => opt.MapFrom(src => $"{src.Status!.Name}"));
     }
 }

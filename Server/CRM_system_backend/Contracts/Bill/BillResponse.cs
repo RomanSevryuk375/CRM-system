@@ -1,9 +1,9 @@
-﻿namespace CRMSystem.Core.DTOs.Bill;
+﻿namespace CRM_system_backend.Contracts.Bill;
 
 public record BillResponse
 {
     public long Id { get; init; }
-    public long OrderIdv { get; init; }
+    public long OrderId { get; init; }
     public string Status { get; init; } = string.Empty;
     public int StatusId { get; init; }
     public DateTime CreatedAt { get; init; }

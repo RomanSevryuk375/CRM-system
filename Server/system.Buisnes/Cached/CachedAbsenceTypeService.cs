@@ -1,12 +1,12 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Buisnes.Services;
-using CRMSystem.Core.DTOs.AbsenceType;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Extensions;
+using CRMSystem.Business.Services;
+using CRMSystem.Core.ProjectionModels.AbsenceType;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Cached;
+namespace CRMSystem.Business.Cached;
 
 public class CachedAbsenceTypeService : IAbsenceTypeService
 {
@@ -25,9 +25,9 @@ public class CachedAbsenceTypeService : IAbsenceTypeService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<int> CretaeAbsenceType(AbsenceType absenceType)
+    public async Task<int> CreateAbsenceType(AbsenceType absenceType)
     {
-        var Id = await _decorated.CretaeAbsenceType(absenceType);
+        var Id = await _decorated.CreateAbsenceType(absenceType);
 
         await _distributed.RemoveAsync(CACHE_KEY);
 
@@ -53,7 +53,7 @@ public class CachedAbsenceTypeService : IAbsenceTypeService
             CACHE_KEY,
             () => _decorated.GetAllAbsenceType(),
             TimeSpan.FromHours(24),
-            _logger) ?? new List<AbsenceTypeItem>();
+            _logger) ?? [];
     }
 
     public async Task<int> UpdateAbsenceType(int id, string name)

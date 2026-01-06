@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Schedule;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Schedule;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 

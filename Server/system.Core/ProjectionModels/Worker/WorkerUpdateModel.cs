@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Worker;
+﻿namespace CRMSystem.Core.ProjectionModels.Worker;
 
 public record WorkerUpdateModel
 (

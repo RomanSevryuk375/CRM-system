@@ -1,6 +1,6 @@
 ﻿using CRMSystem.Core.Enums;
 
-namespace CRMSystem.Core.DTOs.Car;
+namespace CRM_system_backend.Contracts.Car;
 
 public record CarUpdateRequest
 (

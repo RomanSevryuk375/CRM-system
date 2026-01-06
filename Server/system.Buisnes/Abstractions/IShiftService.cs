@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Shift;
+﻿using CRMSystem.Core.ProjectionModels.Shift;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IShiftService
 {

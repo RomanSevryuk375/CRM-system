@@ -1,7 +1,7 @@
 ﻿using CRMSystem.Core.Constants;
 using CRMSystem.Core.Validation;
 
-namespace CRMSystem.DataAccess.Models;
+namespace CRMSystem.Core.Models;
 
 public class Guarantee
 {

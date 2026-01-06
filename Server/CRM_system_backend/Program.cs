@@ -1,17 +1,14 @@
 using CRM_system_backend.Extensions;
 using CRM_system_backend.Middlewares;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Cached;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Buisnes.Services;
-using CRMSystem.Buisness.Abstractions;
-using CRMSystem.Buisness.Services;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Cached;
+using CRMSystem.Business.Extensions;
+using CRMSystem.Business.Services;
+using CRMSystem.Core.Abstractions;
 using CRMSystem.DataAccess;
 using CRMSystem.DataAccess.Repositories;
-using CRMSystem.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace CRM_system_backend;
@@ -33,7 +30,7 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddAutoMapper(cfg =>
         {
-            cfg.AddMaps(typeof(Program).Assembly);                                                // cfg.AddMaps(typeof(AbsenceService).Assembly); // Если профили в Business
+            cfg.AddMaps(typeof(Program).Assembly);                          
         });
 
         builder.Services.AddCors(options =>
@@ -66,6 +63,8 @@ public class Program
         builder.Services.AddScoped<IJwtProvider, JwtProvider>();
         builder.Services.AddScoped<IMyPasswordHasher, MyPasswordHasher>();
         builder.Services.AddScoped<IFileService, MinioFileService>();
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
         builder.Services.AddScoped<IAbsenceRepository, AbsenceRepository>();
         builder.Services.AddScoped<IAbsenceTypeRepository, AbsenceTypeRepository>();
@@ -78,7 +77,7 @@ public class Program
         builder.Services.AddScoped<ICarRepository, CarRepository>();
         builder.Services.AddScoped<ICarStatusRepository, CarStatusRepository>();
         builder.Services.AddScoped<IClientRepository, ClientsRepository>();
-        builder.Services.AddScoped<IExpenseRespository, ExpenseRespository>();
+        builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
         builder.Services.AddScoped<IExpenseTypeRepository, ExpenseTypeRepository>();
         builder.Services.AddScoped<IGuaranteeRepository, GuaranteeRepository>();
         builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
@@ -126,7 +125,7 @@ public class Program
         builder.Services.AddScoped<IPartService, PartService>();
         builder.Services.AddScoped<IPartSetService, PartSetService>();
         builder.Services.AddScoped<IPaymentNoteService, PaymentNoteService>();
-        builder.Services.AddScoped<IPositionSrevice, PositionSevice>(); 
+        builder.Services.AddScoped<IPositionService, PositionService>(); 
         builder.Services.AddScoped<IRoleService, RoleService>();
         builder.Services.AddScoped<IScheduleService, ScheduleService>();
         builder.Services.AddScoped<IShiftService, ShiftService>();
@@ -140,7 +139,7 @@ public class Program
         builder.Services.AddScoped<IWorkService, WorkService>();
         builder.Services.AddScoped<IWorkInOrderService, WorkInOrderService>();
         builder.Services.AddScoped<IWorkerService, WorkerService>();
-        builder.Services.AddScoped<IWorkPropossalService, WorkPropossalService>(); 
+        builder.Services.AddScoped<IWorkProposalService, WorkProposalService>(); 
 
         builder.Services.AddScoped<AbsenceTypeService>();
         builder.Services.AddScoped<IAbsenceTypeService>(provider =>

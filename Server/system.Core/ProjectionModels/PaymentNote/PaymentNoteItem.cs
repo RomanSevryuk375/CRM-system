@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.PaymentNote;
+﻿namespace CRMSystem.Core.ProjectionModels.PaymentNote;
 
 public record PaymentNoteItem
 {

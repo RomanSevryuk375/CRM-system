@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.WorkInOrder;
+﻿using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IWorkInOrderService
 {

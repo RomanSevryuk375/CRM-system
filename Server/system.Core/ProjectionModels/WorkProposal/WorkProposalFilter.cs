@@ -1,6 +1,4 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.WorkProposal;
+﻿namespace CRMSystem.Core.ProjectionModels.WorkProposal;
 
 public record WorkProposalFilter
 (

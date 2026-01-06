@@ -1,6 +1,4 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.Absence;
+﻿namespace CRMSystem.Core.ProjectionModels.Absence;
 
 public record AbsenceItem
 {

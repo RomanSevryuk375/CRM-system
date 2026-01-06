@@ -1,8 +1,7 @@
-﻿using CRMSystem.Core.DTOs.PartSet;
+﻿using CRMSystem.Core.ProjectionModels.PartSet;
 using CRMSystem.Core.Models;
-using System.Threading.Tasks;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IPartSetRepository
 {

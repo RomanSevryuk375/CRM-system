@@ -1,9 +1,11 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs;
-using CRMSystem.DataAccess.Repositories;
+﻿// Ignore Spelling: repo
+
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class NotificationStatusService : INotificationStatusService
 {

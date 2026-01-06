@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Client;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Client;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Client;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +25,7 @@ public class ClientController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<ClientItem>>> GetPagedClient([FromQuery] ClientFilter filter)
     {
-        var dto = await _clientService.GetPagedCkients(filter);
+        var dto = await _clientService.GetPagedClients(filter);
         var count = await _clientService.GetCountClients(filter);
 
         var response = _mapper.Map<List<ClientsResponse>>(dto);
@@ -63,7 +63,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpPost("with-user")]
-    public async Task<ActionResult<int>> CreateClientWithUser([FromBody] ClientRegistreRequest request)
+    public async Task<ActionResult<int>> CreateClientWithUser([FromBody] ClientRegisterRequest request)
     {
         var (user, errorsUser) = CRMSystem.Core.Models.User.Create(
             0,

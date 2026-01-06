@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.PartCategory;
+﻿namespace CRM_system_backend.Contracts.PartCategory;
 
 public record PartCategoryResponse
 {

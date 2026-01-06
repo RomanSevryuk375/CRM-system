@@ -1,13 +1,13 @@
-﻿using CRMSystem.Core.DTOs.Order;
+﻿using CRMSystem.Core.ProjectionModels.Order;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IOrderService
 {
     Task<long> CloseOrder(long id);
-    Task<long> CompliteOrder(long id);
+    Task<long> CompleteOrder(long id);
     Task<long> CreateOrder(Order order);
     Task<long> CreateOrderWithBill(Order order, Bill bill);
     Task<long> DeleteOrder(long id);

@@ -1,10 +1,10 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Extensions;
+using CRMSystem.Core.ProjectionModels;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Cached;
+namespace CRMSystem.Business.Cached;
 
 public class CachedPaymentMethodService : IPaymentMethodService
 {
@@ -29,7 +29,7 @@ public class CachedPaymentMethodService : IPaymentMethodService
             CACHE_KEY,
             () => _decorated.GetPaymentMethods(),
             TimeSpan.FromHours(24),
-            _logger) ?? new List<PaymentMethodItem>();
+            _logger) ?? [];
 
     }
 }

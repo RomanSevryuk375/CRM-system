@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.AbsenceType;
+﻿namespace CRMSystem.Core.ProjectionModels.AbsenceType;
 
 public record AbsenceTypeItem
 {

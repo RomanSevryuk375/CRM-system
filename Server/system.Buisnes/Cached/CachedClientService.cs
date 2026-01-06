@@ -1,11 +1,11 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Core.DTOs.Client;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Extensions;
+using CRMSystem.Core.ProjectionModels.Client;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Cached;
+namespace CRMSystem.Business.Cached;
 
 public class CachedClientService : IClientService
 {
@@ -57,9 +57,9 @@ public class CachedClientService : IClientService
         return await _decorated.GetCountClients(filter);
     }
 
-    public async Task<List<ClientItem>> GetPagedCkients(ClientFilter filter)
+    public async Task<List<ClientItem>> GetPagedClients(ClientFilter filter)
     {
-        return await _decorated.GetPagedCkients(filter);
+        return await _decorated.GetPagedClients(filter);
     }
 
     public async Task<long> UpdateClient(long id, ClientUpdateModel model)

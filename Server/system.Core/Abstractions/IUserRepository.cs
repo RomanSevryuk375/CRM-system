@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.User;
+﻿using CRMSystem.Core.ProjectionModels.User;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IUserRepository
 {

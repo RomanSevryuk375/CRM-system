@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Bill;
+﻿using CRMSystem.Core.ProjectionModels.Bill;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IBillService
 {

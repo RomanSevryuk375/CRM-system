@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_system_backend.Controllers;
@@ -22,9 +22,9 @@ public class OrderPriorityController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<OrderPriorityItem>>> GetPrioritys()
+    public async Task<ActionResult<List<OrderPriorityItem>>> GetPriorities()
     {
-        var dto = await _orderPriorityService.GetPrioritys();
+        var dto = await _orderPriorityService.GetPriorities();
 
         var response = _mapper.Map<List<OrderPriorityResponse>>(dto);
 

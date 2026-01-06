@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Work;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Work;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Work;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,7 +41,7 @@ public class WorkController : ControllerBase
         var (work, errors) = Work.Create(
             0,
             request.Title,
-            request.Categoty,
+            request.Category,
             request.Description,
             request.StandartTime);
 
@@ -58,7 +58,7 @@ public class WorkController : ControllerBase
     {
         var model = new WorkUpdateModel(
             request.Title,
-            request.Categoty,
+            request.Category,
             request.Description,
             request.StandartTime);
 

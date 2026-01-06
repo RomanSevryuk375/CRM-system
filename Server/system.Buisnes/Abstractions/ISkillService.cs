@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Skill;
+﻿using CRMSystem.Core.ProjectionModels.Skill;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface ISkillService
 {

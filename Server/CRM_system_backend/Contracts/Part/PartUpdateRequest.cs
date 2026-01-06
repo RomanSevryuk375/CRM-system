@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Part;
+﻿namespace CRM_system_backend.Contracts.Part;
 
 public record PartUpdateRequest
 (
@@ -7,6 +7,6 @@ public record PartUpdateRequest
     string? InternalArticle,
     string? Description,
     string? Name,
-    string? manufacturer,
+    string? Manufacturer,
     string? Applicability
 );

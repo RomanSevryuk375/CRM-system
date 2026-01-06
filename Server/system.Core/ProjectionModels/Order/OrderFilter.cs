@@ -1,6 +1,4 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.Order;
+﻿namespace CRMSystem.Core.ProjectionModels.Order;
 
 public record OrderFilter
 (

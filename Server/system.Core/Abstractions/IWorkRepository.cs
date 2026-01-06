@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Work;
+﻿using CRMSystem.Core.ProjectionModels.Work;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IWorkRepository
 {

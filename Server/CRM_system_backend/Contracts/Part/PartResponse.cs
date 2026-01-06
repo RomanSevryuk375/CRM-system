@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.Core.DTOs.Part;
+﻿// Ignore Spelling: Oem
+
+namespace CRM_system_backend.Contracts.Part;
 
 public record PartResponse
 {

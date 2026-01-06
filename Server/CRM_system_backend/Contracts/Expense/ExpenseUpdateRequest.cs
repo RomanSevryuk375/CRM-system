@@ -1,6 +1,6 @@
 ﻿using CRMSystem.Core.Enums;
 
-namespace CRMSystem.Core.DTOs.Expense;
+namespace CRM_system_backend.Contracts.Expense;
 
 public record ExpenseUpdateRequest
 (

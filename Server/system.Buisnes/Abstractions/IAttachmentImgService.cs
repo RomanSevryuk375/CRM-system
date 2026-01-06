@@ -1,7 +1,9 @@
-﻿using CRMSystem.Core.DTOs;
-using CRMSystem.Core.DTOs.AttachmentImg;
+﻿// Ignore Spelling: Img
 
-namespace CRMSystem.Buisnes.Abstractions;
+using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.AttachmentImg;
+
+namespace CRMSystem.Business.Abstractions;
 
 public interface IAttachmentImgService
 {
@@ -10,5 +12,5 @@ public interface IAttachmentImgService
     Task<long> DeleteAttachmentImg(long id);
     Task<int> GetCountAttachmentImg(AttachmentImgFilter filter);
     Task<List<AttachmentImgItem>> GetPagedAttachmentImg(AttachmentImgFilter filter);
-    Task<long> UpdateAttaachmentImg(long id, string? filePath, string? description);
+    Task<long> UpdateAttachmentImg(long id, string? filePath, string? description);
 }

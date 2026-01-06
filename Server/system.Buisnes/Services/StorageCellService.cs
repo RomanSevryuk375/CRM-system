@@ -1,11 +1,12 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.StorageCell;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.StorageCell;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class StorageCellService : IStorageCellService
 {
@@ -37,8 +38,8 @@ public class StorageCellService : IStorageCellService
 
         if (await _storageCellRepository.HasOverlaps(storageCell.Rack, storageCell.Shelf))
         {
-            _logger.LogError("Sotage cell is exist with shelf{shelfName} and rack{rackName}", storageCell.Shelf, storageCell.Rack);
-            throw new ConflictException($"Sotage cell is exist with shelf{storageCell.Shelf} and rack{storageCell.Rack}");
+            _logger.LogError("Storage cell is exist with shelf{shelfName} and rack{rackName}", storageCell.Shelf, storageCell.Rack);
+            throw new ConflictException($"Storage cell is exist with shelf{storageCell.Shelf} and rack{storageCell.Rack}");
         }
 
         var Id = await _storageCellRepository.Create(storageCell);
@@ -52,12 +53,12 @@ public class StorageCellService : IStorageCellService
     {
         _logger.LogInformation("Updating storage cell start");
 
-        //if ((!string.IsNullOrEmpty(model.shelf) && !string.IsNullOrEmpty(model.rack))
-        //    && await _storageCellRepository.HasOverlaps(model.rack, model.shelf))
-        //{
-        //    _logger.LogError("Sotage cell is exist with shelf{shelfName} and rack{rackName}", model.shelf, model.rack);
-        //    throw new ConflictException($"Sotage cell is exist with shelf{model.shelf} and rack{model.rack}");
-        //}
+        if ((!string.IsNullOrEmpty(model.Shelf) && !string.IsNullOrEmpty(model.Rack))
+            && await _storageCellRepository.HasOverlaps(model.Rack, model.Shelf))
+        {
+            _logger.LogError("Storage cell is exist with shelf{shelfName} and rack{rackName}", model.Shelf, model.Rack);
+            throw new ConflictException($"Storage cell is exist with shelf{model.Shelf} and rack{model.Rack}");
+        }
 
         var Id = await _storageCellRepository.Update(id, model);
 

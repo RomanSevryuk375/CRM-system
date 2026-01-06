@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.Constants;
+﻿// Ignore Spelling: vin
+
+using CRMSystem.Core.Constants;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Validation;
 using System.Text.RegularExpressions;

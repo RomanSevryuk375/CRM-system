@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Expense;
+﻿namespace CRM_system_backend.Contracts.Expense;
 
 public record ExpenseResponse
 {
@@ -9,6 +9,6 @@ public record ExpenseResponse
     public int? TaxId { get; init; }
     public long? PartSetId { get; init; }
     public string ExpenseType { get; init; } = string.Empty;
-    public int ExpenceTypeId { get; init; }
+    public int ExpenseTypeId { get; init; }
     public decimal Sum { get; init; }
 };

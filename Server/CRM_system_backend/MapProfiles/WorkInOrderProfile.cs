@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.WorkInOrder;
-using CRMSystem.Core.DTOs.WorkInOrder;
+using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using CRMSystem.DataAccess.Entites;
 
 namespace CRM_system_backend.MapProfiles;
@@ -11,12 +11,12 @@ public class WorkInOrderProfile : Profile
     {
         CreateMap<WorkInOrderItem, WorkInOrderResponse>();
 
-        CreateMap<WorkInOrderEntity, WorkInOrderEntity>()
-            .ForMember(dest => dest.Work,
+        CreateMap<WorkInOrderEntity, WorkInOrderItem>()
+            .ForMember(dest => dest.Job,
                         opt => opt.MapFrom(src => $"{src.Work!.Title}"))
             .ForMember(dest => dest.Worker,
                         opt => opt.MapFrom(src => $"{src.Worker!.Name} {src.Worker.Surname}"))
-            .ForMember(dest => dest.WorkInOrderStatus,
+            .ForMember(dest => dest.Status,
                         opt => opt.MapFrom(src => $"{src.WorkInOrderStatus!.Name}"));
     }
 }

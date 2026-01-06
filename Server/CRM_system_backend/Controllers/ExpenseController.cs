@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Expense;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Expense;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Expense;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

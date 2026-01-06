@@ -1,13 +1,13 @@
-﻿using CRMSystem.Core.DTOs.Position;
+﻿using CRMSystem.Core.ProjectionModels.Position;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
-public interface IPositionSrevice
+public interface IPositionService
 {
     Task<long> CreatePositionWithPart(Position position, Part part);
     Task<long> DeletePosition(long id);
     Task<int> GetCountPositions(PositionFilter filter);
-    Task<List<PositionItem>> GetGagedPositions(PositionFilter positionFilter);
+    Task<List<PositionItem>> GetPagedPositions(PositionFilter positionFilter);
     Task<long> UpdatePosition(long id, PositionUpdateModel model);
 }

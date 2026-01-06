@@ -1,11 +1,12 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.SupplySet;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.SupplySet;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class SupplySetService : ISupplySetService
 {
@@ -26,7 +27,7 @@ public class SupplySetService : ISupplySetService
         _logger = logger;
     }
 
-    public async Task<List<SupplySetItem>> GetPagetSupplySets(SupplySetFilter filter)
+    public async Task<List<SupplySetItem>> GetPagedSupplySets(SupplySetFilter filter)
     {
         _logger.LogInformation("Getting supply sets start");
 

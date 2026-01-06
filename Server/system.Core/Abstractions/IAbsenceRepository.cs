@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Absence;
+﻿using CRMSystem.Core.ProjectionModels.Absence;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IAbsenceRepository
 {

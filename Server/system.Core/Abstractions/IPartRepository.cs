@@ -1,8 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Order;
-using CRMSystem.Core.DTOs.Part;
+﻿using CRMSystem.Core.ProjectionModels.Part;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IPartRepository
 {

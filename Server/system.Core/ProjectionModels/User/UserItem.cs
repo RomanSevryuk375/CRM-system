@@ -1,11 +1,11 @@
-﻿namespace CRMSystem.Core.DTOs.User;
+﻿namespace CRMSystem.Core.ProjectionModels.User;
 
 public record UserItem
 (
     long Id,
     string Role,
     int RoleId,
-    string login,
+    string Login,
     string PasswordHash
 );
 

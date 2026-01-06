@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using CRMSystem.Core.DTOs.WorkProposal;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.WorkProposal;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
@@ -38,7 +39,7 @@ public class WorkProposalRepository : IWorkProposalRepository
         return query;
     }
 
-    public async Task<List<WorkProposalItem>> Getpaged(WorkProposalFilter filter)
+    public async Task<List<WorkProposalItem>> GetPaged(WorkProposalFilter filter)
     {
         var query = _context.WorkProposals.AsNoTracking();
         query = ApplyFilter(query, filter);

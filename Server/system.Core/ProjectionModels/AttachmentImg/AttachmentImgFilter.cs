@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.Core.DTOs.AttachmentImg;
+﻿// Ignore Spelling: Img
+
+namespace CRMSystem.Core.ProjectionModels.AttachmentImg;
 
 public record AttachmentImgFilter
 (

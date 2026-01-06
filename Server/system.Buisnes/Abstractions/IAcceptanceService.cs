@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Acceptance;
+﻿using CRMSystem.Core.ProjectionModels.Acceptance;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IAcceptanceService
 {

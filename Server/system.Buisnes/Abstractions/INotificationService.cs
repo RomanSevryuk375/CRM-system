@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Notification;
+﻿using CRMSystem.Core.ProjectionModels.Notification;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface INotificationService
 {

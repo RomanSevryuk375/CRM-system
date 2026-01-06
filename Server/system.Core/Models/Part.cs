@@ -1,4 +1,6 @@
-﻿using CRMSystem.Core.Constants;
+﻿// Ignore Spelling: oem
+
+using CRMSystem.Core.Constants;
 using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;

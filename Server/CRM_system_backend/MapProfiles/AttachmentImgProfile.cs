@@ -1,6 +1,8 @@
-﻿using AutoMapper;
-using CRMSystem.Core.DTOs.Attachment;
-using CRMSystem.Core.DTOs.AttachmentImg;
+﻿// Ignore Spelling: Img
+
+using AutoMapper;
+using CRM_system_backend.Contracts.AttachmentImg;
+using CRMSystem.Core.ProjectionModels.AttachmentImg;
 using CRMSystem.DataAccess.Entites;
 
 namespace CRM_system_backend.MapProfiles;

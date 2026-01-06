@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.PartSet;
+﻿using CRMSystem.Core.ProjectionModels.PartSet;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IPartSetService
 {

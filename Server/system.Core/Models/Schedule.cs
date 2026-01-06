@@ -13,7 +13,7 @@ public class Schedule
         Date = dateTime;
     }
 
-    public void SetSshftId(int shiftId)
+    public void SetShiftId(int shiftId)
     {
         if (shiftId <= 0) throw new ConflictException("Invalid ID");
         ShiftId = shiftId;

@@ -1,26 +1,30 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Worker;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Worker;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class WorkerService : IWorkerService
 {
     private readonly IWorkerRepository _workerRepository;
     private readonly IUserRepository _userRepository;
     private readonly ILogger<WorkerService> _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
     public WorkerService(
         IWorkerRepository workerRepository,
         IUserRepository userRepository,
-        ILogger<WorkerService> logger)
+        ILogger<WorkerService> logger,
+        IUnitOfWork unitOfWork)
     {
         _workerRepository = workerRepository;
         _userRepository = userRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<List<WorkerItem>> GetPagedWorkers(WorkerFilter filter)
@@ -36,7 +40,7 @@ public class WorkerService : IWorkerService
 
     public async Task<int> GetCountWorkers(WorkerFilter filter)
     {
-        _logger.LogInformation("Getting count woker start");
+        _logger.LogInformation("Getting count worker start");
 
         var count = await _workerRepository.GetCount(filter);
 
@@ -80,25 +84,30 @@ public class WorkerService : IWorkerService
 
     public async Task<int> CreateWorkerWithUser(Worker worker, User user)
     {
-        var userId = 0L;
+        await _unitOfWork.BeginTransactionAsync();
+
+        long userId;
         try
         {
             _logger.LogInformation("Creating user start");
 
             userId = await _userRepository.Create(user);
-            worker.SetUserId(userId);
+            worker.SetUserId(0L);
 
             var Id = await _workerRepository.Create(worker);
 
             _logger.LogInformation("Creating worker success");
 
+            await _unitOfWork.CommitTransactionAsync();
+
             return Id;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to create worker. Rolling back user.");
-            if (userId > 0)
-                await _userRepository.Delete(userId);
+            _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
+            
+            await _unitOfWork.RollbackAsync();
+
             throw;
         }
     }

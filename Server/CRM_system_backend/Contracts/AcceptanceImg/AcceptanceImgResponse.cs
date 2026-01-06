@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.Core.DTOs.AccetanceImg;
+﻿// Ignore Spelling: Img
+
+namespace CRM_system_backend.Contracts.AcceptanceImg;
 
 public record AcceptanceImgResponse
 {

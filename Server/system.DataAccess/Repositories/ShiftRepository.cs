@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using CRMSystem.Core.DTOs.Shift;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.Shift;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -48,8 +49,8 @@ public class ShiftRepository : IShiftRepository
         var entity = await _context.Shifts.FirstOrDefaultAsync(s => s.Id == id)
             ?? throw new Exception("Shift note not found");
 
-        if (!string.IsNullOrWhiteSpace(model.name)) entity.Name = model.name;
-        if (model.startAt.HasValue) entity.StartAt = model.startAt.Value;
+        if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
+        if (model.StartAt.HasValue) entity.StartAt = model.StartAt.Value;
         if (model.EndAt.HasValue) entity.EndAt = model.EndAt.Value;
 
         await _context.SaveChangesAsync();

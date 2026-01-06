@@ -2,7 +2,6 @@
 using CRMSystem.Core.Enums;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CRMSystem.DataAccess.Configurations;

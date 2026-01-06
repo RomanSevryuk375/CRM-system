@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Buisness.Abstractions;
+﻿namespace CRMSystem.Business.Abstractions;
 
 public interface IFileService
 {

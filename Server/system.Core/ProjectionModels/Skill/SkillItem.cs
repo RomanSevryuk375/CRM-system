@@ -1,9 +1,9 @@
-﻿namespace CRMSystem.Core.DTOs.Skill;
+﻿namespace CRMSystem.Core.ProjectionModels.Skill;
 
 public record SkillItem
 (
     int Id,
-    string worker,
+    string Worker,
     int WorkerId,
     string Specialization,
     int SpecializationId

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Shift;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Shift;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Shift;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.Position;
+﻿namespace CRMSystem.Core.ProjectionModels.Position;
 
 public record PositionItem
 {

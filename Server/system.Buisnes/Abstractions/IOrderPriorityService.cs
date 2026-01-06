@@ -1,8 +1,8 @@
-﻿using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Core.ProjectionModels;
 
-namespace CRMSystem.Buisnes.Abstractions;
+namespace CRMSystem.Business.Abstractions;
 
 public interface IOrderPriorityService
 {
-    Task<List<OrderPriorityItem>> GetPrioritys();
+    Task<List<OrderPriorityItem>> GetPriorities();
 }

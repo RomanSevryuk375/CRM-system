@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using CRMSystem.Core.DTOs.Guarantee;
+using CRM_system_backend.Contracts.Guarantee;
+using CRMSystem.Core.ProjectionModels.Guarantee;
 using CRMSystem.DataAccess.Entites;
 
 namespace CRM_system_backend.MapProfiles;

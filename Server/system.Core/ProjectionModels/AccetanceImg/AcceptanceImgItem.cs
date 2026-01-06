@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.Core.DTOs.AcceptanceImg;
+﻿// Ignore Spelling: Img
+
+namespace CRMSystem.Core.ProjectionModels.AccetanceImg;
 
 public record AcceptanceImgItem
 {

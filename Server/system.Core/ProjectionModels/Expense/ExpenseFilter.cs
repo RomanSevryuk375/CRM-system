@@ -1,6 +1,4 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.Expense;
+﻿namespace CRMSystem.Core.ProjectionModels.Expense;
 
 public record ExpenseFilter
 (

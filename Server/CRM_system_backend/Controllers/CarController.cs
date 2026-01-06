@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Car;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Car;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Car;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;

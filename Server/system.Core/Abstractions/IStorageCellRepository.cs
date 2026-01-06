@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.StorageCell;
+﻿using CRMSystem.Core.ProjectionModels.StorageCell;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface IStorageCellRepository
 {

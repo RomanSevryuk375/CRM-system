@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.Core.DTOs.Part;
+﻿// Ignore Spelling: Oem
+
+namespace CRMSystem.Core.ProjectionModels.Part;
 
 public record PartItem
 {

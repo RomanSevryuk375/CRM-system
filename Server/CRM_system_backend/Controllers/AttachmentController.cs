@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Attachment;
-using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.Attachment;
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.ProjectionModels.Attachment;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +27,7 @@ public class AttachmentController : ControllerBase
     public async Task<ActionResult<List<AttachmentItem>>> GetPagedAttachments([FromQuery]AttachmentFilter filter)
     {
         var dto = await _attachmentService.GetPagedAttachments(filter);
-        var count = await _attachmentService.GetCountAttchment(filter);
+        var count = await _attachmentService.GetCountAttachment(filter);
 
         var response = _mapper.Map<List<AttachmentResponse>>(dto);
 
@@ -63,9 +63,9 @@ public class AttachmentController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteingAttachment(long id)
+    public async Task<ActionResult<long>> DeletingAttachment(long id)
     {
-        var Id = await _attachmentService.DeleteingAttachment(id);
+        var Id = await _attachmentService.DeletingAttachment(id);
 
         return Ok(Id);
     }

@@ -1,6 +1,4 @@
-﻿using CRMSystem.Core.Enums;
-
-namespace CRMSystem.Core.DTOs.Position;
+﻿namespace CRMSystem.Core.ProjectionModels.Position;
 
 public record PositionFilter
 (

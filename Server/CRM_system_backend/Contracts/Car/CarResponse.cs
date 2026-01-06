@@ -1,4 +1,6 @@
-﻿namespace CRMSystem.Core.DTOs.Car;
+﻿// Ignore Spelling: Vin
+
+namespace CRM_system_backend.Contracts.Car;
 
 public record CarResponse
 {

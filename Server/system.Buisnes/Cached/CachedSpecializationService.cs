@@ -1,12 +1,11 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Buisnes.Extensions;
-using CRMSystem.Core.DTOs;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Extensions;
+using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Cached;
+namespace CRMSystem.Business.Cached;
 
 public class CachedSpecializationService : ISpecializationService
 {
@@ -49,7 +48,7 @@ public class CachedSpecializationService : ISpecializationService
             CACHE_KEY,
             () => _decorated.GetSpecializations(),
             TimeSpan.FromHours(24),
-            _logger) ?? new List<SpecializationItem>();
+            _logger) ?? [];
     }
 
     public async Task<int> UpdateSpecialization(int id, string? name)

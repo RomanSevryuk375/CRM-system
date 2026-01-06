@@ -1,13 +1,15 @@
-﻿
-using CRMSystem.Buisness.Abstractions;
-using CRMSystem.Core.DTOs;
-using CRMSystem.Core.DTOs.AcceptanceImg;
+﻿// Ignore Spelling: Img
+
+using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
+using CRMSystem.Core.ProjectionModels.AccetanceImg;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class AcceptanceImgService : IAcceptanceImgService
 {
@@ -41,10 +43,8 @@ public class AcceptanceImgService : IAcceptanceImgService
 
     public async Task<(Stream FileStream, string ContentType)> GetImageStream(long id)
     {
-        var img = await _acceptanceImgRepository.GetById(id);
-        if (img == null)
-            throw new NotFoundException($"Image {id} not found");
-
+        var img = await _acceptanceImgRepository.GetById(id)
+            ?? throw new NotFoundException($"Image {id} not found");
         var stream = await _fileService.GetFile(img.FilePath);
 
         string contentType = "application/octet-stream";
@@ -52,7 +52,7 @@ public class AcceptanceImgService : IAcceptanceImgService
         return (stream, contentType);
     }
 
-    public async Task<int> GetCountAccptnceImg(AcceptanceImgFilter filter)
+    public async Task<int> GetCountAcceptanceImg(AcceptanceImgFilter filter)
     {
         _logger.LogInformation("Getting count of acceptanceImg start");
 
@@ -63,7 +63,7 @@ public class AcceptanceImgService : IAcceptanceImgService
         return count;
     }
 
-    public async Task<long> CreateAccptanceImg(long AcceptanceId, FileItem file, string? description)
+    public async Task<long> CreateAcceptanceImg(long AcceptanceId, FileItem file, string? description)
     {
         _logger.LogInformation("Creating acceptanceImg start");
 
@@ -90,7 +90,7 @@ public class AcceptanceImgService : IAcceptanceImgService
             path,
             description);
 
-        if ((errors is not null && errors.Any()) || acceptanceImg == null)
+        if (errors is not null && errors.Any() || acceptanceImg == null)
         {
             await _fileService.DeleteFile(path);
 
@@ -99,14 +99,14 @@ public class AcceptanceImgService : IAcceptanceImgService
             throw new ConflictException($"Validation failed: {errorMsg}");
         }
 
-        var accptanceImg = await _acceptanceImgRepository.Create(acceptanceImg!);
+        var Id = await _acceptanceImgRepository.Create(acceptanceImg!);
 
         _logger.LogInformation("Creating acceptanceImg success");
 
-        return accptanceImg;
+        return Id;
     }
 
-    public async Task<long> UpdateAccptanceImg(long id, string? filePath, string? description)
+    public async Task<long> UpdateAcceptanceImg(long id, string? filePath, string? description)
     {
         _logger.LogInformation("Updating Acceptance{AcceptanceId} start", id);
 
@@ -117,7 +117,7 @@ public class AcceptanceImgService : IAcceptanceImgService
         return acceptance;
     }
 
-    public async Task<long> DeleteAccptanceImg(long id)
+    public async Task<long> DeleteAcceptanceImg(long id)
     {
         _logger.LogInformation("Deleting Acceptance{AcceptanceId} start", id);
 

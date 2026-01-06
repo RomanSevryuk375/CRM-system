@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.StorageCell;
+﻿namespace CRMSystem.Core.ProjectionModels.StorageCell;
 
 public record StorageCellItem
 {

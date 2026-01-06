@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRM_system_backend.Contracts.Schedule;
-using CRMSystem.Core.DTOs.Schedule;
+using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.DataAccess.Entites;
 
 namespace CRM_system_backend.MapProfiles;

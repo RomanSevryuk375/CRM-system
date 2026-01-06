@@ -1,11 +1,11 @@
-﻿using CRMSystem.Buisnes.Abstractions;
-using CRMSystem.Core.DTOs.AbsenceType;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.ProjectionModels.AbsenceType;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace CRMSystem.Buisnes.Services;
+namespace CRMSystem.Business.Services;
 
 public class AbsenceTypeService : IAbsenceTypeService
 {
@@ -31,14 +31,14 @@ public class AbsenceTypeService : IAbsenceTypeService
         return absenceType;
     }
 
-    public async Task<int> CretaeAbsenceType(AbsenceType absenceType)
+    public async Task<int> CreateAbsenceType(AbsenceType absenceType)
     {
         _logger.LogInformation("Creating absenceType start");
 
         if (await _absenceTypeRepository.GetByName(absenceType.Name) is not null)
         {
             _logger.LogInformation("Absence type {TypeName} is exists", absenceType.Name);
-            throw new FoundException($"Absece type {absenceType.Name} is exists");
+            throw new FoundException($"Absence type {absenceType.Name} is exists");
         }
 
         var absenceTypeRes = await _absenceTypeRepository.Create(absenceType);
@@ -55,7 +55,7 @@ public class AbsenceTypeService : IAbsenceTypeService
         if (await _absenceTypeRepository.GetByName(name) is not null)
         {
             _logger.LogInformation("Absence type {TypeName} is exists", name);
-            throw new ConflictException($"Absece type {name} is exists");
+            throw new ConflictException($"Absence type {name} is exists");
         }
 
         var absenceType = await _absenceTypeRepository.Update(id, name);

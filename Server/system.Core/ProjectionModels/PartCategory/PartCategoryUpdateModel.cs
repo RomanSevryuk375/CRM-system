@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.DTOs.PartCategory;
+﻿namespace CRMSystem.Core.ProjectionModels.PartCategory;
 
 public record PartCategoryUpdateModel
 (

@@ -1,7 +1,7 @@
-﻿using CRMSystem.Core.DTOs.Tax;
+﻿using CRMSystem.Core.ProjectionModels.Tax;
 using CRMSystem.Core.Models;
 
-namespace CRMSystem.DataAccess.Repositories;
+namespace CRMSystem.Core.Abstractions;
 
 public interface ITaxRepository
 {
