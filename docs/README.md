@@ -56,7 +56,7 @@ Database Schema:
   <summary>Click to expand the ER Diagram</summary>
   <br>
   <p align="center">
-    <img src="./docs/ERD.jpg" alt="Database Schema">
+    <img src="./ERD.jpg" alt="Database Schema">
   </p>
 </details>
 
