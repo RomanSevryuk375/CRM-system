@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM_system_backend", "CRM_s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "system.Business", "system.Business", "{8CF8A2C0-6E5A-2645-0905-F9FA8E666CFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRMSystem.Business", "system.Buisnes\CRMSystem.Business.csproj", "{62855923-DED2-447D-9D65-0030987A4657}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRMSystem.Business", "system.Business\CRMSystem.Business.csproj", "{62855923-DED2-447D-9D65-0030987A4657}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "system.Core", "system.Core", "{6BF3463B-995D-0847-FE12-55FDF4447814}"
 EndProject

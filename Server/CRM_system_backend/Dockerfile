@@ -13,7 +13,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["CRM_system_backend/CRM_system_backend.csproj", "CRM_system_backend/"]
-COPY ["system.Buisnes/CRMSystem.Buisnes.csproj", "system.Buisnes/"]
+COPY ["system.Buisnes/CRMSystem.Business.csproj", "system.Buisnes/"]
 COPY ["system.Core/CRMSystem.Core.csproj", "system.Core/"]
 COPY ["system.DataAccess/CRMSystem.DataAccess.csproj", "system.DataAccess/"]
 RUN dotnet restore "./CRM_system_backend/CRM_system_backend.csproj"
