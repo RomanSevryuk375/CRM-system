@@ -92,7 +92,7 @@ public class WorkerService : IWorkerService
             _logger.LogInformation("Creating user start");
 
             userId = await _userRepository.Create(user);
-            worker.SetUserId(0L);
+            worker.SetUserId(userId);
 
             var Id = await _workerRepository.Create(worker);
 

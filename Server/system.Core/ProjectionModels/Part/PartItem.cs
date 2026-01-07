@@ -7,7 +7,7 @@ public record PartItem
     public long Id { get; init; }
     public string Category { get; init; } = string.Empty;
     public int CategoryId { get; init; }
-    public string? OemArticle { get; init; }
+    public string? OEMArticle { get; init; }
     public string? ManufacturerArticle { get; init; }
     public string InternalArticle { get; init; } = string.Empty;
     public string? Description { get; init; }
