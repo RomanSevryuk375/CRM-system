@@ -22,9 +22,9 @@ public class WorkProposalStatusController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<WorkProposalStatusItem>>> GetProposalStatuses()
+    public async Task<ActionResult<List<WorkProposalStatusItem>>> GetProposalStatuses(CancellationToken ct)
     {
-        var dto = await _service.GetProposalStatuses();
+        var dto = await _service.GetProposalStatuses(ct);
 
         var response = _mapper.Map<List<WorkProposalStatusResponse>>(dto);
 

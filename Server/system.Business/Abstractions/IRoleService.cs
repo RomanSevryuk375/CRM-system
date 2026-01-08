@@ -4,5 +4,5 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IRoleService
 {
-    Task<List<RoleItem>> GetRoles();
+    Task<List<RoleItem>> GetRoles(CancellationToken ct);
 }

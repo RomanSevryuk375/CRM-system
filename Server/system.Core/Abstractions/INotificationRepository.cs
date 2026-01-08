@@ -5,8 +5,8 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface INotificationRepository
 {
-    Task<long> Create(Notification notification);
-    Task<long> Delete(long id);
-    Task<int> GetCount(NotificationFilter filter);
-    Task<List<NotificationItem>> GetPaged(NotificationFilter filter);
+    Task<long> Create(Notification notification, CancellationToken ct);
+    Task<long> Delete(long id, CancellationToken ct);
+    Task<int> GetCount(NotificationFilter filter, CancellationToken ct);
+    Task<List<NotificationItem>> GetPaged(NotificationFilter filter, CancellationToken ct);
 }

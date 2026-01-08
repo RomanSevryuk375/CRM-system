@@ -33,33 +33,33 @@ public class PartSetService : IPartSetService
         _logger = logger;
     }
 
-    public async Task<List<PartSetItem>> GetPagedPartSets(PartSetFilter filter)
+    public async Task<List<PartSetItem>> GetPagedPartSets(PartSetFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting part set start");
 
-        var partSets = await _partSetRepository.GetPaged(filter);
+        var partSets = await _partSetRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting part set success");
 
         return partSets;
     }
 
-    public async Task<List<PartSetItem>> GetPartSetsByOrderId(long orderId)
+    public async Task<List<PartSetItem>> GetPartSetsByOrderId(long orderId, CancellationToken ct)
     {
         _logger.LogInformation("Getting part set by order id start");
 
-        var partSets = await _partSetRepository.GetByOrderId(orderId);
+        var partSets = await _partSetRepository.GetByOrderId(orderId, ct);
 
         _logger.LogInformation("Getting part set by order id success");
 
         return partSets;
     }
 
-    public async Task<PartSetItem> GetPartSetById(long id)
+    public async Task<PartSetItem> GetPartSetById(long id, CancellationToken ct)
     {
         _logger.LogInformation("Getting part set by id start");
 
-        var partSet = await _partSetRepository.GetById(id);
+        var partSet = await _partSetRepository.GetById(id, ct);
 
         if (partSet is null)
         {
@@ -72,65 +72,65 @@ public class PartSetService : IPartSetService
         return partSet;
     }
 
-    public async Task<int> GetCountPartSets(PartSetFilter filter)
+    public async Task<int> GetCountPartSets(PartSetFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting count part set start");
 
-        var count = await _partSetRepository.GetCount(filter);
+        var count = await _partSetRepository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting count part set success");
 
         return count;
     }
 
-    public async Task<long> AddToPartSet(PartSet partSet)
+    public async Task<long> AddToPartSet(PartSet partSet, CancellationToken ct)
     {
         _logger.LogInformation("Adding to part set start");
 
-        if (partSet.OrderId.HasValue && !await _orderRepository.Exists(partSet.OrderId.Value))
+        if (partSet.OrderId.HasValue && !await _orderRepository.Exists(partSet.OrderId.Value, ct))
         {
             _logger.LogError("Order{OrderId} not found", partSet.OrderId);
             throw new NotFoundException($"Order{partSet.OrderId} not found");
         }
 
-        if (partSet.ProposalId.HasValue && !await _workProposalRepository.Exists(partSet.ProposalId.Value))
+        if (partSet.ProposalId.HasValue && !await _workProposalRepository.Exists(partSet.ProposalId.Value, ct))
         {
             _logger.LogError("Proposal{proposalId} not found", partSet.ProposalId);
             throw new NotFoundException($"Proposal{partSet.ProposalId} not found");
         }
 
-        if (!await _positionRepository.Exists(partSet.PositionId))
+        if (!await _positionRepository.Exists(partSet.PositionId, ct))
         {
             _logger.LogError("Position{positionId} not found", partSet.PositionId);
             throw new NotFoundException($"Position {partSet.PositionId} not found");
         }
 
-        var Id = await _partSetRepository.Create(partSet);
+        var Id = await _partSetRepository.Create(partSet, ct);
 
         _logger.LogInformation("Adding to part set success");
 
         if (partSet.OrderId.HasValue)
         {
             _logger.LogInformation("Recalculating bill start");
-            await _billRepository.RecalculateAmount(partSet.OrderId.Value);
+            await _billRepository.RecalculateAmount(partSet.OrderId.Value, ct);
             _logger.LogInformation("Recalculating bill success");
         }
 
         return Id;
     }
 
-    public async Task<long> UpdatePartSet(long id, PartSetUpdateModel model)
+    public async Task<long> UpdatePartSet(long id, PartSetUpdateModel model, CancellationToken ct)
     {
         _logger.LogInformation("Updating part set start");
 
-        var Id = await _partSetRepository.Update(id, model);
+        var Id = await _partSetRepository.Update(id, model, ct);
 
-        var partSet = await _partSetRepository.GetById(id);
+        var partSet = await _partSetRepository.GetById(id, ct);
 
         if (partSet is not null && partSet.OrderId.HasValue)
         {
             _logger.LogInformation("Recalculating bill start");
-            await _billRepository.RecalculateAmount(partSet.OrderId.Value);
+            await _billRepository.RecalculateAmount(partSet.OrderId.Value, ct);
             _logger.LogInformation("Recalculating bill success");
         }
 
@@ -139,18 +139,18 @@ public class PartSetService : IPartSetService
         return Id;
     }
 
-    public async Task<long> DeleteFromPartSet(long id)
+    public async Task<long> DeleteFromPartSet(long id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting part set start");
 
-        var Id = await _partSetRepository.Delete(id);
+        var Id = await _partSetRepository.Delete(id, ct);
 
-        var partSet = await _partSetRepository.GetById(id);
+        var partSet = await _partSetRepository.GetById(id, ct);
 
         if (partSet is not null && partSet.OrderId.HasValue)
         {
             _logger.LogInformation("Recalculating bill start");
-            await _billRepository.RecalculateAmount(partSet.OrderId.Value);
+            await _billRepository.RecalculateAmount(partSet.OrderId.Value, ct);
             _logger.LogInformation("Recalculating bill success");
         }
 

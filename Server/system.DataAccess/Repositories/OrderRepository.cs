@@ -23,7 +23,7 @@ public class OrderRepository : IOrderRepository
         _mapper = mapper;
     }
 
-    private IQueryable<OrderEntity> ApplyFilter(IQueryable<OrderEntity> query, OrderFilter filter)
+    private static IQueryable<OrderEntity> ApplyFilter(IQueryable<OrderEntity> query, OrderFilter filter)
     {
         if (filter.StatusIds != null && filter.StatusIds.Any())
             query = query.Where(o => filter.StatusIds.Contains(o.StatusId));
@@ -40,7 +40,7 @@ public class OrderRepository : IOrderRepository
         return query;
     }
 
-    public async Task<List<OrderItem>> GetPaged(OrderFilter filter)
+    public async Task<List<OrderItem>> GetPaged(OrderFilter filter, CancellationToken ct)
     {
         var query = _context.Orders.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -78,30 +78,30 @@ public class OrderRepository : IOrderRepository
         };
 
         return await query
-            .ProjectTo<OrderItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<OrderItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<OrderItem?> GetByProposalId(long proposalId)
+    public async Task<OrderItem?> GetByProposalId(long proposalId, CancellationToken ct)
     {
         return await _context.Orders
             .AsNoTracking()
             .Where(o => o.PriorityId == proposalId)
-            .ProjectTo<OrderItem>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync();
+            .ProjectTo<OrderItem>(_mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
 
     }
 
-    public async Task<int> GetCount(OrderFilter filter)
+    public async Task<int> GetCount(OrderFilter filter, CancellationToken ct)
     {
         var query = _context.Orders.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(Order order)
+    public async Task<long> Create(Order order, CancellationToken ct)
     {
 
         var orderEntitie = new OrderEntity
@@ -112,84 +112,84 @@ public class OrderRepository : IOrderRepository
             PriorityId = (int)order.PriorityId
         };
 
-        await _context.Orders.AddAsync(orderEntitie);
-        await _context.SaveChangesAsync();
+        await _context.Orders.AddAsync(orderEntitie, ct);
+        await _context.SaveChangesAsync(ct);
 
         return orderEntitie.Id;
     }
 
-    public async Task<long> Update(long id, OrderPriorityEnum? priorityId)
+    public async Task<long> Update(long id, OrderPriorityEnum? priorityId, CancellationToken ct)
     {
-        var entity = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id)
+        var entity = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id, ct)
             ?? throw new NotFoundException("Order not found");
 
         if (priorityId.HasValue) entity.PriorityId = (int)priorityId.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Complete(long id)
+    public async Task<long> Complete(long id, CancellationToken ct)
     {
-        var entity = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id)
+        var entity = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id, ct)
             ?? throw new NotFoundException("Order not found");
 
         entity.StatusId = (int)OrderStatusEnum.Completed;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Close(long id)
+    public async Task<long> Close(long id, CancellationToken ct)
     {
-        var entity = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id)
+        var entity = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id, ct)
             ?? throw new NotFoundException("Order not found");
 
         entity.StatusId = (int)OrderStatusEnum.Closed;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var order = await _context.Orders
             .Where(x => x.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(long id)
+    public async Task<bool> Exists(long id, CancellationToken ct)
     {
         return await _context.Orders
-            .AnyAsync(x => x.Id == id);
+            .AnyAsync(x => x.Id == id, ct);
     }
 
-    public async Task<int?> GetStatus(long id)
+    public async Task<int?> GetStatus(long id, CancellationToken ct)
     {
         return await _context.Orders
         .AsNoTracking()
         .Where(o => o.Id == id)
         .Select(o => (int?)o.StatusId)
-        .FirstOrDefaultAsync();
+        .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<bool> PossibleToComplete(long id)
+    public async Task<bool> PossibleToComplete(long id, CancellationToken ct)
     {
         return !await _context.WorksInOrder
             .Where(w => w.OrderId == id)
             .AnyAsync(w => (w.StatusId == (int)WorkStatusEnum.InProgress 
-                            || w.StatusId == (int)WorkStatusEnum.Pending));
+                            || w.StatusId == (int)WorkStatusEnum.Pending), ct);
     }
 
-    public async Task<bool> PossibleToClose(long id)
+    public async Task<bool> PossibleToClose(long id, CancellationToken ct)
     {
         return await _context.Bills
             .Where(b => b.OrderId == id)
-            .AnyAsync(b => b.Amount <= 0);
+            .AnyAsync(b => b.Amount <= 0, ct);
     }
 }

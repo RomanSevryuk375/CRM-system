@@ -4,6 +4,6 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface INotificationTypeRepository
 {
-    Task<List<NotificationTypeItem>> Get();
-    Task<bool> Exists(int id);
+    Task<List<NotificationTypeItem>> Get(CancellationToken ct);
+    Task<bool> Exists(int id, CancellationToken ct);
 }

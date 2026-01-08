@@ -18,11 +18,11 @@ public class OrderStatusService : IOrderStatusService
         _logger = logger;
     }
 
-    public async Task<List<OrderStatusItem>> GetOrderStatuses()
+    public async Task<List<OrderStatusItem>> GetOrderStatuses(CancellationToken ct)
     {
         _logger.LogInformation("Getting order priorities start");
 
-        var statuses = await _orderStatusRepository.Get();
+        var statuses = await _orderStatusRepository.Get(ct);
 
         _logger.LogInformation("Getting order priorities success");
 

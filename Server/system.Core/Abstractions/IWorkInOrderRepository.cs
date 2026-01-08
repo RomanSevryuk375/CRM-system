@@ -5,10 +5,10 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IWorkInOrderRepository
 {
-    Task<long> Create(WorkInOrder workInOrder);
-    Task<long> Delete(long id);
-    Task<int> GetCount(WorkInOrderFilter filter);
-    Task<List<WorkInOrderItem>> GetPaged(WorkInOrderFilter filter);
-    Task<long> Update(long id, WorkInOrderUpdateModel model);
-    Task<List<WorkInOrderItem>> GetByOrderId(long orderId);
+    Task<long> Create(WorkInOrder workInOrder, CancellationToken ct);
+    Task<long> Delete(long id, CancellationToken ct);
+    Task<int> GetCount(WorkInOrderFilter filter, CancellationToken ct);
+    Task<List<WorkInOrderItem>> GetPaged(WorkInOrderFilter filter, CancellationToken ct);
+    Task<long> Update(long id, WorkInOrderUpdateModel model, CancellationToken ct);
+    Task<List<WorkInOrderItem>> GetByOrderId(long orderId, CancellationToken ct);
 }

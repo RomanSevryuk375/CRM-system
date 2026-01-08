@@ -22,9 +22,9 @@ public class ExpenseTypeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ExpenseTypeItem>>> GetExpenseType()
+    public async Task<ActionResult<List<ExpenseTypeItem>>> GetExpenseType(CancellationToken ct)
     {
-        var dto = await _expenseTypeService.GetExpenseType();
+        var dto = await _expenseTypeService.GetExpenseType(ct);
 
         var response = _mapper.Map<List<ExpenseTypeResponse>>(dto);
 

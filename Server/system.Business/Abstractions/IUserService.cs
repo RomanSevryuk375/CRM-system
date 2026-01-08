@@ -5,8 +5,8 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IUserService
 {
-    Task<long> CreateUser(User user);
-    Task<long> DeleteUser(long id);
-    Task<UserItem> GetUsersByLogin(string login);
-    Task<string> LoginUser(string login, string password);
+    Task<long> CreateUser(User user, CancellationToken ct);
+    Task<long> DeleteUser(long id, CancellationToken ct);
+    Task<UserItem> GetUsersByLogin(string login, CancellationToken ct);
+    Task<string> LoginUser(string login, string password, CancellationToken ct);
 }

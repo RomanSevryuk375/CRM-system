@@ -21,15 +21,15 @@ public class SupplierRepository : ISupplierRepository
         _mapper = mapper;
     }
 
-    public async Task<List<SupplierItem>> Get()
+    public async Task<List<SupplierItem>> Get(CancellationToken ct)
     {
         return await _context.Suppliers
             .AsNoTracking()
-            .ProjectTo<SupplierItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<SupplierItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<int> Create(Supplier supplier)
+    public async Task<int> Create(Supplier supplier, CancellationToken ct)
     {
         var supplierEntity = new SupplierEntity
         {
@@ -37,45 +37,45 @@ public class SupplierRepository : ISupplierRepository
             Contacts = supplier.Contacts
         };
 
-        await _context.Suppliers.AddAsync(supplierEntity);
-        await _context.SaveChangesAsync();
+        await _context.Suppliers.AddAsync(supplierEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return supplierEntity.Id;
     }
 
-    public async Task<int> Update(int id, SupplierUpdateModel model)
+    public async Task<int> Update(int id, SupplierUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Suppliers.FirstOrDefaultAsync(su => su.Id == id)
+        var entity = await _context.Suppliers.FirstOrDefaultAsync(su => su.Id == id, ct)
             ?? throw new ArgumentException("Supplier not found");
 
         if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
         if (!string.IsNullOrWhiteSpace(model.Contacts)) entity.Contacts = model.Contacts;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<int> Delete(int id, CancellationToken ct)
     {
         var supplier = await _context.Suppliers
             .Where(su => su.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(int id, CancellationToken ct)
     {
         return await _context.Suppliers
             .AsNoTracking()
-            .AnyAsync(s => s.Id == id);
+            .AnyAsync(s => s.Id == id, ct);
     }
 
-    public async Task<bool> ExistsByName(string name)
+    public async Task<bool> ExistsByName(string name, CancellationToken ct)
     {
         return await _context.Suppliers
             .AsNoTracking()
-            .AnyAsync(s => s.Name == name);
+            .AnyAsync(s => s.Name == name, ct);
     }
 }

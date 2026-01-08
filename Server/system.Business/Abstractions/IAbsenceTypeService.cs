@@ -5,8 +5,8 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IAbsenceTypeService
 {
-    Task<int> CreateAbsenceType(AbsenceType absenceType);
-    Task<int> DeleteAbsenceType(int id);
-    Task<List<AbsenceTypeItem>> GetAllAbsenceType();
-    Task<int> UpdateAbsenceType(int id, string name);
+    Task<int> CreateAbsenceType(AbsenceType absenceType, CancellationToken ct);
+    Task<int> DeleteAbsenceType(int id, CancellationToken ct);
+    Task<List<AbsenceTypeItem>> GetAllAbsenceType(CancellationToken ct);
+    Task<int> UpdateAbsenceType(int id, string name, CancellationToken ct);
 }

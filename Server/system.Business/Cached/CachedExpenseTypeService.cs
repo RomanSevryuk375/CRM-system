@@ -24,12 +24,12 @@ public class CachedExpenseTypeService : IExpenseTypeService
         _logger = logger;
     }
 
-    public async Task<List<ExpenseTypeItem>> GetExpenseType()
+    public async Task<List<ExpenseTypeItem>> GetExpenseType(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetExpenseType(),
+            () => _decorated.GetExpenseType(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 }

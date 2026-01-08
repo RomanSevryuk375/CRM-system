@@ -23,10 +23,10 @@ public class PartController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<PartItem>>> GetPagedParts([FromQuery]PartFilter filter)
+    public async Task<ActionResult<List<PartItem>>> GetPagedParts([FromQuery]PartFilter filter, CancellationToken ct)
     {
-        var dto = await _partService.GetPagedParts(filter);
-        var count = await _partService.GetCountParts(filter);
+        var dto = await _partService.GetPagedParts(filter, ct);
+        var count = await _partService.GetCountParts(filter, ct);
 
         var response = _mapper.Map<List<PartResponse>>(dto);
 
@@ -36,7 +36,7 @@ public class PartController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreatePart([FromBody] PartRequest request)
+    public async Task<ActionResult<long>> CreatePart([FromBody] PartRequest request, CancellationToken ct)
     {
         var (part, errors) = Part.Create(
             0,
@@ -52,13 +52,13 @@ public class PartController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _partService.CreatePart(part!);
+        var Id = await _partService.CreatePart(part!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdatePart(long id, [FromBody] PartUpdateRequest request)
+    public async Task<ActionResult<long>> UpdatePart(long id, [FromBody] PartUpdateRequest request, CancellationToken ct)
     {
         var model = new PartUpdateModel(
             request.OemArticle,
@@ -69,15 +69,15 @@ public class PartController : ControllerBase
             request.Manufacturer,
             request.Applicability);
 
-        var Id = await _partService.UpdatePart(id, model);
+        var Id = await _partService.UpdatePart(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeletePart(long id)
+    public async Task<ActionResult<long>> DeletePart(long id, CancellationToken ct)
     {
-        var Id = await _partService.DeletePart(id);
+        var Id = await _partService.DeletePart(id, ct);
 
         return Ok(Id);
     }

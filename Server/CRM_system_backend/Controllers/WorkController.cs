@@ -23,10 +23,10 @@ public class WorkController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<WorkItem>>> GetPagedWork([FromQuery] WorkFilter filter)
+    public async Task<ActionResult<List<WorkItem>>> GetPagedWork([FromQuery] WorkFilter filter, CancellationToken ct)
     {
-        var dto = await _workService.GetPagedWork(filter);
-        var count = await _workService.GetCountWork();
+        var dto = await _workService.GetPagedWork(filter, ct);
+        var count = await _workService.GetCountWork(ct);
 
         var response = _mapper.Map<List<WorkResponse>>(dto);
 
@@ -36,7 +36,7 @@ public class WorkController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateWork([FromBody] WorkRequest request)
+    public async Task<ActionResult<long>> CreateWork([FromBody] WorkRequest request, CancellationToken ct)
     {
         var (work, errors) = Work.Create(
             0,
@@ -48,13 +48,13 @@ public class WorkController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var workId = await _workService.CreateWork(work!);
+        var workId = await _workService.CreateWork(work!, ct);
 
         return Ok(workId);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateWork(long id, [FromBody] WorkRequest request)
+    public async Task<ActionResult<long>> UpdateWork(long id, [FromBody] WorkRequest request, CancellationToken ct)
     {
         var model = new WorkUpdateModel(
             request.Title,
@@ -62,15 +62,15 @@ public class WorkController : ControllerBase
             request.Description,
             request.StandartTime);
 
-        var Id = await _workService.UpdateWork(id, model);
+        var Id = await _workService.UpdateWork(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("${id}")]
-    public async Task<ActionResult<long>> DeleteWork(long id)
+    public async Task<ActionResult<long>> DeleteWork(long id, CancellationToken ct)
     {
-        var Id = await _workService.DeleteWork(id);
+        var Id = await _workService.DeleteWork(id, ct);
 
         return Ok(Id);
     }

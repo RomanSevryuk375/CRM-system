@@ -23,9 +23,9 @@ public class BillStatusController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<BillStatusItem>>> GetAllBillStatuses()
+    public async Task<ActionResult<List<BillStatusItem>>> GetAllBillStatuses(CancellationToken ct)
     {
-        var dto = await _billStatusService.GetAllBillStatuses();
+        var dto = await _billStatusService.GetAllBillStatuses(ct);
 
         var response = _mapper.Map<List<BillStatusResponse>>(dto);
 

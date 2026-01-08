@@ -23,9 +23,9 @@ public class CarStatusController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<CarStatusItem>>> GetCarStatuses()
+    public async Task<ActionResult<List<CarStatusItem>>> GetCarStatuses(CancellationToken ct)
     {
-        var dto = await _carStatusService.GetCarStatuses();
+        var dto = await _carStatusService.GetCarStatuses(ct);
 
         var response = _mapper.Map<List<CarStatusResponse>>(dto);
 

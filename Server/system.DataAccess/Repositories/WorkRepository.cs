@@ -21,7 +21,7 @@ public class WorkRepository : IWorkRepository
         _mapper = mapper;
     }
 
-    public async Task<List<WorkItem>> GetPaged(WorkFilter filter)
+    public async Task<List<WorkItem>> GetPaged(WorkFilter filter, CancellationToken ct)
     {
         var query = _context.Works.AsNoTracking();
 
@@ -47,28 +47,28 @@ public class WorkRepository : IWorkRepository
         };
 
         return await query
-            .ProjectTo<WorkItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<WorkItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<WorkItem?> GetById (long id)
+    public async Task<WorkItem?> GetById (long id, CancellationToken ct)
     {
         return await _context.Works
             .AsNoTracking()
             .Where(w => w.Id == id)
-            .ProjectTo<WorkItem>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync();
+            .ProjectTo<WorkItem>(_mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
 
     }
 
-    public async Task<int> GetCount()
+    public async Task<int> GetCount(CancellationToken ct)
     {
-        return await _context.Works.CountAsync();
+        return await _context.Works.CountAsync(ct);
     }
 
-    public async Task<long> Create(Work work)
+    public async Task<long> Create(Work work, CancellationToken ct)
     {
         var workEntity = new WorkEntity
         {
@@ -78,15 +78,15 @@ public class WorkRepository : IWorkRepository
             StandardTime = work.StandardTime,
         };
 
-        await _context.Works.AddAsync(workEntity);
-        await _context.SaveChangesAsync();
+        await _context.Works.AddAsync(workEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return workEntity.Id;
     }
 
-    public async Task<long> Update(long id, WorkUpdateModel model)
+    public async Task<long> Update(long id, WorkUpdateModel model, CancellationToken ct)
     {
-        var entty = await _context.Works.FirstOrDefaultAsync(w => w.Id == id)
+        var entty = await _context.Works.FirstOrDefaultAsync(w => w.Id == id, ct)
             ?? throw new ArgumentException("Work not found");
 
         if (!string.IsNullOrWhiteSpace(model.Title)) entty.Title = model.Title;
@@ -94,24 +94,24 @@ public class WorkRepository : IWorkRepository
         if (!string.IsNullOrWhiteSpace(model.Description)) entty.Description = model.Description;
         if (model.StandartTime.HasValue) entty.StandardTime = model.StandartTime.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entty.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var entoty = await _context.Works
             .Where(w => w.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(long id)
+    public async Task<bool> Exists(long id, CancellationToken ct)
     {
         return await _context.Works
             .AsNoTracking()
-            .AnyAsync(w => w.Id == id);
+            .AnyAsync(w => w.Id == id, ct);
     }
 }

@@ -18,11 +18,11 @@ public class CarStatusService : ICarStatusService
         _logger = logger;
     }
 
-    public async Task<List<CarStatusItem>> GetCarStatuses()
+    public async Task<List<CarStatusItem>> GetCarStatuses(CancellationToken ct)
     {
         _logger.LogInformation("Car status getting start");
 
-        var carSatsus = await _carStatusRepository.Get();
+        var carSatsus = await _carStatusRepository.Get(ct);
 
         _logger.LogInformation("Car status getting success");
 

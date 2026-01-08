@@ -30,63 +30,63 @@ public class ScheduleService : IScheduleService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<ScheduleItem>> GetPagedSchedules(ScheduleFilter filter)
+    public async Task<List<ScheduleItem>> GetPagedSchedules(ScheduleFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting schedules start");
 
-        var schedules = await _scheduleRepository.GetPaged(filter);
+        var schedules = await _scheduleRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting schedules success");
 
         return schedules;
     }
 
-    public async Task<int> GetCountSchedules(ScheduleFilter filter)
+    public async Task<int> GetCountSchedules(ScheduleFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting count schedules start");
 
-        var count = await _scheduleRepository.GetCount(filter);
+        var count = await _scheduleRepository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting count schedules success");
 
         return count;
     }
 
-    public async Task<int> CreateSchedule(Schedule schedule)
+    public async Task<int> CreateSchedule(Schedule schedule, CancellationToken ct)
     {
         _logger.LogInformation("Creating schedule start");
 
-        if (!await _workerRepository.Exists(schedule.WorkerId))
+        if (!await _workerRepository.Exists(schedule.WorkerId, ct))
         {
             _logger.LogError("Worker {workerId} not found", schedule.WorkerId);
             throw new NotFoundException($"Worker {schedule.WorkerId} not found");
         }
 
-        if (!await _shiftRepository.Exists(schedule.ShiftId))
+        if (!await _shiftRepository.Exists(schedule.ShiftId, ct))
         {
             _logger.LogError("Shift {shiftId} not found", schedule.ShiftId);
             throw new NotFoundException($"Shift {schedule.ShiftId} not found");
         }
 
-        var Id = await _scheduleRepository.Create(schedule);
+        var Id = await _scheduleRepository.Create(schedule, ct);
 
         _logger.LogInformation("Creating schedule success");
 
         return Id;
     }
 
-    public async Task<int> CreateWithShift(Schedule schedule, Shift shift)
+    public async Task<int> CreateWithShift(Schedule schedule, Shift shift, CancellationToken ct)
     {
-        await _unitOfWork.BeginTransactionAsync();
+        await _unitOfWork.BeginTransactionAsync(ct);
 
         int shiftId;
         try
         {
             _logger.LogInformation("Creating shift start");
 
-            shiftId = await _shiftRepository.Create(shift);
+            shiftId = await _shiftRepository.Create(shift, ct);
 
-            if (!await _workerRepository.Exists(schedule.WorkerId))
+            if (!await _workerRepository.Exists(schedule.WorkerId, ct))
             {
                 _logger.LogError("Worker {workerId} not found", schedule.WorkerId);
                 throw new NotFoundException($"Worker {schedule.WorkerId} not found");
@@ -97,11 +97,11 @@ public class ScheduleService : IScheduleService
             _logger.LogInformation("Creating schedule start");
 
             schedule.SetShiftId(shiftId);
-            var scheduleId = await _scheduleRepository.Create(schedule);
+            var scheduleId = await _scheduleRepository.Create(schedule, ct);
 
             _logger.LogInformation("Creating schedule success");
 
-            await _unitOfWork.CommitTransactionAsync();
+            await _unitOfWork.CommitTransactionAsync(ct);
 
             return scheduleId;
         }
@@ -109,28 +109,28 @@ public class ScheduleService : IScheduleService
         {
             _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
             
-            await _unitOfWork.RollbackAsync();
+            await _unitOfWork.RollbackAsync(ct);
 
             throw;
         }
     }
 
-    public async Task<int> UpdateSchedule(int id, ScheduleUpdateModel model)
+    public async Task<int> UpdateSchedule(int id, ScheduleUpdateModel model, CancellationToken ct)
     {
         _logger.LogInformation("Updating schedule start");
 
-        var Id = await _scheduleRepository.Update(id, model);
+        var Id = await _scheduleRepository.Update(id, model, ct);
 
         _logger.LogInformation("Updating schedule success");
 
         return Id;
     }
 
-    public async Task<int> DeleteSchedule(int id)
+    public async Task<int> DeleteSchedule(int id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting schedule start");
 
-        var Id = await _scheduleRepository.Delete(id);
+        var Id = await _scheduleRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting schedule success");
 

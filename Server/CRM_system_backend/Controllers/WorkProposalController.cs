@@ -23,10 +23,10 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<WorkProposalItem>>> GetPagedProposals([FromQuery] WorkProposalFilter filter)
+    public async Task<ActionResult<List<WorkProposalItem>>> GetPagedProposals([FromQuery] WorkProposalFilter filter, CancellationToken ct)
     {
-        var dto = await _workPropossalService.GetPagedProposals(filter);
-        var count = await _workPropossalService.GetCountProposals(filter);
+        var dto = await _workPropossalService.GetPagedProposals(filter, ct);
+        var count = await _workPropossalService.GetCountProposals(filter, ct);
 
         var response = _mapper.Map<List<WorkProposalResponse>>(dto);
 
@@ -36,15 +36,15 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<WorkProposalItem>> GetProposalById(long id)
+    public async Task<ActionResult<WorkProposalItem>> GetProposalById(long id, CancellationToken ct)
     {
-        var dto = await _workPropossalService.GetProposalById(id);
+        var dto = await _workPropossalService.GetProposalById(id, ct);
 
         return Ok(dto);
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateProposal([FromBody] WorkProposalRequest request)
+    public async Task<ActionResult<long>> CreateProposal([FromBody] WorkProposalRequest request, CancellationToken ct)
     {
         var (workProposal, errors) = WorkProposal.Create(
             0,
@@ -57,32 +57,32 @@ public class WorkProposalController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _workPropossalService.CreateProposal(workProposal!);
+        var Id = await _workPropossalService.CreateProposal(workProposal!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}/accept")]
-    public async Task<ActionResult<long>> AcceptProposal(long id)
+    public async Task<ActionResult<long>> AcceptProposal(long id, CancellationToken ct)
     {
-        await _workPropossalService.AcceptProposal(id);
+        await _workPropossalService.AcceptProposal(id, ct);
 
         return Ok(0);
     }
 
     [HttpPut("{id}/reject")]
-    public async Task<ActionResult<long>> RejectProposal(long id)
+    public async Task<ActionResult<long>> RejectProposal(long id, CancellationToken ct)
     {
-        await _workPropossalService.RejectProposal(id);
+        await _workPropossalService.RejectProposal(id, ct);
 
         return Ok(0);
     }
 
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteWorkProposal(long id)
+    public async Task<ActionResult<long>> DeleteWorkProposal(long id, CancellationToken ct)
     {
-        var result = await _workPropossalService.DeleteProposal(id);
+        var result = await _workPropossalService.DeleteProposal(id, ct);
 
         return Ok(result);
     }

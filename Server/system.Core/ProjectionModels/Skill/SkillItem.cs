@@ -1,10 +1,10 @@
 ﻿namespace CRMSystem.Core.ProjectionModels.Skill;
 
 public record SkillItem
-(
-    int Id,
-    string Worker,
-    int WorkerId,
-    string Specialization,
-    int SpecializationId
-);
+{
+    public int Id { get; init; }
+    public string Worker { get; init; } = string.Empty;
+    public int WorkerId { get; init; }
+    public string Specialization { get; init; } = string.Empty;
+    public int SpecializationId { get; init; }
+};

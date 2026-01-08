@@ -24,9 +24,9 @@ public class NotificationTypeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<NotificationTypeItem>>> GetNotificationTypes()
+    public async Task<ActionResult<List<NotificationTypeItem>>> GetNotificationTypes(CancellationToken ct)
     {
-        var dto = await _notificationTypeService.GetNotificationTypes();
+        var dto = await _notificationTypeService.GetNotificationTypes(ct);
 
         var response = _mapper.Map<NotificationTypeResponse>(dto);
 

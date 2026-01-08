@@ -4,7 +4,6 @@ using CRMSystem.Core.ProjectionModels.PaymentNote;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
@@ -28,79 +27,79 @@ public class PaymentNoteService : IPaymentNoteService
         _logger = logger;
     }
 
-    public async Task<List<PaymentNoteItem>> GetPagedPaymentNotes(PaymentNoteFilter filter)
+    public async Task<List<PaymentNoteItem>> GetPagedPaymentNotes(PaymentNoteFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting payment note start");
 
-        var paymentsNote = await _paymentNoteRepository.GetPaged(filter);
+        var paymentsNote = await _paymentNoteRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting payment note success");
 
         return paymentsNote;
     }
 
-    public async Task<int> GetCountPaymentNotes(PaymentNoteFilter filter)
+    public async Task<int> GetCountPaymentNotes(PaymentNoteFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting count payment note start");
 
-        var count = await _paymentNoteRepository.GetCount(filter);
+        var count = await _paymentNoteRepository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting count payment note success");
 
         return count;
     }
 
-    public async Task<long> CreatePaymentNote(PaymentNote paymentNote)
+    public async Task<long> CreatePaymentNote(PaymentNote paymentNote, CancellationToken ct)
     {
         _logger.LogInformation("Creating payment note start");
 
-        if (!await _billRepository.Exists(paymentNote.BillId))
+        if (!await _billRepository.Exists(paymentNote.BillId, ct))
         {
             _logger.LogError("Bill{billId} not found", paymentNote.BillId);
             throw new NotFoundException($"Bill {paymentNote.BillId} not found");
         }
 
-        if (!await _paymentMethodRepository.Exists((int)paymentNote.MethodId))
+        if (!await _paymentMethodRepository.Exists((int)paymentNote.MethodId, ct))
         {
             _logger.LogError("Method {mrthodId} not found", (int)paymentNote.MethodId);
             throw new NotFoundException($"Method {(int)paymentNote.MethodId} not found");
         }
 
-        var Id = await _paymentNoteRepository.Create(paymentNote);
+        var Id = await _paymentNoteRepository.Create(paymentNote, ct);
 
         _logger.LogInformation("Creating payment note success");
 
         _logger.LogInformation("Recalculating bill{billId} start", paymentNote.BillId);
 
-        await _billRepository.RecalculateDebt(paymentNote.BillId);
+        await _billRepository.RecalculateDebt(paymentNote.BillId, ct);
 
         _logger.LogInformation("Recalculating bill{billId} success", paymentNote.BillId);
 
         return Id;
     }
 
-    public async Task<long> UpratePaymentNote(long id, PaymentMethodEnum? method)
+    public async Task<long> UpratePaymentNote(long id, PaymentMethodEnum? method, CancellationToken ct)
     {
         _logger.LogInformation("Updating payment note start");
 
-        if (method.HasValue && !await _paymentMethodRepository.Exists((int)method))
+        if (method.HasValue && !await _paymentMethodRepository.Exists((int)method, ct))
         {
             _logger.LogError("Method {mrthodId} not found", (int)method);
             throw new NotFoundException($"Method {(int)method} not found");
         }
 
-        var Id = await _paymentNoteRepository.Update(id, method);
+        var Id = await _paymentNoteRepository.Update(id, method, ct);
 
         _logger.LogInformation("Updating payment note success");
 
         return Id;
     }
 
-    public async Task<long> DeletePaymentNote(long id)
+    public async Task<long> DeletePaymentNote(long id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting payment note start");
 
-        var Id = await _paymentNoteRepository.Delete(id);
+        var Id = await _paymentNoteRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting payment note success");
 

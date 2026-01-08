@@ -4,6 +4,6 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IOrderPriorityRepository
 {
-    Task<List<OrderPriorityItem>> Get();
-    Task<bool> Exists(int id);
+    Task<List<OrderPriorityItem>> Get(CancellationToken ct);
+    Task<bool> Exists(int id, CancellationToken ct);
 }

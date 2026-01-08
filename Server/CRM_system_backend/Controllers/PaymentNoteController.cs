@@ -24,10 +24,10 @@ public class PaymentNoteController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<PaymentNote>>> GetPaymentNote([FromQuery] PaymentNoteFilter filter)
+    public async Task<ActionResult<List<PaymentNote>>> GetPaymentNote([FromQuery] PaymentNoteFilter filter, CancellationToken ct)
     {
-        var dto  = await _paymentNoteService.GetPagedPaymentNotes(filter);
-        var count = await _paymentNoteService.GetCountPaymentNotes(filter);
+        var dto  = await _paymentNoteService.GetPagedPaymentNotes(filter, ct);
+        var count = await _paymentNoteService.GetCountPaymentNotes(filter, ct);
 
         var  response = _mapper.Map<List<PaymentNoteResponse>>(dto);
 
@@ -37,7 +37,7 @@ public class PaymentNoteController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreatePaymentNote([FromBody] PaymentNoteRequest request)
+    public async Task<ActionResult<long>> CreatePaymentNote([FromBody] PaymentNoteRequest request, CancellationToken ct)
     {
         var (paymentNote, errors) = PaymentNote.Create(
             0,
@@ -49,23 +49,23 @@ public class PaymentNoteController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _paymentNoteService.CreatePaymentNote(paymentNote!);
+        var Id = await _paymentNoteService.CreatePaymentNote(paymentNote!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<int>> UpdatePaymentNote(long id, [FromBody] PaymentMethodEnum? method)
+    public async Task<ActionResult<int>> UpdatePaymentNote(long id, [FromBody] PaymentMethodEnum? method, CancellationToken ct)
     {
-        var Id = await _paymentNoteService.UpratePaymentNote(id, method);
+        var Id = await _paymentNoteService.UpratePaymentNote(id, method, ct);
         
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<int>> DeletePaymentNote(int id)
+    public async Task<ActionResult<int>> DeletePaymentNote(int id, CancellationToken ct)
     {
-        var result = await _paymentNoteService.DeletePaymentNote(id);
+        var result = await _paymentNoteService.DeletePaymentNote(id, ct);
 
         return Ok(result);
     }

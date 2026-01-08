@@ -21,7 +21,7 @@ public class AcceptanceRepository : IAcceptanceRepository
         _mapper = mapper;
     }
 
-    private IQueryable<AcceptanceEntity> ApplyFilter(IQueryable<AcceptanceEntity> query, AcceptanceFilter filter)
+    private static IQueryable<AcceptanceEntity> ApplyFilter(IQueryable<AcceptanceEntity> query, AcceptanceFilter filter)
     {
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
             query = query.Where(x => filter.WorkerIds.Contains(x.WorkerId));
@@ -35,7 +35,7 @@ public class AcceptanceRepository : IAcceptanceRepository
         return query;
     }
 
-    public async Task<List<AcceptanceItem>> GetPaged(AcceptanceFilter filter)
+    public async Task<List<AcceptanceItem>> GetPaged(AcceptanceFilter filter, CancellationToken ct)
     {
         var query = _context.Acceptances.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -70,20 +70,20 @@ public class AcceptanceRepository : IAcceptanceRepository
         };
 
         return await query
-            .ProjectTo<AcceptanceItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<AcceptanceItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(AcceptanceFilter filter)
+    public async Task<int> GetCount(AcceptanceFilter filter, CancellationToken ct)
     {
         var query = _context.Acceptances.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(Acceptance acceptance)
+    public async Task<long> Create(Acceptance acceptance, CancellationToken ct)
     {
         var accptanceEntity = new AcceptanceEntity
         {
@@ -98,15 +98,15 @@ public class AcceptanceRepository : IAcceptanceRepository
             WorkerSign = acceptance.WorkerSign
         };
 
-        await _context.AddAsync(accptanceEntity);
-        await _context.SaveChangesAsync();
+        await _context.AddAsync(accptanceEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return accptanceEntity.Id;
     }
 
-    public async Task<long> Update(long id, AcceptanceUpdateModel model)
+    public async Task<long> Update(long id, AcceptanceUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Acceptances.FirstOrDefaultAsync(a => a.Id == id)
+        var entity = await _context.Acceptances.FirstOrDefaultAsync(a => a.Id == id, ct)
             ?? throw new Exception("Acceptance not found");
 
         if (model.Mileage.HasValue) entity.Mileage = model.Mileage.Value;
@@ -116,24 +116,24 @@ public class AcceptanceRepository : IAcceptanceRepository
         if (model.ClientSign.HasValue) entity.ClientSign = model.ClientSign.Value;
         if (model.WorkerSign.HasValue) entity.WorkerSign = model.WorkerSign.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var entity = await _context.Acceptances
             .Where(a => a.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(long id)
+    public async Task<bool> Exists(long id, CancellationToken ct)
     {
         return await _context.Acceptances
             .AsNoTracking()
-            .AnyAsync(a => a.Id == id);
+            .AnyAsync(a => a.Id == id, ct);
     }
 }

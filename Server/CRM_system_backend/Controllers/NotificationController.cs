@@ -23,10 +23,10 @@ public class NotificationController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<NotificationItem>>> GetPagedNotifications([FromQuery]NotificationFilter filter)
+    public async Task<ActionResult<List<NotificationItem>>> GetPagedNotifications([FromQuery]NotificationFilter filter, CancellationToken ct)
     {
-        var dto = await _notificationService.GetPagedNotifications(filter);
-        var count = await _notificationService.GetCountNotifications(filter);
+        var dto = await _notificationService.GetPagedNotifications(filter, ct);
+        var count = await _notificationService.GetCountNotifications(filter, ct);
 
         var response = _mapper.Map<List<NotificationResponse>>(dto);
 
@@ -36,7 +36,7 @@ public class NotificationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateNotification(NotificationRequest request)
+    public async Task<ActionResult<long>> CreateNotification(NotificationRequest request, CancellationToken ct)
     {
         var (notification, errors) = Notification.Create(
             0,
@@ -50,15 +50,15 @@ public class NotificationController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _notificationService.CreateNotification(notification!);
+        var Id = await _notificationService.CreateNotification(notification!, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteNotification(long id)
+    public async Task<ActionResult<long>> DeleteNotification(long id, CancellationToken ct)
     {
-        var Id = await _notificationService.DeleteNotification(id);
+        var Id = await _notificationService.DeleteNotification(id, ct);
 
         return Ok(Id);
     }

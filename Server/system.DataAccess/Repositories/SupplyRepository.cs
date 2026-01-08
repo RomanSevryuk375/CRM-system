@@ -21,7 +21,7 @@ public class SupplyRepository : ISupplyRepository
         _mapper = mapper;
     }
 
-    private IQueryable<SupplyEntity> ApplyFilter(IQueryable<SupplyEntity> query, SupplyFilter filter)
+    private static IQueryable<SupplyEntity> ApplyFilter(IQueryable<SupplyEntity> query, SupplyFilter filter)
     {
         if (filter.SuplierIds != null && filter.SuplierIds.Any())
             query = query.Where(s => filter.SuplierIds.Contains(s.SupplierId));
@@ -29,7 +29,7 @@ public class SupplyRepository : ISupplyRepository
         return query;
     }
 
-    public async Task<List<SupplyItem>> GetPaged(SupplyFilter filter)
+    public async Task<List<SupplyItem>> GetPaged(SupplyFilter filter, CancellationToken ct)
     {
         var query = _context.Supplies.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -53,20 +53,20 @@ public class SupplyRepository : ISupplyRepository
         };
 
         return await query
-            .ProjectTo<SupplyItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<SupplyItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount (SupplyFilter filter)
+    public async Task<int> GetCount (SupplyFilter filter, CancellationToken ct)
     {
         var query = _context.Supplies.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(Supply supply)
+    public async Task<long> Create(Supply supply, CancellationToken ct)
     {
         var sullpyEntity = new SupplyEntity
         {
@@ -74,25 +74,25 @@ public class SupplyRepository : ISupplyRepository
             Date = supply.Date,
         };
 
-        await _context.Supplies.AddAsync(sullpyEntity);
-        await _context.SaveChangesAsync();
+        await _context.Supplies.AddAsync(sullpyEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return sullpyEntity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var enity = await _context.Supplies
             .Where(s => s.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(long id)
+    public async Task<bool> Exists(long id, CancellationToken ct)
     {
         return await _context.Supplies
             .AsNoTracking()
-            .AnyAsync(s => s.Id == id);
+            .AnyAsync(s => s.Id == id, ct);
     }
 }

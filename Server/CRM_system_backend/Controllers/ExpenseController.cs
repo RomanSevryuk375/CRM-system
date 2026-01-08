@@ -24,10 +24,10 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ExpenseItem>>> GetPagedExpense([FromQuery] ExpenseFilter filter)
+    public async Task<ActionResult<List<ExpenseItem>>> GetPagedExpense([FromQuery] ExpenseFilter filter, CancellationToken ct)
     {
-        var dto = await _expenseService.GetPagedExpenses(filter);
-        var count = await _expenseService.GetCountExpenses(filter);
+        var dto = await _expenseService.GetPagedExpenses(filter, ct);
+        var count = await _expenseService.GetCountExpenses(filter, ct);
 
         var response = _mapper.Map<List<ExpenseResponse>>(dto);
 
@@ -37,8 +37,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> CreateExpense([FromBody] ExpenseRequest request)
+    public async Task<ActionResult<long>> CreateExpense([FromBody] ExpenseRequest request, CancellationToken ct)
     {
         var (expense, errors) = Expense.Create(
             0,
@@ -52,14 +51,13 @@ public class ExpenseController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _expenseService.CreateExpenses(expense!);
+        var Id = await _expenseService.CreateExpenses(expense!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> UpdateExpense(int id, [FromBody] ExpenseUpdateRequest request)
+    public async Task<ActionResult<long>> UpdateExpense(int id, [FromBody] ExpenseUpdateRequest request, CancellationToken ct)
     {
         var model = new ExpenseUpdateModel(
             request.Date,
@@ -67,16 +65,15 @@ public class ExpenseController : ControllerBase
             request.ExpenseTypeId,
             request.Sum);
 
-        var Id = await _expenseService.UpdateExpense(id, model);
+        var Id = await _expenseService.UpdateExpense(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> DeleteExpense(long id)
+    public async Task<ActionResult<long>> DeleteExpense(long id, CancellationToken ct)
     {
-        var result = await _expenseService.DeleteExpense(id);
+        var result = await _expenseService.DeleteExpense(id, ct);
 
         return Ok(result);
     }

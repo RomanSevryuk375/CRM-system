@@ -5,9 +5,9 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IExpenseRepository
 {
-    Task<long> Create(Expense expense);
-    Task<long> Delete(long id);
-    Task<int> GetCount(ExpenseFilter filter);
-    Task<List<ExpenseItem>> GetPaged(ExpenseFilter filter);
-    Task<long> Update(long id, ExpenseUpdateModel model);
+    Task<long> Create(Expense expense, CancellationToken ct);
+    Task<long> Delete(long id, CancellationToken ct);
+    Task<int> GetCount(ExpenseFilter filter, CancellationToken ct);
+    Task<List<ExpenseItem>> GetPaged(ExpenseFilter filter, CancellationToken ct);
+    Task<long> Update(long id, ExpenseUpdateModel model, CancellationToken ct);
 }

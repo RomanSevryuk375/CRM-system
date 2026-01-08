@@ -23,10 +23,10 @@ public class SupplyController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<SupplyItem>>> GetPagedSupplies([FromQuery]SupplyFilter filter)
+    public async Task<ActionResult<List<SupplyItem>>> GetPagedSupplies([FromQuery]SupplyFilter filter, CancellationToken ct)
     {
-        var dto = await _supplyService.GetPagedSupplies(filter);
-        var count = await _supplyService.GetCountSupplies(filter);
+        var dto = await _supplyService.GetPagedSupplies(filter, ct);
+        var count = await _supplyService.GetCountSupplies(filter, ct);
 
         var response = _mapper.Map<SupplyResponse>(dto);
 
@@ -36,7 +36,7 @@ public class SupplyController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateSupply(SupplyRequest request)
+    public async Task<ActionResult<long>> CreateSupply(SupplyRequest request, CancellationToken ct)
     {
         var (supply, errors) = Supply.Create(
             0,
@@ -46,15 +46,15 @@ public class SupplyController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _supplyService.CreateSupply(supply!);
+        var Id = await _supplyService.CreateSupply(supply!, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteSupply(long id)
+    public async Task<ActionResult<long>> DeleteSupply(long id, CancellationToken ct)
     {
-        var Id = await _supplyService.DeleteSupply(id);
+        var Id = await _supplyService.DeleteSupply(id, ct);
 
         return Ok(Id);
     }

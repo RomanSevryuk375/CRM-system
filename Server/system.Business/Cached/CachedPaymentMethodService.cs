@@ -23,13 +23,13 @@ public class CachedPaymentMethodService : IPaymentMethodService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<List<PaymentMethodItem>> GetPaymentMethods()
+    public async Task<List<PaymentMethodItem>> GetPaymentMethods(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetPaymentMethods(),
+            () => _decorated.GetPaymentMethods(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
 
     }
 }

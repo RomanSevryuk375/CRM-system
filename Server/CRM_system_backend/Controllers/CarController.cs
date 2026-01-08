@@ -24,10 +24,10 @@ public class CarController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<CarItem>>> GetPagedCars([FromQuery]CarFilter filter)
+    public async Task<ActionResult<List<CarItem>>> GetPagedCars([FromQuery]CarFilter filter, CancellationToken ct)
     {
-        var dto = await _carService.GetPagedCars(filter);
-        var cout = await _carService.GetCountCars(filter);
+        var dto = await _carService.GetPagedCars(filter, ct);
+        var cout = await _carService.GetCountCars(filter, ct);
 
         var response = _mapper.Map<List<CarResponse>>(dto);
 
@@ -37,15 +37,15 @@ public class CarController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<CarItem>> GetCarById(long id)
+    public async Task<ActionResult<CarItem>> GetCarById(long id, CancellationToken ct)
     {
-        var car = await _carService.GetCarById(id);
+        var car = await _carService.GetCarById(id, ct);
 
         return Ok(car);
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateCar([FromBody] CarRequest request)
+    public async Task<ActionResult<long>> CreateCar([FromBody] CarRequest request, CancellationToken ct)
     {
         Console.WriteLine($"CONTROLLER DEBUG: Recieved JSON mapped to: OwnerId={request.OwnerId}, StatusId={request.StatusId}");
         var (car, errors) = Car.Create(
@@ -62,13 +62,13 @@ public class CarController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _carService.CreateCar(car!);
+        var Id = await _carService.CreateCar(car!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateCar(long id, [FromBody]CarUpdateRequest request)
+    public async Task<ActionResult<long>> UpdateCar(long id, [FromBody]CarUpdateRequest request, CancellationToken ct)
     {
         var model = new CarUpdateModel(
             request.StatusId,
@@ -77,15 +77,15 @@ public class CarController : ControllerBase
             request.YearOfManufacture,
             request.Mileage);
 
-        var Id = await _carService.UpdateCar(id, model);
+        var Id = await _carService.UpdateCar(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteCar(long id)
+    public async Task<ActionResult<long>> DeleteCar(long id, CancellationToken ct)
     {
-        var Id = await _carService.DeleteCar(id);
+        var Id = await _carService.DeleteCar(id, ct);
 
         return Ok(Id);
     }

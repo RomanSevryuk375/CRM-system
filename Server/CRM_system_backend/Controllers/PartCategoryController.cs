@@ -23,9 +23,9 @@ public class PartCategoryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<PartCategoryItem>>> GetPartCategories()
+    public async Task<ActionResult<List<PartCategoryItem>>> GetPartCategories(CancellationToken ct)
     {
-        var dto = await _partCategoryService.GetPartCategories();
+        var dto = await _partCategoryService.GetPartCategories(ct);
 
         var response = _mapper.Map<PartCategoryResponse>(dto);
 
@@ -33,7 +33,7 @@ public class PartCategoryController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreatePartCategory([FromBody] PartCategoryRequest request)
+    public async Task<ActionResult<int>> CreatePartCategory([FromBody] PartCategoryRequest request, CancellationToken ct)
     {
         var (partCategory, errors) = PartCategory.Create(
             0,
@@ -43,27 +43,27 @@ public class PartCategoryController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _partCategoryService.CreatePartCategory(partCategory!);
+        var Id = await _partCategoryService.CreatePartCategory(partCategory!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<int>> UpdatePartCategory(int id, [FromBody]PartCategoryUpdateRequest request)
+    public async Task<ActionResult<int>> UpdatePartCategory(int id, [FromBody]PartCategoryUpdateRequest request, CancellationToken ct)
     {
         var model = new PartCategoryUpdateModel(
             request.Name,
             request.Description);
 
-        var Id = await _partCategoryService.UpdatePartCategory(id, model);
+        var Id = await _partCategoryService.UpdatePartCategory(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<int>> DeletePartCategory(int id)
+    public async Task<ActionResult<int>> DeletePartCategory(int id, CancellationToken ct)
     {
-        var Id = await _partCategoryService.DeletePartCategory(id);
+        var Id = await _partCategoryService.DeletePartCategory(id, ct);
 
         return Ok(Id);
     }

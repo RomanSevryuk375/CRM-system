@@ -7,10 +7,10 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IAcceptanceImgRepository
 {
-    Task<long> Create(AcceptanceImg acceptanceImg);
-    Task<long> Delete(long id);
-    Task<int> GetCount(AcceptanceImgFilter filter);
-    Task<List<AcceptanceImgItem>> GetPaged(AcceptanceImgFilter filter);
-    Task<AcceptanceImgItem?> GetById(long id);
-    Task<long> Update(long id, string? filePath, string? description);
+    Task<long> Create(AcceptanceImg acceptanceImg, CancellationToken ct);
+    Task<long> Delete(long id, CancellationToken ct);
+    Task<int> GetCount(AcceptanceImgFilter filter, CancellationToken ct);
+    Task<List<AcceptanceImgItem>> GetPaged(AcceptanceImgFilter filter, CancellationToken ct);
+    Task<AcceptanceImgItem?> GetById(long id, CancellationToken ct);
+    Task<long> Update(long id, string? filePath, string? description, CancellationToken ct);
 }

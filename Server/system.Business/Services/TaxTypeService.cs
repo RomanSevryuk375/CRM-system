@@ -18,11 +18,11 @@ public class TaxTypeService : ITaxTypeService
         _logger = logger;
     }
 
-    public async Task<List<TaxTypeItem>> GetTaxTypes()
+    public async Task<List<TaxTypeItem>> GetTaxTypes(CancellationToken ct)
     {
         _logger.LogInformation("Getting tax type start");
 
-        var taxTypes = await _taxTypeRepository.Get();
+        var taxTypes = await _taxTypeRepository.Get(ct);
 
         _logger.LogInformation("Getting tax types success");
 

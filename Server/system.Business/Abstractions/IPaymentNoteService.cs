@@ -6,9 +6,9 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IPaymentNoteService
 {
-    Task<long> CreatePaymentNote(PaymentNote paymentNote);
-    Task<long> DeletePaymentNote(long id);
-    Task<int> GetCountPaymentNotes(PaymentNoteFilter filter);
-    Task<List<PaymentNoteItem>> GetPagedPaymentNotes(PaymentNoteFilter filter);
-    Task<long> UpratePaymentNote(long id, PaymentMethodEnum? method);
+    Task<long> CreatePaymentNote(PaymentNote paymentNote, CancellationToken ct);
+    Task<long> DeletePaymentNote(long id, CancellationToken ct);
+    Task<int> GetCountPaymentNotes(PaymentNoteFilter filter, CancellationToken ct);
+    Task<List<PaymentNoteItem>> GetPagedPaymentNotes(PaymentNoteFilter filter, CancellationToken ct);
+    Task<long> UpratePaymentNote(long id, PaymentMethodEnum? method, CancellationToken ct);
 }

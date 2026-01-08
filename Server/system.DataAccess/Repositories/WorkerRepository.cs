@@ -21,7 +21,7 @@ public class WorkerRepository : IWorkerRepository
         _mapper = mapper;
     }
 
-    private IQueryable<WorkerEntity> ApplyFilter(IQueryable<WorkerEntity> query, WorkerFilter filter)
+    private static IQueryable<WorkerEntity> ApplyFilter(IQueryable<WorkerEntity> query, WorkerFilter filter)
     {
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
             query = query.Where(w => filter.WorkerIds.Contains(w.Id));
@@ -29,7 +29,7 @@ public class WorkerRepository : IWorkerRepository
         return query;
     }
 
-    public async Task<List<WorkerItem>> GetPaged(WorkerFilter filter)
+    public async Task<List<WorkerItem>> GetPaged(WorkerFilter filter, CancellationToken ct)
     {
         var query = _context.Workers.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -58,29 +58,29 @@ public class WorkerRepository : IWorkerRepository
         };
 
         return await query
-            .ProjectTo<WorkerItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<WorkerItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<WorkerItem?> GetById(int id)
+    public async Task<WorkerItem?> GetById(int id, CancellationToken ct)
     {
         return await _context.Workers
             .AsNoTracking()
             .Where(w => w.Id == id)
-            .ProjectTo<WorkerItem>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync();
+            .ProjectTo<WorkerItem>(_mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<int> GetCount(WorkerFilter filter)
+    public async Task<int> GetCount(WorkerFilter filter, CancellationToken ct)
     {
         var query = _context.Workers.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<int> Create(Worker worker)
+    public async Task<int> Create(Worker worker, CancellationToken ct)
     {
         var workerEntities = new WorkerEntity
         {
@@ -92,15 +92,15 @@ public class WorkerRepository : IWorkerRepository
             Email = worker.Email
         };
 
-        await _context.Workers.AddAsync(workerEntities);
-        await _context.SaveChangesAsync();
+        await _context.Workers.AddAsync(workerEntities, ct);
+        await _context.SaveChangesAsync(ct);
 
         return worker.Id;
     }
 
-    public async Task<int> Update(int id, WorkerUpdateModel model)
+    public async Task<int> Update(int id, WorkerUpdateModel model, CancellationToken ct)
     {
-        var workerEntity = await _context.Workers.FirstOrDefaultAsync(w => w.Id == id)
+        var workerEntity = await _context.Workers.FirstOrDefaultAsync(w => w.Id == id, ct)
             ?? throw new Exception("Payment note not found");
 
         if (!string.IsNullOrWhiteSpace(model.Name)) workerEntity.Name = model.Name;
@@ -109,25 +109,25 @@ public class WorkerRepository : IWorkerRepository
         if (!string.IsNullOrWhiteSpace(model.PhoneNumber)) workerEntity.PhoneNumber = model.PhoneNumber;
         if (!string.IsNullOrWhiteSpace(model.Email)) workerEntity.Email = model.Email;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return workerEntity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<int> Delete(int id, CancellationToken ct)
     {
         var worker = await _context.Workers
             .Where(w => w.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(int id, CancellationToken ct)
     {
         var exist = await _context.Workers
             .AsNoTracking()
-            .AnyAsync(a => a.Id == id);
+            .AnyAsync(a => a.Id == id, ct);
 
         return exist;
     }

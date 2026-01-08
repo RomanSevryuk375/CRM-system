@@ -24,10 +24,10 @@ public class BillController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<BillItem>>> GetPagedBills([FromQuery] BillFilter filter)
+    public async Task<ActionResult<List<BillItem>>> GetPagedBills([FromQuery] BillFilter filter, CancellationToken ct)
     {
-        var dto = await _billService.GetPagedBills(filter);
-        var count = await _billService.GetCountBills(filter);
+        var dto = await _billService.GetPagedBills(filter, ct);
+        var count = await _billService.GetCountBills(filter, ct);
 
         var response = _mapper.Map<List<BillResponse>>(dto);
 
@@ -37,7 +37,7 @@ public class BillController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateBill([FromBody] BillRequest request)
+    public async Task<ActionResult<long>> CreateBill([FromBody] BillRequest request, CancellationToken ct)
     {
         var (bill, errors) = Bill.Create(
             0,
@@ -50,25 +50,25 @@ public class BillController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _billService.CreateBill(bill!);
+        var Id = await _billService.CreateBill(bill!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateBill(long id, [FromBody]BillUpdateRequest request)
+    public async Task<ActionResult<long>> UpdateBill(long id, [FromBody]BillUpdateRequest request, CancellationToken ct)
     {
         var model = _mapper.Map<BillUpdateModel>(request);
 
-        var Id = await _billService.UpdateBill(id, model);
+        var Id = await _billService.UpdateBill(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> Delete(long id)
+    public async Task<ActionResult<long>> Delete(long id, CancellationToken ct)
     {
-        var Id = await _billService.Delete(id);
+        var Id = await _billService.Delete(id, ct);
 
         return Ok(Id);
     }

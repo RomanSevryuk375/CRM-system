@@ -23,7 +23,7 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
         _mapper = mapper;
     }
 
-    private IQueryable<AcceptanceImgEntity> ApplyFilter(IQueryable<AcceptanceImgEntity> query, AcceptanceImgFilter filter)
+    private static IQueryable<AcceptanceImgEntity> ApplyFilter(IQueryable<AcceptanceImgEntity> query, AcceptanceImgFilter filter)
     {
         if (filter.AcceptanceIds != null && filter.AcceptanceIds.Any())
             query = query.Where(a => filter.AcceptanceIds.Contains(a.AcceptanceId));
@@ -31,7 +31,7 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
         return query;
     }
 
-    public async Task<List<AcceptanceImgItem>> GetPaged(AcceptanceImgFilter filter)
+    public async Task<List<AcceptanceImgItem>> GetPaged(AcceptanceImgFilter filter, CancellationToken ct)
     {
         var query = _context.AcceptanceImgs.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -39,30 +39,30 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
         query = query.OrderByDescending(a => a.Id);
 
         return await query
-            .ProjectTo<AcceptanceImgItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<AcceptanceImgItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<AcceptanceImgItem?> GetById(long id)
+    public async Task<AcceptanceImgItem?> GetById(long id, CancellationToken ct)
     {
         return await _context.AcceptanceImgs
             .AsNoTracking()
             .Where(a => a.Id == id)
-            .ProjectTo<AcceptanceImgItem>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync();
+            .ProjectTo<AcceptanceImgItem>(_mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
             
     }
 
-    public async Task<int> GetCount(AcceptanceImgFilter filter)
+    public async Task<int> GetCount(AcceptanceImgFilter filter, CancellationToken ct)
     {
         var query = _context.AcceptanceImgs.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(AcceptanceImg acceptanceImg)
+    public async Task<long> Create(AcceptanceImg acceptanceImg, CancellationToken ct)
     {
         var accptanceImgEntity = new AcceptanceImgEntity
         {
@@ -71,15 +71,15 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
             Description = acceptanceImg.Description,
         };
 
-        await _context.AddAsync(accptanceImgEntity);
-        await _context.SaveChangesAsync();
+        await _context.AddAsync(accptanceImgEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return accptanceImgEntity.Id;
     }
 
-    public async Task<long> Update(long id, string? filePath, string? description)
+    public async Task<long> Update(long id, string? filePath, string? description, CancellationToken ct)
     {
-        var entity = await _context.AcceptanceImgs.FirstOrDefaultAsync(a => a.Id == id) 
+        var entity = await _context.AcceptanceImgs.FirstOrDefaultAsync(a => a.Id == id, ct)
             ?? throw new Exception("AcceptanceImg not found");
 
         if (entity == null) throw new Exception("AcceptanceImg not found");
@@ -87,16 +87,16 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
         if (!string.IsNullOrEmpty(filePath)) entity.FilePath = filePath;
         if (!string.IsNullOrEmpty(description)) entity.Description = description;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var entity = await _context.AcceptanceImgs
             .Where(a => a.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }

@@ -22,9 +22,9 @@ public class PaymentMethodController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<PaymentMethodItem>>> GetPaymentMethods()
+    public async Task<ActionResult<List<PaymentMethodItem>>> GetPaymentMethods(CancellationToken ct)
     {
-        var dto = await _paymentMethodService.GetPaymentMethods();
+        var dto = await _paymentMethodService.GetPaymentMethods(ct);
 
         var response = _mapper.Map<List<PaymentMethodResponse>>(dto);
 

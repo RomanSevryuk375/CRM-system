@@ -20,50 +20,50 @@ public class ShiftService : IShiftService
         _logger = logger;
     }
 
-    public async Task<List<ShiftItem>> GetShifts()
+    public async Task<List<ShiftItem>> GetShifts(CancellationToken ct)
     {
         _logger.LogInformation("Getting shift start");
 
-        var shifts = await _shiftRepository.Get();
+        var shifts = await _shiftRepository.Get(ct);
 
         _logger.LogInformation("Getting shift success");
 
         return shifts;
     }
 
-    public async Task<int> CreateShift(Shift shift)
+    public async Task<int> CreateShift(Shift shift, CancellationToken ct)
     {
         _logger.LogInformation("Creating shift start");
 
-        if (await _shiftRepository.HasOverLap(shift.StartAt, shift.EndAt))
+        if (await _shiftRepository.HasOverLap(shift.StartAt, shift.EndAt, ct))
         {
             _logger.LogInformation("Has date overlaps");
             throw new ConflictException($"Has date overlaps");
         }
 
-        var Id = await _shiftRepository.Create(shift);
+        var Id = await _shiftRepository.Create(shift, ct);
 
         _logger.LogInformation("Creating shift success");
 
         return Id;
     }
 
-    public async Task<int> UpdateShift(int id, ShiftUpdateModel model)
+    public async Task<int> UpdateShift(int id, ShiftUpdateModel model, CancellationToken ct)
     {
         _logger.LogInformation("Updating shift start");
 
-        var Id = await _shiftRepository.Update(id, model);
+        var Id = await _shiftRepository.Update(id, model, ct);
 
         _logger.LogInformation("Updating shift success");
 
         return Id;
     }
 
-    public async Task<int> DeleteShift(int id)
+    public async Task<int> DeleteShift(int id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting shift start");
 
-        var Id = await _shiftRepository.Delete(id);
+        var Id = await _shiftRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting shift success");
 

@@ -23,9 +23,9 @@ public class TaxController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<TaxItem>>> GetTaxes([FromQuery] TaxFilter filter)
+    public async Task<ActionResult<List<TaxItem>>> GetTaxes([FromQuery] TaxFilter filter, CancellationToken ct)
     {
-        var dto = await _taxService.GetTaxes(filter);
+        var dto = await _taxService.GetTaxes(filter, ct);
 
         var response = _mapper.Map<List<TaxResponse>>(dto);
 
@@ -33,7 +33,7 @@ public class TaxController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreateTax([FromBody] TaxRequest taxRequest)
+    public async Task<ActionResult<int>> CreateTax([FromBody] TaxRequest taxRequest, CancellationToken ct)
     {
         var (tax, errors) = Tax.Create(
             0,
@@ -44,27 +44,27 @@ public class TaxController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _taxService.CreateTax(tax!);
+        var Id = await _taxService.CreateTax(tax!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<int>> UpdateTax(int id, [FromBody] TaxUpdateRequest request)
+    public async Task<ActionResult<int>> UpdateTax(int id, [FromBody] TaxUpdateRequest request, CancellationToken ct)
     {
         var model = new TaxUpdateModel(
             request.Name,
             request.Rate);
 
-        var result = await _taxService.UpdateTax(id, model);
+        var result = await _taxService.UpdateTax(id, model, ct);
 
         return Ok(result);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<int>> DeleteTax(int id)
+    public async Task<ActionResult<int>> DeleteTax(int id, CancellationToken ct)
     {
-        var result = await _taxService.DeleteTax(id);
+        var result = await _taxService.DeleteTax(id, ct);
 
         return Ok(result);
     }

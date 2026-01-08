@@ -24,20 +24,23 @@ public class AbsenceController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<List<AbsenceItem>>> GetPagedAbsence(
-        [FromQuery] AbsenceFilter filter)
+        [FromQuery] AbsenceFilter filter,
+        CancellationToken ct)
     {
-        var dto = await _absenceService.GetPagedAbsence(filter);
+        var dto = await _absenceService.GetPagedAbsence(filter, ct);
 
         var response = _mapper.Map<List<AbsenceResponse>>(dto);
 
-        var count = await _absenceService.GetCountAbsence(filter);
+        var count = await _absenceService.GetCountAbsence(filter, ct);
         Response.Headers.Append("x-total-count", count.ToString());
 
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreateAbsence([FromBody] AbsenceRequest request)
+    public async Task<ActionResult<int>> CreateAbsence(
+        [FromBody] AbsenceRequest request,
+        CancellationToken ct)
     {
         var (absence, errors) = Absence.Create(
             0,
@@ -49,25 +52,30 @@ public class AbsenceController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _absenceService.CreateAbsence(absence!);
+        var Id = await _absenceService.CreateAbsence(absence!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<int>> UpdateAbsence(int id, [FromBody] AbsenceUpdateRequest request)
+    public async Task<ActionResult<int>> UpdateAbsence(
+        int id, 
+        [FromBody] AbsenceUpdateRequest request,
+        CancellationToken ct)
     {
         var model = _mapper.Map<AbsenceUpdateModel>(request);
 
-        var Id = await _absenceService.UpdateAbsence(id, model);
+        var Id = await _absenceService.UpdateAbsence(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<int>> DeleteAbsence(int id)
+    public async Task<ActionResult<int>> DeleteAbsence(
+        int id,
+        CancellationToken ct)
     {
-        var Id = await _absenceService.DeleteAbsence(id);
+        var Id = await _absenceService.DeleteAbsence(id, ct);
 
         return Ok(Id);
     }

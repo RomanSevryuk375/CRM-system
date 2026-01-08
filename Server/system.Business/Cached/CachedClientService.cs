@@ -22,52 +22,52 @@ public class CachedClientService : IClientService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<long> CreateClient(Client client)
+    public async Task<long> CreateClient(Client client, CancellationToken ct)
     {
-        return await _decorated.CreateClient(client);
+        return await _decorated.CreateClient(client, ct);
     }
 
-    public async Task<long> CreateClientWithUser(Client client, User user)
+    public async Task<long> CreateClientWithUser(Client client, User user, CancellationToken ct)
     {
-        return await _decorated.CreateClientWithUser(client, user);
+        return await _decorated.CreateClientWithUser(client, user, ct);
     }
 
-    public async Task<long> DeleteClient(long id)
+    public async Task<long> DeleteClient(long id, CancellationToken ct)
     {
-        await _distributed.RemoveAsync($"client_{id}");
+        await _distributed.RemoveAsync($"client_{id}", ct);
 
         _logger.LogInformation("Removing cache success");
 
-        return await _decorated.DeleteClient(id);
+        return await _decorated.DeleteClient(id, ct);
     }
 
-    public async Task<ClientItem> GetClientById(long id)
+    public async Task<ClientItem> GetClientById(long id, CancellationToken ct)
     {
         var key = $"client_{id}";
 
         return await _distributed.GetOrCreateAsync(
             key,
-            () => _decorated.GetClientById(id),
+            () => _decorated.GetClientById(id, ct),
             TimeSpan.FromMinutes(2),
-            _logger);
+            _logger, ct);
     }
 
-    public async Task<int> GetCountClients(ClientFilter filter)
+    public async Task<int> GetCountClients(ClientFilter filter, CancellationToken ct)
     {
-        return await _decorated.GetCountClients(filter);
+        return await _decorated.GetCountClients(filter, ct);
     }
 
-    public async Task<List<ClientItem>> GetPagedClients(ClientFilter filter)
+    public async Task<List<ClientItem>> GetPagedClients(ClientFilter filter, CancellationToken ct)
     {
-        return await _decorated.GetPagedClients(filter);
+        return await _decorated.GetPagedClients(filter, ct);
     }
 
-    public async Task<long> UpdateClient(long id, ClientUpdateModel model)
+    public async Task<long> UpdateClient(long id, ClientUpdateModel model, CancellationToken ct)
     {
-        await _distributed.RemoveAsync($"client_{id}");
+        await _distributed.RemoveAsync($"client_{id}", ct);
 
         _logger.LogInformation("Removing cache success");
 
-        return await _decorated.UpdateClient(id, model);
+        return await _decorated.UpdateClient(id, model, ct);
     }
 }

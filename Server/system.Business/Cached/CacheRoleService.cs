@@ -24,12 +24,12 @@ public class CacheRoleService : IRoleService
         _logger = logger;
     }
 
-    public async Task<List<RoleItem>> GetRoles()
+    public async Task<List<RoleItem>> GetRoles(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetRoles(),
+            () => _decorated.GetRoles(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 }

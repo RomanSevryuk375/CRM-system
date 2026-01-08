@@ -3,7 +3,6 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Worker;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
@@ -27,33 +26,33 @@ public class WorkerService : IWorkerService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<WorkerItem>> GetPagedWorkers(WorkerFilter filter)
+    public async Task<List<WorkerItem>> GetPagedWorkers(WorkerFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting worker start");
 
-        var worker = await _workerRepository.GetPaged(filter);
+        var worker = await _workerRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting worker success");
 
         return worker;
     }
 
-    public async Task<int> GetCountWorkers(WorkerFilter filter)
+    public async Task<int> GetCountWorkers(WorkerFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting count worker start");
 
-        var count = await _workerRepository.GetCount(filter);
+        var count = await _workerRepository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting count worker success");
 
         return count;
     }
 
-    public async Task<WorkerItem> GetWorkerById(int id)
+    public async Task<WorkerItem> GetWorkerById(int id, CancellationToken ct)
     {
         _logger.LogInformation("Getting worker by id start");
 
-        var worker = await _workerRepository.GetById(id);
+        var worker = await _workerRepository.GetById(id, ct);
         if (worker is null)
         {
             _logger.LogError("Worker{workerId} not found", id);
@@ -65,40 +64,40 @@ public class WorkerService : IWorkerService
         return worker;
     }
 
-    public async Task<int> CreateWorker(Worker worker)
+    public async Task<int> CreateWorker(Worker worker, CancellationToken ct)
     {
         _logger.LogInformation("Creating worker start");
 
-        if (!await _userRepository.Exists(worker.UserId))
+        if (!await _userRepository.Exists(worker.UserId, ct))
         {
             _logger.LogError("User{UserId} not found", worker.UserId);
             throw new NotFoundException($"User{worker.UserId} not found");
         }
 
-        var Id = await _workerRepository.Create(worker);
+        var Id = await _workerRepository.Create(worker, ct);
 
         _logger.LogInformation("Creating worker success");
 
         return Id;
     }
 
-    public async Task<int> CreateWorkerWithUser(Worker worker, User user)
+    public async Task<int> CreateWorkerWithUser(Worker worker, User user, CancellationToken ct)
     {
-        await _unitOfWork.BeginTransactionAsync();
+        await _unitOfWork.BeginTransactionAsync(ct);
 
         long userId;
         try
         {
             _logger.LogInformation("Creating user start");
 
-            userId = await _userRepository.Create(user);
+            userId = await _userRepository.Create(user, ct);
             worker.SetUserId(userId);
 
-            var Id = await _workerRepository.Create(worker);
+            var Id = await _workerRepository.Create(worker, ct);
 
             _logger.LogInformation("Creating worker success");
 
-            await _unitOfWork.CommitTransactionAsync();
+            await _unitOfWork.CommitTransactionAsync(ct);
 
             return Id;
         }
@@ -106,28 +105,28 @@ public class WorkerService : IWorkerService
         {
             _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
             
-            await _unitOfWork.RollbackAsync();
+            await _unitOfWork.RollbackAsync(ct);
 
             throw;
         }
     }
 
-    public async Task<int> UpdateWorker(int id, WorkerUpdateModel model)
+    public async Task<int> UpdateWorker(int id, WorkerUpdateModel model, CancellationToken ct)
     {
         _logger.LogInformation("Updating worker start");
 
-        var Id = await _workerRepository.Update(id, model);
+        var Id = await _workerRepository.Update(id, model, ct);
 
         _logger.LogInformation("Updating worker success");
 
         return Id;
     }
 
-    public async Task<int> DeleteWorker(int id)
+    public async Task<int> DeleteWorker(int id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting worker start");
 
-        var Id = await _workerRepository.Delete(id);
+        var Id = await _workerRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting worker success");
 

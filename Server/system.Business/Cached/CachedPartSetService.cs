@@ -22,66 +22,66 @@ public class CachedPartSetService : IPartSetService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<long> AddToPartSet(PartSet partSet)
+    public async Task<long> AddToPartSet(PartSet partSet, CancellationToken ct)
     {
         var key = $"dict_{partSet.OrderId}";
 
-        await _distributed.RemoveAsync(key);
+        await _distributed.RemoveAsync(key, ct);
 
         _logger.LogInformation("Removing cache success");
 
-        return await _decorated.AddToPartSet(partSet);
+        return await _decorated.AddToPartSet(partSet, ct);
     }
 
-    public async Task<long> DeleteFromPartSet(long id)
+    public async Task<long> DeleteFromPartSet(long id, CancellationToken ct)
     {
-        var partSet = await _decorated.GetPartSetById(id);
+        var partSet = await _decorated.GetPartSetById(id, ct);
 
         var key = $"dict_{partSet.OrderId}";
 
-        await _distributed.RemoveAsync(key);
+        await _distributed.RemoveAsync(key, ct);
 
         _logger.LogInformation("Removing cache success");
 
-        return await _decorated.DeleteFromPartSet(id);
+        return await _decorated.DeleteFromPartSet(id, ct);
     }
 
-    public async Task<int> GetCountPartSets(PartSetFilter filter)
+    public async Task<int> GetCountPartSets(PartSetFilter filter, CancellationToken ct)
     {
-        return await _decorated.GetCountPartSets(filter);
+        return await _decorated.GetCountPartSets(filter, ct);
     }
 
-    public async Task<List<PartSetItem>> GetPagedPartSets(PartSetFilter filter)
+    public async Task<List<PartSetItem>> GetPagedPartSets(PartSetFilter filter, CancellationToken ct)
     {
-        return await _decorated.GetPagedPartSets(filter);
+        return await _decorated.GetPagedPartSets(filter, ct);
     }
 
-    public async Task<PartSetItem> GetPartSetById(long id)
+    public async Task<PartSetItem> GetPartSetById(long id, CancellationToken ct)
     {
-        return await _decorated.GetPartSetById(id);
+        return await _decorated.GetPartSetById(id, ct);
     }
 
-    public async Task<List<PartSetItem>> GetPartSetsByOrderId(long orderId)
+    public async Task<List<PartSetItem>> GetPartSetsByOrderId(long orderId, CancellationToken ct)
     {
         var key = $"dict_{orderId}";
 
         return await _distributed.GetOrCreateAsync(
             key,
-            () => _decorated.GetPartSetsByOrderId(orderId),
+            () => _decorated.GetPartSetsByOrderId(orderId, ct),
             TimeSpan.FromMinutes(15),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 
-    public async Task<long> UpdatePartSet(long id, PartSetUpdateModel model)
+    public async Task<long> UpdatePartSet(long id, PartSetUpdateModel model, CancellationToken ct)
     {
-        var partSet = await _decorated.GetPartSetById(id);
+        var partSet = await _decorated.GetPartSetById(id, ct);
 
         var key = $"dict_{partSet.OrderId}";
 
-        await _distributed.RemoveAsync(key);
+        await _distributed.RemoveAsync(key, ct);
 
         _logger.LogInformation("Removing cache success");
 
-        return await _decorated.UpdatePartSet(id, model);
+        return await _decorated.UpdatePartSet(id, model, ct);
     }
 }

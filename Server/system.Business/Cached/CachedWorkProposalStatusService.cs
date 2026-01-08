@@ -23,12 +23,12 @@ public class CachedWorkProposalStatusService : IWorkProposalStatusService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<List<WorkProposalStatusItem>> GetProposalStatuses()
+    public async Task<List<WorkProposalStatusItem>> GetProposalStatuses(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetProposalStatuses(),
+            () => _decorated.GetProposalStatuses(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 }

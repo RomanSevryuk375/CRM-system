@@ -21,7 +21,7 @@ public class PartRepository : IPartRepository
         _mapper = mapper;
     }
 
-    private IQueryable<PartEntity> ApplyFilter(IQueryable<PartEntity> query, PartFilter filter)
+    private static IQueryable<PartEntity> ApplyFilter(IQueryable<PartEntity> query, PartFilter filter)
     {
         if (filter.CategoryIds != null && filter.CategoryIds.Any())
             query = query.Where(p => filter.CategoryIds.Contains(p.CategoryId));
@@ -29,7 +29,7 @@ public class PartRepository : IPartRepository
         return query;
     }
 
-    public async Task<List<PartItem>> GetPaged(PartFilter filter)
+    public async Task<List<PartItem>> GetPaged(PartFilter filter, CancellationToken ct)
     {
         var query = _context.Parts.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -68,20 +68,20 @@ public class PartRepository : IPartRepository
         };
 
         return await query
-            .ProjectTo<PartItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<PartItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(PartFilter filter)
+    public async Task<int> GetCount(PartFilter filter, CancellationToken ct)
     {
         var query = _context.Parts.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(Part part)
+    public async Task<long> Create(Part part, CancellationToken ct)
     {
         var partEntity = new PartEntity
         {
@@ -95,15 +95,15 @@ public class PartRepository : IPartRepository
             Applicability = part.Applicability
         };
 
-        await _context.Parts.AddAsync(partEntity);
-        await _context.SaveChangesAsync();
+        await _context.Parts.AddAsync(partEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return partEntity.Id;
     }
 
-    public async Task<long> Update(long id, PartUpdateModel model)
+    public async Task<long> Update(long id, PartUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Parts.FirstOrDefaultAsync(p => p.Id == id)
+        var entity = await _context.Parts.FirstOrDefaultAsync(p => p.Id == id, ct)
             ?? throw new Exception("Part not found");
 
         if (!string.IsNullOrWhiteSpace(model.OemArticle)) entity.OEMArticle = model.OemArticle;
@@ -114,24 +114,24 @@ public class PartRepository : IPartRepository
         if (!string.IsNullOrWhiteSpace(model.Manufacturer)) entity.Manufacturer = model.Manufacturer;
         if (!string.IsNullOrWhiteSpace(model.Applicability)) entity.Applicability = model.Applicability;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var entity = await _context.Parts
             .Where(p => p.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(long id)
+    public async Task<bool> Exists(long id, CancellationToken ct)
     {
         return await _context.Parts
             .AsNoTracking()
-            .AnyAsync(p => p.Id == id);
+            .AnyAsync(p => p.Id == id, ct);
     }
 }

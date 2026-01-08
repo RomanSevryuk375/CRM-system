@@ -21,7 +21,7 @@ public class ClientsRepository : IClientRepository
         _mapper = mapper;
     }
 
-    private IQueryable<ClientEntity> ApplyFilter(IQueryable<ClientEntity> query, ClientFilter filter)
+    private static IQueryable<ClientEntity> ApplyFilter(IQueryable<ClientEntity> query, ClientFilter filter)
     {
         if (filter.UserIds != null && filter.UserIds.Any())
             query = query.Where(c => filter.UserIds.Contains(c.UserId));
@@ -29,7 +29,7 @@ public class ClientsRepository : IClientRepository
         return query;
     }
 
-    public async Task<List<ClientItem>> GetPaged(ClientFilter filter)
+    public async Task<List<ClientItem>> GetPaged(ClientFilter filter, CancellationToken ct)
     {
         var query = _context.Clients.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -55,29 +55,29 @@ public class ClientsRepository : IClientRepository
         };
 
         return await query
-            .ProjectTo<ClientItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<ClientItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(ClientFilter filter)
+    public async Task<int> GetCount(ClientFilter filter, CancellationToken ct)
     {
         var query = _context.Clients.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<ClientItem?> GetById(long id)
+    public async Task<ClientItem?> GetById(long id, CancellationToken ct)
     {
         return await _context.Clients
             .AsNoTracking()
             .Where(c => c.Id == id)
-            .ProjectTo<ClientItem>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync();
+            .ProjectTo<ClientItem>(_mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<long> Create(Client client)
+    public async Task<long> Create(Client client, CancellationToken ct)
     {
         var clientEntities = new ClientEntity
         {
@@ -88,15 +88,15 @@ public class ClientsRepository : IClientRepository
             Email = client.Email
         };
 
-        await _context.Clients.AddAsync(clientEntities);
-        await _context.SaveChangesAsync();
+        await _context.Clients.AddAsync(clientEntities, ct);
+        await _context.SaveChangesAsync(ct);
 
         return clientEntities.Id;
     }
 
-    public async Task<long> Update(long id, ClientUpdateModel model)
+    public async Task<long> Update(long id, ClientUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Clients.FirstOrDefaultAsync(c => c.Id == id)
+        var entity = await _context.Clients.FirstOrDefaultAsync(c => c.Id == id, ct)
             ?? throw new Exception("Client not found");
 
         if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
@@ -104,24 +104,24 @@ public class ClientsRepository : IClientRepository
         if (!string.IsNullOrWhiteSpace(model.PhoneNumber)) entity.PhoneNumber = model.PhoneNumber;
         if (!string.IsNullOrWhiteSpace(model.Email)) entity.Email = model.Email;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var clientEntity = await _context.Clients
             .Where(c => c.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(long id)
+    public async Task<bool> Exists(long id, CancellationToken ct)
     {
         return await _context.Clients
             .AsNoTracking()
-            .AnyAsync(c => c.Id == id);
+            .AnyAsync(c => c.Id == id, ct);
     }
 }

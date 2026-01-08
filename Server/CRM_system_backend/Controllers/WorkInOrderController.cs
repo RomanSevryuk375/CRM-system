@@ -23,10 +23,10 @@ public class WorkInOrderController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<WorkInOrderItem>>> GetPagedWiO([FromQuery] WorkInOrderFilter filter)
+    public async Task<ActionResult<List<WorkInOrderItem>>> GetPagedWiO([FromQuery] WorkInOrderFilter filter, CancellationToken ct)
     {
-        var dto = await _workInOrderService.GetPagedWiO(filter);
-        var count = await _workInOrderService.GetCountWiO(filter);
+        var dto = await _workInOrderService.GetPagedWiO(filter, ct);
+        var count = await _workInOrderService.GetCountWiO(filter, ct);
 
         var response = _mapper.Map<List<WorkInOrderResponse>>(dto);
 
@@ -36,9 +36,9 @@ public class WorkInOrderController : ControllerBase
     }
 
     [HttpGet("order/{orderId}")]
-    public async Task<ActionResult<List<WorkInOrderItem>>> GetWiOByOrderId(long orderId)
+    public async Task<ActionResult<List<WorkInOrderItem>>> GetWiOByOrderId(long orderId, CancellationToken ct)
     {
-        var dto = await _workInOrderService.GetWiOByOrderId(orderId);
+        var dto = await _workInOrderService.GetWiOByOrderId(orderId, ct);
 
         var response = _mapper.Map<List<WorkInOrderResponse>>(dto);
 
@@ -46,7 +46,7 @@ public class WorkInOrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateWiO([FromBody] WorkInOrderRequest request)
+    public async Task<ActionResult<long>> CreateWiO([FromBody] WorkInOrderRequest request, CancellationToken ct)
     {
         var (work, errors) = WorkInOrder.Create(
             0,
@@ -59,28 +59,28 @@ public class WorkInOrderController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _workInOrderService.CreateWiO(work!);
+        var Id = await _workInOrderService.CreateWiO(work!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateWiO(long id, [FromBody] WorkInOrderUpdateRequest request)
+    public async Task<ActionResult<long>> UpdateWiO(long id, [FromBody] WorkInOrderUpdateRequest request, CancellationToken ct)
     {
         var model = new WorkInOrderUpdateModel(
             request.WorkerId,
             request.StatusId,
             request.TimeSpent);
 
-        var Id = await _workInOrderService.UpdateWiO(id, model);
+        var Id = await _workInOrderService.UpdateWiO(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteWIO(long id)
+    public async Task<ActionResult<long>> DeleteWIO(long id, CancellationToken ct)
     {
-        var Id = await _workInOrderService.DeleteWIO(id);
+        var Id = await _workInOrderService.DeleteWIO(id, ct);
 
         return Ok(Id);
     }

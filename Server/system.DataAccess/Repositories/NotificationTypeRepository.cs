@@ -19,18 +19,18 @@ public class NotificationTypeRepository : INotificationTypeRepository
         _mapper = mapper;
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(int id, CancellationToken ct)
     {
         return await _context.NotificationTypes
             .AsNoTracking()
-            .AnyAsync(n => n.Id == id);
+            .AnyAsync(n => n.Id == id, ct);
     }
 
-    public async Task<List<NotificationTypeItem>> Get()
+    public async Task<List<NotificationTypeItem>> Get(CancellationToken ct)
     {
         return await _context.NotificationTypes
             .AsNoTracking()
-            .ProjectTo<NotificationTypeItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<NotificationTypeItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 }

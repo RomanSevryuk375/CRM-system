@@ -21,61 +21,61 @@ public class SpecializationRepository : ISpecializationRepository
         _mapper = mapper;
     }
 
-    public async Task<List<SpecializationItem>> Get()
+    public async Task<List<SpecializationItem>> Get(CancellationToken ct)
     {
         return await _context.Specializations
             .AsNoTracking()
-            .ProjectTo<SpecializationItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<SpecializationItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<int> Create(Specialization specialization)
+    public async Task<int> Create(Specialization specialization, CancellationToken ct)
     {
         var specEntity = new SpecializationEntity
         {
             Name = specialization.Name,
         };
 
-        await _context.Specializations.AddAsync(specEntity);
-        await _context.SaveChangesAsync();
+        await _context.Specializations.AddAsync(specEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return specEntity.Id;
     }
 
-    public async Task<int> Update(int id, string? name)
+    public async Task<int> Update(int id, string? name, CancellationToken ct)
     {
-        var specialization = await _context.Specializations.FirstOrDefaultAsync(s => s.Id == id)
+        var specialization = await _context.Specializations.FirstOrDefaultAsync(s => s.Id == id, ct)
             ?? throw new Exception("Specialization not found");
 
         if (!string.IsNullOrWhiteSpace(name))
             specialization.Name = name;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return specialization.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<int> Delete(int id, CancellationToken ct)
     {
         var specialization = await _context.Specializations
             .Where(s => s.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(int id, CancellationToken ct)
     {
         return await _context.Specializations
             .AsNoTracking()
-            .AnyAsync(s => s.Id == id);
+            .AnyAsync(s => s.Id == id, ct);
     }
 
-    public  async Task<bool> ExistsByName(string name)
+    public  async Task<bool> ExistsByName(string name, CancellationToken ct)
     {
         return await _context.Specializations
             .AsNoTracking()
-            .AnyAsync(s => s.Name == name);
+            .AnyAsync(s => s.Name == name, ct);
     }
 }
 

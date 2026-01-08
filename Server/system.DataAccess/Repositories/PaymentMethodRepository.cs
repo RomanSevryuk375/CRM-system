@@ -19,18 +19,18 @@ public class PaymentMethodRepository : IPaymentMethodRepository
         _mapper = mapper;
     }
 
-    public async Task<List<PaymentMethodItem>> Get()
+    public async Task<List<PaymentMethodItem>> Get(CancellationToken ct)
     {
         return await _context.PaymentMethods
             .AsNoTracking()
-            .ProjectTo<PaymentMethodItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<PaymentMethodItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(int id, CancellationToken ct)
     {
         return await _context.PaymentMethods
             .AsNoTracking()
-            .AnyAsync(p => p.Id == id);
+            .AnyAsync(p => p.Id == id, ct);
     }
 }

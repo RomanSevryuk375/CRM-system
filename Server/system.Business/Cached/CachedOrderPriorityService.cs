@@ -23,12 +23,12 @@ public class CachedOrderPriorityService : IOrderPriorityService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<List<OrderPriorityItem>> GetPriorities()
+    public async Task<List<OrderPriorityItem>> GetPriorities(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetPriorities(),
+            () => _decorated.GetPriorities(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 }

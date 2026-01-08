@@ -23,12 +23,12 @@ public class CachedBillStatusService : IBillStatusService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<List<BillStatusItem>> GetAllBillStatuses()
+    public async Task<List<BillStatusItem>> GetAllBillStatuses(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetAllBillStatuses(),
+            () => _decorated.GetAllBillStatuses(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 }

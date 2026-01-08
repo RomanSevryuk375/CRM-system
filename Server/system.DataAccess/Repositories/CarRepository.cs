@@ -21,7 +21,7 @@ public class CarRepository : ICarRepository
         _mapper = mapper;
     }
 
-    private IQueryable<CarEntity> ApplyFilter(IQueryable<CarEntity> query, CarFilter filter)
+    private static IQueryable<CarEntity> ApplyFilter(IQueryable<CarEntity> query, CarFilter filter)
     {
         if (filter.OwnerIds != null && filter.OwnerIds.Any())
             query = query.Where(c => filter.OwnerIds.Contains(c.OwnerId));
@@ -29,7 +29,7 @@ public class CarRepository : ICarRepository
         return query;
     }
 
-    public async Task<List<CarItem>> Get(CarFilter filter)
+    public async Task<List<CarItem>> Get(CarFilter filter, CancellationToken ct)
     {
         var query = _context.Cars.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -75,29 +75,29 @@ public class CarRepository : ICarRepository
         };
 
         return await query
-            .ProjectTo<CarItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<CarItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<CarItem?> GetById(long id)
+    public async Task<CarItem?> GetById(long id, CancellationToken ct)
     {
         return await _context.Cars
             .AsNoTracking()
             .Where(c => c.Id == id)
-            .ProjectTo<CarItem>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync();
+            .ProjectTo<CarItem>(_mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<int> GetCount(CarFilter filter)
+    public async Task<int> GetCount(CarFilter filter, CancellationToken ct)
     {
         var query = _context.Cars.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(Car car)
+    public async Task<long> Create(Car car, CancellationToken ct)
     {
         var carEntities = new CarEntity
         {
@@ -111,16 +111,16 @@ public class CarRepository : ICarRepository
             Mileage = car.Mileage
         };
 
-        await _context.Cars.AddAsync(carEntities);
+        await _context.Cars.AddAsync(carEntities, ct);
         Console.WriteLine($"DEBUG: Saving Car with StatusId = {carEntities.StatusId}");
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return carEntities.Id;
     }
 
-    public async Task<long> Update(long id, CarUpdateModel model)
+    public async Task<long> Update(long id, CarUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id)
+        var entity = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id, ct)
             ?? throw new Exception("Car not found");
 
         if (!string.IsNullOrWhiteSpace(model.Brand)) entity.Brand = model.Brand;
@@ -129,24 +129,24 @@ public class CarRepository : ICarRepository
         if (model.Mileage.HasValue) entity.Mileage = model.Mileage.Value;
         if (model.StatusId.HasValue) entity.StatusId = (int)model.StatusId.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var carEntities = await _context.Cars
             .Where(c => c.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(long id)
+    public async Task<bool> Exists(long id, CancellationToken ct)
     {
         return await _context.Cars
             .AsNoTracking()
-            .AnyAsync(c => c.Id == id);
+            .AnyAsync(c => c.Id == id, ct);
     }
 }

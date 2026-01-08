@@ -19,18 +19,18 @@ public class OrderStatusRepository : IOrderStatusRepository
         _mapper = mapper;
     }
 
-    public async Task<List<OrderStatusItem>> Get()
+    public async Task<List<OrderStatusItem>> Get(CancellationToken ct)
     {
         return await _context.OrderStatuses
             .AsNoTracking()
-            .ProjectTo<OrderStatusItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<OrderStatusItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(int id, CancellationToken ct)
     {
         return await _context.OrderStatuses
             .AsNoTracking()
-            .AnyAsync(o => o.Id == id);
+            .AnyAsync(o => o.Id == id, ct);
     }
 }

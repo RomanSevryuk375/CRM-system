@@ -5,8 +5,8 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface INotificationService
 {
-    Task<long> CreateNotification(Notification notification);
-    Task<long> DeleteNotification(long id);
-    Task<int> GetCountNotifications(NotificationFilter filter);
-    Task<List<NotificationItem>> GetPagedNotifications(NotificationFilter filter);
+    Task<long> CreateNotification(Notification notification, CancellationToken ct);
+    Task<long> DeleteNotification(long id, CancellationToken ct);
+    Task<int> GetCountNotifications(NotificationFilter filter, CancellationToken ct);
+    Task<List<NotificationItem>> GetPagedNotifications(NotificationFilter filter, CancellationToken ct);
 }

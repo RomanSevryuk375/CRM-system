@@ -22,47 +22,47 @@ public class CachedCarService : ICarService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<long> CreateCar(Car car)
+    public async Task<long> CreateCar(Car car, CancellationToken ct)
     {
-        return await _decorated.CreateCar(car);
+        return await _decorated.CreateCar(car, ct);
     }
 
-    public async Task<long> DeleteCar(long id)
+    public async Task<long> DeleteCar(long id, CancellationToken ct)
     {
-        await _distributed.RemoveAsync($"car_{id}");
+        await _distributed.RemoveAsync($"car_{id}", ct);
 
         _logger.LogInformation("Removing cache success");
 
-        return await _decorated.DeleteCar(id);
+        return await _decorated.DeleteCar(id, ct);
     }
 
-    public async Task<CarItem> GetCarById(long id)
+    public async Task<CarItem> GetCarById(long id, CancellationToken ct)
     {
         var key = $"car_{id}";
 
         return await _distributed.GetOrCreateAsync(
             key,
-            () => _decorated.GetCarById(id),
+            () => _decorated.GetCarById(id, ct),
             TimeSpan.FromMinutes(2),
-            _logger);
+            _logger, ct);
     }
 
-    public async Task<int> GetCountCars(CarFilter filter)
+    public async Task<int> GetCountCars(CarFilter filter, CancellationToken ct)
     {
-        return await _decorated.GetCountCars(filter);
+        return await _decorated.GetCountCars(filter, ct);
     }
 
-    public async Task<List<CarItem>> GetPagedCars(CarFilter filter)
+    public async Task<List<CarItem>> GetPagedCars(CarFilter filter, CancellationToken ct)
     {
-        return await _decorated.GetPagedCars(filter);
+        return await _decorated.GetPagedCars(filter, ct);
     }
 
-    public async Task<long> UpdateCar(long id, CarUpdateModel model)
+    public async Task<long> UpdateCar(long id, CarUpdateModel model, CancellationToken ct)
     {
-        await _distributed.RemoveAsync($"car_{id}");
+        await _distributed.RemoveAsync($"car_{id}", ct);
 
         _logger.LogInformation("Removing cache success");
 
-        return await _decorated.UpdateCar(id, model);
+        return await _decorated.UpdateCar(id, model, ct);
     }
 }

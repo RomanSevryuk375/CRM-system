@@ -11,9 +11,10 @@ public static class CachedExtension
         string key,
         Func<Task<T>> factory,
         TimeSpan? expiration = null,
-        ILogger? logger = null)
+        ILogger? logger = null,
+        CancellationToken ct = default)
     {
-        var cachedData = await cache.GetStringAsync(key);
+        var cachedData = await cache.GetStringAsync(key, ct);
 
         if (!string.IsNullOrEmpty(cachedData))
         {
@@ -34,7 +35,7 @@ public static class CachedExtension
                 AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromHours(24)
             };
 
-            await cache.SetStringAsync(key, JsonConvert.SerializeObject(data), options);
+            await cache.SetStringAsync(key, JsonConvert.SerializeObject(data), options, ct);
             logger?.LogInformation("Caching {Type} success", typeof(T).Name);
         }
 

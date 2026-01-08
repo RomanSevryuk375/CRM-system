@@ -24,42 +24,42 @@ public class CachedPartCategoryService : IPartCategoryService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<int> CreatePartCategory(PartCategory partCategory)
+    public async Task<int> CreatePartCategory(PartCategory partCategory, CancellationToken ct)
     {
-        var Id = await _decorated.CreatePartCategory(partCategory);
+        var Id = await _decorated.CreatePartCategory(partCategory, ct);
 
-        await _distributed.RemoveAsync(CACHE_KEY);
+        await _distributed.RemoveAsync(CACHE_KEY, ct);
 
         _logger.LogInformation("Removing cache success");
 
         return Id;
     }
 
-    public async Task<int> DeletePartCategory(int id)
+    public async Task<int> DeletePartCategory(int id, CancellationToken ct)
     {
-        var Id = await _decorated.DeletePartCategory(id);
+        var Id = await _decorated.DeletePartCategory(id, ct);
 
-        await _distributed.RemoveAsync(CACHE_KEY);
+        await _distributed.RemoveAsync(CACHE_KEY, ct);
 
         _logger.LogInformation("Removing cache success");
 
         return Id;
     }
 
-    public async Task<List<PartCategoryItem>> GetPartCategories()
+    public async Task<List<PartCategoryItem>> GetPartCategories(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetPartCategories(),
+            () => _decorated.GetPartCategories(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 
-    public async Task<int> UpdatePartCategory(int id, PartCategoryUpdateModel model)
+    public async Task<int> UpdatePartCategory(int id, PartCategoryUpdateModel model, CancellationToken ct)
     {
-        var Id = await _decorated.UpdatePartCategory(id, model);
+        var Id = await _decorated.UpdatePartCategory(id, model, ct);
 
-        await _distributed.RemoveAsync(CACHE_KEY);
+        await _distributed.RemoveAsync(CACHE_KEY, ct);
 
         _logger.LogInformation("Removing cache success");
 

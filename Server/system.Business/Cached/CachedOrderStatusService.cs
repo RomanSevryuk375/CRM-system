@@ -24,12 +24,12 @@ public class CachedOrderStatusService : IOrderStatusService
         _logger = logger;
     }
 
-    public async Task<List<OrderStatusItem>> GetOrderStatuses()
+    public async Task<List<OrderStatusItem>> GetOrderStatuses(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetOrderStatuses(),
+            () => _decorated.GetOrderStatuses(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 }

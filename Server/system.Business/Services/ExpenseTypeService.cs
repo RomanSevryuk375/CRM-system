@@ -18,11 +18,11 @@ public class ExpenseTypeService : IExpenseTypeService
         _logger = logger;
     }
 
-    public async Task<List<ExpenseTypeItem>> GetExpenseType()
+    public async Task<List<ExpenseTypeItem>> GetExpenseType(CancellationToken ct)
     {
         _logger.LogInformation("Getting absenceType start");
 
-        var expenseTypes = await _expenseTypeRepository.Get();
+        var expenseTypes = await _expenseTypeRepository.Get(ct);
 
         _logger.LogInformation("Getting absenceType success");
 

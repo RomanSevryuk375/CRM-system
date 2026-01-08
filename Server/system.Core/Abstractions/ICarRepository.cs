@@ -5,11 +5,11 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface ICarRepository
 {
-    Task<long> Create(Car car);
-    Task<long> Delete(long id);
-    Task<List<CarItem>> Get(CarFilter filter);
-    Task<int> GetCount(CarFilter filter);
-    Task<long> Update(long id, CarUpdateModel model);
-    Task<CarItem?> GetById(long id);
-    Task<bool> Exists(long id);
+    Task<long> Create(Car car, CancellationToken ct);
+    Task<long> Delete(long id, CancellationToken ct);
+    Task<List<CarItem>> Get(CarFilter filter, CancellationToken ct);
+    Task<int> GetCount(CarFilter filter, CancellationToken ct);
+    Task<long> Update(long id, CarUpdateModel model, CancellationToken ct);
+    Task<CarItem?> GetById(long id, CancellationToken ct);
+    Task<bool> Exists(long id, CancellationToken ct);
 }

@@ -2,7 +2,7 @@
 
 public interface IUnitOfWork
 {
-    Task BeginTransactionAsync();
-    Task CommitTransactionAsync();
-    Task RollbackAsync();
+    Task BeginTransactionAsync(CancellationToken ct);
+    Task CommitTransactionAsync(CancellationToken ct);
+    Task RollbackAsync(CancellationToken ct);
 }

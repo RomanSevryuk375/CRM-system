@@ -21,11 +21,11 @@ public class NotificationTypeService : INotificationTypeService
         _logger = logger;
     }
 
-    public async Task<List<NotificationTypeItem>> GetNotificationTypes()
+    public async Task<List<NotificationTypeItem>> GetNotificationTypes(CancellationToken ct)
     {
         _logger.LogInformation("Getting NotificationType start");
 
-        var absenceType = await _repo.Get();
+        var absenceType = await _repo.Get(ct);
 
         _logger.LogInformation("Getting NotificationType success");
 

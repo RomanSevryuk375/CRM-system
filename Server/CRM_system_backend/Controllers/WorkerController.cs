@@ -24,10 +24,10 @@ public class WorkerController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<WorkerItem>>> GetPagedWorkers([FromQuery] WorkerFilter filter)
+    public async Task<ActionResult<List<WorkerItem>>> GetPagedWorkers([FromQuery] WorkerFilter filter, CancellationToken ct)
     {
-        var dto = await _workerService.GetPagedWorkers(filter);
-        var count = await _workerService.GetCountWorkers(filter);
+        var dto = await _workerService.GetPagedWorkers(filter, ct);
+        var count = await _workerService.GetCountWorkers(filter, ct);
 
         var response = _mapper.Map<List<WorkerResponse>>(dto);
 
@@ -37,15 +37,15 @@ public class WorkerController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<WorkerItem>> GetWorkerById(int id)
+    public async Task<ActionResult<WorkerItem>> GetWorkerById(int id, CancellationToken ct)
     {
-        var response = await _workerService.GetWorkerById(id);
+        var response = await _workerService.GetWorkerById(id, ct);
 
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreateWorker([FromBody] WorkerRequest request)
+    public async Task<ActionResult<int>> CreateWorker([FromBody] WorkerRequest request, CancellationToken ct)
     {
         var (worker, errorsWorker) = Worker.Create(
             0,
@@ -59,13 +59,13 @@ public class WorkerController : ControllerBase
         if (errorsWorker is not null && errorsWorker.Any())
             return BadRequest(errorsWorker);
 
-        var Id = await _workerService.CreateWorker(worker!);
+        var Id = await _workerService.CreateWorker(worker!, ct);
 
         return Ok(Id);
     }
 
     [HttpPost("with-user")]
-    public async Task<ActionResult<int>> CreateWorker([FromBody]  WorkerWithUserRequest request)
+    public async Task<ActionResult<int>> CreateWorker([FromBody]  WorkerWithUserRequest request, CancellationToken ct)
     {
         var (user, errorsUser) = CRMSystem.Core.Models.User.Create(
             0,
@@ -88,14 +88,14 @@ public class WorkerController : ControllerBase
         if (errorsWorker is not null && errorsWorker.Any())
             return BadRequest(errorsWorker);
 
-        var Id = await _workerService.CreateWorkerWithUser(worker!, user!);
+        var Id = await _workerService.CreateWorkerWithUser(worker!, user!, ct);
 
         return Ok(Id);
 
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<int>> UpdateWorker(int id, [FromBody] WorkerRequest request)
+    public async Task<ActionResult<int>> UpdateWorker(int id, [FromBody] WorkerRequest request, CancellationToken ct)
     {
         var model = new WorkerUpdateModel(
             request.Name,
@@ -104,15 +104,15 @@ public class WorkerController : ControllerBase
             request.PhoneNumber,
             request.Email);
 
-        var result = await _workerService.UpdateWorker(id, model);
+        var result = await _workerService.UpdateWorker(id, model, ct);
 
         return Ok(result);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<int>> DeleteWorker(int id)
+    public async Task<ActionResult<int>> DeleteWorker(int id, CancellationToken ct)
     {
-        var result = await _workerService.DeleteWorker(id);
+        var result = await _workerService.DeleteWorker(id, ct);
 
         return Ok(result);
     }

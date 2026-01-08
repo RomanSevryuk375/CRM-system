@@ -19,18 +19,18 @@ public class OrderPriorityRepository : IOrderPriorityRepository
         _mapper = mapper;
     }
 
-    public async Task<List<OrderPriorityItem>> Get()
+    public async Task<List<OrderPriorityItem>> Get(CancellationToken ct)
     {
         return await _context.OrderPriorities
             .AsNoTracking()
-            .ProjectTo<OrderPriorityItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<OrderPriorityItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<bool> Exists (int id)
+    public async Task<bool> Exists (int id, CancellationToken ct)
     {
         return await _context.OrderPriorities
             .AsNoTracking()
-            .AnyAsync(o => o.Id == id);
+            .AnyAsync(o => o.Id == id, ct);
     }
 }

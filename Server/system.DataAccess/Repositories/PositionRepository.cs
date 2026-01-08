@@ -21,7 +21,7 @@ public class PositionRepository : IPositionRepository
         _mapper = mapper;
     }
 
-    private IQueryable<PositionEntity> ApplyFilter(IQueryable<PositionEntity> query, PositionFilter filter)
+    private static IQueryable<PositionEntity> ApplyFilter(IQueryable<PositionEntity> query, PositionFilter filter)
     {
         if (filter.PartIds != null && filter.PartIds.Any())
             query = query.Where(p => filter.PartIds.Contains(p.PartId));
@@ -29,7 +29,7 @@ public class PositionRepository : IPositionRepository
         return query;
     }
 
-    public async Task<List<PositionItem>> GetPaged(PositionFilter filter)
+    public async Task<List<PositionItem>> GetPaged(PositionFilter filter, CancellationToken ct)
     {
         var query = _context.Positions.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -62,20 +62,20 @@ public class PositionRepository : IPositionRepository
         };
 
         return await query
-            .ProjectTo<PositionItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<PositionItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(PositionFilter filter)
+    public async Task<int> GetCount(PositionFilter filter, CancellationToken ct)
     {
         var query = _context.Positions.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(Position position)
+    public async Task<long> Create(Position position, CancellationToken ct)
     {
         var positionentity = new PositionEntity
         {
@@ -86,15 +86,15 @@ public class PositionRepository : IPositionRepository
             Quantity = position.Quantity
         };
 
-        await _context.AddAsync(positionentity);
-        await _context.SaveChangesAsync();
+        await _context.AddAsync(positionentity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return positionentity.Id;
     }
 
-    public async Task<long> Update(long id, PositionUpdateModel model)
+    public async Task<long> Update(long id, PositionUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Positions.FirstOrDefaultAsync(p => p.Id == id)
+        var entity = await _context.Positions.FirstOrDefaultAsync(p => p.Id == id, ct)
             ?? throw new Exception("Position note not found");
 
         if (model.CellId.HasValue) entity.CellId = model.CellId.Value;
@@ -102,24 +102,24 @@ public class PositionRepository : IPositionRepository
         if (model.SellingPrice.HasValue) entity.SellingPrice = model.SellingPrice.Value;
         if (model.Quantity.HasValue) entity.Quantity = model.Quantity.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
-        var entity = await _context.Positions
+        var Id = await _context.Positions
             .Where(p => p.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(long id)
+    public async Task<bool> Exists(long id, CancellationToken ct)
     {
         return await _context.Positions
             .AsNoTracking()
-            .AnyAsync(p => p.Id == id);
+            .AnyAsync(p => p.Id == id, ct);
     }
 } 

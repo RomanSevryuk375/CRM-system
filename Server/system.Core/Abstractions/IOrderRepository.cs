@@ -6,16 +6,16 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IOrderRepository
 {
-    Task<long> Create(Order order);
-    Task<long> Delete(long id);
-    Task<int> GetCount(OrderFilter filter);
-    Task<List<OrderItem>> GetPaged(OrderFilter filter);
-    Task<long> Update(long id, OrderPriorityEnum? priorityId);
-    Task<bool> Exists(long id);
-    Task<int?> GetStatus(long id);
-    Task<long> Complete(long id);
-    Task<long> Close(long id);
-    Task<bool> PossibleToComplete(long id);
-    Task<bool> PossibleToClose(long id);
-    Task<OrderItem?> GetByProposalId(long proposalId);
+    Task<long> Create(Order order, CancellationToken ct);
+    Task<long> Delete(long id, CancellationToken ct);
+    Task<int> GetCount(OrderFilter filter, CancellationToken ct);
+    Task<List<OrderItem>> GetPaged(OrderFilter filter, CancellationToken ct);
+    Task<long> Update(long id, OrderPriorityEnum? priorityId, CancellationToken ct);
+    Task<bool> Exists(long id, CancellationToken ct);
+    Task<int?> GetStatus(long id, CancellationToken ct);
+    Task<long> Complete(long id, CancellationToken ct);
+    Task<long> Close(long id, CancellationToken ct);
+    Task<bool> PossibleToComplete(long id, CancellationToken ct);
+    Task<bool> PossibleToClose(long id, CancellationToken ct);
+    Task<OrderItem?> GetByProposalId(long proposalId, CancellationToken ct);
 }

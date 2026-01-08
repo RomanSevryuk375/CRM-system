@@ -5,13 +5,13 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IAbsenceRepository
 {
-    Task<int> Create(Absence absence);
-    Task<int> Delete(int id);
-    Task<int> GetCount(AbsenceFilter filter);
-    Task<List<AbsenceItem>> GetPaged(AbsenceFilter filter);
-    Task<int> Update(int id, AbsenceUpdateModel model);
-    Task<bool> Exists(int id);
-    Task<bool> HasOverLap(int workerId, DateOnly start, DateOnly? end, int? excludeId = null);
-    Task<int?> GetWorkerId(int id);
+    Task<int> Create(Absence absence, CancellationToken ct);
+    Task<int> Delete(int id, CancellationToken ct);
+    Task<int> GetCount(AbsenceFilter filter, CancellationToken ct);
+    Task<List<AbsenceItem>> GetPaged(AbsenceFilter filter, CancellationToken ct);
+    Task<int> Update(int id, AbsenceUpdateModel model, CancellationToken ct);
+    Task<bool> Exists(int id, CancellationToken ct);
+    Task<bool> HasOverLap(int workerId, DateOnly start, DateOnly? end, int? excludeId, CancellationToken ct);
+    Task<int?> GetWorkerId(int id, CancellationToken ct);
 
 }

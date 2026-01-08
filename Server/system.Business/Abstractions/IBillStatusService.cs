@@ -4,5 +4,5 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IBillStatusService
 {
-    Task<List<BillStatusItem>> GetAllBillStatuses();
+    Task<List<BillStatusItem>> GetAllBillStatuses(CancellationToken ct);
 }

@@ -22,9 +22,9 @@ public class RoleController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<RoleItem>>> GetRoles()
+    public async Task<ActionResult<List<RoleItem>>> GetRoles(CancellationToken ct)
     {
-        var dto = await _roleService.GetRoles();
+        var dto = await _roleService.GetRoles(ct);
 
         var response = _mapper.Map<List<RoleResponse>>(dto);
 

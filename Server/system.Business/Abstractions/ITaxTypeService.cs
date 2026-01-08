@@ -4,5 +4,5 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface ITaxTypeService
 {
-    Task<List<TaxTypeItem>> GetTaxTypes();
+    Task<List<TaxTypeItem>> GetTaxTypes(CancellationToken ct);
 }

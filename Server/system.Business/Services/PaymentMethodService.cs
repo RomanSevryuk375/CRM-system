@@ -18,11 +18,11 @@ public class PaymentMethodService : IPaymentMethodService
         _logger = logger;
     }
 
-    public async Task<List<PaymentMethodItem>> GetPaymentMethods()
+    public async Task<List<PaymentMethodItem>> GetPaymentMethods(CancellationToken ct)
     {
         _logger.LogInformation("Getting payment method start");
 
-        var paymentMethods = await _paymentMethodRepository.Get();
+        var paymentMethods = await _paymentMethodRepository.Get(ct);
 
         _logger.LogInformation("Getting payment method success");
 

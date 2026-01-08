@@ -5,7 +5,6 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.User;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
@@ -29,11 +28,11 @@ public class UserService : IUserService
         _logger = logger;
     }
 
-    public async Task<string> LoginUser(string login, string password)
+    public async Task<string> LoginUser(string login, string password, CancellationToken ct)
     {
         _logger.LogInformation("Logging user start");
 
-        var user = await GetUsersByLogin(login);
+        var user = await GetUsersByLogin(login, ct);
 
         var result = _myPasswordHasher.Verify(password, user.PasswordHash);
 
@@ -50,11 +49,11 @@ public class UserService : IUserService
         return token;
     }
 
-    public async Task<UserItem> GetUsersByLogin(string login)
+    public async Task<UserItem> GetUsersByLogin(string login, CancellationToken ct)
     {
         _logger.LogInformation("Getting user by login start");
 
-        var user = await _userRepository.GetByLogin(login);
+        var user = await _userRepository.GetByLogin(login, ct);
 
         if (user is null)
         {
@@ -67,22 +66,22 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<long> CreateUser(User user)
+    public async Task<long> CreateUser(User user, CancellationToken ct)
     {
         _logger.LogInformation("Creating user start");
 
-        var Id = await _userRepository.Create(user);
+        var Id = await _userRepository.Create(user, ct);
 
         _logger.LogInformation("Creating user success");
 
         return Id;
     }
 
-    public async Task<long> DeleteUser(long id)
+    public async Task<long> DeleteUser(long id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting user start");
 
-        var Id = await _userRepository.Delete(id);
+        var Id = await _userRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting user success");
 

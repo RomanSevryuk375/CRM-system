@@ -22,7 +22,7 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         _mapper = mapper;
     }
 
-    private IQueryable<PaymentNoteEntity> ApplyFilter(IQueryable<PaymentNoteEntity> query, PaymentNoteFilter filter)
+    private static IQueryable<PaymentNoteEntity> ApplyFilter(IQueryable<PaymentNoteEntity> query, PaymentNoteFilter filter)
     {
         if (filter.BillIds != null && filter.BillIds.Any())
             query = query.Where(p => filter.BillIds.Contains(p.BillId));
@@ -33,7 +33,7 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         return query;
     }
 
-    public async Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter filter)
+    public async Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter filter, CancellationToken ct)
     {
         var query = _context.PaymentNotes.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -63,20 +63,20 @@ public class PaymentNoteRepository : IPaymentNoteRepository
         };
 
         return await query
-            .ProjectTo<PaymentNoteItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<PaymentNoteItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(PaymentNoteFilter filter)
+    public async Task<int> GetCount(PaymentNoteFilter filter, CancellationToken ct)
     {
         var quety = _context.PaymentNotes.AsNoTracking();
         quety = ApplyFilter(quety, filter);
-        return await quety.CountAsync();
+        return await quety.CountAsync(ct);
     }
 
-    public async Task<long> Create(PaymentNote paymentNote)
+    public async Task<long> Create(PaymentNote paymentNote, CancellationToken ct)
     {
         var paymentNoteEntity = new PaymentNoteEntity
         {
@@ -86,29 +86,29 @@ public class PaymentNoteRepository : IPaymentNoteRepository
             MethodId = (int)paymentNote.MethodId,
         };
 
-        await _context.AddAsync(paymentNoteEntity);
-        await _context.SaveChangesAsync();
+        await _context.AddAsync(paymentNoteEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return paymentNoteEntity.Id;
     }
 
-    public async Task<long> Update(long id, PaymentMethodEnum? method)
+    public async Task<long> Update(long id, PaymentMethodEnum? method, CancellationToken ct)
     {
-        var entity = await _context.PaymentNotes.FirstOrDefaultAsync(pn => pn.Id == id)
+        var entity = await _context.PaymentNotes.FirstOrDefaultAsync(pn => pn.Id == id, ct)
             ?? throw new Exception("Payment note not found");
 
         if (method.HasValue) entity.MethodId = (int)method.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var paymentNote = await _context.PaymentNotes
             .Where(pn => pn.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }

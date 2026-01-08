@@ -21,7 +21,7 @@ public class TaxRepository : ITaxRepository
         _mapper = mapper;
     }
 
-    private IQueryable<TaxEntity> ApplyFilter(IQueryable<TaxEntity> query, TaxFilter filter)
+    private static IQueryable<TaxEntity> ApplyFilter(IQueryable<TaxEntity> query, TaxFilter filter)
     {
         if (filter.TaxTyprIds != null && filter.TaxTyprIds.Any())
             query = query.Where(t => filter.TaxTyprIds.Contains(t.TypeId));
@@ -29,7 +29,7 @@ public class TaxRepository : ITaxRepository
         return query;
     }
 
-    public async Task<List<TaxItem>> Get(TaxFilter filter)
+    public async Task<List<TaxItem>> Get(TaxFilter filter, CancellationToken ct)
     {
         var query = _context.Taxes.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -56,11 +56,11 @@ public class TaxRepository : ITaxRepository
         };
 
         return await query
-            .ProjectTo<TaxItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<TaxItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<int> Create(Tax tax)
+    public async Task<int> Create(Tax tax, CancellationToken ct)
     {
 
         var taxEntitie = new TaxEntity
@@ -70,38 +70,38 @@ public class TaxRepository : ITaxRepository
             TypeId = (int)tax.TypeId,
         };
 
-        await _context.Taxes.AddAsync(taxEntitie);
-        await _context.SaveChangesAsync();
+        await _context.Taxes.AddAsync(taxEntitie, ct);
+        await _context.SaveChangesAsync(ct);
 
         return taxEntitie.Id;
     }
 
-    public async Task<int> Update(int id, TaxUpdateModel model)
+    public async Task<int> Update(int id, TaxUpdateModel model, CancellationToken ct)
     {
-        var entity = _context.Taxes.FirstOrDefault(t => t.Id == id)
+        var entity = await _context.Taxes.FirstOrDefaultAsync(t => t.Id == id, ct)
             ?? throw new ArgumentException("Tax not found");
 
         if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
         if (model.Rate.HasValue) entity.Rate = model.Rate.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<int> Delete(int id, CancellationToken ct)
     {
         var entity = await _context.Taxes
             .Where(t => t.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists (int id)
+    public async Task<bool> Exists (int id, CancellationToken ct)
     {
         return await _context.Taxes
             .AsNoTracking()
-            .AnyAsync(t => t.Id == id);
+            .AnyAsync(t => t.Id == id, ct);
     }
 }

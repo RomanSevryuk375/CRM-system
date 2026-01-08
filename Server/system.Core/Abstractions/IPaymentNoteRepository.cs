@@ -6,9 +6,9 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IPaymentNoteRepository
 {
-    Task<long> Create(PaymentNote paymentNote);
-    Task<long> Delete(long id);
-    Task<int> GetCount(PaymentNoteFilter fIlter);
-    Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter fIlter);
-    Task<long> Update(long id, PaymentMethodEnum? method);
+    Task<long> Create(PaymentNote paymentNote, CancellationToken ct);
+    Task<long> Delete(long id, CancellationToken ct);
+    Task<int> GetCount(PaymentNoteFilter fIlter, CancellationToken ct);
+    Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter fIlter, CancellationToken ct);
+    Task<long> Update(long id, PaymentMethodEnum? method, CancellationToken ct);
 }

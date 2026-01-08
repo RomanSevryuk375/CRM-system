@@ -28,45 +28,45 @@ public class BillService : IBillService
         _logger = logger;
     }
 
-    public async Task<List<BillItem>> GetPagedBills(BillFilter filter)
+    public async Task<List<BillItem>> GetPagedBills(BillFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting bills start");
 
-        var bill = await _billRepository.GetPaged(filter);
+        var bill = await _billRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting bills started");
 
         return bill;
     }
 
-    public async Task<int> GetCountBills(BillFilter filter)
+    public async Task<int> GetCountBills(BillFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting count start");
 
-        var count = await _billRepository.GetCount(filter);
+        var count = await _billRepository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting count success");
 
         return count;
     }
 
-    public async Task<long> CreateBill(Bill bill)
+    public async Task<long> CreateBill(Bill bill, CancellationToken ct)
     {
         _logger.LogInformation("Creating bill start");
 
-        if (!await _orderRepository.Exists(bill.OrderId))
+        if (!await _orderRepository.Exists(bill.OrderId, ct))
         {
             _logger.LogError("Order{OrderId} not found", bill.OrderId);
             throw new NotFoundException($"Order{bill.OrderId} not found");
         }
 
-        if (await _orderRepository.GetStatus(bill.OrderId) == (int)OrderStatusEnum.Closed)
+        if (await _orderRepository.GetStatus(bill.OrderId, ct) == (int)OrderStatusEnum.Closed)
         {
             _logger.LogError("Order{OrderId} is closed", bill.OrderId);
             throw new ConflictException($"Order {bill.OrderId} is closed");
         }
 
-        if (!await _statusRepository.Exists((int)bill.StatusId))
+        if (!await _statusRepository.Exists((int)bill.StatusId, ct))
         {
             _logger.LogError("Status{StatusId} not found", bill.StatusId);
             throw new NotFoundException($"Status{bill.StatusId} not found");
@@ -74,47 +74,47 @@ public class BillService : IBillService
 
         _logger.LogInformation("Creating bill success");
 
-        var Id = await _billRepository.Create(bill);
+        var Id = await _billRepository.Create(bill, ct);
 
         return Id;
     }
 
-    public async Task<long> UpdateBill(long id, BillUpdateModel model)
+    public async Task<long> UpdateBill(long id, BillUpdateModel model, CancellationToken ct)
     {
         _logger.LogInformation("Updating bill start");
 
         if (model.StatusId is not null)
         {
-            if (!await _statusRepository.Exists((int)model.StatusId))
+            if (!await _statusRepository.Exists((int)model.StatusId, ct))
             {
                 _logger.LogError("Status{StatusId} not found", (int)model.StatusId);
                 throw new NotFoundException($"Status{(int)model.StatusId} not found");
             }
         }
 
-        var Id = await _billRepository.Update(id, model);
+        var Id = await _billRepository.Update(id, model, ct);
 
         _logger.LogInformation("Updating bill success");
 
         return Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting bill start");
 
-        var Id = await _billRepository.Delete(id);
+        var Id = await _billRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting bill success");
 
         return id;
     }
 
-    public async Task<decimal> FetchDebtOfBill(long id)
+    public async Task<decimal> FetchDebtOfBill(long id, CancellationToken ct)
     {
         _logger.LogInformation("Recalculating debt of bill start");
 
-        var debt = await _billRepository.RecalculateDebt(id);
+        var debt = await _billRepository.RecalculateDebt(id, ct);
 
         _logger.LogInformation("Recalculating debt of bill success");
 

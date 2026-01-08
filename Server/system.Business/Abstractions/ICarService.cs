@@ -5,10 +5,10 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface ICarService
 {
-    Task<long> CreateCar(Car car);
-    Task<long> DeleteCar(long id);
-    Task<CarItem> GetCarById(long id);
-    Task<int> GetCountCars(CarFilter filter);
-    Task<List<CarItem>> GetPagedCars(CarFilter filter);
-    Task<long> UpdateCar(long id, CarUpdateModel model);
+    Task<long> CreateCar(Car car, CancellationToken ct);
+    Task<long> DeleteCar(long id, CancellationToken ct);
+    Task<CarItem> GetCarById(long id, CancellationToken ct);
+    Task<int> GetCountCars(CarFilter filter, CancellationToken ct);
+    Task<List<CarItem>> GetPagedCars(CarFilter filter, CancellationToken ct);
+    Task<long> UpdateCar(long id, CarUpdateModel model, CancellationToken ct);
 }

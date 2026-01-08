@@ -26,10 +26,10 @@ public class AttachmentImgController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<AttachmentImgItem>>> GetPagedAttachmentImg([FromQuery] AttachmentImgFilter filter)
+    public async Task<ActionResult<List<AttachmentImgItem>>> GetPagedAttachmentImg([FromQuery] AttachmentImgFilter filter, CancellationToken ct)
     {
-        var dto = await _attachmentImgService.GetPagedAttachmentImg(filter);
-        var count = await _attachmentImgService.GetCountAttachmentImg(filter);
+        var dto = await _attachmentImgService.GetPagedAttachmentImg(filter, ct);
+        var count = await _attachmentImgService.GetCountAttachmentImg(filter, ct);
 
         var response = _mapper.Map<List<AttachmentImgResponse>>(dto);
 
@@ -39,15 +39,15 @@ public class AttachmentImgController : ControllerBase
     }
 
     [HttpGet("{id}/download")]
-    public async Task<IActionResult> DownloadImage(long id)
+    public async Task<IActionResult> DownloadImage(long id, CancellationToken ct)
     {
-        var (stream, contentType) = await _attachmentImgService.GetImageStream(id);
+        var (stream, contentType) = await _attachmentImgService.GetImageStream(id, ct);
 
         return File(stream, contentType, $"attachment_{id}.jpg");
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateAttachmentImg([FromBody] AttachmentImgRequest request)
+    public async Task<ActionResult<long>> CreateAttachmentImg([FromBody] AttachmentImgRequest request, CancellationToken ct)
     {
         if(request.File is null || request.File.Length == 0)
             return BadRequest("File is required");
@@ -55,23 +55,23 @@ public class AttachmentImgController : ControllerBase
         using var stream = request.File.OpenReadStream();
         var fileItem = new FileItem(stream, request.File.FileName, request.File.ContentType);
 
-        var Id = await _attachmentImgService.CreateAttachmentImg(request.AttachmentId, fileItem, request.Description);
+        var Id = await _attachmentImgService.CreateAttachmentImg(request.AttachmentId, fileItem, request.Description, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateAttachmentImg(long id, [FromBody] AttachmentImgUpdateRequest request)
+    public async Task<ActionResult<long>> UpdateAttachmentImg(long id, [FromBody] AttachmentImgUpdateRequest request, CancellationToken ct)
     {
-        var Id = await _attachmentImgService.UpdateAttachmentImg(id, request.FilePath, request.Description);
+        var Id = await _attachmentImgService.UpdateAttachmentImg(id, request.FilePath, request.Description, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteAttachmentImg(long id)
+    public async Task<ActionResult<long>> DeleteAttachmentImg(long id, CancellationToken ct)
     {
-        var Id = await _attachmentImgService.DeleteAttachmentImg(id);
+        var Id = await _attachmentImgService.DeleteAttachmentImg(id, ct);
 
         return Ok(Id);
     }

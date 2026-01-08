@@ -22,9 +22,9 @@ public class NotificationStatusController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<NotificationStatusItem>>> GetNotificationStatuses()
+    public async Task<ActionResult<List<NotificationStatusItem>>> GetNotificationStatuses(CancellationToken ct)
     {
-        var dto = await _notificationStatusService.GetNotificationStatuses();
+        var dto = await _notificationStatusService.GetNotificationStatuses(ct);
 
         var response = _mapper.Map<NotificationStatusResponse>(dto);
 

@@ -6,12 +6,12 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IWorkProposalService
 {
-    Task<long> AcceptProposal(long id);
-    Task<long> CreateProposal(WorkProposal workProposal);
-    Task<long> DeleteProposal(long id);
-    Task<int> GetCountProposals(WorkProposalFilter filter);
-    Task<List<WorkProposalItem>> GetPagedProposals(WorkProposalFilter filter);
-    Task<WorkProposalItem> GetProposalById(long id);
-    Task<long> RejectProposal(long id);
-    Task<long> UpdateProposal(long id, ProposalStatusEnum? statusId);
+    Task<long> AcceptProposal(long id, CancellationToken ct);
+    Task<long> CreateProposal(WorkProposal workProposal, CancellationToken ct);
+    Task<long> DeleteProposal(long id, CancellationToken ct);
+    Task<int> GetCountProposals(WorkProposalFilter filter, CancellationToken ct);
+    Task<List<WorkProposalItem>> GetPagedProposals(WorkProposalFilter filter, CancellationToken ct);
+    Task<WorkProposalItem> GetProposalById(long id, CancellationToken ct);
+    Task<long> RejectProposal(long id, CancellationToken ct);
+    Task<long> UpdateProposal(long id, ProposalStatusEnum? statusId, CancellationToken ct);
 }

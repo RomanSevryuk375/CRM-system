@@ -23,61 +23,61 @@ public class PartService : IPartService
         _logger = logger;
     }
 
-    public async Task<List<PartItem>> GetPagedParts(PartFilter filter)
+    public async Task<List<PartItem>> GetPagedParts(PartFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting part start");
 
-        var parts = await _partRepository.GetPaged(filter);
+        var parts = await _partRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting part success");
 
         return parts;
     }
 
-    public async Task<int> GetCountParts(PartFilter filter)
+    public async Task<int> GetCountParts(PartFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting count part start");
 
-        var count = await _partRepository.GetCount(filter);
+        var count = await _partRepository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting part success");
 
         return count;
     }
 
-    public async Task<long> CreatePart(Part part)
+    public async Task<long> CreatePart(Part part, CancellationToken ct)
     {
         _logger.LogInformation("Creating part start");
 
-        if (!await _partCategoryRepository.Exists(part.CategoryId))
+        if (!await _partCategoryRepository.Exists(part.CategoryId, ct))
         {
             _logger.LogError("Part category{categoryId} not found", part.CategoryId);
             throw new NotFoundException($"Part category {part.CategoryId} not found");
         }
 
-        var Id = await _partRepository.Create(part);
+        var Id = await _partRepository.Create(part, ct);
 
         _logger.LogInformation("Creating part success");
 
         return Id;
     }
 
-    public async Task<long> UpdatePart(long id, PartUpdateModel model)
+    public async Task<long> UpdatePart(long id, PartUpdateModel model, CancellationToken ct)
     {
         _logger.LogInformation("Updating part start");
 
-        var Id = await _partRepository.Update(id, model);
+        var Id = await _partRepository.Update(id, model, ct);
 
         _logger.LogInformation("Updating part success");
 
         return Id;
     }
 
-    public async Task<long> DeletePart(long id)
+    public async Task<long> DeletePart(long id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting part start");
 
-        var Id = await _partRepository.Delete(id);
+        var Id = await _partRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting part success");
 

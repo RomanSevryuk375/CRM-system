@@ -33,68 +33,68 @@ public class NotificationService : INotificationService
         _logger = logger;
     }
 
-    public async Task<List<NotificationItem>> GetPagedNotifications(NotificationFilter filter)
+    public async Task<List<NotificationItem>> GetPagedNotifications(NotificationFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting notifications start");
 
-        var notifications = await _notificationRepository.GetPaged(filter);
+        var notifications = await _notificationRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting notifications success");
 
         return notifications;
     }
 
-    public async Task<int> GetCountNotifications(NotificationFilter filter)
+    public async Task<int> GetCountNotifications(NotificationFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting notifications count start");
 
-        var count = await _notificationRepository.GetCount(filter);
+        var count = await _notificationRepository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting notifications count success");
 
         return count;
     }
 
-    public async Task<long> CreateNotification(Notification notification)
+    public async Task<long> CreateNotification(Notification notification, CancellationToken ct)
     {
         _logger.LogInformation("Creating notification start");
 
-        if (!await _clientRepository.Exists(notification.ClientId))
+        if (!await _clientRepository.Exists(notification.ClientId, ct))
         {
             _logger.LogError("Client {ClientId} not found", notification.ClientId);
             throw new NotFoundException($"Client {notification.ClientId} not found");
         }
 
-        if (!await _carRepository.Exists(notification.CarId))
+        if (!await _carRepository.Exists(notification.CarId, ct))
         {
             _logger.LogError("Car {CarId} not found", notification.CarId);
             throw new NotFoundException($"Car {notification.CarId} not found");
         }
 
-        if (!await _notificationStatusRepository.Exists((int)notification.StatusId))
+        if (!await _notificationStatusRepository.Exists((int)notification.StatusId, ct))
         {
             _logger.LogError("Status {StatusId} not found", (int)notification.StatusId);
             throw new NotFoundException($"Status {(int)notification.StatusId} not found");
         }
 
-        if (!await _notificationTypeRepository.Exists((int)notification.TypeId))
+        if (!await _notificationTypeRepository.Exists((int)notification.TypeId, ct))
         {
             _logger.LogError("Type {TypeId} not found", (int)notification.TypeId);
             throw new NotFoundException($"Type {(int)notification.TypeId} not found");
         }
 
-        var id = await _notificationRepository.Create(notification);
+        var id = await _notificationRepository.Create(notification, ct);
 
         _logger.LogInformation("Creating notification success");
 
         return id;
     }
 
-    public async Task<long> DeleteNotification(long id)
+    public async Task<long> DeleteNotification(long id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting notification start");
 
-        var deletedId = await _notificationRepository.Delete(id);
+        var deletedId = await _notificationRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting notification success");
 

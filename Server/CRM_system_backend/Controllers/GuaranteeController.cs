@@ -24,10 +24,10 @@ public class GuaranteeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<GuaranteeItem>>> GetPagedGuarantees([FromQuery]GuaranteeFilter filter)
+    public async Task<ActionResult<List<GuaranteeItem>>> GetPagedGuarantees([FromQuery]GuaranteeFilter filter, CancellationToken ct)
     {
-        var dto = await _guaranteeService.GetPagedGuarantees(filter);
-        var count = await _guaranteeService.GetCountGuarantees(filter);
+        var dto = await _guaranteeService.GetPagedGuarantees(filter, ct);
+        var count = await _guaranteeService.GetCountGuarantees(filter, ct);
 
         var response = _mapper.Map<List<GuaranteeResponse>>(dto);
 
@@ -37,7 +37,7 @@ public class GuaranteeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateGuarantee(GuaranteeRequest request)
+    public async Task<ActionResult<long>> CreateGuarantee(GuaranteeRequest request, CancellationToken ct)
     {
         var (guarantee, errors) = Guarantee.Create(
             0,
@@ -50,27 +50,27 @@ public class GuaranteeController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _guaranteeService.CreateGuarantee(guarantee!);
+        var Id = await _guaranteeService.CreateGuarantee(guarantee!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateGuarantee(long id, GuaranteeUpdateRequest request)
+    public async Task<ActionResult<long>> UpdateGuarantee(long id, GuaranteeUpdateRequest request, CancellationToken ct)
     {
         var model = new GuaranteeUpdateModel(
             request.Description,
             request.Terms);
 
-        var Id = await _guaranteeService.UpdateGuarantee(id, model);
+        var Id = await _guaranteeService.UpdateGuarantee(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteGuarantee(long id)
+    public async Task<ActionResult<long>> DeleteGuarantee(long id, CancellationToken ct)
     {
-        var Id = await _guaranteeService.DeleteGuarantee(id);
+        var Id = await _guaranteeService.DeleteGuarantee(id, ct);
 
         return Ok(Id);
     }

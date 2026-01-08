@@ -22,9 +22,9 @@ public class WorkInOrderStatusController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<WorkInOrderStatusItem>>> GetWiOStatuses()
+    public async Task<ActionResult<List<WorkInOrderStatusItem>>> GetWiOStatuses(CancellationToken ct)
     {
-        var dto = await _service.GetWiOStatuses();
+        var dto = await _service.GetWiOStatuses(ct);
 
         var response = _mapper.Map<List<WorkInOrderStatusResponse>>(dto);
 

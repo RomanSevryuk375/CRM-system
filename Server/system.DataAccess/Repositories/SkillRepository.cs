@@ -3,19 +3,25 @@ using CRMSystem.Core.ProjectionModels.Skill;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
 public class SkillRepository : ISkillRepository
 {
     private readonly SystemDbContext _context;
+    private readonly IMapper _mapper;
 
-    public SkillRepository(SystemDbContext context)
+    public SkillRepository(
+        SystemDbContext context,
+        IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    private IQueryable<SkillEntity> ApplyFilter(IQueryable<SkillEntity> query, SkillFilter filter)
+    private static IQueryable<SkillEntity> ApplyFilter(IQueryable<SkillEntity> query, SkillFilter filter)
     {
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
             query = query.Where(s => filter.WorkerIds.Contains(s.WorkerId));
@@ -26,7 +32,7 @@ public class SkillRepository : ISkillRepository
         return query;
     }
 
-    public async Task<List<SkillItem>> Get(SkillFilter filter)
+    public async Task<List<SkillItem>> Get(SkillFilter filter, CancellationToken ct)
     {
         var query = _context.Skills.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -53,28 +59,19 @@ public class SkillRepository : ISkillRepository
                 : query.OrderBy(s => s.Id),
         };
 
-        var projection = query.Select(s => new SkillItem(
-            s.Id,
-            s.Worker == null
-                ? string.Empty
-                : $"{s.Worker.Name} {s.Worker.Surname}",
-            s.WorkerId,
-            s.Specialization == null
-                ? string.Empty
-                : s.Specialization.Name,
-            s.SpecializationId));
-
-        return await projection.ToListAsync();
+        return await query
+            .ProjectTo<SkillItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(SkillFilter filter)
+    public async Task<int> GetCount(SkillFilter filter, CancellationToken ct)
     {
         var query = _context.Skills.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<int> Create(Skill skill)
+    public async Task<int> Create(Skill skill, CancellationToken ct)
     {
         var skillEntity = new SkillEntity
         {
@@ -82,30 +79,30 @@ public class SkillRepository : ISkillRepository
             SpecializationId = skill.SpecializationId,
         };
 
-        await _context.Skills.AddAsync(skillEntity);
-        await _context.SaveChangesAsync();
+        await _context.Skills.AddAsync(skillEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return skillEntity.Id;
     }
 
-    public async Task<int> Update(int id, SkillUpdateModel model)
+    public async Task<int> Update(int id, SkillUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Skills.FirstOrDefaultAsync(s => s.Id == id)
+        var entity = await _context.Skills.FirstOrDefaultAsync(s => s.Id == id, ct)
             ?? throw new Exception("Schedule note not found");
 
         if (model.WorkerId.HasValue) entity.WorkerId = model.WorkerId.Value;
         if (model.SpecializationId.HasValue) entity.SpecializationId = model.SpecializationId.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<int> Delete(int id, CancellationToken ct)
     {
         var entity = await _context.Skills
             .Where(s => s.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }

@@ -19,11 +19,11 @@ public class WorkProposalStatusService : IWorkProposalStatusService
         _logger = logger;
     }
 
-    public async Task<List<WorkProposalStatusItem>> GetProposalStatuses()
+    public async Task<List<WorkProposalStatusItem>> GetProposalStatuses(CancellationToken ct)
     {
         _logger.LogInformation("Getting proposal statuses start");
 
-        var statuses = await _workProposalStatusRepository.Get();
+        var statuses = await _workProposalStatusRepository.Get(ct);
 
         _logger.LogInformation("Getting proposal statuses success");
 

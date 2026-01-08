@@ -23,9 +23,9 @@ public class StorageCellController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<StorageCellItem>>> GetStorageCells()
+    public async Task<ActionResult<List<StorageCellItem>>> GetStorageCells(CancellationToken ct)
     {
-        var dto = await _storageCellService.GetStorageCells();
+        var dto = await _storageCellService.GetStorageCells(ct);
 
         var response = _mapper.Map<List<StorageCellResponse>>(dto);
 
@@ -33,7 +33,7 @@ public class StorageCellController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreateStorageCell([FromBody] StorageCellRequest request)
+    public async Task<ActionResult<int>> CreateStorageCell([FromBody] StorageCellRequest request, CancellationToken ct)
     {
         var (cell, errors) = StorageCell.Create(
             0,
@@ -43,27 +43,27 @@ public class StorageCellController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _storageCellService.CreateStorageCell(cell!);
+        var Id = await _storageCellService.CreateStorageCell(cell!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<int>> UpdateStorageCell(int id, [FromBody] StorageCellUpdateRequest request)
+    public async Task<ActionResult<int>> UpdateStorageCell(int id, [FromBody] StorageCellUpdateRequest request, CancellationToken ct)
     {
         var model = new StorageCellUpdateModel(
             request.Rack,
             request.Shelf);
 
-        var Id = await _storageCellService.UpdateStorageCell(id, model);
+        var Id = await _storageCellService.UpdateStorageCell(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<int>> DeleteStorageCell(int id)
+    public async Task<ActionResult<int>> DeleteStorageCell(int id, CancellationToken ct)
     {
-        var Id = await _storageCellService.DeleteStorageCell(id);
+        var Id = await _storageCellService.DeleteStorageCell(id, ct);
 
         return Ok(Id);
     }

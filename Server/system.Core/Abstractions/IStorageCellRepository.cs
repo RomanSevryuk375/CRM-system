@@ -5,10 +5,10 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IStorageCellRepository
 {
-    Task<int> Create(StorageCell storageCell);
-    Task<int> Delete(int id);
-    Task<List<StorageCellItem>> Get();
-    Task<int> Update(int id, StorageCellUpdateModel model);
-    Task<bool> Exists(int id);
-    Task<bool> HasOverlaps(string rack, string shelf);
+    Task<int> Create(StorageCell storageCell, CancellationToken ct);
+    Task<int> Delete(int id, CancellationToken ct);
+    Task<List<StorageCellItem>> Get(CancellationToken ct);
+    Task<int> Update(int id, StorageCellUpdateModel model, CancellationToken ct);
+    Task<bool> Exists(int id, CancellationToken ct);
+    Task<bool> HasOverlaps(string rack, string shelf, CancellationToken ct);
 }

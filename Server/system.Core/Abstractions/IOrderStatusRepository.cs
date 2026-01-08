@@ -4,6 +4,6 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IOrderStatusRepository
 {
-    Task<List<OrderStatusItem>> Get();
-    Task<bool> Exists(int id);
+    Task<List<OrderStatusItem>> Get(CancellationToken ct);
+    Task<bool> Exists(int id, CancellationToken ct);
 }

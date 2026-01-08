@@ -5,8 +5,8 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface ISpecializationService
 {
-    Task<int> CreateSpecialization(Specialization specialization);
-    Task<int> DeleteSpecialization(int id);
-    Task<List<SpecializationItem>> GetSpecializations();
-    Task<int> UpdateSpecialization(int id, string? name);
+    Task<int> CreateSpecialization(Specialization specialization, CancellationToken ct);
+    Task<int> DeleteSpecialization(int id, CancellationToken ct);
+    Task<List<SpecializationItem>> GetSpecializations(CancellationToken ct);
+    Task<int> UpdateSpecialization(int id, string? name, CancellationToken ct);
 }

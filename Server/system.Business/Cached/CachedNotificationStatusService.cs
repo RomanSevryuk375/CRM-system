@@ -23,12 +23,12 @@ public class CachedNotificationStatusService : INotificationStatusService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<List<NotificationStatusItem>> GetNotificationStatuses()
+    public async Task<List<NotificationStatusItem>> GetNotificationStatuses(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetNotificationStatuses(),
+            () => _decorated.GetNotificationStatuses(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 }

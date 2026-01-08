@@ -5,8 +5,8 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IPartCategoryService
 {
-    Task<int> CreatePartCategory(PartCategory partCategory);
-    Task<int> DeletePartCategory(int id);
-    Task<List<PartCategoryItem>> GetPartCategories();
-    Task<int> UpdatePartCategory(int id, PartCategoryUpdateModel model);
+    Task<int> CreatePartCategory(PartCategory partCategory, CancellationToken ct);
+    Task<int> DeletePartCategory(int id, CancellationToken ct);
+    Task<List<PartCategoryItem>> GetPartCategories(CancellationToken ct);
+    Task<int> UpdatePartCategory(int id, PartCategoryUpdateModel model, CancellationToken ct);
 }

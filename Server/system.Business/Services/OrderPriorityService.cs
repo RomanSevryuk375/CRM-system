@@ -19,11 +19,11 @@ public class OrderPriorityService : IOrderPriorityService
         _logger = logger;
     }
 
-    public async Task<List<OrderPriorityItem>> GetPriorities()
+    public async Task<List<OrderPriorityItem>> GetPriorities(CancellationToken ct)
     {
         _logger.LogInformation("Getting order priorities start");
 
-        var prioritys = await _orderPriorityRepository.Get();
+        var prioritys = await _orderPriorityRepository.Get(ct);
 
         _logger.LogInformation("Getting order priorities success");
 

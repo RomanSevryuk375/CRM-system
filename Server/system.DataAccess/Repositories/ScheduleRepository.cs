@@ -21,7 +21,7 @@ public class ScheduleRepository : IScheduleRepository
         _mapper = mapper;
     }
 
-    private IQueryable<ScheduleEntity> ApplyFilter(IQueryable<ScheduleEntity> query, ScheduleFilter filter)
+    private static IQueryable<ScheduleEntity> ApplyFilter(IQueryable<ScheduleEntity> query, ScheduleFilter filter)
     {
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
             query = query.Where(s => filter.WorkerIds.Contains(s.WorkerId));
@@ -32,7 +32,7 @@ public class ScheduleRepository : IScheduleRepository
         return query;
     }
 
-    public async Task<List<ScheduleItem>> GetPaged(ScheduleFilter filter)
+    public async Task<List<ScheduleItem>> GetPaged(ScheduleFilter filter, CancellationToken ct)
     {
         var query = _context.Schedules.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -63,20 +63,20 @@ public class ScheduleRepository : IScheduleRepository
         };
 
         return await query
-            .ProjectTo<ScheduleItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<ScheduleItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(ScheduleFilter filter)
+    public async Task<int> GetCount(ScheduleFilter filter, CancellationToken ct)
     {
         var query = _context.Schedules.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<int> Create(Schedule schedule)
+    public async Task<int> Create(Schedule schedule, CancellationToken ct)
     {
         var scheduleEntity = new ScheduleEntity
         {
@@ -85,39 +85,39 @@ public class ScheduleRepository : IScheduleRepository
             Date = schedule.Date,
         };
 
-        await _context.Schedules.AddAsync(scheduleEntity);
-        await _context.SaveChangesAsync();
+        await _context.Schedules.AddAsync(scheduleEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return scheduleEntity.Id;
     }
 
-    public async Task<int> Update(int id, ScheduleUpdateModel model)
+    public async Task<int> Update(int id, ScheduleUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Schedules.FirstOrDefaultAsync(s => s.Id == id)
+        var entity = await _context.Schedules.FirstOrDefaultAsync(s => s.Id == id, ct)
             ?? throw new Exception("Schedule note not found");
 
         if (model.ShiftId.HasValue) entity.ShiftId = model.ShiftId.Value;
         if (model.DateTime.HasValue) entity.Date = model.DateTime.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<int> Delete(int id, CancellationToken ct)
     {
         var entity = await _context.Schedules
             .Where(s => s.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> ExistsByDateAndId(int id, DateTime date)
+    public async Task<bool> ExistsByDateAndId(int id, DateTime date, CancellationToken ct)
     {
         return await _context.Schedules
             .AsNoTracking()
             .Where(s => s.Id == id)
-            .AnyAsync(s => s.Date == date);
+            .AnyAsync(s => s.Date == date, ct);
     }
 }

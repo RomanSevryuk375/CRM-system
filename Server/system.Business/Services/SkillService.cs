@@ -3,7 +3,6 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Skill;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
@@ -27,62 +26,62 @@ public class SkillService : ISkillService
         _logger = logger;
     }
 
-    public async Task<List<SkillItem>> GetPagedSkills(SkillFilter filter)
+    public async Task<List<SkillItem>> GetPagedSkills(SkillFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting skills start");
 
-        var skills = await _skillRepository.Get(filter);
+        var skills = await _skillRepository.Get(filter, ct);
 
         _logger.LogInformation("Getting skills success");
 
         return skills;
     }
 
-    public async Task<int> GetSkillsCount(SkillFilter filter)
+    public async Task<int> GetSkillsCount(SkillFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting skills count start");
 
-        var count = await _skillRepository.GetCount(filter);
+        var count = await _skillRepository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting skills count success");
 
         return count;
     }
 
-    public async Task<int> CreateSkill(Skill skill)
+    public async Task<int> CreateSkill(Skill skill, CancellationToken ct)
     {
         _logger.LogInformation("Creating skill start");
 
-        if (!await _workerRepository.Exists(skill.WorkerId))
+        if (!await _workerRepository.Exists(skill.WorkerId, ct))
         {
             _logger.LogError("Worker {workerId} not found", skill.WorkerId);
             throw new NotFoundException($"Worker {skill.WorkerId} not found");
         }
 
-        if (!await _specializationRepository.Exists(skill.SpecializationId))
+        if (!await _specializationRepository.Exists(skill.SpecializationId, ct))
         {
             _logger.LogError("Specialization {specializationId} not found", skill.SpecializationId);
             throw new NotFoundException($"Specialization {skill.SpecializationId} not found");
         }
 
-        var Id = await _skillRepository.Create(skill);
+        var Id = await _skillRepository.Create(skill, ct);
 
         _logger.LogInformation("Creating skill success");
 
         return Id;
     }
 
-    public async Task<int> UpdateSkill(int id, SkillUpdateModel model)
+    public async Task<int> UpdateSkill(int id, SkillUpdateModel model, CancellationToken ct)
     {
         _logger.LogInformation("Updating skill start");
 
-        if (model.WorkerId.HasValue && !await _workerRepository.Exists(model.WorkerId.Value))
+        if (model.WorkerId.HasValue && !await _workerRepository.Exists(model.WorkerId.Value, ct))
         {
             _logger.LogError("Worker {workerId} not found", model.WorkerId);
             throw new NotFoundException($"Worker {model.WorkerId} not found");
         }
 
-        if (model.SpecializationId.HasValue && !await _specializationRepository.Exists(model.SpecializationId.Value))
+        if (model.SpecializationId.HasValue && !await _specializationRepository.Exists(model.SpecializationId.Value, ct))
         {
             _logger.LogError("Specialization {specializationId} not found", model.SpecializationId);
             throw new NotFoundException($"Specialization {model.SpecializationId} not found");
@@ -90,16 +89,16 @@ public class SkillService : ISkillService
 
         _logger.LogInformation("Updating skill success");
 
-        var Id = await _skillRepository.Update(id, model);
+        var Id = await _skillRepository.Update(id, model, ct);
 
         return Id;
     }
 
-    public async Task<int> DeleteSkill(int id)
+    public async Task<int> DeleteSkill(int id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting skill start");
 
-        var Id = await _skillRepository.Delete(id);
+        var Id = await _skillRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting skill success");
 

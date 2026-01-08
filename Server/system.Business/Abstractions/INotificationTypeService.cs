@@ -4,5 +4,5 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface INotificationTypeService
 {
-    Task<List<NotificationTypeItem>> GetNotificationTypes();
+    Task<List<NotificationTypeItem>> GetNotificationTypes(CancellationToken ct);
 }

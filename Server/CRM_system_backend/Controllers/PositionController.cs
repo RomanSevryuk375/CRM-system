@@ -23,10 +23,10 @@ public class PositionController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<PositionItem>>> GetPagedPositions([FromQuery] PositionFilter positionFilter)
+    public async Task<ActionResult<List<PositionItem>>> GetPagedPositions([FromQuery] PositionFilter positionFilter, CancellationToken ct)
     {
-        var dto = await _positionSrevice.GetPagedPositions(positionFilter);
-        var count = await _positionSrevice.GetCountPositions(positionFilter);
+        var dto = await _positionSrevice.GetPagedPositions(positionFilter, ct);
+        var count = await _positionSrevice.GetCountPositions(positionFilter, ct);
 
         var response = _mapper.Map<List<PositionResponse>>(dto);
 
@@ -36,7 +36,7 @@ public class PositionController : ControllerBase
     }
 
     [HttpPost("with-part")]
-    public async Task<ActionResult<long>> CreatePositionWithPart([FromBody] PositionWithPartRequest request)
+    public async Task<ActionResult<long>> CreatePositionWithPart([FromBody] PositionWithPartRequest request, CancellationToken ct)
     {
         var (part, partErrors) = Part.Create(
             0,
@@ -63,13 +63,13 @@ public class PositionController : ControllerBase
         if (positionErrors is not null && positionErrors.Any())
             return BadRequest(positionErrors);
 
-        var Id = await _positionSrevice.CreatePositionWithPart(position!, part!);
+        var Id = await _positionSrevice.CreatePositionWithPart(position!, part!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdatePosition(long id,[FromBody] PositionUpdateRequest request)
+    public async Task<ActionResult<long>> UpdatePosition(long id,[FromBody] PositionUpdateRequest request, CancellationToken ct)
     {
         var model = new PositionUpdateModel(
             request.CellId,
@@ -77,15 +77,15 @@ public class PositionController : ControllerBase
             request.PurchasePrice,
             request.Quantity);
 
-        var Id = await _positionSrevice.UpdatePosition(id, model);
+        var Id = await _positionSrevice.UpdatePosition(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeletePosition(long id)
+    public async Task<ActionResult<long>> DeletePosition(long id, CancellationToken ct)
     {
-        var Id = await _positionSrevice.DeletePosition(id);
+        var Id = await _positionSrevice.DeletePosition(id, ct);
 
         return Ok(Id);
     }

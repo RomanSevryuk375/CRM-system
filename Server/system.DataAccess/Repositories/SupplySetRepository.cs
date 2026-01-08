@@ -21,7 +21,7 @@ public class SupplySetRepository : ISupplySetRepository
         _mapper = mapper;
     }
 
-    private IQueryable<SupplySetEntity> ApplyFilter(IQueryable<SupplySetEntity> query, SupplySetFilter filter)
+    private static IQueryable<SupplySetEntity> ApplyFilter(IQueryable<SupplySetEntity> query, SupplySetFilter filter)
     {
         if (filter.SupplyIds != null && filter.SupplyIds.Any())
             query = query.Where(s => filter.SupplyIds.Contains(s.SupplyId));
@@ -32,7 +32,7 @@ public class SupplySetRepository : ISupplySetRepository
         return query;
     }
 
-    public async Task<List<SupplySetItem>> GetPaged(SupplySetFilter filter)
+    public async Task<List<SupplySetItem>> GetPaged(SupplySetFilter filter, CancellationToken ct)
     {
         var query = _context.SupplySets.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -66,19 +66,19 @@ public class SupplySetRepository : ISupplySetRepository
         };
 
         return await query
-            .ProjectTo<SupplySetItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<SupplySetItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
-    public async Task<int> GetCount(SupplySetFilter filter)
+    public async Task<int> GetCount(SupplySetFilter filter, CancellationToken ct)
     {
         var query = _context.SupplySets.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(SupplySet supplySet)
+    public async Task<long> Create(SupplySet supplySet, CancellationToken ct)
     {
         var supplySetEntity = new SupplySetEntity
         {
@@ -88,30 +88,30 @@ public class SupplySetRepository : ISupplySetRepository
             PurchasePrice = supplySet.PurchasePrice,
         };
 
-        await _context.SupplySets.AddAsync(supplySetEntity);
-        await _context.SaveChangesAsync();
+        await _context.SupplySets.AddAsync(supplySetEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return supplySetEntity.Id;
     }
 
-    public async Task<long> Update(long id, SupplySetUpdateModel model)
+    public async Task<long> Update(long id, SupplySetUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.SupplySets.FirstOrDefaultAsync(s => s.Id == id)
+        var entity = await _context.SupplySets.FirstOrDefaultAsync(s => s.Id == id, ct)
             ?? throw new Exception("SupplySet note not found");
 
         if (model.Quantity.HasValue) entity.Quantity = model.Quantity.Value;
         if (model.PurchasePrice.HasValue) entity.PurchasePrice = model.PurchasePrice.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var entity = await _context.SupplySets
             .Where(s => s.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }

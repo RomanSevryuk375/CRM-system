@@ -4,6 +4,6 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IWorkProposalStatusRepository
 {
-    Task<List<WorkProposalStatusItem>> Get();
-    Task<bool> Exists(int id);
+    Task<List<WorkProposalStatusItem>> Get(CancellationToken ct);
+    Task<bool> Exists(int id, CancellationToken ct);
 }

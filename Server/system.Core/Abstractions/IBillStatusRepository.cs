@@ -4,6 +4,6 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IBillStatusRepository
 {
-    Task<List<BillStatusItem>> Get();
-    Task<bool> Exists(int id);
+    Task<List<BillStatusItem>> Get(CancellationToken ct);
+    Task<bool> Exists(int id, CancellationToken ct);
 }

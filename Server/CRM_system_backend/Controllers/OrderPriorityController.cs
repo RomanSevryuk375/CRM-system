@@ -22,9 +22,9 @@ public class OrderPriorityController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<OrderPriorityItem>>> GetPriorities()
+    public async Task<ActionResult<List<OrderPriorityItem>>> GetPriorities(CancellationToken ct)
     {
-        var dto = await _orderPriorityService.GetPriorities();
+        var dto = await _orderPriorityService.GetPriorities(ct);
 
         var response = _mapper.Map<List<OrderPriorityResponse>>(dto);
 

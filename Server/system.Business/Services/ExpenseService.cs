@@ -29,47 +29,47 @@ public class ExpenseService : IExpenseService
         _logger = logger;
     }
 
-    public async Task<List<ExpenseItem>> GetPagedExpenses(ExpenseFilter filter)
+    public async Task<List<ExpenseItem>> GetPagedExpenses(ExpenseFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting expenses start");
 
-        var client = await _expenseRespository.GetPaged(filter);
+        var client = await _expenseRespository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting expenses success");
 
         return client;
     }
 
-    public async Task<int> GetCountExpenses(ExpenseFilter filter)
+    public async Task<int> GetCountExpenses(ExpenseFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting count expenses start");
 
-        var client = await _expenseRespository.GetCount(filter);
+        var client = await _expenseRespository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting count expenses success");
 
         return client;
     }
 
-    public async Task<long> CreateExpenses(Expense expense)
+    public async Task<long> CreateExpenses(Expense expense, CancellationToken ct)
     {
         _logger.LogInformation("Creating expenses start");
 
-        if (!await _expenseTypeRepository.Exists((int)expense.ExpenseTypeId))
+        if (!await _expenseTypeRepository.Exists((int)expense.ExpenseTypeId, ct))
         {
             _logger.LogError("Expense{ExpenseTypeId} not found", expense.ExpenseTypeId);
             throw new NotFoundException($"Expense{(int)expense.ExpenseTypeId} not found");
         }
 
         if (expense.TaxId.HasValue
-                && !await _taxRepository.Exists((int)expense.TaxId.Value))
+                && !await _taxRepository.Exists((int)expense.TaxId.Value, ct))
         {
             _logger.LogError("Tax{TaxId} not found", (int)expense.TaxId);
             throw new NotFoundException($"Tax{(int)expense.TaxId} not found");
         }
 
         if (expense.PartSetId.HasValue
-                && !await _partSetRepository.Exists(expense.PartSetId.Value))
+                && !await _partSetRepository.Exists(expense.PartSetId.Value, ct))
         {
             _logger.LogError("PartSet{PartSetId} not found", (int)expense.PartSetId.Value);
             throw new NotFoundException($"PartSet{(int)expense.PartSetId.Value} not found");
@@ -77,34 +77,34 @@ public class ExpenseService : IExpenseService
 
         _logger.LogInformation("Creating expenses success");
 
-        var Id = await _expenseRespository.Create(expense);
+        var Id = await _expenseRespository.Create(expense, ct);
 
         return Id;
     }
 
-    public async Task<long> UpdateExpense(long id, ExpenseUpdateModel model)
+    public async Task<long> UpdateExpense(long id, ExpenseUpdateModel model, CancellationToken ct)
     {
         _logger.LogInformation("Updating expenses start");
 
         if (model.ExpenseTypeId.HasValue
-                && !await _expenseTypeRepository.Exists((int)model.ExpenseTypeId.Value))
+                && !await _expenseTypeRepository.Exists((int)model.ExpenseTypeId.Value, ct))
         {
             _logger.LogError("Expense{ExpenseTypeId} not found", model.ExpenseTypeId.Value);
             throw new NotFoundException($"Expense{(int)model.ExpenseTypeId.Value} not found");
         }
 
-        var Id = await _expenseRespository.Update(id, model);
+        var Id = await _expenseRespository.Update(id, model, ct);
 
         _logger.LogInformation("Updating expenses success");
 
         return Id;
     }
 
-    public async Task<long> DeleteExpense(long id)
+    public async Task<long> DeleteExpense(long id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting expenses start");
 
-        var Id = await _expenseRespository.Delete(id);
+        var Id = await _expenseRespository.Delete(id, ct);
 
         _logger.LogInformation("Deleting expenses success");
 

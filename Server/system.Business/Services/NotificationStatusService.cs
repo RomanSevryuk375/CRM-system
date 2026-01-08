@@ -20,11 +20,11 @@ public class NotificationStatusService : INotificationStatusService
         _logger = logger;
     }
 
-    public async Task<List<NotificationStatusItem>> GetNotificationStatuses()
+    public async Task<List<NotificationStatusItem>> GetNotificationStatuses(CancellationToken ct)
     {
         _logger.LogInformation("Notification status getting start");
 
-        var carSatsus = await _repo.Get();
+        var carSatsus = await _repo.Get(ct);
 
         _logger.LogInformation("Notification status getting success");
 

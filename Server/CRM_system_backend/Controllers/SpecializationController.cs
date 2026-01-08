@@ -24,9 +24,9 @@ public class SpecializationController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<SpecializationItem>>> GetSpecialization()
+    public async Task<ActionResult<List<SpecializationItem>>> GetSpecialization(CancellationToken ct)
     {
-        var dto = await _specializationService.GetSpecializations();
+        var dto = await _specializationService.GetSpecializations(ct);
 
         var response = _mapper.Map<List<SpecializationResponse>>(dto);
 
@@ -34,7 +34,7 @@ public class SpecializationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreateSpecialization([FromBody]SpecializationRequest request)
+    public async Task<ActionResult<int>> CreateSpecialization([FromBody]SpecializationRequest request, CancellationToken ct)
     {
         var (specialization, errors) = Specialization.Create(
             0,
@@ -43,23 +43,23 @@ public class SpecializationController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _specializationService.CreateSpecialization(specialization!);
+        var Id = await _specializationService.CreateSpecialization(specialization!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<int>> UpdateSpecialization([FromBody] SpecializationUpdateRequest request, int id)
+    public async Task<ActionResult<int>> UpdateSpecialization([FromBody] SpecializationUpdateRequest request, int id, CancellationToken ct)
     {
-        var Id = await _specializationService.UpdateSpecialization(id, request.Name);
+        var Id = await _specializationService.UpdateSpecialization(id, request.Name, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<int>> DeleteSpecialization(int id)
+    public async Task<ActionResult<int>> DeleteSpecialization(int id, CancellationToken ct)
     {
-        var Id = await _specializationService.DeleteSpecialization(id);
+        var Id = await _specializationService.DeleteSpecialization(id, ct);
 
         return Ok(Id);
     }

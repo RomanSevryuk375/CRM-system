@@ -23,10 +23,10 @@ public class SupplySetController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<SupplySetItem>>> GetPagedSupplySets([FromQuery] SupplySetFilter filter)
+    public async Task<ActionResult<List<SupplySetItem>>> GetPagedSupplySets([FromQuery] SupplySetFilter filter, CancellationToken ct)
     {
-        var dto = await _supplySetService.GetPagedSupplySets(filter);
-        var count = await _supplySetService.GetCountSupplySets(filter);
+        var dto = await _supplySetService.GetPagedSupplySets(filter, ct);
+        var count = await _supplySetService.GetCountSupplySets(filter, ct);
 
         var response = _mapper.Map<List<SupplySetResponse>>(dto);
 
@@ -36,7 +36,7 @@ public class SupplySetController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateSupplySet([FromBody] SupplySetRequest request)
+    public async Task<ActionResult<long>> CreateSupplySet([FromBody] SupplySetRequest request, CancellationToken ct)
     {
         var (supplySet, errors) = SupplySet.Create(
             0,
@@ -48,27 +48,27 @@ public class SupplySetController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _supplySetService.CreateSupplySet(supplySet!);
+        var Id = await _supplySetService.CreateSupplySet(supplySet!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateSupplySet(long id, [FromBody] SupplySetUpdateRequest request)
+    public async Task<ActionResult<long>> UpdateSupplySet(long id, [FromBody] SupplySetUpdateRequest request, CancellationToken ct)
     {
         var model = new SupplySetUpdateModel(
             request.Quantity,
             request.PurchasePrice);
 
-        var Id = await _supplySetService.UpdateSupplySet(id, model);
+        var Id = await _supplySetService.UpdateSupplySet(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteSupplySet(long id)
+    public async Task<ActionResult<long>> DeleteSupplySet(long id, CancellationToken ct)
     {
-        var Id = await _supplySetService.DeleteSupplySet(id);
+        var Id = await _supplySetService.DeleteSupplySet(id, ct);
 
         return Ok(Id);
     }

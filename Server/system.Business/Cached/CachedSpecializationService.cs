@@ -24,39 +24,39 @@ public class CachedSpecializationService : ISpecializationService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<int> CreateSpecialization(Specialization specialization)
+    public async Task<int> CreateSpecialization(Specialization specialization, CancellationToken ct)
     {
-        await _distributed.RemoveAsync(CACHE_KEY);
+        await _distributed.RemoveAsync(CACHE_KEY, ct);
 
         _logger.LogInformation("Removing cache success");
 
-        return await _decorated.CreateSpecialization(specialization);
+        return await _decorated.CreateSpecialization(specialization, ct);
     }
 
-    public async Task<int> DeleteSpecialization(int id)
+    public async Task<int> DeleteSpecialization(int id, CancellationToken ct)
     {
-        await _distributed.RemoveAsync(CACHE_KEY);
+        await _distributed.RemoveAsync(CACHE_KEY, ct);
 
         _logger.LogInformation("Removing cache success");
 
-        return await _decorated.DeleteSpecialization(id);
+        return await _decorated.DeleteSpecialization(id, ct);
     }
 
-    public async Task<List<SpecializationItem>> GetSpecializations()
+    public async Task<List<SpecializationItem>> GetSpecializations(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetSpecializations(),
+            () => _decorated.GetSpecializations(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 
-    public async Task<int> UpdateSpecialization(int id, string? name)
+    public async Task<int> UpdateSpecialization(int id, string? name, CancellationToken ct)
     {
-        await _distributed.RemoveAsync(CACHE_KEY);
+        await _distributed.RemoveAsync(CACHE_KEY, ct);
 
         _logger.LogInformation("Removing cache success");
 
-        return await _decorated.UpdateSpecialization(id, name);
+        return await _decorated.UpdateSpecialization(id, name, ct);
     }
 }

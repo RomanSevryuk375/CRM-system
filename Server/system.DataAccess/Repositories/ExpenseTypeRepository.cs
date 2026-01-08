@@ -19,18 +19,18 @@ public class ExpenseTypeRepository : IExpenseTypeRepository
         _mapper = mapper;
     }
 
-    public async Task<List<ExpenseTypeItem>> Get()
+    public async Task<List<ExpenseTypeItem>> Get(CancellationToken ct)
     {
         return await _context.ExpenseTypes
             .AsNoTracking()
-            .ProjectTo<ExpenseTypeItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<ExpenseTypeItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<bool> Exists (int id)
+    public async Task<bool> Exists (int id, CancellationToken ct)
     {
         return await _context.ExpenseTypes
             .AsNoTracking()
-            .AnyAsync(e => e.Id == id);
+            .AnyAsync(e => e.Id == id, ct);
     }
 }

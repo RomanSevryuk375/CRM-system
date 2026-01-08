@@ -23,10 +23,10 @@ public class PartSetController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<PartSetItem>>> GetPagedPartSets([FromQuery] PartSetFilter filter)
+    public async Task<ActionResult<List<PartSetItem>>> GetPagedPartSets([FromQuery] PartSetFilter filter, CancellationToken ct)
     {
-        var dto = await _partSetService.GetPagedPartSets(filter);
-        var count = await _partSetService.GetCountPartSets(filter);
+        var dto = await _partSetService.GetPagedPartSets(filter, ct);
+        var count = await _partSetService.GetCountPartSets(filter, ct);
 
         var response = _mapper.Map<List<PartSetResponse>>(dto);
 
@@ -36,17 +36,17 @@ public class PartSetController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<PartSetItem>> GetPartSetById(long id)
+    public async Task<ActionResult<PartSetItem>> GetPartSetById(long id, CancellationToken ct)
     {
-        var response = await _partSetService.GetPartSetById(id);
+        var response = await _partSetService.GetPartSetById(id, ct);
 
         return Ok(response);
     }
 
     [HttpGet("/order/{orderId}")]
-    public async Task<ActionResult<List<PartSetItem>>> GetPartSetsByOrderId(long orderId)
+    public async Task<ActionResult<List<PartSetItem>>> GetPartSetsByOrderId(long orderId, CancellationToken ct)
     {
-        var dto = await _partSetService.GetPartSetsByOrderId(orderId);
+        var dto = await _partSetService.GetPartSetsByOrderId(orderId, ct);
 
         var response = _mapper.Map<List<PartSetResponse>>(dto);
 
@@ -54,7 +54,7 @@ public class PartSetController : ControllerBase
     }
 
     [HttpPost] 
-    public async Task<ActionResult<long>> AddToPartSet([FromBody] PartSetRequest request)
+    public async Task<ActionResult<long>> AddToPartSet([FromBody] PartSetRequest request, CancellationToken ct)
     {
         var (partSet, errors) = PartSet.Create(
             0,
@@ -67,27 +67,27 @@ public class PartSetController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _partSetService.AddToPartSet(partSet!);
+        var Id = await _partSetService.AddToPartSet(partSet!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdatePartSet(long id, [FromBody] PartSetUpdateRequest request)
+    public async Task<ActionResult<long>> UpdatePartSet(long id, [FromBody] PartSetUpdateRequest request, CancellationToken ct)
     {
         var model = new PartSetUpdateModel(
             request.Quantity,
             request.SoldPrice);
 
-        var Id = await _partSetService.UpdatePartSet(id, model);
+        var Id = await _partSetService.UpdatePartSet(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteFromPartSet(long id)
+    public async Task<ActionResult<long>> DeleteFromPartSet(long id, CancellationToken ct)
     {
-        var Id = await _partSetService.DeleteFromPartSet(id);
+        var Id = await _partSetService.DeleteFromPartSet(id, ct);
 
         return Ok(Id);
     }

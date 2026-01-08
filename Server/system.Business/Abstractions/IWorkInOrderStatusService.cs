@@ -4,5 +4,5 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IWorkInOrderStatusService
 {
-    Task<List<WorkInOrderStatusItem>> GetWiOStatuses();
+    Task<List<WorkInOrderStatusItem>> GetWiOStatuses(CancellationToken ct);
 }

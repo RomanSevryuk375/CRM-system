@@ -5,8 +5,8 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IStorageCellService
 {
-    Task<int> CreateStorageCell(StorageCell storageCell);
-    Task<int> DeleteStorageCell(int id);
-    Task<List<StorageCellItem>> GetStorageCells();
-    Task<int> UpdateStorageCell(int id, StorageCellUpdateModel model);
+    Task<int> CreateStorageCell(StorageCell storageCell, CancellationToken ct);
+    Task<int> DeleteStorageCell(int id, CancellationToken ct);
+    Task<List<StorageCellItem>> GetStorageCells(CancellationToken ct);
+    Task<int> UpdateStorageCell(int id, StorageCellUpdateModel model, CancellationToken ct);
 }

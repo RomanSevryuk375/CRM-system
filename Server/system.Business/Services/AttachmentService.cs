@@ -27,67 +27,67 @@ public class AttachmentService : IAttachmentService
         _logger = logger;
     }
 
-    public async Task<List<AttachmentItem>> GetPagedAttachments(AttachmentFilter filter)
+    public async Task<List<AttachmentItem>> GetPagedAttachments(AttachmentFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting attachments start");
 
-        var attachment = await _attachmentRepository.GetPaged(filter);
+        var attachment = await _attachmentRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting attachments success");
 
         return attachment;
     }
 
-    public async Task<int> GetCountAttachment(AttachmentFilter filter)
+    public async Task<int> GetCountAttachment(AttachmentFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting count attachments start");
 
-        var count = await _attachmentRepository.GetCount(filter);
+        var count = await _attachmentRepository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting count attachments success");
 
         return count;
     }
 
-    public async Task<long> CreateAttachment(Attachment attachment)
+    public async Task<long> CreateAttachment(Attachment attachment, CancellationToken ct)
     {
         _logger.LogInformation("Creating attachments start");
 
-        if (!await _orderRepository.Exists(attachment.OrderId))
+        if (!await _orderRepository.Exists(attachment.OrderId, ct))
         {
             _logger.LogInformation("Order{OrderId} not found", attachment.OrderId);
             throw new NotFoundException($"Order{attachment.OrderId} not found");
         }
 
-        if (!await _workerRepository.Exists(attachment.WorkerId))
+        if (!await _workerRepository.Exists(attachment.WorkerId, ct))
         {
             _logger.LogInformation("Worker{WorkerId} not found", attachment.WorkerId);
             throw new NotFoundException($"Worker{attachment.WorkerId} not found");
         }
 
-        var id = await _attachmentRepository.Create(attachment);
+        var id = await _attachmentRepository.Create(attachment, ct);
 
         _logger.LogInformation("Creating attachments success");
 
         return id;
     }
 
-    public async Task<long> UpdateAttachment(long id, string? description)
+    public async Task<long> UpdateAttachment(long id, string? description, CancellationToken ct)
     {
         _logger.LogInformation("Updating attachments start");
 
-        var Id = await _attachmentRepository.Update(id, description);
+        var Id = await _attachmentRepository.Update(id, description, ct);
 
         _logger.LogInformation("Updating attachments success");
 
         return Id;
     }
 
-    public async Task<long> DeletingAttachment(long id)
+    public async Task<long> DeletingAttachment(long id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting attachments start");
 
-        var Id = await _attachmentRepository.Delete(id);
+        var Id = await _attachmentRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting attachments success");
 

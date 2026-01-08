@@ -23,10 +23,10 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<OrderItem>>> GetOrders([FromQuery] OrderFilter filter)
+    public async Task<ActionResult<List<OrderItem>>> GetOrders([FromQuery] OrderFilter filter, CancellationToken ct)
     {
-        var dto = await _orderService.GetPagedOrders(filter);
-        var count = await _orderService.GetCountOrders(filter);
+        var dto = await _orderService.GetPagedOrders(filter, ct);
+        var count = await _orderService.GetCountOrders(filter, ct);
 
         var response = _mapper.Map<List<OrderResponse>>(dto);
 
@@ -36,7 +36,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateOrder([FromBody] OrderRequest request)
+    public async Task<ActionResult<long>> CreateOrder([FromBody] OrderRequest request, CancellationToken ct)
     {
         var (order, errors) = Order.Create(
             0,
@@ -48,13 +48,13 @@ public class OrderController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _orderService.CreateOrder(order!);
+        var Id = await _orderService.CreateOrder(order!, ct);
 
         return Ok(Id);
     }
 
     [HttpPost("/with-bill")]
-    public async Task<ActionResult<long>> CreateOrderWithBill([FromBody] OrderWithBillRequest request)
+    public async Task<ActionResult<long>> CreateOrderWithBill([FromBody] OrderWithBillRequest request, CancellationToken ct)
     {
         var (order, errorsOrder) = Order.Create(
             0,
@@ -77,39 +77,39 @@ public class OrderController : ControllerBase
         if (errorsBill is not null && errorsBill.Any())
             return BadRequest(errorsBill);
 
-        var Id = await _orderService.CreateOrderWithBill(order!, bill!);
+        var Id = await _orderService.CreateOrderWithBill(order!, bill!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateOrder([FromBody] OrderUpdateRequest request, int id)
+    public async Task<ActionResult<long>> UpdateOrder([FromBody] OrderUpdateRequest request, int id, CancellationToken ct)
     {
-        var Id = await _orderService.UpdateOrder(id, request.PriorityId);
+        var Id = await _orderService.UpdateOrder(id, request.PriorityId, ct);
 
         return Ok(Id);
     }
 
     [HttpPatch("close/{id}")]
-    public async Task<ActionResult<long>> CloseOrder(long id)
+    public async Task<ActionResult<long>> CloseOrder(long id, CancellationToken ct)
     {
-        var Id = await _orderService.CloseOrder(id);
+        var Id = await _orderService.CloseOrder(id, ct);
 
         return Ok(Id);
     }
 
     [HttpPatch("complete/{id}")]
-    public async Task<ActionResult<long>> CompleteOrder(long id)
+    public async Task<ActionResult<long>> CompleteOrder(long id, CancellationToken ct)
     {
-        var Id = await _orderService.CompleteOrder(id);
+        var Id = await _orderService.CompleteOrder(id, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteOrder(long id)
+    public async Task<ActionResult<long>> DeleteOrder(long id, CancellationToken ct)
     {
-        var result = await _orderService.DeleteOrder(id);
+        var result = await _orderService.DeleteOrder(id, ct);
 
         return Ok(result);
     }

@@ -23,12 +23,12 @@ public class CachedTaxTypeService : ITaxTypeService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<List<TaxTypeItem>> GetTaxTypes()
+    public async Task<List<TaxTypeItem>> GetTaxTypes(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CAHCE_KEY,
-            () => _decorated.GetTaxTypes(),
+            () => _decorated.GetTaxTypes(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 }

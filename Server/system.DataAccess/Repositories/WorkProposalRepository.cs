@@ -22,7 +22,7 @@ public class WorkProposalRepository : IWorkProposalRepository
         _mapper = mapper;
     }
 
-    private IQueryable<WorkProposalEntity> ApplyFilter(IQueryable<WorkProposalEntity> query, WorkProposalFilter filter)
+    private static IQueryable<WorkProposalEntity> ApplyFilter(IQueryable<WorkProposalEntity> query, WorkProposalFilter filter)
     {
         if (filter.OrderIds != null && filter.OrderIds.Any())
             query = query.Where(w => filter.OrderIds.Contains(w.OrderId));
@@ -39,7 +39,7 @@ public class WorkProposalRepository : IWorkProposalRepository
         return query;
     }
 
-    public async Task<List<WorkProposalItem>> GetPaged(WorkProposalFilter filter)
+    public async Task<List<WorkProposalItem>> GetPaged(WorkProposalFilter filter, CancellationToken ct)
     {
         var query = _context.WorkProposals.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -80,29 +80,29 @@ public class WorkProposalRepository : IWorkProposalRepository
         };
 
         return await query
-            .ProjectTo<WorkProposalItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<WorkProposalItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<WorkProposalItem?> GetById(long id)
+    public async Task<WorkProposalItem?> GetById(long id, CancellationToken ct)
     {
         return await _context.WorkProposals
             .AsNoTracking()
             .Where(p => p.Id == id)
-            .ProjectTo<WorkProposalItem>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync();
+            .ProjectTo<WorkProposalItem>(_mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<int> GetCount(WorkProposalFilter filter)
+    public async Task<int> GetCount(WorkProposalFilter filter, CancellationToken ct)
     {
         var query = _context.WorkProposals.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(WorkProposal workProposal)
+    public async Task<long> Create(WorkProposal workProposal, CancellationToken ct)
     {
         var workProposalEntity = new WorkProposalEntity
         {
@@ -113,61 +113,61 @@ public class WorkProposalRepository : IWorkProposalRepository
             Date = workProposal.Date
         };
 
-        await _context.WorkProposals.AddAsync(workProposalEntity);
-        await _context.SaveChangesAsync();
+        await _context.WorkProposals.AddAsync(workProposalEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return workProposalEntity.Id;
     }
 
-    public async Task<long> Update(long id, ProposalStatusEnum? statusId)
+    public async Task<long> Update(long id, ProposalStatusEnum? statusId, CancellationToken ct)
     {
-        var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(x => x.Id == id)
+        var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(x => x.Id == id, ct)
             ?? throw new Exception("Work proposal not found");
 
         if (statusId.HasValue) workProposal.StatusId = (int)statusId.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return workProposal.Id;
     }
 
-    public async Task<long> AcceptProposal(long id)
+    public async Task<long> AcceptProposal(long id, CancellationToken ct)
     {
-        var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(X => X.Id == id)
+        var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(X => X.Id == id, ct)
             ?? throw new Exception("Work proposal not found");
 
         workProposal.StatusId = (int)ProposalStatusEnum.Accepted;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return workProposal.Id;
     }
 
-    public async Task<long> RejectProposal(long id)
+    public async Task<long> RejectProposal(long id, CancellationToken ct)
     {
-        var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(X => X.Id == id)
+        var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(X => X.Id == id, ct)
             ?? throw new Exception("Work proposal not found");
 
         workProposal.StatusId = (int)ProposalStatusEnum.Rejected;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return workProposal.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var workProposal = await _context.WorkProposals
             .Where(x => x.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(long id)
+    public async Task<bool> Exists(long id, CancellationToken ct)
     {
         return await _context.WorkProposals
             .AsNoTracking()
-            .AnyAsync(x => x.Id == id);
+            .AnyAsync(x => x.Id == id, ct);
     }
 }

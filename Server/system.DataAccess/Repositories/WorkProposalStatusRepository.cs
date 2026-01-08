@@ -19,18 +19,18 @@ public class WorkProposalStatusRepository : IWorkProposalStatusRepository
         _mapper = mapper;
     }
 
-    public async Task<List<WorkProposalStatusItem>> Get()
+    public async Task<List<WorkProposalStatusItem>> Get(CancellationToken ct)
     {
         return await _context.WorkProposalStatuses
             .AsNoTracking()
-            .ProjectTo<WorkProposalStatusItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<WorkProposalStatusItem>(_mapper.ConfigurationProvider,ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(int id, CancellationToken ct)
     {
         return await _context.WorkProposalStatuses
             .AsNoTracking()
-            .AnyAsync(w => w.Id == id);
+            .AnyAsync(w => w.Id == id, ct);
     }
 }

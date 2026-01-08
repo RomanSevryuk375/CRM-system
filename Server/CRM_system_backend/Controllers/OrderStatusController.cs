@@ -22,9 +22,9 @@ public class OrderStatusController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<OrderStatusItem>>> GetOrderStatuses()
+    public async Task<ActionResult<List<OrderStatusItem>>> GetOrderStatuses(CancellationToken ct)
     {
-        var dto = await _orderStatusService.GetOrderStatuses();
+        var dto = await _orderStatusService.GetOrderStatuses(ct);
 
         var response = _mapper.Map<List<OrderStatusResponse>>(dto);
 

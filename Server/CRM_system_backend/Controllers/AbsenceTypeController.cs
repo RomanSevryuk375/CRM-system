@@ -23,9 +23,9 @@ public class AbsenceTypeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<AbsenceTypeItem>>> GetAllAbsenceType()
+    public async Task<ActionResult<List<AbsenceTypeItem>>> GetAllAbsenceType(CancellationToken ct)
     {
-        var dto = await _absenceTypeService.GetAllAbsenceType();
+        var dto = await _absenceTypeService.GetAllAbsenceType(ct);
 
         var response = _mapper.Map<List<AbsenceTypeResponse>>(dto);
 
@@ -33,7 +33,7 @@ public class AbsenceTypeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreateAbsenceType([FromBody] AbsenceTypeRequest request)
+    public async Task<ActionResult<int>> CreateAbsenceType([FromBody] AbsenceTypeRequest request, CancellationToken ct)
     {
         var (absenceType, errors) = AbsenceType.Create(
             0,
@@ -42,23 +42,23 @@ public class AbsenceTypeController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _absenceTypeService.CreateAbsenceType(absenceType!);
+        var Id = await _absenceTypeService.CreateAbsenceType(absenceType!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<int>> UpdateAbsenceType(int id, [FromBody] AbsenceTypeUpdateRequest request)
+    public async Task<ActionResult<int>> UpdateAbsenceType(int id, [FromBody] AbsenceTypeUpdateRequest request, CancellationToken ct)
     {
-        var Id = await _absenceTypeService.UpdateAbsenceType(id, request.Name);
+        var Id = await _absenceTypeService.UpdateAbsenceType(id, request.Name, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<int>> DeleteAbsenceType(int id)
+    public async Task<ActionResult<int>> DeleteAbsenceType(int id, CancellationToken ct)
     {
-        var Id = await _absenceTypeService.DeleteAbsenceType(id);
+        var Id = await _absenceTypeService.DeleteAbsenceType(id, ct);
 
         return Ok(Id);
     }

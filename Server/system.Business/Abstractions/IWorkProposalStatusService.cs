@@ -4,5 +4,5 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IWorkProposalStatusService
 {
-    Task<List<WorkProposalStatusItem>> GetProposalStatuses();
+    Task<List<WorkProposalStatusItem>> GetProposalStatuses(CancellationToken ct);
 }

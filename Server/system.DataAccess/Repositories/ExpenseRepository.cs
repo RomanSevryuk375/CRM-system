@@ -21,7 +21,7 @@ public class ExpenseRepository : IExpenseRepository
         _mapper = mapper;
     }
 
-    private IQueryable<ExpenseEntity> ApplyFilter(IQueryable<ExpenseEntity> query, ExpenseFilter filter)
+    private static IQueryable<ExpenseEntity> ApplyFilter(IQueryable<ExpenseEntity> query, ExpenseFilter filter)
     {
         if (filter.TaxIds != null && filter.TaxIds.Any())
             query = query.Where(e => filter.TaxIds.Contains(e.TaxId));
@@ -35,7 +35,7 @@ public class ExpenseRepository : IExpenseRepository
         return query;
     }
 
-    public async Task<List<ExpenseItem>> GetPaged(ExpenseFilter filter)
+    public async Task<List<ExpenseItem>> GetPaged(ExpenseFilter filter, CancellationToken ct)
     {
         var query = _context.Expenses.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -75,20 +75,20 @@ public class ExpenseRepository : IExpenseRepository
         };
 
         return await query
-            .ProjectTo<ExpenseItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<ExpenseItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(ExpenseFilter filter)
+    public async Task<int> GetCount(ExpenseFilter filter, CancellationToken ct)
     {
         var query = _context.Expenses.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(Expense expense)
+    public async Task<long> Create(Expense expense, CancellationToken ct)
     {
         var expenceEntity = new ExpenseEntity
         {
@@ -100,15 +100,15 @@ public class ExpenseRepository : IExpenseRepository
             Sum = expense.Sum
         };
 
-        await _context.Expenses.AddAsync(expenceEntity);
-        await _context.SaveChangesAsync();
+        await _context.Expenses.AddAsync(expenceEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return expense.Id;
     }
 
-    public async Task<long> Update(long id, ExpenseUpdateModel model)
+    public async Task<long> Update(long id, ExpenseUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Expenses.FirstOrDefaultAsync(x => x.Id == id)
+        var entity = await _context.Expenses.FirstOrDefaultAsync(x => x.Id == id, ct)
             ?? throw new Exception("Expence not found");
 
         if (model.Date.HasValue) entity.Date = model.Date.Value;
@@ -116,16 +116,16 @@ public class ExpenseRepository : IExpenseRepository
         if (model.ExpenseTypeId.HasValue) entity.ExpenseTypeId = (int)model.ExpenseTypeId.Value;
         if (model.Sum.HasValue) entity.Sum = model.Sum.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var expence = await _context.Expenses
             .Where(x => x.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }

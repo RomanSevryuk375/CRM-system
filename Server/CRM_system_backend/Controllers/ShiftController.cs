@@ -23,9 +23,9 @@ public class ShiftController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ShiftItem>>> GetShifts()
+    public async Task<ActionResult<List<ShiftItem>>> GetShifts(CancellationToken ct)
     {
-        var dto = await _shiftService.GetShifts();
+        var dto = await _shiftService.GetShifts(ct);
 
         var response = _mapper.Map<List<ShiftResponse>>(dto);
 
@@ -33,7 +33,7 @@ public class ShiftController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreateShift([FromBody] ShiftRequest request)
+    public async Task<ActionResult<int>> CreateShift([FromBody] ShiftRequest request, CancellationToken ct)
     {
         var (shift, errors) = Shift.Create(
             0,
@@ -44,28 +44,28 @@ public class ShiftController : ControllerBase
         if(errors is not null && errors.Any()) 
             return BadRequest(errors);
 
-        var Id = await _shiftService.CreateShift(shift!);
+        var Id = await _shiftService.CreateShift(shift!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<int>> UpdateShift(int id, [FromBody]ShiftUpdateRequest request)
+    public async Task<ActionResult<int>> UpdateShift(int id, [FromBody]ShiftUpdateRequest request, CancellationToken ct)
     {
         var model = new ShiftUpdateModel(
             request.Name,
             request.StartAt,
             request.EndAt);
 
-        var Id = await _shiftService.UpdateShift(id, model);
+        var Id = await _shiftService.UpdateShift(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<int>> DeleteShift(int id)
+    public async Task<ActionResult<int>> DeleteShift(int id, CancellationToken ct)
     {
-        var Id = await _shiftService.DeleteShift(id);
+        var Id = await _shiftService.DeleteShift(id, ct);
 
         return Ok(Id);
     }

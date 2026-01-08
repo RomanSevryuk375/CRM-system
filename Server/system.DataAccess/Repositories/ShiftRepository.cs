@@ -21,15 +21,15 @@ public class ShiftRepository : IShiftRepository
         _mapper = mapper;
     }
 
-    public async Task<List<ShiftItem>> Get()
+    public async Task<List<ShiftItem>> Get(CancellationToken ct)
     {
         return await _context.Shifts
             .AsNoTracking()
-            .ProjectTo<ShiftItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<ShiftItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<int> Create(Shift shift)
+    public async Task<int> Create(Shift shift, CancellationToken ct)
     {
         var shiftEntity = new ShiftEntity
         {
@@ -38,47 +38,47 @@ public class ShiftRepository : IShiftRepository
             EndAt = shift.EndAt,
         };
 
-        await _context.Shifts.AddAsync(shiftEntity);
-        await _context.SaveChangesAsync();
+        await _context.Shifts.AddAsync(shiftEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return shiftEntity.Id;
     }
 
-    public async Task<int> Update(int id, ShiftUpdateModel model)
+    public async Task<int> Update(int id, ShiftUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Shifts.FirstOrDefaultAsync(s => s.Id == id)
+        var entity = await _context.Shifts.FirstOrDefaultAsync(s => s.Id == id, ct)
             ?? throw new Exception("Shift note not found");
 
         if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
         if (model.StartAt.HasValue) entity.StartAt = model.StartAt.Value;
         if (model.EndAt.HasValue) entity.EndAt = model.EndAt.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<int> Delete(int id, CancellationToken ct)
     {
         var entity = await _context.Shifts
             .Where(s => s.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(int id, CancellationToken ct)
     {
         return await _context.Shifts
             .AsNoTracking()
-            .AnyAsync(s => s.Id == id);
+            .AnyAsync(s => s.Id == id, ct);
     }
 
-    public async Task<bool> HasOverLap(TimeOnly start, TimeOnly end)
+    public async Task<bool> HasOverLap(TimeOnly start, TimeOnly end, CancellationToken ct)
     {
         return await _context.Shifts
             .AsNoTracking()
             .AnyAsync(s => s.StartAt == start 
-                        && s.EndAt == end);
+                        && s.EndAt == end, ct);
     }
 }

@@ -19,10 +19,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<string>> LoginUser([FromBody] LoginRequest loginRequest)
+    public async Task<ActionResult<string>> LoginUser([FromBody] LoginRequest loginRequest, CancellationToken ct)
     {
-        var token = await _userService.LoginUser(loginRequest.Login, loginRequest.Password);
-        var user = await _userService.GetUsersByLogin(loginRequest.Login);
+        var token = await _userService.LoginUser(loginRequest.Login, loginRequest.Password, ct);
+        var user = await _userService.GetUsersByLogin(loginRequest.Login, ct);
 
         var cookieOptions = new CookieOptions
         {
@@ -56,14 +56,14 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("by-login/{login}")]
-    public async Task<ActionResult<UserItem>> GetUserByLogin(string login)
+    public async Task<ActionResult<UserItem>> GetUserByLogin(string login, CancellationToken ct)
     {
-        var user = await _userService.GetUsersByLogin(login);
+        var user = await _userService.GetUsersByLogin(login, ct);
         return Ok(user);
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateUser([FromBody] UserRequest request)
+    public async Task<ActionResult<long>> CreateUser([FromBody] UserRequest request, CancellationToken ct)
     {
         var (user, errors) = CRMSystem.Core.Models.User.Create(
             0,
@@ -75,16 +75,16 @@ public class UserController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var userId = await _userService.CreateUser(user!);
+        var userId = await _userService.CreateUser(user!, ct);
 
         return userId;
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> DeleteUser (int id)
+    public async Task<ActionResult<long>> DeleteUser (int id, CancellationToken ct)
     {
-        var result = await _userService.DeleteUser(id);
+        var result = await _userService.DeleteUser(id, ct);
 
         return Ok(id);
     }

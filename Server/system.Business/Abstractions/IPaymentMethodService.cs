@@ -4,5 +4,5 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IPaymentMethodService
 {
-    Task<List<PaymentMethodItem>> GetPaymentMethods();
+    Task<List<PaymentMethodItem>> GetPaymentMethods(CancellationToken ct);
 }

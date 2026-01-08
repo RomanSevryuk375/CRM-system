@@ -18,11 +18,11 @@ public class BillStatusService : IBillStatusService
         _logger = logger;
     }
 
-    public async Task<List<BillStatusItem>> GetAllBillStatuses()
+    public async Task<List<BillStatusItem>> GetAllBillStatuses(CancellationToken ct)
     {
         _logger.LogInformation("Getting bill statuses start");
 
-        var bullStatus = await _billStatusRepository.Get();
+        var bullStatus = await _billStatusRepository.Get(ct);
 
         _logger.LogInformation("Getting bill statuses success");
 

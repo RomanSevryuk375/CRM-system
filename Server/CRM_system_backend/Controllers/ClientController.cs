@@ -23,10 +23,10 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ClientItem>>> GetPagedClient([FromQuery] ClientFilter filter)
+    public async Task<ActionResult<List<ClientItem>>> GetPagedClient([FromQuery] ClientFilter filter, CancellationToken ct)
     {
-        var dto = await _clientService.GetPagedClients(filter);
-        var count = await _clientService.GetCountClients(filter);
+        var dto = await _clientService.GetPagedClients(filter, ct);
+        var count = await _clientService.GetCountClients(filter, ct);
 
         var response = _mapper.Map<List<ClientsResponse>>(dto);
 
@@ -36,15 +36,15 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<List<Client>>> GetClientById(long id)
+    public async Task<ActionResult<List<Client>>> GetClientById(long id, CancellationToken ct)
     {
-        var response = await _clientService.GetClientById(id);
+        var response = await _clientService.GetClientById(id, ct);
 
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateClient(ClientsRequest request)
+    public async Task<ActionResult<long>> CreateClient(ClientsRequest request, CancellationToken ct)
     {
         var (client, errors) = Client.Create(
             0,
@@ -57,13 +57,13 @@ public class ClientController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _clientService.CreateClient(client!);
+        var Id = await _clientService.CreateClient(client!, ct);
 
         return Ok(Id);
     }
 
     [HttpPost("with-user")]
-    public async Task<ActionResult<int>> CreateClientWithUser([FromBody] ClientRegisterRequest request)
+    public async Task<ActionResult<int>> CreateClientWithUser([FromBody] ClientRegisterRequest request, CancellationToken ct)
     {
         var (user, errorsUser) = CRMSystem.Core.Models.User.Create(
             0,
@@ -85,13 +85,13 @@ public class ClientController : ControllerBase
         if (errorsClient is not null && errorsClient.Any())
             return BadRequest(errorsClient);
 
-        var clientId = await _clientService.CreateClientWithUser(client!, user!);
+        var clientId = await _clientService.CreateClientWithUser(client!, user!, ct);
 
         return Ok(clientId);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateClient(long id, [FromBody] ClientUpdateRequest request)
+    public async Task<ActionResult<long>> UpdateClient(long id, [FromBody] ClientUpdateRequest request, CancellationToken ct)
     {
         var model = new ClientUpdateModel(
             request.Name,
@@ -99,15 +99,15 @@ public class ClientController : ControllerBase
             request.PhoneNumber,
             request.Email);
 
-        var Id = await _clientService.UpdateClient(id, model);
+        var Id = await _clientService.UpdateClient(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteClient(long id)
+    public async Task<ActionResult<long>> DeleteClient(long id, CancellationToken ct)
     {
-         var Id = await _clientService.DeleteClient(id);
+         var Id = await _clientService.DeleteClient(id, ct);
 
         return Ok(Id);
     }

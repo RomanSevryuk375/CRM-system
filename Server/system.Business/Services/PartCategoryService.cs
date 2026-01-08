@@ -23,56 +23,56 @@ public class PartCategoryService : IPartCategoryService
         _logger = logger;
     }
 
-    public async Task<List<PartCategoryItem>> GetPartCategories()
+    public async Task<List<PartCategoryItem>> GetPartCategories(CancellationToken ct)
     {
         _logger.LogInformation("Getting part category start");
 
-        var categories = await _repo.Get();
+        var categories = await _repo.Get(ct);
 
         _logger.LogInformation("Getting part category success");
 
         return categories;
     }
 
-    public async Task<int> CreatePartCategory(PartCategory partCategory)
+    public async Task<int> CreatePartCategory(PartCategory partCategory, CancellationToken ct)
     {
         _logger.LogInformation("Creating part category start");
 
-        if (await _repo.NameExists(partCategory.Name))
+        if (await _repo.NameExists(partCategory.Name, ct))
         {
             _logger.LogError("Category with this this name{Name} is exist", partCategory.Name);
             throw new ConflictException($"Category with this this name{partCategory.Name} is exist");
         }
 
-        var Id = await _repo.Create(partCategory);
+        var Id = await _repo.Create(partCategory, ct);
 
         _logger.LogInformation("Creating part category success");
 
         return Id;
     }
 
-    public async Task<int> UpdatePartCategory(int id, PartCategoryUpdateModel model)
+    public async Task<int> UpdatePartCategory(int id, PartCategoryUpdateModel model, CancellationToken ct)
     {
         _logger.LogInformation("Updating part category start");
 
-        if (!string.IsNullOrEmpty(model.Name) && await _repo.NameExists(model.Name))
+        if (!string.IsNullOrEmpty(model.Name) && await _repo.NameExists(model.Name, ct))
         {
             _logger.LogError("Category with this this name{Name} is exist", model.Name);
             throw new ConflictException($"Category with this this name{model.Name} is exist");
         }
 
-        var Id = await _repo.Update(id, model);
+        var Id = await _repo.Update(id, model, ct);
 
         _logger.LogInformation("Updating part category success");
 
         return Id;
     }
 
-    public async Task<int> DeletePartCategory(int id)
+    public async Task<int> DeletePartCategory(int id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting part category start");
 
-        var Id = await _repo.Delete(id);
+        var Id = await _repo.Delete(id, ct);
 
         _logger.LogInformation("Deleting part category success");
 

@@ -19,18 +19,18 @@ public class WorkInOrderStatusRepository : IWorkInOrderStatusRepository
         _mapper = mapper;
     }
 
-    public async Task<List<WorkInOrderStatusItem>> Get()
+    public async Task<List<WorkInOrderStatusItem>> Get(CancellationToken ct)
     {
         return await _context.WorkInOrderStatuses
             .AsNoTracking()
-            .ProjectTo<WorkInOrderStatusItem>(_mapper.ConfigurationProvider )
-            .ToListAsync();
+            .ProjectTo<WorkInOrderStatusItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(int id, CancellationToken ct)
     {
         return await _context.WorkInOrderStatuses
             .AsNoTracking()
-            .AnyAsync(w => w.Id == id);
+            .AnyAsync(w => w.Id == id, ct);
     }
 }

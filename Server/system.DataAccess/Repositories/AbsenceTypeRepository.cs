@@ -21,15 +21,15 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
         _mapper = mapper;
     }
 
-    public async Task<List<AbsenceTypeItem>> GetAll()
+    public async Task<List<AbsenceTypeItem>> GetAll(CancellationToken ct)
     {
         return await _context.AbsenceTypes
             .AsNoTracking()
-            .ProjectTo<AbsenceTypeItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<AbsenceTypeItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<List<AbsenceTypeItem>> GetByName (string name)
+    public async Task<List<AbsenceTypeItem>> GetByName (string name, CancellationToken ct)
     {
         var query = _context.AbsenceTypes
             .Where(a => a.Name == name)
@@ -38,26 +38,26 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
         return await _context.AbsenceTypes
             .Where(a => a.Name == name)
             .AsNoTracking()
-            .ProjectTo<AbsenceTypeItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<AbsenceTypeItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<int> Create(AbsenceType absenceType)
+    public async Task<int> Create(AbsenceType absenceType, CancellationToken ct)
     {
         var entity = new AbsenceTypeEntity
         {
             Name = absenceType.Name
         };
 
-        await _context.AddAsync(entity);
-        await _context.SaveChangesAsync();
+        await _context.AddAsync(entity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<int> Update(int id, string name)
+    public async Task<int> Update(int id, string name, CancellationToken ct)
     {
-        var entity = await _context.AbsenceTypes.FirstOrDefaultAsync(a => a.Id == id)
+        var entity = await _context.AbsenceTypes.FirstOrDefaultAsync(a => a.Id == id, ct)
             ?? throw new Exception("AbsenceType not found");
 
         if (entity == null) throw new Exception("AbsencesType not found");
@@ -65,16 +65,16 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
         if (!string.IsNullOrEmpty(name))
             entity.Name = name;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<int> Delete(int id, CancellationToken ct)
     {
         var entity = await _context.AbsenceTypes
             .Where(a => a.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }

@@ -19,11 +19,11 @@ public class RoleRepository : IRoleRepository
         _mapper = mapper;
     }
 
-    public async Task<List<RoleItem>> Get()
+    public async Task<List<RoleItem>> Get(CancellationToken ct)
     {
         return await _context.Roles
             .AsNoTracking()
-            .ProjectTo<RoleItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<RoleItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 }

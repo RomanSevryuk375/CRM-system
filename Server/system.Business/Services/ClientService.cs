@@ -27,33 +27,33 @@ public class ClientService : IClientService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<ClientItem>> GetPagedClients(ClientFilter filter)
+    public async Task<List<ClientItem>> GetPagedClients(ClientFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting client start");
 
-        var client = await _clientRepository.GetPaged(filter);
+        var client = await _clientRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting client success");
 
         return client;
     }
 
-    public async Task<int> GetCountClients(ClientFilter filter)
+    public async Task<int> GetCountClients(ClientFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting count client start");
 
-        var count = await _clientRepository.GetCount(filter);
+        var count = await _clientRepository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting count client success");
 
         return count;
     }
 
-    public async Task<ClientItem> GetClientById(long id)
+    public async Task<ClientItem> GetClientById(long id, CancellationToken ct)
     {
         _logger.LogInformation("Getting count client start");
 
-        var client = await _clientRepository.GetById(id);
+        var client = await _clientRepository.GetById(id, ct);
         if (client is null)
         {
             _logger.LogError("Client{ClinetId} not found", id);
@@ -65,40 +65,40 @@ public class ClientService : IClientService
         return client;
     }
 
-    public async Task<long> CreateClient(Client client)
+    public async Task<long> CreateClient(Client client, CancellationToken ct)
     {
         _logger.LogInformation("Creating client start");
 
-        if (!await _userRepository.Exists(client.UserId))
+        if (!await _userRepository.Exists(client.UserId, ct))
         {
             _logger.LogError("User{UserId} not found", client.UserId);
             throw new NotFoundException($"User{client.UserId} not found");
         }
 
-        var Id = await _clientRepository.Create(client);
+        var Id = await _clientRepository.Create(client, ct);
 
         _logger.LogInformation("Creating client success");
 
         return Id;
     }
 
-    public async Task<long> CreateClientWithUser(Client client, User user)
+    public async Task<long> CreateClientWithUser(Client client, User user, CancellationToken ct)
     {
-        await _unitOfWork.BeginTransactionAsync();
+        await _unitOfWork.BeginTransactionAsync(ct);
 
         long userId;
         try
         {
             _logger.LogInformation("Creating user start");
 
-            userId = await _userRepository.Create(user);
+            userId = await _userRepository.Create(user, ct);
             client.SetUserId(userId);
 
-            var Id = await _clientRepository.Create(client);
+            var Id = await _clientRepository.Create(client, ct);
 
             _logger.LogInformation("Creating client success");
 
-            await _unitOfWork.CommitTransactionAsync();
+            await _unitOfWork.CommitTransactionAsync(ct);
 
             return Id;
         }
@@ -106,28 +106,28 @@ public class ClientService : IClientService
         {
             _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
             
-            await _unitOfWork.RollbackAsync();
+            await _unitOfWork.RollbackAsync(ct);
 
             throw;
         }
     }
 
-    public async Task<long> UpdateClient(long id, ClientUpdateModel model)
+    public async Task<long> UpdateClient(long id, ClientUpdateModel model, CancellationToken ct)
     {
         _logger.LogInformation("Updating client start");
 
-        var Id = await _clientRepository.Update(id, model);
+        var Id = await _clientRepository.Update(id, model, ct);
 
         _logger.LogInformation("Updating client success");
 
         return Id;
     }
 
-    public async Task<long> DeleteClient(long id)
+    public async Task<long> DeleteClient(long id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting client start");
 
-        var Id = await _clientRepository.Delete(id);
+        var Id = await _clientRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting client success");
 

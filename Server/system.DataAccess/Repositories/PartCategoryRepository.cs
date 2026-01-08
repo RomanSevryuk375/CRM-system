@@ -21,15 +21,15 @@ public class PartCategoryRepository : IPartCategoryRepository
         _mapper = mapper;
     }
 
-    public async Task<List<PartCategoryItem>> Get()
+    public async Task<List<PartCategoryItem>> Get(CancellationToken ct)
     {
         return await _context.PartCategories
             .AsNoTracking()
-            .ProjectTo<PartCategoryItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<PartCategoryItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<int> Create(PartCategory category)
+    public async Task<int> Create(PartCategory category, CancellationToken ct)
     {
         var partCategoryEntity = new PartCategoryEntity
         {
@@ -37,45 +37,45 @@ public class PartCategoryRepository : IPartCategoryRepository
             Description = category.Description,
         };
 
-        await _context.AddAsync(partCategoryEntity);
-        await _context.SaveChangesAsync();
+        await _context.AddAsync(partCategoryEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return partCategoryEntity.Id;
     }
 
-    public async Task<int> Update(int id, PartCategoryUpdateModel model)
+    public async Task<int> Update(int id, PartCategoryUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.PartCategories.FirstOrDefaultAsync(p => p.Id == id)
+        var entity = await _context.PartCategories.FirstOrDefaultAsync(p => p.Id == id, ct)
             ?? throw new Exception("PartCategory not found");
 
         if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
         if (!string.IsNullOrWhiteSpace(model.Description)) entity.Description = model.Description;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<int> Delete(int id)
+    public async Task<int> Delete(int id, CancellationToken ct)
     {
         var entity = await _context.PartCategories
             .Where(p => p.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists (int id)
+    public async Task<bool> Exists (int id, CancellationToken ct)
     {
         return await _context.PartCategories
             .AsNoTracking()
-            .AnyAsync(p => p.Id == id);
+            .AnyAsync(p => p.Id == id, ct);
     }
 
-    public async Task<bool> NameExists (string name)
+    public async Task<bool> NameExists (string name, CancellationToken ct)
     {
         return await _context.PartCategories
             .AsNoTracking()
-            .AnyAsync(p => p.Name == name);
+            .AnyAsync(p => p.Name == name, ct);
     }
 }

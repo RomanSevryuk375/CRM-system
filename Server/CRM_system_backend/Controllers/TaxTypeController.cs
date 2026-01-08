@@ -22,9 +22,9 @@ public class TaxTypeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<TaxTypeItem>>> GetTaxTypes()
+    public async Task<ActionResult<List<TaxTypeItem>>> GetTaxTypes(CancellationToken ct)
     {
-        var dto = await _taxTypeService.GetTaxTypes();
+        var dto = await _taxTypeService.GetTaxTypes(ct);
 
         var response = _mapper.Map<List<TaxTypeResponse>>(dto);
 

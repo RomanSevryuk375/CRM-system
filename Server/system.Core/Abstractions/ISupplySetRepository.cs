@@ -5,9 +5,9 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface ISupplySetRepository
 {
-    Task<long> Create(SupplySet supplySet);
-    Task<long> Delete(long id);
-    Task<int> GetCount(SupplySetFilter filter);
-    Task<List<SupplySetItem>> GetPaged(SupplySetFilter filter);
-    Task<long> Update(long id, SupplySetUpdateModel model);
+    Task<long> Create(SupplySet supplySet, CancellationToken ct);
+    Task<long> Delete(long id, CancellationToken ct);
+    Task<int> GetCount(SupplySetFilter filter, CancellationToken ct);
+    Task<List<SupplySetItem>> GetPaged(SupplySetFilter filter, CancellationToken ct);
+    Task<long> Update(long id, SupplySetUpdateModel model, CancellationToken ct);
 }

@@ -19,18 +19,17 @@ public class CarStatusRepository : ICarStatusRepository
         _mapper = mapper;
     }
 
-    public async Task<List<CarStatusItem>> Get()
+    public async Task<List<CarStatusItem>> Get(CancellationToken ct)
     {
         return await _context.CarStatuses
             .AsNoTracking()
-            .ProjectTo<CarStatusItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<CarStatusItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<bool> Exists(long id)
+    public async Task<bool> Exists(long id, CancellationToken ct)
     {
-        var exists = await _context.CarStatuses.AnyAsync(c => c.Id == id);
-        Console.WriteLine($"DEBUG: Checking status {id}. Exists in DB? {exists}");
-        return exists;
+        return await _context.CarStatuses
+            .AnyAsync(c => c.Id == id, ct);
     }
 }

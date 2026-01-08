@@ -19,18 +19,18 @@ public class BillStatusRepository : IBillStatusRepository
         _mapper = mapper;
     }
 
-    public async Task<List<BillStatusItem>> Get()
+    public async Task<List<BillStatusItem>> Get(CancellationToken ct)
     {
         return await _context.BillStatuses
             .AsNoTracking()
-            .ProjectTo<BillStatusItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<BillStatusItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<bool> Exists (int id)
+    public async Task<bool> Exists (int id, CancellationToken ct)
     {
         return await _context.BillStatuses
             .AsNoTracking()
-            .AnyAsync(b => b.Id == id);
+            .AnyAsync(b => b.Id == id, ct);
     }
 }

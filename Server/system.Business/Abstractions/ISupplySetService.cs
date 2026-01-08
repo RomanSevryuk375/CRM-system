@@ -5,9 +5,9 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface ISupplySetService
 {
-    Task<long> CreateSupplySet(SupplySet supplySet);
-    Task<long> DeleteSupplySet(long id);
-    Task<int> GetCountSupplySets(SupplySetFilter filter);
-    Task<List<SupplySetItem>> GetPagedSupplySets(SupplySetFilter filter);
-    Task<long> UpdateSupplySet(long id, SupplySetUpdateModel model);
+    Task<long> CreateSupplySet(SupplySet supplySet, CancellationToken ct);
+    Task<long> DeleteSupplySet(long id, CancellationToken ct);
+    Task<int> GetCountSupplySets(SupplySetFilter filter, CancellationToken ct);
+    Task<List<SupplySetItem>> GetPagedSupplySets(SupplySetFilter filter, CancellationToken ct);
+    Task<long> UpdateSupplySet(long id, SupplySetUpdateModel model, CancellationToken ct);
 }

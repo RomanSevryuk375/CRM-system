@@ -21,8 +21,7 @@ public class NotificationRepository : INotificationRepository
         _mapper = mapper;
     }
 
-    private IQueryable<NotificationEntity> ApplyFilter
-        (IQueryable<NotificationEntity> query, NotificationFilter filter)
+    private static IQueryable<NotificationEntity> ApplyFilter (IQueryable<NotificationEntity> query, NotificationFilter filter)
     {
         if (filter.ClientIds != null && filter.ClientIds.Any())
             query = query.Where(n => filter.ClientIds.Contains(n.ClientId));
@@ -39,7 +38,7 @@ public class NotificationRepository : INotificationRepository
         return query;
     }
 
-    public async Task<List<NotificationItem>> GetPaged(NotificationFilter filter)
+    public async Task<List<NotificationItem>> GetPaged(NotificationFilter filter, CancellationToken ct)
     {
         var query = _context.Notifications.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -87,20 +86,20 @@ public class NotificationRepository : INotificationRepository
         };
 
         return await query
-            .ProjectTo<NotificationItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<NotificationItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(NotificationFilter filter)
+    public async Task<int> GetCount(NotificationFilter filter, CancellationToken ct)
     {
         var query = _context.Notifications.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(Notification notification)
+    public async Task<long> Create(Notification notification, CancellationToken ct)
     {
         var noticationEntity = new NotificationEntity
         {
@@ -112,17 +111,17 @@ public class NotificationRepository : INotificationRepository
             SendAt = notification.SendAt,
         };
 
-        await _context.AddAsync(noticationEntity);
-        await _context.SaveChangesAsync();
+        await _context.AddAsync(noticationEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return noticationEntity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var entity = await _context.Notifications
             .Where(n => n.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }

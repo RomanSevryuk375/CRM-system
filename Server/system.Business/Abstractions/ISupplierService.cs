@@ -5,8 +5,8 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface ISupplierService
 {
-    Task<int> CreateSupplier(Supplier supplier);
-    Task<int> DeleteSupplier(int id);
-    Task<List<SupplierItem>> GetSuppliers();
-    Task<int> UpdateSupplier(int id, SupplierUpdateModel model);
+    Task<int> CreateSupplier(Supplier supplier, CancellationToken ct);
+    Task<int> DeleteSupplier(int id, CancellationToken ct);
+    Task<List<SupplierItem>> GetSuppliers(CancellationToken ct);
+    Task<int> UpdateSupplier(int id, SupplierUpdateModel model, CancellationToken ct);
 }

@@ -23,7 +23,7 @@ public class BillRepository : IBillRepository
         _mapper = mapper;
     }
 
-    private IQueryable<BillEntity> ApplyFilter(IQueryable<BillEntity> query, BillFilter filter)
+    private static IQueryable<BillEntity> ApplyFilter(IQueryable<BillEntity> query, BillFilter filter)
     {
         if (filter.OrderIds != null && filter.OrderIds.Any())
             query = query.Where(b => filter.OrderIds.Contains(b.OrderId));
@@ -31,7 +31,7 @@ public class BillRepository : IBillRepository
         return query;
     }
 
-    public async Task<List<BillItem>> GetPaged(BillFilter filter)
+    public async Task<List<BillItem>> GetPaged(BillFilter filter, CancellationToken ct)
     {
         var query = _context.Bills.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -61,31 +61,31 @@ public class BillRepository : IBillRepository
         };
 
         return await query
-            .ProjectTo<BillItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<BillItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(BillFilter filter)
+    public async Task<int> GetCount(BillFilter filter, CancellationToken ct)
     {
         var query = _context.Bills.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<BillItem?> GetByOrderId(long orderId)
+    public async Task<BillItem?> GetByOrderId(long orderId, CancellationToken ct)
     {
         var bill = await _context.Bills
             .AsNoTracking()
             .Where(b => b.OrderId == orderId)
-            .ProjectTo<BillItem>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync();
+            .ProjectTo<BillItem>(_mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
 
         return bill;
     }
 
-    public async Task<long> Create(Bill bill)
+    public async Task<long> Create(Bill bill, CancellationToken ct)
     {
         var billEntity = new BillEntity
         {
@@ -96,72 +96,72 @@ public class BillRepository : IBillRepository
             ActualBillDate = bill.ActualBillDate,
         };
 
-        await _context.Bills.AddAsync(billEntity);
-        await _context.SaveChangesAsync();
+        await _context.Bills.AddAsync(billEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return billEntity.Id;
     }
 
-    public async Task<long> Update(long id, BillUpdateModel model)
+    public async Task<long> Update(long id, BillUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Bills.FirstOrDefaultAsync(b => b.Id == id)
+        var entity = await _context.Bills.FirstOrDefaultAsync(b => b.Id == id, ct)
             ?? throw new NotFoundException("Bill not found");
 
         if (model.StatusId.HasValue) entity.StatusId = (int)model.StatusId.Value;
         if (model.Amount.HasValue) entity.Amount = model.Amount.Value;
         if (model.ActualBillDate.HasValue) entity.ActualBillDate = model.ActualBillDate.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var entity = await _context.Bills
             .Where(b => b.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }
 
-    public async Task<bool> Exists(long id)
+    public async Task<bool> Exists(long id, CancellationToken ct)
     {
         return await _context.Bills
             .AsNoTracking()
-            .AnyAsync(b => b.Id == id);
+            .AnyAsync(b => b.Id == id, ct);
     }
 
-    public async Task<long> RecalculateAmount(long orderId)
+    public async Task<long> RecalculateAmount(long orderId, CancellationToken ct)
     {
-        var bill = await _context.Bills.FirstOrDefaultAsync(b => b.OrderId == orderId)
+        var bill = await _context.Bills.FirstOrDefaultAsync(b => b.OrderId == orderId, ct)
             ?? throw new NotFoundException("Bill not found");
 
         var newSetSum = await _context.PartSets
             .Where(b => b.OrderId == orderId)
-            .SumAsync(b => b.SoldPrice * b.Quantity);
+            .SumAsync(b => b.SoldPrice * b.Quantity, ct);
 
         var newWorkInOrderSum = await _context.WorksInOrder
             .Where(b => b.OrderId == orderId)
             .SumAsync(b => (b.Work != null && b.Worker != null)
                 ? b.Work.StandardTime * b.Worker.HourlyRate
-                : 0m);
+                : 0m, ct);
 
         bill.Amount = newSetSum + newWorkInOrderSum;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return bill.Id;
     }
 
-    public async Task<decimal> RecalculateDebt(long Id)
+    public async Task<decimal> RecalculateDebt(long Id, CancellationToken ct)
     {
-        var bill = await _context.Bills.FirstOrDefaultAsync(b => b.Id == Id)
+        var bill = await _context.Bills.FirstOrDefaultAsync(b => b.Id == Id, ct)
             ?? throw new NotFoundException("Bill not found");
 
         var payedSum = await _context.PaymentNotes
             .Where(p => p.BillId == bill.Id)
-            .SumAsync(p => p.Amount);
+            .SumAsync(p => p.Amount, ct);
 
         var debt = bill.Amount - payedSum;
 
@@ -172,7 +172,7 @@ public class BillRepository : IBillRepository
         else
             bill.StatusId = (int)BillStatusEnum.PartiallyPaid;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return debt;
     }

@@ -23,12 +23,12 @@ public class CachedCarStatusService : ICarStatusService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<List<CarStatusItem>> GetCarStatuses()
+    public async Task<List<CarStatusItem>> GetCarStatuses(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetCarStatuses(),
+            () => _decorated.GetCarStatuses(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 }

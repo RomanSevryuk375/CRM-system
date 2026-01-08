@@ -19,18 +19,18 @@ public class TaxTypeRepository : ITaxTypeRepository
         _mapper = mapper;
     }
 
-    public async Task<List<TaxTypeItem>> Get()
+    public async Task<List<TaxTypeItem>> Get(CancellationToken ct)
     {
         return await _context.TaxTypes
             .AsNoTracking()
-            .ProjectTo<TaxTypeItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<TaxTypeItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(int id, CancellationToken ct)
     {
         return await _context.TaxTypes
             .AsNoTracking()
-            .AnyAsync(t => t.Id == id);
+            .AnyAsync(t => t.Id == id, ct);
     }
 }

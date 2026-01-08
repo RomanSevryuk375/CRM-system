@@ -4,5 +4,5 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface INotificationStatusService
 {
-    Task<List<NotificationStatusItem>> GetNotificationStatuses();
+    Task<List<NotificationStatusItem>> GetNotificationStatuses(CancellationToken ct);
 }

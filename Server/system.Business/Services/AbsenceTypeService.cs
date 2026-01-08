@@ -20,56 +20,56 @@ public class AbsenceTypeService : IAbsenceTypeService
         _logger = logger;
     }
 
-    public async Task<List<AbsenceTypeItem>> GetAllAbsenceType()
+    public async Task<List<AbsenceTypeItem>> GetAllAbsenceType(CancellationToken ct)
     {
         _logger.LogInformation("Getting absenceType start");
 
-        var absenceType = await _absenceTypeRepository.GetAll();
+        var absenceType = await _absenceTypeRepository.GetAll(ct);
 
         _logger.LogInformation("Getting absenceType success");
 
         return absenceType;
     }
 
-    public async Task<int> CreateAbsenceType(AbsenceType absenceType)
+    public async Task<int> CreateAbsenceType(AbsenceType absenceType, CancellationToken ct)
     {
         _logger.LogInformation("Creating absenceType start");
 
-        if (await _absenceTypeRepository.GetByName(absenceType.Name) is not null)
+        if (await _absenceTypeRepository.GetByName(absenceType.Name, ct) is not null)
         {
             _logger.LogInformation("Absence type {TypeName} is exists", absenceType.Name);
             throw new FoundException($"Absence type {absenceType.Name} is exists");
         }
 
-        var absenceTypeRes = await _absenceTypeRepository.Create(absenceType);
+        var absenceTypeRes = await _absenceTypeRepository.Create(absenceType, ct);
 
         _logger.LogInformation("Creating absenceType success");
 
         return absenceTypeRes;
     }
 
-    public async Task<int> UpdateAbsenceType(int id, string name)
+    public async Task<int> UpdateAbsenceType(int id, string name, CancellationToken ct)
     {
         _logger.LogInformation("Updating absence start");
 
-        if (await _absenceTypeRepository.GetByName(name) is not null)
+        if (await _absenceTypeRepository.GetByName(name, ct) is not null)
         {
             _logger.LogInformation("Absence type {TypeName} is exists", name);
             throw new ConflictException($"Absence type {name} is exists");
         }
 
-        var absenceType = await _absenceTypeRepository.Update(id, name);
+        var absenceType = await _absenceTypeRepository.Update(id, name, ct);
 
         _logger.LogInformation("Updating absence success");
 
         return absenceType;
     }
 
-    public async Task<int> DeleteAbsenceType(int id)
+    public async Task<int> DeleteAbsenceType(int id, CancellationToken ct)
     {
         _logger.LogInformation("Deleting absence start");
 
-        var absenceType = await _absenceTypeRepository.Delete(id);
+        var absenceType = await _absenceTypeRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting absence success");
 

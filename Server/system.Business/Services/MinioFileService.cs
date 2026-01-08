@@ -34,17 +34,17 @@ public class MinioFileService : IFileService
             config["SecretKey"],
             s3Config);
     }
-    public async Task DeleteFile(string fileName)
+    public async Task DeleteFile(string fileName, CancellationToken ct)
     {
-        await _s3Client.DeleteObjectAsync(_bucketName, fileName);
+        await _s3Client.DeleteObjectAsync(_bucketName, fileName, ct);
         _logger.LogInformation("File {FileName} deleted from MinIO", fileName);
     }
 
-    public async Task<Stream> GetFile(string fileName)
+    public async Task<Stream> GetFile(string fileName, CancellationToken ct)
     {
         try
         {
-            var response = await _s3Client.GetObjectAsync(_bucketName, fileName);
+            var response = await _s3Client.GetObjectAsync(_bucketName, fileName, ct);
 
             return response.ResponseStream;
         }
@@ -55,7 +55,7 @@ public class MinioFileService : IFileService
         }
     }
 
-    public async Task<string> UploadFile(Stream fileStream, string fileName, string contentType)
+    public async Task<string> UploadFile(Stream fileStream, string fileName, string contentType, CancellationToken ct)
     {
         var uniqueFileName = $"{Guid.NewGuid()}_{fileName}";
 
@@ -69,8 +69,8 @@ public class MinioFileService : IFileService
                 Key = uniqueFileName,
                 BucketName = _bucketName,
                 ContentType = contentType,
-                AutoCloseStream = false
-            });
+                AutoCloseStream = false,
+            }, ct);
 
             _logger.LogInformation("File {FileName} uploaded to MinIO", uniqueFileName);
 

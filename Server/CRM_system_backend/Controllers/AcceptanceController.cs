@@ -24,10 +24,10 @@ public class AcceptanceController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<AcceptanceItem>>> GetPagedAcceptance([FromQuery] AcceptanceFilter filter)
+    public async Task<ActionResult<List<AcceptanceItem>>> GetPagedAcceptance([FromQuery] AcceptanceFilter filter, CancellationToken ct)
     {
-        var dto = await _acceptanceService.GetPagedAcceptance(filter);
-        var count = await _acceptanceService.GetCountAcceptance(filter);
+        var dto = await _acceptanceService.GetPagedAcceptance(filter, ct);
+        var count = await _acceptanceService.GetCountAcceptance(filter, ct);
 
         var response = _mapper.Map<List<AcceptanceResponse>>(dto);
 
@@ -37,7 +37,7 @@ public class AcceptanceController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateAcceptance([FromBody] AcceptanceRequest request)
+    public async Task<ActionResult<long>> CreateAcceptance([FromBody] AcceptanceRequest request, CancellationToken ct)
     {
         var (acceptance, errors) = Acceptance.Create(
             0,
@@ -54,25 +54,25 @@ public class AcceptanceController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _acceptanceService.CreateAcceptance(acceptance!);
+        var Id = await _acceptanceService.CreateAcceptance(acceptance!, ct);
 
         return Ok(Id);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<long>> UpdateAcceptance(long id, [FromBody] AcceptanceUpdateRequest request)
+    public async Task<ActionResult<long>> UpdateAcceptance(long id, [FromBody] AcceptanceUpdateRequest request, CancellationToken ct)
     {
         var model = _mapper.Map<AcceptanceUpdateModel>(request);
 
-        var Id = await _acceptanceService.UpdateAcceptance(id, model);
+        var Id = await _acceptanceService.UpdateAcceptance(id, model, ct);
 
         return Ok(Id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<long>> DeleteAcceptance(long id)
+    public async Task<ActionResult<long>> DeleteAcceptance(long id, CancellationToken ct)
     {
-        var Id = await _acceptanceService.DeleteAcceptance(id);
+        var Id = await _acceptanceService.DeleteAcceptance(id, ct);
 
         return Ok(Id);
     }

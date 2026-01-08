@@ -6,13 +6,13 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IWorkProposalRepository
 {
-    Task<long> AcceptProposal(long id);
-    Task<long> Create(WorkProposal workProposal);
-    Task<long> Delete(long id);
-    Task<List<WorkProposalItem>> GetPaged(WorkProposalFilter filter);
-    Task<int> GetCount(WorkProposalFilter filter);
-    Task<long> RejectProposal(long id);
-    Task<long> Update(long id, ProposalStatusEnum? statusId);
-    Task<WorkProposalItem?> GetById(long id);
-    Task<bool> Exists(long id);
+    Task<long> AcceptProposal(long id, CancellationToken ct);
+    Task<long> Create(WorkProposal workProposal, CancellationToken ct);
+    Task<long> Delete(long id, CancellationToken ct);
+    Task<List<WorkProposalItem>> GetPaged(WorkProposalFilter filter, CancellationToken ct);
+    Task<int> GetCount(WorkProposalFilter filter, CancellationToken ct);
+    Task<long> RejectProposal(long id, CancellationToken ct);
+    Task<long> Update(long id, ProposalStatusEnum? statusId, CancellationToken ct);
+    Task<WorkProposalItem?> GetById(long id, CancellationToken ct);
+    Task<bool> Exists(long id, CancellationToken ct );
 }

@@ -4,5 +4,5 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IOrderPriorityService
 {
-    Task<List<OrderPriorityItem>> GetPriorities();
+    Task<List<OrderPriorityItem>> GetPriorities(CancellationToken ct);
 }

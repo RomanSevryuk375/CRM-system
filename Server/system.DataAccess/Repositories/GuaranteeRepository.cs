@@ -21,7 +21,7 @@ public class GuaranteeRepository : IGuaranteeRepository
         _mapper = mapper;
     }
 
-    private IQueryable<GuaranteeEntity> ApplyFilter(IQueryable<GuaranteeEntity> query, GuaranteeFilter filter)
+    private static IQueryable<GuaranteeEntity> ApplyFilter(IQueryable<GuaranteeEntity> query, GuaranteeFilter filter)
     {
         if (filter.OrderIds != null && filter.OrderIds.Any())
             query = query.Where(g => filter.OrderIds.Contains(g.OrderId));
@@ -29,7 +29,7 @@ public class GuaranteeRepository : IGuaranteeRepository
         return query;
     }
 
-    public async Task<List<GuaranteeItem>> GetPaged(GuaranteeFilter filter)
+    public async Task<List<GuaranteeItem>> GetPaged(GuaranteeFilter filter, CancellationToken ct)
     {
         var query = _context.Guarantees.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -55,20 +55,20 @@ public class GuaranteeRepository : IGuaranteeRepository
         };
 
         return await query
-            .ProjectTo<GuaranteeItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<GuaranteeItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(GuaranteeFilter filter)
+    public async Task<int> GetCount(GuaranteeFilter filter, CancellationToken ct)
     {
         var query = _context.Guarantees.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<long> Create(Guarantee guarantee)
+    public async Task<long> Create(Guarantee guarantee, CancellationToken ct)
     {
         var guarantyEntity = new GuaranteeEntity
         {
@@ -79,30 +79,30 @@ public class GuaranteeRepository : IGuaranteeRepository
             Terms = guarantee.Terms
         };
 
-        await _context.Guarantees.AddAsync(guarantyEntity);
-        await _context.SaveChangesAsync();
+        await _context.Guarantees.AddAsync(guarantyEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return guarantyEntity.Id;
     }
 
-    public async Task<long> Update(long id, GuaranteeUpdateModel model)
+    public async Task<long> Update(long id, GuaranteeUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Guarantees.FirstOrDefaultAsync(g => g.Id == id)
+        var entity = await _context.Guarantees.FirstOrDefaultAsync(g => g.Id == id, ct)
             ?? throw new Exception("Guarantee not found");
 
         if (!string.IsNullOrWhiteSpace(model.Description)) entity.Description = model.Description;
         if (!string.IsNullOrWhiteSpace(model.Terms)) entity.Description = model.Terms;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var entity = await _context.Guarantees
             .Where(g => g.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }

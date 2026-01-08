@@ -23,12 +23,12 @@ public class CachedWorkInOrderStatusService : IWorkInOrderStatusService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<List<WorkInOrderStatusItem>> GetWiOStatuses()
+    public async Task<List<WorkInOrderStatusItem>> GetWiOStatuses(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetWiOStatuses(),
+            () => _decorated.GetWiOStatuses(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 }

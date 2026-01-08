@@ -21,7 +21,7 @@ public class WorkInOrderRepository : IWorkInOrderRepository
         _mapper = mapper;
     }
 
-    private IQueryable<WorkInOrderEntity> ApplyFilter(IQueryable<WorkInOrderEntity> query, WorkInOrderFilter filter)
+    private static IQueryable<WorkInOrderEntity> ApplyFilter(IQueryable<WorkInOrderEntity> query, WorkInOrderFilter filter)
     {
         if (filter.OrderIds != null && filter.OrderIds.Any())
             query = query.Where(w => filter.OrderIds.Contains(w.OrderId));
@@ -38,7 +38,7 @@ public class WorkInOrderRepository : IWorkInOrderRepository
         return query;
     }
 
-    public async Task<List<WorkInOrderItem>> GetPaged(WorkInOrderFilter filter)
+    public async Task<List<WorkInOrderItem>> GetPaged(WorkInOrderFilter filter, CancellationToken ct)
     {
         var query = _context.WorksInOrder.AsNoTracking();
         query = ApplyFilter(query, filter);
@@ -79,31 +79,31 @@ public class WorkInOrderRepository : IWorkInOrderRepository
         };
 
         return await query
-            .ProjectTo<WorkInOrderItem>(_mapper.ConfigurationProvider)
+            .ProjectTo<WorkInOrderItem>(_mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<int> GetCount(WorkInOrderFilter filter)
+    public async Task<int> GetCount(WorkInOrderFilter filter, CancellationToken ct)
     {
         var query = _context.WorksInOrder.AsNoTracking();
         query = ApplyFilter(query, filter);
-        return await query.CountAsync();
+        return await query.CountAsync(ct);
     }
 
-    public async Task<List<WorkInOrderItem>> GetByOrderId(long orderId)
+    public async Task<List<WorkInOrderItem>> GetByOrderId(long orderId, CancellationToken ct)
     {
         var worksInOrder = await _context.WorksInOrder
             .AsNoTracking()
             .Where(w => w.OrderId == orderId)
-            .ProjectTo<WorkInOrderItem>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ProjectTo<WorkInOrderItem>(_mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
 
         return worksInOrder;
     }
 
-    public async Task<long> Create(WorkInOrder workInOrder)
+    public async Task<long> Create(WorkInOrder workInOrder, CancellationToken ct)
     {
         var workInOrderEntity = new WorkInOrderEntity
         {
@@ -114,31 +114,31 @@ public class WorkInOrderRepository : IWorkInOrderRepository
             TimeSpent = workInOrder.TimeSpent,
         };
 
-        await _context.WorksInOrder.AddAsync(workInOrderEntity);
-        await _context.SaveChangesAsync();
+        await _context.WorksInOrder.AddAsync(workInOrderEntity, ct);
+        await _context.SaveChangesAsync(ct);
 
         return workInOrderEntity.Id;
     }
 
-    public async Task<long> Update(long id, WorkInOrderUpdateModel model)
+    public async Task<long> Update(long id, WorkInOrderUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.WorksInOrder.FirstOrDefaultAsync(x => x.Id == id)
+        var entity = await _context.WorksInOrder.FirstOrDefaultAsync(x => x.Id == id, ct)
             ?? throw new ArgumentException("Work in order not found");
 
         if (model.WorkerId.HasValue) entity.WorkerId = model.WorkerId.Value;
         if (model.StatusId.HasValue) entity.StatusId = (int)model.StatusId.Value;
         if (model.TimeSpent.HasValue) entity.TimeSpent = model.TimeSpent.Value;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
-    public async Task<long> Delete(long id)
+    public async Task<long> Delete(long id, CancellationToken ct)
     {
         var entity = await _context.WorksInOrder
             .Where(w => w.Id == id)
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(ct);
 
         return id;
     }

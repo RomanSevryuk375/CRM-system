@@ -5,13 +5,13 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IBillRepository
 {
-    Task<long> Create(Bill bill);
-    Task<long> Delete(long id);
-    Task<int> GetCount(BillFilter filter);
-    Task<List<BillItem>> GetPaged(BillFilter filter);
-    Task<long> Update(long id, BillUpdateModel model);
-    Task<BillItem?> GetByOrderId(long orderId);
-    Task<decimal> RecalculateDebt(long Id);
-    Task<long> RecalculateAmount(long orderId);
-    Task<bool> Exists(long id);
+    Task<long> Create(Bill bill, CancellationToken ct);
+    Task<long> Delete(long id, CancellationToken ct);
+    Task<int> GetCount(BillFilter filter, CancellationToken ct);
+    Task<List<BillItem>> GetPaged(BillFilter filter, CancellationToken ct);
+    Task<long> Update(long id, BillUpdateModel model, CancellationToken ct);
+    Task<BillItem?> GetByOrderId(long orderId, CancellationToken ct);
+    Task<decimal> RecalculateDebt(long Id, CancellationToken ct);
+    Task<long> RecalculateAmount(long orderId, CancellationToken ct);
+    Task<bool> Exists(long id, CancellationToken ct);
 }

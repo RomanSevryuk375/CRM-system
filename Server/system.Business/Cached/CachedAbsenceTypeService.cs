@@ -25,42 +25,42 @@ public class CachedAbsenceTypeService : IAbsenceTypeService
         _distributed = distributed;
         _logger = logger;
     }
-    public async Task<int> CreateAbsenceType(AbsenceType absenceType)
+    public async Task<int> CreateAbsenceType(AbsenceType absenceType, CancellationToken ct)
     {
-        var Id = await _decorated.CreateAbsenceType(absenceType);
+        var Id = await _decorated.CreateAbsenceType(absenceType, ct);
 
-        await _distributed.RemoveAsync(CACHE_KEY);
+        await _distributed.RemoveAsync(CACHE_KEY, ct);
 
         _logger.LogInformation("Removing cache success");
 
         return Id;
     }
 
-    public async Task<int> DeleteAbsenceType(int id)
+    public async Task<int> DeleteAbsenceType(int id, CancellationToken ct)
     {
-        var Id = await _decorated.DeleteAbsenceType(id);
+        var Id = await _decorated.DeleteAbsenceType(id, ct);
 
-        await _distributed.RemoveAsync(CACHE_KEY);
+        await _distributed.RemoveAsync(CACHE_KEY, ct);
 
         _logger.LogInformation("Removing cache success");
 
         return Id;
     }
 
-    public async Task<List<AbsenceTypeItem>> GetAllAbsenceType()
+    public async Task<List<AbsenceTypeItem>> GetAllAbsenceType(CancellationToken ct)
     {
         return await _distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetAllAbsenceType(),
+            () => _decorated.GetAllAbsenceType(ct),
             TimeSpan.FromHours(24),
-            _logger) ?? [];
+            _logger, ct) ?? [];
     }
 
-    public async Task<int> UpdateAbsenceType(int id, string name)
+    public async Task<int> UpdateAbsenceType(int id, string name, CancellationToken ct)
     {
-        var Id = await _decorated.UpdateAbsenceType(id, name);
+        var Id = await _decorated.UpdateAbsenceType(id, name, ct);
 
-        await _distributed.RemoveAsync(CACHE_KEY);
+        await _distributed.RemoveAsync(CACHE_KEY, ct);
 
         _logger.LogInformation("Removing cache success");
 

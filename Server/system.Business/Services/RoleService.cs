@@ -18,11 +18,11 @@ public class RoleService : IRoleService
         _logger = logger;
     }
 
-    public async Task<List<RoleItem>> GetRoles()
+    public async Task<List<RoleItem>> GetRoles(CancellationToken ct)
     {
         _logger.LogInformation("Getting roles start");
 
-        var roles = await _roleRepository.Get();
+        var roles = await _roleRepository.Get(ct);
 
         _logger.LogInformation("Getting roles success");
 

@@ -5,11 +5,11 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IWorkerRepository
 {
-    Task<int> Create(Worker worker);
-    Task<int> Delete(int id);
-    Task<int> GetCount(WorkerFilter filter);
-    Task<List<WorkerItem>> GetPaged(WorkerFilter filter);
-    Task<WorkerItem?> GetById(int id);
-    Task<int> Update(int id, WorkerUpdateModel model);
-    Task<bool> Exists(int id);
+    Task<int> Create(Worker worker, CancellationToken ct);
+    Task<int> Delete(int id, CancellationToken ct);
+    Task<int> GetCount(WorkerFilter filter, CancellationToken ct);
+    Task<List<WorkerItem>> GetPaged(WorkerFilter filter, CancellationToken ct);
+    Task<WorkerItem?> GetById(int id, CancellationToken ct);
+    Task<int> Update(int id, WorkerUpdateModel model, CancellationToken ct);
+    Task<bool> Exists(int id, CancellationToken ct);
 }

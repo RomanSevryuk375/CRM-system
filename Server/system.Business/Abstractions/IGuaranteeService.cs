@@ -5,9 +5,9 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IGuaranteeService
 {
-    Task<long> CreateGuarantee(Guarantee guarantee);
-    Task<long> DeleteGuarantee(long id);
-    Task<int> GetCountGuarantees(GuaranteeFilter filter);
-    Task<List<GuaranteeItem>> GetPagedGuarantees(GuaranteeFilter filter);
-    Task<long> UpdateGuarantee(long id, GuaranteeUpdateModel model);
+    Task<long> CreateGuarantee(Guarantee guarantee, CancellationToken ct);
+    Task<long> DeleteGuarantee(long id, CancellationToken ct);
+    Task<int> GetCountGuarantees(GuaranteeFilter filter, CancellationToken ct);
+    Task<List<GuaranteeItem>> GetPagedGuarantees(GuaranteeFilter filter, CancellationToken ct);
+    Task<long> UpdateGuarantee(long id, GuaranteeUpdateModel model, CancellationToken ct);
 }

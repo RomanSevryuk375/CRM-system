@@ -4,5 +4,5 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IRoleRepository
 {
-    Task<List<RoleItem>> Get();
+    Task<List<RoleItem>> Get(CancellationToken ct);
 }
