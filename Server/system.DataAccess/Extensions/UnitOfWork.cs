@@ -1,7 +1,7 @@
 ﻿using CRMSystem.Core.Abstractions;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace CRMSystem.DataAccess;
+namespace CRMSystem.DataAccess.Extensions;
 
 public class UnitOfWork : IUnitOfWork
 {

@@ -28,7 +28,7 @@ public class SupplyController : ControllerBase
         var dto = await _supplyService.GetPagedSupplies(filter, ct);
         var count = await _supplyService.GetCountSupplies(filter, ct);
 
-        var response = _mapper.Map<SupplyResponse>(dto);
+        var response = _mapper.Map<List<SupplyResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
