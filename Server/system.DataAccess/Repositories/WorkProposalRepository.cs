@@ -6,6 +6,7 @@ using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -122,7 +123,7 @@ public class WorkProposalRepository : IWorkProposalRepository
     public async Task<long> Update(long id, ProposalStatusEnum? statusId, CancellationToken ct)
     {
         var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(x => x.Id == id, ct)
-            ?? throw new Exception("Work proposal not found");
+            ?? throw new NotFoundException("Work proposal not found");
 
         if (statusId.HasValue) workProposal.StatusId = (int)statusId.Value;
 
@@ -134,7 +135,7 @@ public class WorkProposalRepository : IWorkProposalRepository
     public async Task<long> AcceptProposal(long id, CancellationToken ct)
     {
         var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(X => X.Id == id, ct)
-            ?? throw new Exception("Work proposal not found");
+            ?? throw new NotFoundException("Work proposal not found");
 
         workProposal.StatusId = (int)ProposalStatusEnum.Accepted;
 
@@ -146,7 +147,7 @@ public class WorkProposalRepository : IWorkProposalRepository
     public async Task<long> RejectProposal(long id, CancellationToken ct)
     {
         var workProposal = await _context.WorkProposals.SingleOrDefaultAsync(X => X.Id == id, ct)
-            ?? throw new Exception("Work proposal not found");
+            ?? throw new NotFoundException("Work proposal not found");
 
         workProposal.StatusId = (int)ProposalStatusEnum.Rejected;
 

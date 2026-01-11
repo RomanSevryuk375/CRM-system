@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Car;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -121,7 +122,7 @@ public class CarRepository : ICarRepository
     public async Task<long> Update(long id, CarUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id, ct)
-            ?? throw new Exception("Car not found");
+            ?? throw new NotFoundException("Car not found");
 
         if (!string.IsNullOrWhiteSpace(model.Brand)) entity.Brand = model.Brand;
         if (!string.IsNullOrWhiteSpace(model.Model)) entity.Model = model.Model;

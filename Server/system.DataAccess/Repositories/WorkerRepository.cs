@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Worker;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -101,7 +102,7 @@ public class WorkerRepository : IWorkerRepository
     public async Task<int> Update(int id, WorkerUpdateModel model, CancellationToken ct)
     {
         var workerEntity = await _context.Workers.FirstOrDefaultAsync(w => w.Id == id, ct)
-            ?? throw new Exception("Payment note not found");
+            ?? throw new NotFoundException("Payment note not found");
 
         if (!string.IsNullOrWhiteSpace(model.Name)) workerEntity.Name = model.Name;
         if (!string.IsNullOrWhiteSpace(model.Surname)) workerEntity.Surname = model.Surname;

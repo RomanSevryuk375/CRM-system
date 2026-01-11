@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Work;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -87,7 +88,7 @@ public class WorkRepository : IWorkRepository
     public async Task<long> Update(long id, WorkUpdateModel model, CancellationToken ct)
     {
         var entty = await _context.Works.FirstOrDefaultAsync(w => w.Id == id, ct)
-            ?? throw new ArgumentException("Work not found");
+            ?? throw new NotFoundException("Work not found");
 
         if (!string.IsNullOrWhiteSpace(model.Title)) entty.Title = model.Title;
         if (!string.IsNullOrWhiteSpace(model.Categoty)) entty.Category = model.Categoty;

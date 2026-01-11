@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Acceptance;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -107,7 +108,7 @@ public class AcceptanceRepository : IAcceptanceRepository
     public async Task<long> Update(long id, AcceptanceUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Acceptances.FirstOrDefaultAsync(a => a.Id == id, ct)
-            ?? throw new Exception("Acceptance not found");
+            ?? throw new NotFoundException("Acceptance not found");
 
         if (model.Mileage.HasValue) entity.Mileage = model.Mileage.Value;
         if (model.FuelLevel.HasValue) entity.FuelLevel = model.FuelLevel.Value;

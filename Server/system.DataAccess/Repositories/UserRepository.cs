@@ -7,6 +7,7 @@ using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -54,7 +55,7 @@ public class UserRepository : IUserRepository
     public async Task<long> Update(long id, UserUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id, ct)
-            ?? throw new ArgumentException("User not found");
+            ?? throw new NotFoundException("User not found");
 
         if (!string.IsNullOrWhiteSpace(model.Login)) entity.Login = model.Login;
         if (!string.IsNullOrWhiteSpace(model.Password)) entity.PasswordHash = model.Password;

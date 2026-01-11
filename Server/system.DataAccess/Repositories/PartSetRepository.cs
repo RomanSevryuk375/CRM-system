@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.PartSet;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -123,7 +124,7 @@ public class PartSetRepository : IPartSetRepository
     public async Task<long> Update(long id, PartSetUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.PartSets.FirstOrDefaultAsync(p => p.Id == id, ct)
-            ?? throw new Exception("Part not found");
+            ?? throw new NotFoundException("Part not found");
 
         if (model.SoldPrice.HasValue) entity.SoldPrice = model.SoldPrice.Value;
         if (model.Quantity.HasValue) entity.Quantity = model.Quantity.Value;

@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Attachment;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -84,7 +85,7 @@ public class AttachmentRepository : IAttachmentRepository
     public async Task<long> Update(long id, string? description, CancellationToken ct)
     {
         var entity = await _context.Attachments.FirstOrDefaultAsync(a => a.Id == id, ct)
-            ?? throw new Exception("Attachment not found");
+            ?? throw new NotFoundException("Attachment not found");
 
         if (!string.IsNullOrEmpty(description)) entity.Description = description;
 

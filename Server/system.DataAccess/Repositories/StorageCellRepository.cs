@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.StorageCell;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -46,7 +47,7 @@ public class StorageCellRepository : IStorageCellRepository
     public async Task<int> Update(int id, StorageCellUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.StorageCells.FirstOrDefaultAsync(s => s.Id == id, ct)
-            ?? throw new Exception("StorageCell not found");
+            ?? throw new NotFoundException("StorageCell not found");
 
         if (!string.IsNullOrWhiteSpace(model.Rack)) entity.Rack = model.Rack;
         if (!string.IsNullOrWhiteSpace(model.Shelf)) entity.Shelf = model.Shelf;

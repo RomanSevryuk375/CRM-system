@@ -7,6 +7,7 @@ using CRMSystem.Core.ProjectionModels.AttachmentImg;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -79,7 +80,7 @@ public class AttachmentImgRepository : IAttachmentImgRepository
     public async Task<long> Update(long id, string? filePath, string? description, CancellationToken ct)
     {
         var entity = await _context.AttachmentImgs.FirstOrDefaultAsync(a => a.Id == id, ct) 
-            ?? throw new Exception("AttachmentImg not found");
+            ?? throw new NotFoundException("AttachmentImg not found");
 
         if (!string.IsNullOrEmpty(filePath)) entity.FilePath = filePath;
         if (!string.IsNullOrEmpty(description)) entity.Description = description;

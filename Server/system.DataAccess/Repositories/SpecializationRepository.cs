@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -45,7 +46,7 @@ public class SpecializationRepository : ISpecializationRepository
     public async Task<int> Update(int id, string? name, CancellationToken ct)
     {
         var specialization = await _context.Specializations.FirstOrDefaultAsync(s => s.Id == id, ct)
-            ?? throw new Exception("Specialization not found");
+            ?? throw new NotFoundException("Specialization not found");
 
         if (!string.IsNullOrWhiteSpace(name))
             specialization.Name = name;

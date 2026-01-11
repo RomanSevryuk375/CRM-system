@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Position;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -95,7 +96,7 @@ public class PositionRepository : IPositionRepository
     public async Task<long> Update(long id, PositionUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Positions.FirstOrDefaultAsync(p => p.Id == id, ct)
-            ?? throw new Exception("Position note not found");
+            ?? throw new NotFoundException("Position note not found");
 
         if (model.CellId.HasValue) entity.CellId = model.CellId.Value;
         if (model.PurchasePrice.HasValue) entity.PurchasePrice = model.PurchasePrice.Value;

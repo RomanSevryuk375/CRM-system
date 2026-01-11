@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -123,7 +124,7 @@ public class WorkInOrderRepository : IWorkInOrderRepository
     public async Task<long> Update(long id, WorkInOrderUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.WorksInOrder.FirstOrDefaultAsync(x => x.Id == id, ct)
-            ?? throw new ArgumentException("Work in order not found");
+            ?? throw new NotFoundException("Work in order not found");
 
         if (model.WorkerId.HasValue) entity.WorkerId = model.WorkerId.Value;
         if (model.StatusId.HasValue) entity.StatusId = (int)model.StatusId.Value;

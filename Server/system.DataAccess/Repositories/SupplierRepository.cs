@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Supplier;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -46,7 +47,7 @@ public class SupplierRepository : ISupplierRepository
     public async Task<int> Update(int id, SupplierUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Suppliers.FirstOrDefaultAsync(su => su.Id == id, ct)
-            ?? throw new ArgumentException("Supplier not found");
+            ?? throw new NotFoundException("Supplier not found");
 
         if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
         if (!string.IsNullOrWhiteSpace(model.Contacts)) entity.Contacts = model.Contacts;

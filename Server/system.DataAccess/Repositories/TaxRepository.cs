@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Tax;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -79,7 +80,7 @@ public class TaxRepository : ITaxRepository
     public async Task<int> Update(int id, TaxUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Taxes.FirstOrDefaultAsync(t => t.Id == id, ct)
-            ?? throw new ArgumentException("Tax not found");
+            ?? throw new NotFoundException("Tax not found");
 
         if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
         if (model.Rate.HasValue) entity.Rate = model.Rate.Value;

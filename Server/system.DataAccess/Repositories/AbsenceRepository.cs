@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Absence;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -88,7 +89,7 @@ public class AbsenceRepository : IAbsenceRepository
     public async Task<int> Update(int id, AbsenceUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Absences.FirstOrDefaultAsync(a => a.Id == id, ct)
-            ?? throw new Exception("Absence not found");
+            ?? throw new NotFoundException("Absence not found");
 
         if (model.TypeId.HasValue) entity.TypeId = (int)model.TypeId.Value;
         if (model.StartDate.HasValue) entity.StartDate = model.StartDate.Value;

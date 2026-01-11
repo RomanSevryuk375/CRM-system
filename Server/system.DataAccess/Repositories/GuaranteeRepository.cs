@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Guarantee;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -88,7 +89,7 @@ public class GuaranteeRepository : IGuaranteeRepository
     public async Task<long> Update(long id, GuaranteeUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Guarantees.FirstOrDefaultAsync(g => g.Id == id, ct)
-            ?? throw new Exception("Guarantee not found");
+            ?? throw new NotFoundException("Guarantee not found");
 
         if (!string.IsNullOrWhiteSpace(model.Description)) entity.Description = model.Description;
         if (!string.IsNullOrWhiteSpace(model.Terms)) entity.Description = model.Terms;

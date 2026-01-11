@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.PartCategory;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -46,7 +47,7 @@ public class PartCategoryRepository : IPartCategoryRepository
     public async Task<int> Update(int id, PartCategoryUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.PartCategories.FirstOrDefaultAsync(p => p.Id == id, ct)
-            ?? throw new Exception("PartCategory not found");
+            ?? throw new NotFoundException("PartCategory not found");
 
         if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
         if (!string.IsNullOrWhiteSpace(model.Description)) entity.Description = model.Description;

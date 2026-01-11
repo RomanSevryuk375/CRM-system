@@ -6,6 +6,7 @@ using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -95,7 +96,7 @@ public class PaymentNoteRepository : IPaymentNoteRepository
     public async Task<long> Update(long id, PaymentMethodEnum? method, CancellationToken ct)
     {
         var entity = await _context.PaymentNotes.FirstOrDefaultAsync(pn => pn.Id == id, ct)
-            ?? throw new Exception("Payment note not found");
+            ?? throw new NotFoundException("Payment note not found");
 
         if (method.HasValue) entity.MethodId = (int)method.Value;
 

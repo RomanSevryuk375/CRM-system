@@ -5,6 +5,7 @@ using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -88,7 +89,7 @@ public class SkillRepository : ISkillRepository
     public async Task<int> Update(int id, SkillUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Skills.FirstOrDefaultAsync(s => s.Id == id, ct)
-            ?? throw new Exception("Schedule note not found");
+            ?? throw new NotFoundException("Schedule note not found");
 
         if (model.WorkerId.HasValue) entity.WorkerId = model.WorkerId.Value;
         if (model.SpecializationId.HasValue) entity.SpecializationId = model.SpecializationId.Value;

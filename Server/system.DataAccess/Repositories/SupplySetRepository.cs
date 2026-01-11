@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.SupplySet;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -97,7 +98,7 @@ public class SupplySetRepository : ISupplySetRepository
     public async Task<long> Update(long id, SupplySetUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.SupplySets.FirstOrDefaultAsync(s => s.Id == id, ct)
-            ?? throw new Exception("SupplySet note not found");
+            ?? throw new NotFoundException("SupplySet note not found");
 
         if (model.Quantity.HasValue) entity.Quantity = model.Quantity.Value;
         if (model.PurchasePrice.HasValue) entity.PurchasePrice = model.PurchasePrice.Value;

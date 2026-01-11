@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Shift;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -47,7 +48,7 @@ public class ShiftRepository : IShiftRepository
     public async Task<int> Update(int id, ShiftUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Shifts.FirstOrDefaultAsync(s => s.Id == id, ct)
-            ?? throw new Exception("Shift note not found");
+            ?? throw new NotFoundException("Shift note not found");
 
         if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
         if (model.StartAt.HasValue) entity.StartAt = model.StartAt.Value;

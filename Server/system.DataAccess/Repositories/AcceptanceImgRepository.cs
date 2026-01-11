@@ -7,6 +7,7 @@ using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.ProjectionModels.AccetanceImg;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -80,9 +81,9 @@ public class AcceptanceImgRepository : IAcceptanceImgRepository
     public async Task<long> Update(long id, string? filePath, string? description, CancellationToken ct)
     {
         var entity = await _context.AcceptanceImgs.FirstOrDefaultAsync(a => a.Id == id, ct)
-            ?? throw new Exception("AcceptanceImg not found");
+            ?? throw new NotFoundException("AcceptanceImg not found");
 
-        if (entity == null) throw new Exception("AcceptanceImg not found");
+        if (entity == null) throw new NotFoundException("AcceptanceImg not found");
 
         if (!string.IsNullOrEmpty(filePath)) entity.FilePath = filePath;
         if (!string.IsNullOrEmpty(description)) entity.Description = description;

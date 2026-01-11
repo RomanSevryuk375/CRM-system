@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.AbsenceType;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -58,9 +59,9 @@ public class AbsenceTypeRepository : IAbsenceTypeRepository
     public async Task<int> Update(int id, string name, CancellationToken ct)
     {
         var entity = await _context.AbsenceTypes.FirstOrDefaultAsync(a => a.Id == id, ct)
-            ?? throw new Exception("AbsenceType not found");
+            ?? throw new NotFoundException("AbsenceType not found");
 
-        if (entity == null) throw new Exception("AbsencesType not found");
+        if (entity == null) throw new NotFoundException("AbsencesType not found");
 
         if (!string.IsNullOrEmpty(name))
             entity.Name = name;

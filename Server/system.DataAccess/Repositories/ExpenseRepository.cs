@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Expense;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -109,7 +110,7 @@ public class ExpenseRepository : IExpenseRepository
     public async Task<long> Update(long id, ExpenseUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Expenses.FirstOrDefaultAsync(x => x.Id == id, ct)
-            ?? throw new Exception("Expence not found");
+            ?? throw new NotFoundException("Expense not found");
 
         if (model.Date.HasValue) entity.Date = model.Date.Value;
         if (!string.IsNullOrWhiteSpace(model.Category)) entity.Category = model.Category;

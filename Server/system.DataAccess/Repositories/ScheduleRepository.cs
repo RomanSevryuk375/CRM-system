@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
+using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -94,7 +95,7 @@ public class ScheduleRepository : IScheduleRepository
     public async Task<int> Update(int id, ScheduleUpdateModel model, CancellationToken ct)
     {
         var entity = await _context.Schedules.FirstOrDefaultAsync(s => s.Id == id, ct)
-            ?? throw new Exception("Schedule note not found");
+            ?? throw new NotFoundException("Schedule note not found");
 
         if (model.ShiftId.HasValue) entity.ShiftId = model.ShiftId.Value;
         if (model.DateTime.HasValue) entity.Date = model.DateTime.Value;
