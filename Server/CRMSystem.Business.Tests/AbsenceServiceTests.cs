@@ -31,27 +31,98 @@ public class AbsenceServiceTests
     [Fact] 
     public async Task CreateAbsence_ShouldThrowNotFoundException_WhenWorkerDoesNotExist()
     {
-        var absence = new Absence(0, 99, AbsenceTypeEnum.SickLeave, new DateOnly(2025, 1, 1), null);
+        var absence = new Absence(
+                        123,
+                        123, 
+                        AbsenceTypeEnum.Vacation, 
+                        new DateOnly(2025, 1, 1), 
+                        null);
 
-        _workerRepoMock.Setup(x => x.Exists(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+        _workerRepoMock.Setup(x => x.Exists(
+                            absence.WorkerId,
+                            It.IsAny<CancellationToken>()))
                        .ReturnsAsync(false);
 
         await Assert.ThrowsAsync<NotFoundException>(() =>
             _service.CreateAbsence(absence, CancellationToken.None));
+
+        _absenceRepoMock.Verify(x => x.Create(
+                            absence,
+                            It.IsAny<CancellationToken>()),
+                            Times.Never);
     }
 
     [Fact]
     public async Task CreateAbsence_ShouldThrowConflictException_WhenDatesOverlap()
     {
-        var absence = new Absence(0, 1, AbsenceTypeEnum.Vacation, new DateOnly(2025, 1, 1), null);
+        var absence = new Absence(
+                        123,
+                        123,
+                        AbsenceTypeEnum.Vacation,
+                        new DateOnly(2025, 1, 1),
+                        null);
 
-        _workerRepoMock.Setup(x => x.Exists(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+        _workerRepoMock.Setup(x => x.Exists(
+                            absence.WorkerId, 
+                            It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(true);
 
-        _absenceRepoMock.Setup(x => x.HasOverLap(It.IsAny<int>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly?>(), null, It.IsAny<CancellationToken>()))
+        _absenceRepoMock.Setup(x => x.HasOverLap(
+                            absence.WorkerId,
+                            absence.StartDate,
+                            It.IsAny<DateOnly?>(), 
+                            null, 
+                            It.IsAny<CancellationToken>()))
                         .ReturnsAsync(true);
 
         await Assert.ThrowsAsync<ConflictException>(() =>
             _service.CreateAbsence(absence, CancellationToken.None));
+
+        _absenceRepoMock.Verify(x => x.Create(
+                            absence,
+                            It.IsAny<CancellationToken>()),
+                            Times.Never);
+    }
+
+    [Fact]
+    public async Task CreateAbsence_Success()
+    {
+        var absenceId = 123;
+        var absence = new Absence(
+                        absenceId,
+                        123,
+                        AbsenceTypeEnum.Vacation,
+                        new DateOnly(2025, 1, 1),
+                        null);
+
+        _workerRepoMock.Setup(x => x.Exists(
+                            absence.WorkerId,
+                            It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(true);
+
+        _absenceRepoMock.Setup(x => x.HasOverLap(
+                            absence.WorkerId,
+                            absence.StartDate,
+                            It.IsAny<DateOnly?>(),
+                            null,
+                            It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(false);
+
+        _absenceRepoMock.Setup(x => x.Create(
+                            absence,
+                            It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(absenceId);
+
+        var result = await _service.CreateAbsence(
+                            absence,
+                            CancellationToken.None);
+
+        Assert.Equal(result, absenceId);
+
+        _absenceRepoMock.Verify(x => x.Create(
+                            absence,
+                            It.IsAny<CancellationToken>()),
+                            Times.Once);
     }
 
     [Fact]
@@ -67,23 +138,25 @@ public class AbsenceServiceTests
             EndDate = new DateOnly(2025, 1, 14)
         };
 
-        _absenceRepoMock.Setup(x => x.GetWorkerId(absenceId, It.IsAny<CancellationToken>()))
+        _absenceRepoMock.Setup(x => x.GetWorkerId(
+                            absenceId, 
+                            It.IsAny<CancellationToken>()))
                         .ReturnsAsync(workerId);
 
         _absenceRepoMock.Setup(x => x.HasOverLap(
                             workerId,
-                            It.IsAny<DateOnly>(),
-                            It.IsAny<DateOnly?>(),
+                            (DateOnly)model.StartDate,
+                            model.EndDate,
                             It.IsAny<int?>(), 
                             It.IsAny<CancellationToken>()))
                         .ReturnsAsync(true);
 
         await Assert.ThrowsAsync<ConflictException>(() =>
-            _service.UpdateAbsence(absenceId, model, default));
+            _service.UpdateAbsence(absenceId, model, It.IsAny<CancellationToken>()));
 
         _absenceRepoMock.Verify(x => x.Update(
-                            It.IsAny<int>(),
-                            It.IsAny<AbsenceUpdateModel>(),
+                            absenceId,
+                            model,
                             It.IsAny<CancellationToken>()),
                             Times.Never);
     }
@@ -96,12 +169,14 @@ public class AbsenceServiceTests
         _absenceRepoMock.Setup(x => x.Delete(absenceId, It.IsAny<CancellationToken>()))
                         .ReturnsAsync(absenceId);
 
-        var result = await _service.DeleteAbsence(absenceId, It.IsAny<CancellationToken>());
+        var result = await _service.DeleteAbsence(
+                        absenceId, 
+                        CancellationToken.None);
 
         Assert.Equal(absenceId, result);
 
         _absenceRepoMock.Verify(x => x.Delete(
-                            It.IsAny<int>(),
+                            absenceId,
                             It.IsAny<CancellationToken>()), 
                             Times.Once);
     }

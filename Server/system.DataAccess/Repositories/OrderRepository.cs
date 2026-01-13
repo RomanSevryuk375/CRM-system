@@ -188,7 +188,7 @@ public class OrderRepository : IOrderRepository
 
     public async Task<bool> PossibleToClose(long id, CancellationToken ct)
     {
-        return await _context.Bills
+        return !await _context.Bills
             .Where(b => b.OrderId == id)
             .AnyAsync(b => b.Amount <= 0, ct);
     }

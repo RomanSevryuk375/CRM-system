@@ -125,7 +125,7 @@ public class OrderService : IOrderService
 
             return orderId;
         }
-        catch (ConflictException ex)
+        catch (Exception ex)
         {
             _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
             
@@ -184,7 +184,7 @@ public class OrderService : IOrderService
     {
         _logger.LogInformation("Closing orders start");
 
-        if (await _orderRepository.PossibleToComplete(id, ct))
+        if (!await _orderRepository.PossibleToComplete(id, ct))
         {
             _logger.LogInformation("Order{id} has unfinished works", id);
             throw new ConflictException("Order has unfinished works");
