@@ -11,7 +11,7 @@ public class SystemDbContext : DbContext
         base(options)
     {
     }
-
+   
     public DbSet<AbsenceEntity> Absences { get; set; }
     public DbSet<AbsenceTypeEntity> AbsenceTypes { get; set; }
     public DbSet<AcceptanceEntity> Acceptances { get; set; }

@@ -13,6 +13,7 @@ public class Absence
         StartDate = startDate;
         EndDate = endDate;
     }
+
     public int Id { get; }
     public int WorkerId { get; }
     public AbsenceTypeEnum TypeId { get; }
