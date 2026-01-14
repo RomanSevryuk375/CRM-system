@@ -60,6 +60,32 @@ Database Schema:
   </p>
 </details>
 
+## 🧪 Testing Strategy
+
+The project implements a multi-layered testing approach to ensure both algorithmic correctness and system-wide data integrity.
+
+### Unit Testing
+*Focus: Isolated business logic and domain rules.*
+
+- **Frameworks:** `xUnit`, `Moq`, `FluentAssertions`.
+- **Domain Logic:** Verified "Smart Domain Models" (e.g., complex date overlap algorithms in the `Absence` model) ensuring that the core logic is correct without any infrastructure overhead.
+- **Service Layer:** Tested the coordination between components, ensuring correct handling of business exceptions (`ConflictException`, `NotFoundException`) and transaction flows using isolated mocks for repositories.
+
+### Integration Testing
+*Focus: Database integrity and cross-component interaction.*
+
+- **Infrastructure:** `Testcontainers` (PostgreSQL), `WebApplicationFactory`.
+- **Data Cleanup:** `Respawn` — used to reset the database state between tests instantly using high-performance `TRUNCATE` operations, ensuring complete test isolation without the overhead of recreating the schema.
+- **Real-World Scenarios:** 
+    - Full lifecycle testing from Service layer to a real **PostgreSQL** instance running in a Docker container.
+    - Verification of complex SQL queries and aggregations (e.g., automated billing calculations based on labor hours and part prices).
+    - Automated execution of migrations against a temporary container to ensure the schema and Fluent API configurations are always up to date.
+
+### Tools & Methodology
+- **AAA Pattern:** All tests follow the *Arrange-Act-Assert* structure for maximum readability and maintainability.
+- **Containerization:** Leveraging Docker to provide a "disposable" and consistent environment for every test run, eliminating the "works on my machine" problem.
+- **State-Based Testing:** Integration tests verify the final state of the database rather than just method calls, ensuring reliable data persistence and relational integrity.
+
 Quick Start:
 1. **Clone the repository:**
    ```bash
