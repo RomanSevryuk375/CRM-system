@@ -45,4 +45,12 @@ public class Absence
 
         return (absence, new List<string>());
     }
+
+    public bool OverlapsWith(DateOnly start, DateOnly? end)
+    {
+        var thisEnd = EndDate ?? DateOnly.MaxValue;
+        var otherEnd = end ?? DateOnly.MaxValue;
+
+        return StartDate <= otherEnd && start <= thisEnd;
+    }
 }

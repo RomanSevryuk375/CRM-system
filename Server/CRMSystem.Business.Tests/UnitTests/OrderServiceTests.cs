@@ -3,11 +3,10 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace CRMSystem.Business.Tests;
+namespace CRMSystem.Business.Tests.UnitTests;
 
 public class OrderServiceTests
 {
@@ -129,7 +128,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task CreateOrder_Success()
+    public async Task CreateOrder_WhenCarExistsAndOrderPriorityExistsAndStatusExists_ShouldReturnId()
     {
         var orderId = 123;
         var order = new Order(
@@ -243,7 +242,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task CreateOrderWithBill_Success()
+    public async Task CreateOrderWithBill_WhenCarExistsAndOrderPriorityExistsAndStatusExists_ShouldReturnId()
     {
         var orderId = 123L;
         var billId = 123;
@@ -336,7 +335,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task UpdateOrder_Success()
+    public async Task UpdateOrder_WhenOrderPriorityExists_ShouldReturnId()
     {
         var orderId = 123L;
         var priorityId = OrderPriorityEnum.Medium;
@@ -364,7 +363,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task DeleteOrder_Success()
+    public async Task DeleteOrder_ShouldReturnId()
     {
         var orderId = 123L;
 
@@ -403,7 +402,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task CloseOrder_Success()
+    public async Task CloseOrder_WhenAnyWorkInProgress_ShouldReturnId()
     {
         var orderId = 123L;
 
@@ -447,7 +446,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task CompleteOrder_Success()
+    public async Task CompleteOrder_WhenBillDebtIsZero_ShouldReturnId()
     {
         var orderId = 123L;
 

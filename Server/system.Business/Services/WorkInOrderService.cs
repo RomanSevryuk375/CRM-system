@@ -14,6 +14,7 @@ public class WorkInOrderService : IWorkInOrderService
     private readonly IWorkerRepository _workerRepository;
     private readonly IOrderRepository _orderRepository;
     private readonly IWorkRepository _workRepository;
+    private readonly IBillRepository _billRepository;
     private readonly ILogger<WorkInOrderService> _logger;
 
     public WorkInOrderService(
@@ -22,6 +23,7 @@ public class WorkInOrderService : IWorkInOrderService
         IWorkerRepository workerRepository,
         IOrderRepository orderRepository,
         IWorkRepository workRepository,
+        IBillRepository billRepository,
         ILogger<WorkInOrderService> logger)
     {
         _workInOrderRepository = workInOrderRepository;
@@ -29,6 +31,7 @@ public class WorkInOrderService : IWorkInOrderService
         _workerRepository = workerRepository;
         _orderRepository = orderRepository;
         _workRepository = workRepository;
+        _billRepository = billRepository;
         _logger = logger;
     }
 
@@ -96,6 +99,10 @@ public class WorkInOrderService : IWorkInOrderService
         var Id = await _workInOrderRepository.Create(workInOrder, ct);
 
         _logger.LogInformation("Creating work in order success");
+
+        _logger.LogInformation("Recalculating bill start");
+        await _billRepository.RecalculateAmount(workInOrder.OrderId, ct);
+        _logger.LogInformation("Recalculating bill success");
 
         return Id;
     }

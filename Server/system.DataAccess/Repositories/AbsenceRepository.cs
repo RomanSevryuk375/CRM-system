@@ -123,17 +123,11 @@ public class AbsenceRepository : IAbsenceRepository
             .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<bool> HasOverLap(int workerId, DateOnly start, DateOnly? end, int? excludeId, CancellationToken ct)
+    public async Task<List<Absence>> GetByWorkerId(int workerId, CancellationToken ct)
     {
-        var query = _context.Absences.AsNoTracking()
-            .Where(a => a.WorkerId == workerId);
-
-        if (excludeId.HasValue)
-            query = query.Where(a => a.Id != excludeId.Value);
-
-        return await query.AnyAsync(a =>
-                start <= (a.EndDate ?? DateOnly.MaxValue)
-                &&
-                a.StartDate <= (end ?? DateOnly.MaxValue), ct);
+        return await _context.Absences
+            .Where(a => a.WorkerId == workerId)
+            .Select(a => new Absence(a.Id, a.WorkerId, (Core.Enums.AbsenceTypeEnum)a.TypeId, a.StartDate, a.EndDate))
+            .ToListAsync(ct);
     }
 }

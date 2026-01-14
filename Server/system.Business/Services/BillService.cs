@@ -4,7 +4,6 @@ using CRMSystem.Core.ProjectionModels.Bill;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
@@ -107,7 +106,7 @@ public class BillService : IBillService
 
         _logger.LogInformation("Deleting bill success");
 
-        return id;
+        return Id;
     }
 
     public async Task<decimal> FetchDebtOfBill(long id, CancellationToken ct)
@@ -119,5 +118,16 @@ public class BillService : IBillService
         _logger.LogInformation("Recalculating debt of bill success");
 
         return debt;
+    }
+
+    public async Task<decimal> RecalculateBillAmount(long id, CancellationToken ct)
+    {
+        _logger.LogInformation("Recalculating amount of bill start");
+
+        var amount = await _billRepository.RecalculateAmount(id, ct);
+
+        _logger.LogInformation("Recalculating amount of bill success");
+
+        return amount;
     }
 }
