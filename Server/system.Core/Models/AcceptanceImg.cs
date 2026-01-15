@@ -7,7 +7,7 @@ namespace CRMSystem.Core.Models;
 
 public class AcceptanceImg
 {
-    public AcceptanceImg(long id, long acceptanceId, string filePath, string? description)
+    private AcceptanceImg(long id, long acceptanceId, string filePath, string? description)
     {
         Id = id;
         AcceptanceId = acceptanceId;

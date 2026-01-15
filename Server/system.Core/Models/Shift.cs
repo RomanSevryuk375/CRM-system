@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class Shift
 {
-    public Shift(int id, string name, TimeOnly startAt, TimeOnly endAt)
+    private Shift(int id, string name, TimeOnly startAt, TimeOnly endAt)
     {
         Id = id;    
         Name = name;

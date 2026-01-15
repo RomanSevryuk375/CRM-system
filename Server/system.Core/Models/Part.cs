@@ -7,7 +7,7 @@ namespace CRMSystem.Core.Models;
 
 public class Part
 {
-    public Part(long id, int categoryId, string? oemArticle, string? manufacturerArticle, string internalArticle, string? description, string name, string manufacturer, string applicability)
+    private Part(long id, int categoryId, string? oemArticle, string? manufacturerArticle, string internalArticle, string? description, string name, string manufacturer, string applicability)
     {
         Id = id;
         CategoryId = categoryId;

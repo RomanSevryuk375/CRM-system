@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class StorageCell
 {
-    public StorageCell(int id, string rack, string shelf)
+    private StorageCell(int id, string rack, string shelf)
     {
         Id = id;
         Rack = rack;

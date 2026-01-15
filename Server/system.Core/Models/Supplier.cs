@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class Supplier
 {
-    public Supplier(int id, string name, string contacts)
+    private Supplier(int id, string name, string contacts)
     {
         Id = id;
         Name = name;

@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class OrderPriority
 {
-    public OrderPriority(int id, string name)
+    private OrderPriority(int id, string name)
     {
         Id = id;
         Name = name;

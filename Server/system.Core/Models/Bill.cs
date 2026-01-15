@@ -6,7 +6,7 @@ namespace CRMSystem.Core.Models;
 
 public class Bill
 {
-    public Bill(long id, long orderId, BillStatusEnum statusId, DateTime createdAt, decimal amount, DateOnly? actualBillDate)
+    private Bill(long id, long orderId, BillStatusEnum statusId, DateTime createdAt, decimal amount, DateOnly? actualBillDate)
     {
         Id = id;
         OrderId = orderId;

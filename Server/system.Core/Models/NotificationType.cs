@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class NotificationType
 {
-    public NotificationType(int id, string name)
+    private NotificationType(int id, string name)
     {
         Id = id;
         Name = name;

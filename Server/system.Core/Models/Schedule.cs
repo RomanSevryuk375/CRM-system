@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class Schedule
 {
-    public Schedule(int id, int workerId, int shiftId, DateTime dateTime)
+    private Schedule(int id, int workerId, int shiftId, DateTime dateTime)
     {
         Id = id;
         WorkerId = workerId;

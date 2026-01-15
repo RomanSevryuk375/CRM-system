@@ -5,6 +5,7 @@ using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
+using CRMSystem.Core.Enums;
 
 namespace CRMSystem.Business.Services;
 
@@ -75,8 +76,8 @@ public class CarService : ICarService
             throw new NotFoundException($"Client{car.OwnerId} not found");
         }
 
-        if (!await _carStatusRepository.Exists((int)car.StatusId, ct))
-        //&& car.StatusId is not CarStatusEnum.AtWork)
+        if (!await _carStatusRepository.Exists((int)car.StatusId, ct)
+        || car.StatusId is CarStatusEnum.AtWork)
         {
             _logger.LogError("Status{StatusId} not found or invalid status", (int)car.StatusId);
             throw new NotFoundException($"Car{(int)car.StatusId} not found or invalid status");

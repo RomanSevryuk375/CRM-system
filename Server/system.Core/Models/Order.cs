@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class Order
 {
-    public Order(long id, OrderStatusEnum statusId, long carId, DateOnly date, OrderPriorityEnum priorityId)
+    private Order(long id, OrderStatusEnum statusId, long carId, DateOnly date, OrderPriorityEnum priorityId)
     {
         Id = id;
         StatusId = statusId;

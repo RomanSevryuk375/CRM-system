@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class ExpenseType
 {
-    public ExpenseType(int id, string name)
+    private ExpenseType(int id, string name)
     {
         Id = id;
         Name = name;

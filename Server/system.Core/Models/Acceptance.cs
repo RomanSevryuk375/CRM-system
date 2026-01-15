@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class Acceptance
 {
-    public Acceptance(long id, long orderId, int workerId, DateTime createdAt, int mileage,
+    private Acceptance(long id, long orderId, int workerId, DateTime createdAt, int mileage,
         int fuelLevel, string? externalDefects, string? internalDefects, bool? clientSign, bool? workerSign)
     {
         Id = id;

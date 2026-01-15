@@ -6,7 +6,7 @@ namespace CRMSystem.Core.Models;
 
 public class Tax
 {
-    public Tax(int id, string name, decimal rate, TaxTypeEnum typeId)
+    private Tax(int id, string name, decimal rate, TaxTypeEnum typeId)
     {
         Id = id;
         Name = name;

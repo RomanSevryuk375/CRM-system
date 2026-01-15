@@ -2,7 +2,7 @@
 
 public class Role
 {
-    public Role(int id, string name)
+    private Role(int id, string name)
     {
         Id = id;
         Name = name;

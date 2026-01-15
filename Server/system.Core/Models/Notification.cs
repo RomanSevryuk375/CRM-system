@@ -6,7 +6,7 @@ namespace CRMSystem.Core.Models;
 
 public class Notification
 {
-    public Notification(long id, long clientId, long carId, NotificationTypeEnum typeId, NotificationStatusEnum statusId, string message, DateTime sendAt) 
+    private Notification(long id, long clientId, long carId, NotificationTypeEnum typeId, NotificationStatusEnum statusId, string message, DateTime sendAt) 
     {
         Id = id;
         ClientId = clientId;

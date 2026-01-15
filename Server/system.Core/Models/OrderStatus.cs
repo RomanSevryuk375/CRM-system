@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class OrderStatus
 {
-    public OrderStatus(int id, string name)
+    private OrderStatus(int id, string name)
     {
         Id = id;
         Name = name;

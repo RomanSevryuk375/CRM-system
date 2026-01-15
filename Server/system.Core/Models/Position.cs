@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class Position
 {
-    public Position(long id, long partId, int cellId, decimal purchasePrice, decimal sellingPrice, decimal quantity)
+    private Position(long id, long partId, int cellId, decimal purchasePrice, decimal sellingPrice, decimal quantity)
     {
         Id = id;
         PartId = partId;

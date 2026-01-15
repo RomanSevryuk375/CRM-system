@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class PaymentMethod
 {
-    public PaymentMethod(int id, string name)
+    private PaymentMethod(int id, string name)
     {
         Id = id;
         Name = name;

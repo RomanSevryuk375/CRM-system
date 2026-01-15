@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class User
 {
-    public User(long id, int roleId, string login, string passwordHash)
+    private User(long id, int roleId, string login, string passwordHash)
     {
         Id = id;
         RoleId = roleId;    

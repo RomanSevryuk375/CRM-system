@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class AbsenceType
 {
-    public AbsenceType(int id, string name)
+    private AbsenceType(int id, string name)
     {
         Id = id;
         Name = name;

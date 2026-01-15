@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class WorkProposalStatus
 {
-    public WorkProposalStatus(int id, string name)
+    private WorkProposalStatus(int id, string name)
     {
         Id = id;
         Name = name;

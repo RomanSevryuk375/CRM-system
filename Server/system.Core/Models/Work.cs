@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class Work
 {
-    public Work(long id, string title, string category, string description, decimal standardTime)
+    private Work(long id, string title, string category, string description, decimal standardTime)
     {
         Id = id;
         Title = title;

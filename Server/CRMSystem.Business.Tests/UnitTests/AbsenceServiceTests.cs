@@ -4,7 +4,7 @@ using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Absence;
-using Microsoft.Extensions.Logging;
+using FluentAssertions;
 using Moq;
 
 namespace CRMSystem.Business.Tests.UnitTests;
@@ -42,15 +42,16 @@ public class AbsenceServiceTests
         string newStart, string newEnd,
         bool expectedResult)
     {
+        var (absence, errors) = Absence.Create(1, 123, AbsenceTypeEnum.Vacation,
+            DateOnly.Parse(existingStart), existingEnd != null ? DateOnly.Parse(existingEnd) : null);
 
-        var existingAbsence = new Absence(1, 123, AbsenceTypeEnum.Vacation,
-            DateOnly.Parse(existingStart),
-            existingEnd != null ? DateOnly.Parse(existingEnd) : null);
+        absence.Should().NotBeNull();
+        errors.Should().BeEmpty();
 
         var newStartDate = DateOnly.Parse(newStart);
         DateOnly? newEndDate = newEnd != null ? DateOnly.Parse(newEnd) : null;
 
-        var result = existingAbsence.OverlapsWith(newStartDate, newEndDate);
+        var result = absence.OverlapsWith(newStartDate, newEndDate);
 
         Assert.Equal(expectedResult, result);
     }
@@ -58,12 +59,15 @@ public class AbsenceServiceTests
     [Fact] 
     public async Task CreateAbsence_ShouldThrowNotFoundException_WhenWorkerDoesNotExist()
     {
-        var absence = new Absence(
+        var (absence, errors) = Absence.Create(
                         123,
                         123, 
                         AbsenceTypeEnum.Vacation, 
                         new DateOnly(2025, 1, 1), 
                         null);
+
+        absence.Should().NotBeNull();
+        errors.Should().BeEmpty();
 
         _workerRepoMock.Setup(x => x.Exists(
                             absence.WorkerId,
@@ -87,12 +91,25 @@ public class AbsenceServiceTests
     [Fact]
     public async Task CreateAbsence_ShouldThrowConflictException_WhenDatesOverlap()
     {
-        var absence = new Absence(
+        var (absence, errors) = Absence.Create(
                         123,
                         123,
                         AbsenceTypeEnum.Vacation,
                         new DateOnly(2025, 1, 1),
                         null);
+
+        absence.Should().NotBeNull();
+        errors.Should().BeEmpty();
+
+        var (newAbsence, errorsNew) = Absence.Create(
+                                            123,
+                                            123,
+                                            AbsenceTypeEnum.Vacation,
+                                            new DateOnly(2025, 1, 4),
+                                            new DateOnly(2025, 1, 7));
+
+        newAbsence.Should().NotBeNull();
+        errorsNew.Should().BeEmpty();
 
         _workerRepoMock.Setup(x => x.Exists(
                             absence.WorkerId,
@@ -102,12 +119,7 @@ public class AbsenceServiceTests
         _absenceRepoMock.Setup(x => x.GetByWorkerId(
                             absence.WorkerId,
                             It.IsAny<CancellationToken>()))
-                        .ReturnsAsync([new Absence(
-                                            123,
-                                            123,
-                                            AbsenceTypeEnum.Vacation,
-                                            new DateOnly(2025, 1, 4),
-                                            new DateOnly(2025, 1, 7))]);
+                        .ReturnsAsync([newAbsence]);
 
         await Assert.ThrowsAsync<ConflictException>(() =>
             _service.CreateAbsence(absence, CancellationToken.None));
@@ -119,15 +131,18 @@ public class AbsenceServiceTests
     }
 
     [Fact]
-    public async Task CreateAbsence_Success()
+    public async Task CreateAbsence_WhenWorkerExistsAndDoesNotOverlap_ShouldReturnId()
     {
         var absenceId = 123;
-        var absence = new Absence(
+        var (absence, errors) = Absence.Create(
                         absenceId,
                         123,
                         AbsenceTypeEnum.Vacation,
                         new DateOnly(2025, 1, 1),
                         null);
+
+        absence.Should().NotBeNull();
+        errors.Should().BeEmpty();
 
         _workerRepoMock.Setup(x => x.Exists(
                             absence.WorkerId,
@@ -169,6 +184,16 @@ public class AbsenceServiceTests
             EndDate = new DateOnly(2025, 1, 14)
         };
 
+        var (newAbsence, errorsNew) = Absence.Create(
+                                            123,
+                                            123,
+                                            AbsenceTypeEnum.Vacation,
+                                            new DateOnly(2025, 1, 4),
+                                            new DateOnly(2025, 1, 7));
+
+        newAbsence.Should().NotBeNull();
+        errorsNew.Should().BeEmpty();
+
         _absenceRepoMock.Setup(x => x.GetWorkerId(
                             absenceId,
                             It.IsAny<CancellationToken>()))
@@ -177,12 +202,7 @@ public class AbsenceServiceTests
         _absenceRepoMock.Setup(x => x.GetByWorkerId(
                             workerId,
                             It.IsAny<CancellationToken>()))
-                        .ReturnsAsync([new Absence(
-                                            123,
-                                            123,
-                                            AbsenceTypeEnum.Vacation,
-                                            new DateOnly(2025, 1, 4),
-                                            new DateOnly(2025, 1, 7))]);
+                        .ReturnsAsync([newAbsence]);
 
         await Assert.ThrowsAsync<ConflictException>(() =>
             _service.UpdateAbsence(absenceId, model, It.IsAny<CancellationToken>()));

@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class NotificationStatus
 {
-    public NotificationStatus(int id, string name)
+    private NotificationStatus(int id, string name)
     {
         Id = id;
         Name = name;

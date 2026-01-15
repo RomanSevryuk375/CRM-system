@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class WorkProposal
 {
-    public WorkProposal(long id, long orderId, long jobId, int workerId, ProposalStatusEnum statusId, DateTime date)
+    private WorkProposal(long id, long orderId, long jobId, int workerId, ProposalStatusEnum statusId, DateTime date)
     {
         Id = id;
         OrderId = orderId;

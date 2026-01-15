@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class Guarantee
 {
-    public Guarantee(long id, long orderId, DateOnly dateStart, DateOnly dateEnd, string? description, string terms)
+    private Guarantee(long id, long orderId, DateOnly dateStart, DateOnly dateEnd, string? description, string terms)
     {
         Id = id;
         OrderId = orderId; 

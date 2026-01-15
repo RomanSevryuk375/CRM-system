@@ -4,7 +4,7 @@ namespace CRMSystem.Core.Models;
 
 public class Skill
 {
-    public Skill(int id, int workerId, int specializationId)
+    private Skill(int id, int workerId, int specializationId)
     {
         Id = id;
         WorkerId = workerId;

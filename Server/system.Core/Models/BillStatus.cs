@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class BillStatus
 {
-    public BillStatus(int id, string name)
+    private BillStatus(int id, string name)
     {
         Id = id;
         Name = name;

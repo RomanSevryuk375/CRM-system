@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class PartCategory
 {
-    public PartCategory(int id, string name, string? description)
+    private PartCategory(int id, string name, string? description)
     {
         Id = id;
         Name = name;

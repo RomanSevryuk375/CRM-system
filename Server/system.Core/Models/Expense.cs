@@ -7,7 +7,7 @@ namespace CRMSystem.Core.Models;
 
 public class Expense
 {
-    public Expense(long id, DateTime date, string category, int? taxId, long? partSetId, ExpenseTypeEnum expenseTypeId, decimal sum)
+    private Expense(long id, DateTime date, string category, int? taxId, long? partSetId, ExpenseTypeEnum expenseTypeId, decimal sum)
     {
         Id = id;
         Date = date;

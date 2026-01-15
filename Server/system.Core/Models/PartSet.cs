@@ -4,7 +4,7 @@ namespace CRMSystem.Core.Models;
 
 public class PartSet
 {
-    public PartSet(long id, long? orderId, long positionId, long? proposalId, decimal quantity, decimal soldPrice)
+    private PartSet(long id, long? orderId, long positionId, long? proposalId, decimal quantity, decimal soldPrice)
     {
         Id = id;
         OrderId = orderId;

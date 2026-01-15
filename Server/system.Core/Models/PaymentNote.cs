@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class PaymentNote
 {
-    public PaymentNote(long id, long billId, DateTime date, decimal amount, PaymentMethodEnum methodId)
+    private PaymentNote(long id, long billId, DateTime date, decimal amount, PaymentMethodEnum methodId)
     {
         Id = id;
         BillId = billId;

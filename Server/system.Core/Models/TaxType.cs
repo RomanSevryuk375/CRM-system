@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class TaxType
 {
-    public TaxType(int id, string name)
+    private TaxType(int id, string name)
     {
         Id = id;
         Name = name;

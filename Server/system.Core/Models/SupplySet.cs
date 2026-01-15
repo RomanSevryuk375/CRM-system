@@ -4,7 +4,7 @@ namespace CRMSystem.Core.Models;
 
 public class SupplySet
 {
-    public SupplySet(long id, long supplyId, long positionId, decimal quantity, decimal purchasePrice)
+    private SupplySet(long id, long supplyId, long positionId, decimal quantity, decimal purchasePrice)
     {
         Id = id;
         SupplyId = supplyId;

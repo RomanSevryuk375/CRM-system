@@ -163,13 +163,13 @@ public class WorkProposalService : IWorkProposalService
 
             var Id = await _workProposalRepository.AcceptProposal(id, ct);
 
-            var transitModel = new WorkInOrder(
+            var transitModel = WorkInOrder.Create(
                 0,
                 proposal.OrderId,
                 proposal.JobId,
                 proposal.StatusId,
                 WorkStatusEnum.Pending,
-                0);
+                0).workInOrder!;
 
             await _workInOrderRepository.Create(transitModel, ct);
             _logger.LogInformation("Creating works in WiO success");

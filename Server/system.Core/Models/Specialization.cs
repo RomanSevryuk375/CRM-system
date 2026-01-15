@@ -4,7 +4,7 @@ namespace CRMSystem.Core.Models;
 
 public class Specialization
 {
-    public Specialization(int id, string name)
+    private Specialization(int id, string name)
     {
         Id = id;
         Name = name;

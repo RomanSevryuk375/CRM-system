@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class WorkInOrder
 {
-    public WorkInOrder(long id, long orderId, long jobId, int workerId, WorkStatusEnum statusId, decimal timeSpent)
+    private WorkInOrder(long id, long orderId, long jobId, int workerId, WorkStatusEnum statusId, decimal timeSpent)
     {
         Id = id;
         OrderId = orderId;

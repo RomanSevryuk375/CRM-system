@@ -6,7 +6,7 @@ namespace CRMSystem.Core.Models;
 
 public class Worker
 {
-    public Worker(int id, long userId, string name, string surname, decimal hourlyRate, string phoneNumber, string email)
+    private Worker(int id, long userId, string name, string surname, decimal hourlyRate, string phoneNumber, string email)
     {
         Id = id;
         UserId = userId;

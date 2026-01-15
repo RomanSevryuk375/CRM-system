@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class Attachment
 {
-    public Attachment(long id, long orderId, int workerId, DateTime createAt, string? description)
+    private Attachment(long id, long orderId, int workerId, DateTime createAt, string? description)
     {
         Id = id;
         OrderId = orderId;

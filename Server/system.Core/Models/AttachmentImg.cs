@@ -7,7 +7,7 @@ namespace CRMSystem.Core.Models;
 
 public class AttachmentImg
 {
-    public AttachmentImg(long id, long attachmentId, string filePath, string? description)
+    private AttachmentImg(long id, long attachmentId, string filePath, string? description)
     {
         Id = id;
         AttachmentId = attachmentId;

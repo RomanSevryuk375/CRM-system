@@ -4,7 +4,7 @@ namespace CRMSystem.Core.Models;
 
 public class Supply
 {
-    public Supply(long id, int supplierId, DateOnly date)
+    private Supply(long id, int supplierId, DateOnly date)
     {
         Id = id;
         SupplierId = supplierId;

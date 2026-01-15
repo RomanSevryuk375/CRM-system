@@ -127,7 +127,7 @@ public class AbsenceRepository : IAbsenceRepository
     {
         return await _context.Absences
             .Where(a => a.WorkerId == workerId)
-            .Select(a => new Absence(a.Id, a.WorkerId, (Core.Enums.AbsenceTypeEnum)a.TypeId, a.StartDate, a.EndDate))
+            .Select(a => Absence.Create(a.Id, a.WorkerId, (Core.Enums.AbsenceTypeEnum)a.TypeId, a.StartDate, a.EndDate).absence)
             .ToListAsync(ct);
     }
 }

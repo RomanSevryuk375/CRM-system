@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class Absence
 {
-    public Absence(int id, int workerId, AbsenceTypeEnum typeId, DateOnly startDate, DateOnly? endDate)
+    private Absence(int id, int workerId, AbsenceTypeEnum typeId, DateOnly startDate, DateOnly? endDate)
     {
         Id = id;
         WorkerId = workerId;

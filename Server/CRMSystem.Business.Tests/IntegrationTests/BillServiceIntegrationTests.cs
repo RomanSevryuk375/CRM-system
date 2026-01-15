@@ -1,6 +1,7 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Enums;
 using CRMSystem.DataAccess.Entites;
+using FluentAssertions;
 
 namespace CRMSystem.Business.Tests.IntegrationTests;
 
@@ -115,6 +116,8 @@ public class BillServiceIntegrationTests : BaseIntegrationTest, IClassFixture<In
         dbContext.ChangeTracker.Clear();
 
         var updatedBill = await dbContext.Bills.FindAsync(bill.Id);
+
+        updatedBill.Should().NotBeNull();
 
         Assert.Equal(100, updatedBill.Amount);
     }

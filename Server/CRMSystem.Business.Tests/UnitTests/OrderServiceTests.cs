@@ -3,7 +3,7 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using Microsoft.Extensions.Logging;
+using FluentAssertions;
 using Moq;
 
 namespace CRMSystem.Business.Tests.UnitTests;
@@ -43,12 +43,15 @@ public class OrderServiceTests
     [Fact]
     public async Task CreateOrder_ShouldThrowNotFoundException_WhenCarDoesNotExist()
     {
-        var order = new Order(
+        var (order, errors) = Order.Create(
                         123,
                         OrderStatusEnum.Accepted,
                         123,
                         new DateOnly(2025, 1 ,1), 
                         OrderPriorityEnum.Medium);
+
+        errors.Should().BeEmpty();
+        order.Should().NotBeNull();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,
@@ -67,12 +70,15 @@ public class OrderServiceTests
     [Fact]
     public async Task CreateOrder_ShouldThrowNotFoundException_WhenPriorityDoesNotExist()
     {
-        var order = new Order(
+        var (order, errors) = Order.Create(
                         123,
                         OrderStatusEnum.Accepted,
                         123,
                         new DateOnly(2025, 1, 1),
                         OrderPriorityEnum.Medium);
+
+        errors.Should().BeEmpty();
+        order.Should().NotBeNull();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,
@@ -96,12 +102,15 @@ public class OrderServiceTests
     [Fact]
     public async Task CreateOrder_ShouldThrowNotFoundException_WhenStatusDoesNotExist()
     {
-        var order = new Order(
+        var (order, errors) = Order.Create(
                          123,
                          OrderStatusEnum.Accepted,
                          123,
                          new DateOnly(2025, 1, 1),
                          OrderPriorityEnum.Medium);
+
+        errors.Should().BeEmpty();
+        order.Should().NotBeNull();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,
@@ -131,12 +140,15 @@ public class OrderServiceTests
     public async Task CreateOrder_WhenCarExistsAndOrderPriorityExistsAndStatusExists_ShouldReturnId()
     {
         var orderId = 123;
-        var order = new Order(
+        var (order, errors) = Order.Create(
                          orderId,
                          OrderStatusEnum.Accepted,
                          123,
                          new DateOnly(2025, 1, 1),
                          OrderPriorityEnum.Medium);
+
+        errors.Should().BeEmpty();
+        order.Should().NotBeNull();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,
@@ -175,20 +187,26 @@ public class OrderServiceTests
     {
         var orderId = 123L;
         var billId = 123;
-        var order = new Order(
+        var (order, errorsOrder) = Order.Create(
                          orderId,
                          OrderStatusEnum.Accepted,
                          123,
                          new DateOnly(2025, 1, 1),
                          OrderPriorityEnum.Medium);
 
-        var bill = new Bill(
+        errorsOrder.Should().BeEmpty();
+        order.Should().NotBeNull();
+
+        var (bill, errorsBill) = Bill.Create(
                         billId, 
                         orderId, 
                         BillStatusEnum.PartiallyPaid, 
                         new DateTime(2025, 1, 1, 12, 12, 12, 12, 12, DateTimeKind.Utc), 
                         123, 
                         null);
+
+        errorsBill.Should().BeEmpty();
+        bill.Should().NotBeNull();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,
@@ -246,20 +264,26 @@ public class OrderServiceTests
     {
         var orderId = 123L;
         var billId = 123;
-        var order = new Order(
+        var (order, errorsOrder) = Order.Create(
                          orderId,
                          OrderStatusEnum.Accepted,
                          123,
                          new DateOnly(2025, 1, 1),
                          OrderPriorityEnum.Medium);
 
-        var bill = new Bill(
+        errorsOrder.Should().BeEmpty();
+        order.Should().NotBeNull();
+
+        var (bill, errorsBill) = Bill.Create(
                         billId,
                         orderId,
                         BillStatusEnum.PartiallyPaid,
                         new DateTime(2025, 1, 1, 12, 12, 12, 12, 12, DateTimeKind.Utc),
                         123,
                         null);
+
+        errorsBill.Should().BeEmpty();
+        bill.Should().NotBeNull();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,

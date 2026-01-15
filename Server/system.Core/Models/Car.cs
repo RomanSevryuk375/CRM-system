@@ -9,7 +9,7 @@ namespace CRMSystem.Core.Models;
 
 public class Car
 {
-    public Car(long id, long ownerId, CarStatusEnum statusId, string brand, string model, int yearOfManufacture, string vinNumber, string stateNumber, int mileage)
+    private Car(long id, long ownerId, CarStatusEnum statusId, string brand, string model, int yearOfManufacture, string vinNumber, string stateNumber, int mileage)
     {
         Id = id;
         OwnerId = ownerId;

@@ -5,7 +5,7 @@ namespace CRMSystem.Core.Models;
 
 public class WorkInOrderStatus
 {
-    public WorkInOrderStatus(int id, string name)
+    private WorkInOrderStatus(int id, string name)
     {
         Id = id;
         Name = name;
