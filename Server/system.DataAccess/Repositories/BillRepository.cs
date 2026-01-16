@@ -143,8 +143,8 @@ public class BillRepository : IBillRepository
 
         var newWorkInOrderSum = await _context.WorksInOrder
             .Where(b => b.OrderId == orderId)
-            .SumAsync(b => (b.Work != null && b.Worker != null)
-                ? b.Work.StandardTime * b.Worker.HourlyRate
+            .SumAsync(b => (b.Worker != null)
+                ? b.TimeSpent * b.Worker.HourlyRate
                 : 0m, ct);
 
         bill.Amount = newSetSum + newWorkInOrderSum;

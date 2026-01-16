@@ -90,7 +90,7 @@ public class PositionService : IPositionService
 
             return newPositionId;
         }
-        catch (ConflictException ex)
+        catch (Exception ex)
         {
             _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
             

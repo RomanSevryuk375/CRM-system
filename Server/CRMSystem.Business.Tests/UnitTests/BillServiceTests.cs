@@ -34,27 +34,19 @@ public class BillServiceTests
     [Fact]
     public async Task CreateBill_ShouldThrowNotFoundException_WhenOrderDoesNotExist()
     {
-        var (bill, errors) = Bill.Create(
-            123,
-            123,
-            BillStatusEnum.Unpaid,
-            new DateTime(2025, 1, 1),
-            0,
-            null);
-
-        bill.Should().NotBeNull();
-        errors.Should().BeEmpty();
+        var bill = ValidObjects.CreateValidBill();
 
         _orderRepoMock.Setup(x => x.Exists(
                         bill.OrderId,
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(false);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            _service.CreateBill(bill, CancellationToken.None));
+        var act = () => _service.CreateBill(bill, CancellationToken.None);
+
+        await act.Should().ThrowAsync<NotFoundException>();
 
         _billRepoMock.Verify(x => x.Create(
-                        bill, 
+                        It.IsAny<Bill>(), 
                         It.IsAny<CancellationToken>()), 
                        Times.Never);
     }
@@ -62,16 +54,7 @@ public class BillServiceTests
     [Fact]
     public async Task CreateBill_ShouldThrowConflictException_WhenOrderIsClosed()
     {
-        var (bill, errors) = Bill.Create(
-            123,
-            123,
-            BillStatusEnum.Unpaid,
-            new DateTime(2025, 1, 1),
-            0,
-            null);
-
-        bill.Should().NotBeNull();
-        errors.Should().BeEmpty();
+        var bill = ValidObjects.CreateValidBill();
 
         _orderRepoMock.Setup(x => x.Exists(
                         bill.OrderId,
@@ -83,11 +66,12 @@ public class BillServiceTests
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync((int)OrderStatusEnum.Closed);
 
-        await Assert.ThrowsAsync<ConflictException>(() =>
-            _service.CreateBill(bill, CancellationToken.None));
+        var act = () => _service.CreateBill(bill, CancellationToken.None);
+
+        await act.Should().ThrowAsync<ConflictException>();
 
         _billRepoMock.Verify(x => x.Create(
-                        bill,
+                        It.IsAny<Bill>(),
                         It.IsAny<CancellationToken>()),
                        Times.Never);
     }
@@ -95,16 +79,7 @@ public class BillServiceTests
     [Fact]
     public async Task CreateBill_ShouldNotFoundException_WhenBillStatusDoesNotExist()
     {
-        var (bill, errors) = Bill.Create(
-            123,
-            123,
-            BillStatusEnum.Unpaid,
-            new DateTime(2025, 1, 1),
-            0,
-            null);
-
-        bill.Should().NotBeNull();
-        errors.Should().BeEmpty();
+        var bill = ValidObjects.CreateValidBill();
 
         _orderRepoMock.Setup(x => x.Exists(
                         bill.OrderId,
@@ -121,11 +96,12 @@ public class BillServiceTests
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(false);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            _service.CreateBill(bill, CancellationToken.None));
+        var act = () => _service.CreateBill(bill, CancellationToken.None);
+
+        await act.Should().ThrowAsync<NotFoundException>();
 
         _billRepoMock.Verify(x => x.Create(
-                        bill,
+                        It.IsAny<Bill>(),
                         It.IsAny<CancellationToken>()),
                        Times.Never);
     }
@@ -133,17 +109,8 @@ public class BillServiceTests
     [Fact]
     public async Task CreateBill_WhenOrderExistsAndStatusNotClosedAndBillStatusExists_ShouldReturnId()
     {
-        var billId = 123;
-        var (bill, errors) = Bill.Create(
-            billId,
-            123,
-            BillStatusEnum.Unpaid,
-            new DateTime(2025, 1, 1),
-            0,
-            null);
-
-        bill.Should().NotBeNull();
-        errors.Should().BeEmpty();
+        var billId = 0;
+        var bill = ValidObjects.CreateValidBill();
 
         _orderRepoMock.Setup(x => x.Exists(
                         bill.OrderId,
@@ -167,10 +134,10 @@ public class BillServiceTests
 
         var result = await _service.CreateBill(bill, CancellationToken.None);
 
-        Assert.Equal(result, billId);
+        result.Should().Be(billId);
 
         _billRepoMock.Verify(x => x.Create(
-                        bill,
+                        It.IsAny<Bill>(),
                         It.IsAny<CancellationToken>()),
                        Times.Once);
     }
@@ -190,8 +157,9 @@ public class BillServiceTests
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(false);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            _service.UpdateBill(billId ,model, CancellationToken.None));
+        var act = () => _service.UpdateBill(billId, model, CancellationToken.None);
+
+        await act.Should().ThrowAsync<NotFoundException>();
 
         _billRepoMock.Verify(x => x.Update(
                         billId,

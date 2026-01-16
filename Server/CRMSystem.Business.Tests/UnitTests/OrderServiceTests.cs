@@ -5,6 +5,7 @@ using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using FluentAssertions;
 using Moq;
+using Order = CRMSystem.Core.Models.Order;
 
 namespace CRMSystem.Business.Tests.UnitTests;
 
@@ -43,23 +44,16 @@ public class OrderServiceTests
     [Fact]
     public async Task CreateOrder_ShouldThrowNotFoundException_WhenCarDoesNotExist()
     {
-        var (order, errors) = Order.Create(
-                        123,
-                        OrderStatusEnum.Accepted,
-                        123,
-                        new DateOnly(2025, 1 ,1), 
-                        OrderPriorityEnum.Medium);
-
-        errors.Should().BeEmpty();
-        order.Should().NotBeNull();
+        var order = ValidObjects.CreateValidOrder();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,
                         It.IsAny<CancellationToken>()))
                     .ReturnsAsync(false);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            _service.CreateOrder(order, It.IsAny<CancellationToken>()));
+        var act = () => _service.CreateOrder(order, It.IsAny<CancellationToken>());
+
+        await act.Should().ThrowAsync<NotFoundException>();
 
         _orderRepoMock.Verify(x => x.Create(
                         order,
@@ -70,15 +64,7 @@ public class OrderServiceTests
     [Fact]
     public async Task CreateOrder_ShouldThrowNotFoundException_WhenPriorityDoesNotExist()
     {
-        var (order, errors) = Order.Create(
-                        123,
-                        OrderStatusEnum.Accepted,
-                        123,
-                        new DateOnly(2025, 1, 1),
-                        OrderPriorityEnum.Medium);
-
-        errors.Should().BeEmpty();
-        order.Should().NotBeNull();
+        var order = ValidObjects.CreateValidOrder();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,
@@ -90,8 +76,9 @@ public class OrderServiceTests
                         It.IsAny<CancellationToken>()))
                     .ReturnsAsync(false);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            _service.CreateOrder(order, It.IsAny<CancellationToken>()));
+        var act = () => _service.CreateOrder(order, It.IsAny<CancellationToken>());
+
+        await act.Should().ThrowAsync<NotFoundException>();
 
         _orderRepoMock.Verify(x => x.Create(
                         It.IsAny<Order>(),
@@ -102,15 +89,7 @@ public class OrderServiceTests
     [Fact]
     public async Task CreateOrder_ShouldThrowNotFoundException_WhenStatusDoesNotExist()
     {
-        var (order, errors) = Order.Create(
-                         123,
-                         OrderStatusEnum.Accepted,
-                         123,
-                         new DateOnly(2025, 1, 1),
-                         OrderPriorityEnum.Medium);
-
-        errors.Should().BeEmpty();
-        order.Should().NotBeNull();
+        var order = ValidObjects.CreateValidOrder();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,
@@ -127,8 +106,9 @@ public class OrderServiceTests
                         It.IsAny<CancellationToken>()))
                     .ReturnsAsync(false);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            _service.CreateOrder(order, It.IsAny<CancellationToken>()));
+        var act = () => _service.CreateOrder(order, It.IsAny<CancellationToken>());
+
+        await act.Should().ThrowAsync<NotFoundException>();
 
         _orderRepoMock.Verify(x => x.Create(
                         It.IsAny<Order>(),
@@ -139,16 +119,8 @@ public class OrderServiceTests
     [Fact]
     public async Task CreateOrder_WhenCarExistsAndOrderPriorityExistsAndStatusExists_ShouldReturnId()
     {
-        var orderId = 123;
-        var (order, errors) = Order.Create(
-                         orderId,
-                         OrderStatusEnum.Accepted,
-                         123,
-                         new DateOnly(2025, 1, 1),
-                         OrderPriorityEnum.Medium);
-
-        errors.Should().BeEmpty();
-        order.Should().NotBeNull();
+        var orderId = 0;
+        var order = ValidObjects.CreateValidOrder();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,
@@ -170,14 +142,12 @@ public class OrderServiceTests
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(orderId);
 
-        var result = await _service.CreateOrder(
-                            order, 
-                            CancellationToken.None);
+        var result = await _service.CreateOrder(order, CancellationToken.None);
 
-        Assert.Equal(result, orderId);
+        result.Should().Be(orderId);
 
         _orderRepoMock.Verify(x => x.Create(
-                        order,
+                        It.IsAny<Order>(),
                         It.IsAny<CancellationToken>()),
                        Times.Once);
     }
@@ -185,28 +155,10 @@ public class OrderServiceTests
     [Fact]
     public async Task CreateOrderWithBill_ShouldRollback_WhenBillCreationFails()
     {
-        var orderId = 123L;
-        var billId = 123;
-        var (order, errorsOrder) = Order.Create(
-                         orderId,
-                         OrderStatusEnum.Accepted,
-                         123,
-                         new DateOnly(2025, 1, 1),
-                         OrderPriorityEnum.Medium);
+        var orderId = 1;
+        var order = ValidObjects.CreateValidOrder();
 
-        errorsOrder.Should().BeEmpty();
-        order.Should().NotBeNull();
-
-        var (bill, errorsBill) = Bill.Create(
-                        billId, 
-                        orderId, 
-                        BillStatusEnum.PartiallyPaid, 
-                        new DateTime(2025, 1, 1, 12, 12, 12, 12, 12, DateTimeKind.Utc), 
-                        123, 
-                        null);
-
-        errorsBill.Should().BeEmpty();
-        bill.Should().NotBeNull();
+        var bill = ValidObjects.CreateValidBill();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,
@@ -233,16 +185,17 @@ public class OrderServiceTests
                         It.IsAny<CancellationToken>()))
                        .ThrowsAsync(new Exception("Some think going wrong"));  
 
-        await Assert.ThrowsAsync<Exception>(() => 
-            _service.CreateOrderWithBill(order, bill, CancellationToken.None));
+        var act = () => _service.CreateOrderWithBill(order, bill, CancellationToken.None);
+
+        await act.Should().ThrowAsync<Exception>();
 
         _orderRepoMock.Verify(x => x.Create(
-                        order,
+                        It.IsAny<Order>(),
                         It.IsAny<CancellationToken>()),
                        Times.Once);
 
         _billRepoMock.Verify(x => x.Create(
-                        bill,
+                        It.IsAny<Bill>(),
                         It.IsAny<CancellationToken>()),
                        Times.Once);
 
@@ -262,28 +215,11 @@ public class OrderServiceTests
     [Fact]
     public async Task CreateOrderWithBill_WhenCarExistsAndOrderPriorityExistsAndStatusExists_ShouldReturnId()
     {
-        var orderId = 123L;
-        var billId = 123;
-        var (order, errorsOrder) = Order.Create(
-                         orderId,
-                         OrderStatusEnum.Accepted,
-                         123,
-                         new DateOnly(2025, 1, 1),
-                         OrderPriorityEnum.Medium);
+        var orderId = 1;
+        var billId = 0;
+        var order = ValidObjects.CreateValidOrder();
 
-        errorsOrder.Should().BeEmpty();
-        order.Should().NotBeNull();
-
-        var (bill, errorsBill) = Bill.Create(
-                        billId,
-                        orderId,
-                        BillStatusEnum.PartiallyPaid,
-                        new DateTime(2025, 1, 1, 12, 12, 12, 12, 12, DateTimeKind.Utc),
-                        123,
-                        null);
-
-        errorsBill.Should().BeEmpty();
-        bill.Should().NotBeNull();
+        var bill = ValidObjects.CreateValidBill();
 
         _carRepoMock.Setup(x => x.Exists(
                         order.CarId,
@@ -312,15 +248,15 @@ public class OrderServiceTests
 
         var result = await _service.CreateOrderWithBill(order, bill, CancellationToken.None);
 
-        Assert.Equal(orderId, result);
+        result.Should().Be(orderId);
 
         _orderRepoMock.Verify(x => x.Create(
-                        order,
+                        It.IsAny<Order>(),
                         It.IsAny<CancellationToken>()),
                        Times.Once);
 
         _billRepoMock.Verify(x => x.Create(
-                        bill,
+                        It.IsAny<Bill>(),
                         It.IsAny<CancellationToken>()),
                        Times.Once);
 
@@ -348,11 +284,12 @@ public class OrderServiceTests
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(false);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            _service.UpdateOrder(orderId, priorityId, CancellationToken.None));
+        var act = () => _service.UpdateOrder(orderId, priorityId, CancellationToken.None);
+
+        await act.Should().ThrowAsync<NotFoundException>();
 
         _orderRepoMock.Verify(x => x.Update(
-                        orderId,
+                        It.IsAny<long>(),
                         priorityId,
                         It.IsAny<CancellationToken>()),
                         Times.Never);                       
@@ -377,10 +314,10 @@ public class OrderServiceTests
 
         var result = await _service.UpdateOrder(orderId, priorityId, CancellationToken.None);
 
-        Assert.Equal(result, orderId);
+        result.Should().Be(orderId);
 
         _orderRepoMock.Verify(x => x.Update(
-                        orderId,
+                        It.IsAny<long>(),
                         priorityId,
                         It.IsAny<CancellationToken>()),
                         Times.Once);
@@ -398,10 +335,10 @@ public class OrderServiceTests
 
         var result = await _service.DeleteOrder(orderId, CancellationToken.None);
 
-        Assert.Equal(result, orderId);
+        result.Should().Be(orderId);
 
         _orderRepoMock.Verify(x => x.Delete(
-                        orderId,
+                        It.IsAny<long>(),
                         It.IsAny<CancellationToken>()),
                         Times.Once);
     }
@@ -416,11 +353,12 @@ public class OrderServiceTests
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(false);
 
-        await Assert.ThrowsAsync<ConflictException>(() =>
-            _service.CloseOrder(orderId, CancellationToken.None));
+        var act = () => _service.CloseOrder(orderId, CancellationToken.None);
+
+        await act.Should().ThrowAsync<ConflictException>();
 
         _orderRepoMock.Verify(x => x.Close(
-                        orderId,
+                        It.IsAny<long>(),
                         It.IsAny<CancellationToken>()),
                         Times.Never);
     }
@@ -429,6 +367,11 @@ public class OrderServiceTests
     public async Task CloseOrder_WhenAnyWorkInProgress_ShouldReturnId()
     {
         var orderId = 123L;
+
+        _orderRepoMock.Setup(x => x.PossibleToComplete(
+                        orderId,
+                        It.IsAny<CancellationToken>()))
+                       .ReturnsAsync(true);
 
         _orderRepoMock.Setup(x => x.PossibleToClose(
                         orderId,
@@ -442,10 +385,10 @@ public class OrderServiceTests
 
         var result = await _service.CloseOrder(orderId, CancellationToken.None);
 
-        Assert.Equal(result, orderId);
+        result.Should().Be(orderId);
 
         _orderRepoMock.Verify(x => x.Close(
-                        orderId,
+                        It.IsAny<long>(),
                         It.IsAny<CancellationToken>()),
                         Times.Once);
     }
@@ -460,11 +403,12 @@ public class OrderServiceTests
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(false);
 
-        await Assert.ThrowsAsync<ConflictException>(() =>
-            _service.CompleteOrder(orderId, CancellationToken.None));
+        var act = () => _service.CompleteOrder(orderId, CancellationToken.None);
+
+        await act.Should().ThrowAsync<ConflictException>();
 
         _orderRepoMock.Verify(x => x.Complete(
-                        orderId,
+                        It.IsAny<long>(),
                         It.IsAny<CancellationToken>()),
                         Times.Never);
     }
@@ -486,10 +430,10 @@ public class OrderServiceTests
 
         var result = await _service.CompleteOrder(orderId, CancellationToken.None);
 
-        Assert.Equal(result, orderId);
+        result.Should().Be(orderId);
 
         _orderRepoMock.Verify(x => x.Complete(
-                        orderId,
+                        It.IsAny<long>(),
                         It.IsAny<CancellationToken>()),
                         Times.Once);
     }

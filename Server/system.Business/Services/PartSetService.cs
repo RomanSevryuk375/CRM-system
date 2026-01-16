@@ -3,7 +3,6 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.PartSet;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;

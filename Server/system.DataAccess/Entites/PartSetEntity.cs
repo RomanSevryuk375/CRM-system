@@ -2,8 +2,6 @@
 
 public class PartSetEntity
 {
-    protected PartSetEntity() { }
-
     public PartSetEntity(long? orderId, long positionId, long? proposalId, decimal quantity, decimal soldPrice)
     {
         OrderId = orderId;

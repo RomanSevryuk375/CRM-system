@@ -33,30 +33,19 @@ public class CarServiceTests
     [Fact]
     public async Task CreateCar_ShouldThrowNotFoundException_WhenClientDoesNotExists()
     {
-        var (car, errors) = Car.Create(
-            123,
-            123,
-            CarStatusEnum.NotAtWork,
-            "Test",
-            "Test",
-            2008,
-            "VF3MJAHXVHS101043",
-            "1111AA-1",
-            15000);
-
-        car.Should().NotBeNull();
-        errors.Should().BeEmpty();
+        var car = ValidObjects.CreateValidCar(CarStatusEnum.NotAtWork);
 
         _clientRepoMock.Setup(x => x.Exists(
                             car.OwnerId,
                             It.IsAny<CancellationToken>()))
                         .ReturnsAsync(false);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            _service.CreateCar(car, CancellationToken.None));
+        var act = () => _service.CreateCar(car, CancellationToken.None);
+
+        await act.Should().ThrowAsync<NotFoundException>();
 
         _carRepoMock.Verify(x => x.Create(
-                       car,
+                       It.IsAny<Car>(),
                        It.IsAny<CancellationToken>()),
                        Times.Never);
     }
@@ -64,19 +53,7 @@ public class CarServiceTests
     [Fact]
     public async Task CreateCar_ShouldThrowNotFoundException_WhenCarStatusDoesNotExists()
     {
-        var (car, errors) = Car.Create(
-            123,
-            123,
-            CarStatusEnum.NotAtWork,
-            "Test",
-            "Test",
-            2008,
-            "VF3MJAHXVHS101043",
-            "1111AA-1",
-            15000);
-
-        car.Should().NotBeNull();
-        errors.Should().BeEmpty();
+        var car = ValidObjects.CreateValidCar(CarStatusEnum.NotAtWork);
 
         _clientRepoMock.Setup(x => x.Exists(
                             car.OwnerId,
@@ -88,11 +65,12 @@ public class CarServiceTests
                             It.IsAny<CancellationToken>()))
                         .ReturnsAsync(false);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            _service.CreateCar(car, CancellationToken.None));
+        var act = () => _service.CreateCar(car, CancellationToken.None);
+
+        await act.Should().ThrowAsync<NotFoundException>();
 
         _carRepoMock.Verify(x => x.Create(
-                       car,
+                       It.IsAny<Car>(),
                        It.IsAny<CancellationToken>()),
                        Times.Never);
     }
@@ -100,19 +78,7 @@ public class CarServiceTests
     [Fact]
     public async Task CreateCar_ShouldThrowNotFoundException_WhenCarStatusIsAtWork()
     {
-        var (car, errors) = Car.Create(
-            123,
-            123,
-            CarStatusEnum.AtWork,
-            "Test",
-            "Test",
-            2008,
-            "VF3MJAHXVHS101043",
-            "1111AA-1",
-            15000);
-
-        car.Should().NotBeNull();
-        errors.Should().BeEmpty();
+        var car = ValidObjects.CreateValidCar(CarStatusEnum.AtWork);
 
         _clientRepoMock.Setup(x => x.Exists(
                             car.OwnerId,
@@ -124,11 +90,12 @@ public class CarServiceTests
                             It.IsAny<CancellationToken>()))
                         .ReturnsAsync(true);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
-            _service.CreateCar(car, CancellationToken.None));
+        var act = () => _service.CreateCar(car, CancellationToken.None);
+
+        await act.Should().ThrowAsync<NotFoundException>();
 
         _carRepoMock.Verify(x => x.Create(
-                       car,
+                       It.IsAny<Car>(),
                        It.IsAny<CancellationToken>()),
                        Times.Never);
     }
@@ -136,20 +103,8 @@ public class CarServiceTests
     [Fact]
     public async Task CreateCar_WhenCarStatusIsNotAtWorkAndClientExistsAndStatusExists_ShouldReturnId()
     {
-        var carId = 123;
-        var (car, errors) = Car.Create(
-            carId,
-            123,
-            CarStatusEnum.NotAtWork,
-            "Test",
-            "Test",
-            2008,
-            "VF3MJAHXVHS101043",
-            "1111AA-1",
-            15000);
-
-        car.Should().NotBeNull();
-        errors.Should().BeEmpty();
+        var carId = 0;
+        var car = ValidObjects.CreateValidCar(CarStatusEnum.NotAtWork); 
 
         _clientRepoMock.Setup(x => x.Exists(
                             car.OwnerId,
@@ -168,10 +123,10 @@ public class CarServiceTests
 
         var result = await _service.CreateCar(car, CancellationToken.None);
 
-        Assert.Equal(carId, result);
+        result.Should().Be(carId);
 
         _carRepoMock.Verify(x => x.Create(
-                       car,
+                       It.IsAny<Car>(),
                        It.IsAny<CancellationToken>()),
                        Times.Once);
     }

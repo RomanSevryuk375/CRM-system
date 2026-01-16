@@ -63,7 +63,8 @@ public class IntegrationTestFactory : WebApplicationFactory<IApiMarker>, IAsyncL
                     "tax_types",
                     "work_in_order_statuses",
                     "work_proposal_statuses",
-                    "specializations"
+                    "specializations",
+                    "payment_methods"
                 }
         });
     }

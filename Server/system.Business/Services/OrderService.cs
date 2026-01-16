@@ -167,6 +167,12 @@ public class OrderService : IOrderService
     {
         _logger.LogInformation("Closing orders start");
 
+        if (!await _orderRepository.PossibleToComplete(id, ct))
+        {
+            _logger.LogInformation("Order{id} has unfinished works", id);
+            throw new ConflictException("Order has unfinished works");
+        }
+
         if (!await _orderRepository.PossibleToClose(id, ct))
         {
             _logger.LogInformation("Order{orderId} has not paid bill", id);

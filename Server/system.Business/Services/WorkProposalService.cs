@@ -167,7 +167,7 @@ public class WorkProposalService : IWorkProposalService
                 0,
                 proposal.OrderId,
                 proposal.JobId,
-                proposal.StatusId,
+                proposal.WorkerId,
                 WorkStatusEnum.Pending,
                 0).workInOrder!;
 

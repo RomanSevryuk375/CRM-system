@@ -3,7 +3,6 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
@@ -105,7 +104,7 @@ public class ScheduleService : IScheduleService
 
             return scheduleId;
         }
-        catch (ConflictException ex)
+        catch (Exception ex)
         {
             _logger.LogError(ex, "Transaction failed. Rolling back all changes.");
             
