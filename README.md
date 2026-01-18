@@ -90,11 +90,8 @@ Quick Start:
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/your-username/your-repo-name.git
-2. **Starting the infrastructure (Postgres, Redis, MinIO):**
+2. **Starting the infrastructure and application (Postgres, Redis, MinIO):**
    ```bash
    docker-compose up -d 
-3. **Starting the application:**
-   ```bash
-   dotnet run --project CRM_system_backend
-4. Access API Documentation: Navigate to http://localhost:5066/swagger to test endpoints via Swagger UI.
+3. Access API Documentation: Navigate to http://localhost:5066/swagger to test endpoints via Swagger UI.
 
