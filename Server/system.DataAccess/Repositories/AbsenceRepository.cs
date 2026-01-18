@@ -123,7 +123,7 @@ public class AbsenceRepository : IAbsenceRepository
             .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<List<Absence>> GetByWorkerId(int workerId, CancellationToken ct)
+    public async Task<List<Absence?>> GetByWorkerId(int workerId, CancellationToken ct)
     {
         return await _context.Absences
             .Where(a => a.WorkerId == workerId)

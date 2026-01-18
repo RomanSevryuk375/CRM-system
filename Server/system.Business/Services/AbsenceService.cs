@@ -52,7 +52,7 @@ public class AbsenceService : IAbsenceService
 
         var absences = await _absenceRepository.GetByWorkerId(absence.WorkerId, ct);
 
-        if (absences.Any(x => x.OverlapsWith(absence.StartDate, absence.EndDate)))
+        if (absences.Any(x => x!.OverlapsWith(absence.StartDate, absence.EndDate)))
             throw new ConflictException($"Has date overlaps for worker{absence.WorkerId}");
 
         if (!await _workerRepository.Exists(absence.WorkerId, ct))
@@ -81,7 +81,7 @@ public class AbsenceService : IAbsenceService
         {
             var absences = await _absenceRepository.GetByWorkerId(workerId, ct);
 
-            if (absences.Any(x => x.OverlapsWith(newStartDate.Value, model.EndDate)))
+            if (absences.Any(x => x!.OverlapsWith(newStartDate.Value, model.EndDate)))
                 throw new ConflictException($"Has date overlaps for worker{workerId}");
         }
 

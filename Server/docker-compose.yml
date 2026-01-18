@@ -1,4 +1,4 @@
-services:
+﻿services:
 
  postgres:
     image: postgres:18
@@ -23,6 +23,12 @@ services:
     container_name: AUTOService-redis
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
  minio:
   image: minio/minio
   container_name: AUTOService-minio
@@ -35,12 +41,37 @@ services:
   volumes:
     - minio_data:/data
   command: server /data --console-address ":9001"
+  healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9000/minio/health/live || exit 1"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
 
- # crm_system_backend:
- #    image: ${DOCKER_REGISTRY-}crmsystembackend
- #    build:
- #      context: .
- #      dockerfile: CRM_system_backend/Dockerfile
+ crm_system_backend:
+    build:
+      context: .
+      dockerfile: CRM_system_backend/Dockerfile
+    container_name: AUTOService-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__SystemDbContext=Host=postgres;Port=5432;Database=AUTOService;Username=postgres228;Password=roman228
+      - ConnectionStrings__Redis=redis:6379
+      - Minio__ServiceUrl=http://minio:9000
+      - Minio__AccessKey=minio_admin
+      - Minio__SecretKey=minio_password
+      - Minio__BucketName=service-files
+      - JwtOptions__SecretKey=SecretKeySecretKeySecretKeySecretKeySecretKeySecretKeySecretKeySecretKeySecretKey
+      - JwtOptions__ExpiresHours=12
+    ports:
+      - "5066:8080" 
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
 
 volumes:
   postgres_data:

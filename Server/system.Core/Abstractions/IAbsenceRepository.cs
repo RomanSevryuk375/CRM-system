@@ -11,7 +11,6 @@ public interface IAbsenceRepository
     Task<List<AbsenceItem>> GetPaged(AbsenceFilter filter, CancellationToken ct);
     Task<int> Update(int id, AbsenceUpdateModel model, CancellationToken ct);
     Task<bool> Exists(int id, CancellationToken ct);
-    //Task<bool> HasOverLap(int workerId, DateOnly start, DateOnly? end, int? excludeId, CancellationToken ct);
     Task<int?> GetWorkerId(int id, CancellationToken ct);
-    Task<List<Absence>> GetByWorkerId(int workerId, CancellationToken ct);
+    Task<List<Absence?>> GetByWorkerId(int workerId, CancellationToken ct);
 }
