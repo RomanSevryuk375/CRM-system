@@ -1,0 +1,94 @@
+.reg-modal-shadow {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 300;
+}
+
+.reg-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 50vw;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.reg-element{
+    display: flex;
+    flex-direction: column;
+}
+
+.reg-modal-head {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    margin: 0px;
+    color: #0069D0;
+    margin-bottom: 16px;
+}
+
+.element-name{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    margin: 0px;
+    padding: 0px;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.element-input{
+    width: 300px;
+    height: 24px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: #999999;
+    margin-bottom: 8px;
+}
+
+.reg-modal-button{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.reg-active-button{
+    width: 100%;
+    height: 32px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    background-color: #0069D0;
+    color: #ffffff;
+    border: none;
+    margin-bottom: 8px;
+}
+
+.reg-second-button{
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    color: #0069D0;
+    background-color: #ffffff;
+    border: none;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
+    font-weight: 500;
+    font-style: normal;
+}

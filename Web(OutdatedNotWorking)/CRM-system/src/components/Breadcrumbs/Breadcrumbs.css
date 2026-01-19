@@ -1,0 +1,32 @@
+.breadcrumbs {
+    background-color: #ffffff;
+    height: 32px;
+    width: 100%;
+    margin-top: 46px;
+    position: fixed;
+    display: flex;
+    left: 0;
+    border-bottom: 1px solid;
+    border-collapse: collapse;
+    border-color: #EBEDF0; 
+}
+
+.breadcrumbs-text{
+    color: #999999;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 14px;
+    text-align: end;
+    justify-content: center;
+    justify-items: center;
+    line-height: 8px;
+    margin-left: 16px;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
+    font-weight: 900;
+    font-style: normal;
+}

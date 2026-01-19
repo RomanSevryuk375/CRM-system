@@ -1,0 +1,89 @@
+.filtre-modal-body {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 200;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.6);
+
+}
+
+.filter-modal-position{
+    padding-top: 130px;
+   padding-left: 260px;
+}
+
+.filtre-modal-content {
+    width: 548px;
+    height: 202px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: #ffffff;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+.filtre-input-container {
+    width: 250px;
+    height: 50px;
+    padding: 8px;
+}
+
+.filtre-modal-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    height: 46px;
+    width: 548px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    border-top: #EBEDF0 solid;
+}
+
+.filtre-input {
+    width: 100%;
+    height: 30px;
+    font-family: 'Robot', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    vertical-align: middle;
+    color: #333333;
+}
+
+.filtre-input-lable {
+    width: 100%;
+    height: 20px;
+    margin-bottom: 0px;
+    font-family: 'Robot', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.modal-footer-button {
+    height: 30px;
+    background-color: #3296F8;
+    border: none;
+    border-radius: 2px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    color: #ffffff;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-right: 16px;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
+    font-weight: 900;
+    font-style: normal;
+}

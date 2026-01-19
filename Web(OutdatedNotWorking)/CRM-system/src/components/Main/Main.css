@@ -1,0 +1,238 @@
+.screen {
+    left: 54px;
+    position: fixed;
+    top: 54px;
+    z-index: 200;
+    width: calc(100vw - 54px);
+    height: calc(100vh - 118px);
+    background-color: #ffffff;
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.screen-header {
+    background-color: #ffffff;
+    width: 1450px;
+    height: calc(60vh - 16px);
+    display: flex;
+    flex-direction: row;
+}
+
+.screen-footer {
+    background-color: #ffffff;
+    width: 1450px;
+    height: calc(40vh - 102px);
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.employee-efficiency-gist {
+    height: 95%;
+    width: 49.25%;
+    background-color: #ffffff;
+    margin-top: 12px;
+}
+
+
+
+.number-of-completed-work-orders {
+    height: 95%;
+    width: 50%;
+    /* background-color: red; */
+    margin-top: 12px;
+}
+
+.left {
+    width: 50%;
+    height: 100%;
+    background-color: #ffffff;
+}
+
+.right {
+    width: 50%;
+    height: 100%;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+}
+
+.right-left {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-right {
+    height: 100%;
+    width: 50%;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 8px rgba(0, 105, 208, 0.15);
+    border-radius: 2px;
+}
+
+
+.pie-chart {
+    background-color: #ffffff;
+    box-shadow: 0px 0px 8px rgba(0, 105, 208, 0.15);
+    border-radius: 2px;
+    width: 97%;
+    height: 295px;
+    margin-bottom: 16px;
+}
+
+.left-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 147px;
+    width: calc(50vw - 54px);
+}
+
+.left-footer {
+    background-color: #ffffff;
+    box-shadow: 0px 0px 8px rgba(0, 105, 208, 0.15);
+    border-radius: 2px;
+    margin-top: 16px;
+    width: calc(50vw - 54px);
+    height: 37.5vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.profit-histogram-header {
+    width: 100%;
+    height: 15%;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profit-histogram-h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: bold;
+    font-size: 16px;
+    line-height: 19px;
+    color: #333333;
+    margin-left: 16px;
+}
+
+.profit-histogram-select{
+    width: 30%;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: bold;
+    font-size: 16px;
+    line-height: 19px;
+    color: #333333;
+    border: none;
+    margin-right: 16px;
+}
+
+.profit-histogram {
+    width: 100%;
+    height: 85%;
+    background-color: #ffffff;
+}
+
+.profit-before-taxes {
+    background-color: #ffffff;
+    box-shadow: 0px 0px 8px rgba(0, 105, 208, 0.15);
+    border-radius: 2px;
+    width: 49.25%;
+    height: 147px;
+}
+
+.profit-before-taxes-right {
+    background-color: #ffffff;
+    box-shadow: 0px 0px 8px rgba(0, 105, 208, 0.15);
+    border-radius: 2px;
+    width: 97%;
+    height: 147px;
+}
+
+.profit-before-taxes-content {
+    height: 131px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.profit-numbers {
+    height: 35%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profit-procen-img {
+    display: flex;
+    align-items: center;
+}
+
+.profit-before-taxes-lable {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: bold;
+    font-size: 22px;
+    line-height: 26px;
+    display: flex;
+    align-items: center;
+    color: #333333;
+}
+
+.profit-quantity {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: bold;
+    font-size: 40px;
+    line-height: 47px;
+    color: #0069D0;
+}
+
+.profit-procent {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: bold;
+    font-size: 16px;
+    line-height: 19px;
+    color: #32AB50;
+    margin-left: 8px;
+}
+
+.profit-procent-red {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: bold;
+    font-size: 16px;
+    line-height: 19px;
+    color: #FF2A2A;
+    margin-left: 8px;
+}
+
+.profit-img-green {
+    filter: invert(47%) sepia(35%) saturate(1750%) hue-rotate(97deg) brightness(85%) contrast(89%);
+}
+
+.profit-img-red {
+    filter: brightness(0) saturate(100%) invert(16%) sepia(99%) saturate(4214%) hue-rotate(340deg);
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
+    font-weight: 900;
+    font-style: normal;
+}
+

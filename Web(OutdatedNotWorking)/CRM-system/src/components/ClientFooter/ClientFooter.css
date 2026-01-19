@@ -1,0 +1,60 @@
+.footer-content{
+    background-color: #112347;
+    position: relative;
+    width: calc(100vw - 128px);
+    height: 10vh;
+    margin-left: 48px;
+    margin-top: 48px;
+    border-radius: 20px;
+    padding-right: 32px;
+    padding-left: 32px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.footer-img{
+    width: 20px;
+    height: 20px;
+}
+
+.footer-button-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.footer-button-cli{
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.logo-h1-footer{
+    font-size: 24px;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: bold;
+}
+
+.inc{
+    font-size: 14px;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-style: bold;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
+    font-weight: 900;
+    font-style: normal;
+}

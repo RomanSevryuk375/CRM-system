@@ -1,0 +1,34 @@
+
+.main-content-area {
+    left: 54px;
+    position: fixed;
+    top: 98px;
+    width: calc(100vw - 54px);
+    height: calc(100vh - 122px);
+    background-color: #F1F3F5;
+    display: block;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    z-index: 1; /* Убедимся, что main-content-area находится поверх других элементов */
+}
+
+.main-content-area.sidebar-enabled {
+    left: 240px;
+    position: fixed;
+    top: 98px;
+    width: calc(100vw - 240px);
+    height: calc(100vh - 122px);
+    background-color: #F1F3F5;
+    display: block;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    z-index: 1; /* Убедимся, что main-content-area находится поверх других элементов */
+}
+
+.view-toolbar.disable {
+    display: none;
+}
+
+.view-toolbar.enable {
+    display: contents;
+}
