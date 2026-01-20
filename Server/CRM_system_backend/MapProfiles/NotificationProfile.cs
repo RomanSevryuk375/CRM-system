@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.Notification;
 using CRMSystem.Core.ProjectionModels.Notification;
 using CRMSystem.DataAccess.Entites;
+using Shared.Contracts.Notification;
 
-namespace CRM_system_backend.MapProfile;
+namespace CRM_system_backend.MapProfiles;
 
 public class NotificationProfile : Profile
 {

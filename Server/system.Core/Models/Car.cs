@@ -1,8 +1,8 @@
 ﻿// Ignore Spelling: vin
 
 using CRMSystem.Core.Constants;
-using CRMSystem.Core.Enums;
 using CRMSystem.Core.Validation;
+using Shared.Enums;
 using System.Text.RegularExpressions;
 
 namespace CRMSystem.Core.Models;

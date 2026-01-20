@@ -1,4 +1,4 @@
-﻿using CRMSystem.Core.Enums;
+﻿using Shared.Enums;
 
 namespace CRMSystem.Core.ProjectionModels.Absence;
 

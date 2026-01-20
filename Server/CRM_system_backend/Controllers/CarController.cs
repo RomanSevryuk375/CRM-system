@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.Car;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels.Car;
-using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Enums;
+using Shared.Contracts.Car;
 
 namespace CRM_system_backend.Controllers;
 

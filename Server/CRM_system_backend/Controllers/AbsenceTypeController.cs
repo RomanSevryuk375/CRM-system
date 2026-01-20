@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.AbsenceType;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels.AbsenceType;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.AbsenceType;
 
 namespace CRM_system_backend.Controllers;
 

@@ -1,9 +1,9 @@
-﻿using CRM_system_backend.Contracts;
-using CRM_system_backend.Contracts.User;
-using CRMSystem.Business.Abstractions;
+﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts;
+using Shared.Contracts.User;
 
 namespace CRM_system_backend.Controllers;
 

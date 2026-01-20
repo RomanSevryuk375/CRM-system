@@ -3,9 +3,8 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Car;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
-using CRMSystem.Core.Enums;
+using Shared.Enums;
 
 namespace CRMSystem.Business.Services;
 

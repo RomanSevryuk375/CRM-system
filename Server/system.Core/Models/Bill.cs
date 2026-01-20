@@ -1,6 +1,6 @@
-﻿using CRMSystem.Core.Enums;
-using CRMSystem.Core.Exceptions;
+﻿using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Validation;
+using Shared.Enums;
 
 namespace CRMSystem.Core.Models;
 

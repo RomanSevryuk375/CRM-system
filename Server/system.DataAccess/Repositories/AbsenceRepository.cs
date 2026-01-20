@@ -6,6 +6,7 @@ using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
+using Shared.Enums;
 
 namespace CRMSystem.DataAccess.Repositories;
 
@@ -127,7 +128,7 @@ public class AbsenceRepository : IAbsenceRepository
     {
         return await _context.Absences
             .Where(a => a.WorkerId == workerId)
-            .Select(a => Absence.Create(a.Id, a.WorkerId, (Core.Enums.AbsenceTypeEnum)a.TypeId, a.StartDate, a.EndDate).absence)
+            .Select(a => Absence.Create(a.Id, a.WorkerId, (AbsenceTypeEnum)a.TypeId, a.StartDate, a.EndDate).absence)
             .ToListAsync(ct);
     }
 }

@@ -1,7 +1,6 @@
-﻿using CRMSystem.Core.Enums;
-using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Models;
 using FluentAssertions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Shared.Enums;
 using Order = CRMSystem.Core.Models.Order;
 
 namespace CRMSystem.Business.Tests;

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.PaymentNote;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels.PaymentNote;
-using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Enums;
+using Shared.Contracts.PaymentNote;
 
 namespace CRM_system_backend.Controllers;
 

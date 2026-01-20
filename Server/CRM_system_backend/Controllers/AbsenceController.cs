@@ -3,7 +3,7 @@ using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels.Absence;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
-using CRM_system_backend.Contracts.Absence;
+using Shared.Contracts.Absence;
 
 namespace CRM_system_backend.Controllers;
 

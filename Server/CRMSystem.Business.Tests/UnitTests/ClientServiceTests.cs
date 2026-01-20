@@ -1,6 +1,5 @@
 ﻿using CRMSystem.Business.Services;
 using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.Enums;
 using CRMSystem.Core.Models;
 using FluentAssertions;
 using Moq;

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.Schedule;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.Schedule;
 
 namespace CRM_system_backend.Controllers;
 

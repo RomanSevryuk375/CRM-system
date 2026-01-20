@@ -1,6 +1,6 @@
-﻿using CRMSystem.Core.ProjectionModels.WorkProposal;
-using CRMSystem.Core.Enums;
-using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.WorkProposal;
+using Shared.Enums;
 
 namespace CRMSystem.Core.Abstractions;
 

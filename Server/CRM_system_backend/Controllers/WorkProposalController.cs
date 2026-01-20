@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.WorkPropossal;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.WorkProposal;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.WorkProposal;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.WorkProposal;
+using Shared.Contracts.WorkPropossal;
 
 namespace CRM_system_backend.Controllers;
 

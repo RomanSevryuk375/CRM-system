@@ -1,7 +1,7 @@
 ﻿using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Enums;
 using CRMSystem.DataAccess.Entites;
 using FluentAssertions;
+using Shared.Enums;
 
 namespace CRMSystem.Business.Tests.IntegrationTests;
 

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.Tax;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.Tax;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Tax;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.Tax;
 
 namespace CRM_system_backend.Controllers;
 

@@ -1,11 +1,11 @@
 ﻿// Ignore Spelling: Img
 
 using AutoMapper;
-using CRM_system_backend.Contracts.AcceptanceImg;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.ProjectionModels.AccetanceImg;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.AcceptanceImg;
 
 namespace CRM_system_backend.Controllers;
 

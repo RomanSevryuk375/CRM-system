@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.Client;
 using CRMSystem.Core.ProjectionModels.Client;
 using CRMSystem.DataAccess.Entites;
+using Shared.Contracts.Client;
 
 namespace CRM_system_backend.MapProfiles;
 

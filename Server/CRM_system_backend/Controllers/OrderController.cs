@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.Order;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.Order;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Order;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.Order;
 
 namespace CRM_system_backend.Controllers;
 

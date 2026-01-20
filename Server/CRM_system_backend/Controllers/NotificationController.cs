@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.Notification;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels.Notification;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.Notification;
 
 namespace CRM_system_backend.Controllers;
 

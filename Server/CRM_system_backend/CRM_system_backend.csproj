@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Shared.csproj" />
     <ProjectReference Include="..\system.Business\CRMSystem.Business.csproj" />
     <ProjectReference Include="..\system.Core\CRMSystem.Core.csproj" />
     <ProjectReference Include="..\system.DataAccess\CRMSystem.DataAccess.csproj" />

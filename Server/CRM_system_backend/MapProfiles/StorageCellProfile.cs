@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using CRM_system_backend.Contracts.StorageCell;
 using CRMSystem.Core.ProjectionModels.StorageCell;
 using CRMSystem.DataAccess.Entites;
+using Shared.Contracts.StorageCell;
 
 namespace CRM_system_backend.MapProfiles;
 

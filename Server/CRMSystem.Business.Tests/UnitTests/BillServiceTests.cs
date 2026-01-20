@@ -1,11 +1,11 @@
 ﻿using CRMSystem.Business.Services;
 using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.Enums;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Bill;
 using FluentAssertions;
 using Moq;
+using Shared.Enums;
 
 namespace CRMSystem.Business.Tests.UnitTests;
 

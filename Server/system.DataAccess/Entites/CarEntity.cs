@@ -1,7 +1,5 @@
 ﻿// Ignore Spelling: Vin
 
-using CRMSystem.Core.Enums;
-
 namespace CRMSystem.DataAccess.Entites;
 
 public class CarEntity
