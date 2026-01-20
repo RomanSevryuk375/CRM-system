@@ -74,6 +74,15 @@ public class WorkerRepository : IWorkerRepository
             .FirstOrDefaultAsync(ct);
     }
 
+    public async Task<WorkerItem?> GetByUserId(long userId, CancellationToken ct)
+    {
+        return await _context.Workers
+            .AsNoTracking()
+            .Where(w => w.UserId == userId)
+            .ProjectTo<WorkerItem>(_mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+
     public async Task<int> GetCount(WorkerFilter filter, CancellationToken ct)
     {
         var query = _context.Workers.AsNoTracking();

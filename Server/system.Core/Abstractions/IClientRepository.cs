@@ -10,6 +10,7 @@ public interface IClientRepository
     Task<int> GetCount(ClientFilter filter, CancellationToken ct);
     Task<List<ClientItem>> GetPaged(ClientFilter filter, CancellationToken ct);
     Task<ClientItem?> GetById(long id, CancellationToken ct);
+    Task<ClientItem?> GetByUserId(long userId, CancellationToken ct);
     Task<long> Update(long id, ClientUpdateModel model, CancellationToken ct);
     Task<bool> Exists(long id, CancellationToken ct);
 }

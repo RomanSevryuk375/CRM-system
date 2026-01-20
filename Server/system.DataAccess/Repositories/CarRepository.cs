@@ -30,7 +30,7 @@ public class CarRepository : ICarRepository
         return query;
     }
 
-    public async Task<List<CarItem>> Get(CarFilter filter, CancellationToken ct)
+    public async Task<List<CarItem>> GetPaged(CarFilter filter, CancellationToken ct)
     {
         var query = _context.Cars.AsNoTracking();
         query = ApplyFilter(query, filter);

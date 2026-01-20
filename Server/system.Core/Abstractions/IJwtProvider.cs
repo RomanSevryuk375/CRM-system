@@ -6,5 +6,5 @@ namespace CRMSystem.Core.Abstractions;
 
 public interface IJwtProvider
 {
-    string GenerateToken(UserItem user);
+    string GenerateToken(UserItem user, long profileId);
 }

@@ -10,6 +10,7 @@ public interface IWorkerRepository
     Task<int> GetCount(WorkerFilter filter, CancellationToken ct);
     Task<List<WorkerItem>> GetPaged(WorkerFilter filter, CancellationToken ct);
     Task<WorkerItem?> GetById(int id, CancellationToken ct);
+    Task<WorkerItem?> GetByUserId(long userId, CancellationToken ct);
     Task<int> Update(int id, WorkerUpdateModel model, CancellationToken ct);
     Task<bool> Exists(int id, CancellationToken ct);
 }

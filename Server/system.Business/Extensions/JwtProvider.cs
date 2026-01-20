@@ -15,10 +15,12 @@ public class JwtProvider : IJwtProvider
     private readonly JwtOptions _options;
 
     public JwtProvider(IOptions<JwtOptions> options) => _options = options.Value;
-    public string GenerateToken(UserItem user)
+
+    public string GenerateToken(UserItem user, long profileId)
     {
         Claim[] claims = [ new("userId", user.Id.ToString()),
-                           new("userRoleId", user.RoleId.ToString())];
+                           new("userRoleId", user.RoleId.ToString()),
+                           new("profileId", profileId.ToString())];
 
         var singinCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),

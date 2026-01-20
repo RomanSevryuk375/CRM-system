@@ -4,6 +4,7 @@ using CRMSystem.Core.ProjectionModels.Skill;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Logging;
+using Shared.Enums;
 
 namespace CRMSystem.Business.Services;
 
@@ -12,23 +13,29 @@ public class SkillService : ISkillService
     private readonly ISkillRepository _skillRepository;
     private readonly ISpecializationRepository _specializationRepository;
     private readonly IWorkerRepository _workerRepository;
+    private readonly IUserContext _userContext;
     private readonly ILogger<SkillService> _logger;
 
     public SkillService(
         ISkillRepository skillRepository,
         ISpecializationRepository specializationRepository,
         IWorkerRepository workerRepository,
+        IUserContext userContext,
         ILogger<SkillService> logger)
     {
         _skillRepository = skillRepository;
         _specializationRepository = specializationRepository;
         _workerRepository = workerRepository;
+        _userContext = userContext;
         _logger = logger;
     }
 
-    public async Task<List<SkillItem>> GetPagedSkills(SkillFilter filter, CancellationToken ct)
+    public async Task<List<SkillItem>> GetSkills(SkillFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting skills start");
+
+        if(_userContext.RoleId != (int)RoleEnum.Manager)
+            filter = filter with { WorkerIds = [(int)_userContext.ProfileId] };
 
         var skills = await _skillRepository.Get(filter, ct);
 

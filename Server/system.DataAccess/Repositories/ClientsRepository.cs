@@ -24,8 +24,8 @@ public class ClientsRepository : IClientRepository
 
     private static IQueryable<ClientEntity> ApplyFilter(IQueryable<ClientEntity> query, ClientFilter filter)
     {
-        if (filter.UserIds != null && filter.UserIds.Any())
-            query = query.Where(c => filter.UserIds.Contains(c.UserId));
+        if (filter.ClientIds != null && filter.ClientIds.Any())
+            query = query.Where(c => filter.ClientIds.Contains(c.Id));
 
         return query;
     }
@@ -74,6 +74,15 @@ public class ClientsRepository : IClientRepository
         return await _context.Clients
             .AsNoTracking()
             .Where(c => c.Id == id)
+            .ProjectTo<ClientItem>(_mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+
+    public async Task<ClientItem?> GetByUserId(long userId, CancellationToken ct)
+    {
+        return await _context.Clients
+            .AsNoTracking()
+            .Where(c => c.UserId == userId)
             .ProjectTo<ClientItem>(_mapper.ConfigurationProvider, ct)
             .FirstOrDefaultAsync(ct);
     }

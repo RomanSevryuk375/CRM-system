@@ -13,17 +13,20 @@ public class CarService : ICarService
     private readonly ICarRepository _carRepository;
     private readonly IClientRepository _clientsRepository;
     private readonly ICarStatusRepository _carStatusRepository;
+    private readonly IUserContext _userContext;
     private readonly ILogger<CarService> _logger;
 
     public CarService(
         ICarRepository carRepository,
         IClientRepository clientsRepository,
         ICarStatusRepository carStatusRepository,
+        IUserContext userContext,
         ILogger<CarService> logger)
     {
         _carRepository = carRepository;
         _clientsRepository = clientsRepository;
         _carStatusRepository = carStatusRepository;
+        _userContext = userContext;
         _logger = logger;
     }
 
@@ -31,7 +34,10 @@ public class CarService : ICarService
     {
         _logger.LogInformation("Car getting success");
 
-        var car = await _carRepository.Get(filter, ct);
+        if (_userContext.RoleId != (int)RoleEnum.Manager)
+            filter = filter with { OwnerIds = [(int)_userContext.ProfileId] };
+
+        var car = await _carRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Car getting success");
 

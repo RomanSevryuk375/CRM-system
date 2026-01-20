@@ -18,6 +18,7 @@ public class WorkProposalService : IWorkProposalService
     private readonly IWorkInOrderRepository _workInOrderRepository;
     private readonly IPartSetRepository _partSetRepository;
     private readonly IBillRepository _billRepository;
+    private readonly IUserContext _userContext;
     private readonly ILogger<WorkProposalService> _logger;
     private readonly IUnitOfWork _unitOfWork;
 
@@ -30,6 +31,7 @@ public class WorkProposalService : IWorkProposalService
         IWorkInOrderRepository workInOrderRepository,
         IPartSetRepository partSetRepository,
         IBillRepository billRepository,
+        IUserContext userContext,
         ILogger<WorkProposalService> logger,
         IUnitOfWork unitOfWork)
     {
@@ -41,6 +43,7 @@ public class WorkProposalService : IWorkProposalService
         _workInOrderRepository = workInOrderRepository;
         _partSetRepository = partSetRepository;
         _billRepository = billRepository;
+        _userContext = userContext;
         _logger = logger;
         _unitOfWork = unitOfWork;
     }
@@ -48,6 +51,9 @@ public class WorkProposalService : IWorkProposalService
     public async Task<List<WorkProposalItem>> GetPagedProposals(WorkProposalFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting proposals start");
+
+        if (_userContext.RoleId != (int)RoleEnum.Manager)
+            filter = filter with { WorkerIds = [(int)_userContext.ProfileId] };
 
         var proposals = await _workProposalRepository.GetPaged(filter, ct);
 

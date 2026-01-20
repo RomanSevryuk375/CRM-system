@@ -1,9 +1,10 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using Microsoft.Extensions.Logging;
+using Shared.Enums;
 
 namespace CRMSystem.Business.Services;
 
@@ -15,6 +16,7 @@ public class WorkInOrderService : IWorkInOrderService
     private readonly IOrderRepository _orderRepository;
     private readonly IWorkRepository _workRepository;
     private readonly IBillRepository _billRepository;
+    private readonly IUserContext _userContext;
     private readonly ILogger<WorkInOrderService> _logger;
 
     public WorkInOrderService(
@@ -24,6 +26,7 @@ public class WorkInOrderService : IWorkInOrderService
         IOrderRepository orderRepository,
         IWorkRepository workRepository,
         IBillRepository billRepository,
+        IUserContext userContext,
         ILogger<WorkInOrderService> logger)
     {
         _workInOrderRepository = workInOrderRepository;
@@ -32,12 +35,16 @@ public class WorkInOrderService : IWorkInOrderService
         _orderRepository = orderRepository;
         _workRepository = workRepository;
         _billRepository = billRepository;
+        _userContext = userContext;
         _logger = logger;
     }
 
     public async Task<List<WorkInOrderItem>> GetPagedWiO(WorkInOrderFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting paged works in order start");
+
+        if (_userContext.RoleId != (int)RoleEnum.Manager)
+            filter = filter with { WorkerIds = [(int)_userContext.ProfileId] };
 
         var works = await _workInOrderRepository.GetPaged(filter, ct);
 

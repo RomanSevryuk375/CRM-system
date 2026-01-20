@@ -1,9 +1,10 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.ProjectionModels.Client;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Client;
 using Microsoft.Extensions.Logging;
+using Shared.Enums;
 
 namespace CRMSystem.Business.Services;
 
@@ -11,17 +12,20 @@ public class ClientService : IClientService
 {
     private readonly IClientRepository _clientRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IUserContext _userContext;
     private readonly ILogger<ClientService> _logger;
     private readonly IUnitOfWork _unitOfWork;
 
     public ClientService(
         IClientRepository clientRepository,
         IUserRepository userRepository,
+        IUserContext userContext,
         ILogger<ClientService> logger,
         IUnitOfWork unitOfWork)
     {
         _clientRepository = clientRepository;
         _userRepository = userRepository;
+        _userContext = userContext;
         _logger = logger;
         _unitOfWork = unitOfWork;
     }
@@ -29,6 +33,9 @@ public class ClientService : IClientService
     public async Task<List<ClientItem>> GetPagedClients(ClientFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting client start");
+
+        if (_userContext.RoleId != (int)RoleEnum.Manager)
+            filter = filter with { ClientIds = [(int)_userContext.ProfileId] };
 
         var client = await _clientRepository.GetPaged(filter, ct);
 

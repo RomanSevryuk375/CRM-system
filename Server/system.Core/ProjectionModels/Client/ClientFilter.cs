@@ -2,7 +2,7 @@
 
 public record ClientFilter
 (
-    IEnumerable<long> UserIds,
+    IEnumerable<long> ClientIds,
     string? SortBy,
     int Page,
     int Limit,

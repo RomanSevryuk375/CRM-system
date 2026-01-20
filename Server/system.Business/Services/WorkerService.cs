@@ -1,9 +1,10 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.ProjectionModels.Worker;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Worker;
 using Microsoft.Extensions.Logging;
+using Shared.Enums;
 
 namespace CRMSystem.Business.Services;
 
@@ -11,17 +12,20 @@ public class WorkerService : IWorkerService
 {
     private readonly IWorkerRepository _workerRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IUserContext _userContext;
     private readonly ILogger<WorkerService> _logger;
     private readonly IUnitOfWork _unitOfWork;
 
     public WorkerService(
         IWorkerRepository workerRepository,
         IUserRepository userRepository,
+        IUserContext userContext,
         ILogger<WorkerService> logger,
         IUnitOfWork unitOfWork)
     {
         _workerRepository = workerRepository;
         _userRepository = userRepository;
+        _userContext = userContext;
         _logger = logger;
         _unitOfWork = unitOfWork;
     }
@@ -29,6 +33,9 @@ public class WorkerService : IWorkerService
     public async Task<List<WorkerItem>> GetPagedWorkers(WorkerFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting worker start");
+
+        if (_userContext.RoleId != (int)RoleEnum.Manager)
+            filter = filter with { WorkerIds = [(int)_userContext.ProfileId] };
 
         var worker = await _workerRepository.GetPaged(filter, ct);
 

@@ -6,6 +6,7 @@ using CRMSystem.Core.ProjectionModels.User;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Logging;
+using Shared.Enums;
 
 namespace CRMSystem.Business.Services;
 
@@ -14,17 +15,23 @@ public class UserService : IUserService
     private readonly IUserRepository _userRepository;
     private readonly IJwtProvider _jwtProvider;
     private readonly IMyPasswordHasher _myPasswordHasher;
+    private readonly IClientRepository _clientRepository;
+    private readonly IWorkerRepository _workerRepository;
     private readonly ILogger<UserService> _logger;
 
     public UserService(
         IUserRepository userRepository,
         IJwtProvider jwtProvider,
         IMyPasswordHasher myPasswordHasher,
+        IClientRepository clientRepository,
+        IWorkerRepository workerRepository,
         ILogger<UserService> logger)
     {
         _userRepository = userRepository;
         _jwtProvider = jwtProvider;
         _myPasswordHasher = myPasswordHasher;
+        _clientRepository = clientRepository;
+        _workerRepository = workerRepository;
         _logger = logger;
     }
 
@@ -42,7 +49,23 @@ public class UserService : IUserService
             throw new UnauthorizedAccessException("Invalid password");
         }
 
-        var token = _jwtProvider.GenerateToken(user);
+        var profileId = 0L;
+        if (user.RoleId == (int)RoleEnum.Client)
+        {
+            var clinet = await _clientRepository.GetByUserId(user.Id, ct)
+                ?? throw new NotFoundException($"Client with user Id{user.Id} not exists");
+
+            profileId = clinet.Id;
+        }
+        else if (user.RoleId == (int)RoleEnum.Worker)
+        {
+            var worker = await _workerRepository.GetByUserId(user.Id, ct)
+                ?? throw new NotFoundException($"Worker with user Id{user.Id} not exists");
+
+            profileId += worker.Id;
+        }
+
+            var token = _jwtProvider.GenerateToken(user, profileId);
 
         _logger.LogInformation("Logging user success");
 

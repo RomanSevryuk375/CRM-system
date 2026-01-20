@@ -23,6 +23,7 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddHttpContextAccessor();
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -63,6 +64,7 @@ public class Program
             redisOptions.Configuration = connetion;
         });
 
+        builder.Services.AddScoped<IUserContext, UserContext>(); 
         builder.Services.AddScoped<IJwtProvider, JwtProvider>();
         builder.Services.AddScoped<IMyPasswordHasher, MyPasswordHasher>();
         builder.Services.AddScoped<IFileService, MinioFileService>();

@@ -1,7 +1,9 @@
-﻿using CRMSystem.Business.Services;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.ProjectionModels.Skill;
 using FluentAssertions;
 using Moq;
@@ -13,6 +15,7 @@ public class SkillServiceTests
     private readonly Mock<ISkillRepository> _skillRepoMock;
     private readonly Mock<ISpecializationRepository> _specRepoMock;
     private readonly Mock<IWorkerRepository> _workerRepoMock;
+    private readonly Mock<IUserContext> _userContextMock;
     private readonly Mock<ILogger<SkillService>> _loggerMock;
     private readonly SkillService _service;
 
@@ -21,12 +24,14 @@ public class SkillServiceTests
         _skillRepoMock = new Mock<ISkillRepository>();
         _specRepoMock = new Mock<ISpecializationRepository>();
         _workerRepoMock = new Mock<IWorkerRepository>();
+        _userContextMock = new Mock<IUserContext>();
         _loggerMock = new Mock<ILogger<SkillService>>();
 
         _service = new SkillService(
             _skillRepoMock.Object,
             _specRepoMock.Object,
             _workerRepoMock.Object,
+            _userContextMock.Object,
             _loggerMock.Object);
     }
 
@@ -122,5 +127,57 @@ public class SkillServiceTests
             It.IsAny<SkillUpdateModel>(),
             It.IsAny<CancellationToken>()),
             Times.Never);
+    }
+
+    [Fact]
+    public async Task GetPagedSkills_WhenUserIsNotManager_ShouldForceFilterByOwnProfileId()
+    {
+        var inputFilter = new SkillFilter(
+            [1, 2, 3],
+            [],
+            null,
+            true);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns(3);
+
+
+        _skillRepoMock.Setup(x => x.Get(
+            It.IsAny<SkillFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<SkillItem>());
+
+        await _service.GetSkills(inputFilter, CancellationToken.None);
+
+        _skillRepoMock.Verify(x => x.Get(
+                It.Is<SkillFilter>(f => f.WorkerIds!.Count() == 1 && f.WorkerIds!.First() == 10),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
+    }
+
+    [Fact]
+    public async Task GetPagedSkills_WhenUserIsManager_ShouldNotForceFilterByOwnProfileId()
+    {
+        var inputFilter = new SkillFilter(
+            [1, 2, 3],
+            [],
+            null,
+            true);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns(1);
+
+
+        _skillRepoMock.Setup(x => x.Get(
+            It.IsAny<SkillFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<SkillItem>());
+
+        await _service.GetSkills(inputFilter, CancellationToken.None);
+
+        _skillRepoMock.Verify(x => x.Get(
+                It.Is<SkillFilter>(f => f.WorkerIds!.Count() != 1 && f.WorkerIds!.First() == 1),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
     }
 }

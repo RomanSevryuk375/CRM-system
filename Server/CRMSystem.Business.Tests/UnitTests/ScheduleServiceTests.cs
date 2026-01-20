@@ -1,7 +1,9 @@
-﻿using CRMSystem.Business.Services;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Schedule;
 using FluentAssertions;
 using Moq;
 
@@ -13,6 +15,7 @@ public class ScheduleServiceTests
     private readonly Mock<IWorkerRepository> _workerRepoMock;
     private readonly Mock<IShiftRepository> _shiftRepoMock;
     private readonly Mock<ILogger<ScheduleService>> _loggerMock;
+    private readonly Mock<IUserContext> _userContextMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly ScheduleService _service;
 
@@ -22,12 +25,14 @@ public class ScheduleServiceTests
         _workerRepoMock = new Mock<IWorkerRepository>();
         _shiftRepoMock = new Mock<IShiftRepository>();
         _loggerMock = new Mock<ILogger<ScheduleService>>();
+        _userContextMock = new Mock<IUserContext>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
 
         _service = new ScheduleService(
             _shceduleRepoMock.Object,
             _workerRepoMock.Object,
             _shiftRepoMock.Object,
+            _userContextMock.Object,
             _loggerMock.Object,
             _unitOfWorkMock.Object);
     }
@@ -118,5 +123,61 @@ public class ScheduleServiceTests
         _unitOfWorkMock.Verify(x => x.RollbackAsync(
                          It.IsAny<CancellationToken>()),
                         Times.Once);
+    }
+
+    [Fact]
+    public async Task GetPagedSchedules_WhenUserIsNotManager_ShouldForceFilterByOwnProfileId()
+    {
+        var inputFilter = new ScheduleFilter(
+            [1, 2, 3],
+            [],
+            null,
+            1,
+            5,
+            true);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns(3);
+
+
+        _shceduleRepoMock.Setup(x => x.GetPaged(
+            It.IsAny<ScheduleFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<ScheduleItem>());
+
+        await _service.GetPagedSchedules(inputFilter, CancellationToken.None);
+
+        _shceduleRepoMock.Verify(x => x.GetPaged(
+                It.Is<ScheduleFilter>(f => f.WorkerIds!.Count() == 1 && f.WorkerIds!.First() == 10),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
+    }
+
+    [Fact]
+    public async Task GetPagedSchedules_WhenUserIsManager_ShouldNotForceFilterByOwnProfileId()
+    {
+        var inputFilter = new ScheduleFilter(
+            [1, 2, 3],
+            [],
+            null,
+            1,
+            5,
+            true);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns(1);
+
+
+        _shceduleRepoMock.Setup(x => x.GetPaged(
+            It.IsAny<ScheduleFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<ScheduleItem>());
+
+        await _service.GetPagedSchedules(inputFilter, CancellationToken.None);
+
+        _shceduleRepoMock.Verify(x => x.GetPaged(
+                It.Is<ScheduleFilter>(f => f.WorkerIds!.Count() != 1 && f.WorkerIds!.First() == 1),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
     }
 }

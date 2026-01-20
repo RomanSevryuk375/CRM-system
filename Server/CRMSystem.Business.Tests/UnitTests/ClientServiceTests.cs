@@ -1,6 +1,8 @@
-﻿using CRMSystem.Business.Services;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Client;
 using FluentAssertions;
 using Moq;
 
@@ -11,6 +13,7 @@ public class ClientServiceTests
     private readonly Mock<IClientRepository> _clientRepoMock;
     private readonly Mock<IUserRepository> _userRepoMock;
     private readonly Mock<ILogger<ClientService>> _loggerMock;
+    private readonly Mock<IUserContext> _userContextMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly ClientService _service;
 
@@ -19,11 +22,13 @@ public class ClientServiceTests
         _clientRepoMock = new Mock<IClientRepository>();
         _userRepoMock = new Mock<IUserRepository>();
         _loggerMock = new Mock<ILogger<ClientService>>();
+        _userContextMock = new Mock<IUserContext>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
 
         _service = new ClientService(
             _clientRepoMock.Object,
             _userRepoMock.Object,
+            _userContextMock.Object,
             _loggerMock.Object,
             _unitOfWorkMock.Object);
     }
@@ -73,5 +78,59 @@ public class ClientServiceTests
         _unitOfWorkMock.Verify(x => x.RollbackAsync(
                          It.IsAny<CancellationToken>()),
                         Times.Once);
+    }
+
+    [Fact]
+    public async Task GetPagedClients_WhenUserIsNotManager_ShouldForceFilterByOwnProfileId()
+    {
+        var inputFilter = new ClientFilter(
+            [1, 2, 3],
+            null,
+            1,
+            5,
+            true);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns(3);
+
+
+        _clientRepoMock.Setup(x => x.GetPaged(
+            It.IsAny<ClientFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<ClientItem>());
+
+        await _service.GetPagedClients(inputFilter, CancellationToken.None);
+
+        _clientRepoMock.Verify(x => x.GetPaged(
+                It.Is<ClientFilter>(f => f.ClientIds!.Count() == 1 && f.ClientIds!.First() == 10),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
+    }
+
+    [Fact]
+    public async Task GetPagedClients_WhenUserIsManager_ShouldNotForceFilterByOwnProfileId()
+    {
+        var inputFilter = new ClientFilter(
+            [1, 2, 3],
+            null,
+            1,
+            5,
+            true);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns(1);
+
+
+        _clientRepoMock.Setup(x => x.GetPaged(
+            It.IsAny<ClientFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<ClientItem>());
+
+        await _service.GetPagedClients(inputFilter, CancellationToken.None);
+
+        _clientRepoMock.Verify(x => x.GetPaged(
+                It.Is<ClientFilter>(f => f.ClientIds!.Count() != 1 && f.ClientIds!.First() == 1),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
     }
 }

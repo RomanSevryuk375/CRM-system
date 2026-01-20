@@ -1,9 +1,11 @@
 ﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Extensions;
 using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Schedule;
 using Microsoft.Extensions.Logging;
+using Shared.Enums;
 
 namespace CRMSystem.Business.Services;
 
@@ -12,6 +14,7 @@ public class ScheduleService : IScheduleService
     private readonly IScheduleRepository _scheduleRepository;
     private readonly IWorkerRepository _workerRepository;
     private readonly IShiftRepository _shiftRepository;
+    private readonly IUserContext _userContext;
     private readonly ILogger<ScheduleService> _logger;
     private readonly IUnitOfWork _unitOfWork;
 
@@ -19,12 +22,14 @@ public class ScheduleService : IScheduleService
         IScheduleRepository scheduleRepository,
         IWorkerRepository workerRepository,
         IShiftRepository shiftRepository,
+        IUserContext userContext,
         ILogger<ScheduleService> logger,
         IUnitOfWork unitOfWork)
     {
         _scheduleRepository = scheduleRepository;
         _workerRepository = workerRepository;
         _shiftRepository = shiftRepository;
+        _userContext = userContext;
         _logger = logger;
         _unitOfWork = unitOfWork;
     }
@@ -32,6 +37,9 @@ public class ScheduleService : IScheduleService
     public async Task<List<ScheduleItem>> GetPagedSchedules(ScheduleFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting schedules start");
+
+        if (_userContext.RoleId != (int)RoleEnum.Manager)
+            filter = filter with { WorkerIds = [(int)_userContext.ProfileId] };
 
         var schedules = await _scheduleRepository.GetPaged(filter, ct);
 

@@ -1,4 +1,5 @@
-﻿using CRMSystem.Business.Services;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
@@ -13,6 +14,7 @@ public class AbsenceServiceTests
 {
     private readonly Mock<IAbsenceRepository> _absenceRepoMock;
     private readonly Mock<IWorkerRepository> _workerRepoMock;
+    private readonly Mock<IUserContext> _userContextMock;
     private readonly Mock<ILogger<AbsenceService>> _loggerMock;
     private readonly AbsenceService _service;
 
@@ -20,11 +22,13 @@ public class AbsenceServiceTests
     {
         _absenceRepoMock = new Mock<IAbsenceRepository>();
         _workerRepoMock = new Mock<IWorkerRepository>();
+        _userContextMock = new Mock<IUserContext>();
         _loggerMock = new Mock<ILogger<AbsenceService>>();
 
         _service = new AbsenceService(
             _absenceRepoMock.Object,
             _workerRepoMock.Object,
+            _userContextMock.Object,
             _loggerMock.Object);
     }
 
@@ -192,5 +196,59 @@ public class AbsenceServiceTests
                             absenceId,
                             It.IsAny<CancellationToken>()), 
                             Times.Once);
+    }
+
+    [Fact]
+    public async Task GetPagedAbsence_WhenUserIsNotManager_ShouldForceFilterByOwnProfileId()
+    {
+        var inputFilter = new AbsenceFilter(
+            [1, 2, 3], 
+            null, 
+            1,
+            5,
+            true);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns(3);
+
+
+        _absenceRepoMock.Setup(x => x.GetPaged(
+            It.IsAny<AbsenceFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<AbsenceItem>());
+
+        await _service.GetPagedAbsence(inputFilter, CancellationToken.None);
+
+        _absenceRepoMock.Verify(x => x.GetPaged(
+                It.Is<AbsenceFilter>(f => f.WorkerIds!.Count() == 1 && f.WorkerIds!.First() == 10),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
+    }
+
+    [Fact]
+    public async Task GetPagedAbsence_WhenUserIsManager_ShouldNotForceFilterByOwnProfileId()
+    {
+        var inputFilter = new AbsenceFilter(
+            [1, 2, 3],
+            null,
+            1,
+            5,
+            true);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns(1);
+
+
+        _absenceRepoMock.Setup(x => x.GetPaged(
+            It.IsAny<AbsenceFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<AbsenceItem>());
+
+        await _service.GetPagedAbsence(inputFilter, CancellationToken.None);
+
+        _absenceRepoMock.Verify(x => x.GetPaged(
+                It.Is<AbsenceFilter>(f => f.WorkerIds!.Count() != 1 && f.WorkerIds!.First() == 1),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
     }
 }

@@ -1,9 +1,10 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.ProjectionModels.Absence;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Absence;
 using Microsoft.Extensions.Logging;
+using Shared.Enums;
 
 namespace CRMSystem.Business.Services;
 
@@ -11,15 +12,18 @@ public class AbsenceService : IAbsenceService
 {
     private readonly IAbsenceRepository _absenceRepository;
     private readonly IWorkerRepository _workerRepository;
+    private readonly IUserContext _userContext;
     private readonly ILogger<AbsenceService> _logger;
 
     public AbsenceService(
         IAbsenceRepository absenceRepository,
         IWorkerRepository workerRepository,
+        IUserContext userContext,
         ILogger<AbsenceService> logger)
     {
         _absenceRepository = absenceRepository;
         _workerRepository = workerRepository;
+        _userContext = userContext;
         _logger = logger;
     }
 
@@ -27,12 +31,14 @@ public class AbsenceService : IAbsenceService
     {
         _logger.LogInformation("Getting absence start");
 
+        if (_userContext.RoleId != (int)RoleEnum.Manager)
+            filter = filter with { WorkerIds = [(int)_userContext.ProfileId] };
+
         var absence = await _absenceRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting absence success");
 
         return absence;
-
     }
 
     public async Task<int> GetCountAbsence(AbsenceFilter filter, CancellationToken ct)
