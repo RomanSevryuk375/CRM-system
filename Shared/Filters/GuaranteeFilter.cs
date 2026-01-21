@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Guarantee;
+﻿namespace Shared.Filters;
 
 public record GuaranteeFilter
 (

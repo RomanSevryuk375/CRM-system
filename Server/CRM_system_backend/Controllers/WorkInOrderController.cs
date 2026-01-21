@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.WorkInOrder;
+using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 

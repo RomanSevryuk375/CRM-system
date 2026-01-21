@@ -1,6 +1,6 @@
 ﻿// Ignore Spelling: Img
 
-namespace CRMSystem.Core.ProjectionModels.AccetanceImg;
+namespace Shared.Filters;
 
 public record AcceptanceImgFilter
 (

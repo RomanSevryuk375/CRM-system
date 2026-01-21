@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Work;
+﻿namespace Shared.Filters;
 
 public record WorkFilter
 (

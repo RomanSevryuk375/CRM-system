@@ -1,9 +1,18 @@
-﻿namespace Shared.Contracts.Client;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.Client;
 
 public record ClientUpdateRequest
-(
-    string? Name,
-    string? Surname,
-    string? PhoneNumber,
-    string? Email
-);
+{
+    [JsonPropertyName("name")]
+    public string? Name { get; init; }
+
+    [JsonPropertyName("surname")]
+    public string? Surname { get; init; }
+
+    [JsonPropertyName("phoneNumber")]
+    public string? PhoneNumber { get; init; }
+
+    [JsonPropertyName("email")]
+    public string? Email { get; init; }
+};

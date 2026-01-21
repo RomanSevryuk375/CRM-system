@@ -4,6 +4,7 @@ using CRMSystem.Core.ProjectionModels.Guarantee;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Logging;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 

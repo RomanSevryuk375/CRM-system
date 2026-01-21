@@ -23,6 +23,9 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddHealthChecks()
+            .AddNpgSql(builder.Configuration.GetConnectionString("SystemDbContext")!)
+            .AddRedis(builder.Configuration.GetConnectionString("Redis")!); // I couldn't implement health check for S3
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -94,6 +97,7 @@ public class Program
         }
 
         app.UseCustomException();
+        app.MapHealthChecks("/health");
 
         app.UseHttpsRedirection();
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Car;
 using Shared.Enums;
+using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 

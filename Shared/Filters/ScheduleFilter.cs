@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Schedule;
+﻿namespace Shared.Filters;
 
 public record ScheduleFilter
 (

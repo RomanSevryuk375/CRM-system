@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Attachment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Attachment;
+using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 

@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Car;
+﻿namespace Shared.Filters;
 
 public record CarFilter
 (

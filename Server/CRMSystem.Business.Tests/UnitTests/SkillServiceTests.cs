@@ -7,6 +7,7 @@ using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.ProjectionModels.Skill;
 using FluentAssertions;
 using Moq;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Tests.UnitTests;
 

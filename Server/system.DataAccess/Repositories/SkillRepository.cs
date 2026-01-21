@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Exceptions;
+using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 

@@ -1,7 +1,12 @@
-﻿namespace Shared.Contracts.Guarantee;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.Guarantee;
 
 public record GuaranteeUpdateRequest
-(
-    string? Description,
-    string? Terms
-);
+{
+    [JsonPropertyName("description")]
+    public string? Description { get; init; }
+
+    [JsonPropertyName("terms")]
+    public string? Terms { get; init; }
+};

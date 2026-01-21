@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Schedule;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Schedule;
+using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 

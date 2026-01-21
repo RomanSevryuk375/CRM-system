@@ -3,6 +3,7 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Work;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Logging;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 

@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Skill;
+﻿namespace Shared.Filters;
 
 public record SkillFilter
 (

@@ -1,6 +1,9 @@
-﻿namespace Shared.Contracts.Attachment;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.Attachment;
 
 public record AttachmentUpdateRequest
-(
-    string? Description
-);
+{
+    [JsonPropertyName("description")]
+    public string? Description { get; init; }
+};

@@ -7,6 +7,7 @@ using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Shared.Enums;
+using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 

@@ -2,6 +2,7 @@
 
 using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.ProjectionModels.AccetanceImg;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Abstractions;
 

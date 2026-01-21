@@ -5,6 +5,7 @@ using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Client;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 

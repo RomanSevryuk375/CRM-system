@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Tax;
+﻿namespace Shared.Filters;
 
 public record TaxFilter
 (

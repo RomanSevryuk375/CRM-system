@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.SupplySet;
+﻿namespace Shared.Filters;
 
 public record SupplySetFilter
 (

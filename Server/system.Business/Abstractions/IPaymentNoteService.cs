@@ -1,6 +1,7 @@
 ﻿using CRMSystem.Core.ProjectionModels.PaymentNote;
 using CRMSystem.Core.Models;
 using Shared.Enums;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Abstractions;
 

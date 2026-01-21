@@ -6,6 +6,7 @@ using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Worker;
 using FluentAssertions;
 using Moq;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Tests.UnitTests;
 

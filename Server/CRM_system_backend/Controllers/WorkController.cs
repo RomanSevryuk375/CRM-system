@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Work;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Work;
+using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
@@ -46,7 +47,7 @@ public class WorkController : ControllerBase
             request.Title,
             request.Category,
             request.Description,
-            request.StandartTime);
+            request.StandardTime);
 
         if (errors is not null && errors.Any())
             return BadRequest(errors);
@@ -64,7 +65,7 @@ public class WorkController : ControllerBase
             request.Title,
             request.Category,
             request.Description,
-            request.StandartTime);
+            request.StandardTime);
 
         var Id = await _workService.UpdateWork(id, model, ct);
 

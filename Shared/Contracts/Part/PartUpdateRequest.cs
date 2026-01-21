@@ -1,12 +1,27 @@
-﻿namespace Shared.Contracts.Part;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.Part;
 
 public record PartUpdateRequest
-(
-    string? OemArticle,
-    string? ManufacturerArticle,
-    string? InternalArticle,
-    string? Description,
-    string? Name,
-    string? Manufacturer,
-    string? Applicability
-);
+{
+    [JsonPropertyName("oemArtiocle")]
+    public string? OemArticle { get; init; }
+
+    [JsonPropertyName("manufacturerArticle")]
+    public string? ManufacturerArticle { get; init; }
+
+    [JsonPropertyName("internalArticle")]
+    public string? InternalArticle { get; init; } = string.Empty;
+
+    [JsonPropertyName("description")]
+    public string? Description { get; init; }
+
+    [JsonPropertyName("name")]
+    public string? Name { get; init; } = string.Empty;
+
+    [JsonPropertyName("manufacturer")]
+    public string? Manufacturer { get; init; } = string.Empty;
+
+    [JsonPropertyName("applicability")]
+    public string? Applicability { get; init; } = string.Empty;
+};

@@ -8,6 +8,7 @@ using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 using CRMSystem.Core.ProjectionModels.AccetanceImg;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 

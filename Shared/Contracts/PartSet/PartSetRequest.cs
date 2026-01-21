@@ -1,10 +1,21 @@
-﻿namespace Shared.Contracts.PartSet;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.PartSet;
 
 public record PartSetRequest
-(
-    long? OrderId,
-    long PositionId,
-    long? ProposalId,
-    decimal Quantity,
-    decimal SoldPrice
-);
+{
+    [JsonPropertyName("orderId")]
+    public long? OrderId { get; init; }
+
+    [JsonPropertyName("positionId")]
+    public long PositionId { get; init; }
+
+    [JsonPropertyName("proposalId")]
+    public long? ProposalId { get; init; }
+
+    [JsonPropertyName("quantity")]
+    public decimal Quantity { get; init; }
+
+    [JsonPropertyName("soldPrice")]
+    public decimal SoldPrice { get; init; }
+};

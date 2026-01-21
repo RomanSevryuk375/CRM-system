@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Expense;
+﻿namespace Shared.Filters;
 
 public record ExpenseFilter
 (

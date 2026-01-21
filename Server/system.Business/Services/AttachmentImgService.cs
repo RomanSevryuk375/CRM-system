@@ -7,6 +7,7 @@ using CRMSystem.Core.ProjectionModels.AttachmentImg;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Logging;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 

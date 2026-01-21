@@ -1,6 +1,6 @@
 ﻿// Ignore Spelling: Img
 
-namespace CRMSystem.Core.ProjectionModels.AttachmentImg;
+namespace Shared.Filters;
 
 public record AttachmentImgFilter
 (

@@ -5,6 +5,7 @@ using CRMSystem.Core.ProjectionModels.Worker;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Worker;
+using Shared.Filters;
 
 
 namespace CRM_system_backend.Controllers;

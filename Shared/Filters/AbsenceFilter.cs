@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Absence;
+﻿namespace Shared.Filters;
 
 public record AbsenceFilter
 (

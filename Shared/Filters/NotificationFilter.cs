@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Notification;
+﻿namespace Shared.Filters;
 
 public record NotificationFilter
 (

@@ -11,9 +11,7 @@ using Testcontainers.PostgreSql;
 
 public class IntegrationTestFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
-        .WithImage("postgres:18")
-        .Build();
+    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder("postgres:18").Build();
     public Respawner Respawner { get; private set; } = default!;
 
 

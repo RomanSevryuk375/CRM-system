@@ -1,13 +1,25 @@
 ﻿using Shared.Enums;
+using System.Text.Json.Serialization;
 
 namespace Shared.Contracts.Notification;
 
 public record NotificationRequest
-(
-    long ClientId,
-    long CarId,
-    NotificationTypeEnum TypeId,
-    NotificationStatusEnum StatusId,
-    string Message,
-    DateTime SendAt
-);
+{
+    [JsonPropertyName("clientId")]
+    public long ClientId { get; init; }
+
+    [JsonPropertyName("carId")]
+    public long CarId { get; init; }
+
+    [JsonPropertyName("statusId")]
+    public NotificationTypeEnum TypeId { get; init; }
+
+    [JsonPropertyName("statusId")]
+    public NotificationStatusEnum StatusId { get; init; }
+
+    [JsonPropertyName("message")]
+    public string Message { get; init; } = string.Empty;
+
+    [JsonPropertyName("sendAt")]
+    public DateTime SendAt { get; init; }
+};

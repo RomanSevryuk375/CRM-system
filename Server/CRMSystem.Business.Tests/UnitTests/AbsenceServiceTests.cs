@@ -7,6 +7,7 @@ using CRMSystem.Core.ProjectionModels.Absence;
 using FluentAssertions;
 using Moq;
 using Shared.Enums;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Tests.UnitTests;
 

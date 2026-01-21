@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Position;
+﻿namespace Shared.Filters;
 
 public record PositionFilter
 (

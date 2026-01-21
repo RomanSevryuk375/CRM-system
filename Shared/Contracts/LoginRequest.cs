@@ -1,7 +1,12 @@
-﻿namespace Shared.Contracts;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts;
 
 public record LoginRequest
-(
-    string Login,
-    string Password
-);
+{
+    [JsonPropertyName("login")]
+    public string Login { get; init; } = string.Empty;
+
+    [JsonPropertyName("password")]
+    public string Password { get; init; } = string.Empty;
+};

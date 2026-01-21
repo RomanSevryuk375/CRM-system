@@ -4,6 +4,7 @@ using CRMSystem.Core.ProjectionModels.Car;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Cached;
 

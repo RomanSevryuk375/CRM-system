@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Client;
+﻿namespace Shared.Filters;
 
 public record ClientFilter
 (

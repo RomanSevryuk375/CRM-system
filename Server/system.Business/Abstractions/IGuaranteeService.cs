@@ -1,5 +1,6 @@
 ﻿using CRMSystem.Core.ProjectionModels.Guarantee;
 using CRMSystem.Core.Models;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Abstractions;
 

@@ -1,7 +1,12 @@
-﻿namespace Shared.Contracts.SupplySet;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.SupplySet;
 
 public record SupplySetUpdateRequest
-(
-    decimal? Quantity,
-    decimal? PurchasePrice
-);
+{
+    [JsonPropertyName("quantity")]
+    public decimal? Quantity { get; init; }
+
+    [JsonPropertyName("purchasePrice")]
+    public decimal? PurchasePrice { get; init; }
+};

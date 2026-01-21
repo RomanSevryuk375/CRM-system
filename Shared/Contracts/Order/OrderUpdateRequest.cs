@@ -1,8 +1,10 @@
 ﻿using Shared.Enums;
+using System.Text.Json.Serialization;
 
 namespace Shared.Contracts.Order;
 
 public record OrderUpdateRequest
-(
-    OrderPriorityEnum PriorityId
-);
+{
+    [JsonPropertyName("priorityId")]
+    public OrderPriorityEnum? PriorityId { get; init; }
+};

@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.PaymentNote;
+﻿namespace Shared.Filters;
 
 public record PaymentNoteFilter
 (

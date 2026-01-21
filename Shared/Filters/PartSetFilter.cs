@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.PartSet;
+﻿namespace Shared.Filters;
 
 public record PartSetFilter
 (

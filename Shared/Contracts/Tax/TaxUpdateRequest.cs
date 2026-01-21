@@ -1,7 +1,12 @@
-﻿namespace Shared.Contracts.Tax;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.Tax;
 
 public record TaxUpdateRequest
-(
-    string? Name,
-    decimal? Rate
-);
+{
+    [JsonPropertyName("name")]
+    public string? Name { get; init; }
+
+    [JsonPropertyName("rate")]
+    public decimal? Rate { get; init; }
+};

@@ -8,6 +8,7 @@ using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
+using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 

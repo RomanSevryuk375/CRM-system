@@ -1,5 +1,6 @@
 ﻿using CRMSystem.Core.ProjectionModels.Client;
 using CRMSystem.Core.Models;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Abstractions;
 

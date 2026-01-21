@@ -6,6 +6,7 @@ using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Schedule;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
+using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 

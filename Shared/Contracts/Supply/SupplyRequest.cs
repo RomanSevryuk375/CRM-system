@@ -1,7 +1,12 @@
-﻿namespace Shared.Contracts.Supply;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.Supply;
 
 public record SupplyRequest
-(
-    int SupplierId,
-    DateOnly Date
-);
+{
+    [JsonPropertyName("supplierId")]
+    public int SupplierId { get; init; }
+
+    [JsonPropertyName("date")]
+    public DateOnly Date { get; init; }
+}

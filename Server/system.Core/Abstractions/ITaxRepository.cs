@@ -1,5 +1,6 @@
 ﻿using CRMSystem.Core.ProjectionModels.Tax;
 using CRMSystem.Core.Models;
+using Shared.Filters;
 
 namespace CRMSystem.Core.Abstractions;
 

@@ -1,7 +1,12 @@
-﻿namespace Shared.Contracts.PartSet;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.PartSet;
 
 public record PartSetUpdateRequest
-(
-    decimal? Quantity,
-    decimal? SoldPrice
-);
+{
+    [JsonPropertyName("quantity")]
+    public decimal? Quantity { get; init; }
+
+    [JsonPropertyName("soldPrice")]
+    public decimal? SoldPrice { get; init; }
+};

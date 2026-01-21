@@ -1,7 +1,12 @@
-﻿namespace Shared.Contracts.StorageCell;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.StorageCell;
 
 public record StorageCellRequest
-(
-    string Rack,
-    string Shelf
-);
+{
+    [JsonPropertyName("rack")]
+    public string Rack { get; init; } = string.Empty;
+
+    [JsonPropertyName("shelf")]
+    public string Shelf { get; init; } = string.Empty;
+};

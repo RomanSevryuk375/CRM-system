@@ -1,8 +1,13 @@
-﻿namespace Shared.Contracts;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts;
 
 public record RoleResponse
 {
+    [JsonPropertyName("id")]
     public int Id { get; init; }
+
+    [JsonPropertyName("name")]
     public string Name { get; init; } = string.Empty;
 };
 

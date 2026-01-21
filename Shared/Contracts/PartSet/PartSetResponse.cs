@@ -1,12 +1,24 @@
-﻿namespace Shared.Contracts.PartSet;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.PartSet;
 
 public record PartSetResponse
 {
+    [JsonPropertyName("id")]
     public long Id { get; init; }
-    public long? OrderId { get; init; }
-    public string Position { get; init; } = string.Empty;
-    public long PositionId { get; init; }
-    public long? ProposalId { get; init; }
-    public decimal Quantity { get; init; }
-    public decimal SoldPrice { get; init; }
+
+    [JsonPropertyName("orderId")]
+    long? OrderId { get; init; }
+
+    [JsonPropertyName("positionId")]
+    long PositionId { get; init; }
+
+    [JsonPropertyName("proposalId")]
+    long? ProposalId { get; init; }
+
+    [JsonPropertyName("quantity")]
+    decimal Quantity { get; init; }
+
+    [JsonPropertyName("soldPrice")]
+    decimal SoldPrice { get; init; }
 };

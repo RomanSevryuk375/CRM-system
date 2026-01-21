@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Attachment;
+﻿namespace Shared.Filters;
 
 public record AttachmentFilter
 (

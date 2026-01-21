@@ -1,11 +1,19 @@
 ﻿using Shared.Enums;
+using System.Text.Json.Serialization;
 
 namespace Shared.Contracts.Expense;
 
 public record ExpenseUpdateRequest
-(
-    DateTime? Date,
-    string? Category,
-    ExpenseTypeEnum? ExpenseTypeId,
-    decimal? Sum
-);
+{
+    [JsonPropertyName("date")]
+    public DateTime? Date { get; init; }
+
+    [JsonPropertyName("category")]
+    public string? Category { get; init; }
+
+    [JsonPropertyName("expenseTypeId")]
+    public ExpenseTypeEnum? ExpenseTypeId { get; init; }
+
+    [JsonPropertyName("sum")]
+    public decimal? Sum { get; init; }
+};

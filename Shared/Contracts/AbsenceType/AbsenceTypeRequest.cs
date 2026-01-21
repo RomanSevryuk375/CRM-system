@@ -1,6 +1,9 @@
-﻿namespace Shared.Contracts.AbsenceType;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Contracts.AbsenceType;
 
 public record AbsenceTypeRequest
-(
-  string Name
-);
+{
+    [JsonPropertyName("name")]
+    public string Name { get; init; } = string.Empty;
+};

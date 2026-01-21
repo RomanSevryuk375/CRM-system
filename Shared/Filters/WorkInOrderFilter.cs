@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.WorkInOrder;
+﻿namespace Shared.Filters;
 
 public record WorkInOrderFilter
 (

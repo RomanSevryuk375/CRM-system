@@ -1,8 +1,8 @@
 ﻿namespace CRMSystemMobile
 {
-    public partial class AppShell : Shell
+    public partial class MainPage : ContentPage
     {
-        public AppShell()
+        public MainPage()
         {
             InitializeComponent();
         }

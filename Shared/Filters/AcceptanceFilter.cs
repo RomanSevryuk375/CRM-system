@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Acceptance;
+﻿namespace Shared.Filters;
 
 public record AcceptanceFilter
 (

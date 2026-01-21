@@ -5,6 +5,7 @@ using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Absence;
 using Microsoft.AspNetCore.Authorization;
+using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
