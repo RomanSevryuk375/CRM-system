@@ -28,6 +28,9 @@ public class BillRepository : IBillRepository
         if (filter.OrderIds != null && filter.OrderIds.Any())
             query = query.Where(b => filter.OrderIds.Contains(b.OrderId));
 
+        if (filter.ClientIds != null && filter.ClientIds.Any())
+            query = query.Where(b => filter.ClientIds.Contains(b.Order!.Car!.OwnerId));
+
         return query;
     }
 

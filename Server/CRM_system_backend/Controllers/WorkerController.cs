@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Worker;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Worker;
 
@@ -24,6 +25,7 @@ public class WorkerController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<WorkerItem>>> GetPagedWorkers([FromQuery] WorkerFilter filter, CancellationToken ct)
     {
         var dto = await _workerService.GetPagedWorkers(filter, ct);
@@ -37,6 +39,7 @@ public class WorkerController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<WorkerItem>> GetWorkerById(int id, CancellationToken ct)
     {
         var response = await _workerService.GetWorkerById(id, ct);
@@ -95,6 +98,7 @@ public class WorkerController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<int>> UpdateWorker(int id, [FromBody] WorkerRequest request, CancellationToken ct)
     {
         var model = new WorkerUpdateModel(
@@ -110,6 +114,7 @@ public class WorkerController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteWorker(int id, CancellationToken ct)
     {
         var result = await _workerService.DeleteWorker(id, ct);

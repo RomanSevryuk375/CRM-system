@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.Client;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Client;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Client;
 
@@ -23,6 +24,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<List<ClientItem>>> GetPagedClient([FromQuery] ClientFilter filter, CancellationToken ct)
     {
         var dto = await _clientService.GetPagedClients(filter, ct);
@@ -36,6 +38,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<List<Client>>> GetClientById(long id, CancellationToken ct)
     {
         var response = await _clientService.GetClientById(id, ct);
@@ -91,6 +94,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<long>> UpdateClient(long id, [FromBody] ClientUpdateRequest request, CancellationToken ct)
     {
         var model = new ClientUpdateModel(
@@ -105,6 +109,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<long>> DeleteClient(long id, CancellationToken ct)
     {
          var Id = await _clientService.DeleteClient(id, ct);

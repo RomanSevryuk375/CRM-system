@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.Guarantee;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Guarantee;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Guarantee;
 
@@ -24,6 +25,7 @@ public class GuaranteeController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<List<GuaranteeItem>>> GetPagedGuarantees([FromQuery]GuaranteeFilter filter, CancellationToken ct)
     {
         var dto = await _guaranteeService.GetPagedGuarantees(filter, ct);
@@ -37,6 +39,7 @@ public class GuaranteeController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> CreateGuarantee(GuaranteeRequest request, CancellationToken ct)
     {
         var (guarantee, errors) = Guarantee.Create(
@@ -56,6 +59,7 @@ public class GuaranteeController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> UpdateGuarantee(long id, GuaranteeUpdateRequest request, CancellationToken ct)
     {
         var model = new GuaranteeUpdateModel(
@@ -68,6 +72,7 @@ public class GuaranteeController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> DeleteGuarantee(long id, CancellationToken ct)
     {
         var Id = await _guaranteeService.DeleteGuarantee(id, ct);

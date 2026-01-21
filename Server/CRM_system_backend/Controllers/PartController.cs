@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Part;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Part;
 
@@ -23,6 +24,7 @@ public class PartController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<PartItem>>> GetPagedParts([FromQuery]PartFilter filter, CancellationToken ct)
     {
         var dto = await _partService.GetPagedParts(filter, ct);
@@ -36,6 +38,7 @@ public class PartController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> CreatePart([FromBody] PartRequest request, CancellationToken ct)
     {
         var (part, errors) = Part.Create(
@@ -58,6 +61,7 @@ public class PartController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> UpdatePart(long id, [FromBody] PartUpdateRequest request, CancellationToken ct)
     {
         var model = new PartUpdateModel(
@@ -75,6 +79,7 @@ public class PartController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> DeletePart(long id, CancellationToken ct)
     {
         var Id = await _partService.DeletePart(id, ct);

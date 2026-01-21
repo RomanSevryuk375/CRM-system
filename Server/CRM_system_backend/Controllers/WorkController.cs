@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.Work;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Work;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Work;
 
@@ -23,6 +24,7 @@ public class WorkController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<WorkItem>>> GetPagedWork([FromQuery] WorkFilter filter, CancellationToken ct)
     {
         var dto = await _workService.GetPagedWork(filter, ct);
@@ -36,6 +38,7 @@ public class WorkController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> CreateWork([FromBody] WorkRequest request, CancellationToken ct)
     {
         var (work, errors) = Work.Create(
@@ -54,6 +57,7 @@ public class WorkController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> UpdateWork(long id, [FromBody] WorkRequest request, CancellationToken ct)
     {
         var model = new WorkUpdateModel(
@@ -68,6 +72,7 @@ public class WorkController : ControllerBase
     }
 
     [HttpDelete("${id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> DeleteWork(long id, CancellationToken ct)
     {
         var Id = await _workService.DeleteWork(id, ct);

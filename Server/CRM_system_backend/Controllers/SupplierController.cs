@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Supplier;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Supplier;
 
@@ -23,6 +24,7 @@ public class SupplierController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<SupplierItem>>> GetSuppliers(CancellationToken ct)
     {
         var dto = await _supplierService.GetSuppliers(ct);
@@ -33,6 +35,7 @@ public class SupplierController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateSupplier ([FromBody] SupplierRequest request, CancellationToken ct)
     {
         var (supplier, errors) = Supplier.Create(
@@ -49,6 +52,7 @@ public class SupplierController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateSupplier(int id, [FromBody] SupplierUpdateRequest request, CancellationToken ct)
     {
         var model = new SupplierUpdateModel(
@@ -61,6 +65,7 @@ public class SupplierController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteSupplier(int id, CancellationToken ct)
     {
         var result = await _supplierService.DeleteSupplier(id, ct);

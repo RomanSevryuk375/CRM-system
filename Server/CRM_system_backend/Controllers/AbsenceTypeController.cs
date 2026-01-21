@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.AbsenceType;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.AbsenceType;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.AbsenceType;
 
@@ -23,6 +24,7 @@ public class AbsenceTypeController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<AbsenceTypeItem>>> GetAllAbsenceType(CancellationToken ct)
     {
         var dto = await _absenceTypeService.GetAllAbsenceType(ct);
@@ -33,6 +35,7 @@ public class AbsenceTypeController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateAbsenceType([FromBody] AbsenceTypeRequest request, CancellationToken ct)
     {
         var (absenceType, errors) = AbsenceType.Create(
@@ -48,6 +51,7 @@ public class AbsenceTypeController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateAbsenceType(int id, [FromBody] AbsenceTypeUpdateRequest request, CancellationToken ct)
     {
         var Id = await _absenceTypeService.UpdateAbsenceType(id, request.Name, ct);
@@ -56,6 +60,7 @@ public class AbsenceTypeController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteAbsenceType(int id, CancellationToken ct)
     {
         var Id = await _absenceTypeService.DeleteAbsenceType(id, ct);

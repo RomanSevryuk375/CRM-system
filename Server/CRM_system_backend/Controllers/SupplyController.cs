@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Supply;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Supply;
 
@@ -23,6 +24,7 @@ public class SupplyController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<SupplyItem>>> GetPagedSupplies([FromQuery]SupplyFilter filter, CancellationToken ct)
     {
         var dto = await _supplyService.GetPagedSupplies(filter, ct);
@@ -36,6 +38,7 @@ public class SupplyController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> CreateSupply(SupplyRequest request, CancellationToken ct)
     {
         var (supply, errors) = Supply.Create(
@@ -52,6 +55,7 @@ public class SupplyController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> DeleteSupply(long id, CancellationToken ct)
     {
         var Id = await _supplyService.DeleteSupply(id, ct);

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.Position;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Position;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Position;
 
@@ -23,6 +24,7 @@ public class PositionController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<PositionItem>>> GetPagedPositions([FromQuery] PositionFilter positionFilter, CancellationToken ct)
     {
         var dto = await _positionSrevice.GetPagedPositions(positionFilter, ct);
@@ -36,6 +38,7 @@ public class PositionController : ControllerBase
     }
 
     [HttpPost("with-part")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> CreatePositionWithPart([FromBody] PositionWithPartRequest request, CancellationToken ct)
     {
         var (part, partErrors) = Part.Create(
@@ -69,6 +72,7 @@ public class PositionController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> UpdatePosition(long id,[FromBody] PositionUpdateRequest request, CancellationToken ct)
     {
         var model = new PositionUpdateModel(
@@ -83,6 +87,7 @@ public class PositionController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> DeletePosition(long id, CancellationToken ct)
     {
         var Id = await _positionSrevice.DeletePosition(id, ct);

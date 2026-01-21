@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.Car;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Car;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Enums;
 using Shared.Contracts.Car;
+using Shared.Enums;
 
 namespace CRM_system_backend.Controllers;
 
@@ -24,6 +25,7 @@ public class CarController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<List<CarItem>>> GetPagedCars([FromQuery]CarFilter filter, CancellationToken ct)
     {
         var dto = await _carService.GetPagedCars(filter, ct);
@@ -37,6 +39,7 @@ public class CarController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<CarItem>> GetCarById(long id, CancellationToken ct)
     {
         var car = await _carService.GetCarById(id, ct);
@@ -45,6 +48,7 @@ public class CarController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<long>> CreateCar([FromBody] CarRequest request, CancellationToken ct)
     {
         Console.WriteLine($"CONTROLLER DEBUG: Recieved JSON mapped to: OwnerId={request.OwnerId}, StatusId={request.StatusId}");
@@ -68,6 +72,7 @@ public class CarController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<long>> UpdateCar(long id, [FromBody]CarUpdateRequest request, CancellationToken ct)
     {
         var model = new CarUpdateModel(
@@ -83,6 +88,7 @@ public class CarController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<long>> DeleteCar(long id, CancellationToken ct)
     {
         var Id = await _carService.DeleteCar(id, ct);

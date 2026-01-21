@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.Notification;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Notification;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Notification;
 
@@ -23,6 +24,7 @@ public class NotificationController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<List<NotificationItem>>> GetPagedNotifications([FromQuery]NotificationFilter filter, CancellationToken ct)
     {
         var dto = await _notificationService.GetPagedNotifications(filter, ct);
@@ -36,6 +38,7 @@ public class NotificationController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> CreateNotification(NotificationRequest request, CancellationToken ct)
     {
         var (notification, errors) = Notification.Create(
@@ -56,6 +59,7 @@ public class NotificationController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> DeleteNotification(long id, CancellationToken ct)
     {
         var Id = await _notificationService.DeleteNotification(id, ct);

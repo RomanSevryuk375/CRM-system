@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.WorkProposal;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.WorkProposal;
 using Shared.Contracts.WorkPropossal;
@@ -24,6 +25,7 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<List<WorkProposalItem>>> GetPagedProposals([FromQuery] WorkProposalFilter filter, CancellationToken ct)
     {
         var dto = await _workPropossalService.GetPagedProposals(filter, ct);
@@ -37,6 +39,7 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<WorkProposalItem>> GetProposalById(long id, CancellationToken ct)
     {
         var dto = await _workPropossalService.GetProposalById(id, ct);
@@ -45,6 +48,7 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> CreateProposal([FromBody] WorkProposalRequest request, CancellationToken ct)
     {
         var (workProposal, errors) = WorkProposal.Create(
@@ -64,6 +68,7 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpPut("{id}/accept")]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<long>> AcceptProposal(long id, CancellationToken ct)
     {
         await _workPropossalService.AcceptProposal(id, ct);
@@ -72,6 +77,7 @@ public class WorkProposalController : ControllerBase
     }
 
     [HttpPut("{id}/reject")]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<long>> RejectProposal(long id, CancellationToken ct)
     {
         await _workPropossalService.RejectProposal(id, ct);
@@ -81,6 +87,7 @@ public class WorkProposalController : ControllerBase
 
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> DeleteWorkProposal(long id, CancellationToken ct)
     {
         var result = await _workPropossalService.DeleteProposal(id, ct);

@@ -4,6 +4,7 @@ using AutoMapper;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.ProjectionModels.AccetanceImg;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.AcceptanceImg;
 
@@ -25,6 +26,7 @@ public class AcceptanceImgController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<AcceptanceImgItem>>> GetAcceptanceIng([FromQuery]AcceptanceImgFilter filter, CancellationToken ct)
     {
         var dto = await _acceptanceImgService.GetAcceptanceIng(filter, ct);
@@ -38,6 +40,7 @@ public class AcceptanceImgController : ControllerBase
     }
 
     [HttpGet("{id}/download")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<IActionResult> DownloadImage(long id, CancellationToken ct)
     {
         var (stream, contentType) = await _acceptanceImgService.GetImageStream(id, ct);
@@ -46,6 +49,7 @@ public class AcceptanceImgController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> CreateAcceptanceImg([FromForm] CreateAcceptanceImgRequest request, CancellationToken ct)
     {
         if (request.File is null || request.File.Length == 0) 
@@ -60,6 +64,7 @@ public class AcceptanceImgController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> UpdateAcceptanceImg(long id, [FromBody] AcceptanceImgUpdateRequest request, CancellationToken ct)
     {
         var Id = await _acceptanceImgService.UpdateAcceptanceImg(id, request.FilePath, request.Description, ct);
@@ -68,6 +73,7 @@ public class AcceptanceImgController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> DeleteAcceptanceImg(long id, CancellationToken ct)
     {
         var Id = await _acceptanceImgService.DeleteAcceptanceImg(id, ct);

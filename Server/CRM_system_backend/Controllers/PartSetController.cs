@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.PartSet;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.PartSet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.PartSet;
 
@@ -23,6 +24,7 @@ public class PartSetController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<List<PartSetItem>>> GetPagedPartSets([FromQuery] PartSetFilter filter, CancellationToken ct)
     {
         var dto = await _partSetService.GetPagedPartSets(filter, ct);
@@ -36,6 +38,7 @@ public class PartSetController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<PartSetItem>> GetPartSetById(long id, CancellationToken ct)
     {
         var response = await _partSetService.GetPartSetById(id, ct);
@@ -44,6 +47,7 @@ public class PartSetController : ControllerBase
     }
 
     [HttpGet("/order/{orderId}")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<List<PartSetItem>>> GetPartSetsByOrderId(long orderId, CancellationToken ct)
     {
         var dto = await _partSetService.GetPartSetsByOrderId(orderId, ct);
@@ -53,7 +57,8 @@ public class PartSetController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost] 
+    [HttpPost]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> AddToPartSet([FromBody] PartSetRequest request, CancellationToken ct)
     {
         var (partSet, errors) = PartSet.Create(
@@ -73,6 +78,7 @@ public class PartSetController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> UpdatePartSet(long id, [FromBody] PartSetUpdateRequest request, CancellationToken ct)
     {
         var model = new PartSetUpdateModel(
@@ -85,6 +91,7 @@ public class PartSetController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> DeleteFromPartSet(long id, CancellationToken ct)
     {
         var Id = await _partSetService.DeleteFromPartSet(id, ct);

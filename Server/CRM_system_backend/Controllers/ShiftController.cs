@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Shift;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Shift;
 
@@ -23,6 +24,7 @@ public class ShiftController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<ShiftItem>>> GetShifts(CancellationToken ct)
     {
         var dto = await _shiftService.GetShifts(ct);
@@ -33,6 +35,7 @@ public class ShiftController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateShift([FromBody] ShiftRequest request, CancellationToken ct)
     {
         var (shift, errors) = Shift.Create(
@@ -50,6 +53,7 @@ public class ShiftController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateShift(int id, [FromBody]ShiftUpdateRequest request, CancellationToken ct)
     {
         var model = new ShiftUpdateModel(
@@ -63,6 +67,7 @@ public class ShiftController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteShift(int id, CancellationToken ct)
     {
         var Id = await _shiftService.DeleteShift(id, ct);

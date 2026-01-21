@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;
 
@@ -22,6 +23,7 @@ public class NotificationStatusController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<NotificationStatusItem>>> GetNotificationStatuses(CancellationToken ct)
     {
         var dto = await _notificationStatusService.GetNotificationStatuses(ct);

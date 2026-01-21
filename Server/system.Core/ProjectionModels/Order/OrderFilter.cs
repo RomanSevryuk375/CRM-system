@@ -6,6 +6,8 @@ public record OrderFilter
     IEnumerable<int>? StatusIds,
     IEnumerable<int>? PriorityIds,
     IEnumerable<long>? CarIds,
+    IEnumerable<long>? ClientIds,
+    IEnumerable<int>? WorkerIds,
     string? SortBy,
     int Page,
     int Limit,

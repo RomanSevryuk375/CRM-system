@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.WorkInOrder;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.WorkInOrder;
 
@@ -23,6 +24,7 @@ public class WorkInOrderController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<List<WorkInOrderItem>>> GetPagedWiO([FromQuery] WorkInOrderFilter filter, CancellationToken ct)
     {
         var dto = await _workInOrderService.GetPagedWiO(filter, ct);
@@ -36,6 +38,7 @@ public class WorkInOrderController : ControllerBase
     }
 
     [HttpGet("order/{orderId}")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<List<WorkInOrderItem>>> GetWiOByOrderId(long orderId, CancellationToken ct)
     {
         var dto = await _workInOrderService.GetWiOByOrderId(orderId, ct);
@@ -46,6 +49,7 @@ public class WorkInOrderController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> CreateWiO([FromBody] WorkInOrderRequest request, CancellationToken ct)
     {
         var (work, errors) = WorkInOrder.Create(
@@ -65,6 +69,7 @@ public class WorkInOrderController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> UpdateWiO(long id, [FromBody] WorkInOrderUpdateRequest request, CancellationToken ct)
     {
         var model = new WorkInOrderUpdateModel(
@@ -78,6 +83,7 @@ public class WorkInOrderController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> DeleteWIO(long id, CancellationToken ct)
     {
         var Id = await _workInOrderService.DeleteWIO(id, ct);

@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.SupplySet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.SupplySet;
 
@@ -23,6 +24,7 @@ public class SupplySetController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<SupplySetItem>>> GetPagedSupplySets([FromQuery] SupplySetFilter filter, CancellationToken ct)
     {
         var dto = await _supplySetService.GetPagedSupplySets(filter, ct);
@@ -36,6 +38,7 @@ public class SupplySetController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> CreateSupplySet([FromBody] SupplySetRequest request, CancellationToken ct)
     {
         var (supplySet, errors) = SupplySet.Create(
@@ -54,6 +57,7 @@ public class SupplySetController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> UpdateSupplySet(long id, [FromBody] SupplySetUpdateRequest request, CancellationToken ct)
     {
         var model = new SupplySetUpdateModel(
@@ -66,6 +70,7 @@ public class SupplySetController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> DeleteSupplySet(long id, CancellationToken ct)
     {
         var Id = await _supplySetService.DeleteSupplySet(id, ct);

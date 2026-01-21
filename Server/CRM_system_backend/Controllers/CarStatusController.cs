@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;
 
@@ -23,6 +24,7 @@ public class CarStatusController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<CarStatusItem>>> GetCarStatuses(CancellationToken ct)
     {
         var dto = await _carStatusService.GetCarStatuses(ct);

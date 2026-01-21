@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Tax;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Tax;
 
@@ -23,6 +24,7 @@ public class TaxController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<TaxItem>>> GetTaxes([FromQuery] TaxFilter filter, CancellationToken ct)
     {
         var dto = await _taxService.GetTaxes(filter, ct);
@@ -33,6 +35,7 @@ public class TaxController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateTax([FromBody] TaxRequest taxRequest, CancellationToken ct)
     {
         var (tax, errors) = Tax.Create(
@@ -50,6 +53,7 @@ public class TaxController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateTax(int id, [FromBody] TaxUpdateRequest request, CancellationToken ct)
     {
         var model = new TaxUpdateModel(
@@ -62,6 +66,7 @@ public class TaxController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteTax(int id, CancellationToken ct)
     {
         var result = await _taxService.DeleteTax(id, ct);

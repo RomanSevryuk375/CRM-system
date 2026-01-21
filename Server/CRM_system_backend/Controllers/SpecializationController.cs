@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Specialization;
 
@@ -24,6 +25,7 @@ public class SpecializationController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<SpecializationItem>>> GetSpecialization(CancellationToken ct)
     {
         var dto = await _specializationService.GetSpecializations(ct);
@@ -34,6 +36,7 @@ public class SpecializationController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateSpecialization([FromBody]SpecializationRequest request, CancellationToken ct)
     {
         var (specialization, errors) = Specialization.Create(
@@ -49,6 +52,7 @@ public class SpecializationController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateSpecialization([FromBody] SpecializationUpdateRequest request, int id, CancellationToken ct)
     {
         var Id = await _specializationService.UpdateSpecialization(id, request.Name, ct);
@@ -57,6 +61,7 @@ public class SpecializationController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteSpecialization(int id, CancellationToken ct)
     {
         var Id = await _specializationService.DeleteSpecialization(id, ct);

@@ -1,7 +1,9 @@
-﻿using CRMSystem.Business.Services;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Order;
 using FluentAssertions;
 using Moq;
 using Shared.Enums;
@@ -16,6 +18,7 @@ public class OrderServiceTests
     private readonly Mock<ICarRepository> _carRepoMock;
     private readonly Mock<IOrderPriorityRepository> _orderPriorityRepoMock;
     private readonly Mock<IBillRepository> _billRepoMock;
+    private readonly Mock<IUserContext> _userContextMock;
     private readonly Mock<ILogger<OrderService>> _loggerRepoMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly OrderService _service;
@@ -27,6 +30,7 @@ public class OrderServiceTests
         _carRepoMock = new Mock<ICarRepository>();
         _orderPriorityRepoMock = new Mock<IOrderPriorityRepository>();
         _billRepoMock = new Mock<IBillRepository>();
+        _userContextMock = new Mock<IUserContext>();
         _loggerRepoMock = new Mock<ILogger<OrderService>>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
 
@@ -36,6 +40,7 @@ public class OrderServiceTests
             _carRepoMock.Object,
             _orderPriorityRepoMock.Object,
             _billRepoMock.Object,
+            _userContextMock.Object,
             _loggerRepoMock.Object,
             _unitOfWorkMock.Object);
 
@@ -436,5 +441,67 @@ public class OrderServiceTests
                         It.IsAny<long>(),
                         It.IsAny<CancellationToken>()),
                         Times.Once);
+    }
+
+    [Fact]
+    public async Task GetPagedOrders_WhenUserIsWorker_ShouldEnforceWorkerIdFilter()
+    {
+        var inputFilter = new OrderFilter(
+            [],
+            [], 
+            [],
+            [],
+            [],
+            [1, 2, 3], 
+            null, 
+            1, 
+            10, 
+            false);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns((int)RoleEnum.Worker);
+
+        _orderRepoMock.Setup(x => x.GetPaged(
+            It.IsAny<OrderFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<OrderItem>());
+
+        await _service.GetPagedOrders(inputFilter, CancellationToken.None);
+
+        _orderRepoMock.Verify(x => x.GetPaged(
+            It.Is<OrderFilter>(f => f.WorkerIds!.Count() == 1 && f.WorkerIds!.First() == 10),
+            It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task GetPagedOrders_WhenUserIsClient_ShouldEnforceClientIdFilter()
+    {
+        var inputFilter = new OrderFilter(
+            [],
+            [],
+            [],
+            [],
+            [1, 2, 3],
+            [],
+            null,
+            1,
+            10,
+            false);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns((int)RoleEnum.Client);
+
+        _orderRepoMock.Setup(x => x.GetPaged(
+            It.IsAny<OrderFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<OrderItem>());
+
+        await _service.GetPagedOrders(inputFilter, CancellationToken.None);
+
+        _orderRepoMock.Verify(x => x.GetPaged(
+            It.Is<OrderFilter>(f => f.ClientIds!.Count() == 1 && f.ClientIds!.First() == 10),
+            It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 }

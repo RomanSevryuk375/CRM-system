@@ -15,6 +15,7 @@ public class OrderService : IOrderService
     private readonly ICarRepository _carRepository;
     private readonly IOrderPriorityRepository _orderPriorityRepository;
     private readonly IBillRepository _billRepository;
+    private readonly IUserContext _userContext;
     private readonly ILogger<OrderService> _logger;
     private readonly IUnitOfWork _unitOfWork;
 
@@ -24,6 +25,7 @@ public class OrderService : IOrderService
         ICarRepository carRepository,
         IOrderPriorityRepository orderPriorityRepository,
         IBillRepository billRepository,
+        IUserContext userContext,
         ILogger<OrderService> logger,
         IUnitOfWork unitOfWork)
     {
@@ -32,6 +34,7 @@ public class OrderService : IOrderService
         _carRepository = carRepository;
         _orderPriorityRepository = orderPriorityRepository;
         _billRepository = billRepository;
+        _userContext = userContext;
         _logger = logger;
         _unitOfWork = unitOfWork;
     }
@@ -39,6 +42,12 @@ public class OrderService : IOrderService
     public async Task<List<OrderItem>> GetPagedOrders(OrderFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting orders start");
+
+        if (_userContext.RoleId == (int)RoleEnum.Worker)
+            filter = filter with { WorkerIds = [(int)_userContext.ProfileId] };
+
+        if (_userContext.RoleId == (int)RoleEnum.Client)
+            filter = filter with { ClientIds = [_userContext.ProfileId] };
 
         var orders = await _orderRepository.GetPaged(filter, ct);
 

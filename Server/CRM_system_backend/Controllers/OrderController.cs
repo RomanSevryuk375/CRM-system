@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Order;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Order;
 
@@ -23,6 +24,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<List<OrderItem>>> GetOrders([FromQuery] OrderFilter filter, CancellationToken ct)
     {
         var dto = await _orderService.GetPagedOrders(filter, ct);
@@ -36,6 +38,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<long>> CreateOrder([FromBody] OrderRequest request, CancellationToken ct)
     {
         var (order, errors) = Order.Create(
@@ -54,6 +57,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost("/with-bill")]
+    [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult<long>> CreateOrderWithBill([FromBody] OrderWithBillRequest request, CancellationToken ct)
     {
         var (order, errorsOrder) = Order.Create(
@@ -83,6 +87,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> UpdateOrder([FromBody] OrderUpdateRequest request, int id, CancellationToken ct)
     {
         var Id = await _orderService.UpdateOrder(id, request.PriorityId, ct);
@@ -91,6 +96,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPatch("close/{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> CloseOrder(long id, CancellationToken ct)
     {
         var Id = await _orderService.CloseOrder(id, ct);
@@ -99,6 +105,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPatch("complete/{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> CompleteOrder(long id, CancellationToken ct)
     {
         var Id = await _orderService.CompleteOrder(id, ct);
@@ -107,6 +114,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> DeleteOrder(long id, CancellationToken ct)
     {
         var result = await _orderService.DeleteOrder(id, ct);

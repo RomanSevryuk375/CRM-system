@@ -1,7 +1,9 @@
-﻿using CRMSystem.Business.Services;
+﻿using CRMSystem.Business.Abstractions;
+using CRMSystem.Business.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Absence;
 using CRMSystem.Core.ProjectionModels.Bill;
 using FluentAssertions;
 using Moq;
@@ -14,6 +16,7 @@ public class BillServiceTests
     private readonly Mock<IBillRepository> _billRepoMock;
     private readonly Mock<IOrderRepository> _orderRepoMock;
     private readonly Mock<IBillStatusRepository> _billStatusRepoMock;
+    private readonly Mock<IUserContext> _userContextMock;
     private readonly Mock<ILogger<BillService>> _loggerMock;
     private readonly BillService _service;
 
@@ -22,12 +25,14 @@ public class BillServiceTests
         _billRepoMock = new Mock<IBillRepository>();
         _orderRepoMock = new Mock<IOrderRepository>();
         _billStatusRepoMock = new Mock<IBillStatusRepository>();
+        _userContextMock = new Mock<IUserContext>();
         _loggerMock = new Mock<ILogger<BillService>>();
 
         _service = new BillService(
             _billRepoMock.Object,
             _orderRepoMock.Object,
             _billStatusRepoMock.Object,
+            _userContextMock.Object,
             _loggerMock.Object);
     }
 
@@ -166,5 +171,61 @@ public class BillServiceTests
                         model,
                         It.IsAny<CancellationToken>()),
                        Times.Never);
+    }
+
+    [Fact]
+    public async Task GetPagedBills_WhenUserIsNotManager_ShouldForceFilterByOwnProfileId()
+    {
+        var inputFilter = new BillFilter(
+            [],
+            [1, 2, 3],
+            null,
+            1,
+            5,
+            true);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns(3);
+
+
+        _billRepoMock.Setup(x => x.GetPaged(
+            It.IsAny<BillFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<BillItem>());
+
+        await _service.GetPagedBills(inputFilter, CancellationToken.None);
+
+        _billRepoMock.Verify(x => x.GetPaged(
+                It.Is<BillFilter>(f => f.ClientIds!.Count() == 1 && f.ClientIds!.First() == 10),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
+    }
+
+    [Fact]
+    public async Task GetPagedBills_WhenUserIsManager_ShouldNotForceFilterByOwnProfileId()
+    {
+        var inputFilter = new BillFilter(
+            [],
+            [1, 2, 3],
+            null,
+            1,
+            5,
+            true);
+
+        _userContextMock.Setup(x => x.ProfileId).Returns(10);
+        _userContextMock.Setup(x => x.RoleId).Returns(1);
+
+
+        _billRepoMock.Setup(x => x.GetPaged(
+            It.IsAny<BillFilter>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<BillItem>());
+
+        await _service.GetPagedBills(inputFilter, CancellationToken.None);
+
+        _billRepoMock.Verify(x => x.GetPaged(
+                It.Is<BillFilter>(f => f.ClientIds!.Count() != 1 && f.ClientIds!.First() == 1),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
     }
 }

@@ -35,7 +35,7 @@ public class ClientService : IClientService
         _logger.LogInformation("Getting client start");
 
         if (_userContext.RoleId != (int)RoleEnum.Manager)
-            filter = filter with { ClientIds = [(int)_userContext.ProfileId] };
+            filter = filter with { ClientIds = [_userContext.ProfileId] };
 
         var client = await _clientRepository.GetPaged(filter, ct);
 

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Schedule;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Schedule;
 
@@ -23,6 +24,7 @@ public class ScheduleController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<ScheduleItem>>> GetPagedSchedules([FromQuery] ScheduleFilter filter, CancellationToken ct)
     {
         var dto = await _scheduleService.GetPagedSchedules(filter, ct);
@@ -36,6 +38,7 @@ public class ScheduleController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateSchedule([FromBody]ScheduleRequest request, CancellationToken ct)
     {
         var (schedule, errors) = Schedule.Create(
@@ -53,6 +56,7 @@ public class ScheduleController : ControllerBase
     }
 
     [HttpPost("with-shift")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateWithShift([FromBody] ScheduleWithShiftRequest request, CancellationToken ct)
     {
         var(schedule, errorsSchedule) = Schedule.Create(
@@ -79,6 +83,7 @@ public class ScheduleController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateSchedule(int id, ScheduleUpdateRequest request, CancellationToken ct)
     {
         var model = new ScheduleUpdateModel(
@@ -91,6 +96,7 @@ public class ScheduleController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteSchedule(int id, CancellationToken ct)
     {
         var Id = await _scheduleService.DeleteSchedule(id, ct);

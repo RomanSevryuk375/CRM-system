@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.Expense;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Expense;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Expense;
 
@@ -23,6 +24,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<ExpenseItem>>> GetPagedExpense([FromQuery] ExpenseFilter filter, CancellationToken ct)
     {
         var dto = await _expenseService.GetPagedExpenses(filter, ct);
@@ -36,6 +38,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> CreateExpense([FromBody] ExpenseRequest request, CancellationToken ct)
     {
         var (expense, errors) = Expense.Create(
@@ -56,6 +59,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> UpdateExpense(int id, [FromBody] ExpenseUpdateRequest request, CancellationToken ct)
     {
         var model = new ExpenseUpdateModel(
@@ -70,6 +74,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> DeleteExpense(long id, CancellationToken ct)
     {
         var result = await _expenseService.DeleteExpense(id, ct);

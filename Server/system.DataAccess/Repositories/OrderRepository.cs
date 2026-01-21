@@ -37,6 +37,12 @@ public class OrderRepository : IOrderRepository
         if (filter.OrderIds != null && filter.OrderIds.Any())
             query = query.Where(o => filter.OrderIds.Contains(o.Id));
 
+        if (filter.ClientIds != null && filter.ClientIds.Any())
+            query = query.Where(o => filter.ClientIds.Contains(o.Car!.OwnerId));
+
+        if (filter.WorkerIds != null && filter.WorkerIds.Any())
+            query = query.Where(o => o.WorksInOrder.Any(w => filter.WorkerIds.Contains(w.WorkerId)));
+
         return query;
     }
 

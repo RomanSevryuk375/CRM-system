@@ -35,7 +35,7 @@ public class CarService : ICarService
         _logger.LogInformation("Car getting success");
 
         if (_userContext.RoleId != (int)RoleEnum.Manager)
-            filter = filter with { OwnerIds = [(int)_userContext.ProfileId] };
+            filter = filter with { OwnerIds = [_userContext.ProfileId] };
 
         var car = await _carRepository.GetPaged(filter, ct);
 

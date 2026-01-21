@@ -4,6 +4,7 @@ using AutoMapper;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.ProjectionModels.AttachmentImg;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.AttachmentImg;
 
@@ -25,6 +26,7 @@ public class AttachmentImgController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<AttachmentImgItem>>> GetPagedAttachmentImg([FromQuery] AttachmentImgFilter filter, CancellationToken ct)
     {
         var dto = await _attachmentImgService.GetPagedAttachmentImg(filter, ct);
@@ -38,6 +40,7 @@ public class AttachmentImgController : ControllerBase
     }
 
     [HttpGet("{id}/download")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<IActionResult> DownloadImage(long id, CancellationToken ct)
     {
         var (stream, contentType) = await _attachmentImgService.GetImageStream(id, ct);
@@ -46,6 +49,7 @@ public class AttachmentImgController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> CreateAttachmentImg([FromBody] AttachmentImgRequest request, CancellationToken ct)
     {
         if(request.File is null || request.File.Length == 0)
@@ -60,6 +64,7 @@ public class AttachmentImgController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> UpdateAttachmentImg(long id, [FromBody] AttachmentImgUpdateRequest request, CancellationToken ct)
     {
         var Id = await _attachmentImgService.UpdateAttachmentImg(id, request.FilePath, request.Description, ct);
@@ -68,6 +73,7 @@ public class AttachmentImgController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> DeleteAttachmentImg(long id, CancellationToken ct)
     {
         var Id = await _attachmentImgService.DeleteAttachmentImg(id, ct);

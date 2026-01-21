@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Attachment;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Attachment;
 
@@ -24,6 +25,7 @@ public class AttachmentController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<AttachmentItem>>> GetPagedAttachments([FromQuery]AttachmentFilter filter, CancellationToken ct)
     {
         var dto = await _attachmentService.GetPagedAttachments(filter, ct);
@@ -37,6 +39,7 @@ public class AttachmentController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> CreateAttachment([FromBody]AttachmentRequest request, CancellationToken ct)
     {
         var (attachment, errors) = Attachment.Create(
@@ -55,6 +58,7 @@ public class AttachmentController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> UpdateAttachment(long id, [FromBody] AttachmentUpdateRequest request, CancellationToken ct)
     {
         var Id = await _attachmentService.UpdateAttachment(id, request.Description, ct);
@@ -63,6 +67,7 @@ public class AttachmentController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> DeletingAttachment(long id, CancellationToken ct)
     {
         var Id = await _attachmentService.DeletingAttachment(id, ct);

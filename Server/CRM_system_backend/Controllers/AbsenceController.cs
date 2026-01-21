@@ -4,6 +4,7 @@ using CRMSystem.Core.ProjectionModels.Absence;
 using CRMSystem.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Absence;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CRM_system_backend.Controllers;
 
@@ -23,6 +24,7 @@ public class AbsenceController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<AbsenceItem>>> GetPagedAbsence(
         [FromQuery] AbsenceFilter filter,
         CancellationToken ct)
@@ -38,6 +40,7 @@ public class AbsenceController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateAbsence(
         [FromBody] AbsenceRequest request,
         CancellationToken ct)
@@ -58,6 +61,7 @@ public class AbsenceController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateAbsence(
         int id, 
         [FromBody] AbsenceUpdateRequest request,
@@ -71,6 +75,7 @@ public class AbsenceController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteAbsence(
         int id,
         CancellationToken ct)

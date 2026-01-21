@@ -13,23 +13,29 @@ public class BillService : IBillService
     private readonly IBillRepository _billRepository;
     private readonly IOrderRepository _orderRepository;
     private readonly IBillStatusRepository _statusRepository;
+    private readonly IUserContext _userContext;
     private readonly ILogger _logger;
 
     public BillService(
         IBillRepository billRepository,
         IOrderRepository orderRepository,
         IBillStatusRepository statusRepository,
+        IUserContext userContext,
         ILogger<BillService> logger)
     {
         _billRepository = billRepository;
         _orderRepository = orderRepository;
         _statusRepository = statusRepository;
+        _userContext = userContext;
         _logger = logger;
     }
 
     public async Task<List<BillItem>> GetPagedBills(BillFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting bills start");
+
+        if (_userContext.RoleId != (int)RoleEnum.Manager)
+            filter = filter with { ClientIds = [_userContext.ProfileId] };
 
         var bill = await _billRepository.GetPaged(filter, ct);
 

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.Acceptance;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Acceptance;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Acceptance;
 
@@ -24,6 +25,7 @@ public class AcceptanceController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<AcceptanceItem>>> GetPagedAcceptance([FromQuery] AcceptanceFilter filter, CancellationToken ct)
     {
         var dto = await _acceptanceService.GetPagedAcceptance(filter, ct);
@@ -37,6 +39,7 @@ public class AcceptanceController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> CreateAcceptance([FromBody] AcceptanceRequest request, CancellationToken ct)
     {
         var (acceptance, errors) = Acceptance.Create(
@@ -60,6 +63,7 @@ public class AcceptanceController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> UpdateAcceptance(long id, [FromBody] AcceptanceUpdateRequest request, CancellationToken ct)
     {
         var model = _mapper.Map<AcceptanceUpdateModel>(request);
@@ -70,6 +74,7 @@ public class AcceptanceController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<long>> DeleteAcceptance(long id, CancellationToken ct)
     {
         var Id = await _acceptanceService.DeleteAcceptance(id, ct);
