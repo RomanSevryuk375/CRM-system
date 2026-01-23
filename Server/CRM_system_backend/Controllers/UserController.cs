@@ -2,13 +2,13 @@
 using CRMSystem.Core.ProjectionModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Contracts;
+using Shared.Contracts.Login;
 using Shared.Contracts.User;
 
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -19,7 +19,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<string>> LoginUser([FromBody] LoginRequest loginRequest, CancellationToken ct)
+    public async Task<ActionResult<LoginResponse>> LoginUser([FromBody] LoginRequest loginRequest, CancellationToken ct)
     {
         var token = await _userService.LoginUser(loginRequest.Login, loginRequest.Password, ct);
         var user = await _userService.GetUsersByLogin(loginRequest.Login, ct);
@@ -35,9 +35,16 @@ public class UserController : ControllerBase
         };
 
         Response.Cookies.Append("jwt", token, cookieOptions);
-        var userId = user.RoleId;
+        var roleId = user.RoleId;
 
-        return Ok(new { Message = "Logged in", Token = token , RoleId = userId});
+        var response = new LoginResponse
+        {
+            Token = token,
+            RoleId = roleId,
+            Message = "Logged in"
+        };
+
+        return Ok(response);
     }
 
     [HttpPost("logout")]
@@ -82,7 +89,7 @@ public class UserController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> DeleteUser (int id, CancellationToken ct)
+    public async Task<ActionResult<long>> DeleteUser(int id, CancellationToken ct)
     {
         var result = await _userService.DeleteUser(id, ct);
 

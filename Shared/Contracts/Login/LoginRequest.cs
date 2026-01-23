@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Shared.Contracts;
+namespace Shared.Contracts.Login;
 
 public record LoginRequest
 {

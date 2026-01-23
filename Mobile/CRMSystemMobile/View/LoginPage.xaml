@@ -1,12 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CRMSystemMobile.MainPage">
+             Shell.NavBarIsVisible="False" 
+             Shell.TabBarIsVisible="False"
+             Shell.FlyoutBehavior="Disabled"
+             xmlns:vm="clr-namespace:CRMSystemMobile.ViewModel"
+             x:DataType="vm:LoginViewModel"
+             x:Class="CRMSystemMobile.LoginPage">
 
-    <VerticalStackLayout BackgroundColor="{StaticResource PrimaryBlue}">
-        <Grid RowDefinitions="*" BackgroundColor="{StaticResource PrimaryBlue}">
+    <VerticalStackLayout BackgroundColor="#112347">
+        <Grid RowDefinitions="*" BackgroundColor="#112347">
             <Ellipse 
-                Fill="{StaticResource CleanWhite}"
+                Fill="#ffffff"
                 WidthRequest="630" 
                 HeightRequest="480"
                 HorizontalOptions="Center"
@@ -25,13 +30,14 @@
                     HeightRequest="50">
                     <Entry 
                         Placeholder="Введите логин"
+                        Text="{Binding UserLogin, Mode=TwoWay}"
                         VerticalOptions="Center"
                         Margin="10,0"
-                        TextColor="{StaticResource CleanWhite}"
+                        TextColor="#ffffff"
                         FontSize="16"/>
                 </Border>
                 <Border
-                    Background="{StaticResource CleanWhite}"
+                    Background="#ffffff"
                     StrokeShape="RoundRectangle 3"
                     Padding="5, 3, 5, 3"
                     HorizontalOptions="Start"
@@ -41,7 +47,7 @@
                     <Label 
                         Text="Логин" 
                         FontSize="14"
-                        TextColor="{StaticResource PrimaryBlue}"/>
+                        TextColor="#112347"/>
                 </Border>
             </Grid>
 
@@ -53,13 +59,14 @@
                     <Entry 
                          IsPassword="True"
                          Placeholder="Введите пароль"
+                         Text="{Binding UserPassword, Mode=TwoWay}"
                          VerticalOptions="Center"
                          Margin="10,0"
-                         TextColor="{StaticResource CleanWhite}"
+                         TextColor="#ffffff"
                          FontSize="16"/>
                 </Border>
                 <Border
-                    Background="{StaticResource CleanWhite}"
+                    Background="#ffffff"
                     StrokeShape="RoundRectangle 3"
                     Padding="5, 3, 5, 3"
                     HorizontalOptions="Start"
@@ -69,23 +76,24 @@
                     <Label 
                         Text="Пароль" 
                         FontSize="14"
-                        TextColor="{StaticResource PrimaryBlue}"/>
+                        TextColor="#112347"/>
                 </Border>
             </Grid>
 
             <Button 
                 Text="Войти" 
-                BackgroundColor="{StaticResource CleanWhite}" 
-                TextColor="{StaticResource PrimaryBlue}"
+                Command="{Binding LoginCommand}"
+                BackgroundColor="#ffffff" 
+                TextColor="#112347"
                 FontSize="16"
                 FontAttributes="Bold"/>
             <Button 
                 Text="Зарегистрироваться" 
-                BackgroundColor ="{StaticResource PrimaryBlue}" 
-                TextColor="{StaticResource CleanWhite}"
+                Command="{Binding GoToRegistrationCommand}"
+                BackgroundColor ="#112347" 
+                TextColor="#ffffff"
                 FontSize="14"
                 FontAttributes="None"/>
-
         </VerticalStackLayout>
     </VerticalStackLayout>
 </ContentPage>

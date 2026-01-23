@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CRMSystemMobile.Services;
+using CRMSystemMobile.View;
+using CRMSystemMobile.ViewModel;
+using CRMSystemMobile.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace CRMSystemMobile
 {
@@ -26,6 +30,14 @@ namespace CRMSystemMobile
                 handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
 #endif
             });
+
+            builder.Services.AddSingleton<HttpClient>();
+            builder.Services.AddSingleton<LoginService>();
+            builder.Services.AddSingleton<AppShell>();
+            builder.Services.AddTransient<LoginViewModel>();
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<RegistrationViewModel>();
+            builder.Services.AddTransient<RegistrationPage>();
 
             return builder.Build();
         }

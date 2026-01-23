@@ -87,6 +87,7 @@ public class Program
         }
         else
         {
+            //app.UseHttpsRedirection();
             app.UseCors("Frontend");
         }
 
@@ -98,8 +99,6 @@ public class Program
 
         app.UseCustomException();
         app.MapHealthChecks("/health");
-
-        app.UseHttpsRedirection();
 
         app.UseAuthentication();
         app.UseAuthorization();
