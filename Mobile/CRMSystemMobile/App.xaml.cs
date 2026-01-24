@@ -1,16 +1,17 @@
-﻿namespace CRMSystemMobile
-{
-    public partial class App : Application
-    {
-        public App(AppShell shell)
-        {
-            InitializeComponent();
-            MainPage = shell;
-        }
+﻿namespace CRMSystemMobile;
 
-        protected override Window CreateWindow(IActivationState? activationState)
-        {
-            return new Window(MainPage);
-        }
+public partial class App : Application
+{
+    private readonly AppShell _shell;
+
+    public App(AppShell shell)
+    {
+        InitializeComponent();
+        _shell = shell;
+    }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        return new Window(_shell);
     }
 }

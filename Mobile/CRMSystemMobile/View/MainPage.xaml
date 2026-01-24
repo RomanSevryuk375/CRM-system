@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CRMSystemMobile.View.MainPage"
+             Shell.NavBarIsVisible="False" 
+             Shell.TabBarIsVisible="False"
+             Shell.FlyoutBehavior="Disabled"
+             xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+             x:DataType="vm:MainViewModel"
+             Title="MainPage">
+    <VerticalStackLayout BackgroundColor="#112347">
+
+        <Grid 
+            RowDefinitions="auto, auto" 
+            ColumnDefinitions="auto, * , auto" 
+            BackgroundColor="#112347"
+            Padding="15, 30, 15, 10">
+
+
+            <Border
+                Grid.Row="0" 
+                Grid.Column="0"
+                HeightRequest="50"
+                WidthRequest="50"
+                BackgroundColor="#ffffff"
+                StrokeShape="RoundRectangle 25">
+                <Label 
+                    Text="СР" 
+                    HorizontalOptions="Center" 
+                    VerticalOptions="Center" 
+                    FontSize="18" 
+                    TextColor="#112347"
+                    FontAttributes="Bold"/>
+            </Border>
+
+            <Border Grid.Row="0"
+                    Grid.Column="1"
+                    HeightRequest="50"
+                    WidthRequest="220" 
+                    Margin="10,0"
+                    BackgroundColor="#1C2D4F" 
+                    StrokeShape="RoundRectangle 25"
+                    StrokeThickness="0"
+                    HorizontalOptions="Center">
+
+                <Grid ColumnDefinitions="*, *">
+
+                    <Button Grid.Column="0"
+                            Text="В работе"
+                            TextColor="#112347"
+                            FontSize="14"
+                            BackgroundColor="#ffffff"
+                            HeightRequest="44"/>
+
+
+                    <Button Grid.Column="1"
+                            Text="Завершенные"
+                            TextColor="#ACACAC"
+                            FontSize="14"
+                            BackgroundColor="Transparent"
+                            HeightRequest="44"/>
+                </Grid>
+            </Border>
+
+            <Border 
+                Grid.Row="0"
+                Grid.Column="2"
+                HeightRequest="50"
+                WidthRequest="50"
+                StrokeShape="RoundRectangle 25"
+                BackgroundColor="#ffffff"
+                StrokeThickness="0">
+                <ImageButton 
+                    Source="show_menu.svg" 
+                    Padding="12"/>
+            </Border>
+
+
+        </Grid>
+
+        <Border BackgroundColor="#213868"
+                Stroke="Transparent"
+                Padding="16" 
+                StrokeShape="RoundRectangle 12"
+                Margin="10">
+            <Grid RowDefinitions="100, Auto" RowSpacing="25">
+
+                <Grid Grid.Row="0" ColumnDefinitions="80, *" ColumnSpacing="16">
+
+                    <Border Grid.Column="0" 
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 8"
+                            HeightRequest="80" 
+                            WidthRequest="80">
+                        <Image Source="car.png" 
+                               Background="Transparent"
+                               Aspect="AspectFit" 
+                               Margin="0"/>
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                        <Label TextColor="#ffffff" 
+                               FontSize="17" 
+                               FontAttributes="Bold">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Mercedes-Benz "/>
+                                    <Span Text="E-classe W124" TextColor="#ffffff"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                        <Label TextColor="#ACACAC" FontSize="14">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Приоритет: "/>
+                                    <Span Text="высокий" TextColor="#ffffff"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                        <Label Text="(1111AA-1)" 
+                               TextColor="#FFFFFF" 
+                               FontSize="14"
+                               Margin="0,4,0,0"/>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Grid Grid.Row="1" ColumnDefinitions="*, Auto" VerticalOptions="End">
+                    <Label Grid.Column="0" 
+                           Text="Дата: 2025. 01. 01" 
+                           TextColor="#ffffff" 
+                           FontSize="15"/>
+
+                    <Label Grid.Column="1" 
+                           Text="Принят" 
+                           TextColor="#FFB347" 
+                           FontSize="16" 
+                           FontAttributes="Bold"/>
+                </Grid>
+            </Grid>
+        </Border>
+
+    </VerticalStackLayout>
+</ContentPage>

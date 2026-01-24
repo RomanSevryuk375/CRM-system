@@ -33,11 +33,15 @@ namespace CRMSystemMobile
 
             builder.Services.AddSingleton<HttpClient>();
             builder.Services.AddSingleton<LoginService>();
+            builder.Services.AddSingleton<RegistrationService>();
             builder.Services.AddSingleton<AppShell>();
+            builder.Services.AddSingleton<App>();
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegistrationViewModel>();
             builder.Services.AddTransient<RegistrationPage>();
+            builder.Services.AddTransient<MainViewModel>();
+            builder.Services.AddTransient<MainPage>();
 
             return builder.Build();
         }

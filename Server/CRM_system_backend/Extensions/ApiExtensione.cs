@@ -38,9 +38,16 @@ public static class ApiExtensions
             {
                 OnMessageReceived = context =>
                 {
-                    var token = context.Request.Cookies["jwt"];
-                    if (!string.IsNullOrEmpty(token))
-                        context.Token = token;
+                    var authHeader = context.Request.Headers.Authorization.ToString();
+                    if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        context.Token = authHeader["Bearer ".Length..].Trim();
+                    }
+                    else if (context.Request.Cookies.TryGetValue("jwt", out var cookieToken))
+                    {
+                        context.Token = cookieToken;
+                    }
+
                     return Task.CompletedTask;
                 }
             };
@@ -50,7 +57,7 @@ public static class ApiExtensions
         {
             options.AddPolicy("AdminUserPolicy", policy =>
             {
-                policy.RequireClaim("userRoleId", "1", "2"); 
+                policy.RequireClaim("userRoleId", "1", "2");
             });
 
             options.AddPolicy("AdminWorkerPolicy", options =>

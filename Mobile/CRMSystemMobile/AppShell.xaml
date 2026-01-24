@@ -18,4 +18,9 @@
         ContentTemplate="{DataTemplate view:RegistrationPage}"
         Route="RegistrationPage" />
 
+    <ShellContent
+        Title="MainPage"
+        ContentTemplate="{DataTemplate view:MainPage}"
+        Route="MainPage" />
+
 </Shell>

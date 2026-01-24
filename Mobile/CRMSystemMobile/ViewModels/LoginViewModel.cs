@@ -7,9 +7,11 @@ namespace CRMSystemMobile.ViewModel;
 
 public partial class LoginViewModel(LoginService loginService) : ObservableObject
 {
-    [ObservableProperty] private string userLogin = "";
+    [ObservableProperty]
+    public partial string UserLogin { get; set; }
 
-    [ObservableProperty] private string userPassword = "";
+    [ObservableProperty]
+    public partial string UserPassword { get; set; }
 
     [RelayCommand]
     private async Task Login()
@@ -22,16 +24,12 @@ public partial class LoginViewModel(LoginService loginService) : ObservableObjec
 
         var response = await loginService.LoginUser(request);
 
-        if (response != null)
-        {
-            //await Shell.Current.GoToAsync("//MainPage");
-        }
+        if (response != null) 
+            await Shell.Current.GoToAsync("//MainPage");
         else
-        {
             await Shell.Current.DisplayAlert("Ошибка", "Неверный логин или пароль", "ОК");
-        }
     }
 
     [RelayCommand]
-    private async Task OnGoToRegistration() => await Shell.Current.GoToAsync("//RegistrationPage");
+    private async Task OnGoToRegistration() => await Shell.Current.GoToAsync("RegistrationPage");
 }

@@ -31,7 +31,7 @@
                  HeightRequest="50">
                     <Entry 
                      Placeholder="Введите имя фамилию"
-                        
+                     Text="{Binding NameSurname, Mode=TwoWay}"
                      VerticalOptions="Center"
                      Margin="10,0"
                      TextColor="#ffffff"
@@ -58,9 +58,8 @@
                  VerticalOptions="End"
                  HeightRequest="50">
                     <Entry 
-                      IsPassword="True"
                       Placeholder="Введите номер телефона"
-
+                      Text="{Binding ClientPhoneNumber, Mode=TwoWay}"
                       VerticalOptions="Center"
                       Margin="10,0"
                       TextColor="#ffffff"
@@ -88,7 +87,7 @@
                  HeightRequest="50">        
                     <Entry 
                      Placeholder="Введите почту"
-            
+                     Text="{Binding ClientEmail, Mode=TwoWay}"
                      VerticalOptions="Center"
                      Margin="10,0"
                      TextColor="#ffffff"
@@ -115,9 +114,8 @@
                  VerticalOptions="End"
                  HeightRequest="50">
                     <Entry 
-                     IsPassword="True"
                      Placeholder="Введите логин"
-
+                     Text="{Binding UserLogin, Mode=TwoWay}"
                      VerticalOptions="Center"
                      Margin="10,0"
                      TextColor="#ffffff"
@@ -146,7 +144,7 @@
                     <Entry 
                      IsPassword="True"
                      Placeholder="Введите пароль"
-
+                     Text="{Binding UserPassword, Mode=TwoWay}"
                      VerticalOptions="Center"
                      Margin="10,0"
                      TextColor="#ffffff"
@@ -171,7 +169,7 @@
 
             <Button 
              Text="Зарегистрироваться " 
-
+             Command="{Binding RegisterCommand}"
              BackgroundColor="#ffffff" 
              TextColor="#112347"
              FontSize="16"
