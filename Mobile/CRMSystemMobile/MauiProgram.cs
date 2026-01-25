@@ -1,4 +1,5 @@
-﻿using CRMSystemMobile.Services;
+﻿using CRMSystemMobile.Extentions;
+using CRMSystemMobile.Services;
 using CRMSystemMobile.View;
 using CRMSystemMobile.ViewModel;
 using CRMSystemMobile.ViewModels;
@@ -31,9 +32,22 @@ namespace CRMSystemMobile
 #endif
             });
 
-            builder.Services.AddSingleton<HttpClient>();
-            builder.Services.AddSingleton<LoginService>();
-            builder.Services.AddSingleton<RegistrationService>();
+            builder.Services.AddTransient<AuthHttpMessageHandler>();
+            builder.Services.AddSingleton<IdentityService>();
+
+            builder.Services.AddHttpClient<OrderService>(client =>
+            {
+                client.BaseAddress = new Uri("http://192.168.100.52:5066/");
+            })
+            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services.AddHttpClient<LoginService>(client =>
+            {
+                client.BaseAddress = new Uri("http://192.168.100.52:5066/");
+            });
+            builder.Services.AddHttpClient<RegistrationService>(client =>
+            {
+                client.BaseAddress = new Uri("http://192.168.100.52:5066/");
+            });
             builder.Services.AddSingleton<AppShell>();
             builder.Services.AddSingleton<App>();
             builder.Services.AddTransient<LoginViewModel>();

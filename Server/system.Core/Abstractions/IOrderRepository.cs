@@ -1,6 +1,7 @@
 ﻿using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Order;
 using Shared.Enums;
+using Shared.Filters;
 
 namespace CRMSystem.Core.Abstractions;
 

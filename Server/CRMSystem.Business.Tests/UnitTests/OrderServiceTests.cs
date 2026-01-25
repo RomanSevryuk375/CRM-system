@@ -7,6 +7,7 @@ using CRMSystem.Core.ProjectionModels.Order;
 using FluentAssertions;
 using Moq;
 using Shared.Enums;
+using Shared.Filters;
 using Order = CRMSystem.Core.Models.Order;
 
 namespace CRMSystem.Business.Tests.UnitTests;

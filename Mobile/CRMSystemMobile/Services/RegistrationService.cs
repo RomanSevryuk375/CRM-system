@@ -9,7 +9,7 @@ public class RegistrationService(HttpClient httpClient)
 {
     public async Task<bool> RegisterUser(ClientRegisterRequest request)
     {
-        string url = $"{ApiConfig.BaseUrl}/Client/with-user";
+        string url = $"api/Client/with-user";
 
         try
         {

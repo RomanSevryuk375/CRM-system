@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels.Order;
+﻿namespace Shared.Filters;
 
 public record OrderFilter
 (

@@ -9,7 +9,7 @@ public class LoginService(HttpClient httpClient)
 {
     public async Task<LoginResponse?> LoginUser(LoginRequest request)
     {
-        string url = $"{ApiConfig.BaseUrl}/User/login";
+        string url = $"api/User/login";
 
         try
         {

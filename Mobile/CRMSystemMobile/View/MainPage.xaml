@@ -6,6 +6,7 @@
              Shell.TabBarIsVisible="False"
              Shell.FlyoutBehavior="Disabled"
              xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+             xmlns:contracts="clr-namespace:Shared.Contracts.Order;assembly=Shared"
              x:DataType="vm:MainViewModel"
              Title="MainPage">
     <VerticalStackLayout BackgroundColor="#112347">
@@ -50,6 +51,8 @@
                             TextColor="#112347"
                             FontSize="14"
                             BackgroundColor="#ffffff"
+                            Command="{Binding SelectTabCommand}"
+                            CommandParameter="InProgress"
                             HeightRequest="44"/>
 
 
@@ -57,6 +60,8 @@
                             Text="Завершенные"
                             TextColor="#ACACAC"
                             FontSize="14"
+                            Command="{Binding SelectTabCommand}"
+                            CommandParameter="Completed"
                             BackgroundColor="Transparent"
                             HeightRequest="44"/>
                 </Grid>
@@ -78,68 +83,78 @@
 
         </Grid>
 
-        <Border BackgroundColor="#213868"
-                Stroke="Transparent"
-                Padding="16" 
-                StrokeShape="RoundRectangle 12"
-                Margin="10">
-            <Grid RowDefinitions="100, Auto" RowSpacing="25">
-
-                <Grid Grid.Row="0" ColumnDefinitions="80, *" ColumnSpacing="16">
-
-                    <Border Grid.Column="0" 
+        <CollectionView 
+            ItemsSource="{Binding Orders}"
+            RemainingItemsThreshold="2"
+            RemainingItemsThresholdReachedCommand="{Binding LoadNextPageCommand}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="contracts:OrderResponse">
+                    <Border BackgroundColor="#213868"
                             Stroke="Transparent"
-                            StrokeShape="RoundRectangle 8"
-                            HeightRequest="80" 
-                            WidthRequest="80">
-                        <Image Source="car.png" 
-                               Background="Transparent"
-                               Aspect="AspectFit" 
-                               Margin="0"/>
+                            Padding="16" 
+                            StrokeShape="RoundRectangle 12"
+                            Margin="10">
+                        <Grid RowDefinitions="100, Auto" RowSpacing="25">
+
+                            <Grid Grid.Row="0" ColumnDefinitions="80, *" ColumnSpacing="16">
+
+                                <Border Grid.Column="0" 
+                                        Stroke="Transparent"
+                                        StrokeShape="RoundRectangle 8"
+                                        HeightRequest="80" 
+                                        WidthRequest="80">
+                                    <Image Source="car.png" 
+                                           Background="Transparent"
+                                           Aspect="AspectFit" 
+                                           Margin="0"/>
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label TextColor="#ffffff" 
+                                           FontSize="17" 
+                                           FontAttributes="Bold">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding Car}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label TextColor="#ACACAC" FontSize="14">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Приоритет: "/>
+                                                <Span Text="{Binding Priority}" TextColor="#ffffff"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <Grid Grid.Row="1" ColumnDefinitions="*, Auto" VerticalOptions="End">
+                                <Label Grid.Column="0" 
+                                       Text="{Binding Date}" 
+                                       TextColor="#ffffff" 
+                                       FontSize="15"/>
+
+                                <Label Grid.Column="1" 
+                                       Text="{Binding Status}" 
+                                       TextColor="#FFB347" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold"/>
+                            </Grid>
+                        </Grid>
                     </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+            <CollectionView.Footer>
+                <ActivityIndicator IsRunning="{Binding IsLoadingMore}" 
+                           IsVisible="{Binding IsLoadingMore}"
+                           Color="#112347"
+                           Margin="10" />
+            </CollectionView.Footer>
 
-                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                        <Label TextColor="#ffffff" 
-                               FontSize="17" 
-                               FontAttributes="Bold">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="Mercedes-Benz "/>
-                                    <Span Text="E-classe W124" TextColor="#ffffff"/>
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
-
-                        <Label TextColor="#ACACAC" FontSize="14">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="Приоритет: "/>
-                                    <Span Text="высокий" TextColor="#ffffff"/>
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
-
-                        <Label Text="(1111AA-1)" 
-                               TextColor="#FFFFFF" 
-                               FontSize="14"
-                               Margin="0,4,0,0"/>
-                    </VerticalStackLayout>
-                </Grid>
-
-                <Grid Grid.Row="1" ColumnDefinitions="*, Auto" VerticalOptions="End">
-                    <Label Grid.Column="0" 
-                           Text="Дата: 2025. 01. 01" 
-                           TextColor="#ffffff" 
-                           FontSize="15"/>
-
-                    <Label Grid.Column="1" 
-                           Text="Принят" 
-                           TextColor="#FFB347" 
-                           FontSize="16" 
-                           FontAttributes="Bold"/>
-                </Grid>
-            </Grid>
-        </Border>
-
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>
