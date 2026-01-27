@@ -19,6 +19,15 @@ public partial class MainViewModel(OrderService orderService) : ObservableObject
     [ObservableProperty]
     public partial bool IsLoadingMore { get; set; }
 
+    [ObservableProperty]
+    public partial bool IsMenuSheetOpen { get; set; } 
+
+    [RelayCommand]
+    private void ToggleMenuSheet()
+    {
+        IsMenuSheetOpen = !IsMenuSheetOpen;
+    }
+
     [RelayCommand]
     private async Task SelectTab(string tabName)
     {
