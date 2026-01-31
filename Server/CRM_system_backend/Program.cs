@@ -6,6 +6,7 @@ using CRMSystem.Business.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.DataAccess;
 using CRMSystem.DataAccess.Extensions;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -67,7 +68,7 @@ public class Program
             redisOptions.Configuration = connetion;
         });
 
-        builder.Services.AddScoped<IUserContext, UserContext>(); 
+        builder.Services.AddScoped<IUserContext, UserContext>();
         builder.Services.AddScoped<IJwtProvider, JwtProvider>();
         builder.Services.AddScoped<IMyPasswordHasher, MyPasswordHasher>();
         builder.Services.AddScoped<IFileService, MinioFileService>();
@@ -75,6 +76,10 @@ public class Program
         builder.Services.AddRepositories();
         builder.Services.AddServices();
         builder.Services.AddApiAuthentication(builder.Configuration);
+
+        builder.Services.AddDataProtection()
+            .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"))
+            .SetApplicationName("AUTOService");
 
         var app = builder.Build();
 
@@ -107,7 +112,7 @@ public class Program
 
         app.Run();
 
-        
+
     }
 }
 
