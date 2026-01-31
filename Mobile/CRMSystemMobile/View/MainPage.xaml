@@ -26,8 +26,11 @@
                     WidthRequest="50"
                     BackgroundColor="#ffffff"
                     StrokeShape="RoundRectangle 25">
-                    <Label 
-                        Text="СР" 
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToProfileCommand}" />
+                    </Border.GestureRecognizers>
+                    <Label
+                        Text="{Binding UserInitials}"
                         HorizontalOptions="Center" 
                         VerticalOptions="Center" 
                         FontSize="18" 
@@ -160,61 +163,65 @@
             </CollectionView>
         </VerticalStackLayout>
 
-        <!-- Выезжающее меню -->
-        <Grid Grid.Row="0" IsVisible="{Binding IsMenuSheetOpen}" BackgroundColor="#0000007F">
-
-            <Border Grid.Row="0"
+        <Grid Grid.Row="0" IsVisible="{Binding IsMenuSheetOpen}" BackgroundColor="Transparent">
+            <Grid RowDefinitions="*, Auto">
+                <BoxView Grid.Row="0" BackgroundColor="#80000000">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleMenuSheetCommand}" />
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+                <Border Grid.Row="1"
                         HeightRequest="{OnPlatform Default=350}" 
                         VerticalOptions="End" 
                         BackgroundColor="#1C2D4F" 
                         StrokeThickness="0">
 
-                <Grid RowDefinitions="Auto, *, Auto" 
-                      RowSpacing="10" 
-                      Padding="20, 0, 20, 20">
+                    <Grid RowDefinitions="Auto, *, Auto" 
+                          RowSpacing="10" 
+                          Padding="20, 0, 20, 20">
 
 
-                    <StackLayout Grid.Row="1" 
-                                 Spacing="10">
-                        <Button Text="Мои авто" 
-                                Command="{Binding NavigateToCommand}" 
-                                CommandParameter="MyCarsPage" 
-                                BackgroundColor="Transparent" 
-                                TextColor="White" 
-                                HorizontalOptions="Fill"/>
-                        
-                        <Button Text="Заказы" 
-                                Command="{Binding NavigateToCommand}" 
-                                CommandParameter="OrdersPage" 
-                                BackgroundColor="Transparent" 
-                                TextColor="White" 
-                                HorizontalOptions="Fill"/>
-                        
-                        <Button Text="История" 
-                                Command="{Binding NavigateToCommand}" 
-                                BackgroundColor="Transparent" 
-                                TextColor="White" 
-                                HorizontalOptions="Fill"/>
-                        
-                        <Button Text="Счета" 
-                                Command="{Binding NavigateToCommand}" 
-                                BackgroundColor="Transparent" 
-                                TextColor="White" 
-                                HorizontalOptions="Fill"/>
-                        
-                    </StackLayout>
+                        <StackLayout Grid.Row="1" 
+                                     Spacing="10">
+                            <Button Text="Мои авто" 
+                                    Command="{Binding NavigateToCommand}" 
+                                    CommandParameter="MyCarsPage" 
+                                    BackgroundColor="Transparent" 
+                                    TextColor="White" 
+                                    HorizontalOptions="Fill"/>
+                            
+                            <Button Text="Заказы" 
+                                    Command="{Binding NavigateToCommand}" 
+                                    CommandParameter="OrdersPage" 
+                                    BackgroundColor="Transparent" 
+                                    TextColor="White" 
+                                    HorizontalOptions="Fill"/>
+                            
+                            <Button Text="История" 
+                                    Command="{Binding NavigateToCommand}" 
+                                    BackgroundColor="Transparent" 
+                                    TextColor="White" 
+                                    HorizontalOptions="Fill"/>
+                            
+                            <Button Text="Счета" 
+                                    Command="{Binding NavigateToCommand}" 
+                                    BackgroundColor="Transparent" 
+                                    TextColor="White" 
+                                    HorizontalOptions="Fill"/>
+                            
+                        </StackLayout>
 
 
-                    <Button Grid.Row="2" 
-                                Text="Выйти" 
-                                TextColor="Red"
-                                Command="{Binding LogoutCommand}"
-                                BackgroundColor="Transparent" 
-                                HorizontalOptions="Center" />
-                </Grid>
-                
-            </Border>
-            
+                        <Button Grid.Row="2" 
+                                    Text="Выйти" 
+                                    TextColor="Red"
+                                    Command="{Binding LogoutCommand}"
+                                    BackgroundColor="Transparent" 
+                                    HorizontalOptions="Center" />
+                    </Grid>
+                    
+                </Border>
+            </Grid>
         </Grid>
     </Grid>
 </ContentPage>

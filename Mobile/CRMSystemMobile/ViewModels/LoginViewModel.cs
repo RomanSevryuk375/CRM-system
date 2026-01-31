@@ -13,6 +13,19 @@ public partial class LoginViewModel(LoginService loginService) : ObservableObjec
     [ObservableProperty]
     public partial string UserPassword { get; set; }
 
+    [ObservableProperty]
+    private bool _isPasswordHidden = true;
+
+    [ObservableProperty]
+    private string _passwordIcon = "eye_hide.png";
+
+    [RelayCommand]
+    private void TogglePassword()
+    {
+        IsPasswordHidden = !IsPasswordHidden;
+        PasswordIcon = IsPasswordHidden ? "eye_hide.png" : "visible_hide.png";
+    }
+
     [RelayCommand]
     private async Task Login()
     {
@@ -24,7 +37,7 @@ public partial class LoginViewModel(LoginService loginService) : ObservableObjec
 
         var response = await loginService.LoginUser(request);
 
-        if (response != null) 
+        if (response != null)
             await Shell.Current.GoToAsync("//MainPage");
         else
             await Shell.Current.DisplayAlert("Ошибка", "Неверный логин или пароль", "ОК");

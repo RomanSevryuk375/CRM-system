@@ -23,5 +23,5 @@ public record ScheduleWithShiftRequest
     public TimeOnly StartAt { get; init; }
 
     [JsonPropertyName("endAt")]
-    public TimeOnly EndAt{ get; init; }
+    public TimeOnly EndAt { get; init; }
 };

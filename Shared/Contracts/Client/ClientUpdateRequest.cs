@@ -4,6 +4,14 @@ namespace Shared.Contracts.Client;
 
 public record ClientUpdateRequest
 {
+    public ClientUpdateRequest(string name, string surname, string phoneNumber, string email)
+    {
+        Name = name;
+        Surname = surname;
+        PhoneNumber = phoneNumber;
+        Email = email;
+    }
+
     [JsonPropertyName("name")]
     public string? Name { get; init; }
 

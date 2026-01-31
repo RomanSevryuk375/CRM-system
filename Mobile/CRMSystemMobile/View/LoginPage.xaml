@@ -22,7 +22,7 @@
             </VerticalStackLayout>
         </Grid>
 
-        <VerticalStackLayout Padding="40" Spacing="15" Margin="0, 50, 0 ,0">
+        <VerticalStackLayout Padding="40" Spacing="15" Margin="0, 20, 0 ,0">
             <Grid Margin="0,5">
                 <Border 
                     StrokeShape="RoundRectangle 5"
@@ -34,7 +34,9 @@
                         VerticalOptions="Center"
                         Margin="10,0"
                         TextColor="#ffffff"
-                        FontSize="16"/>
+                        FontSize="16"
+                        ReturnType="Next"
+                        Completed="OnLoginCompleted"/>
                 </Border>
                 <Border
                     Background="#ffffff"
@@ -56,14 +58,30 @@
                     StrokeShape="RoundRectangle 5"
                     VerticalOptions="End"
                     HeightRequest="50">
-                    <Entry 
-                         IsPassword="True"
-                         Placeholder="Введите пароль"
-                         Text="{Binding UserPassword, Mode=TwoWay}"
-                         VerticalOptions="Center"
-                         Margin="10,0"
-                         TextColor="#ffffff"
-                         FontSize="16"/>
+                    <Grid ColumnDefinitions="*, 40">
+                        <Entry
+                            x:Name="PasswordEntry"
+                            Grid.Column="0"
+                            IsPassword="{Binding IsPasswordHidden}"
+                            Placeholder="Введите пароль"
+                            Text="{Binding UserPassword, Mode=TwoWay}"
+                            VerticalOptions="Center"
+                            Margin="10,0,0,0"
+                            TextColor="#ffffff"
+                            FontSize="16"
+                            ReturnType="Go"
+                            ReturnCommand="{Binding LoginCommand}"/>
+                        
+                        <ImageButton Grid.Column="1"
+                            Command="{Binding TogglePasswordCommand}"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            HeightRequest="10"
+                            WidthRequest="10"
+                            Margin="-10, 0,0,0"
+                            Source="{Binding PasswordIcon}">
+                        </ImageButton>
+                    </Grid>
                 </Border>
                 <Border
                     Background="#ffffff"

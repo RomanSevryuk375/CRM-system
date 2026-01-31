@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+             x:Class="CRMSystemMobile.View.ProfilePage"
+             x:DataType="vm:ProfileViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#112347">
+
+    <Grid RowDefinitions="Auto, *">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Padding="10,10" HeightRequest="60">
+            <ImageButton Source="back_icon.png" 
+                         Command="{Binding GoBackCommand}"
+                         HorizontalOptions="Start" 
+                         HeightRequest="24" WidthRequest="24">
+            </ImageButton>
+
+            <Label Text="Профиль" 
+                   TextColor="White" 
+                   FontSize="20"
+                   Margin="0,0,45,0"
+                   FontAttributes="Bold" 
+                   VerticalOptions="Center" 
+                   HorizontalOptions="Center" 
+                   Grid.Column="1"/>
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="20" Padding="30">
+
+                <!-- Аватарка (Инициалы) -->
+                <Border HeightRequest="100" WidthRequest="100" 
+                        StrokeShape="RoundRectangle 50"
+                        BackgroundColor="White"
+                        HorizontalOptions="Center"
+                        StrokeThickness="0">
+                    <Label Text="{Binding Initials}" 
+                           TextColor="#112347" 
+                           FontSize="40" 
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center"/>
+                </Border>
+
+                <!-- Поля ввода -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Имя" TextColor="#ACACAC" FontSize="12"/>
+                    <Border StrokeShape="RoundRectangle 5" HeightRequest="45" BackgroundColor="#213868" StrokeThickness="0">
+                        <Entry Text="{Binding Name}" TextColor="White" Margin="10,0"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Фамилия" TextColor="#ACACAC" FontSize="12"/>
+                    <Border StrokeShape="RoundRectangle 5" HeightRequest="45" BackgroundColor="#213868" StrokeThickness="0">
+                        <Entry Text="{Binding Surname}" TextColor="White" Margin="10,0"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Телефон" TextColor="#ACACAC" FontSize="12"/>
+                    <Border StrokeShape="RoundRectangle 5" HeightRequest="45" BackgroundColor="#213868" StrokeThickness="0">
+                        <Entry Text="{Binding PhoneNumber}" TextColor="White" Margin="10,0" Keyboard="Telephone"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Email" TextColor="#ACACAC" FontSize="12"/>
+                    <Border StrokeShape="RoundRectangle 5" HeightRequest="45" BackgroundColor="#213868" StrokeThickness="0">
+                        <Entry Text="{Binding Email}" TextColor="White" Margin="10,0" Keyboard="Email"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Кнопки -->
+                <Button Text="Сохранить изменения" 
+                        Command="{Binding SaveProfileCommand}"
+                        BackgroundColor="#3296F8" 
+                        TextColor="White"
+                        CornerRadius="8"
+                        FontAttributes="Bold"
+                        Margin="0,20,0,0"/>
+
+                <Button Text="Выйти из аккаунта" 
+                        Command="{Binding LogoutCommand}"
+                        BackgroundColor="Transparent" 
+                        TextColor="#FF453A"
+                        BorderColor="#FF453A"
+                        BorderWidth="1"
+                        CornerRadius="8"/>
+
+                <ActivityIndicator IsRunning="{Binding IsLoading}" 
+                                    IsVisible="{Binding IsLoading}" 
+                                    Color="White"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
