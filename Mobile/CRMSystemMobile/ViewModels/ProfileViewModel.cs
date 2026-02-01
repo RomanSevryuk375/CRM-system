@@ -18,7 +18,6 @@ public partial class ProfileViewModel : ObservableObject
     {
         _clientService = clientService;
         _identityService = identityService;
-        LoadProfileCommand.Execute(null);
     }
 
     [ObservableProperty]

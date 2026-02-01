@@ -77,11 +77,22 @@ public partial class MainViewModel : ObservableObject
             var client = await _clientService.GetClientById(profileId);
             if (client != null)
             {
-                var s = client.Surname?[0].ToString() ?? "";
-                var n = client.Name?[0].ToString() ?? "";
+                var s = client.Surname?.FirstOrDefault().ToString() ?? "";
+                var n = client.Name?.FirstOrDefault().ToString() ?? "";
 
-                UserInitials = ($"{s} {n}").ToUpper();
+                if (string.IsNullOrEmpty(s) && string.IsNullOrEmpty(n))
+                    UserInitials = "--";
+                else
+                    UserInitials = (s + n).ToUpper();
             }
+            else
+            {
+                UserInitials = "X"; // No found client
+            }
+        }
+        else
+        {
+            UserInitials = "?"; // don't get Id
         }
     }
 
@@ -158,4 +169,15 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
+    [RelayCommand]
+    public async Task Logout()
+    {
+        bool answer = await Shell.Current.DisplayAlert("Выход", "Выйти из аккаунта?", "Да", "Нет");
+        if (answer)
+        {
+            SecureStorage.Default.Remove("jwt_token");
+            IsMenuSheetOpen = false;
+            await Shell.Current.GoToAsync("//LoginPage");
+        }
+    }
 }

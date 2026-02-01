@@ -28,7 +28,6 @@
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Spacing="20" Padding="30">
 
-                <!-- Аватарка (Инициалы) -->
                 <Border HeightRequest="100" WidthRequest="100" 
                         StrokeShape="RoundRectangle 50"
                         BackgroundColor="White"
@@ -42,7 +41,6 @@
                            VerticalOptions="Center"/>
                 </Border>
 
-                <!-- Поля ввода -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Имя" TextColor="#ACACAC" FontSize="12"/>
                     <Border StrokeShape="RoundRectangle 5" HeightRequest="45" BackgroundColor="#213868" StrokeThickness="0">
@@ -71,7 +69,6 @@
                     </Border>
                 </VerticalStackLayout>
 
-                <!-- Кнопки -->
                 <Button Text="Сохранить изменения" 
                         Command="{Binding SaveProfileCommand}"
                         BackgroundColor="#3296F8" 

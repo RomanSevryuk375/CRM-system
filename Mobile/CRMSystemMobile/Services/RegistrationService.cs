@@ -51,7 +51,7 @@ public class RegistrationService
             }
             catch
             {
-                // Если не JSON — вернуть сырой контент
+                // If not JSON, return the raw content.
             }
 
             return new RegistrationResult(false, string.IsNullOrWhiteSpace(content) ? response.ReasonPhrase : content);
