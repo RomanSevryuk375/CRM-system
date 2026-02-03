@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
-             xmlns:conv="clr-namespace:CRMSystemMobile.Converters;assembly=CRMSystemMobile"
-             Shell.NavBarIsVisible="False" 
-             Shell.TabBarIsVisible="False"
-             Shell.FlyoutBehavior="Disabled"
-             x:Class="CRMSystemMobile.View.RegistrationPage"
-             x:DataType="vm:RegistrationViewModel"
-             Title="RegistrationPage">
+<ContentPage
+    x:Class="CRMSystemMobile.View.RegistrationPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:conv="clr-namespace:CRMSystemMobile.Converters;assembly=CRMSystemMobile"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="RegistrationPage"
+    x:DataType="vm:RegistrationViewModel"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -18,203 +19,259 @@
 
     <VerticalStackLayout BackgroundColor="#112347">
         <Grid BackgroundColor="#112347" HeightRequest="180">
-            <Ellipse 
-             Fill="#ffffff"
-             WidthRequest="630" 
-             HeightRequest="480"
-             HorizontalOptions="Center"
-             VerticalOptions="Start"
-             Margin="0,-330,0,0" />
+            <Ellipse
+                Margin="0,-330,0,0"
+                Fill="#ffffff"
+                HeightRequest="480"
+                HorizontalOptions="Center"
+                VerticalOptions="Start"
+                WidthRequest="630" />
 
-            <VerticalStackLayout Spacing="0" VerticalOptions="Start" HorizontalOptions="Center">
-                <Image Source="logotype_dark.png" Margin="0, 30, 0, 0" HeightRequest="46"/>
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                Spacing="0"
+                VerticalOptions="Start">
+                <Image
+                    Margin="0,30,0,0"
+                    HeightRequest="46"
+                    Source="logotype_dark.png" />
             </VerticalStackLayout>
         </Grid>
 
-        <VerticalStackLayout Padding="30,50,30,20" Spacing="20" Margin="0, -30, 0 ,0">
+        <VerticalStackLayout
+            Margin="0,-30,0,0"
+            Padding="30,50,30,20"
+            Spacing="20">
 
             <Grid Margin="0.2">
                 <VerticalStackLayout Spacing="0">
-                    <Border StrokeShape="RoundRectangle 5" VerticalOptions="End" HeightRequest="45">
-                        <Entry x:Name="NameEntry"
-                               Placeholder="Введите Фамилию и Имя"
-                               Text="{Binding NameSurname, Mode=TwoWay}"
-                               VerticalOptions="Center"
-                               Margin="10,0"
-                               TextColor="#ffffff"
-                               FontSize="14"
-                               ReturnType="Next"
-                               Completed="OnNameCompleted"/>
+                    <Border
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 5"
+                        VerticalOptions="End">
+                        <Entry
+                            x:Name="NameEntry"
+                            Margin="10,0"
+                            Completed="OnNameCompleted"
+                            FontSize="14"
+                            Placeholder="Введите Фамилию и Имя"
+                            ReturnType="Next"
+                            Text="{Binding NameSurname, Mode=TwoWay}"
+                            TextColor="#ffffff"
+                            VerticalOptions="Center" />
                     </Border>
-                    <Label Text="{Binding NameSurnameError}"
-                           TextColor="#FF3333"
-                           FontSize="12"
-                           IsVisible="{Binding NameSurnameError, Converter={StaticResource StringNotEmptyConverter}}"/>
+                    <Label
+                        FontSize="12"
+                        IsVisible="{Binding NameSurnameError, Converter={StaticResource StringNotEmptyConverter}}"
+                        Text="{Binding NameSurnameError}"
+                        TextColor="#FF3333" />
                 </VerticalStackLayout>
 
-                <Border Background="#ffffff"
-                        StrokeShape="RoundRectangle 3"
-                        Padding="5, 0, 5, 0"
-                        HorizontalOptions="Start"
-                        VerticalOptions="Start"
-                        Margin="15,-10,0,0"
-                        ZIndex="1">
-                    <Label Text="Фамилия и Имя" FontSize="13" TextColor="#112347"/>
+                <Border
+                    Margin="15,-10,0,0"
+                    Padding="5,0,5,0"
+                    Background="#ffffff"
+                    HorizontalOptions="Start"
+                    StrokeShape="RoundRectangle 3"
+                    VerticalOptions="Start"
+                    ZIndex="1">
+                    <Label
+                        FontSize="13"
+                        Text="Фамилия и Имя"
+                        TextColor="#112347" />
                 </Border>
             </Grid>
 
             <Grid Margin="0,2">
                 <VerticalStackLayout Spacing="0">
-                    <Border StrokeShape="RoundRectangle 5" VerticalOptions="End" HeightRequest="45">
-                        <Entry x:Name="PhoneEntry"
-                               Placeholder="Введите номер телефона"
-                               Text="{Binding ClientPhoneNumber, Mode=TwoWay}"
-                               VerticalOptions="Center"
-                               Margin="10,0"
-                               TextColor="#ffffff"
-                               FontSize="14"
-                               Keyboard="Telephone"
-                               ReturnType="Next"
-                               Completed="OnPhoneCompleted"/>
+                    <Border
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 5"
+                        VerticalOptions="End">
+                        <Entry
+                            x:Name="PhoneEntry"
+                            Margin="10,0"
+                            Completed="OnPhoneCompleted"
+                            FontSize="14"
+                            Keyboard="Telephone"
+                            Placeholder="Введите номер телефона"
+                            ReturnType="Next"
+                            Text="{Binding ClientPhoneNumber, Mode=TwoWay}"
+                            TextColor="#ffffff"
+                            VerticalOptions="Center" />
                     </Border>
-                    <Label Text="{Binding ClientPhoneNumberError}"
-                           TextColor="#FF3333"
-                           FontSize="10"
-                           IsVisible="{Binding ClientPhoneNumberError, Converter={StaticResource StringNotEmptyConverter}}"/>
+                    <Label
+                        FontSize="10"
+                        IsVisible="{Binding ClientPhoneNumberError, Converter={StaticResource StringNotEmptyConverter}}"
+                        Text="{Binding ClientPhoneNumberError}"
+                        TextColor="#FF3333" />
                 </VerticalStackLayout>
 
-                <Border Background="#ffffff"
-                        StrokeShape="RoundRectangle 3"
-                        Padding="5, 0, 5, 0"
-                        HorizontalOptions="Start"
-                        VerticalOptions="Start"
-                        Margin="15,-10,0,0"
-                        ZIndex="1">
-                    <Label Text="Телефон" FontSize="13" TextColor="#112347"/>
+                <Border
+                    Margin="15,-10,0,0"
+                    Padding="5,0,5,0"
+                    Background="#ffffff"
+                    HorizontalOptions="Start"
+                    StrokeShape="RoundRectangle 3"
+                    VerticalOptions="Start"
+                    ZIndex="1">
+                    <Label
+                        FontSize="13"
+                        Text="Телефон"
+                        TextColor="#112347" />
                 </Border>
             </Grid>
 
             <Grid Margin="0,2">
                 <VerticalStackLayout Spacing="0">
-                    <Border StrokeShape="RoundRectangle 5" VerticalOptions="End" HeightRequest="45">
-                        <Entry x:Name="EmailEntry"
-                               Placeholder="Введите почту"
-                               Text="{Binding ClientEmail, Mode=TwoWay}"
-                               VerticalOptions="Center"
-                               Margin="10,0"
-                               TextColor="#ffffff"
-                               FontSize="14"
-                               Keyboard="Email"
-                               ReturnType="Next"
-                               Completed="OnEmailCompleted"/>
+                    <Border
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 5"
+                        VerticalOptions="End">
+                        <Entry
+                            x:Name="EmailEntry"
+                            Margin="10,0"
+                            Completed="OnEmailCompleted"
+                            FontSize="14"
+                            Keyboard="Email"
+                            Placeholder="Введите почту"
+                            ReturnType="Next"
+                            Text="{Binding ClientEmail, Mode=TwoWay}"
+                            TextColor="#ffffff"
+                            VerticalOptions="Center" />
                     </Border>
-                    <Label Text="{Binding ClientEmailError}"
-                           TextColor="#FF3333"
-                           FontSize="10"
-                           IsVisible="{Binding ClientEmailError, Converter={StaticResource StringNotEmptyConverter}}"/>
+                    <Label
+                        FontSize="10"
+                        IsVisible="{Binding ClientEmailError, Converter={StaticResource StringNotEmptyConverter}}"
+                        Text="{Binding ClientEmailError}"
+                        TextColor="#FF3333" />
                 </VerticalStackLayout>
 
-                <Border Background="#ffffff"
-                        StrokeShape="RoundRectangle 3"
-                        Padding="5, 0, 5, 0"
-                        HorizontalOptions="Start"
-                        VerticalOptions="Start"
-                        Margin="15,-10,0,0"
-                        ZIndex="1">
-                    <Label Text="Почта" FontSize="13" TextColor="#112347"/>
+                <Border
+                    Margin="15,-10,0,0"
+                    Padding="5,0,5,0"
+                    Background="#ffffff"
+                    HorizontalOptions="Start"
+                    StrokeShape="RoundRectangle 3"
+                    VerticalOptions="Start"
+                    ZIndex="1">
+                    <Label
+                        FontSize="13"
+                        Text="Почта"
+                        TextColor="#112347" />
                 </Border>
             </Grid>
 
             <Grid Margin="0,2">
                 <VerticalStackLayout Spacing="0">
-                    <Border StrokeShape="RoundRectangle 5" VerticalOptions="End" HeightRequest="45">
-                        <Entry x:Name="LoginEntry"
-                               Placeholder="Введите логин"
-                               Text="{Binding UserLogin, Mode=TwoWay}"
-                               VerticalOptions="Center"
-                               Margin="10,0"
-                               TextColor="#ffffff"
-                               FontSize="14"
-                               ReturnType="Next"
-                               Completed="OnLoginCompleted"/>
+                    <Border
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 5"
+                        VerticalOptions="End">
+                        <Entry
+                            x:Name="LoginEntry"
+                            Margin="10,0"
+                            Completed="OnLoginCompleted"
+                            FontSize="14"
+                            Placeholder="Введите логин"
+                            ReturnType="Next"
+                            Text="{Binding UserLogin, Mode=TwoWay}"
+                            TextColor="#ffffff"
+                            VerticalOptions="Center" />
                     </Border>
-                    <Label Text="{Binding UserLoginError}"
-                           TextColor="#FF3333"
-                           FontSize="10"
-                           IsVisible="{Binding UserLoginError, Converter={StaticResource StringNotEmptyConverter}}"/>
+                    <Label
+                        FontSize="10"
+                        IsVisible="{Binding UserLoginError, Converter={StaticResource StringNotEmptyConverter}}"
+                        Text="{Binding UserLoginError}"
+                        TextColor="#FF3333" />
                 </VerticalStackLayout>
 
-                <Border Background="#ffffff"
-                        StrokeShape="RoundRectangle 3"
-                        Padding="5, 0, 5, 0"
-                        HorizontalOptions="Start"
-                        VerticalOptions="Start"
-                        Margin="15,-10,0,0"
-                        ZIndex="1">
-                    <Label Text="Логин" FontSize="13" TextColor="#112347"/>
+                <Border
+                    Margin="15,-10,0,0"
+                    Padding="5,0,5,0"
+                    Background="#ffffff"
+                    HorizontalOptions="Start"
+                    StrokeShape="RoundRectangle 3"
+                    VerticalOptions="Start"
+                    ZIndex="1">
+                    <Label
+                        FontSize="13"
+                        Text="Логин"
+                        TextColor="#112347" />
                 </Border>
             </Grid>
 
             <Grid Margin="0,2">
                 <VerticalStackLayout Spacing="0">
-                    <Border StrokeShape="RoundRectangle 5" VerticalOptions="End" HeightRequest="45">
+                    <Border
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 5"
+                        VerticalOptions="End">
                         <Grid ColumnDefinitions="*, 40">
-                            <Entry x:Name="PasswordEntry"
-                                   Grid.Column="0"
-                                   IsPassword="{Binding IsPasswordHidden}"
-                                   Placeholder="Введите пароль"
-                                   Text="{Binding UserPassword, Mode=TwoWay}"
-                                   VerticalOptions="Center"
-                                   Margin="10,0,0,0"
-                                   TextColor="#ffffff"
-                                   FontSize="14"
-                                   ReturnType="Go"
-                                   ReturnCommand="{Binding RegisterCommand}"/>
+                            <Entry
+                                x:Name="PasswordEntry"
+                                Grid.Column="0"
+                                Margin="10,0,0,0"
+                                FontSize="14"
+                                IsPassword="{Binding IsPasswordHidden}"
+                                Placeholder="Введите пароль"
+                                ReturnCommand="{Binding RegisterCommand}"
+                                ReturnType="Go"
+                                Text="{Binding UserPassword, Mode=TwoWay}"
+                                TextColor="#ffffff"
+                                VerticalOptions="Center" />
 
-                            <ImageButton Grid.Column="1"
-                                         Command="{Binding TogglePasswordCommand}"
-                                         VerticalOptions="Center"
-                                         HorizontalOptions="Center"
-                                         HeightRequest="10"
-                                         WidthRequest="10"
-                                         Margin="-10, 0,0,0"
-                                         Source="{Binding PasswordIcon}">
-                            </ImageButton>
+                            <ImageButton
+                                Grid.Column="1"
+                                Margin="-10,0,0,0"
+                                Command="{Binding TogglePasswordCommand}"
+                                HeightRequest="10"
+                                HorizontalOptions="Center"
+                                Source="{Binding PasswordIcon}"
+                                VerticalOptions="Center"
+                                WidthRequest="10" />
                         </Grid>
                     </Border>
-                    <Label Text="{Binding UserPasswordError}"
-                           TextColor="#FF3333"
-                           FontSize="10"
-                           IsVisible="{Binding UserPasswordError, Converter={StaticResource StringNotEmptyConverter}}"/>
+                    <Label
+                        FontSize="10"
+                        IsVisible="{Binding UserPasswordError, Converter={StaticResource StringNotEmptyConverter}}"
+                        Text="{Binding UserPasswordError}"
+                        TextColor="#FF3333" />
                 </VerticalStackLayout>
 
-                <Border Background="#ffffff"
-                        StrokeShape="RoundRectangle 3"
-                        Padding="5, 0, 5, 0"
-                        HorizontalOptions="Start"
-                        VerticalOptions="Start"
-                        Margin="15,-10,0,0"
-                        ZIndex="1">
-                    <Label Text="Пароль" FontSize="13" TextColor="#112347"/>
+                <Border
+                    Margin="15,-10,0,0"
+                    Padding="5,0,5,0"
+                    Background="#ffffff"
+                    HorizontalOptions="Start"
+                    StrokeShape="RoundRectangle 3"
+                    VerticalOptions="Start"
+                    ZIndex="1">
+                    <Label
+                        FontSize="13"
+                        Text="Пароль"
+                        TextColor="#112347" />
                 </Border>
             </Grid>
 
-            <Button Text="Зарегистрироваться"
-                    Command="{Binding RegisterCommand}"
-                    BackgroundColor="#ffffff"
-                    TextColor="#112347"
-                    FontSize="16"
-                    FontAttributes="Bold"
-                    Margin="0,10,0,0"
-                    HeightRequest="45"/>
+            <Button
+                Margin="0,10,0,0"
+                BackgroundColor="#ffffff"
+                Command="{Binding RegisterCommand}"
+                FontAttributes="Bold"
+                FontSize="16"
+                HeightRequest="45"
+                Text="Зарегистрироваться"
+                TextColor="#112347" />
 
-            <Button Text="Войти"
-                    Command="{Binding GoToLoginCommand}"
-                    BackgroundColor ="#112347"
-                    TextColor="#ffffff"
-                    FontSize="14"
-                    FontAttributes="None"
-                    HeightRequest="40"/>
+            <Button
+                BackgroundColor="#112347"
+                Command="{Binding GoToLoginCommand}"
+                FontAttributes="None"
+                FontSize="14"
+                HeightRequest="40"
+                Text="Войти"
+                TextColor="#ffffff" />
         </VerticalStackLayout>
     </VerticalStackLayout>
 </ContentPage>

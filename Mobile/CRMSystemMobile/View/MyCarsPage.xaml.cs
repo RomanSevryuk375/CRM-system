@@ -16,6 +16,7 @@ public partial class MyCarsPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        _viewModel.IsMenuOpen = false;
         await _viewModel.LoadCarsCommand.ExecuteAsync(null);
     }
 }

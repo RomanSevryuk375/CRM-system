@@ -139,6 +139,10 @@ namespace CRMSystemMobile
             builder.Services.AddTransient<MyCarsPage>();
             builder.Services.AddTransient<ProfileViewModel>();
             builder.Services.AddTransient<ProfilePage>();
+            builder.Services.AddTransient<AddCarViewModel>();
+            builder.Services.AddTransient<AddCarPage>();
+            builder.Services.AddTransient<CarDetailsViewModel>();
+            builder.Services.AddTransient<CarDetailsPage>();
 
             return builder.Build();
         }

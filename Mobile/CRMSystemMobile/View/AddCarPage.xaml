@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="CRMSystemMobile.View.ProfilePage"
+    x:Class="CRMSystemMobile.View.AddCarPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
-    x:DataType="vm:ProfileViewModel"
+    x:DataType="vm:AddCarViewModel"
     BackgroundColor="#112347"
     Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="Auto, *">
+        <!--  Header  -->
         <Grid
             Grid.Row="0"
-            Padding="10,10"
-            ColumnDefinitions="Auto, *, Auto"
-            HeightRequest="60">
+            Padding="15,20"
+            ColumnDefinitions="Auto, *"
+            HeightRequest="80">
             <ImageButton
                 Command="{Binding GoBackCommand}"
                 HeightRequest="24"
@@ -23,38 +24,22 @@
 
             <Label
                 Grid.Column="1"
-                Margin="0,0,45,0"
+                Margin="-24,0,0,0"
                 FontAttributes="Bold"
                 FontSize="20"
                 HorizontalOptions="Center"
-                Text="Профиль"
+                Text="Добавить авто"
                 TextColor="White"
                 VerticalOptions="Center" />
         </Grid>
 
         <ScrollView Grid.Row="1">
-            <VerticalStackLayout Padding="30" Spacing="20">
-
-                <Border
-                    BackgroundColor="White"
-                    HeightRequest="100"
-                    HorizontalOptions="Center"
-                    StrokeShape="RoundRectangle 50"
-                    StrokeThickness="0"
-                    WidthRequest="100">
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="40"
-                        HorizontalOptions="Center"
-                        Text="{Binding Initials}"
-                        TextColor="#112347"
-                        VerticalOptions="Center" />
-                </Border>
+            <VerticalStackLayout Padding="30" Spacing="15">
 
                 <VerticalStackLayout Spacing="5">
                     <Label
                         FontSize="12"
-                        Text="Имя"
+                        Text="Марка"
                         TextColor="#ACACAC" />
                     <Border
                         BackgroundColor="#213868"
@@ -63,7 +48,10 @@
                         StrokeThickness="0">
                         <Entry
                             Margin="10,0"
-                            Text="{Binding Name}"
+                            MaxLength="128"
+                            Placeholder="Toyota"
+                            PlaceholderColor="Gray"
+                            Text="{Binding Brand}"
                             TextColor="White" />
                     </Border>
                 </VerticalStackLayout>
@@ -71,7 +59,7 @@
                 <VerticalStackLayout Spacing="5">
                     <Label
                         FontSize="12"
-                        Text="Фамилия"
+                        Text="Модель"
                         TextColor="#ACACAC" />
                     <Border
                         BackgroundColor="#213868"
@@ -80,7 +68,10 @@
                         StrokeThickness="0">
                         <Entry
                             Margin="10,0"
-                            Text="{Binding Surname}"
+                            MaxLength="256"
+                            Placeholder="Camry"
+                            PlaceholderColor="Gray"
+                            Text="{Binding Model}"
                             TextColor="White" />
                     </Border>
                 </VerticalStackLayout>
@@ -88,7 +79,7 @@
                 <VerticalStackLayout Spacing="5">
                     <Label
                         FontSize="12"
-                        Text="Телефон"
+                        Text="Год выпуска"
                         TextColor="#ACACAC" />
                     <Border
                         BackgroundColor="#213868"
@@ -97,8 +88,9 @@
                         StrokeThickness="0">
                         <Entry
                             Margin="10,0"
-                            Keyboard="Telephone"
-                            Text="{Binding PhoneNumber}"
+                            Keyboard="Numeric"
+                            MaxLength="4"
+                            Text="{Binding Year}"
                             TextColor="White" />
                     </Border>
                 </VerticalStackLayout>
@@ -106,7 +98,7 @@
                 <VerticalStackLayout Spacing="5">
                     <Label
                         FontSize="12"
-                        Text="Email"
+                        Text="VIN номер"
                         TextColor="#ACACAC" />
                     <Border
                         BackgroundColor="#213868"
@@ -115,8 +107,44 @@
                         StrokeThickness="0">
                         <Entry
                             Margin="10,0"
-                            Keyboard="Email"
-                            Text="{Binding Email}"
+                            Text="{Binding VinNumber}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Гос. номер"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <Entry
+                            Margin="10,0"
+                            MaxLength="17"
+                            Text="{Binding StateNumber}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Пробег (км)"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <Entry
+                            Margin="10,0"
+                            Keyboard="Numeric"
+                            MaxLength="15"
+                            Text="{Binding Mileage}"
                             TextColor="White" />
                     </Border>
                 </VerticalStackLayout>
@@ -124,25 +152,12 @@
                 <Button
                     Margin="0,20,0,0"
                     BackgroundColor="#3296F8"
-                    Command="{Binding SaveProfileCommand}"
+                    Command="{Binding SaveCarCommand}"
                     CornerRadius="8"
                     FontAttributes="Bold"
-                    Text="Сохранить изменения"
+                    Text="Добавить"
                     TextColor="White" />
 
-                <Button
-                    BackgroundColor="Transparent"
-                    BorderColor="#FF453A"
-                    BorderWidth="1"
-                    Command="{Binding LogoutCommand}"
-                    CornerRadius="8"
-                    Text="Выйти из аккаунта"
-                    TextColor="#FF453A" />
-
-                <ActivityIndicator
-                    IsRunning="{Binding IsLoading}"
-                    IsVisible="{Binding IsLoading}"
-                    Color="White" />
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

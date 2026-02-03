@@ -21,19 +21,19 @@ public partial class ProfileViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string name;
+    public partial string Name { get; set; }
 
     [ObservableProperty]
-    private string surname;
+    public partial string Surname { get; set; }
 
     [ObservableProperty]
-    private string phoneNumber;
+    public partial string PhoneNumber { get; set; }
 
     [ObservableProperty]
-    private string email;
+    public partial string Email { get; set; }
 
     [ObservableProperty]
-    private bool isLoading;
+    public partial bool IsLoading { get; set; }
 
     public string Initials => $"{Surname?.FirstOrDefault()}{Name?.FirstOrDefault()}".ToUpper();
 

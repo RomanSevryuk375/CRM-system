@@ -57,7 +57,11 @@ public class OrderService(HttpClient httpClient)
             var response = await httpClient.GetAsync($"api/Order?{query}");
 
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                SecureStorage.Default.Remove("jwt_token");
+                await Shell.Current.GoToAsync("//LoginPage");
                 return (null, 0);
+            }
 
             response.EnsureSuccessStatusCode();
 

@@ -46,7 +46,7 @@ public partial class MainViewModel : ObservableObject
     public partial bool IsMenuSheetOpen { get; set; }
 
     [ObservableProperty]
-    private string userInitials = "??";
+    public partial string UserInitials { get; set; } = "??";
 
     [RelayCommand]
     private void ToggleMenuSheet()

@@ -1,225 +1,238 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CRMSystemMobile.View.MainPage"
-             Shell.NavBarIsVisible="False" 
-             Shell.TabBarIsVisible="False"
-             Shell.FlyoutBehavior="Disabled"
-             xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
-             xmlns:contracts="clr-namespace:Shared.Contracts.Order;assembly=Shared"
-             x:DataType="vm:MainViewModel"
-             Title="MainPage">
+<ContentPage
+    x:Class="CRMSystemMobile.View.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:contracts="clr-namespace:Shared.Contracts.Order;assembly=Shared"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="MainPage"
+    x:DataType="vm:MainViewModel"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
     <Grid>
         <VerticalStackLayout BackgroundColor="#112347">
 
-            <Grid 
-                RowDefinitions="auto, auto" 
-                ColumnDefinitions="auto, * , auto" 
+            <Grid
+                Padding="15,30,15,10"
                 BackgroundColor="#112347"
-                Padding="15, 30, 15, 10">
-
+                ColumnDefinitions="auto, * , auto"
+                RowDefinitions="auto, auto">
 
                 <Border
-                    Grid.Row="0" 
+                    Grid.Row="0"
                     Grid.Column="0"
-                    HeightRequest="50"
-                    WidthRequest="50"
                     BackgroundColor="#ffffff"
-                    StrokeShape="RoundRectangle 25">
+                    HeightRequest="50"
+                    StrokeShape="RoundRectangle 25"
+                    WidthRequest="50">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding GoToProfileCommand}" />
                     </Border.GestureRecognizers>
                     <Label
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        HorizontalOptions="Center"
                         Text="{Binding UserInitials}"
-                        HorizontalOptions="Center" 
-                        VerticalOptions="Center" 
-                        FontSize="18" 
                         TextColor="#112347"
-                        FontAttributes="Bold"/>
+                        VerticalOptions="Center" />
                 </Border>
 
-                <Border Grid.Row="0"
-                        Grid.Column="1"
-                        HeightRequest="50"
-                        WidthRequest="220" 
-                        Margin="10,0"
-                        BackgroundColor="#1C2D4F" 
-                        StrokeShape="RoundRectangle 25"
-                        StrokeThickness="0"
-                        HorizontalOptions="Center">
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="10,0"
+                    BackgroundColor="#1C2D4F"
+                    HeightRequest="50"
+                    HorizontalOptions="Center"
+                    StrokeShape="RoundRectangle 25"
+                    StrokeThickness="0"
+                    WidthRequest="220">
 
                     <Grid ColumnDefinitions="*, *">
 
-                        <Button Grid.Column="0"
-                                Text="В работе"
-                                TextColor="#112347"
-                                FontSize="14"
-                                BackgroundColor="#ffffff"
-                                Command="{Binding SelectTabCommand}"
-                                CommandParameter="InProgress"
-                                HeightRequest="44"/>
+                        <Button
+                            Grid.Column="0"
+                            BackgroundColor="#ffffff"
+                            Command="{Binding SelectTabCommand}"
+                            CommandParameter="InProgress"
+                            FontSize="14"
+                            HeightRequest="44"
+                            Text="В работе"
+                            TextColor="#112347" />
 
-
-                        <Button Grid.Column="1"
-                                Text="Завершенные"
-                                TextColor="#ACACAC"
-                                FontSize="14"
-                                Command="{Binding SelectTabCommand}"
-                                CommandParameter="Completed"
-                                BackgroundColor="Transparent"
-                                HeightRequest="44"/>
+                        <Button
+                            Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            Command="{Binding SelectTabCommand}"
+                            CommandParameter="Completed"
+                            FontSize="14"
+                            HeightRequest="44"
+                            Text="Завершенные"
+                            TextColor="#ACACAC" />
                     </Grid>
                 </Border>
 
-                <Border 
+                <Border
                     Grid.Row="0"
                     Grid.Column="2"
-                    HeightRequest="50"
-                    WidthRequest="50"
-                    StrokeShape="RoundRectangle 25"
                     BackgroundColor="#ffffff"
-                    StrokeThickness="0">
-                    <ImageButton 
-                        Source="show_menu.svg" 
+                    HeightRequest="50"
+                    StrokeShape="RoundRectangle 25"
+                    StrokeThickness="0"
+                    WidthRequest="50">
+                    <ImageButton
+                        Padding="8"
                         Command="{Binding ToggleMenuSheetCommand}"
-                        Padding="12"/>
+                        Source="show_menu.svg" />
                 </Border>
-
 
             </Grid>
 
-            <CollectionView 
+            <CollectionView
                 ItemsSource="{Binding Orders}"
                 RemainingItemsThreshold="2"
                 RemainingItemsThresholdReachedCommand="{Binding LoadNextPageCommand}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="contracts:OrderResponse">
-                        <Border BackgroundColor="#213868"
-                                Stroke="Transparent"
-                                Padding="16" 
-                                StrokeShape="RoundRectangle 12"
-                                Margin="10">
+                        <Border
+                            Margin="10"
+                            Padding="16"
+                            BackgroundColor="#213868"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 12">
                             <Grid RowDefinitions="100, Auto" RowSpacing="25">
 
-                                <Grid Grid.Row="0" ColumnDefinitions="80, *" ColumnSpacing="16">
+                                <Grid
+                                    Grid.Row="0"
+                                    ColumnDefinitions="80, *"
+                                    ColumnSpacing="16">
 
-                                    <Border Grid.Column="0" 
-                                            Stroke="Transparent"
-                                            StrokeShape="RoundRectangle 8"
-                                            HeightRequest="80" 
-                                            WidthRequest="80">
-                                        <Image Source="car.png" 
-                                               Background="Transparent"
-                                               Aspect="AspectFit" 
-                                               Margin="0"/>
+                                    <Border
+                                        Grid.Column="0"
+                                        HeightRequest="80"
+                                        Stroke="Transparent"
+                                        StrokeShape="RoundRectangle 8"
+                                        WidthRequest="80">
+                                        <Image
+                                            Margin="0"
+                                            Aspect="AspectFit"
+                                            Background="Transparent"
+                                            Source="car.png" />
                                     </Border>
 
-                                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                                        <Label TextColor="#ffffff" 
-                                               FontSize="17" 
-                                               FontAttributes="Bold">
+                                    <VerticalStackLayout
+                                        Grid.Column="1"
+                                        Spacing="2"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="17"
+                                            TextColor="#ffffff">
                                             <Label.FormattedText>
                                                 <FormattedString>
-                                                    <Span Text="{Binding Car}"/>
+                                                    <Span Text="{Binding Car}" />
                                                 </FormattedString>
                                             </Label.FormattedText>
                                         </Label>
 
-                                        <Label TextColor="#ACACAC" FontSize="14">
+                                        <Label FontSize="14" TextColor="#ACACAC">
                                             <Label.FormattedText>
                                                 <FormattedString>
-                                                    <Span Text="Приоритет: "/>
-                                                    <Span Text="{Binding Priority}" TextColor="#ffffff"/>
+                                                    <Span Text="Приоритет: " />
+                                                    <Span Text="{Binding Priority}" TextColor="#ffffff" />
                                                 </FormattedString>
                                             </Label.FormattedText>
                                         </Label>
                                     </VerticalStackLayout>
                                 </Grid>
 
-                                <Grid Grid.Row="1" ColumnDefinitions="*, Auto" VerticalOptions="End">
-                                    <Label Grid.Column="0" 
-                                           Text="{Binding Date}" 
-                                           TextColor="#ffffff" 
-                                           FontSize="15"/>
+                                <Grid
+                                    Grid.Row="1"
+                                    ColumnDefinitions="*, Auto"
+                                    VerticalOptions="End">
+                                    <Label
+                                        Grid.Column="0"
+                                        FontSize="15"
+                                        Text="{Binding Date}"
+                                        TextColor="#ffffff" />
 
-                                    <Label Grid.Column="1" 
-                                           Text="{Binding Status}" 
-                                           TextColor="#FFB347" 
-                                           FontSize="16" 
-                                           FontAttributes="Bold"/>
+                                    <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="{Binding Status}"
+                                        TextColor="#FFB347" />
                                 </Grid>
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-            
-                <CollectionView.Footer>
-                    <ActivityIndicator IsRunning="{Binding IsLoadingMore}" 
-                               IsVisible="{Binding IsLoadingMore}"
-                               Color="#112347"
-                               Margin="10" />
-                </CollectionView.Footer>
 
+                <CollectionView.Footer>
+                    <ActivityIndicator
+                        Margin="10"
+                        IsRunning="{Binding IsLoadingMore}"
+                        IsVisible="{Binding IsLoadingMore}"
+                        Color="#112347" />
+                </CollectionView.Footer>
             </CollectionView>
         </VerticalStackLayout>
 
-        <Grid Grid.Row="0" IsVisible="{Binding IsMenuSheetOpen}" BackgroundColor="Transparent">
+        <Grid
+            Grid.Row="0"
+            BackgroundColor="Transparent"
+            IsVisible="{Binding IsMenuSheetOpen}">
             <Grid RowDefinitions="*, Auto">
                 <BoxView Grid.Row="0" BackgroundColor="#80000000">
                     <BoxView.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ToggleMenuSheetCommand}" />
                     </BoxView.GestureRecognizers>
                 </BoxView>
-                <Border Grid.Row="1"
-                        HeightRequest="{OnPlatform Default=350}" 
-                        VerticalOptions="End" 
-                        BackgroundColor="#1C2D4F" 
-                        StrokeThickness="0">
+                <Border
+                    Grid.Row="1"
+                    BackgroundColor="#1C2D4F"
+                    HeightRequest="{OnPlatform Default=350}"
+                    StrokeThickness="0"
+                    VerticalOptions="End">
 
-                    <Grid RowDefinitions="Auto, *, Auto" 
-                          RowSpacing="10" 
-                          Padding="20, 0, 20, 20">
+                    <Grid
+                        Padding="20,0,20,20"
+                        RowDefinitions="Auto, *, Auto"
+                        RowSpacing="10">
 
+                        <StackLayout Grid.Row="1" Spacing="10">
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding NavigateToCommand}"
+                                CommandParameter="MyCarsPage"
+                                HorizontalOptions="Fill"
+                                Text="Мои авто"
+                                TextColor="White" />
 
-                        <StackLayout Grid.Row="1" 
-                                     Spacing="10">
-                            <Button Text="Мои авто" 
-                                    Command="{Binding NavigateToCommand}" 
-                                    CommandParameter="MyCarsPage" 
-                                    BackgroundColor="Transparent" 
-                                    TextColor="White" 
-                                    HorizontalOptions="Fill"/>
-                            
-                            <Button Text="Заказы" 
-                                    Command="{Binding NavigateToCommand}" 
-                                    CommandParameter="OrdersPage" 
-                                    BackgroundColor="Transparent" 
-                                    TextColor="White" 
-                                    HorizontalOptions="Fill"/>
-                            
-                            <Button Text="История" 
-                                    Command="{Binding NavigateToCommand}" 
-                                    BackgroundColor="Transparent" 
-                                    TextColor="White" 
-                                    HorizontalOptions="Fill"/>
-                            
-                            <Button Text="Счета" 
-                                    Command="{Binding NavigateToCommand}" 
-                                    BackgroundColor="Transparent" 
-                                    TextColor="White" 
-                                    HorizontalOptions="Fill"/>
-                            
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding NavigateToCommand}"
+                                HorizontalOptions="Fill"
+                                Text="История"
+                                TextColor="White" />
+
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding NavigateToCommand}"
+                                HorizontalOptions="Fill"
+                                Text="Счета"
+                                TextColor="White" />
                         </StackLayout>
 
-
-                        <Button Grid.Row="2" 
-                                    Text="Выйти" 
-                                    TextColor="Red"
-                                    Command="{Binding LogoutCommand}"
-                                    BackgroundColor="Transparent" 
-                                    HorizontalOptions="Center" />
+                        <Button
+                            Grid.Row="2"
+                            BackgroundColor="Transparent"
+                            Command="{Binding LogoutCommand}"
+                            HorizontalOptions="Center"
+                            Text="Выйти"
+                            TextColor="Red" />
                     </Grid>
-                    
                 </Border>
             </Grid>
         </Grid>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.CarDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://schemas.microsoft.com/dotnet/2021/maui/design"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    x:DataType="vm:CarDetailsViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
+
+        <Grid
+            Grid.Row="0"
+            Padding="15,30,15,10"
+            ColumnDefinitions="50, *"
+            HeightRequest="90"
+            VerticalOptions="End">
+
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+        </Grid>
+
+        <VerticalStackLayout Grid.Row="1" Spacing="10">
+            <Label
+                Margin="20,0,0,0"
+                FontAttributes="Bold"
+                FontSize="28"
+                Text="Детализация"
+                TextColor="White" />
+
+            <Image
+                Margin="0,20,0,0"
+                Aspect="AspectFit"
+                HeightRequest="180"
+                Source="car_placeholder.png" />
+        </VerticalStackLayout>
+
+        <Border
+            Grid.Row="2"
+            Margin="20,20,20,20"
+            Padding="20"
+            BackgroundColor="White"
+            StrokeShape="RoundRectangle 15"
+            StrokeThickness="0"
+            VerticalOptions="Fill">
+
+            <VerticalStackLayout Spacing="10">
+                <Grid ColumnDefinitions="*, *">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="Марка:"
+                        TextColor="#112347" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="{Binding Car.Brand}"
+                        TextColor="#555555" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*, *">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="Модель:"
+                        TextColor="#112347" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="{Binding Car.Model}"
+                        TextColor="#555555" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*, *">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="VIN:"
+                        TextColor="#112347" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="12"
+                        Text="{Binding Car.VinNumber}"
+                        TextColor="#555555" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*, *">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="Гос. номер:"
+                        TextColor="#112347" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="{Binding Car.StateNumber}"
+                        TextColor="#555555" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*, *">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="Статус:"
+                        TextColor="#112347" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="{Binding Car.Status}"
+                        TextColor="#555555" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*, *">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="Пробег:"
+                        TextColor="#112347" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="{Binding Car.Mileage, StringFormat='{0} км'}"
+                        TextColor="#555555" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <Button
+            Grid.Row="3"
+            Margin="20,0,20,30"
+            BackgroundColor="White"
+            Command="{Binding BookVisitCommand}"
+            CornerRadius="10"
+            FontAttributes="Bold"
+            FontSize="16"
+            HeightRequest="50"
+            Text="Запланировать посещение"
+            TextColor="#112347" />
+
+    </Grid>
+</ContentPage>

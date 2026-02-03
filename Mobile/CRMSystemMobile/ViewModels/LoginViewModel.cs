@@ -14,10 +14,10 @@ public partial class LoginViewModel(LoginService loginService) : ObservableObjec
     public partial string UserPassword { get; set; }
 
     [ObservableProperty]
-    private bool _isPasswordHidden = true;
+    public partial bool IsPasswordHidden { get; set; } = true;
 
     [ObservableProperty]
-    private string _passwordIcon = "eye_hide.png";
+    public partial string PasswordIcon { get; set; } = "eye_hide.png";
 
     [RelayCommand]
     private void TogglePassword()

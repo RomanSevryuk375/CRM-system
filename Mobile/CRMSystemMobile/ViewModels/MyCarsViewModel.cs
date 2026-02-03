@@ -16,6 +16,9 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
     [ObservableProperty]
     public partial bool IsRefreshing { get; set; }
 
+    [ObservableProperty]
+    public partial bool IsMenuOpen { get; set; } = false;
+
     [RelayCommand]
     private async Task LoadCars()
     {
@@ -43,8 +46,54 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
     }
 
     [RelayCommand]
+    private async Task GoToAddCar()
+    {
+        await Shell.Current.GoToAsync("AddCarPage");
+    }
+
+    [RelayCommand]
     private async Task GoBack()
     {
+        if (IsMenuOpen)
+        {
+            IsMenuOpen = false;
+            return;
+        }
         await Shell.Current.GoToAsync("..");
+    }
+
+    [RelayCommand]
+    private void ToggleMenu()
+    {
+        IsMenuOpen = !IsMenuOpen;
+    }
+
+    [RelayCommand]
+    private async Task GoToDetails(CarResponse car)
+    {
+        if (car == null) return;
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "Car", car }
+        };
+        await Shell.Current.GoToAsync("CarDetailsPage", navigationParameter);
+    }
+
+    [RelayCommand]
+    private async Task NavigateTo(string page)
+    {
+        IsMenuOpen = false;
+
+        if (page == "MyCarsPage") return;
+
+        await Shell.Current.GoToAsync(page);
+    }
+
+    [RelayCommand]
+    private async Task Logout()
+    {
+        IsMenuOpen = false;
+        SecureStorage.Default.Remove("jwt_token");
+        await Shell.Current.GoToAsync("//LoginPage");
     }
 }
