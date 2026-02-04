@@ -7,26 +7,32 @@ namespace CRMSystemMobile.ViewModels;
 public partial class CarDetailsViewModel : ObservableObject, IQueryAttributable
 {
     [ObservableProperty]
-    private CarResponse _car;
+    private CarResponse car;
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.ContainsKey("Car") && query["Car"] is CarResponse carData)
+        if (query.TryGetValue("Car", out object? value))
         {
-            Car = carData;
+            Car = (CarResponse)value;
         }
+    }
+
+    [RelayCommand]
+    private async Task BookVisit()
+    {
+        if (Car == null) return;
+
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "SelectedCar", Car }
+        };
+
+        await Shell.Current.GoToAsync("BookingPage", navigationParameter);
     }
 
     [RelayCommand]
     private async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
-    }
-
-    [RelayCommand]
-    private async Task BookVisit()
-    {
-        // Логика перехода на страницу бронирования (календарь)
-        await Shell.Current.DisplayAlert("Бронирование", "Переход на экран выбора даты", "OK");
     }
 }

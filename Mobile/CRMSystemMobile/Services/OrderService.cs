@@ -78,4 +78,29 @@ public class OrderService(HttpClient httpClient)
             return (null, 0);
         }
     }
+
+    public async Task<string?> CreateOrder(OrderRequest request)
+    {
+        try
+        {
+            var response = await httpClient.PostAsJsonAsync("api/Order", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var errorContent = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(errorContent))
+            {
+                return $"Ошибка сервера: {response.StatusCode}";
+            }
+
+            return errorContent.Trim('"');
+        }
+        catch (Exception ex)
+        {
+            return $"Ошибка соединения: {ex.Message}";
+        }
+    }
 }

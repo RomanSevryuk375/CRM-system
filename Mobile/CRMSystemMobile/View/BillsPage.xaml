@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.BillsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:contracts="clr-namespace:Shared.Contracts.Bill;assembly=Shared"
+    xmlns:d="http://schemas.microsoft.com/dotnet/2021/maui/design"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="Счета"
+    x:DataType="vm:BillsViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *">
+        <!--  Header  -->
+        <Grid
+            Grid.Row="0"
+            Padding="15,20"
+            ColumnDefinitions="Auto, *"
+            HeightRequest="80">
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+
+            <Label
+                Grid.Column="1"
+                Margin="-24,0,0,0"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="Мои счета"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <RefreshView
+            Grid.Row="1"
+            Command="{Binding LoadBillsCommand}"
+            IsRefreshing="{Binding IsRefreshing}"
+            RefreshColor="#112347">
+
+            <CollectionView Margin="0,10,0,0" ItemsSource="{Binding Bills}">
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="Счетов пока нет" TextColor="Gray" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="contracts:BillResponse">
+                        <Border
+                            Margin="15,6"
+                            Padding="16"
+                            BackgroundColor="#213868"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 12">
+                            <Grid
+                                ColumnDefinitions="*, Auto"
+                                RowDefinitions="Auto, Auto"
+                                RowSpacing="5">
+
+                                <VerticalStackLayout
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Spacing="2">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="{Binding Id, StringFormat='Счет №{0}'}"
+                                        TextColor="White" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding CreatedAt, StringFormat='от {0:dd.MM.yyyy}'}"
+                                        TextColor="#ACACAC" />
+                                </VerticalStackLayout>
+
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    FontAttributes="Bold"
+                                    FontSize="18"
+                                    HorizontalOptions="End"
+                                    Text="{Binding Amount, StringFormat='{0} BYN'}"
+                                    TextColor="White" />
+
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Status}">
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding Status}"
+                                            TargetType="Label"
+                                            Value="Оплачен">
+                                            <Setter Property="TextColor" Value="#4CD964" />
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding Status}"
+                                            TargetType="Label"
+                                            Value="Не оплачен">
+                                            <Setter Property="TextColor" Value="#FF453A" />
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding Status}"
+                                            TargetType="Label"
+                                            Value="Частично оплачен">
+                                            <Setter Property="TextColor" Value="#FFB347" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <ActivityIndicator
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            Color="White" />
+    </Grid>
+</ContentPage>

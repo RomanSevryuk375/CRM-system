@@ -12,6 +12,19 @@ public class AuthHttpMessageHandler : DelegatingHandler
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         }
 
-        return await base.SendAsync(request, cancellationToken);
+        var response = await base.SendAsync(request, cancellationToken);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            SecureStorage.Default.Remove("jwt_token");
+
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                var nav = Shell.Current.Navigation.NavigationStack;
+                await Shell.Current.GoToAsync("//LoginPage");
+            });
+        }
+
+        return response;
     }
 }

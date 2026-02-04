@@ -27,4 +27,24 @@ public class IdentityService
             return (0, 0);
         }
     }
+    public bool IsTokenValid(string token)
+    {
+        try
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+
+            if (jwtToken.ValidTo < DateTime.UtcNow)
+            {
+                System.Diagnostics.Debug.WriteLine("DEBUG: Токен просрочен");
+                return false;
+            }
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }
