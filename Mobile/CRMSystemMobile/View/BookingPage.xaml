@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.BookingPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:Shared.Contracts.Car;assembly=Shared"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="Запись на сервис"
+    x:DataType="vm:BookingViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *">
+        <Grid
+            Grid.Row="0"
+            Padding="15,20"
+            ColumnDefinitions="Auto, *"
+            HeightRequest="80">
+            <ImageButton
+    Command="{Binding GoBackCommand}"
+    HeightRequest="24"
+    HorizontalOptions="Start"
+    Source="back_icon.png"
+    WidthRequest="24" />
+
+            <Label
+                Grid.Column="1"
+                Margin="-24,0,0,0"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="Запись на сервис"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="30" Spacing="20">
+
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Выберите автомобиль"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="50"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <Picker
+                            Title="Нажмите для выбора"
+                            Margin="10,0"
+                            ItemDisplayBinding="{Binding StateNumber}"
+                            ItemsSource="{Binding MyCars}"
+                            SelectedItem="{Binding SelectedCar}"
+                            TextColor="White"
+                            TitleColor="Gray" />
+                    </Border>
+                    <Label
+                        FontSize="12"
+                        IsVisible="{Binding SelectedCar, Converter={StaticResource IsNotNullConverter}}"
+                        Text="{Binding SelectedCar.Brand, StringFormat='Выбрано: {0}'}"
+                        TextColor="#3296F8" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Желаемая дата"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="50"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <DatePicker
+                            Margin="10,0"
+                            Date="{Binding SelectedDate}"
+                            MinimumDate="{Binding MinDate}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Приоритет срочности"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="50"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <Picker
+                            Margin="10,0"
+                            ItemsSource="{Binding Priorities}"
+                            SelectedItem="{Binding SelectedPriorityName}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <Label
+                    FontSize="12"
+                    HorizontalTextAlignment="Center"
+                    Text="После отправки заявки статус заказа появится на главном экране."
+                    TextColor="Gray" />
+
+                <Button
+                    Margin="0,20,0,0"
+                    BackgroundColor="#3296F8"
+                    Command="{Binding BookAppointmentCommand}"
+                    CornerRadius="8"
+                    FontAttributes="Bold"
+                    HeightRequest="50"
+                    Text="Записаться"
+                    TextColor="White" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -4,7 +4,7 @@ namespace CRMSystem.Core.Validation;
 
 public static class DomainValidator
 {
-    public static string ValidateId (int Id, string FieldName)
+    public static string ValidateId(int Id, string FieldName)
     {
         if (Id < 0)
             return $"{FieldName} must be positive";
@@ -26,7 +26,7 @@ public static class DomainValidator
         return string.Empty;
     }
 
-    public static string ValidateString (string? Value, string FieldName)
+    public static string ValidateString(string? Value, string FieldName)
     {
         if (string.IsNullOrWhiteSpace(Value))
             return $"{FieldName} can't be empty";
@@ -62,6 +62,20 @@ public static class DomainValidator
 
         if (Date > DateOnly.FromDateTime(DateTime.Now))
             return $"{FieldName} can't be in the future";
+
+        return string.Empty;
+    }
+    public static string ValidateDateEmpty(DateTime? Date, string FieldName)
+    {
+        if (!Date.HasValue)
+            return $"{FieldName} can't be empty";
+
+        return string.Empty;
+    }
+    public static string ValidateDateEmpty(DateOnly? Date, string FieldName)
+    {
+        if (!Date.HasValue)
+            return $"{FieldName} can't be empty";
 
         return string.Empty;
     }

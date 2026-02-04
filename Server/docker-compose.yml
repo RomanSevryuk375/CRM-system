@@ -49,8 +49,8 @@
 
  crm_system_backend:
     build:
-      context: .
-      dockerfile: CRM_system_backend/Dockerfile
+      context: ..
+      dockerfile: Server/CRM_system_backend/Dockerfile
     container_name: AUTOService-backend
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -65,6 +65,8 @@
       - JwtOptions__ExpiresHours=12
     ports:
       - "5066:8080" 
+    volumes:
+      - ./keys:/app/keys
     depends_on:
       postgres:
         condition: service_healthy
@@ -76,3 +78,4 @@
 volumes:
   postgres_data:
   minio_data:
+  keys_storage:

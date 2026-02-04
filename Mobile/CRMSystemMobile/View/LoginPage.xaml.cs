@@ -9,4 +9,11 @@ public partial class LoginPage : ContentPage
         InitializeComponent();
         BindingContext = loginViewModel;
     }
+
+    private void OnLoginCompleted(object sender, EventArgs e) => PasswordEntry.Focus();
+
+    private void OnPasswordToggled(object sender, EventArgs e)
+    {
+        PasswordEntry.CursorPosition = PasswordEntry.Text?.Length ?? 0;
+    }
 }

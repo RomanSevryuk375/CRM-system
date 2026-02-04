@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.HistoryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:contracts="clr-namespace:Shared.Contracts.Order;assembly=Shared"
+    xmlns:d="http://schemas.microsoft.com/dotnet/2021/maui/design"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="История заказов"
+    x:DataType="vm:HistoryViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *">
+        <Grid
+            Grid.Row="0"
+            Padding="15,20"
+            ColumnDefinitions="Auto, *"
+            HeightRequest="80">
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+
+            <Label
+                Grid.Column="1"
+                Margin="-24,0,0,0"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="История заказов"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <RefreshView
+            Grid.Row="1"
+            Command="{Binding LoadHistoryCommand}"
+            IsRefreshing="{Binding IsRefreshing}"
+            RefreshColor="#112347">
+
+            <CollectionView Margin="0,10,0,0" ItemsSource="{Binding Orders}">
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="История заказов пуста" TextColor="Gray" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="contracts:OrderResponse">
+                        <Border
+                            Margin="15,6"
+                            Padding="16"
+                            BackgroundColor="#213868"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 12">
+                            <Grid RowDefinitions="Auto, Auto" RowSpacing="10">
+
+                                <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                                    <Label
+                                        Grid.Column="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="{Binding Car}"
+                                        TextColor="White" />
+                                    <Label
+                                        Grid.Column="1"
+                                        FontSize="12"
+                                        Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}"
+                                        TextColor="#ACACAC" />
+                                </Grid>
+
+                                <Grid Grid.Row="1" ColumnDefinitions="*, Auto">
+                                    <Label
+                                        Grid.Column="0"
+                                        FontSize="13"
+                                        TextColor="#ACACAC">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Приоритет: " />
+                                                <Span Text="{Binding Priority}" TextColor="White" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        Text="{Binding Status}"
+                                        TextColor="#4CD964" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <ActivityIndicator
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            Color="White" />
+    </Grid>
+</ContentPage>

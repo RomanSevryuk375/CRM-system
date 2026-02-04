@@ -7,18 +7,18 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-
 # Этот этап используется для сборки проекта службы
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["CRM_system_backend/CRM_system_backend.csproj", "CRM_system_backend/"]
-COPY ["system.Business/CRMSystem.Business.csproj", "system.Business/"]
-COPY ["system.Core/CRMSystem.Core.csproj", "system.Core/"]
-COPY ["system.DataAccess/CRMSystem.DataAccess.csproj", "system.DataAccess/"]
-RUN dotnet restore "./CRM_system_backend/CRM_system_backend.csproj"
+COPY ["Server/CRM_system_backend/CRM_system_backend.csproj", "Server/CRM_system_backend/"]
+COPY ["Server/system.Business/CRMSystem.Business.csproj", "Server/system.Business/"]
+COPY ["Server/system.Core/CRMSystem.Core.csproj", "Server/system.Core/"]
+COPY ["Server/system.DataAccess/CRMSystem.DataAccess.csproj", "Server/system.DataAccess/"]
+COPY ["Shared/Shared.csproj", "Shared/"]
+RUN dotnet restore "./Server/CRM_system_backend/CRM_system_backend.csproj"
 COPY . .
-WORKDIR "/src/CRM_system_backend"
+WORKDIR "/src/Server/CRM_system_backend"
 RUN dotnet build "./CRM_system_backend.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Этот этап используется для публикации проекта службы, который будет скопирован на последний этап
@@ -29,5 +29,7 @@ RUN dotnet publish "./CRM_system_backend.csproj" -c $BUILD_CONFIGURATION -o /app
 # Этот этап используется в рабочей среде или при запуске из VS в обычном режиме (по умолчанию, когда конфигурация отладки не используется)
 FROM base AS final
 WORKDIR /app
+RUN mkdir -p /app/keys
+RUN chown -R app:app /app/keys
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "CRM_system_backend.dll"]

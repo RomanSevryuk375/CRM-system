@@ -35,14 +35,14 @@ public class Order
         var prioprityIdError = DomainValidator.ValidateId(priorityId, "priorityId");
         if (!string.IsNullOrEmpty(prioprityIdError)) errors.Add(prioprityIdError);
 
-        var dateError = DomainValidator.ValidateDate(date, "date");
+        var dateError = DomainValidator.ValidateDateEmpty(date, "date");
         if (!string.IsNullOrEmpty(dateError)) errors.Add(dateError);
 
         if (errors.Any())
-            return (null,  errors);
+            return (null, errors);
 
         var order = new Order(id, statusId, carId, date, priorityId);
 
         return (order, new List<string>());
-     }
+    }
 }

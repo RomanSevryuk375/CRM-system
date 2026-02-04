@@ -49,7 +49,7 @@ public class Client
         var phoneError = DomainValidator.ValidateString(phoneNumber, ValidationConstants.MAX_PHONE_LENGTH, "phoneNumber");
         if (!string.IsNullOrEmpty(phoneError)) errors.Add(phoneError);
 
-        if (!Regex.IsMatch(phoneNumber, @"^(375|80)(29|44|33|25)\d{7}$"))
+        if (!Regex.IsMatch(phoneNumber, @"^(\+375|80)(29|44|33|25)\d{7}$"))
             errors.Add("Phone number should be in format +375XXXXXXXXX or 80XXXXXXXXX");
 
         var emailError = DomainValidator.ValidateString(email, ValidationConstants.MAX_EMAIL_LENGTH, "email");

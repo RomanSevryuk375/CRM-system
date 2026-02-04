@@ -1,5 +1,4 @@
-﻿using CRMSystemMobile.Extentions;
-using Shared.Contracts.Login;
+﻿using Shared.Contracts.Login;
 using System.Diagnostics;
 using System.Net.Http.Json;
 

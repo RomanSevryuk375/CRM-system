@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.ProfilePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    x:DataType="vm:ProfileViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *">
+        <Grid
+            Grid.Row="0"
+            Padding="10,10"
+            ColumnDefinitions="Auto, *, Auto"
+            HeightRequest="60">
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+
+            <Label
+                Grid.Column="1"
+                Margin="0,0,45,0"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="Профиль"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="30" Spacing="20">
+
+                <Border
+                    BackgroundColor="White"
+                    HeightRequest="100"
+                    HorizontalOptions="Center"
+                    StrokeShape="RoundRectangle 50"
+                    StrokeThickness="0"
+                    WidthRequest="100">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="40"
+                        HorizontalOptions="Center"
+                        Text="{Binding Initials}"
+                        TextColor="#112347"
+                        VerticalOptions="Center" />
+                </Border>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Имя"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <Entry
+                            Margin="10,0"
+                            Text="{Binding Name}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Фамилия"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <Entry
+                            Margin="10,0"
+                            Text="{Binding Surname}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Телефон"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <Entry
+                            Margin="10,0"
+                            Keyboard="Telephone"
+                            Text="{Binding PhoneNumber}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Email"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="45"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <Entry
+                            Margin="10,0"
+                            Keyboard="Email"
+                            Text="{Binding Email}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <Button
+                    Margin="0,20,0,0"
+                    BackgroundColor="#3296F8"
+                    Command="{Binding SaveProfileCommand}"
+                    CornerRadius="8"
+                    FontAttributes="Bold"
+                    Text="Сохранить изменения"
+                    TextColor="White" />
+
+                <Button
+                    BackgroundColor="Transparent"
+                    BorderColor="#FF453A"
+                    BorderWidth="1"
+                    Command="{Binding LogoutCommand}"
+                    CornerRadius="8"
+                    Text="Выйти из аккаунта"
+                    TextColor="#FF453A" />
+
+                <ActivityIndicator
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}"
+                    Color="White" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

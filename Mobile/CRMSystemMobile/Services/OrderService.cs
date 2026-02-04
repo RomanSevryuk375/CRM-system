@@ -57,7 +57,11 @@ public class OrderService(HttpClient httpClient)
             var response = await httpClient.GetAsync($"api/Order?{query}");
 
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                SecureStorage.Default.Remove("jwt_token");
+                await Shell.Current.GoToAsync("//LoginPage");
                 return (null, 0);
+            }
 
             response.EnsureSuccessStatusCode();
 
@@ -72,6 +76,31 @@ public class OrderService(HttpClient httpClient)
         {
             Debug.WriteLine(ex.ToString());
             return (null, 0);
+        }
+    }
+
+    public async Task<string?> CreateOrder(OrderRequest request)
+    {
+        try
+        {
+            var response = await httpClient.PostAsJsonAsync("api/Order", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var errorContent = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(errorContent))
+            {
+                return $"Ошибка сервера: {response.StatusCode}";
+            }
+
+            return errorContent.Trim('"');
+        }
+        catch (Exception ex)
+        {
+            return $"Ошибка соединения: {ex.Message}";
         }
     }
 }

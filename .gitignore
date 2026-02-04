@@ -50,3 +50,6 @@ obj/
 
 # Publish
 publish/
+
+# Keys
+**/keys/
