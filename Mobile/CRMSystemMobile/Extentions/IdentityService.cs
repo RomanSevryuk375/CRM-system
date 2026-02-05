@@ -7,7 +7,10 @@ public class IdentityService
     public async Task<(long ProfileId, int RoleId)> GetProfileIdAsync()
     {
         var token = await SecureStorage.Default.GetAsync("jwt_token");
-        if (string.IsNullOrEmpty(token)) return (0, 0);
+        if (string.IsNullOrEmpty(token))
+        {
+            return (0, 0);
+        }
 
         try
         {

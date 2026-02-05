@@ -1,34 +1,67 @@
 ﻿using CRMSystemMobile.Extentions;
 using Shared.Contracts.Bill;
+using Shared.Filters;
+using System.Diagnostics;
 using System.Net.Http.Json;
 
 namespace CRMSystemMobile.Services;
 
 public class BillService(HttpClient httpClient, IdentityService identityService)
 {
-    public async Task<List<BillResponse>?> GetMyBills()
+    public async Task<(List<BillResponse>? items, int TotalCount)> GetBills(BillFilter filter)
     {
         try
         {
             var (profileId, _) = await identityService.GetProfileIdAsync();
 
-            if (profileId <= 0) return null;
+            if (profileId <= 0)
+            {
+                return (null, 0);
+            }
 
-            string url = $"api/Bill?Page=1&Limit=100&IsDescending=true&ClientIds={profileId}";
+            var query = $"Page={filter.Page}&Limit={filter.Limit}&IsDescending={filter.IsDescending}";
+
+            if (!string.IsNullOrEmpty(filter.SortBy))
+            {
+                query += $"&SortBy={filter.SortBy}";
+            }
+
+            if (filter.OrderIds?.Any() == true)
+            {
+                foreach (var id in filter.OrderIds)
+                {
+                    query += $"&OrderIds={id}";
+                }
+            }
+
+            query += $"&ClientIds={profileId}";
+
+            string url = $"{ApiConfig.BaseUrl}/Bill?{query}";
 
             var response = await httpClient.GetAsync(url);
 
-            if (response.IsSuccessStatusCode)
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                return await response.Content.ReadFromJsonAsync<List<BillResponse>>();
+                SecureStorage.Default.Remove("jwt_token");
+                await Shell.Current.GoToAsync("//LoginPage");
+                return (null, 0);
             }
 
-            return null;
+            response.EnsureSuccessStatusCode();
+
+            int totalCount = 0;
+            if (response.Headers.TryGetValues("x-total-count", out var values))
+            {
+                int.TryParse(values.FirstOrDefault(), out totalCount);
+            }
+
+            var items = await response.Content.ReadFromJsonAsync<List<BillResponse>>();
+            return (items, totalCount);
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex);
-            return null;
+            Debug.WriteLine(ex.ToString());
+            return (null, 0);
         }
     }
 }

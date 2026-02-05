@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="CRMSystemMobile.View.BillsPage"
+    x:Class="CRMSystemMobile.View.PaymentsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:contracts="clr-namespace:Shared.Contracts.Bill;assembly=Shared"
+    xmlns:contracts="clr-namespace:Shared.Contracts.PaymentNote;assembly=Shared"
     xmlns:d="http://schemas.microsoft.com/dotnet/2021/maui/design"
     xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
-    Title="Счета"
-    x:DataType="vm:BillsViewModel"
+    Title="Платежи"
+    x:DataType="vm:PaymentsViewModel"
     BackgroundColor="#112347"
     Shell.NavBarIsVisible="False">
 
@@ -19,11 +19,11 @@
             ColumnDefinitions="Auto, *"
             HeightRequest="80">
             <ImageButton
+                Grid.Column="0"
                 Command="{Binding GoBackCommand}"
                 HeightRequest="24"
                 HorizontalOptions="Start"
-                Source="back_icon.png"
-                WidthRequest="24" />
+                Source="back_arrow.png" />
 
             <Label
                 Grid.Column="1"
@@ -31,7 +31,7 @@
                 FontAttributes="Bold"
                 FontSize="20"
                 HorizontalOptions="Center"
-                Text="Мои счета"
+                Text="История оплат"
                 TextColor="White"
                 VerticalOptions="Center" />
         </Grid>
@@ -42,22 +42,19 @@
             IsRefreshing="{Binding IsRefreshing}"
             RefreshColor="#112347">
 
-            <CollectionView
-                Margin="0,10,0,0"
-                ItemsSource="{Binding Bills}"
-                RemainingItemsThreshold="2"
+            <CollectionView Margin="0,10,0,0" ItemsSource="{Binding Payments}" RemainingItemsThreshold="2"
                 RemainingItemsThresholdReachedCommand="{Binding LoadNextPageCommand}">
                 <CollectionView.EmptyView>
                     <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                        <Label Text="Счетов пока нет" TextColor="Gray" />
+                        <Label Text="Платежей пока нет" TextColor="Gray" />
                     </StackLayout>
                 </CollectionView.EmptyView>
 
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="contracts:BillResponse">
+                    <DataTemplate x:DataType="contracts:PaymentNoteResponse">
                         <Border
                             Margin="15,6"
-                            Padding="16"
+                            Padding="15"
                             BackgroundColor="#213868"
                             Stroke="Transparent"
                             StrokeShape="RoundRectangle 12">
@@ -73,11 +70,11 @@
                                     <Label
                                         FontAttributes="Bold"
                                         FontSize="16"
-                                        Text="{Binding Id, StringFormat='Счет №{0}'}"
+                                        Text="{Binding Method}"
                                         TextColor="White" />
                                     <Label
                                         FontSize="12"
-                                        Text="{Binding CreatedAt, StringFormat='от {0:dd.MM.yyyy}'}"
+                                        Text="{Binding BillId, StringFormat='К счету №{0}'}"
                                         TextColor="#ACACAC" />
                                 </VerticalStackLayout>
 
@@ -87,50 +84,28 @@
                                     FontAttributes="Bold"
                                     FontSize="18"
                                     HorizontalOptions="End"
-                                    Text="{Binding Amount, StringFormat='{0} BYN'}"
-                                    TextColor="White" />
+                                    Text="{Binding Amount, StringFormat='-{0} BYN'}"
+                                    TextColor="#4CD964" />
 
                                 <Label
                                     Grid.Row="1"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="2"
-                                    FontAttributes="Bold"
-                                    FontSize="14"
+                                    FontSize="12"
                                     HorizontalOptions="Start"
-                                    Text="{Binding Status}">
-                                    <Label.Triggers>
-                                        <DataTrigger
-                                            Binding="{Binding Status}"
-                                            TargetType="Label"
-                                            Value="Оплачен">
-                                            <Setter Property="TextColor" Value="#4CD964" />
-                                        </DataTrigger>
-                                        <DataTrigger
-                                            Binding="{Binding Status}"
-                                            TargetType="Label"
-                                            Value="Не оплачен">
-                                            <Setter Property="TextColor" Value="#FF453A" />
-                                        </DataTrigger>
-                                        <DataTrigger
-                                            Binding="{Binding Status}"
-                                            TargetType="Label"
-                                            Value="Частично оплачен">
-                                            <Setter Property="TextColor" Value="#FFB347" />
-                                        </DataTrigger>
-                                    </Label.Triggers>
-                                </Label>
+                                    Text="{Binding Date, StringFormat='{0:dd MMMM yyyy, HH:mm}'}"
+                                    TextColor="Gray" />
 
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.Footer>
-                    <ActivityIndicator
-                        Margin="10"
-                        HorizontalOptions="Center"
-                        IsRunning="{Binding IsLoadingMore}"
-                        IsVisible="{Binding IsLoadingMore}"
-                        Color="White" />
+                    <ActivityIndicator IsRunning="{Binding IsLoadingMore}" 
+                           IsVisible="{Binding IsLoadingMore}"
+                           Color="White"
+                           Margin="10" 
+                           HorizontalOptions="Center"/>
                 </CollectionView.Footer>
             </CollectionView>
         </RefreshView>
