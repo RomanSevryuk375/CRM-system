@@ -32,12 +32,13 @@ public partial class MainViewModel : ObservableObject
 
         LoadInitialCommand.Execute(null);
     }
-    public ObservableCollection<OrderResponse> Orders { get; } = [];
 
     private int _currentPage = 1;
     private int _totalItems = 0;
     private const int _pageSize = 15;
-    private int[] _activeStatuses = [1, 2, 3, 5];
+    private int[] _activeStatuses = [2, 3, 5];
+
+    public ObservableCollection<OrderResponse> Orders { get; } = [];
 
     [ObservableProperty]
     public partial bool IsLoadingMore { get; set; }
@@ -59,7 +60,7 @@ public partial class MainViewModel : ObservableObject
     {
         if (tabName == "InProgress")
         {
-            _activeStatuses = [1, 2, 3, 5];
+            _activeStatuses = [2, 3, 5];
         }
         else
         {
@@ -102,6 +103,7 @@ public partial class MainViewModel : ObservableObject
         Orders.Clear();
         _currentPage = 1;
         _totalItems = 0;
+        await LoadUserData();
         await LoadNextPage();
     }
 

@@ -209,21 +209,19 @@
                                 HorizontalOptions="Fill"
                                 Text="Мои авто"
                                 TextColor="White" />
-
-                            <Button
-                                BackgroundColor="Transparent"
-                                Command="{Binding NavigateToCommand}"
-                                CommandParameter="HistoryPage"
-                                HorizontalOptions="Fill"
-                                Text="История"
-                                TextColor="White" />
-
                             <Button
                                 BackgroundColor="Transparent"
                                 Command="{Binding NavigateToCommand}"
                                 CommandParameter="BillsPage"
                                 HorizontalOptions="Fill"
                                 Text="Счета"
+                                TextColor="White" />
+                            <Button
+                                BackgroundColor="Transparent"
+                                Command="{Binding NavigateToCommand}"
+                                CommandParameter="PaymentsPage"
+                                HorizontalOptions="Fill"
+                                Text="Платежи"
                                 TextColor="White" />
                         </StackLayout>
 

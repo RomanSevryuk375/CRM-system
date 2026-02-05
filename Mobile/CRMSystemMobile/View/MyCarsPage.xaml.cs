@@ -17,6 +17,6 @@ public partial class MyCarsPage : ContentPage
     {
         base.OnAppearing();
         _viewModel.IsMenuOpen = false;
-        await _viewModel.LoadCarsCommand.ExecuteAsync(null);
+        await _viewModel.LoadInitialCommand.ExecuteAsync(null);
     }
 }

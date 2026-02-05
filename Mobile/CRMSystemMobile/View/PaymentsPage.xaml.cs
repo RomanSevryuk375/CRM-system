@@ -2,15 +2,15 @@ using CRMSystemMobile.ViewModels;
 
 namespace CRMSystemMobile.View;
 
-public partial class MainPage : ContentPage
+public partial class PaymentsPage : ContentPage
 {
-    private readonly MainViewModel _viewModel;
+    private readonly PaymentsViewModel _viewModel;
 
-    public MainPage(MainViewModel mainViewModel)
+    public PaymentsPage(PaymentsViewModel viewModel)
     {
         InitializeComponent();
-        _viewModel = mainViewModel;
-        BindingContext = _viewModel;
+        _viewModel = viewModel;
+        BindingContext = viewModel;
     }
 
     protected override async void OnAppearing()

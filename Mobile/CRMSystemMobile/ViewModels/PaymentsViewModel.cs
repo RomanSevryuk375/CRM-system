@@ -1,15 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CRMSystemMobile.Services;
-using Shared.Contracts.Bill;
+using Shared.Contracts.PaymentNote;
 using Shared.Filters;
 using System.Collections.ObjectModel;
 
 namespace CRMSystemMobile.ViewModels;
 
-public partial class BillsViewModel(BillService billService) : ObservableObject
+public partial class PaymentsViewModel(PaymentService paymentService) : ObservableObject
 {
-    public ObservableCollection<BillResponse> Bills { get; } = [];
+    public ObservableCollection<PaymentNoteResponse> Payments { get; } = [];
 
     private int _currentPage = 1;
     private int _totalItems = 0;
@@ -19,7 +19,7 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
     public partial bool IsBusy { get; set; }
 
     [ObservableProperty]
-    public partial bool IsLoadingMore { get; set; } 
+    public partial bool IsLoadingMore { get; set; }
 
     [ObservableProperty]
     public partial bool IsRefreshing { get; set; }
@@ -31,14 +31,14 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
         try
         {
             IsBusy = true;
-            Bills.Clear();
+            Payments.Clear();
             _currentPage = 1;
             _totalItems = 0;
             await LoadDataInternal();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить счета", "ОК");
+            await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить платежи", "ОК");
         }
         finally
         {
@@ -50,7 +50,7 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
     [RelayCommand]
     private async Task LoadNextPage()
     {
-        if (IsLoadingMore || IsBusy || (Bills.Count >= _totalItems && _totalItems != 0))
+        if (IsLoadingMore || IsBusy || (Payments.Count >= _totalItems && _totalItems != 0))
             return;
 
         try
@@ -66,23 +66,23 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
 
     private async Task LoadDataInternal()
     {
-        var filter = new BillFilter(
-             OrderIds: [],
-             ClientIds: [],
-             SortBy: "createdAt",
-             Page: _currentPage,
-             Limit: _pageSize,
-             IsDescending: true
-         );
+        var filter = new PaymentNoteFilter(
+            BillIds: [],
+            MethodIds: [],
+            SortBy: "date",
+            Page: _currentPage,
+            Limit: _pageSize,
+            IsDescending: true
+        );
 
-        var (items, total) = await billService.GetBills(filter);
+        var (items, total) = await paymentService.GetMyPayments(filter);
         _totalItems = total;
 
         if (items != null)
         {
             foreach (var item in items)
             {
-                Bills.Add(item);
+                Payments.Add(item);
             }
         }
         _currentPage++;

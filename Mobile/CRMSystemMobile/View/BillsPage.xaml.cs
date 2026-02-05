@@ -16,6 +16,7 @@ public partial class BillsPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.LoadBillsCommand.ExecuteAsync(null);
+        if (_viewModel.LoadInitialCommand.CanExecute(null))
+            await _viewModel.LoadInitialCommand.ExecuteAsync(null);
     }
 }
