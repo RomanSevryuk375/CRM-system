@@ -5,26 +5,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
 
-public class PaymentMethodService : IPaymentMethodService
+public class PaymentMethodService(
+    IPaymentMethodRepository paymentMethodRepository,
+    ILogger<PaymentMethodService> logger) : IPaymentMethodService
 {
-    private readonly IPaymentMethodRepository _paymentMethodRepository;
-    private readonly ILogger<PaymentMethodService> _logger;
-
-    public PaymentMethodService(
-        IPaymentMethodRepository paymentMethodRepository,
-        ILogger<PaymentMethodService> logger)
-    {
-        _paymentMethodRepository = paymentMethodRepository;
-        _logger = logger;
-    }
-
     public async Task<List<PaymentMethodItem>> GetPaymentMethods(CancellationToken ct)
     {
-        _logger.LogInformation("Getting payment method start");
+        logger.LogInformation("Getting payment method start");
 
-        var paymentMethods = await _paymentMethodRepository.Get(ct);
+        var paymentMethods = await paymentMethodRepository.Get(ct);
 
-        _logger.LogInformation("Getting payment method success");
+        logger.LogInformation("Getting payment method success");
 
         return paymentMethods;
     }

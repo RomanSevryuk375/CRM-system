@@ -1,31 +1,21 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
 
-public class WorkProposalStatusService : IWorkProposalStatusService
+public class WorkProposalStatusService(
+    IWorkProposalStatusRepository workProposalStatusRepository,
+    ILogger<WorkProposalStatusService> logger) : IWorkProposalStatusService
 {
-    private readonly IWorkProposalStatusRepository _workProposalStatusRepository;
-    private readonly ILogger<WorkProposalStatusService> _logger;
-
-    public WorkProposalStatusService(
-        IWorkProposalStatusRepository workProposalStatusRepository,
-        ILogger<WorkProposalStatusService> logger)
-    {
-        _workProposalStatusRepository = workProposalStatusRepository;
-        _logger = logger;
-    }
-
     public async Task<List<WorkProposalStatusItem>> GetProposalStatuses(CancellationToken ct)
     {
-        _logger.LogInformation("Getting proposal statuses start");
+        logger.LogInformation("Getting proposal statuses start");
 
-        var statuses = await _workProposalStatusRepository.Get(ct);
+        var statuses = await workProposalStatusRepository.Get(ct);
 
-        _logger.LogInformation("Getting proposal statuses success");
+        logger.LogInformation("Getting proposal statuses success");
 
         return statuses;
     }

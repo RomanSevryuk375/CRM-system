@@ -8,68 +8,57 @@ using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 
-public class TaxService : ITaxService
+public class TaxService(
+    ITaxRepository taxRepository,
+    ITaxTypeRepository taxTypeRepository,
+    ILogger<TaxService> logger) : ITaxService
 {
-    private readonly ITaxRepository _taxRepository;
-    private readonly ITaxTypeRepository _taxTypeRepository;
-    private readonly ILogger<TaxService> _logger;
-
-    public TaxService(
-        ITaxRepository taxRepository,
-        ITaxTypeRepository taxTypeRepository,
-        ILogger<TaxService> logger)
-    {
-        _taxRepository = taxRepository;
-        _taxTypeRepository = taxTypeRepository;
-        _logger = logger;
-    }
-
     public async Task<List<TaxItem>> GetTaxes(TaxFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting tax start");
+        logger.LogInformation("Getting tax start");
 
-        var taxes = await _taxRepository.Get(filter, ct);
+        var taxes = await taxRepository.Get(filter, ct);
 
-        _logger.LogInformation("Getting tax success");
+        logger.LogInformation("Getting tax success");
 
         return taxes;
     }
 
     public async Task<int> CreateTax(Tax tax, CancellationToken ct)
     {
-        _logger.LogInformation("Creating tax start");
+        logger.LogInformation("Creating tax start");
 
-        if (!await _taxTypeRepository.Exists((int)tax.TypeId, ct))
+        if (!await taxTypeRepository.Exists((int)tax.TypeId, ct))
         {
-            _logger.LogError("Tax{taxId} not found", (int)tax.TypeId);
+            logger.LogError("Tax{taxId} not found", (int)tax.TypeId);
             throw new NotFoundException($"Tax {(int)tax.TypeId} not found");
         }
 
-        var Id = await _taxRepository.Create(tax, ct);
+        var Id = await taxRepository.Create(tax, ct);
 
-        _logger.LogInformation("Creating tax success");
+        logger.LogInformation("Creating tax success");
 
         return Id;
     }
 
     public async Task<int> UpdateTax(int id, TaxUpdateModel model, CancellationToken ct)
     {
-        _logger.LogInformation("Updating tax start");
+        logger.LogInformation("Updating tax start");
 
-        var Id = await _taxRepository.Update(id, model, ct);
+        var Id = await taxRepository.Update(id, model, ct);
 
-        _logger.LogInformation("Updating tax success");
+        logger.LogInformation("Updating tax success");
 
         return Id;
     }
 
     public async Task<int> DeleteTax(int id, CancellationToken ct)
     {
-        _logger.LogInformation("Deleting tax start");
+        logger.LogInformation("Deleting tax start");
 
-        var Id = await _taxRepository.Delete(id, ct);
+        var Id = await taxRepository.Delete(id, ct);
 
-        _logger.LogInformation("Deleting tax success");
+        logger.LogInformation("Deleting tax success");
 
         return Id;
     }

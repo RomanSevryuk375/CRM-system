@@ -6,29 +6,19 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Cached;
 
-public class CachedBillStatusService : IBillStatusService
+public class CachedBillStatusService(
+    IBillStatusService decorated,
+    IDistributedCache distributed,
+    ILogger<CachedBillStatusService> logger) : IBillStatusService
 {
-    private readonly IBillStatusService _decorated;
-    private readonly IDistributedCache _distributed;
-    private readonly ILogger<CachedBillStatusService> _logger;
-
     private const string CACHE_KEY = $"Dict_{nameof(CachedBillStatusService)}";
 
-    public CachedBillStatusService(
-        IBillStatusService decorated,
-        IDistributedCache distributed,
-        ILogger<CachedBillStatusService> logger)
-    {
-        _decorated = decorated;
-        _distributed = distributed;
-        _logger = logger;
-    }
     public async Task<List<BillStatusItem>> GetAllBillStatuses(CancellationToken ct)
     {
-        return await _distributed.GetOrCreateAsync(
+        return await distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetAllBillStatuses(ct),
+            () => decorated.GetAllBillStatuses(ct),
             TimeSpan.FromHours(24),
-            _logger, ct) ?? [];
+            logger, ct) ?? [];
     }
 }

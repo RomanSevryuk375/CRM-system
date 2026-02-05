@@ -9,106 +9,93 @@ using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 
-public class SkillService : ISkillService
+public class SkillService(
+    ISkillRepository skillRepository,
+    ISpecializationRepository specializationRepository,
+    IWorkerRepository workerRepository,
+    IUserContext userContext,
+    ILogger<SkillService> logger) : ISkillService
 {
-    private readonly ISkillRepository _skillRepository;
-    private readonly ISpecializationRepository _specializationRepository;
-    private readonly IWorkerRepository _workerRepository;
-    private readonly IUserContext _userContext;
-    private readonly ILogger<SkillService> _logger;
-
-    public SkillService(
-        ISkillRepository skillRepository,
-        ISpecializationRepository specializationRepository,
-        IWorkerRepository workerRepository,
-        IUserContext userContext,
-        ILogger<SkillService> logger)
-    {
-        _skillRepository = skillRepository;
-        _specializationRepository = specializationRepository;
-        _workerRepository = workerRepository;
-        _userContext = userContext;
-        _logger = logger;
-    }
-
     public async Task<List<SkillItem>> GetSkills(SkillFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting skills start");
+        logger.LogInformation("Getting skills start");
 
-        if(_userContext.RoleId != (int)RoleEnum.Manager)
-            filter = filter with { WorkerIds = [(int)_userContext.ProfileId] };
+        if (userContext.RoleId != (int)RoleEnum.Manager)
+        {
+            filter = filter with { WorkerIds = [(int)userContext.ProfileId] };
+        }
 
-        var skills = await _skillRepository.Get(filter, ct);
+        var skills = await skillRepository.Get(filter, ct);
 
-        _logger.LogInformation("Getting skills success");
+        logger.LogInformation("Getting skills success");
 
         return skills;
     }
 
     public async Task<int> GetSkillsCount(SkillFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting skills count start");
+        logger.LogInformation("Getting skills count start");
 
-        var count = await _skillRepository.GetCount(filter, ct);
+        var count = await skillRepository.GetCount(filter, ct);
 
-        _logger.LogInformation("Getting skills count success");
+        logger.LogInformation("Getting skills count success");
 
         return count;
     }
 
     public async Task<int> CreateSkill(Skill skill, CancellationToken ct)
     {
-        _logger.LogInformation("Creating skill start");
+        logger.LogInformation("Creating skill start");
 
-        if (!await _workerRepository.Exists(skill.WorkerId, ct))
+        if (!await workerRepository.Exists(skill.WorkerId, ct))
         {
-            _logger.LogError("Worker {workerId} not found", skill.WorkerId);
+            logger.LogError("Worker {workerId} not found", skill.WorkerId);
             throw new NotFoundException($"Worker {skill.WorkerId} not found");
         }
 
-        if (!await _specializationRepository.Exists(skill.SpecializationId, ct))
+        if (!await specializationRepository.Exists(skill.SpecializationId, ct))
         {
-            _logger.LogError("Specialization {specializationId} not found", skill.SpecializationId);
+            logger.LogError("Specialization {specializationId} not found", skill.SpecializationId);
             throw new NotFoundException($"Specialization {skill.SpecializationId} not found");
         }
 
-        var Id = await _skillRepository.Create(skill, ct);
+        var Id = await skillRepository.Create(skill, ct);
 
-        _logger.LogInformation("Creating skill success");
+        logger.LogInformation("Creating skill success");
 
         return Id;
     }
 
     public async Task<int> UpdateSkill(int id, SkillUpdateModel model, CancellationToken ct)
     {
-        _logger.LogInformation("Updating skill start");
+        logger.LogInformation("Updating skill start");
 
-        if (model.WorkerId.HasValue && !await _workerRepository.Exists(model.WorkerId.Value, ct))
+        if (model.WorkerId.HasValue && !await workerRepository.Exists(model.WorkerId.Value, ct))
         {
-            _logger.LogError("Worker {workerId} not found", model.WorkerId);
+            logger.LogError("Worker {workerId} not found", model.WorkerId);
             throw new NotFoundException($"Worker {model.WorkerId} not found");
         }
 
-        if (model.SpecializationId.HasValue && !await _specializationRepository.Exists(model.SpecializationId.Value, ct))
+        if (model.SpecializationId.HasValue && !await specializationRepository.Exists(model.SpecializationId.Value, ct))
         {
-            _logger.LogError("Specialization {specializationId} not found", model.SpecializationId);
+            logger.LogError("Specialization {specializationId} not found", model.SpecializationId);
             throw new NotFoundException($"Specialization {model.SpecializationId} not found");
         }
 
-        _logger.LogInformation("Updating skill success");
+        logger.LogInformation("Updating skill success");
 
-        var Id = await _skillRepository.Update(id, model, ct);
+        var Id = await skillRepository.Update(id, model, ct);
 
         return Id;
     }
 
     public async Task<int> DeleteSkill(int id, CancellationToken ct)
     {
-        _logger.LogInformation("Deleting skill start");
+        logger.LogInformation("Deleting skill start");
 
-        var Id = await _skillRepository.Delete(id, ct);
+        var Id = await skillRepository.Delete(id, ct);
 
-        _logger.LogInformation("Deleting skill success");
+        logger.LogInformation("Deleting skill success");
 
         return Id;
     }

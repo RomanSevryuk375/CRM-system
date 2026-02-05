@@ -6,29 +6,19 @@ using CRMSystem.Business.Extensions;
 
 namespace CRMSystem.Business.Cached;
 
-public class CachedNotificationTypeService : INotificationTypeService
+public class CachedNotificationTypeService(
+    INotificationTypeService decorated,
+    IDistributedCache distributed,
+    ILogger<CachedNotificationTypeService> logger) : INotificationTypeService
 {
-    private readonly INotificationTypeService _decorated;
-    private readonly IDistributedCache _distributed;
-    private readonly ILogger<CachedNotificationTypeService> _logger;
-
     private const string CACHE_KEY = $"Dict_{nameof(CachedNotificationTypeService)}";
 
-    public CachedNotificationTypeService(
-        INotificationTypeService decorated,
-        IDistributedCache distributed,
-        ILogger<CachedNotificationTypeService> logger)
-    {
-        _decorated = decorated;
-        _distributed = distributed;
-        _logger = logger;
-    }
     public async Task<List<NotificationTypeItem>> GetNotificationTypes(CancellationToken ct)
     {
-        return await _distributed.GetOrCreateAsync(
+        return await distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetNotificationTypes(ct),
+            () => decorated.GetNotificationTypes(ct),
             TimeSpan.FromHours(24),
-            _logger, ct) ?? [];
+            logger, ct) ?? [];
     }
 }

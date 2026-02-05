@@ -5,26 +5,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
 
-public class BillStatusService : IBillStatusService
+public class BillStatusService(
+    IBillStatusRepository billStatusRepository,
+    ILogger<BillStatusService> logger) : IBillStatusService
 {
-    private readonly IBillStatusRepository _billStatusRepository;
-    private readonly ILogger<BillStatusService> _logger;
-
-    public BillStatusService(
-        IBillStatusRepository billStatusRepository,
-        ILogger<BillStatusService> logger)
-    {
-        _billStatusRepository = billStatusRepository;
-        _logger = logger;
-    }
-
     public async Task<List<BillStatusItem>> GetAllBillStatuses(CancellationToken ct)
     {
-        _logger.LogInformation("Getting bill statuses start");
+        logger.LogInformation("Getting bill statuses start");
 
-        var bullStatus = await _billStatusRepository.Get(ct);
+        var bullStatus = await billStatusRepository.Get(ct);
 
-        _logger.LogInformation("Getting bill statuses success");
+        logger.LogInformation("Getting bill statuses success");
 
         return bullStatus;
     }

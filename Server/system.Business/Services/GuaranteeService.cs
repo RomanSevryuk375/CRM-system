@@ -8,79 +8,68 @@ using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 
-public class GuaranteeService : IGuaranteeService
+public class GuaranteeService(
+    IGuaranteeRepository guaranteeRepository,
+    IOrderRepository orderRepository,
+    ILogger<GuaranteeService> logger) : IGuaranteeService
 {
-    private readonly IGuaranteeRepository _guaranteeRepository;
-    private readonly IOrderRepository _orderRepository;
-    private readonly ILogger<GuaranteeService> _logger;
-
-    public GuaranteeService(
-        IGuaranteeRepository guaranteeRepository,
-        IOrderRepository orderRepository,
-        ILogger<GuaranteeService> logger)
-    {
-        _guaranteeRepository = guaranteeRepository;
-        _orderRepository = orderRepository;
-        _logger = logger;
-    }
-
     public async Task<List<GuaranteeItem>> GetPagedGuarantees(GuaranteeFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting guarantees start"); 
+        logger.LogInformation("Getting guarantees start"); 
 
-        var guarantee = await _guaranteeRepository.GetPaged(filter, ct);
+        var guarantee = await guaranteeRepository.GetPaged(filter, ct);
 
-        _logger.LogInformation("Getting guarantees success"); 
+        logger.LogInformation("Getting guarantees success"); 
 
         return guarantee;
     }
 
     public async Task<int> GetCountGuarantees(GuaranteeFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting count guarantees start"); 
+        logger.LogInformation("Getting count guarantees start"); 
 
-        var count = await _guaranteeRepository.GetCount(filter, ct);
+        var count = await guaranteeRepository.GetCount(filter, ct);
 
-        _logger.LogInformation("Getting count guarantees success"); 
+        logger.LogInformation("Getting count guarantees success"); 
 
         return count;
     }
 
     public async Task<long> CreateGuarantee(Guarantee guarantee, CancellationToken ct)
     {
-        _logger.LogInformation("Creating guarantee for order {OrderId} start", guarantee.OrderId);
+        logger.LogInformation("Creating guarantee for order {OrderId} start", guarantee.OrderId);
 
-        if (!await _orderRepository.Exists(guarantee.OrderId, ct))
+        if (!await orderRepository.Exists(guarantee.OrderId, ct))
         {
-            _logger.LogError("Order{OrderId} not found", guarantee.OrderId);
+            logger.LogError("Order{OrderId} not found", guarantee.OrderId);
             throw new NotFoundException($"Order{guarantee.OrderId} not found");
         }
 
-        var Id = await _guaranteeRepository.Create(guarantee, ct);
+        var Id = await guaranteeRepository.Create(guarantee, ct);
 
-        _logger.LogInformation("Creating guarantee for order {OrderId} success with ID {GuaranteeId}", guarantee.OrderId, Id);
+        logger.LogInformation("Creating guarantee for order {OrderId} success with ID {GuaranteeId}", guarantee.OrderId, Id);
 
         return Id;
     }
 
     public async Task<long> UpdateGuarantee(long id, GuaranteeUpdateModel model, CancellationToken ct)
     {
-        _logger.LogInformation("Updating guarantee {Id} start", id);
+        logger.LogInformation("Updating guarantee {Id} start", id);
 
-        var Id = await _guaranteeRepository.Update(id, model, ct);
+        var Id = await guaranteeRepository.Update(id, model, ct);
 
-        _logger.LogInformation("Updating guarantee {Id} success", id);
+        logger.LogInformation("Updating guarantee {Id} success", id);
 
         return Id;
     }
 
     public async Task<long> DeleteGuarantee(long id, CancellationToken ct)
     {
-        _logger.LogInformation("Deleting guarantee {Id} start", id);
+        logger.LogInformation("Deleting guarantee {Id} start", id);
 
-        var Id = await _guaranteeRepository.Delete(id, ct);
+        var Id = await guaranteeRepository.Delete(id, ct);
 
-        _logger.LogInformation("Deleting guarantee {Id} success", id);
+        logger.LogInformation("Deleting guarantee {Id} success", id);
 
         return Id;
     }

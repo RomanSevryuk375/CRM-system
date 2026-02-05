@@ -9,142 +9,121 @@ using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 
-public class WorkInOrderService : IWorkInOrderService
+public class WorkInOrderService(
+    IWorkInOrderRepository workInOrderRepository,
+    IWorkInOrderStatusRepository workInOrderStatusRepository,
+    IWorkerRepository workerRepository,
+    IOrderRepository orderRepository,
+    IWorkRepository workRepository,
+    IBillRepository billRepository,
+    IUserContext userContext,
+    ILogger<WorkInOrderService> logger) : IWorkInOrderService
 {
-    private readonly IWorkInOrderRepository _workInOrderRepository;
-    private readonly IWorkInOrderStatusRepository _workInOrderStatusRepository;
-    private readonly IWorkerRepository _workerRepository;
-    private readonly IOrderRepository _orderRepository;
-    private readonly IWorkRepository _workRepository;
-    private readonly IBillRepository _billRepository;
-    private readonly IUserContext _userContext;
-    private readonly ILogger<WorkInOrderService> _logger;
-
-    public WorkInOrderService(
-        IWorkInOrderRepository workInOrderRepository,
-        IWorkInOrderStatusRepository workInOrderStatusRepository,
-        IWorkerRepository workerRepository,
-        IOrderRepository orderRepository,
-        IWorkRepository workRepository,
-        IBillRepository billRepository,
-        IUserContext userContext,
-        ILogger<WorkInOrderService> logger)
-    {
-        _workInOrderRepository = workInOrderRepository;
-        _workInOrderStatusRepository = workInOrderStatusRepository;
-        _workerRepository = workerRepository;
-        _orderRepository = orderRepository;
-        _workRepository = workRepository;
-        _billRepository = billRepository;
-        _userContext = userContext;
-        _logger = logger;
-    }
-
     public async Task<List<WorkInOrderItem>> GetPagedWiO(WorkInOrderFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting paged works in order start");
+        logger.LogInformation("Getting paged works in order start");
 
-        if (_userContext.RoleId != (int)RoleEnum.Manager)
-            filter = filter with { WorkerIds = [(int)_userContext.ProfileId] };
+        if (userContext.RoleId != (int)RoleEnum.Manager)
+            filter = filter with { WorkerIds = [(int)userContext.ProfileId] };
 
-        var works = await _workInOrderRepository.GetPaged(filter, ct);
+        var works = await workInOrderRepository.GetPaged(filter, ct);
 
-        _logger.LogInformation("Getting paged works in order success");
+        logger.LogInformation("Getting paged works in order success");
 
         return works;
     }
 
     public async Task<int> GetCountWiO(WorkInOrderFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting count works in order start");
+        logger.LogInformation("Getting count works in order start");
 
-        var count = await _workInOrderRepository.GetCount(filter, ct);
+        var count = await workInOrderRepository.GetCount(filter, ct);
 
-        _logger.LogInformation("Getting count works in order success");
+        logger.LogInformation("Getting count works in order success");
 
         return count;
     }
 
     public async Task<List<WorkInOrderItem>> GetWiOByOrderId(long orderId, CancellationToken ct)
     {
-        _logger.LogInformation("Getting works in order by order id start");
+        logger.LogInformation("Getting works in order by order id start");
 
-        var works = await _workInOrderRepository.GetByOrderId(orderId, ct);
+        var works = await workInOrderRepository.GetByOrderId(orderId, ct);
 
-        _logger.LogInformation("Getting works in order by order id success");
+        logger.LogInformation("Getting works in order by order id success");
 
         return works;
     }
 
     public async Task<long> CreateWiO(WorkInOrder workInOrder, CancellationToken ct)
     {
-        _logger.LogInformation("Creating work in order start");
+        logger.LogInformation("Creating work in order start");
 
-        if (!await _orderRepository.Exists(workInOrder.OrderId, ct))
+        if (!await orderRepository.Exists(workInOrder.OrderId, ct))
         {
-            _logger.LogError("Order{OrderId} not found", workInOrder.OrderId);
+            logger.LogError("Order{OrderId} not found", workInOrder.OrderId);
             throw new NotFoundException($"Order{workInOrder.OrderId} not found");
         }
 
-        if (!await _workInOrderStatusRepository.Exists((int)workInOrder.StatusId, ct))
+        if (!await workInOrderStatusRepository.Exists((int)workInOrder.StatusId, ct))
         {
-            _logger.LogError("Status{StatusId} not found", workInOrder.StatusId);
+            logger.LogError("Status{StatusId} not found", workInOrder.StatusId);
             throw new NotFoundException($"Status{workInOrder.StatusId} not found");
         }
 
-        if (!await _workerRepository.Exists(workInOrder.WorkerId, ct))
+        if (!await workerRepository.Exists(workInOrder.WorkerId, ct))
         {
-            _logger.LogError("Worker {workerId} not found", workInOrder.WorkerId);
+            logger.LogError("Worker {workerId} not found", workInOrder.WorkerId);
             throw new NotFoundException($"Worker {workInOrder.WorkerId} not found");
         }
 
-        if (!await _workRepository.Exists(workInOrder.JobId, ct))
+        if (!await workRepository.Exists(workInOrder.JobId, ct))
         {
-            _logger.LogError("Work {workId} not found", workInOrder.JobId);
+            logger.LogError("Work {workId} not found", workInOrder.JobId);
             throw new NotFoundException($"Work {workInOrder.JobId} not found");
         }
 
-        var Id = await _workInOrderRepository.Create(workInOrder, ct);
+        var Id = await workInOrderRepository.Create(workInOrder, ct);
 
-        _logger.LogInformation("Creating work in order success");
+        logger.LogInformation("Creating work in order success");
 
-        _logger.LogInformation("Recalculating bill start");
-        await _billRepository.RecalculateAmount(workInOrder.OrderId, ct);
-        _logger.LogInformation("Recalculating bill success");
+        logger.LogInformation("Recalculating bill start");
+        await billRepository.RecalculateAmount(workInOrder.OrderId, ct);
+        logger.LogInformation("Recalculating bill success");
 
         return Id;
     }
 
     public async Task<long> UpdateWiO(long id, WorkInOrderUpdateModel model, CancellationToken ct)
     {
-        _logger.LogInformation("Updating work in order start");
+        logger.LogInformation("Updating work in order start");
 
-        if (model.StatusId.HasValue && !await _workInOrderStatusRepository.Exists((int)model.StatusId.Value, ct))
+        if (model.StatusId.HasValue && !await workInOrderStatusRepository.Exists((int)model.StatusId.Value, ct))
         {
-            _logger.LogError("Status{StatusId} not found", (int)model.StatusId);
+            logger.LogError("Status{StatusId} not found", (int)model.StatusId);
             throw new NotFoundException($"Status{(int)model.StatusId} not found");
         }
 
-        if (model.WorkerId.HasValue && !await _workerRepository.Exists(model.WorkerId.Value, ct))
+        if (model.WorkerId.HasValue && !await workerRepository.Exists(model.WorkerId.Value, ct))
         {
-            _logger.LogError("Worker {workerId} not found", model.WorkerId);
+            logger.LogError("Worker {workerId} not found", model.WorkerId);
             throw new NotFoundException($"Worker {model.WorkerId} not found");
         }
 
-        var Id = await _workInOrderRepository.Update(id, model, ct);
+        var Id = await workInOrderRepository.Update(id, model, ct);
 
-        _logger.LogInformation("Updating work in order success");
+        logger.LogInformation("Updating work in order success");
 
         return Id;
     }
 
     public async Task<long> DeleteWIO(long id, CancellationToken ct)
     {
-        _logger.LogInformation("Deleting work in order start");
+        logger.LogInformation("Deleting work in order start");
 
-        var Id = await _workInOrderRepository.Delete(id, ct);
+        var Id = await workInOrderRepository.Delete(id, ct);
 
-        _logger.LogInformation("Deleting work in order success");
+        logger.LogInformation("Deleting work in order success");
 
         return Id;
     }

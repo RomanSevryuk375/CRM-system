@@ -7,70 +7,61 @@ using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 
-public class WorkService : IWorkService
+public class WorkService(
+    IWorkRepository workRepository,
+    ILogger<WorkService> logger) : IWorkService
 {
-    private readonly IWorkRepository _workRepository;
-    private readonly ILogger<WorkService> _logger;
-
-    public WorkService(
-        IWorkRepository workRepository,
-        ILogger<WorkService> logger)
-    {
-        _workRepository = workRepository;
-        _logger = logger;
-    }
-
     public async Task<List<WorkItem>> GetPagedWork(WorkFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting works start");
+        logger.LogInformation("Getting works start");
 
-        var works = await _workRepository.GetPaged(filter, ct);
+        var works = await workRepository.GetPaged(filter, ct);
 
-        _logger.LogInformation("Getting works success");
+        logger.LogInformation("Getting works success");
 
         return works;
     }
 
     public async Task<int> GetCountWork(CancellationToken ct)
     {
-        _logger.LogInformation("Getting works count start");
+        logger.LogInformation("Getting works count start");
 
-        var count = await _workRepository.GetCount(ct);
+        var count = await workRepository.GetCount(ct);
 
-        _logger.LogInformation("Getting works count success");
+        logger.LogInformation("Getting works count success");
 
         return count;
     }
 
     public async Task<long> CreateWork(Work work, CancellationToken ct)
     {
-        _logger.LogInformation("Creating work start");
+        logger.LogInformation("Creating work start");
 
-        var Id = await _workRepository.Create(work, ct);
+        var Id = await workRepository.Create(work, ct);
 
-        _logger.LogInformation("Creating work success");
+        logger.LogInformation("Creating work success");
 
         return Id;
     }
 
     public async Task<long> UpdateWork(long id, WorkUpdateModel model, CancellationToken ct)
     {
-        _logger.LogInformation("Updating work start");
+        logger.LogInformation("Updating work start");
 
-        var Id = await _workRepository.Update(id, model, ct);
+        var Id = await workRepository.Update(id, model, ct);
 
-        _logger.LogInformation("Updating work success");
+        logger.LogInformation("Updating work success");
 
         return Id;
     }
 
     public async Task<long> DeleteWork(long id, CancellationToken ct)
     {
-        _logger.LogInformation("Deleting work start");
+        logger.LogInformation("Deleting work start");
 
-        var Id = await _workRepository.Delete(id, ct);
+        var Id = await workRepository.Delete(id, ct);
 
-        _logger.LogInformation("Deleting work success");
+        logger.LogInformation("Deleting work success");
 
         return Id;
     }

@@ -5,26 +5,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
 
-public class CarStatusService : ICarStatusService
+public class CarStatusService(
+    ICarStatusRepository carStatusRepository,
+    ILogger<CarStatusService> logger) : ICarStatusService
 {
-    private readonly ICarStatusRepository _carStatusRepository;
-    private readonly ILogger<CarStatusService> _logger;
-
-    public CarStatusService(
-        ICarStatusRepository carStatusRepository,
-        ILogger<CarStatusService> logger)
-    {
-        _carStatusRepository = carStatusRepository;
-        _logger = logger;
-    }
-
     public async Task<List<CarStatusItem>> GetCarStatuses(CancellationToken ct)
     {
-        _logger.LogInformation("Car status getting start");
+        logger.LogInformation("Car status getting start");
 
-        var carSatsus = await _carStatusRepository.Get(ct);
+        var carSatsus = await carStatusRepository.Get(ct);
 
-        _logger.LogInformation("Car status getting success");
+        logger.LogInformation("Car status getting success");
 
         return carSatsus;
     }
