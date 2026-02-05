@@ -6,29 +6,19 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Cached;
 
-public class CachedWorkInOrderStatusService : IWorkInOrderStatusService
+public class CachedWorkInOrderStatusService(
+    IWorkInOrderStatusService decorated,
+    IDistributedCache distributed,
+    ILogger<CachedWorkInOrderStatusService> logger) : IWorkInOrderStatusService
 {
-    private readonly IWorkInOrderStatusService _decorated;
-    private readonly IDistributedCache _distributed;
-    private readonly ILogger<CachedWorkInOrderStatusService> _logger;
-
     private const string CACHE_KEY = $"Dict_{nameof(CachedWorkInOrderStatusService)}";
 
-    public CachedWorkInOrderStatusService(
-        IWorkInOrderStatusService decorated,
-        IDistributedCache distributed,
-        ILogger<CachedWorkInOrderStatusService> logger)
-    {
-        _decorated = decorated;
-        _distributed = distributed;
-        _logger = logger;
-    }
     public async Task<List<WorkInOrderStatusItem>> GetWiOStatuses(CancellationToken ct)
     {
-        return await _distributed.GetOrCreateAsync(
+        return await distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetWiOStatuses(ct),
+            () => decorated.GetWiOStatuses(ct),
             TimeSpan.FromHours(24),
-            _logger, ct) ?? [];
+            logger, ct) ?? [];
     }
 }

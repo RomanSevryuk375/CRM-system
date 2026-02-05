@@ -9,36 +9,25 @@ using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 
-public class BillService : IBillService
+public class BillService(
+    IBillRepository billRepository,
+    IOrderRepository orderRepository,
+    IBillStatusRepository statusRepository,
+    IUserContext userContext,
+    ILogger<BillService> logger) : IBillService
 {
-    private readonly IBillRepository _billRepository;
-    private readonly IOrderRepository _orderRepository;
-    private readonly IBillStatusRepository _statusRepository;
-    private readonly IUserContext _userContext;
-    private readonly ILogger _logger;
-
-    public BillService(
-        IBillRepository billRepository,
-        IOrderRepository orderRepository,
-        IBillStatusRepository statusRepository,
-        IUserContext userContext,
-        ILogger<BillService> logger)
-    {
-        _billRepository = billRepository;
-        _orderRepository = orderRepository;
-        _statusRepository = statusRepository;
-        _userContext = userContext;
-        _logger = logger;
-    }
+    private readonly ILogger _logger = logger;
 
     public async Task<List<BillItem>> GetPagedBills(BillFilter filter, CancellationToken ct)
     {
         _logger.LogInformation("Getting bills start");
 
-        if (_userContext.RoleId != (int)RoleEnum.Manager)
-            filter = filter with { ClientIds = [_userContext.ProfileId] };
+        if (userContext.RoleId != (int)RoleEnum.Manager)
+        {
+            filter = filter with { ClientIds = [userContext.ProfileId] };
+        }
 
-        var bill = await _billRepository.GetPaged(filter, ct);
+        var bill = await billRepository.GetPaged(filter, ct);
 
         _logger.LogInformation("Getting bills started");
 
@@ -49,7 +38,7 @@ public class BillService : IBillService
     {
         _logger.LogInformation("Getting count start");
 
-        var count = await _billRepository.GetCount(filter, ct);
+        var count = await billRepository.GetCount(filter, ct);
 
         _logger.LogInformation("Getting count success");
 
@@ -60,19 +49,19 @@ public class BillService : IBillService
     {
         _logger.LogInformation("Creating bill start");
 
-        if (!await _orderRepository.Exists(bill.OrderId, ct))
+        if (!await orderRepository.Exists(bill.OrderId, ct))
         {
             _logger.LogError("Order{OrderId} not found", bill.OrderId);
             throw new NotFoundException($"Order{bill.OrderId} not found");
         }
 
-        if (await _orderRepository.GetStatus(bill.OrderId, ct) == (int)OrderStatusEnum.Closed)
+        if (await orderRepository.GetStatus(bill.OrderId, ct) == (int)OrderStatusEnum.Closed)
         {
             _logger.LogError("Order{OrderId} is closed", bill.OrderId);
             throw new ConflictException($"Order {bill.OrderId} is closed");
         }
 
-        if (!await _statusRepository.Exists((int)bill.StatusId, ct))
+        if (!await statusRepository.Exists((int)bill.StatusId, ct))
         {
             _logger.LogError("Status{StatusId} not found", bill.StatusId);
             throw new NotFoundException($"Status{bill.StatusId} not found");
@@ -80,7 +69,7 @@ public class BillService : IBillService
 
         _logger.LogInformation("Creating bill success");
 
-        var Id = await _billRepository.Create(bill, ct);
+        var Id = await billRepository.Create(bill, ct);
 
         return Id;
     }
@@ -91,14 +80,14 @@ public class BillService : IBillService
 
         if (model.StatusId is not null)
         {
-            if (!await _statusRepository.Exists((int)model.StatusId, ct))
+            if (!await statusRepository.Exists((int)model.StatusId, ct))
             {
                 _logger.LogError("Status{StatusId} not found", (int)model.StatusId);
                 throw new NotFoundException($"Status{(int)model.StatusId} not found");
             }
         }
 
-        var Id = await _billRepository.Update(id, model, ct);
+        var Id = await billRepository.Update(id, model, ct);
 
         _logger.LogInformation("Updating bill success");
 
@@ -109,7 +98,7 @@ public class BillService : IBillService
     {
         _logger.LogInformation("Deleting bill start");
 
-        var Id = await _billRepository.Delete(id, ct);
+        var Id = await billRepository.Delete(id, ct);
 
         _logger.LogInformation("Deleting bill success");
 
@@ -120,7 +109,7 @@ public class BillService : IBillService
     {
         _logger.LogInformation("Recalculating debt of bill start");
 
-        var debt = await _billRepository.RecalculateDebt(id, ct);
+        var debt = await billRepository.RecalculateDebt(id, ct);
 
         _logger.LogInformation("Recalculating debt of bill success");
 
@@ -131,7 +120,7 @@ public class BillService : IBillService
     {
         _logger.LogInformation("Recalculating amount of bill start");
 
-        var amount = await _billRepository.RecalculateAmount(id, ct);
+        var amount = await billRepository.RecalculateAmount(id, ct);
 
         _logger.LogInformation("Recalculating amount of bill success");
 

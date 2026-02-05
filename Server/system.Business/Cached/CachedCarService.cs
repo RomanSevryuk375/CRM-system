@@ -8,62 +8,52 @@ using Shared.Filters;
 
 namespace CRMSystem.Business.Cached;
 
-public class CachedCarService : ICarService
+public class CachedCarService(
+    ICarService decorated,
+    IDistributedCache distributed,
+    ILogger<CachedCarService> logger) : ICarService
 {
-    private readonly ICarService _decorated;
-    private readonly IDistributedCache _distributed;
-    private readonly ILogger<CachedCarService> _logger;
-
-    public CachedCarService(
-        ICarService decorated,
-        IDistributedCache distributed,
-        ILogger<CachedCarService> logger)
-    {
-        _decorated = decorated;
-        _distributed = distributed;
-        _logger = logger;
-    }
     public async Task<long> CreateCar(Car car, CancellationToken ct)
     {
-        return await _decorated.CreateCar(car, ct);
+        return await decorated.CreateCar(car, ct);
     }
 
     public async Task<long> DeleteCar(long id, CancellationToken ct)
     {
-        await _distributed.RemoveAsync($"car_{id}", ct);
+        await distributed.RemoveAsync($"car_{id}", ct);
 
-        _logger.LogInformation("Removing cache success");
+        logger.LogInformation("Removing cache success");
 
-        return await _decorated.DeleteCar(id, ct);
+        return await decorated.DeleteCar(id, ct);
     }
 
     public async Task<CarItem> GetCarById(long id, CancellationToken ct)
     {
         var key = $"car_{id}";
 
-        return await _distributed.GetOrCreateAsync(
+        return await distributed.GetOrCreateAsync(
             key,
-            () => _decorated.GetCarById(id, ct),
+            () => decorated.GetCarById(id, ct),
             TimeSpan.FromMinutes(2),
-            _logger, ct);
+            logger, ct);
     }
 
     public async Task<int> GetCountCars(CarFilter filter, CancellationToken ct)
     {
-        return await _decorated.GetCountCars(filter, ct);
+        return await decorated.GetCountCars(filter, ct);
     }
 
     public async Task<List<CarItem>> GetPagedCars(CarFilter filter, CancellationToken ct)
     {
-        return await _decorated.GetPagedCars(filter, ct);
+        return await decorated.GetPagedCars(filter, ct);
     }
 
     public async Task<long> UpdateCar(long id, CarUpdateModel model, CancellationToken ct)
     {
-        await _distributed.RemoveAsync($"car_{id}", ct);
+        await distributed.RemoveAsync($"car_{id}", ct);
 
-        _logger.LogInformation("Removing cache success");
+        logger.LogInformation("Removing cache success");
 
-        return await _decorated.UpdateCar(id, model, ct);
+        return await decorated.UpdateCar(id, model, ct);
     }
 }

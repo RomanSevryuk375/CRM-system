@@ -11,33 +11,22 @@ using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository(
+    SystemDbContext context,
+    IMyPasswordHasher myPasswordHasher,
+    IMapper mapper) : IUserRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMyPasswordHasher _myPasswordHasher;
-    private readonly IMapper _mapper;
-
-    public UserRepository(
-        SystemDbContext context, 
-        IMyPasswordHasher myPasswordHasher,
-        IMapper mapper)
-    {
-        _context = context;
-        _myPasswordHasher = myPasswordHasher;
-        _mapper = mapper;
-    }
-
     public async Task<UserItem?> GetByLogin(string login, CancellationToken ct)
     {
-        return await _context.Users.AsNoTracking()
+        return await context.Users.AsNoTracking()
             .Where(u => u.Login == login)
-            .ProjectTo<UserItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<UserItem>(mapper.ConfigurationProvider, ct)
             .FirstOrDefaultAsync(ct);
     }
 
     public async Task<long> Create(User user, CancellationToken ct)
     {
-        var hashedPassword = _myPasswordHasher.Generate(user.PasswordHash);
+        var hashedPassword = myPasswordHasher.Generate(user.PasswordHash);
 
         var userEntyties = new UserEntity
         {
@@ -46,28 +35,35 @@ public class UserRepository : IUserRepository
             PasswordHash = hashedPassword
         };
 
-        await _context.Users.AddAsync(userEntyties, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.Users.AddAsync(userEntyties, ct);
+        await context.SaveChangesAsync(ct);
 
         return userEntyties.Id;
     }
 
     public async Task<long> Update(long id, UserUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id, ct)
+        var entity = await context.Users.FirstOrDefaultAsync(u => u.Id == id, ct)
             ?? throw new NotFoundException("User not found");
 
-        if (!string.IsNullOrWhiteSpace(model.Login)) entity.Login = model.Login;
-        if (!string.IsNullOrWhiteSpace(model.Password)) entity.PasswordHash = model.Password;
+        if (!string.IsNullOrWhiteSpace(model.Login))
+        {
+            entity.Login = model.Login;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        if (!string.IsNullOrWhiteSpace(model.Password))
+        {
+            entity.PasswordHash = model.Password;
+        }
+
+        await context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
     public async Task<long> Delete(long id, CancellationToken ct)
     {
-        var user = await _context.Users
+        await context.Users
             .Where(u => u.Id == id)
             .ExecuteDeleteAsync(ct);
 
@@ -76,7 +72,7 @@ public class UserRepository : IUserRepository
 
     public async Task<bool> Exists (long id, CancellationToken ct)
     {
-        return await _context.Users
+        return await context.Users
             .AsNoTracking()
             .AnyAsync(u => u.Id == id, ct);
     }

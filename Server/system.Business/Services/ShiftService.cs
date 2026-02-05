@@ -7,65 +7,56 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
 
-public class ShiftService : IShiftService
+public class ShiftService(
+    IShiftRepository shiftRepository,
+    ILogger<ShiftService> logger) : IShiftService
 {
-    private readonly IShiftRepository _shiftRepository;
-    private readonly ILogger<ShiftService> _logger;
-
-    public ShiftService(
-        IShiftRepository shiftRepository,
-        ILogger<ShiftService> logger)
-    {
-        _shiftRepository = shiftRepository;
-        _logger = logger;
-    }
-
     public async Task<List<ShiftItem>> GetShifts(CancellationToken ct)
     {
-        _logger.LogInformation("Getting shift start");
+        logger.LogInformation("Getting shift start");
 
-        var shifts = await _shiftRepository.Get(ct);
+        var shifts = await shiftRepository.Get(ct);
 
-        _logger.LogInformation("Getting shift success");
+        logger.LogInformation("Getting shift success");
 
         return shifts;
     }
 
     public async Task<int> CreateShift(Shift shift, CancellationToken ct)
     {
-        _logger.LogInformation("Creating shift start");
+        logger.LogInformation("Creating shift start");
 
-        if (await _shiftRepository.HasOverLap(shift.StartAt, shift.EndAt, ct))
+        if (await shiftRepository.HasOverLap(shift.StartAt, shift.EndAt, ct))
         {
-            _logger.LogInformation("Has date overlaps");
+            logger.LogInformation("Has date overlaps");
             throw new ConflictException($"Has date overlaps");
         }
 
-        var Id = await _shiftRepository.Create(shift, ct);
+        var Id = await shiftRepository.Create(shift, ct);
 
-        _logger.LogInformation("Creating shift success");
+        logger.LogInformation("Creating shift success");
 
         return Id;
     }
 
     public async Task<int> UpdateShift(int id, ShiftUpdateModel model, CancellationToken ct)
     {
-        _logger.LogInformation("Updating shift start");
+        logger.LogInformation("Updating shift start");
 
-        var Id = await _shiftRepository.Update(id, model, ct);
+        var Id = await shiftRepository.Update(id, model, ct);
 
-        _logger.LogInformation("Updating shift success");
+        logger.LogInformation("Updating shift success");
 
         return Id;
     }
 
     public async Task<int> DeleteShift(int id, CancellationToken ct)
     {
-        _logger.LogInformation("Deleting shift start");
+        logger.LogInformation("Deleting shift start");
 
-        var Id = await _shiftRepository.Delete(id, ct);
+        var Id = await shiftRepository.Delete(id, ct);
 
-        _logger.LogInformation("Deleting shift success");
+        logger.LogInformation("Deleting shift success");
 
         return Id;
     }

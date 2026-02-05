@@ -5,26 +5,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
 
-public class RoleService : IRoleService
+public class RoleService(
+    IRoleRepository roleRepository,
+    ILogger<RoleService> logger) : IRoleService
 {
-    private readonly IRoleRepository _roleRepository;
-    private readonly ILogger<RoleService> _logger;
-
-    public RoleService(
-        IRoleRepository roleRepository,
-        ILogger<RoleService> logger)
-    {
-        _roleRepository = roleRepository;
-        _logger = logger;
-    }
-
     public async Task<List<RoleItem>> GetRoles(CancellationToken ct)
     {
-        _logger.LogInformation("Getting roles start");
+        logger.LogInformation("Getting roles start");
 
-        var roles = await _roleRepository.Get(ct);
+        var roles = await roleRepository.Get(ct);
 
-        _logger.LogInformation("Getting roles success");
+        logger.LogInformation("Getting roles success");
 
         return roles;
     }

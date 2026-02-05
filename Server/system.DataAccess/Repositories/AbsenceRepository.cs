@@ -11,30 +11,23 @@ using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class AbsenceRepository : IAbsenceRepository
+public class AbsenceRepository(
+    SystemDbContext context,
+    IMapper mapper) : IAbsenceRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public AbsenceRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     private static IQueryable<AbsenceEntity> ApplyFilter(IQueryable<AbsenceEntity> query, AbsenceFilter filter)
     {
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
+        {
             query = query.Where(x => filter.WorkerIds.Contains(x.WorkerId));
+        }
 
         return query;
     }
 
     public async Task<List<AbsenceItem>> GetPaged(AbsenceFilter filter, CancellationToken ct)
     {
-        var query = _context.Absences.AsNoTracking();
+        var query = context.Absences.AsNoTracking();
         query = ApplyFilter(query, filter);
 
         query = filter.SortBy?.ToLower().Trim() switch
@@ -46,9 +39,11 @@ public class AbsenceRepository : IAbsenceRepository
                 : query.OrderBy(a => a.AbsenceType == null 
                     ? string.Empty 
                     : a.AbsenceType.Name),
+
             "startdate" => filter.IsDescending 
                 ? query.OrderByDescending(a => a.StartDate) 
                 : query.OrderBy(a => a.StartDate),
+
             "enddate" => filter.IsDescending 
                 ? query.OrderByDescending(a => a.EndDate) 
                 : query.OrderBy(a => a.EndDate),
@@ -59,7 +54,7 @@ public class AbsenceRepository : IAbsenceRepository
         };
 
         return await query
-            .ProjectTo<AbsenceItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<AbsenceItem>(mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
@@ -67,8 +62,10 @@ public class AbsenceRepository : IAbsenceRepository
 
     public async Task<int> GetCount(AbsenceFilter filter, CancellationToken ct)
     {
-        var query = _context.Absences.AsNoTracking();
+        var query = context.Absences.AsNoTracking();
+
         query = ApplyFilter(query, filter);
+
         return await query.CountAsync(ct);
     }
 
@@ -82,28 +79,39 @@ public class AbsenceRepository : IAbsenceRepository
             EndDate = absence.EndDate
         };
 
-        await _context.Absences.AddAsync(absenceEntity, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.Absences.AddAsync(absenceEntity, ct);
+        await context.SaveChangesAsync(ct);
 
         return absenceEntity.Id;
     }
 
     public async Task<int> Update(int id, AbsenceUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Absences.FirstOrDefaultAsync(a => a.Id == id, ct)
+        var entity = await context.Absences.FirstOrDefaultAsync(a => a.Id == id, ct)
             ?? throw new NotFoundException("Absence not found");
 
-        if (model.TypeId.HasValue) entity.TypeId = (int)model.TypeId.Value;
-        if (model.StartDate.HasValue) entity.StartDate = model.StartDate.Value;
-        if (model.EndDate.HasValue) entity.EndDate = model.EndDate.Value;
+        if (model.TypeId.HasValue)
+        {
+            entity.TypeId = (int)model.TypeId.Value;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        if (model.StartDate.HasValue)
+        {
+            entity.StartDate = model.StartDate.Value;
+        }
+
+        if (model.EndDate.HasValue)
+        {
+            entity.EndDate = model.EndDate.Value;
+        }
+
+        await context.SaveChangesAsync(ct);
         return entity.Id;
     }
 
     public async Task<int> Delete(int id, CancellationToken ct)
     {
-        var entity = await _context.Absences
+        await context.Absences
             .Where(a => a.Id == id)
             .ExecuteDeleteAsync(ct);
 
@@ -112,14 +120,14 @@ public class AbsenceRepository : IAbsenceRepository
 
     public async Task<bool> Exists(int id, CancellationToken ct)
     {
-        return await _context.Absences
+        return await context.Absences
             .AsNoTracking()
             .AnyAsync(a => a.Id == id, ct);        
     }
 
     public async Task<int?> GetWorkerId(int id, CancellationToken ct)
     {
-        return await _context.Absences
+        return await context.Absences
             .Where(a => a.Id == id)
             .Select(a => a.WorkerId)
             .FirstOrDefaultAsync(ct);
@@ -127,9 +135,14 @@ public class AbsenceRepository : IAbsenceRepository
 
     public async Task<List<Absence?>> GetByWorkerId(int workerId, CancellationToken ct)
     {
-        return await _context.Absences
+        return await context.Absences
             .Where(a => a.WorkerId == workerId)
-            .Select(a => Absence.Create(a.Id, a.WorkerId, (AbsenceTypeEnum)a.TypeId, a.StartDate, a.EndDate).absence)
+            .Select(a => Absence.Create(
+                a.Id,
+                a.WorkerId, 
+                (AbsenceTypeEnum)a.TypeId, 
+                a.StartDate, 
+                a.EndDate).absence)
             .ToListAsync(ct);
     }
 }

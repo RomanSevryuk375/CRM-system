@@ -6,30 +6,19 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Cached;
 
-public class CachedOrderStatusService : IOrderStatusService
+public class CachedOrderStatusService(
+    IOrderStatusService decorated,
+    IDistributedCache distributed,
+    ILogger<CachedOrderStatusService> logger) : IOrderStatusService
 {
-    private readonly IOrderStatusService _decorated;
-    private readonly IDistributedCache _distributed;
-    private readonly ILogger<CachedOrderStatusService> _logger;
-
     private const string CACHE_KEY = $"Dict_{nameof(CachedOrderStatusService)}";
-
-    public CachedOrderStatusService(
-        IOrderStatusService decorated,
-        IDistributedCache distributed,
-        ILogger<CachedOrderStatusService> logger)
-    {
-        _decorated = decorated;
-        _distributed = distributed;
-        _logger = logger;
-    }
 
     public async Task<List<OrderStatusItem>> GetOrderStatuses(CancellationToken ct)
     {
-        return await _distributed.GetOrCreateAsync(
+        return await distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetOrderStatuses(ct),
+            () => decorated.GetOrderStatuses(ct),
             TimeSpan.FromHours(24),
-            _logger, ct) ?? [];
+            logger, ct) ?? [];
     }
 }

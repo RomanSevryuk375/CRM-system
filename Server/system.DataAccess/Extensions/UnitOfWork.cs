@@ -3,23 +3,20 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CRMSystem.DataAccess.Extensions;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork(SystemDbContext context) : IUnitOfWork
 {
-    private readonly SystemDbContext _context;
     private IDbContextTransaction? _currentTransaction;
-
-    public UnitOfWork(SystemDbContext context) => _context = context;
 
     public async Task BeginTransactionAsync(CancellationToken ct)
     {
-        _currentTransaction = await _context.Database.BeginTransactionAsync(ct);
+        _currentTransaction = await context.Database.BeginTransactionAsync(ct);
     }
 
     public async Task CommitTransactionAsync(CancellationToken ct)
     {
         try
         {
-            await _context.SaveChangesAsync(ct);
+            await context.SaveChangesAsync(ct);
             if (_currentTransaction is not null) await _currentTransaction.CommitAsync(ct);
         }
         catch
@@ -49,7 +46,7 @@ public class UnitOfWork : IUnitOfWork
 
     public void Dispose()
     {
-        _context.Dispose();
+        context.Dispose();
         _currentTransaction?.Dispose();
         GC.SuppressFinalize(this);
     }

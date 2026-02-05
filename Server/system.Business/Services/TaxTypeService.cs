@@ -5,26 +5,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
 
-public class TaxTypeService : ITaxTypeService
+public class TaxTypeService(
+    ITaxTypeRepository taxTypeRepository,
+    ILogger<TaxTypeService> logger) : ITaxTypeService
 {
-    private readonly ITaxTypeRepository _taxTypeRepository;
-    private readonly ILogger<TaxTypeService> _logger;
-
-    public TaxTypeService(
-        ITaxTypeRepository taxTypeRepository,
-        ILogger<TaxTypeService> logger)
-    {
-        _taxTypeRepository = taxTypeRepository;
-        _logger = logger;
-    }
-
     public async Task<List<TaxTypeItem>> GetTaxTypes(CancellationToken ct)
     {
-        _logger.LogInformation("Getting tax type start");
+        logger.LogInformation("Getting tax type start");
 
-        var taxTypes = await _taxTypeRepository.Get(ct);
+        var taxTypes = await taxTypeRepository.Get(ct);
 
-        _logger.LogInformation("Getting tax types success");
+        logger.LogInformation("Getting tax types success");
 
         return taxTypes;
     }

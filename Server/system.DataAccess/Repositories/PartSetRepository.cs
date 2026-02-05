@@ -10,36 +10,33 @@ using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class PartSetRepository : IPartSetRepository
+public class PartSetRepository(
+    SystemDbContext context,
+    IMapper mapper) : IPartSetRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public PartSetRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     private static IQueryable<PartSetEntity> ApplyFilter(IQueryable<PartSetEntity> query, PartSetFilter filter)
     {
         if (filter.OrderIds != null && filter.OrderIds.Any())
+        {
             query = query.Where(p => filter.OrderIds.Contains(p.OrderId));
+        }
 
         if (filter.PositionIds != null && filter.PositionIds.Any())
+        {
             query = query.Where(p => filter.PositionIds.Contains(p.PositionId));
+        }
 
         if (filter.ProposalIds != null && filter.ProposalIds.Any())
+        {
             query = query.Where(p => filter.ProposalIds.Contains(p.ProposalId));
+        }
 
         return query;
     }
 
     public async Task<List<PartSetItem>> GetPaged(PartSetFilter filter, CancellationToken ct)
     {
-        var query = _context.PartSets.AsNoTracking();
+        var query = context.PartSets.AsNoTracking();
         query = ApplyFilter(query, filter);
 
         query = filter.SortBy?.ToLower().Trim() switch
@@ -47,6 +44,7 @@ public class PartSetRepository : IPartSetRepository
             "order" => filter.IsDescending
                 ? query.OrderByDescending(p => p.OrderId)
                 : query.OrderBy(p => p.OrderId),
+
             "position" => filter.IsDescending
                 ? query.OrderByDescending(p => p.Position == null
                     ? string.Empty
@@ -58,12 +56,15 @@ public class PartSetRepository : IPartSetRepository
                     : p.Position.Part == null
                         ? string.Empty
                         : p.Position.Part.Name),
+
             "proposal" => filter.IsDescending
                 ? query.OrderByDescending(p => p.ProposalId)
                 : query.OrderBy(p => p.ProposalId),
+
             "quantity" => filter.IsDescending
                 ? query.OrderByDescending(p => p.Quantity)
                 : query.OrderBy(p => p.Quantity),
+
             "soldprice" => filter.IsDescending
                 ? query.OrderByDescending(p => p.SoldPrice)
                 : query.OrderBy(p => p.SoldPrice),
@@ -74,7 +75,7 @@ public class PartSetRepository : IPartSetRepository
         };
 
         return await query
-            .ProjectTo<PartSetItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<PartSetItem>(mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
@@ -82,25 +83,25 @@ public class PartSetRepository : IPartSetRepository
 
     public async Task<List<PartSetItem>> GetByOrderId(long orderId, CancellationToken ct)
     {
-        return await _context.PartSets
+        return await context.PartSets
             .AsNoTracking()
             .Where(p => p.OrderId == orderId)
-            .ProjectTo<PartSetItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<PartSetItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
     }
 
     public async Task<PartSetItem?> GetById(long id, CancellationToken ct)
     {
-        return await _context.PartSets
+        return await context.PartSets
             .AsNoTracking()
             .Where(p => p.Id == id)
-            .ProjectTo<PartSetItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<PartSetItem>(mapper.ConfigurationProvider, ct)
             .FirstOrDefaultAsync(ct);
     }
 
     public async Task<int> GetCount(PartSetFilter filter, CancellationToken ct)
     {
-        var query = _context.PartSets.AsNoTracking();
+        var query = context.PartSets.AsNoTracking();
         query = ApplyFilter(query, filter);
         return await query.CountAsync(ct);
     }
@@ -116,28 +117,35 @@ public class PartSetRepository : IPartSetRepository
             partSet.SoldPrice
         );
 
-        await _context.PartSets.AddAsync(partSetEntity, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.PartSets.AddAsync(partSetEntity, ct);
+        await context.SaveChangesAsync(ct);
 
         return partSet.Id;
     }
 
     public async Task<long> Update(long id, PartSetUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.PartSets.FirstOrDefaultAsync(p => p.Id == id, ct)
+        var entity = await context.PartSets.FirstOrDefaultAsync(p => p.Id == id, ct)
             ?? throw new NotFoundException("Part not found");
 
-        if (model.SoldPrice.HasValue) entity.SoldPrice = model.SoldPrice.Value;
-        if (model.Quantity.HasValue) entity.Quantity = model.Quantity.Value;
+        if (model.SoldPrice.HasValue)
+        {
+            entity.SoldPrice = model.SoldPrice.Value;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        if (model.Quantity.HasValue)
+        {
+            entity.Quantity = model.Quantity.Value;
+        }
+
+        await context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
     public async Task<long> Delete(long id, CancellationToken ct)
     {
-        var query = await _context.PartSets
+        await context.PartSets
             .Where(p => p.Id == id)
             .ExecuteDeleteAsync(ct);
 
@@ -146,7 +154,7 @@ public class PartSetRepository : IPartSetRepository
 
     public async Task<long> DeleteProposedParts(long proposalId, CancellationToken ct)
     {
-        var query = await _context.PartSets
+        await context.PartSets
             .Where(p => p.ProposalId == proposalId)
             .ExecuteDeleteAsync(ct);
 
@@ -155,14 +163,14 @@ public class PartSetRepository : IPartSetRepository
 
     public async Task<bool> Exists(long id, CancellationToken ct)
     {
-        return await _context.PartSets
+        return await context.PartSets
             .AsNoTracking()
             .AnyAsync(p => p.Id == id, ct);
     }
 
     public async Task<long> MoveFromProposalToOrder(long proposalId, long orderId, CancellationToken ct)
     {
-        var parts = await _context.PartSets
+        var parts = await context.PartSets
             .Where(p => p.ProposalId == proposalId)
             .ToListAsync(ct);
 
@@ -174,9 +182,11 @@ public class PartSetRepository : IPartSetRepository
             p.SoldPrice
         )).ToList();
 
-        await _context.PartSets.AddRangeAsync(transfer, ct);
-        await _context.SaveChangesAsync(ct);
-        await _context.PartSets
+        await context.PartSets.AddRangeAsync(transfer, ct);
+
+        await context.SaveChangesAsync(ct);
+
+        await context.PartSets
             .Where(p => p.ProposalId == proposalId)
             .ExecuteDeleteAsync(ct);
 

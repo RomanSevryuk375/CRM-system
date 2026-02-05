@@ -5,26 +5,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
 
-public class WorkInOrderStatusService : IWorkInOrderStatusService
+public class WorkInOrderStatusService(
+    IWorkInOrderStatusRepository workInOrderStatusRepository,
+    ILogger<WorkInOrderStatusService> logger) : IWorkInOrderStatusService
 {
-    private readonly IWorkInOrderStatusRepository _workInOrderStatusRepository;
-    private readonly ILogger<WorkInOrderStatusService> _logger;
-
-    public WorkInOrderStatusService(
-        IWorkInOrderStatusRepository workInOrderStatusRepository,
-        ILogger<WorkInOrderStatusService> logger)
-    {
-        _workInOrderStatusRepository = workInOrderStatusRepository;
-        _logger = logger;
-    }
-
     public async Task<List<WorkInOrderStatusItem>> GetWiOStatuses(CancellationToken ct)
     {
-        _logger.LogInformation("Getting work in order statuses start");
+        logger.LogInformation("Getting work in order statuses start");
 
-        var statuses = await _workInOrderStatusRepository.Get(ct);
+        var statuses = await workInOrderStatusRepository.Get(ct);
 
-        _logger.LogInformation("Getting work in order statuses success");
+        logger.LogInformation("Getting work in order statuses success");
 
         return statuses;
     }

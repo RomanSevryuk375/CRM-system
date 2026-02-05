@@ -9,88 +9,75 @@ using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 
-public class AttachmentService : IAttachmentService
+public class AttachmentService(
+    IAttachmentRepository attachmentRepository,
+    IOrderRepository orderRepository,
+    IWorkerRepository workerRepository,
+    ILogger<AttachmentService> logger) : IAttachmentService
 {
-    private readonly IAttachmentRepository _attachmentRepository;
-    private readonly IOrderRepository _orderRepository;
-    private readonly IWorkerRepository _workerRepository;
-    private readonly ILogger<AttachmentService> _logger;
-
-    public AttachmentService(
-        IAttachmentRepository attachmentRepository,
-        IOrderRepository orderRepository,
-        IWorkerRepository workerRepository,
-        ILogger<AttachmentService> logger)
-    {
-        _attachmentRepository = attachmentRepository;
-        _orderRepository = orderRepository;
-        _workerRepository = workerRepository;
-        _logger = logger;
-    }
-
     public async Task<List<AttachmentItem>> GetPagedAttachments(AttachmentFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting attachments start");
+        logger.LogInformation("Getting attachments start");
 
-        var attachment = await _attachmentRepository.GetPaged(filter, ct);
+        var attachment = await attachmentRepository.GetPaged(filter, ct);
 
-        _logger.LogInformation("Getting attachments success");
+        logger.LogInformation("Getting attachments success");
 
         return attachment;
     }
 
     public async Task<int> GetCountAttachment(AttachmentFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting count attachments start");
+        logger.LogInformation("Getting count attachments start");
 
-        var count = await _attachmentRepository.GetCount(filter, ct);
+        var count = await attachmentRepository.GetCount(filter, ct);
 
-        _logger.LogInformation("Getting count attachments success");
+        logger.LogInformation("Getting count attachments success");
 
         return count;
     }
 
     public async Task<long> CreateAttachment(Attachment attachment, CancellationToken ct)
     {
-        _logger.LogInformation("Creating attachments start");
+        logger.LogInformation("Creating attachments start");
 
-        if (!await _orderRepository.Exists(attachment.OrderId, ct))
+        if (!await orderRepository.Exists(attachment.OrderId, ct))
         {
-            _logger.LogInformation("Order{OrderId} not found", attachment.OrderId);
+            logger.LogInformation("Order{OrderId} not found", attachment.OrderId);
             throw new NotFoundException($"Order{attachment.OrderId} not found");
         }
 
-        if (!await _workerRepository.Exists(attachment.WorkerId, ct))
+        if (!await workerRepository.Exists(attachment.WorkerId, ct))
         {
-            _logger.LogInformation("Worker{WorkerId} not found", attachment.WorkerId);
+            logger.LogInformation("Worker{WorkerId} not found", attachment.WorkerId);
             throw new NotFoundException($"Worker{attachment.WorkerId} not found");
         }
 
-        var id = await _attachmentRepository.Create(attachment, ct);
+        var id = await attachmentRepository.Create(attachment, ct);
 
-        _logger.LogInformation("Creating attachments success");
+        logger.LogInformation("Creating attachments success");
 
         return id;
     }
 
     public async Task<long> UpdateAttachment(long id, string? description, CancellationToken ct)
     {
-        _logger.LogInformation("Updating attachments start");
+        logger.LogInformation("Updating attachments start");
 
-        var Id = await _attachmentRepository.Update(id, description, ct);
+        var Id = await attachmentRepository.Update(id, description, ct);
 
-        _logger.LogInformation("Updating attachments success");
+        logger.LogInformation("Updating attachments success");
 
         return Id;
     }
 
     public async Task<long> DeletingAttachment(long id, CancellationToken ct)
     {
-        _logger.LogInformation("Deleting attachments start");
+        logger.LogInformation("Deleting attachments start");
 
-        var Id = await _attachmentRepository.Delete(id, ct);
+        var Id = await attachmentRepository.Delete(id, ct);
 
-        _logger.LogInformation("Deleting attachments success");
+        logger.LogInformation("Deleting attachments success");
 
         return Id;
     }

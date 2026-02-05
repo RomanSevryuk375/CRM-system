@@ -5,26 +5,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
 
-public class ExpenseTypeService : IExpenseTypeService
+public class ExpenseTypeService(
+    IExpenseTypeRepository expenseTypeRepository,
+    ILogger<ExpenseTypeService> logger) : IExpenseTypeService
 {
-    private readonly IExpenseTypeRepository _expenseTypeRepository;
-    private readonly ILogger<ExpenseTypeService> _logger;
-
-    public ExpenseTypeService(
-        IExpenseTypeRepository expenseTypeRepository,
-        ILogger<ExpenseTypeService> logger)
-    {
-        _expenseTypeRepository = expenseTypeRepository;
-        _logger = logger;
-    }
-
     public async Task<List<ExpenseTypeItem>> GetExpenseType(CancellationToken ct)
     {
-        _logger.LogInformation("Getting absenceType start");
+        logger.LogInformation("Getting absenceType start");
 
-        var expenseTypes = await _expenseTypeRepository.Get(ct);
+        var expenseTypes = await expenseTypeRepository.Get(ct);
 
-        _logger.LogInformation("Getting absenceType success");
+        logger.LogInformation("Getting absenceType success");
 
         return expenseTypes;
     }

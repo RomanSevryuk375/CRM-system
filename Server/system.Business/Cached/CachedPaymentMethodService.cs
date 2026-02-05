@@ -6,30 +6,20 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Cached;
 
-public class CachedPaymentMethodService : IPaymentMethodService
+public class CachedPaymentMethodService(
+    IPaymentMethodService decorated,
+    IDistributedCache distributed,
+    ILogger<CachedPaymentMethodService> logger) : IPaymentMethodService
 {
-    private readonly IPaymentMethodService _decorated;
-    private readonly IDistributedCache _distributed;
-    private readonly ILogger<CachedPaymentMethodService> _logger;
-
     private const string CACHE_KEY = $"Dict_{nameof(CachedPaymentMethodService)}";
 
-    public CachedPaymentMethodService(
-        IPaymentMethodService decorated,
-        IDistributedCache distributed,
-        ILogger<CachedPaymentMethodService> logger)
-    {
-        _decorated = decorated;
-        _distributed = distributed;
-        _logger = logger;
-    }
     public async Task<List<PaymentMethodItem>> GetPaymentMethods(CancellationToken ct)
     {
-        return await _distributed.GetOrCreateAsync(
+        return await distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetPaymentMethods(ct),
+            () => decorated.GetPaymentMethods(ct),
             TimeSpan.FromHours(24),
-            _logger, ct) ?? [];
+            logger, ct) ?? [];
 
     }
 }

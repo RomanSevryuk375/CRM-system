@@ -10,11 +10,9 @@ using System.Text;
 
 namespace CRMSystem.Business.Extensions;
 
-public class JwtProvider : IJwtProvider
+public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 {
-    private readonly JwtOptions _options;
-
-    public JwtProvider(IOptions<JwtOptions> options) => _options = options.Value;
+    private readonly JwtOptions _options = options.Value;
 
     public string GenerateToken(UserItem user, long profileId)
     {

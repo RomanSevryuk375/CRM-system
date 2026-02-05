@@ -5,13 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess;
 
-public class SystemDbContext : DbContext
+public class SystemDbContext(DbContextOptions<SystemDbContext> options) : DbContext(options)
 {
-    public SystemDbContext(DbContextOptions<SystemDbContext> options) :
-        base(options)
-    {
-    }
-   
     public DbSet<AbsenceEntity> Absences { get; set; }
     public DbSet<AbsenceTypeEntity> AbsenceTypes { get; set; }
     public DbSet<AcceptanceEntity> Acceptances { get; set; }

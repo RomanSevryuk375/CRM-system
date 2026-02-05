@@ -6,24 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class RoleRepository : IRoleRepository
+public class RoleRepository(
+    SystemDbContext context,
+    IMapper mapper) : IRoleRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public RoleRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     public async Task<List<RoleItem>> Get(CancellationToken ct)
     {
-        return await _context.Roles
+        return await context.Roles
             .AsNoTracking()
-            .ProjectTo<RoleItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<RoleItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
     }
 }

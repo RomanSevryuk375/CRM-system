@@ -9,103 +9,96 @@ using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
 
-public class AbsenceService : IAbsenceService
+public class AbsenceService(
+    IAbsenceRepository absenceRepository,
+    IWorkerRepository workerRepository,
+    IUserContext userContext,
+    ILogger<AbsenceService> logger) : IAbsenceService
 {
-    private readonly IAbsenceRepository _absenceRepository;
-    private readonly IWorkerRepository _workerRepository;
-    private readonly IUserContext _userContext;
-    private readonly ILogger<AbsenceService> _logger;
-
-    public AbsenceService(
-        IAbsenceRepository absenceRepository,
-        IWorkerRepository workerRepository,
-        IUserContext userContext,
-        ILogger<AbsenceService> logger)
-    {
-        _absenceRepository = absenceRepository;
-        _workerRepository = workerRepository;
-        _userContext = userContext;
-        _logger = logger;
-    }
-
     public async Task<List<AbsenceItem>> GetPagedAbsence(AbsenceFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting absence start");
+        logger.LogInformation("Getting absence start");
 
-        if (_userContext.RoleId != (int)RoleEnum.Manager)
-            filter = filter with { WorkerIds = [(int)_userContext.ProfileId] };
+        if (userContext.RoleId != (int)RoleEnum.Manager)
+        {
+            filter = filter with { WorkerIds = [(int)userContext.ProfileId] };
+        }
 
-        var absence = await _absenceRepository.GetPaged(filter, ct);
+        var absence = await absenceRepository.GetPaged(filter, ct);
 
-        _logger.LogInformation("Getting absence success");
+        logger.LogInformation("Getting absence success");
 
         return absence;
     }
 
     public async Task<int> GetCountAbsence(AbsenceFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting count absence start");
+        logger.LogInformation("Getting count absence start");
 
-        var count = await _absenceRepository.GetCount(filter, ct);
+        var count = await absenceRepository.GetCount(filter, ct);
 
-        _logger.LogInformation("Getting count absence success");
+        logger.LogInformation("Getting count absence success");
 
         return count;
     }
 
     public async Task<int> CreateAbsence(Absence absence, CancellationToken ct)
     {
-        _logger.LogInformation("Creating absence start");
+        logger.LogInformation("Creating absence start");
 
-        var absences = await _absenceRepository.GetByWorkerId(absence.WorkerId, ct);
+        var absences = await absenceRepository.GetByWorkerId(absence.WorkerId, ct);
 
         if (absences.Any(x => x!.OverlapsWith(absence.StartDate, absence.EndDate)))
-            throw new ConflictException($"Has date overlaps for worker{absence.WorkerId}");
-
-        if (!await _workerRepository.Exists(absence.WorkerId, ct))
         {
-            _logger.LogInformation("Worker{WorkerId} not found", absence.WorkerId);
+            throw new ConflictException($"Has date overlaps for worker{absence.WorkerId}");
+        }
+
+        if (!await workerRepository.Exists(absence.WorkerId, ct))
+        {
+            logger.LogInformation("Worker{WorkerId} not found", absence.WorkerId);
             throw new NotFoundException($"Worker {absence.WorkerId} not found");
         }
 
-        var abcense = await _absenceRepository.Create(absence, ct);
+        var abcense = await absenceRepository.Create(absence, ct);
 
-        _logger.LogInformation("Creating absence success");
+        logger.LogInformation("Creating absence success");
 
         return abcense;
     }
 
     public async Task<int> UpdateAbsence(int id, AbsenceUpdateModel model, CancellationToken ct)
     {
-        _logger.LogInformation("Updating absence success");
+        logger.LogInformation("Updating absence success");
 
-        var workerId = await _absenceRepository.GetWorkerId(id, ct)
+        var workerId = await absenceRepository.GetWorkerId(id, ct)
             ?? throw new NotFoundException($"Absence {id} not found");
         var newStartDate = model.StartDate;
 
 
         if (newStartDate.HasValue)
         {
-            var absences = await _absenceRepository.GetByWorkerId(workerId, ct);
+            var absences = await absenceRepository.GetByWorkerId(workerId, ct);
 
             if (absences.Any(x => x!.OverlapsWith(newStartDate.Value, model.EndDate)))
+            {
                 throw new ConflictException($"Has date overlaps for worker{workerId}");
+            }
         }
 
-        var absence = await _absenceRepository.Update(id, model, ct);
+        var absence = await absenceRepository.Update(id, model, ct);
 
-        _logger.LogInformation("Updating absence success");
+        logger.LogInformation("Updating absence success");
 
         return absence;
     }
 
     public async Task<int> DeleteAbsence(int id, CancellationToken ct)
     {
-        _logger.LogInformation("Deleting absence success");
+        logger.LogInformation("Deleting absence success");
 
-        var absence = await _absenceRepository.Delete(id, ct);
+        var absence = await absenceRepository.Delete(id, ct);
 
-        _logger.LogInformation("Deleting absence success");
+        logger.LogInformation("Deleting absence success");
 
         return absence;
     }

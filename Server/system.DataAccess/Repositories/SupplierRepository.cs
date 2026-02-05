@@ -9,24 +9,15 @@ using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class SupplierRepository : ISupplierRepository
+public class SupplierRepository(
+    SystemDbContext context,
+    IMapper mapper) : ISupplierRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public SupplierRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     public async Task<List<SupplierItem>> Get(CancellationToken ct)
     {
-        return await _context.Suppliers
+        return await context.Suppliers
             .AsNoTracking()
-            .ProjectTo<SupplierItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<SupplierItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
     }
 
@@ -38,28 +29,35 @@ public class SupplierRepository : ISupplierRepository
             Contacts = supplier.Contacts
         };
 
-        await _context.Suppliers.AddAsync(supplierEntity, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.Suppliers.AddAsync(supplierEntity, ct);
+        await context.SaveChangesAsync(ct);
 
         return supplierEntity.Id;
     }
 
     public async Task<int> Update(int id, SupplierUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Suppliers.FirstOrDefaultAsync(su => su.Id == id, ct)
+        var entity = await context.Suppliers.FirstOrDefaultAsync(su => su.Id == id, ct)
             ?? throw new NotFoundException("Supplier not found");
 
-        if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
-        if (!string.IsNullOrWhiteSpace(model.Contacts)) entity.Contacts = model.Contacts;
+        if (!string.IsNullOrWhiteSpace(model.Name))
+        {
+            entity.Name = model.Name;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        if (!string.IsNullOrWhiteSpace(model.Contacts))
+        {
+            entity.Contacts = model.Contacts;
+        }
+
+        await context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
     public async Task<int> Delete(int id, CancellationToken ct)
     {
-        var supplier = await _context.Suppliers
+        await context.Suppliers
             .Where(su => su.Id == id)
             .ExecuteDeleteAsync(ct);
 
@@ -68,14 +66,14 @@ public class SupplierRepository : ISupplierRepository
 
     public async Task<bool> Exists(int id, CancellationToken ct)
     {
-        return await _context.Suppliers
+        return await context.Suppliers
             .AsNoTracking()
             .AnyAsync(s => s.Id == id, ct);
     }
 
     public async Task<bool> ExistsByName(string name, CancellationToken ct)
     {
-        return await _context.Suppliers
+        return await context.Suppliers
             .AsNoTracking()
             .AnyAsync(s => s.Name == name, ct);
     }

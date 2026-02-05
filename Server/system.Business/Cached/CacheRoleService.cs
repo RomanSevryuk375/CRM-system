@@ -6,30 +6,19 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Cached;
 
-public class CacheRoleService : IRoleService
+public class CacheRoleService(
+    IRoleService decorated,
+    IDistributedCache distributed,
+    ILogger<CacheRoleService> logger) : IRoleService
 {
-    private readonly IRoleService _decorated;
-    private readonly IDistributedCache _distributed;
-    private readonly ILogger<CacheRoleService> _logger;
-
     private const string CACHE_KEY = $"Dict_{nameof(CacheRoleService)}";
-
-    public CacheRoleService(
-        IRoleService decorated,
-        IDistributedCache distributed,
-        ILogger<CacheRoleService> logger)
-    {
-        _decorated = decorated;
-        _distributed = distributed;
-        _logger = logger;
-    }
 
     public async Task<List<RoleItem>> GetRoles(CancellationToken ct)
     {
-        return await _distributed.GetOrCreateAsync(
+        return await distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetRoles(ct),
+            () => decorated.GetRoles(ct),
             TimeSpan.FromHours(24),
-            _logger, ct) ?? [];
+            logger, ct) ?? [];
     }
 }

@@ -12,36 +12,28 @@ using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class AttachmentImgRepository : IAttachmentImgRepository
+public class AttachmentImgRepository(
+    SystemDbContext context,
+    IMapper mapper) : IAttachmentImgRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public AttachmentImgRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     private static IQueryable<AttachmentImgEntity> ApplyFilter(IQueryable<AttachmentImgEntity> query, AttachmentImgFilter filter)
     {
         if (filter.AttachmentIds != null && filter.AttachmentIds.Any())
+        {
             query = query.Where(a => filter.AttachmentIds.Contains(a.AttachmentId));
+        }
 
         return query;
     }
 
     public async Task<List<AttachmentImgItem>> GetPaged(AttachmentImgFilter filter, CancellationToken ct)
     {
-        var query = _context.AttachmentImgs.AsNoTracking();
-        query = ApplyFilter(query, filter);
+        var query = context.AttachmentImgs.AsNoTracking();
 
-        query = query.OrderByDescending(a => a.Id);
+        query = ApplyFilter(query, filter).OrderByDescending(a => a.Id);
 
         return await query
-            .ProjectTo<AttachmentImgItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<AttachmentImgItem>(mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
@@ -49,17 +41,19 @@ public class AttachmentImgRepository : IAttachmentImgRepository
 
     public async Task<AttachmentImgItem?> GetById(long  id, CancellationToken ct)
     {
-        return await _context.AttachmentImgs
+        return await context.AttachmentImgs
             .AsNoTracking()
             .Where(a => a.Id == id)
-            .ProjectTo<AttachmentImgItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<AttachmentImgItem>(mapper.ConfigurationProvider, ct)
             .FirstOrDefaultAsync(ct);
     }
 
     public async Task<int> GetCount(AttachmentImgFilter filter, CancellationToken ct)
     {
-        var query = _context.AttachmentImgs.AsNoTracking();
+        var query = context.AttachmentImgs.AsNoTracking();
+
         query = ApplyFilter(query, filter);
+
         return await query.CountAsync(ct);
     }
 
@@ -72,28 +66,35 @@ public class AttachmentImgRepository : IAttachmentImgRepository
             Description = attachmentImg.Description,
         };
 
-        await _context.AddAsync(attachmentImgEntity, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.AddAsync(attachmentImgEntity, ct);
+        await context.SaveChangesAsync(ct);
 
         return attachmentImgEntity.Id;
     }
 
     public async Task<long> Update(long id, string? filePath, string? description, CancellationToken ct)
     {
-        var entity = await _context.AttachmentImgs.FirstOrDefaultAsync(a => a.Id == id, ct) 
+        var entity = await context.AttachmentImgs.FirstOrDefaultAsync(a => a.Id == id, ct) 
             ?? throw new NotFoundException("AttachmentImg not found");
 
-        if (!string.IsNullOrEmpty(filePath)) entity.FilePath = filePath;
-        if (!string.IsNullOrEmpty(description)) entity.Description = description;
+        if (!string.IsNullOrEmpty(filePath))
+        {
+            entity.FilePath = filePath;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        if (!string.IsNullOrEmpty(description))
+        {
+            entity.Description = description;
+        }
+
+        await context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
     public async Task<long> Delete(long id, CancellationToken ct)
     {
-        var entity = await _context.AttachmentImgs
+        await context.AttachmentImgs
             .Where(a => a.Id == id)
             .ExecuteDeleteAsync(ct);
 

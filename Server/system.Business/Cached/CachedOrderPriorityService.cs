@@ -6,29 +6,19 @@ using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Cached;
 
-public class CachedOrderPriorityService : IOrderPriorityService
+public class CachedOrderPriorityService(
+    IOrderPriorityService decorated,
+    IDistributedCache distributed,
+    ILogger<CachedOrderPriorityService> logger) : IOrderPriorityService
 {
-    private readonly IOrderPriorityService _decorated;
-    private readonly IDistributedCache _distributed;
-    private readonly ILogger<CachedOrderPriorityService> _logger;
-
     private const string CACHE_KEY = $"Dict_{nameof(CachedOrderPriorityService)}";
 
-    public CachedOrderPriorityService(
-        IOrderPriorityService decorated,
-        IDistributedCache distributed,
-        ILogger<CachedOrderPriorityService> logger)
-    {
-        _decorated = decorated;
-        _distributed = distributed;
-        _logger = logger;
-    }
     public async Task<List<OrderPriorityItem>> GetPriorities(CancellationToken ct)
     {
-        return await _distributed.GetOrCreateAsync(
+        return await distributed.GetOrCreateAsync(
             CACHE_KEY,
-            () => _decorated.GetPriorities(ct),
+            () => decorated.GetPriorities(ct),
             TimeSpan.FromHours(24),
-            _logger, ct) ?? [];
+            logger, ct) ?? [];
     }
 }
