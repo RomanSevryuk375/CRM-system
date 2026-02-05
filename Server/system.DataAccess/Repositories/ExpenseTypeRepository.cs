@@ -6,30 +6,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class ExpenseTypeRepository : IExpenseTypeRepository
+public class ExpenseTypeRepository(
+    SystemDbContext context,
+    IMapper mapper) : IExpenseTypeRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public ExpenseTypeRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     public async Task<List<ExpenseTypeItem>> Get(CancellationToken ct)
     {
-        return await _context.ExpenseTypes
+        return await context.ExpenseTypes
             .AsNoTracking()
-            .ProjectTo<ExpenseTypeItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<ExpenseTypeItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
     }
 
     public async Task<bool> Exists (int id, CancellationToken ct)
     {
-        return await _context.ExpenseTypes
+        return await context.ExpenseTypes
             .AsNoTracking()
             .AnyAsync(e => e.Id == id, ct);
     }

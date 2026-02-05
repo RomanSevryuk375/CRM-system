@@ -9,30 +9,23 @@ using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class SupplyRepository : ISupplyRepository
+public class SupplyRepository(
+    SystemDbContext context,
+    IMapper mapper) : ISupplyRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public SupplyRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     private static IQueryable<SupplyEntity> ApplyFilter(IQueryable<SupplyEntity> query, SupplyFilter filter)
     {
         if (filter.SuplierIds != null && filter.SuplierIds.Any())
+        {
             query = query.Where(s => filter.SuplierIds.Contains(s.SupplierId));
+        }
 
         return query;
     }
 
     public async Task<List<SupplyItem>> GetPaged(SupplyFilter filter, CancellationToken ct)
     {
-        var query = _context.Supplies.AsNoTracking();
+        var query = context.Supplies.AsNoTracking();
         query = ApplyFilter(query, filter);
 
         query = filter.SortBy?.ToLower().Trim() switch
@@ -44,6 +37,7 @@ public class SupplyRepository : ISupplyRepository
                 : query.OrderBy(s => s.Supplier == null
                     ? string.Empty
                     : s.Supplier.Name),
+
             "date" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Date)
                 : query.OrderBy(s => s.Date),
@@ -54,7 +48,7 @@ public class SupplyRepository : ISupplyRepository
         };
 
         return await query
-            .ProjectTo<SupplyItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<SupplyItem>(mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
@@ -62,8 +56,10 @@ public class SupplyRepository : ISupplyRepository
 
     public async Task<int> GetCount (SupplyFilter filter, CancellationToken ct)
     {
-        var query = _context.Supplies.AsNoTracking();
+        var query = context.Supplies.AsNoTracking();
+
         query = ApplyFilter(query, filter);
+
         return await query.CountAsync(ct);
     }
 
@@ -75,15 +71,15 @@ public class SupplyRepository : ISupplyRepository
             Date = supply.Date,
         };
 
-        await _context.Supplies.AddAsync(sullpyEntity, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.Supplies.AddAsync(sullpyEntity, ct);
+        await context.SaveChangesAsync(ct);
 
         return sullpyEntity.Id;
     }
 
     public async Task<long> Delete(long id, CancellationToken ct)
     {
-        var enity = await _context.Supplies
+        await context.Supplies
             .Where(s => s.Id == id)
             .ExecuteDeleteAsync(ct);
 
@@ -92,7 +88,7 @@ public class SupplyRepository : ISupplyRepository
 
     public async Task<bool> Exists(long id, CancellationToken ct)
     {
-        return await _context.Supplies
+        return await context.Supplies
             .AsNoTracking()
             .AnyAsync(s => s.Id == id, ct);
     }

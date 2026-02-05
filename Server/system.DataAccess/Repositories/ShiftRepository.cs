@@ -9,24 +9,15 @@ using CRMSystem.Core.Exceptions;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class ShiftRepository : IShiftRepository
+public class ShiftRepository(
+    SystemDbContext context,
+    IMapper mapper) : IShiftRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public ShiftRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     public async Task<List<ShiftItem>> Get(CancellationToken ct)
     {
-        return await _context.Shifts
+        return await context.Shifts
             .AsNoTracking()
-            .ProjectTo<ShiftItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<ShiftItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
     }
 
@@ -39,29 +30,40 @@ public class ShiftRepository : IShiftRepository
             EndAt = shift.EndAt,
         };
 
-        await _context.Shifts.AddAsync(shiftEntity, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.Shifts.AddAsync(shiftEntity, ct);
+        await context.SaveChangesAsync(ct);
 
         return shiftEntity.Id;
     }
 
     public async Task<int> Update(int id, ShiftUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Shifts.FirstOrDefaultAsync(s => s.Id == id, ct)
+        var entity = await context.Shifts.FirstOrDefaultAsync(s => s.Id == id, ct)
             ?? throw new NotFoundException("Shift note not found");
 
-        if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
-        if (model.StartAt.HasValue) entity.StartAt = model.StartAt.Value;
-        if (model.EndAt.HasValue) entity.EndAt = model.EndAt.Value;
+        if (!string.IsNullOrWhiteSpace(model.Name))
+        {
+            entity.Name = model.Name;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        if (model.StartAt.HasValue)
+        {
+            entity.StartAt = model.StartAt.Value;
+        }
+
+        if (model.EndAt.HasValue)
+        {
+            entity.EndAt = model.EndAt.Value;
+        }
+
+        await context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
     public async Task<int> Delete(int id, CancellationToken ct)
     {
-        var entity = await _context.Shifts
+        await context.Shifts
             .Where(s => s.Id == id)
             .ExecuteDeleteAsync(ct);
 
@@ -70,14 +72,14 @@ public class ShiftRepository : IShiftRepository
 
     public async Task<bool> Exists(int id, CancellationToken ct)
     {
-        return await _context.Shifts
+        return await context.Shifts
             .AsNoTracking()
             .AnyAsync(s => s.Id == id, ct);
     }
 
     public async Task<bool> HasOverLap(TimeOnly start, TimeOnly end, CancellationToken ct)
     {
-        return await _context.Shifts
+        return await context.Shifts
             .AsNoTracking()
             .AnyAsync(s => s.StartAt == start 
                         && s.EndAt == end, ct);

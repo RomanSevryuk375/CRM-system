@@ -6,30 +6,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class BillStatusRepository : IBillStatusRepository
+public class BillStatusRepository(
+    SystemDbContext context,
+    IMapper mapper) : IBillStatusRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public BillStatusRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     public async Task<List<BillStatusItem>> Get(CancellationToken ct)
     {
-        return await _context.BillStatuses
+        return await context.BillStatuses
             .AsNoTracking()
-            .ProjectTo<BillStatusItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<BillStatusItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
     }
 
     public async Task<bool> Exists (int id, CancellationToken ct)
     {
-        return await _context.BillStatuses
+        return await context.BillStatuses
             .AsNoTracking()
             .AnyAsync(b => b.Id == id, ct);
     }

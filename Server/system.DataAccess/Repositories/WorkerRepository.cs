@@ -10,30 +10,23 @@ using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class WorkerRepository : IWorkerRepository
+public class WorkerRepository(
+    SystemDbContext context,
+    IMapper mapper) : IWorkerRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public WorkerRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     private static IQueryable<WorkerEntity> ApplyFilter(IQueryable<WorkerEntity> query, WorkerFilter filter)
     {
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
+        {
             query = query.Where(w => filter.WorkerIds.Contains(w.Id));
+        }
 
         return query;
     }
 
     public async Task<List<WorkerItem>> GetPaged(WorkerFilter filter, CancellationToken ct)
     {
-        var query = _context.Workers.AsNoTracking();
+        var query = context.Workers.AsNoTracking();
         query = ApplyFilter(query, filter);
 
         query = filter.SortBy?.ToLower().Trim() switch
@@ -41,15 +34,19 @@ public class WorkerRepository : IWorkerRepository
             "name" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Name)
                 : query.OrderBy(w => w.Name),
+
             "surname" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Surname)
                 : query.OrderBy(w => w.Surname),
+
             "phonenumber" => filter.IsDescending
                 ? query.OrderByDescending(w => w.PhoneNumber)
                 : query.OrderBy(w => w.PhoneNumber),
+
             "email" => filter.IsDescending
                 ? query.OrderByDescending(w => w.Email)
                 : query.OrderBy(w => w.Email),
+
             "hourlyrate" => filter.IsDescending
                 ? query.OrderByDescending(w => w.HourlyRate)
                 : query.OrderBy(w => w.HourlyRate),
@@ -60,7 +57,7 @@ public class WorkerRepository : IWorkerRepository
         };
 
         return await query
-            .ProjectTo<WorkerItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<WorkerItem>(mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
@@ -68,26 +65,28 @@ public class WorkerRepository : IWorkerRepository
 
     public async Task<WorkerItem?> GetById(int id, CancellationToken ct)
     {
-        return await _context.Workers
+        return await context.Workers
             .AsNoTracking()
             .Where(w => w.Id == id)
-            .ProjectTo<WorkerItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<WorkerItem>(mapper.ConfigurationProvider, ct)
             .FirstOrDefaultAsync(ct);
     }
 
     public async Task<WorkerItem?> GetByUserId(long userId, CancellationToken ct)
     {
-        return await _context.Workers
+        return await context.Workers
             .AsNoTracking()
             .Where(w => w.UserId == userId)
-            .ProjectTo<WorkerItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<WorkerItem>(mapper.ConfigurationProvider, ct)
             .FirstOrDefaultAsync(ct);
     }
 
     public async Task<int> GetCount(WorkerFilter filter, CancellationToken ct)
     {
-        var query = _context.Workers.AsNoTracking();
+        var query = context.Workers.AsNoTracking();
+
         query = ApplyFilter(query, filter);
+
         return await query.CountAsync(ct);
     }
 
@@ -103,31 +102,50 @@ public class WorkerRepository : IWorkerRepository
             Email = worker.Email
         };
 
-        await _context.Workers.AddAsync(workerEntities, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.Workers.AddAsync(workerEntities, ct);
+        await context.SaveChangesAsync(ct);
 
         return worker.Id;
     }
 
     public async Task<int> Update(int id, WorkerUpdateModel model, CancellationToken ct)
     {
-        var workerEntity = await _context.Workers.FirstOrDefaultAsync(w => w.Id == id, ct)
+        var workerEntity = await context.Workers.FirstOrDefaultAsync(w => w.Id == id, ct)
             ?? throw new NotFoundException("Payment note not found");
 
-        if (!string.IsNullOrWhiteSpace(model.Name)) workerEntity.Name = model.Name;
-        if (!string.IsNullOrWhiteSpace(model.Surname)) workerEntity.Surname = model.Surname;
-        if (model.HourlyRate.HasValue) workerEntity.HourlyRate = model.HourlyRate.Value;
-        if (!string.IsNullOrWhiteSpace(model.PhoneNumber)) workerEntity.PhoneNumber = model.PhoneNumber;
-        if (!string.IsNullOrWhiteSpace(model.Email)) workerEntity.Email = model.Email;
+        if (!string.IsNullOrWhiteSpace(model.Name))
+        {
+            workerEntity.Name = model.Name;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        if (!string.IsNullOrWhiteSpace(model.Surname))
+        {
+            workerEntity.Surname = model.Surname;
+        }
+
+        if (model.HourlyRate.HasValue)
+        {
+            workerEntity.HourlyRate = model.HourlyRate.Value;
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.PhoneNumber))
+        {
+            workerEntity.PhoneNumber = model.PhoneNumber;
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.Email))
+        {
+            workerEntity.Email = model.Email;
+        }
+
+        await context.SaveChangesAsync(ct);
 
         return workerEntity.Id;
     }
 
     public async Task<int> Delete(int id, CancellationToken ct)
     {
-        var worker = await _context.Workers
+        await context.Workers
             .Where(w => w.Id == id)
             .ExecuteDeleteAsync(ct);
 
@@ -136,10 +154,8 @@ public class WorkerRepository : IWorkerRepository
 
     public async Task<bool> Exists(int id, CancellationToken ct)
     {
-        var exist = await _context.Workers
+        return await context.Workers
             .AsNoTracking()
             .AnyAsync(a => a.Id == id, ct);
-
-        return exist;
     }
 }

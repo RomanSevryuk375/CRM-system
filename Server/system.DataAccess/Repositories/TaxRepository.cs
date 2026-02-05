@@ -10,30 +10,23 @@ using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class TaxRepository : ITaxRepository
+public class TaxRepository(
+    SystemDbContext context,
+    IMapper mapper) : ITaxRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public TaxRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     private static IQueryable<TaxEntity> ApplyFilter(IQueryable<TaxEntity> query, TaxFilter filter)
     {
         if (filter.TaxTyprIds != null && filter.TaxTyprIds.Any())
+        {
             query = query.Where(t => filter.TaxTyprIds.Contains(t.TypeId));
+        }
 
         return query;
     }
 
     public async Task<List<TaxItem>> Get(TaxFilter filter, CancellationToken ct)
     {
-        var query = _context.Taxes.AsNoTracking();
+        var query = context.Taxes.AsNoTracking();
         query = ApplyFilter(query, filter);
 
         query = filter.SortBy?.ToLower().Trim() switch
@@ -41,9 +34,11 @@ public class TaxRepository : ITaxRepository
             "name" => filter.IsDescending
                 ? query.OrderByDescending(t => t.Name)
                 : query.OrderBy(t => t.Name),
+
             "rate" => filter.IsDescending
                 ? query.OrderByDescending(t => t.Rate)
                 : query.OrderBy(t => t.Rate),
+
             "type" => filter.IsDescending
                 ? query.OrderByDescending(t => t.TaxType == null
                     ? string.Empty
@@ -58,7 +53,7 @@ public class TaxRepository : ITaxRepository
         };
 
         return await query
-            .ProjectTo<TaxItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<TaxItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
     }
 
@@ -72,28 +67,35 @@ public class TaxRepository : ITaxRepository
             TypeId = (int)tax.TypeId,
         };
 
-        await _context.Taxes.AddAsync(taxEntitie, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.Taxes.AddAsync(taxEntitie, ct);
+        await context.SaveChangesAsync(ct);
 
         return taxEntitie.Id;
     }
 
     public async Task<int> Update(int id, TaxUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Taxes.FirstOrDefaultAsync(t => t.Id == id, ct)
+        var entity = await context.Taxes.FirstOrDefaultAsync(t => t.Id == id, ct)
             ?? throw new NotFoundException("Tax not found");
 
-        if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
-        if (model.Rate.HasValue) entity.Rate = model.Rate.Value;
+        if (!string.IsNullOrWhiteSpace(model.Name))
+        {
+            entity.Name = model.Name;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        if (model.Rate.HasValue)
+        {
+            entity.Rate = model.Rate.Value;
+        }
+
+        await context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
     public async Task<int> Delete(int id, CancellationToken ct)
     {
-        var entity = await _context.Taxes
+        await context.Taxes
             .Where(t => t.Id == id)
             .ExecuteDeleteAsync(ct);
 
@@ -102,7 +104,7 @@ public class TaxRepository : ITaxRepository
 
     public async Task<bool> Exists (int id, CancellationToken ct)
     {
-        return await _context.Taxes
+        return await context.Taxes
             .AsNoTracking()
             .AnyAsync(t => t.Id == id, ct);
     }

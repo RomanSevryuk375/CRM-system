@@ -10,30 +10,23 @@ using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class ClientsRepository : IClientRepository
+public class ClientsRepository(
+    SystemDbContext context,
+    IMapper mapper) : IClientRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public ClientsRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     private static IQueryable<ClientEntity> ApplyFilter(IQueryable<ClientEntity> query, ClientFilter filter)
     {
         if (filter.ClientIds != null && filter.ClientIds.Any())
+        {
             query = query.Where(c => filter.ClientIds.Contains(c.Id));
+        }
 
         return query;
     }
 
     public async Task<List<ClientItem>> GetPaged(ClientFilter filter, CancellationToken ct)
     {
-        var query = _context.Clients.AsNoTracking();
+        var query = context.Clients.AsNoTracking();
         query = ApplyFilter(query, filter);
 
         query = filter.SortBy?.ToLower().Trim() switch
@@ -41,12 +34,15 @@ public class ClientsRepository : IClientRepository
             "name" => filter.IsDescending
                 ? query.OrderByDescending(c => c.Name)
                 : query.OrderBy(c => c.Name),
+
             "surname" => filter.IsDescending
                 ? query.OrderByDescending(c => c.Surname)
                 : query.OrderBy(c => c.Surname),
+
             "phonenumber" => filter.IsDescending
                 ? query.OrderByDescending(c => c.PhoneNumber)
                 : query.OrderBy(c => c.PhoneNumber),
+
             "email" => filter.IsDescending
                 ? query.OrderByDescending(c => c.Email)
                 : query.OrderBy(c => c.Email),
@@ -57,7 +53,7 @@ public class ClientsRepository : IClientRepository
         };
 
         return await query
-            .ProjectTo<ClientItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<ClientItem>(mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
@@ -65,26 +61,28 @@ public class ClientsRepository : IClientRepository
 
     public async Task<int> GetCount(ClientFilter filter, CancellationToken ct)
     {
-        var query = _context.Clients.AsNoTracking();
+        var query = context.Clients.AsNoTracking();
+
         query = ApplyFilter(query, filter);
+
         return await query.CountAsync(ct);
     }
 
     public async Task<ClientItem?> GetById(long id, CancellationToken ct)
     {
-        return await _context.Clients
+        return await context.Clients
             .AsNoTracking()
             .Where(c => c.Id == id)
-            .ProjectTo<ClientItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<ClientItem>(mapper.ConfigurationProvider, ct)
             .FirstOrDefaultAsync(ct);
     }
 
     public async Task<ClientItem?> GetByUserId(long userId, CancellationToken ct)
     {
-        return await _context.Clients
+        return await context.Clients
             .AsNoTracking()
             .Where(c => c.UserId == userId)
-            .ProjectTo<ClientItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<ClientItem>(mapper.ConfigurationProvider, ct)
             .FirstOrDefaultAsync(ct);
     }
 
@@ -99,30 +97,45 @@ public class ClientsRepository : IClientRepository
             Email = client.Email
         };
 
-        await _context.Clients.AddAsync(clientEntities, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.Clients.AddAsync(clientEntities, ct);
+        await context.SaveChangesAsync(ct);
 
         return clientEntities.Id;
     }
 
     public async Task<long> Update(long id, ClientUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Clients.FirstOrDefaultAsync(c => c.Id == id, ct)
+        var entity = await context.Clients.FirstOrDefaultAsync(c => c.Id == id, ct)
             ?? throw new NotFoundException("Client not found");
 
-        if (!string.IsNullOrWhiteSpace(model.Name)) entity.Name = model.Name;
-        if (!string.IsNullOrWhiteSpace(model.Surname)) entity.Surname = model.Surname;
-        if (!string.IsNullOrWhiteSpace(model.PhoneNumber)) entity.PhoneNumber = model.PhoneNumber;
-        if (!string.IsNullOrWhiteSpace(model.Email)) entity.Email = model.Email;
+        if (!string.IsNullOrWhiteSpace(model.Name))
+        {
+            entity.Name = model.Name;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        if (!string.IsNullOrWhiteSpace(model.Surname))
+        {
+            entity.Surname = model.Surname;
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.PhoneNumber))
+        {
+            entity.PhoneNumber = model.PhoneNumber;
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.Email))
+        {
+            entity.Email = model.Email;
+        }
+
+        await context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
     public async Task<long> Delete(long id, CancellationToken ct)
     {
-        var clientEntity = await _context.Clients
+        await context.Clients
             .Where(c => c.Id == id)
             .ExecuteDeleteAsync(ct);
 
@@ -131,7 +144,7 @@ public class ClientsRepository : IClientRepository
 
     public async Task<bool> Exists(long id, CancellationToken ct)
     {
-        return await _context.Clients
+        return await context.Clients
             .AsNoTracking()
             .AnyAsync(c => c.Id == id, ct);
     }

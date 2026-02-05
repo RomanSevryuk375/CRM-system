@@ -6,31 +6,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class NotificationTypeRepository : INotificationTypeRepository
+public class NotificationTypeRepository(
+    SystemDbContext context,
+    IMapper mapper) : INotificationTypeRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public NotificationTypeRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     public async Task<bool> Exists(int id, CancellationToken ct)
     {
-        return await _context.NotificationTypes
+        return await context.NotificationTypes
             .AsNoTracking()
             .AnyAsync(n => n.Id == id, ct);
     }
 
     public async Task<List<NotificationTypeItem>> Get(CancellationToken ct)
     {
-        return await _context.NotificationTypes
+        return await context.NotificationTypes
             .AsNoTracking()
-            .ProjectTo<NotificationTypeItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<NotificationTypeItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
     }
 }

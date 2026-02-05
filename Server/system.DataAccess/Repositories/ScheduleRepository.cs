@@ -10,33 +10,28 @@ using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class ScheduleRepository : IScheduleRepository
+public class ScheduleRepository(
+    SystemDbContext context,
+    IMapper mapper) : IScheduleRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public ScheduleRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     private static IQueryable<ScheduleEntity> ApplyFilter(IQueryable<ScheduleEntity> query, ScheduleFilter filter)
     {
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
+        {
             query = query.Where(s => filter.WorkerIds.Contains(s.WorkerId));
+        }
 
         if (filter.ShiftIds != null && filter.ShiftIds.Any())
+        {
             query = query.Where(s => filter.ShiftIds.Contains(s.ShiftId));
+        }
 
         return query;
     }
 
     public async Task<List<ScheduleItem>> GetPaged(ScheduleFilter filter, CancellationToken ct)
     {
-        var query = _context.Schedules.AsNoTracking();
+        var query = context.Schedules.AsNoTracking();
         query = ApplyFilter(query, filter);
 
         query = filter.SortBy?.ToLower().Trim() switch
@@ -48,6 +43,7 @@ public class ScheduleRepository : IScheduleRepository
                 : query.OrderBy(s => s.Worker == null
                     ? string.Empty
                     : s.Worker.Name),
+
             "shift" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Shift == null
                     ? string.Empty
@@ -55,6 +51,7 @@ public class ScheduleRepository : IScheduleRepository
                 : query.OrderByDescending(s => s.Shift == null
                     ? string.Empty
                     : s.Shift.Name),
+
             "datetime" => filter.IsDescending
                 ? query.OrderByDescending(s => s.Date)
                 : query.OrderBy(s => s.Date),
@@ -65,7 +62,7 @@ public class ScheduleRepository : IScheduleRepository
         };
 
         return await query
-            .ProjectTo<ScheduleItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<ScheduleItem>(mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
@@ -73,8 +70,10 @@ public class ScheduleRepository : IScheduleRepository
 
     public async Task<int> GetCount(ScheduleFilter filter, CancellationToken ct)
     {
-        var query = _context.Schedules.AsNoTracking();
+        var query = context.Schedules.AsNoTracking();
+
         query = ApplyFilter(query, filter);
+
         return await query.CountAsync(ct);
     }
 
@@ -87,28 +86,35 @@ public class ScheduleRepository : IScheduleRepository
             Date = schedule.Date,
         };
 
-        await _context.Schedules.AddAsync(scheduleEntity, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.Schedules.AddAsync(scheduleEntity, ct);
+        await context.SaveChangesAsync(ct);
 
         return scheduleEntity.Id;
     }
 
     public async Task<int> Update(int id, ScheduleUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Schedules.FirstOrDefaultAsync(s => s.Id == id, ct)
+        var entity = await context.Schedules.FirstOrDefaultAsync(s => s.Id == id, ct)
             ?? throw new NotFoundException("Schedule note not found");
 
-        if (model.ShiftId.HasValue) entity.ShiftId = model.ShiftId.Value;
-        if (model.DateTime.HasValue) entity.Date = model.DateTime.Value;
+        if (model.ShiftId.HasValue)
+        {
+            entity.ShiftId = model.ShiftId.Value;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        if (model.DateTime.HasValue)
+        {
+            entity.Date = model.DateTime.Value;
+        }
+
+        await context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
     public async Task<int> Delete(int id, CancellationToken ct)
     {
-        var entity = await _context.Schedules
+        await context.Schedules
             .Where(s => s.Id == id)
             .ExecuteDeleteAsync(ct);
 
@@ -117,7 +123,7 @@ public class ScheduleRepository : IScheduleRepository
 
     public async Task<bool> ExistsByDateAndId(int id, DateTime date, CancellationToken ct)
     {
-        return await _context.Schedules
+        return await context.Schedules
             .AsNoTracking()
             .Where(s => s.Id == id)
             .AnyAsync(s => s.Date == date, ct);

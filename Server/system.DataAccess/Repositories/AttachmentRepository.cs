@@ -10,36 +10,33 @@ using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class AttachmentRepository : IAttachmentRepository
+public class AttachmentRepository(
+    SystemDbContext context,
+    IMapper mapper) : IAttachmentRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public AttachmentRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     private static IQueryable<AttachmentEntity> ApplyFilter(IQueryable<AttachmentEntity> query, AttachmentFilter filter)
     {
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
+        {
             query = query.Where(a => filter.WorkerIds.Contains(a.WorkerId));
+        }
 
         if (filter.OrderIds != null && filter.OrderIds.Any())
+        {
             query = query.Where(a => filter.OrderIds.Contains(a.OrderId));
+        }
 
         if (filter.AttachmentIds != null && filter.AttachmentIds.Any())
+        {
             query = query.Where(a => filter.AttachmentIds.Contains(a.Id));
+        }
 
         return query;
     }
 
     public async Task<List<AttachmentItem>> GetPaged(AttachmentFilter filter, CancellationToken ct)
     {
-        var query = _context.Attachments.AsNoTracking();
+        var query = context.Attachments.AsNoTracking();
         query = ApplyFilter(query, filter);
 
         query = filter.SortBy?.ToLower().Trim() switch
@@ -54,7 +51,7 @@ public class AttachmentRepository : IAttachmentRepository
         };
 
         return await query
-            .ProjectTo<AttachmentItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<AttachmentItem>(mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
@@ -62,8 +59,10 @@ public class AttachmentRepository : IAttachmentRepository
 
     public async Task<int> GetCount(AttachmentFilter filter, CancellationToken ct)
     {
-        var query = _context.Attachments.AsNoTracking();
+        var query = context.Attachments.AsNoTracking();
+
         query = ApplyFilter(query, filter);
+
         return await query.CountAsync(ct);
     }
 
@@ -77,27 +76,30 @@ public class AttachmentRepository : IAttachmentRepository
             Description = attachment.Description,
         };
 
-        await _context.Attachments.AddAsync(attachmentEntity, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.Attachments.AddAsync(attachmentEntity, ct);
+        await context.SaveChangesAsync(ct);
 
         return attachmentEntity.Id;
     }
 
     public async Task<long> Update(long id, string? description, CancellationToken ct)
     {
-        var entity = await _context.Attachments.FirstOrDefaultAsync(a => a.Id == id, ct)
+        var entity = await context.Attachments.FirstOrDefaultAsync(a => a.Id == id, ct)
             ?? throw new NotFoundException("Attachment not found");
 
-        if (!string.IsNullOrEmpty(description)) entity.Description = description;
+        if (!string.IsNullOrEmpty(description))
+        {
+            entity.Description = description;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        await context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
     public async Task<long> Delete(long id, CancellationToken ct)
     {
-        var entity = await _context.Attachments
+        await context.Attachments
             .Where(aa => aa.Id == id)
             .ExecuteDeleteAsync(ct);
 
@@ -106,7 +108,7 @@ public class AttachmentRepository : IAttachmentRepository
 
     public async Task<bool> Exists (long id, CancellationToken ct)
     {
-        return await _context.Attachments
+        return await context.Attachments
             .AsNoTracking()
             .AnyAsync(a => a.Id == id, ct);
     }

@@ -10,30 +10,23 @@ using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
 
-public class GuaranteeRepository : IGuaranteeRepository
+public class GuaranteeRepository(
+    SystemDbContext context,
+    IMapper mapper) : IGuaranteeRepository
 {
-    private readonly SystemDbContext _context;
-    private readonly IMapper _mapper;
-
-    public GuaranteeRepository(
-        SystemDbContext context,
-        IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
     private static IQueryable<GuaranteeEntity> ApplyFilter(IQueryable<GuaranteeEntity> query, GuaranteeFilter filter)
     {
         if (filter.OrderIds != null && filter.OrderIds.Any())
+        {
             query = query.Where(g => filter.OrderIds.Contains(g.OrderId));
+        }
 
         return query;
     }
 
     public async Task<List<GuaranteeItem>> GetPaged(GuaranteeFilter filter, CancellationToken ct)
     {
-        var query = _context.Guarantees.AsNoTracking();
+        var query = context.Guarantees.AsNoTracking();
         query = ApplyFilter(query, filter);
 
         query = filter.SortBy?.ToLower().Trim() switch
@@ -41,12 +34,15 @@ public class GuaranteeRepository : IGuaranteeRepository
             "datestart" => filter.IsDescending
                 ? query.OrderByDescending(g => g.DateStart)
                 : query.OrderBy(g => g.DateStart),
+
             "dateend" => filter.IsDescending
                 ? query.OrderByDescending(g => g.DateEnd)
                 : query.OrderBy(g => g.DateStart),
+
             "terms" => filter.IsDescending
                 ? query.OrderByDescending(g => g.Terms)
                 : query.OrderBy(g => g.Terms),
+
             "description" => filter.IsDescending
                 ? query.OrderByDescending(g => g.Description)
                 : query.OrderBy(g => g.Description),
@@ -57,7 +53,7 @@ public class GuaranteeRepository : IGuaranteeRepository
         };
 
         return await query
-            .ProjectTo<GuaranteeItem>(_mapper.ConfigurationProvider, ct)
+            .ProjectTo<GuaranteeItem>(mapper.ConfigurationProvider, ct)
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
@@ -65,8 +61,10 @@ public class GuaranteeRepository : IGuaranteeRepository
 
     public async Task<int> GetCount(GuaranteeFilter filter, CancellationToken ct)
     {
-        var query = _context.Guarantees.AsNoTracking();
+        var query = context.Guarantees.AsNoTracking();
+
         query = ApplyFilter(query, filter);
+
         return await query.CountAsync(ct);
     }
 
@@ -81,28 +79,35 @@ public class GuaranteeRepository : IGuaranteeRepository
             Terms = guarantee.Terms
         };
 
-        await _context.Guarantees.AddAsync(guarantyEntity, ct);
-        await _context.SaveChangesAsync(ct);
+        await context.Guarantees.AddAsync(guarantyEntity, ct);
+        await context.SaveChangesAsync(ct);
 
         return guarantyEntity.Id;
     }
 
     public async Task<long> Update(long id, GuaranteeUpdateModel model, CancellationToken ct)
     {
-        var entity = await _context.Guarantees.FirstOrDefaultAsync(g => g.Id == id, ct)
+        var entity = await context.Guarantees.FirstOrDefaultAsync(g => g.Id == id, ct)
             ?? throw new NotFoundException("Guarantee not found");
 
-        if (!string.IsNullOrWhiteSpace(model.Description)) entity.Description = model.Description;
-        if (!string.IsNullOrWhiteSpace(model.Terms)) entity.Description = model.Terms;
+        if (!string.IsNullOrWhiteSpace(model.Description))
+        {
+            entity.Description = model.Description;
+        }
 
-        await _context.SaveChangesAsync(ct);
+        if (!string.IsNullOrWhiteSpace(model.Terms))
+        {
+            entity.Description = model.Terms;
+        }
+
+        await context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
 
     public async Task<long> Delete(long id, CancellationToken ct)
     {
-        var entity = await _context.Guarantees
+        await context.Guarantees
             .Where(g => g.Id == id)
             .ExecuteDeleteAsync(ct);
 
