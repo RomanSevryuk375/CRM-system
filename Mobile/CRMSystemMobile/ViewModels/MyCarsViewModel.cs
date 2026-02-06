@@ -35,65 +35,27 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
             return; 
         }
 
+        // Временно убираем проверку IsBusy, чтобы исключить "залипание" флага
+        // if (IsBusy) { System.Diagnostics.Debug.WriteLine("DEBUG: IsBusy = true, выход"); return; }
+
         try
         {
             IsBusy = true;
-            Cars.Clear();
-            _currentPage = 1;
-            _totalItems = 0;
+            var carsList = await carService.GetMyCars();
 
-            await LoadDataInternal();
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось загрузить авто. {ex}", "ОК");
+            Cars.Clear();
+            if (carsList != null)
+            {
+                foreach (var car in carsList)
+                {
+                    Cars.Add(car);
+                }
+            }
         }
         finally
         {
             IsBusy = false;
             IsRefreshing = false;
-        }
-    }
-
-    [RelayCommand]
-    private async Task LoadNextPage()
-    {
-        if (IsLoadingMore || IsBusy || (Cars.Count >= _totalItems && _totalItems != 0))
-        {
-            return;
-        }
-
-        try
-        {
-            IsLoadingMore = true;
-            await LoadDataInternal();
-        }
-        finally
-        {
-            IsLoadingMore = false;
-        }
-    }
-
-    private async Task LoadDataInternal()
-    {
-        var filter = new CarFilter(
-            OwnerIds: [],
-            SortBy: null,
-            Page: _currentPage,
-            Limit: _pageSize,
-            IsDescending: true
-        );
-
-        var (items, total) = await carService.GetCars(filter);
-
-        _totalItems = total;
-
-        if (items != null)
-        {
-            foreach (var item in items)
-            {
-                Cars.Add(item);
-            }
         }
         _currentPage++;
     }

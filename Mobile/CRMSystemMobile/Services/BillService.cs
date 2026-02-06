@@ -36,7 +36,7 @@ public class BillService(HttpClient httpClient, IdentityService identityService)
 
             query += $"&ClientIds={profileId}";
 
-            string url = $"{ApiConfig.BaseUrl}/Bill?{query}";
+            string url = $"api/Bill?Page=1&Limit=100&IsDescending=true&ClientIds={profileId}";
 
             var response = await httpClient.GetAsync(url);
 

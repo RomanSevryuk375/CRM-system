@@ -21,8 +21,8 @@ public class PaymentService(HttpClient httpClient)
                 if (id.HasValue)
                 {
                     query += $"&BillIds={id}";
-                }
             }
+        }
         }
 
         if (filter.MethodIds?.Any() == true)
@@ -30,7 +30,7 @@ public class PaymentService(HttpClient httpClient)
             foreach (var id in filter.MethodIds)
             {
                 query += $"&MethodIds={id}";
-            }
+        }
         }
 
         try

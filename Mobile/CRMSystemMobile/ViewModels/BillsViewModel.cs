@@ -36,27 +36,13 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
         {
             IsBusy = true;
             Bills.Clear();
-            _currentPage = 1;
-            _totalItems = 0;
-            await LoadDataInternal();
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить счета", "ОК");
-        }
-        finally
-        {
-            IsBusy = false;
-            IsRefreshing = false;
-        }
-    }
-
-    [RelayCommand]
-    private async Task LoadNextPage()
-    {
-        if (IsLoadingMore || IsBusy || (Bills.Count >= _totalItems && _totalItems != 0))
-        {
-            return;
+            if (items != null)
+            {
+                foreach (var item in items)
+                {
+                    Bills.Add(item);
+                }
+            }
         }
 
         try
@@ -91,7 +77,6 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
                 Bills.Add(item);
             }
         }
-        _currentPage++;
     }
 
     [RelayCommand]

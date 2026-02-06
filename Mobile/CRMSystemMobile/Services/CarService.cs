@@ -14,26 +14,16 @@ public class CarService(HttpClient httpClient)
         {
             var query = $"Page={filter.Page}&Limit={filter.Limit}&IsDescending={filter.IsDescending}";
 
-            if (!string.IsNullOrEmpty(filter.SortBy))
+            if (profileId <= 0)
             {
-                query += $"&SortBy={filter.SortBy}";
+                return null;
             }
 
-            string url = $"api/Car?{query}";
+            string url = $"api/Car?Page=1&Limit=100&IsDescending=true&OwnerIds={profileId}";
 
             var response = await httpClient.GetAsync(url);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                SecureStorage.Default.Remove("jwt_token");
-                await Shell.Current.GoToAsync("//LoginPage");
-                return (null, 0);
-            }
-
-            response.EnsureSuccessStatusCode();
-
-            int totalCount = 0;
-            if (response.Headers.TryGetValues("x-total-count", out var values))
+            if (response.IsSuccessStatusCode)
             {
                 int.TryParse(values.FirstOrDefault(), out totalCount);
             }

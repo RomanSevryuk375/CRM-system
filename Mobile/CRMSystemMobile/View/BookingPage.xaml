@@ -47,6 +47,7 @@
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="25,10" Spacing="20">
 
+                <!--  1. Автомобиль (Read Only)  -->
                 <VerticalStackLayout Spacing="5">
                     <Label
                         FontSize="14"
@@ -67,6 +68,7 @@
                     </Border>
                 </VerticalStackLayout>
 
+                <!--  2. Дата  -->
                 <VerticalStackLayout Spacing="5">
                     <Label
                         FontSize="14"
@@ -88,6 +90,7 @@
                     </Border>
                 </VerticalStackLayout>
 
+                <!--  3. Приоритет  -->
                 <VerticalStackLayout Spacing="5">
                     <Label
                         FontSize="14"
@@ -130,6 +133,7 @@
                     </Border>
                 </VerticalStackLayout>
 
+                <!--  Инфо текст  -->
                 <Label
                     Margin="0,10,0,0"
                     FontSize="12"
@@ -137,6 +141,7 @@
                     Text="После отправки заявки статус заказа появится на главном экране."
                     TextColor="#707070" />
 
+                <!--  Кнопка  -->
                 <Button
                     Margin="0,20,0,0"
                     BackgroundColor="#3296F8"

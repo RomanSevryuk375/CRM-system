@@ -45,16 +45,39 @@ public partial class BookingViewModel(OrderService orderService) : ObservableObj
             return;
         }
 
-        IsBusy = true;
-
-        try
-        {
-            var priorityEnum = SelectedPriorityName switch
+            if (_preSelectedCar != null)
             {
-                "Низкий" => OrderPriorityEnum.Low,
-                "Высокий" => OrderPriorityEnum.High,
-                _ => OrderPriorityEnum.Medium
-            };
+                SelectedCar = MyCars.FirstOrDefault(c => c.Id == _preSelectedCar.Id);
+                _preSelectedCar = null;
+            }
+            else
+            {
+                SelectedCar = MyCars.FirstOrDefault();
+            }
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert("Внимание", "Добавьте авто", "ОК");
+            await Shell.Current.GoToAsync("AddCarPage");
+        }
+    }
+
+    [RelayCommand]
+    private async Task BookAppointment()
+    {
+        if (SelectedCar == null)
+        {
+            await Shell.Current.DisplayAlert("Ошибка", "Выберите автомобиль", "ОК");
+            return;
+        }
+
+        var priorityEnum = SelectedPriorityName switch
+        {
+            "Низкий" => OrderPriorityEnum.Low,
+            "Обычный" => OrderPriorityEnum.Medium,
+            "Высокий" => OrderPriorityEnum.High,
+            _ => OrderPriorityEnum.Medium
+        };
 
             var request = new OrderRequest
             {
@@ -65,13 +88,7 @@ public partial class BookingViewModel(OrderService orderService) : ObservableObj
                 // Description = ComplaintDescription
             };
 
-            var response = await orderService.CreateOrder(request);
-
-            var success = false;
-            if (response != null)
-            {
-                success = true;
-            }
+        var error = await orderService.CreateOrder(request);
 
             if (success)
             {
