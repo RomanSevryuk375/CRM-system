@@ -1,17 +1,18 @@
 ﻿using CRMSystemMobile.Extentions;
 using Shared.Contracts.Car;
+using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
 
 namespace CRMSystemMobile.Services;
 
-public class CarService(HttpClient httpClient, IdentityService identityService)
+public class CarService(HttpClient httpClient)
 {
-    public async Task<List<CarResponse>?> GetMyCars()
+    public async Task<(List<CarResponse>? items, int TotalCount)> GetCars(CarFilter filter)
     {
         try
         {
-            var (profileId, _) = await identityService.GetProfileIdAsync();
+            var query = $"Page={filter.Page}&Limit={filter.Limit}&IsDescending={filter.IsDescending}";
 
             if (profileId <= 0)
             {
@@ -24,14 +25,16 @@ public class CarService(HttpClient httpClient, IdentityService identityService)
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<List<CarResponse>>();
+                int.TryParse(values.FirstOrDefault(), out totalCount);
             }
 
-            return null;
+            var items = await response.Content.ReadFromJsonAsync<List<CarResponse>>();
+            return (items, totalCount);
         }
         catch (Exception ex)
         {
-            return null;
+            Debug.WriteLine(ex.ToString());
+            return (null, 0);
         }
     }
 

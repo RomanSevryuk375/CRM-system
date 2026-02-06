@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Bill;
+using Shared.Filters;
 using System.Collections.ObjectModel;
 
 namespace CRMSystemMobile.ViewModels;
@@ -10,22 +11,30 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
 {
     public ObservableCollection<BillResponse> Bills { get; } = [];
 
+    private int _currentPage = 1;
+    private int _totalItems = 0;
+    private const int _pageSize = 15;
+
     [ObservableProperty]
     public partial bool IsBusy { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsLoadingMore { get; set; } 
 
     [ObservableProperty]
     public partial bool IsRefreshing { get; set; }
 
     [RelayCommand]
-    private async Task LoadBills()
+    private async Task LoadInitial()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
 
         try
         {
             IsBusy = true;
-            var items = await billService.GetMyBills();
-
             Bills.Clear();
             if (items != null)
             {
@@ -35,14 +44,38 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
                 }
             }
         }
-        catch (Exception ex)
+
+        try
         {
-            await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить счета", "ОК");
+            IsLoadingMore = true;
+            await LoadDataInternal();
         }
         finally
         {
-            IsBusy = false;
-            IsRefreshing = false;
+            IsLoadingMore = false;
+        }
+    }
+
+    private async Task LoadDataInternal()
+    {
+        var filter = new BillFilter(
+             OrderIds: [],
+             ClientIds: [],
+             SortBy: "createdAt",
+             Page: _currentPage,
+             Limit: _pageSize,
+             IsDescending: true
+         );
+
+        var (items, total) = await billService.GetBills(filter);
+        _totalItems = total;
+
+        if (items != null)
+        {
+            foreach (var item in items)
+            {
+                Bills.Add(item);
+            }
         }
     }
 

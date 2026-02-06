@@ -19,7 +19,9 @@ public class LoginService(HttpClient httpClient)
                 var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
 
                 if (result?.Token != null)
+                {
                     await SecureStorage.Default.SetAsync("jwt_token", result.Token);
+                }
 
                 return result;
             }

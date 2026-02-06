@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Car;
+using Shared.Filters;
 using System.Collections.ObjectModel;
 
 namespace CRMSystemMobile.ViewModels;
@@ -10,8 +11,15 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
 {
     public ObservableCollection<CarResponse> Cars { get; } = [];
 
+    private int _currentPage = 1;
+    private int _totalItems = 0;
+    private const int _pageSize = 15;
+
     [ObservableProperty]
     public partial bool IsBusy { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsLoadingMore { get; set; }
 
     [ObservableProperty]
     public partial bool IsRefreshing { get; set; }
@@ -20,9 +28,15 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
     public partial bool IsMenuOpen { get; set; } = false;
 
     [RelayCommand]
-    private async Task LoadCars()
+    private async Task LoadInitial()
     {
-        if (IsBusy) return;
+        if (IsBusy) 
+        { 
+            return; 
+        }
+
+        // Временно убираем проверку IsBusy, чтобы исключить "залипание" флага
+        // if (IsBusy) { System.Diagnostics.Debug.WriteLine("DEBUG: IsBusy = true, выход"); return; }
 
         try
         {
@@ -43,6 +57,7 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
             IsBusy = false;
             IsRefreshing = false;
         }
+        _currentPage++;
     }
 
     [RelayCommand]
@@ -71,7 +86,11 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
     [RelayCommand]
     private async Task GoToDetails(CarResponse car)
     {
-        if (car == null) return;
+        if (car == null)
+        {
+            return;
+        }
+
         var navigationParameter = new Dictionary<string, object>
         {
             { "Car", car }
@@ -84,7 +103,10 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
     {
         IsMenuOpen = false;
 
-        if (page == "MyCarsPage") return;
+        if (page == "MyCarsPage")
+        {
+            return;
+        }
 
         await Shell.Current.GoToAsync(page);
     }

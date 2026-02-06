@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+	<style name="MainTheme" parent="Maui.MainTheme">
+		<item name="android:datePickerDialogTheme">@style/MyDatePickerTheme</item>
+	</style>
+
+	<style name="MyDatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+		<item name="colorAccent">#3296F8</item>
+		<item name="android:windowBackground">#FFFFFF</item> -->
+	</style>
+</resources>

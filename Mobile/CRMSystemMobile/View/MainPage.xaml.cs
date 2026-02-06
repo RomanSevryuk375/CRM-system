@@ -16,9 +16,9 @@ public partial class MainPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        if (_viewModel != null)
+        if (_viewModel.LoadInitialCommand.CanExecute(null))
         {
-            await _viewModel.LoadUserData();
+            await _viewModel.LoadInitialCommand.ExecuteAsync(null);
         }
     }
 }

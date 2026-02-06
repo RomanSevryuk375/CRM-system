@@ -4,49 +4,46 @@ using CRMSystemMobile.Services;
 using Shared.Contracts.Car;
 using Shared.Contracts.Order;
 using Shared.Enums;
-using System.Collections.ObjectModel;
 
 namespace CRMSystemMobile.ViewModels;
 
-public partial class BookingViewModel(OrderService orderService, CarService carService) : ObservableObject, IQueryAttributable
+public partial class BookingViewModel(OrderService orderService) : ObservableObject, IQueryAttributable
 {
-    private CarResponse _preSelectedCar;
-    public ObservableCollection<CarResponse> MyCars { get; } = [];
-
     [ObservableProperty]
-    public partial CarResponse SelectedCar { get; set; }
+    public partial CarResponse Car { get; set; }
 
     [ObservableProperty]
     public partial DateTime SelectedDate { get; set; } = DateTime.Now.AddDays(1);
 
     [ObservableProperty]
-    public partial DateTime MinDate { get; set; } = DateTime.Now;
+    public partial string ComplaintDescription { get; set; }
 
     public List<string> Priorities { get; } = ["Низкий", "Обычный", "Высокий"];
 
     [ObservableProperty]
     public partial string SelectedPriorityName { get; set; } = "Обычный";
 
+    [ObservableProperty]
+    public partial bool IsBusy { get; set; }
+
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.TryGetValue("SelectedCar", out object? value))
+        if (query.ContainsKey("Car") && query["Car"] is CarResponse carData)
         {
-            _preSelectedCar = (CarResponse)value;
+            Car = carData;
         }
     }
 
     [RelayCommand]
-    private async Task LoadData()
-    {
-        var cars = await carService.GetMyCars();
-        MyCars.Clear();
+    private async Task GoBack() => await Shell.Current.GoToAsync("..");
 
-        if (cars != null && cars.Count != 0)
+    [RelayCommand]
+    private async Task SubmitOrder()
+    {
+        if (IsBusy)
         {
-            foreach (var car in cars)
-            {
-                MyCars.Add(car);
-            }
+            return;
+        }
 
             if (_preSelectedCar != null)
             {
@@ -82,27 +79,30 @@ public partial class BookingViewModel(OrderService orderService, CarService carS
             _ => OrderPriorityEnum.Medium
         };
 
-        var request = new OrderRequest
-        {
-            CarId = SelectedCar.Id,
-            StatusId = OrderStatusEnum.Pending,
-            PriorityId = priorityEnum,
-            Date = DateOnly.FromDateTime(SelectedDate)
-        };
+            var request = new OrderRequest
+            {
+                CarId = Car.Id,
+                Date = DateOnly.FromDateTime(SelectedDate),
+                PriorityId = priorityEnum,
+                StatusId = OrderStatusEnum.Pending
+                // Description = ComplaintDescription
+            };
 
         var error = await orderService.CreateOrder(request);
 
-        if (error == null)
-        {
-            await Shell.Current.DisplayAlert("Успех", "Заявка отправлена! Менеджер свяжется с вами.", "ОК");
-            await Shell.Current.GoToAsync("//MainPage");
+            if (success)
+            {
+                await Shell.Current.DisplayAlert("Успех", "Вы записаны на сервис!", "OK");
+                await Shell.Current.GoToAsync("//MainPage");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Ошибка", "Не удалось создать запись. Попробуйте позже.", "OK");
+            }
         }
-        else
+        finally
         {
-            await Shell.Current.DisplayAlert("Не удалось записаться", error, "ОК");
+            IsBusy = false;
         }
     }
-
-    [RelayCommand]
-    private async Task GoBack() => await Shell.Current.GoToAsync("..");
 }

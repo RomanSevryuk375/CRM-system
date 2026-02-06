@@ -34,19 +34,32 @@ public partial class AddCarViewModel(CarService carService, IdentityService iden
         var errors = new List<string>();
 
         if (string.IsNullOrWhiteSpace(Brand))
+        {
             errors.Add("Марка не может быть пустой.");
+        }
         else if (Brand.Length > 128)
+        {
             errors.Add("Название марки слишком длинное.");
+        }
 
         if (string.IsNullOrWhiteSpace(Model))
+        {
             errors.Add("Модель не может быть пустой.");
+        }
         else if (Model.Length > 256)
+        {
             errors.Add("Название модели слишком длинное.");
+        }
 
         if (Year < 1900)
+        {
             errors.Add("Мы не ремонтируем старый хлам (год < 1900).");
+        }
+
         if (Year > DateTime.Now.Year + 1)
+        {
             errors.Add("Год выпуска не может быть в будущем.");
+        }
 
         var vinPattern = @"^[A-HJ-NPR-Z0-9]{17}$";
         if (string.IsNullOrWhiteSpace(VinNumber))
@@ -70,9 +83,11 @@ public partial class AddCarViewModel(CarService carService, IdentityService iden
         }
 
         if (Mileage < 0)
+        {
             errors.Add("Пробег не может быть отрицательным.");
+        }
 
-        if (errors.Any())
+        if (errors.Count != 0)
         {
             var message = string.Join("\n", errors);
             await Shell.Current.DisplayAlert("Ошибка валидации", message, "ОК");

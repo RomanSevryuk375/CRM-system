@@ -20,7 +20,10 @@ public partial class CarDetailsViewModel : ObservableObject, IQueryAttributable
     [RelayCommand]
     private async Task BookVisit()
     {
-        if (Car == null) return;
+        if (Car == null)
+        {
+            return;
+        }
 
         var navigationParameter = new Dictionary<string, object>
         {
