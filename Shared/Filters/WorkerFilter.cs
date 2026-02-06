@@ -2,7 +2,7 @@
 
 public record WorkerFilter
 (
-    IEnumerable<int> WorkerIds,
+    IEnumerable<int>? WorkerIds,
     string? SortBy,
     int Page,
     int Limit,

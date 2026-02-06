@@ -5,8 +5,6 @@ namespace Shared.Contracts.Absence;
 
 public record AbsenceRequest
 {
-    [JsonPropertyName("id")]
-    public int Id { get; init; }
 
     [JsonPropertyName("workerId")]
     public int WorkerId { get; init; }

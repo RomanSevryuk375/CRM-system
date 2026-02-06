@@ -4,7 +4,7 @@ namespace Shared.Filters;
 
 public record AttachmentImgFilter
 (
-    IEnumerable<long> AttachmentIds,
+    IEnumerable<long>? AttachmentIds,
     int Page,
     int Limit
 );

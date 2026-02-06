@@ -2,7 +2,7 @@
 
 public record CarFilter
 (
-    IEnumerable<long> OwnerIds,
+    IEnumerable<long>? OwnerIds,
     string? SortBy,
     int Page,
     int Limit,

@@ -2,7 +2,7 @@
 
 public record PositionFilter
 (
-    IEnumerable<long?> PartIds,
+    IEnumerable<long>? PartIds,
     string? SortBy,
     int Page,
     int Limit,

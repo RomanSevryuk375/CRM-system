@@ -5,8 +5,6 @@ namespace Shared.Contracts.WorkInOrder;
 
 public record WorkInOrderRequest
 {
-    [JsonPropertyName("id")]
-    public long Id { get; init; }
 
     [JsonPropertyName("orderId")]
     public long OrderId { get; init; }
