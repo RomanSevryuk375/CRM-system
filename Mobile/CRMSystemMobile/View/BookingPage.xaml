@@ -1,163 +1,96 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="CRMSystemMobile.View.BookingPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:d="http://schemas.microsoft.com/dotnet/2021/maui/design"
-    xmlns:models="clr-namespace:Shared.Contracts.Car;assembly=Shared"
-    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
-    Title="Запись на сервис"
-    x:DataType="vm:BookingViewModel"
-    BackgroundColor="#112347"
-    Shell.NavBarIsVisible="False">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+             x:Class="CRMSystemMobile.View.BookingPage"
+             x:DataType="vm:BookingViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#112347"
+             Title="Запись на сервис">
 
     <Grid RowDefinitions="Auto, *">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto, *" Padding="15, 20" HeightRequest="80">
+            <ImageButton Grid.Column="0"
+                         Source="back_arrow.png" 
+                         HeightRequest="24"
+                         HorizontalOptions="Start"
+                         Command="{Binding GoBackCommand}"/>
 
-        <!--  Header  -->
-        <Grid
-            Grid.Row="0"
-            Padding="20,20"
-            ColumnDefinitions="50, *"
-            HeightRequest="80">
-            <ImageButton
-                Grid.Column="0"
-                Command="{Binding GoBackCommand}"
-                HeightRequest="24"
-                HorizontalOptions="Start"
-                Source="back_arrow.png">
-                <d:ImageButton.Source>
-                    <FontImageSource
-                        FontFamily="OpenSansSemibold"
-                        Glyph="&#xE5CB;"
-                        Size="30"
-                        Color="White" />
-                </d:ImageButton.Source>
-            </ImageButton>
-
-            <Label
-                Grid.Column="1"
-                FontAttributes="Bold"
-                FontSize="22"
-                Text="Запись на посещение"
-                TextColor="White"
-                VerticalOptions="Center" />
+            <Label Grid.Column="1" 
+                   Text="Новая заявка" 
+                   TextColor="White" 
+                   FontSize="20" 
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   Margin="-24,0,0,0"/>
         </Grid>
 
-        <!--  Form Content  -->
         <ScrollView Grid.Row="1">
-            <VerticalStackLayout Padding="25,10" Spacing="20">
+            <VerticalStackLayout Spacing="20" Padding="30">
 
-                <!--  1. Автомобиль (Read Only)  -->
                 <VerticalStackLayout Spacing="5">
-                    <Label
-                        FontSize="14"
-                        Text="Выбранный автомобиль"
-                        TextColor="#ACACAC" />
-                    <Border
-                        BackgroundColor="#1C2D4F"
+                    <Label Text="Автомобиль" TextColor="#ACACAC" FontSize="12"/>
+                    <Border StrokeShape="RoundRectangle 5" BackgroundColor="#213868" StrokeThickness="0" Padding="15">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Image Grid.Column="0" Source="car.png" HeightRequest="40" WidthRequest="40" Margin="0,0,15,0"/>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label TextColor="White" FontSize="16" FontAttributes="Bold">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding SelectedCar.Brand}"/>
+                                            <Span Text=" "/>
+                                            <Span Text="{Binding SelectedCar.Model}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label Text="{Binding SelectedCar.StateNumber}" TextColor="#FFB347" FontSize="14"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Желаемая дата" TextColor="#ACACAC" FontSize="12"/>
+                    <Border StrokeShape="RoundRectangle 5" HeightRequest="50" BackgroundColor="#213868" StrokeThickness="0">
+                        <DatePicker Date="{Binding SelectedDate}"
+                                    MinimumDate="{Binding MinDate}"
+                                    TextColor="White"
+                                    Margin="10,0"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Приоритет срочности" TextColor="#ACACAC" FontSize="12"/>
+                    <Border StrokeShape="RoundRectangle 5" HeightRequest="50" BackgroundColor="#213868" StrokeThickness="0">
+                        <Picker ItemsSource="{Binding Priorities}"
+                                SelectedItem="{Binding SelectedPriorityName}"
+                                TextColor="White"
+                                TitleColor="Gray"
+                                Margin="10,0"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Что случилось? (Жалобы, описание работ)" TextColor="#ACACAC" FontSize="12"/>
+                    <Border StrokeShape="RoundRectangle 5" HeightRequest="100" BackgroundColor="#213868" StrokeThickness="0">
+                        <Editor Text="{Binding Description}"
+                                Placeholder="Стучит подвеска, нужно поменять масло..."
+                                PlaceholderColor="Gray"
+                                TextColor="White"
+                                Margin="10,5"
+                                AutoSize="TextChanges"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <Button Text="Отправить заявку" 
+                        Command="{Binding BookAppointmentCommand}"
+                        BackgroundColor="#3296F8" 
+                        TextColor="White"
+                        CornerRadius="8"
+                        FontAttributes="Bold"
                         HeightRequest="50"
-                        StrokeShape="RoundRectangle 8"
-                        StrokeThickness="0">
-                        <Entry
-                            Margin="15,0"
-                            FontSize="16"
-                            IsReadOnly="True"
-                            Text="{Binding Car.Brand, StringFormat='{0} (Выбрано)'}"
-                            TextColor="White"
-                            VerticalOptions="Center" />
-                    </Border>
-                </VerticalStackLayout>
-
-                <!--  2. Дата  -->
-                <VerticalStackLayout Spacing="5">
-                    <Label
-                        FontSize="14"
-                        Text="Желаемая дата"
-                        TextColor="#ACACAC" />
-                    <Border
-                        BackgroundColor="#1C2D4F"
-                        HeightRequest="50"
-                        StrokeShape="RoundRectangle 8"
-                        StrokeThickness="0">
-                        <DatePicker
-                            xmlns:system="clr-namespace:System;assembly=mscorlib"
-                            Margin="5,0"
-                            Date="{Binding SelectedDate}"
-                            FontSize="16"
-                            MinimumDate="{Binding MinDate}"
-                            TextColor="White"
-                            VerticalOptions="Center" />
-                    </Border>
-                </VerticalStackLayout>
-
-                <!--  3. Приоритет  -->
-                <VerticalStackLayout Spacing="5">
-                    <Label
-                        FontSize="14"
-                        Text="Приоритет срочности"
-                        TextColor="#ACACAC" />
-                    <Border
-                        BackgroundColor="#1C2D4F"
-                        HeightRequest="50"
-                        StrokeShape="RoundRectangle 8"
-                        StrokeThickness="0">
-                        <Picker
-                            Margin="5,0"
-                            FontSize="16"
-                            ItemsSource="{Binding Priorities}"
-                            SelectedItem="{Binding SelectedPriorityName}"
-                            TextColor="White"
-                            TitleColor="#ACACAC"
-                            VerticalOptions="Center" />
-                    </Border>
-                </VerticalStackLayout>
-
-                <!--  4. Описание жалоб (Новое поле)  -->
-                <VerticalStackLayout Spacing="5">
-                    <Label
-                        FontSize="14"
-                        Text="Опишите проблему"
-                        TextColor="#ACACAC" />
-                    <Border
-                        BackgroundColor="#1C2D4F"
-                        HeightRequest="120"
-                        StrokeShape="RoundRectangle 8"
-                        StrokeThickness="0">
-                        <Editor
-                            Margin="15,10"
-                            AutoSize="TextChanges"
-                            FontSize="14"
-                            Placeholder="Стук в подвеске, замена масла..."
-                            PlaceholderColor="#707070"
-                            Text="{Binding ComplaintDescription}"
-                            TextColor="White" />
-                    </Border>
-                </VerticalStackLayout>
-
-                <!--  Инфо текст  -->
-                <Label
-                    Margin="0,10,0,0"
-                    FontSize="12"
-                    HorizontalTextAlignment="Center"
-                    Text="После отправки заявки статус заказа появится на главном экране."
-                    TextColor="#707070" />
-
-                <!--  Кнопка  -->
-                <Button
-                    Margin="0,20,0,0"
-                    BackgroundColor="#3296F8"
-                    Command="{Binding SubmitOrderCommand}"
-                    CornerRadius="8"
-                    FontAttributes="Bold"
-                    FontSize="16"
-                    HeightRequest="50"
-                    Text="Записаться"
-                    TextColor="White" />
-
-                <ActivityIndicator
-                    HorizontalOptions="Center"
-                    IsRunning="{Binding IsBusy}"
-                    Color="White" />
+                        Margin="0,20,0,0"/>
 
             </VerticalStackLayout>
         </ScrollView>

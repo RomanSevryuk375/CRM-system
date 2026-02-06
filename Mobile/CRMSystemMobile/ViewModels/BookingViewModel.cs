@@ -7,78 +7,73 @@ using Shared.Enums;
 
 namespace CRMSystemMobile.ViewModels;
 
-public partial class BookingViewModel(OrderService orderService) : ObservableObject, IQueryAttributable
+public partial class BookingViewModel(OrderService orderService)
+    : ObservableObject, IQueryAttributable
 {
+    // Машина, которую передали с предыдущей страницы
     [ObservableProperty]
-    public partial CarResponse Car { get; set; }
+    public partial CarResponse SelectedCar { get; set; }
 
     [ObservableProperty]
     public partial DateTime SelectedDate { get; set; } = DateTime.Now.AddDays(1);
 
     [ObservableProperty]
-    public partial string ComplaintDescription { get; set; }
+    public partial DateTime MinDate { get; set; } = DateTime.Now;
 
+    [ObservableProperty]
+    public partial string Description { get; set; }
     public List<string> Priorities { get; } = ["Низкий", "Обычный", "Высокий"];
 
     [ObservableProperty]
     public partial string SelectedPriorityName { get; set; } = "Обычный";
 
-    [ObservableProperty]
-    public partial bool IsBusy { get; set; }
-
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.ContainsKey("Car") && query["Car"] is CarResponse carData)
+        if (query.ContainsKey("SelectedCar"))
         {
-            Car = carData;
+            SelectedCar = (CarResponse)query["SelectedCar"];
+        }
+    }
+
+    [RelayCommand]
+    private async Task BookAppointment()
+    {
+        if (SelectedCar == null)
+        {
+            await Shell.Current.DisplayAlert("Ошибка", "Автомобиль не выбран", "ОК");
+            return;
+        }
+
+        var priorityEnum = SelectedPriorityName switch
+        {
+            "Низкий" => OrderPriorityEnum.Low,
+            "Обычный" => OrderPriorityEnum.Medium,
+            "Высокий" => OrderPriorityEnum.High,
+            _ => OrderPriorityEnum.Medium
+        };
+
+        var request = new OrderRequest
+        {
+            CarId = SelectedCar.Id,
+            StatusId = OrderStatusEnum.Pending,
+            PriorityId = priorityEnum,
+            Date = DateOnly.FromDateTime(SelectedDate),
+            // Description = Description 
+        };
+
+        var error = await orderService.CreateOrder(request);
+
+        if (error == null)
+        {
+            await Shell.Current.DisplayAlert("Успех", "Заявка отправлена!", "ОК");
+            await Shell.Current.GoToAsync("//MainPage");
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert("Ошибка", error, "ОК");
         }
     }
 
     [RelayCommand]
     private async Task GoBack() => await Shell.Current.GoToAsync("..");
-
-    [RelayCommand]
-    private async Task SubmitOrder()
-    {
-        if (IsBusy) return;
-        IsBusy = true;
-
-        try
-        {
-            var priorityEnum = SelectedPriorityName switch
-            {
-                "Низкий" => OrderPriorityEnum.Low,
-                "Высокий" => OrderPriorityEnum.High,
-                _ => OrderPriorityEnum.Medium
-            };
-
-            var request = new OrderRequest
-            {
-                CarId = Car.Id,
-                Date = DateOnly.FromDateTime(SelectedDate),
-                PriorityId = priorityEnum,
-                StatusId = OrderStatusEnum.Pending
-                // Description = ComplaintDescription
-            };
-
-            var response = await orderService.CreateOrder(request);
-
-            var success = false;
-            if (response != null) success = true;
-
-            if (success)
-            {
-                await Shell.Current.DisplayAlert("Успех", "Вы записаны на сервис!", "OK");
-                await Shell.Current.GoToAsync("//MainPage");
-            }
-            else
-            {
-                await Shell.Current.DisplayAlert("Ошибка", "Не удалось создать запись. Попробуйте позже.", "OK");
-            }
-        }
-        finally
-        {
-            IsBusy = false;
-        }
-    }
 }
