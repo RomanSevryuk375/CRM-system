@@ -51,7 +51,6 @@ public class OrderService(HttpClient httpClient)
                 query += $"&WorkerIds={id}";
         }
 
-        string url = $"{ApiConfig.BaseUrl}/Order?{query}";
         try
         {
             var response = await httpClient.GetAsync($"api/Order?{query}");

@@ -19,7 +19,7 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
     public partial bool IsBusy { get; set; }
 
     [ObservableProperty]
-    public partial bool IsLoadingMore { get; set; } 
+    public partial bool IsLoadingMore { get; set; }
 
     [ObservableProperty]
     public partial bool IsRefreshing { get; set; }
@@ -27,23 +27,31 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
     [RelayCommand]
     private async Task LoadInitial()
     {
-        if (IsBusy)
-        {
-            return;
-        }
-
+        if (IsBusy) return;
         try
         {
             IsBusy = true;
             Bills.Clear();
-            if (items != null)
-            {
-                foreach (var item in items)
-                {
-                    Bills.Add(item);
-                }
-            }
+            _currentPage = 1;
+            _totalItems = 0;
+            await LoadDataInternal();
         }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось загрузить счета: {ex}", "ОК");
+        }
+        finally
+        {
+            IsBusy = false;
+            IsRefreshing = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task LoadNextPage()
+    {
+        if (IsLoadingMore || IsBusy || (Bills.Count >= _totalItems && _totalItems != 0))
+            return;
 
         try
         {
@@ -77,6 +85,7 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
                 Bills.Add(item);
             }
         }
+        _currentPage++;
     }
 
     [RelayCommand]

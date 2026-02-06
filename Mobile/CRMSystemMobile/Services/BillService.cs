@@ -3,22 +3,16 @@ using Shared.Contracts.Bill;
 using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
+using Xamarin.Google.Crypto.Tink.Shaded.Protobuf;
 
 namespace CRMSystemMobile.Services;
 
-public class BillService(HttpClient httpClient, IdentityService identityService)
+public class BillService(HttpClient httpClient)
 {
     public async Task<(List<BillResponse>? items, int TotalCount)> GetBills(BillFilter filter)
     {
         try
         {
-            var (profileId, _) = await identityService.GetProfileIdAsync();
-
-            if (profileId <= 0)
-            {
-                return (null, 0);
-            }
-
             var query = $"Page={filter.Page}&Limit={filter.Limit}&IsDescending={filter.IsDescending}";
 
             if (!string.IsNullOrEmpty(filter.SortBy))
@@ -34,9 +28,7 @@ public class BillService(HttpClient httpClient, IdentityService identityService)
                 }
             }
 
-            query += $"&ClientIds={profileId}";
-
-            string url = $"api/Bill?Page=1&Limit=100&IsDescending=true&ClientIds={profileId}";
+            string url = $"api/Bill?{query}";
 
             var response = await httpClient.GetAsync(url);
 
