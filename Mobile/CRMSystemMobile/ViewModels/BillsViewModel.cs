@@ -38,7 +38,7 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить счета", "ОК");
+            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось загрузить счета: {ex}", "ОК");
         }
         finally
         {
