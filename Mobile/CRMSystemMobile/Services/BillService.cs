@@ -1,9 +1,7 @@
-﻿using CRMSystemMobile.Extentions;
-using Shared.Contracts.Bill;
+﻿using Shared.Contracts.Bill;
 using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
-using Xamarin.Google.Crypto.Tink.Shaded.Protobuf;
 
 namespace CRMSystemMobile.Services;
 
