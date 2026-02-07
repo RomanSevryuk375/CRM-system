@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using CRMSystemMobile.Message;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Car;
 using Shared.Contracts.Order;
@@ -25,6 +27,22 @@ public partial class BookingViewModel(OrderService orderService)
 
     [ObservableProperty]
     public partial string SelectedPriorityName { get; set; } = "Обычный";
+
+    [ObservableProperty]
+    public partial bool IsPriorityDropdownOpen { get; set; }
+
+    [RelayCommand]
+    private void TogglePriorityDropdown()
+    {
+        IsPriorityDropdownOpen = !IsPriorityDropdownOpen;
+    }
+
+    [RelayCommand]
+    private void SelectPriorityItem(string priority)
+    {
+        SelectedPriorityName = priority;
+        IsPriorityDropdownOpen = false; 
+    }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -64,7 +82,6 @@ public partial class BookingViewModel(OrderService orderService)
 
         if (error == null)
         {
-            await Shell.Current.DisplayAlert("Успех", "Заявка отправлена!", "ОК");
             await Shell.Current.GoToAsync("//MainPage");
         }
         else

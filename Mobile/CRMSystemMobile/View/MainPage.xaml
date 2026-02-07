@@ -49,27 +49,25 @@
                     StrokeThickness="0"
                     WidthRequest="220">
 
-                    <Grid ColumnDefinitions="*, *">
-
+                    <Grid ColumnDefinitions="Auto, Auto">
                         <Button
                             Grid.Column="0"
-                            BackgroundColor="#ffffff"
+                            BackgroundColor="{Binding InProgressBg}"
                             Command="{Binding SelectTabCommand}"
                             CommandParameter="InProgress"
                             FontSize="14"
                             HeightRequest="44"
                             Text="В работе"
-                            TextColor="#112347" />
-
+                            TextColor="{Binding InProgressText}" />
                         <Button
                             Grid.Column="1"
-                            BackgroundColor="Transparent"
+                            BackgroundColor="{Binding CompletedBg}"
                             Command="{Binding SelectTabCommand}"
                             CommandParameter="Completed"
                             FontSize="14"
                             HeightRequest="44"
                             Text="Завершенные"
-                            TextColor="#ACACAC" />
+                            TextColor="{Binding CompletedText}" />
                     </Grid>
                 </Border>
 
