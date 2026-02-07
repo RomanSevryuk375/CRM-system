@@ -1,13 +1,14 @@
 ﻿using Shared.Contracts.Work;
+using Shared.Contracts.WorkInOrder;
 using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
 
 namespace CRMSystemMobile.Services;
 
-public class WorkService(HttpClient httpClient)
+public class WorkInOrderService(HttpClient httpClient)
 {
-    public async Task<(List<WorkResponse>?, int TotalCount)> GetWorks(WorkFilter filter)
+    public async Task<(List<WorkInOrderResponse>?, int TotalCount)> GetWorksInOrder(WorkInOrderFilter filter)
     {
         try
         {
@@ -18,7 +19,39 @@ public class WorkService(HttpClient httpClient)
                 query += $"&SortBy={filter.SortBy}";
             }
 
-            string url = $"api/Work?{query}";
+            if (filter.JobIds?.Any() == true)
+            {
+                foreach (var id in filter.JobIds)
+                {
+                    query += $"&JobIds={id}";
+                }
+            }
+
+            if (filter.StatusIds?.Any() == true)
+            {
+                foreach (var id in filter.StatusIds)
+                {
+                    query += $"&StatusIds={id}";
+                }
+            }
+
+            if (filter.OrderIds?.Any() == true)
+            {
+                foreach (var id in filter.OrderIds)
+                {
+                    query += $"&OrderIds={id}";
+                }
+            }
+
+            if (filter.WorkerIds?.Any() == true)
+            {
+                foreach (var id in filter.WorkerIds)
+                {
+                    query += $"&WorkerIds={id}";
+                }
+            }
+
+            string url = $"api/WorkInOrder?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -37,7 +70,7 @@ public class WorkService(HttpClient httpClient)
                 int.TryParse(values.FirstOrDefault(), out totalCount);
             }
 
-            var items = await response.Content.ReadFromJsonAsync<List<WorkResponse>>();
+            var items = await response.Content.ReadFromJsonAsync<List<WorkInOrderResponse>>();
             return (items, totalCount);
         }
         catch (Exception ex)
@@ -47,11 +80,11 @@ public class WorkService(HttpClient httpClient)
         }
     }
 
-    public async Task<string?> CreateWork(WorkRequest request)
+    public async Task<string?> AddWorkToOrder(WorkInOrderRequest request)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/Work", request);
+            var response = await httpClient.PostAsJsonAsync("api/WorkInOrder", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -69,16 +102,16 @@ public class WorkService(HttpClient httpClient)
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.ToString()); 
+            Debug.WriteLine(ex.ToString());
             return null;
         }
     }
 
-    public async Task<string?> DeleteWork(long id)
+    public async Task<string?> DeleteWorkFromOrder(long id)
     {
         try
         {
-            var response = await httpClient.DeleteAsync($"api/Work{id}");
+            var response = await httpClient.DeleteAsync($"api/WorkInOrder{id}");
 
             if (response.IsSuccessStatusCode)
             {
