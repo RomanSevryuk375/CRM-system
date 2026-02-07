@@ -5,8 +5,6 @@ namespace Shared.Contracts.Order;
 
 public record OrderWithBillRequest
 {
-    [JsonPropertyName("id")]
-    public long Id { get; init; }
 
     [JsonPropertyName("orderStatusId")]
     public OrderStatusEnum OrderStatusId { get; init; }

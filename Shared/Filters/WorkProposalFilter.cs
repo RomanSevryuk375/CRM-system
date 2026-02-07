@@ -2,10 +2,10 @@
 
 public record WorkProposalFilter
 (
-    IEnumerable<long> OrderIds,
-    IEnumerable<long> JobIds,
-    IEnumerable<int> WorkerIds,
-    IEnumerable<int> StatusIds,
+    IEnumerable<long>? OrderIds,
+    IEnumerable<long>? JobIds,
+    IEnumerable<int>? WorkerIds,
+    IEnumerable<int>? StatusIds,
     string? SortBy,
     int Page,
     int Limit,

@@ -8,9 +8,6 @@ public record BillRequest
     [JsonPropertyName("orderId")]
     public long OrderId { get; init; }
 
-    [JsonPropertyName("status")]
-    public string Status { get; init; } = string.Empty;
-
     [JsonPropertyName("statusId")]
     public BillStatusEnum StatusId { get; init; }
 

@@ -2,8 +2,8 @@
 
 public record SupplySetFilter
 (
-    IEnumerable<long> SupplyIds,
-    IEnumerable<long> PositionIds,
+    IEnumerable<long>? SupplyIds,
+    IEnumerable<long>? PositionIds,
     string? SortBy,
     int Page,
     int Limit,
