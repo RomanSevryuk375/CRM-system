@@ -33,7 +33,10 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
     public IEnumerable GetErrors(string? propertyName)
     {
         if (string.IsNullOrEmpty(propertyName))
+        {
             return _errors.SelectMany(kv => kv.Value).ToList();
+        }
+
         return _errors.TryGetValue(propertyName, out var list) ? list : new List<string>();
     }
 
@@ -143,7 +146,9 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
                 {
                     var phoneRegex = MyRegex;
                     if (!phoneRegex.IsMatch(value.Trim()))
+                    {
                         AddError(propertyName, "Неверный формат телефона. Пример: (+375/80)(29/44/33/25)XXX-XX-XX");
+                    }
                 }
                 break;
 
@@ -163,16 +168,26 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
 
             case nameof(UserLogin):
                 if (string.IsNullOrWhiteSpace(value))
+                {
                     AddError(propertyName, "Введите логин.");
+                }
                 else if (value.Trim().Length < 3)
+                {
                     AddError(propertyName, "Логин должен быть не короче 3 символов.");
+                }
+
                 break;
 
             case nameof(UserPassword):
                 if (string.IsNullOrWhiteSpace(value))
+                {
                     AddError(propertyName, "Введите пароль.");
+                }
                 else if (value.Length < 6)
+                {
                     AddError(propertyName, "Пароль должен содержать минимум 6 символов.");
+                }
+
                 break;
             default:
                 break;
@@ -252,7 +267,9 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
 
             var result = await loginService.LoginUser(loginRequest);
             if (result != null)
+            {
                 await Shell.Current.GoToAsync("//MainPage");
+            }
         }
         else
         {

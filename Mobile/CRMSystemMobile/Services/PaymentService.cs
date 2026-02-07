@@ -12,7 +12,9 @@ public class PaymentService(HttpClient httpClient)
         var query = $"Page={filter.Page}&Limit={filter.Limit}&IsDescending={filter.IsDescending}";
 
         if (!string.IsNullOrEmpty(filter.SortBy))
+        {
             query += $"&SortBy={filter.SortBy}";
+        }
 
         if (filter.BillIds?.Any() == true)
         {
@@ -21,8 +23,8 @@ public class PaymentService(HttpClient httpClient)
                 if (id.HasValue)
                 {
                     query += $"&BillIds={id}";
+                }
             }
-        }
         }
 
         if (filter.MethodIds?.Any() == true)
@@ -30,7 +32,7 @@ public class PaymentService(HttpClient httpClient)
             foreach (var id in filter.MethodIds)
             {
                 query += $"&MethodIds={id}";
-        }
+            }
         }
 
         try

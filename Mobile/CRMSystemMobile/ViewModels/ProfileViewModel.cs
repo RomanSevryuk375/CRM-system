@@ -63,7 +63,11 @@ public partial class ProfileViewModel : ObservableObject
     [RelayCommand]
     public async Task SaveProfile()
     {
-        if (IsLoading) return;
+        if (IsLoading)
+        {
+            return;
+        }
+
         IsLoading = true;
 
         var request = new ClientUpdateRequest(

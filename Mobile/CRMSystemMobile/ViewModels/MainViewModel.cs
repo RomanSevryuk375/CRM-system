@@ -160,7 +160,9 @@ public partial class MainViewModel : ObservableObject
             _totalItems = total;
 
             foreach (var item in items ?? [])
+            {
                 Orders.Add(item);
+            }
 
             _currentPage++;
         }
