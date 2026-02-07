@@ -2,7 +2,7 @@
 
 public record PartFilter
 (
-    IEnumerable<long> CategoryIds,
+    IEnumerable<long>? CategoryIds,
     string? SortBy,
     int Page,
     int Limit,

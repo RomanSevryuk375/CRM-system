@@ -7,9 +7,6 @@ public record AcceptanceRequest
     [JsonPropertyName("orderId")]
     public long OrderId { get; init; }
 
-    [JsonPropertyName("worker")]
-    public string Worker { get; init; } = string.Empty;
-
     [JsonPropertyName("workerId")]
     public int WorkerId { get; init; }
 

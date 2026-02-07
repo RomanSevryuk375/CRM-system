@@ -2,7 +2,7 @@
 
 public record GuaranteeFilter
 (
-    IEnumerable<long> OrderIds,
+    IEnumerable<long>? OrderIds,
     string? SortBy,
     int Page,
     int Limit,

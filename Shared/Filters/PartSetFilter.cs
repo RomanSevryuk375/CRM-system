@@ -2,8 +2,8 @@
 
 public record PartSetFilter
 (
-    IEnumerable<long?> OrderIds,
-    IEnumerable<long> PositionIds,
+    IEnumerable<long>? OrderIds,
+    IEnumerable<long>? PositionIds,
     IEnumerable<long?> ProposalIds,
     string? SortBy,
     int Page,

@@ -4,9 +4,6 @@ namespace Shared.Contracts.Position;
 
 public record PositionWithPartRequest
 {
-    [JsonPropertyName("id")]
-    public long Id { get; init; }
-
     [JsonPropertyName("partId")]
     public long PartId { get; init; }
 

@@ -11,7 +11,7 @@ public record NotificationRequest
     [JsonPropertyName("carId")]
     public long CarId { get; init; }
 
-    [JsonPropertyName("statusId")]
+    [JsonPropertyName("typeId")]
     public NotificationTypeEnum TypeId { get; init; }
 
     [JsonPropertyName("statusId")]

@@ -1,13 +1,10 @@
 ﻿using Shared.Enums;
 using System.Text.Json.Serialization;
 
-namespace Shared.Contracts.WorkPropossal;
+namespace Shared.Contracts.WorkProposal;
 
 public record WorkProposalRequest
 {
-    [JsonPropertyName("id")]
-    public long Id { get; init; }
-
     [JsonPropertyName("orderId")]
     public long OrderId { get; init; }
 
