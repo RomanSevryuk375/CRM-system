@@ -15,7 +15,9 @@ public class CarService(HttpClient httpClient)
             var query = $"Page={filter.Page}&Limit={filter.Limit}&IsDescending={filter.IsDescending}";
 
             if (!string.IsNullOrEmpty(filter.SortBy))
+            {
                 query += $"&SortBy={filter.SortBy}";
+            }
 
             string url = $"api/Car?{query}";
 

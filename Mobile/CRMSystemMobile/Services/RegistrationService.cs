@@ -18,7 +18,9 @@ public class RegistrationService
             var content = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
+            {
                 return new RegistrationResult(true, null);
+            }
 
             try
             {
@@ -44,10 +46,14 @@ public class RegistrationService
                 }
 
                 if (root.TryGetProperty("message", out var msgEl))
+                {
                     return new RegistrationResult(false, msgEl.GetString());
+                }
 
                 if (root.ValueKind == JsonValueKind.String)
+                {
                     return new RegistrationResult(false, root.GetString());
+                }
             }
             catch
             {

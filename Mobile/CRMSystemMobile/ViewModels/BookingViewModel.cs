@@ -10,7 +10,6 @@ namespace CRMSystemMobile.ViewModels;
 public partial class BookingViewModel(OrderService orderService)
     : ObservableObject, IQueryAttributable
 {
-    // Машина, которую передали с предыдущей страницы
     [ObservableProperty]
     public partial CarResponse SelectedCar { get; set; }
 

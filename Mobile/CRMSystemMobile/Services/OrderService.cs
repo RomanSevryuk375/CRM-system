@@ -13,42 +13,56 @@ public class OrderService(HttpClient httpClient)
         var query = $"Page={orderFilter.Page}&Limit={orderFilter.Limit}&IsDescending={orderFilter.IsDescending}";
 
         if (!string.IsNullOrEmpty(orderFilter.SortBy))
+        {
             query += $"&SortBy={orderFilter.SortBy}";
+        }
 
         if (orderFilter.StatusIds?.Any() == true)
         {
             foreach (var id in orderFilter.StatusIds)
+            {
                 query += $"&StatusIds={id}";
+            }
         }
 
         if (orderFilter.CarIds?.Any() == true)
         {
             foreach (var id in orderFilter.CarIds)
+            {
                 query += $"&CarIds={id}";
+            }
         }
 
         if (orderFilter.ClientIds?.Any() == true)
         {
             foreach (var id in orderFilter.ClientIds)
+            {
                 query += $"&ClientIds={id}";
+            }
         }
 
         if (orderFilter.PriorityIds?.Any() == true)
         {
             foreach (var id in orderFilter.PriorityIds)
+            {
                 query += $"&PriorityIds={id}";
+            }
         }
 
         if (orderFilter.PriorityIds?.Any() == true)
         {
             foreach (var id in orderFilter.PriorityIds)
+            {
                 query += $"&PriorityIds={id}";
+            }
         }
 
         if (orderFilter.WorkerIds?.Any() == true)
         {
             foreach (var id in orderFilter.WorkerIds)
+            {
                 query += $"&WorkerIds={id}";
+            }
         }
 
         try
@@ -66,7 +80,9 @@ public class OrderService(HttpClient httpClient)
 
             int totalCount = 0;
             if (response.Headers.TryGetValues("x-total-count", out var values))
+            {
                 totalCount = int.Parse(values.First());
+            }
 
             var items = await response.Content.ReadFromJsonAsync<List<OrderResponse>>();
             return (items, totalCount);

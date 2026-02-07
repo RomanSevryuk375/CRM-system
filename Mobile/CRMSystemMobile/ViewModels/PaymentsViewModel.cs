@@ -27,7 +27,11 @@ public partial class PaymentsViewModel(PaymentService paymentService) : Observab
     [RelayCommand]
     private async Task LoadInitial()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
+
         try
         {
             IsBusy = true;

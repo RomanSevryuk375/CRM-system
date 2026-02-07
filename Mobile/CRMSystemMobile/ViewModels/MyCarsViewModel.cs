@@ -30,10 +30,10 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
     [RelayCommand]
     private async Task LoadInitial()
     {
-        System.Diagnostics.Debug.WriteLine("DEBUG: LoadInitial вызван");
-
-        // Временно убираем проверку IsBusy, чтобы исключить "залипание" флага
-        // if (IsBusy) { System.Diagnostics.Debug.WriteLine("DEBUG: IsBusy = true, выход"); return; }
+        if (IsBusy) 
+        {  
+            return; 
+        }
 
         try
         {
@@ -42,19 +42,16 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
             _currentPage = 1;
             _totalItems = 0;
 
-            System.Diagnostics.Debug.WriteLine("DEBUG: Переход к LoadDataInternal");
             await LoadDataInternal();
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"DEBUG: Ошибка в LoadInitial: {ex}");
-            await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить авто", "ОК");
+            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось загрузить авто: {ex}", "ОК");
         }
         finally
         {
             IsBusy = false;
             IsRefreshing = false;
-            System.Diagnostics.Debug.WriteLine("DEBUG: LoadInitial завершен, IsBusy = false");
         }
     }
 
@@ -62,7 +59,9 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
     private async Task LoadNextPage()
     {
         if (IsLoadingMore || IsBusy || (Cars.Count >= _totalItems && _totalItems != 0))
+        {
             return;
+        }
 
         try
         {
@@ -77,8 +76,6 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
 
     private async Task LoadDataInternal()
     {
-        System.Diagnostics.Debug.WriteLine("DEBUG: Внутри LoadDataInternal, создаем фильтр...");
-
         var filter = new CarFilter(
             OwnerIds: [],
             SortBy: null,
@@ -86,13 +83,8 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
             Limit: _pageSize,
             IsDescending: true
         );
-
-        System.Diagnostics.Debug.WriteLine("DEBUG: Вызываем carService.GetCars...");
-
-        // Вызов сервиса
+        
         var (items, total) = await carService.GetCars(filter);
-
-        System.Diagnostics.Debug.WriteLine($"DEBUG: Сервис вернул Total: {total}, Items: {items?.Count ?? 0}");
 
         _totalItems = total;
 
@@ -132,7 +124,11 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
     [RelayCommand]
     private async Task GoToDetails(CarResponse car)
     {
-        if (car == null) return;
+        if (car == null)
+        {
+            return;
+        }
+
         var navigationParameter = new Dictionary<string, object>
         {
             { "Car", car }
@@ -145,7 +141,10 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
     {
         IsMenuOpen = false;
 
-        if (page == "MyCarsPage") return;
+        if (page == "MyCarsPage")
+        {
+            return;
+        }
 
         await Shell.Current.GoToAsync(page);
     }

@@ -27,7 +27,11 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
     [RelayCommand]
     private async Task LoadInitial()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
+
         try
         {
             IsBusy = true;
@@ -51,7 +55,9 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
     private async Task LoadNextPage()
     {
         if (IsLoadingMore || IsBusy || (Bills.Count >= _totalItems && _totalItems != 0))
+        {
             return;
+        }
 
         try
         {
