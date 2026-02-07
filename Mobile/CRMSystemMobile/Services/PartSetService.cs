@@ -1,13 +1,13 @@
-﻿using Shared.Contracts.Part;
+﻿using Shared.Contracts.PartSet;
 using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
 
 namespace CRMSystemMobile.Services;
 
-public class PartService(HttpClient httpClient)
+public class PartSetService(HttpClient httpClient)
 {
-    public async Task<(List<PartResponse>?, int TotalCount)> GetParts(PartFilter filter)
+    public async Task<(List<PartSetResponse>?, int TotalCount)> GetPartSets(PartSetFilter filter)
     {
         try
         {
@@ -18,15 +18,31 @@ public class PartService(HttpClient httpClient)
                 query += $"&SortBy={filter.SortBy}";
             }
 
-            if (filter.CategoryIds?.Any() == true)
+            if (filter.OrderIds?.Any() == true)
             {
-                foreach(var id in filter.CategoryIds)
+                foreach(var id in filter.OrderIds)
                 {
-                    query += $"&CategoryIds={id}";
+                    query += $"&OrderIds={id}";
                 }
             }
 
-            string url = $"api/Part?{query}";
+            if (filter.PositionIds?.Any() == true)
+            {
+                foreach (var id in filter.PositionIds)
+                {
+                    query += $"&PositionIds={id}";
+                }
+            }
+
+            if (filter.ProposalIds?.Any() == true)
+            {
+                foreach (var id in filter.ProposalIds)
+                {
+                    query += $"&ProposalIds={id}";
+                }
+            }
+
+            string url = $"api/PartSet?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -45,10 +61,10 @@ public class PartService(HttpClient httpClient)
                 int.TryParse(values.FirstOrDefault(), out totalCount);
             }
 
-            var items = await response.Content.ReadFromJsonAsync<List<PartResponse>>();
+            var items = await response.Content.ReadFromJsonAsync<List<PartSetResponse>>();
 
-            return(items, totalCount);
-        }
+            return (items, totalCount);
+        } 
         catch (Exception ex)
         {
             Debug.WriteLine(ex.ToString());
@@ -56,12 +72,12 @@ public class PartService(HttpClient httpClient)
         }
     }
 
-    public async Task<string?> CreatePart (PartRequest request)
+    public async Task<string?> AddToSet(PartSetRequest request)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/Part", request);
-            
+            var response = await httpClient.PostAsJsonAsync("api/PartSet", request);
+
             if (response.IsSuccessStatusCode)
             {
                 return null;
@@ -75,19 +91,19 @@ public class PartService(HttpClient httpClient)
             }
 
             return errorContent.Trim('"');
-
-        } catch (Exception ex)
+        } 
+        catch (Exception ex)
         {
             Debug.WriteLine(ex.ToString());
             return $"Connection error: {ex.Message}";
         }
     }
 
-    public async Task<string?> DeletePart (long id)
+    public async Task<string?> DeleteFromSet(long id)
     {
         try
         {
-            var response = await httpClient.DeleteAsync($"api/Part/{id}");
+            var response = await httpClient.DeleteAsync($"api/PartSet/{id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -103,10 +119,12 @@ public class PartService(HttpClient httpClient)
 
             return errorContent.Trim('"');
 
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             Debug.WriteLine(ex.ToString());
             return $"Connection error: {ex.Message}";
         }
     }
 }
+
