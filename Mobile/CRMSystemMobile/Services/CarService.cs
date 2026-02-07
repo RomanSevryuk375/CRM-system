@@ -1,5 +1,4 @@
-﻿using CRMSystemMobile.Extentions;
-using Shared.Contracts.Car;
+﻿using Shared.Contracts.Car;
 using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
