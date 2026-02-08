@@ -54,4 +54,28 @@ public class BillService(HttpClient httpClient)
             return (null, 0);
         }
     }
+    public async Task<decimal?> GetBillDebt(long billId)
+    {
+        try
+        {
+            string url = $"api/Bill/bill-debt/{billId}";
+
+            var response = await httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                if (decimal.TryParse(content, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal debt))
+                {
+                    return debt;
+                }
+            }
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error fetching debt: {ex}");
+            return null;
+        }
+    }
 }
