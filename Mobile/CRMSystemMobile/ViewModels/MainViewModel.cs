@@ -159,6 +159,19 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
+    [RelayCommand]
+    private async Task GoToOrderDetails(OrderResponse order)
+    {
+        if (order == null) return;
+
+        var navParam = new Dictionary<string, object>
+    {
+        { "OrderId", order.Id }
+    };
+
+        await Shell.Current.GoToAsync("OrderDetailsPage", navParam);
+    }
+
     //[RelayCommand]
     //public void SetFilterStatusInWork()
     //{
