@@ -221,7 +221,7 @@ internal static class ValidObjects
             1,
             new DateTime(2025, 1, 1),
             100,
-            PaymentMethodEnum.Сash);
+            PaymentMethodEnum.Cash);
 
         note.Should().NotBeNull();
         errors.Should().BeEmpty();

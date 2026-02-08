@@ -21,12 +21,12 @@ public class PaymentMethodConfiguration : IEntityTypeConfiguration<PaymentMethod
         builder.HasData(
             new PaymentMethodEntity 
             { 
-                Id = (int)PaymentMethodEnum.Сard,
+                Id = (int)PaymentMethodEnum.Card,
                 Name = "Картой"
             },
             new PaymentMethodEntity
             {
-                Id = (int)PaymentMethodEnum.Сash,
+                Id = (int)PaymentMethodEnum.Cash,
                 Name = "Наличными"
             },
             new PaymentMethodEntity
