@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.OrderDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:modelsPart="clr-namespace:Shared.Contracts.PartSet;assembly=Shared"
+    xmlns:modelsProp="clr-namespace:Shared.Contracts.WorkProposal;assembly=Shared"
+    xmlns:modelsWork="clr-namespace:Shared.Contracts.WorkInOrder;assembly=Shared"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    x:DataType="vm:OrderDetailsViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <Grid
+            Grid.Row="0"
+            Padding="15,20"
+            ColumnDefinitions="Auto, *"
+            HeightRequest="80">
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+
+            <Label
+                Grid.Column="1"
+                Margin="-24,0,0,0"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="{Binding OrderTitle}"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <RefreshView
+            Grid.Row="1"
+            Command="{Binding LoadDataCommand}"
+            IsRefreshing="{Binding IsRefreshing}"
+            RefreshColor="#112347">
+
+            <ScrollView>
+                <VerticalStackLayout Padding="15" Spacing="25">
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="14"
+                            Text="Выполняемые работы"
+                            TextColor="#ACACAC" />
+
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Works}" Spacing="8">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="modelsWork:WorkInOrderResponse">
+                                    <Border
+                                        Padding="15"
+                                        BackgroundColor="#213868"
+                                        StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="0">
+                                        <Grid ColumnDefinitions="*, Auto">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    FontSize="16"
+                                                    Text="{Binding Job}"
+                                                    TextColor="White" />
+                                                <Label
+                                                    FontSize="12"
+                                                    Text="{Binding Worker, StringFormat='Мастер: {0}'}"
+                                                    TextColor="#ACACAC" />
+                                            </VerticalStackLayout>
+
+                                            <Label
+                                                Grid.Column="1"
+                                                FontAttributes="Bold"
+                                                Text="{Binding Status}"
+                                                TextColor="#FFB347"
+                                                VerticalOptions="Center" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                            <BindableLayout.EmptyView>
+                                <Label
+                                    HorizontalOptions="Center"
+                                    Text="Нет добавленных работ"
+                                    TextColor="Gray" />
+                            </BindableLayout.EmptyView>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="14"
+                            Text="Использованные запчасти"
+                            TextColor="#ACACAC" />
+
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Parts}" Spacing="8">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="modelsPart:PartSetResponse">
+                                    <Border
+                                        Padding="15"
+                                        BackgroundColor="#213868"
+                                        StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="0">
+                                        <Grid ColumnDefinitions="*, Auto">
+                                            <VerticalStackLayout Grid.Column="0">
+                                                <Label
+                                                    FontSize="16"
+                                                    Text="{Binding Position}"
+                                                    TextColor="White" />
+                                                <Label
+                                                    FontSize="12"
+                                                    Text="{Binding Quantity, StringFormat='Кол-во: {0}'}"
+                                                    TextColor="#ACACAC" />
+                                            </VerticalStackLayout>
+                                            <Label
+                                                Grid.Column="1"
+                                                FontAttributes="Bold"
+                                                Text="{Binding SoldPrice, StringFormat='{0} BYN'}"
+                                                TextColor="White"
+                                                VerticalOptions="Center" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                            <BindableLayout.EmptyView>
+                                <Label
+                                    HorizontalOptions="Center"
+                                    Text="Нет запчастей"
+                                    TextColor="Gray" />
+                            </BindableLayout.EmptyView>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="14"
+                            Text="Требует согласования"
+                            TextColor="#FFB347" />
+
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Proposals}" Spacing="8">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="modelsProp:WorkProposalResponse">
+                                    <Border
+                                        Padding="15"
+                                        BackgroundColor="#2A4375"
+                                        Stroke="#FFB347"
+                                        StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="1">
+                                        <VerticalStackLayout Spacing="10">
+                                            <Label
+                                                FontSize="12"
+                                                Text="Предложение мастера"
+                                                TextColor="#FFB347" />
+
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="16"
+                                                Text="{Binding Job}"
+                                                TextColor="White" />
+                                            <Label
+                                                FontSize="12"
+                                                Text="{Binding Status, StringFormat='Статус: {0}'}"
+                                                TextColor="#ACACAC" />
+
+                                            <Grid
+                                                Margin="0,5,0,0"
+                                                ColumnDefinitions="*, *"
+                                                ColumnSpacing="10">
+                                                <Button
+                                                    Grid.Column="0"
+                                                    Padding="0"
+                                                    BackgroundColor="Transparent"
+                                                    BorderColor="#FF453A"
+                                                    BorderWidth="1"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OrderDetailsViewModel}}, Path=RejectProposalCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    HeightRequest="40"
+                                                    Text="Отклонить"
+                                                    TextColor="#FF453A" />
+
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Padding="0"
+                                                    BackgroundColor="#4CD964"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OrderDetailsViewModel}}, Path=AcceptProposalCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    HeightRequest="40"
+                                                    Text="Принять"
+                                                    TextColor="White" />
+                                            </Grid>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                            <BindableLayout.EmptyView>
+                                <Label
+                                    HorizontalOptions="Center"
+                                    Text="Нет активных предложений"
+                                    TextColor="Gray" />
+                            </BindableLayout.EmptyView>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+
+                    <BoxView BackgroundColor="Transparent" HeightRequest="20" />
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
+
+        <ActivityIndicator
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            Color="White" />
+    </Grid>
+</ContentPage>

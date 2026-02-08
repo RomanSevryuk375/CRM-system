@@ -120,21 +120,40 @@ namespace CRMSystemMobile
                 client.BaseAddress = new Uri(ApiConfig.BaseUrl);
             })
             .AddHttpMessageHandler<AuthHttpMessageHandler>();
+
             builder.Services.AddHttpClient<RegistrationService>(client =>
             {
                 client.BaseAddress = new Uri(ApiConfig.BaseUrl);
             })
             .AddHttpMessageHandler<AuthHttpMessageHandler>();
+
             builder.Services.AddHttpClient<CarService>(client =>
             {
                 client.BaseAddress = new Uri(ApiConfig.BaseUrl);
             })
             .AddHttpMessageHandler<AuthHttpMessageHandler>();
+
             builder.Services.AddHttpClient<PaymentService>(client =>
             {
                 client.BaseAddress = new Uri(ApiConfig.BaseUrl);
             })
-.AddHttpMessageHandler<AuthHttpMessageHandler>();
+            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+
+            builder.Services.AddHttpClient<PartSetService>(client =>
+            {
+                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+            }).AddHttpMessageHandler<AuthHttpMessageHandler>();
+
+            builder.Services.AddHttpClient<WorkInOrderService>(client =>
+            {
+                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+            }).AddHttpMessageHandler<AuthHttpMessageHandler>();
+
+            builder.Services.AddHttpClient<WorkProposalService>(client =>
+            {
+                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+            }).AddHttpMessageHandler<AuthHttpMessageHandler>();
+
             builder.Services.AddSingleton<AppShell>();
             builder.Services.AddSingleton<App>();
             builder.Services.AddTransient<LoginViewModel>();
@@ -155,8 +174,10 @@ namespace CRMSystemMobile
             builder.Services.AddTransient<BillsPage>();
             builder.Services.AddTransient<BookingViewModel>();
             builder.Services.AddTransient<BookingPage>();
-            builder.Services.AddTransient<PaymentsViewModel>();
-            builder.Services.AddTransient<PaymentsPage>();
+            builder.Services.AddTransient<OrderDetailsViewModel>();
+            builder.Services.AddTransient<OrderDetailsPage>();
+            builder.Services.AddTransient<BillDetailsViewModel>();
+            builder.Services.AddTransient<BillDetailsPage>();
 
             return builder.Build();
         }

@@ -99,4 +99,17 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
     {
         await Shell.Current.GoToAsync("..");
     }
+
+    [RelayCommand]
+    private async Task GoToDetails(BillResponse bill)
+    {
+        if (bill == null) return;
+
+        var navParam = new Dictionary<string, object>
+        {
+            { "Bill", bill }
+        };
+
+        await Shell.Current.GoToAsync("BillDetailsPage", navParam);
+    }
 }

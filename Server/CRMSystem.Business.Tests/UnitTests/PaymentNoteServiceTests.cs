@@ -79,7 +79,7 @@ public class PaymentNoteServiceTests
     public async Task UpratePaymentNote_ShouldThrowNotFoundException_WhenMethodDoesNotExist()
     {
         var paymnetNoteId = 123;
-        var paymentMethod = PaymentMethodEnum.Сard;
+        var paymentMethod = PaymentMethodEnum.Card;
 
         _paymentMethodRepoMock.Setup(x => x.Exists(
             (int)paymentMethod,

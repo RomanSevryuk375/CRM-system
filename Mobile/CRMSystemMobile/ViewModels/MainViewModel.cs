@@ -31,12 +31,22 @@ public partial class MainViewModel : ObservableObject
         });
 
         LoadInitialCommand.Execute(null);
+
+        InProgressBg = _activeBg;
+        InProgressText = _activeText;
+        CompletedBg = _inactiveBg;
+        CompletedText = _inactiveText;
     }
 
     private int _currentPage = 1;
     private int _totalItems = 0;
     private const int _pageSize = 15;
     private int[] _activeStatuses = [2, 3, 5];
+
+    private readonly Color _activeBg = Colors.White;
+    private readonly Color _activeText = Color.FromArgb("#112347");
+    private readonly Color _inactiveBg = Colors.Transparent;
+    private readonly Color _inactiveText = Color.FromArgb("#ACACAC");
 
     public ObservableCollection<OrderResponse> Orders { get; } = [];
 
@@ -48,6 +58,18 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     public partial string UserInitials { get; set; } = "??";
+
+    [ObservableProperty]
+    public partial Color InProgressBg { get; set; }
+
+    [ObservableProperty]
+    public partial Color InProgressText { get; set; }
+
+    [ObservableProperty]
+    public partial Color CompletedBg { get; set; }
+
+    [ObservableProperty]
+    public partial Color CompletedText { get; set; }
 
     [RelayCommand]
     private void ToggleMenuSheet()
@@ -61,10 +83,22 @@ public partial class MainViewModel : ObservableObject
         if (tabName == "InProgress")
         {
             _activeStatuses = [2, 3, 5];
+
+            InProgressBg = _activeBg;
+            InProgressText = _activeText;
+
+            CompletedBg = _inactiveBg;
+            CompletedText = _inactiveText;
         }
         else
         {
             _activeStatuses = [4, 6];
+
+            InProgressBg = _inactiveBg;
+            InProgressText = _inactiveText;
+
+            CompletedBg = _activeBg;
+            CompletedText = _activeText;
         }
 
         await LoadInitial();
@@ -123,6 +157,19 @@ public partial class MainViewModel : ObservableObject
         {
             await Shell.Current.GoToAsync(route);
         }
+    }
+
+    [RelayCommand]
+    private async Task GoToOrderDetails(OrderResponse order)
+    {
+        if (order == null) return;
+
+        var navParam = new Dictionary<string, object>
+    {
+        { "OrderId", order.Id }
+    };
+
+        await Shell.Current.GoToAsync("OrderDetailsPage", navParam);
     }
 
     //[RelayCommand]

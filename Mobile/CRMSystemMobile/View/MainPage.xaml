@@ -49,27 +49,25 @@
                     StrokeThickness="0"
                     WidthRequest="220">
 
-                    <Grid ColumnDefinitions="*, *">
-
+                    <Grid ColumnDefinitions="Auto, Auto">
                         <Button
                             Grid.Column="0"
-                            BackgroundColor="#ffffff"
+                            BackgroundColor="{Binding InProgressBg}"
                             Command="{Binding SelectTabCommand}"
                             CommandParameter="InProgress"
                             FontSize="14"
                             HeightRequest="44"
                             Text="В работе"
-                            TextColor="#112347" />
-
+                            TextColor="{Binding InProgressText}" />
                         <Button
                             Grid.Column="1"
-                            BackgroundColor="Transparent"
+                            BackgroundColor="{Binding CompletedBg}"
                             Command="{Binding SelectTabCommand}"
                             CommandParameter="Completed"
                             FontSize="14"
                             HeightRequest="44"
                             Text="Завершенные"
-                            TextColor="#ACACAC" />
+                            TextColor="{Binding CompletedText}" />
                     </Grid>
                 </Border>
 
@@ -101,6 +99,9 @@
                             BackgroundColor="#213868"
                             Stroke="Transparent"
                             StrokeShape="RoundRectangle 12">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GoToOrderDetailsCommand}" CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
                             <Grid RowDefinitions="100, Auto" RowSpacing="25">
 
                                 <Grid
@@ -215,13 +216,6 @@
                                 CommandParameter="BillsPage"
                                 HorizontalOptions="Fill"
                                 Text="Счета"
-                                TextColor="White" />
-                            <Button
-                                BackgroundColor="Transparent"
-                                Command="{Binding NavigateToCommand}"
-                                CommandParameter="PaymentsPage"
-                                HorizontalOptions="Fill"
-                                Text="Платежи"
                                 TextColor="White" />
                         </StackLayout>
 

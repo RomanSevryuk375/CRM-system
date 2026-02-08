@@ -39,6 +39,15 @@ public class BillController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("bill-debt/{id}")]
+    [Authorize(Policy = "UniPolicy")]
+    public async Task<ActionResult<long>> FetchDebt(long id, CancellationToken ct)
+    {
+        var Id = await _billService.FetchDebtOfBill(id, ct);
+
+        return Ok(Id);
+    }
+
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<long>> CreateBill([FromBody] BillRequest request, CancellationToken ct)

@@ -8,17 +8,20 @@ public record PartSetResponse
     public long Id { get; init; }
 
     [JsonPropertyName("orderId")]
-    long? OrderId { get; init; }
+    public long? OrderId { get; init; }
+
+    [JsonPropertyName("position")]
+    public string Position { get; init; } = string.Empty;
 
     [JsonPropertyName("positionId")]
-    long PositionId { get; init; }
+    public long PositionId { get; init; }
 
     [JsonPropertyName("proposalId")]
-    long? ProposalId { get; init; }
+    public long? ProposalId { get; init; }
 
     [JsonPropertyName("quantity")]
-    decimal Quantity { get; init; }
+    public decimal Quantity { get; init; }
 
     [JsonPropertyName("soldPrice")]
-    decimal SoldPrice { get; init; }
+    public decimal SoldPrice { get; init; }
 };

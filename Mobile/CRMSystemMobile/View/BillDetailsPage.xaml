@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.BillDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:contracts="clr-namespace:Shared.Contracts.PaymentNote;assembly=Shared"
+    xmlns:conv="clr-namespace:CRMSystemMobile.Converters"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="Детали счета"
+    x:DataType="vm:BillDetailsViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:PaymentMethodConverter x:Key="PaymentMethodConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto, *">
+        <!--  Header  -->
+        <Grid
+            Grid.Row="0"
+            Padding="15,20"
+            ColumnDefinitions="Auto, *"
+            HeightRequest="80">
+            <ImageButton
+                Grid.Column="0"
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+
+            <Label
+                Grid.Column="1"
+                Margin="-24,0,0,0"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="{Binding Bill.Id, StringFormat='Счет №{0}'}"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="25">
+
+                <Border
+                    Padding="20"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 15"
+                    StrokeThickness="0">
+                    <VerticalStackLayout Spacing="15">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            Text="Информация о счете"
+                            TextColor="#112347" />
+                        <Grid
+                            ColumnDefinitions="*, *"
+                            RowDefinitions="Auto, Auto, Auto, Auto"
+                            RowSpacing="12">
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                FontSize="14"
+                                Text="Дата создания:"
+                                TextColor="Gray" />
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                Text="{Binding Bill.CreatedAt, StringFormat='{0:dd.MM.yyyy}'}"
+                                TextColor="#333" />
+
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                FontSize="14"
+                                Text="Сумма счета:"
+                                TextColor="Gray" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                FontAttributes="Bold"
+                                HorizontalOptions="End"
+                                Text="{Binding Bill.Amount, StringFormat='{0} BYN'}"
+                                TextColor="#112347" />
+
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                FontSize="14"
+                                Text="Остаток к оплате:"
+                                TextColor="Gray" />
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                FontAttributes="Bold"
+                                HorizontalOptions="End"
+                                Text="{Binding RemainingDebt, StringFormat='{0} BYN'}"
+                                TextColor="#FF453A" />
+
+                            <Label
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                FontSize="14"
+                                Text="Статус:"
+                                TextColor="Gray"
+                                VerticalOptions="Center" />
+                            <Label
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                FontAttributes="Bold"
+                                HorizontalOptions="End"
+                                Text="{Binding Bill.Status}"
+                                VerticalOptions="Center">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding Bill.Status}"
+                                        TargetType="Label"
+                                        Value="Оплачен">
+                                        <Setter Property="TextColor" Value="#4CD964" />
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding Bill.Status}"
+                                        TargetType="Label"
+                                        Value="Не оплачен">
+                                        <Setter Property="TextColor" Value="#FF453A" />
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding Bill.Status}"
+                                        TargetType="Label"
+                                        Value="Частично оплачен">
+                                        <Setter Property="TextColor" Value="#FFB347" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="Поступившие платежи"
+                        TextColor="White">
+                        <Label.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Payments.Count}"
+                                TargetType="Label"
+                                Value="0">
+                                <Setter Property="IsVisible" Value="False" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Payments}" Spacing="10">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="contracts:PaymentNoteResponse">
+                                <Border
+                                    Padding="15"
+                                    BackgroundColor="#213868"
+                                    StrokeShape="RoundRectangle 10"
+                                    StrokeThickness="0">
+                                    <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            FontSize="12"
+                                            Text="{Binding Date, StringFormat='{0:dd.MM.yyyy HH:mm}'}"
+                                            TextColor="#ACACAC" />
+
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            FontAttributes="Bold"
+                                            FontSize="16"
+                                            Text="{Binding MethodId, Converter={StaticResource PaymentMethodConverter}}"
+                                            TextColor="White" />
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            FontAttributes="Bold"
+                                            FontSize="18"
+                                            Text="{Binding Amount, StringFormat='-{0} BYN'}"
+                                            TextColor="#4CD964"
+                                            VerticalOptions="Center" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout IsVisible="{Binding CanPay}" Spacing="15">
+                    <BoxView
+                        Margin="0,10"
+                        HeightRequest="1"
+                        Color="#2A4375" />
+
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        Text="Внести оплату"
+                        TextColor="White" />
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label
+                            FontSize="12"
+                            Text="Сумма платежа (BYN)"
+                            TextColor="#ACACAC" />
+                        <Border
+                            BackgroundColor="#213868"
+                            HeightRequest="50"
+                            StrokeShape="RoundRectangle 8"
+                            StrokeThickness="0">
+                            <Entry
+                                Margin="10,0"
+                                FontSize="16"
+                                Keyboard="Numeric"
+                                Text="{Binding PaymentAmount}"
+                                TextColor="White" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label
+                            FontSize="12"
+                            Text="Способ оплаты"
+                            TextColor="#ACACAC" />
+                        <Border
+                            BackgroundColor="#213868"
+                            HeightRequest="50"
+                            StrokeShape="RoundRectangle 8"
+                            StrokeThickness="0">
+                            <Picker
+                                Margin="10,0"
+                                ItemsSource="{Binding PaymentMethods}"
+                                SelectedItem="{Binding SelectedMethodName}"
+                                TextColor="White" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Button
+                        Margin="0,10,0,0"
+                        BackgroundColor="#4CD964"
+                        Command="{Binding MakePaymentCommand}"
+                        CornerRadius="10"
+                        FontAttributes="Bold"
+                        HeightRequest="50"
+                        Text="Оплатить"
+                        TextColor="White" />
+                </VerticalStackLayout>
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    Text="Счет полностью оплачен"
+                    TextColor="#4CD964">
+                    <Label.Triggers>
+                        <DataTrigger
+                            Binding="{Binding CanPay}"
+                            TargetType="Label"
+                            Value="True">
+                            <Setter Property="IsVisible" Value="False" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding CanPay}"
+                            TargetType="Label"
+                            Value="False">
+                            <Setter Property="IsVisible" Value="True" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    Color="White" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -231,7 +231,7 @@ public class BillServiceIntegrationTests : BaseIntegrationTest, IClassFixture<In
             BillId = bill.Id,
             Date = new DateTime(2025, 1, 1),
             Amount = 20,
-            MethodId = (int)PaymentMethodEnum.Сash
+            MethodId = (int)PaymentMethodEnum.Cash
         };
 
         dbContext.PaymentNotes.Add(paymentNote);
