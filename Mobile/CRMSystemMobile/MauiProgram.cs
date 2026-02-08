@@ -174,10 +174,10 @@ namespace CRMSystemMobile
             builder.Services.AddTransient<BillsPage>();
             builder.Services.AddTransient<BookingViewModel>();
             builder.Services.AddTransient<BookingPage>();
-            builder.Services.AddTransient<PaymentsViewModel>();
-            builder.Services.AddTransient<PaymentsPage>();
             builder.Services.AddTransient<OrderDetailsViewModel>();
             builder.Services.AddTransient<OrderDetailsPage>();
+            builder.Services.AddTransient<BillDetailsViewModel>();
+            builder.Services.AddTransient<BillDetailsPage>();
 
             return builder.Build();
         }

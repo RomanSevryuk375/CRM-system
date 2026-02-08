@@ -61,6 +61,9 @@
                             BackgroundColor="#213868"
                             Stroke="Transparent"
                             StrokeShape="RoundRectangle 12">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BillsViewModel}}, Path=GoToDetailsCommand}" CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
                             <Grid
                                 ColumnDefinitions="*, Auto"
                                 RowDefinitions="Auto, Auto"

@@ -217,13 +217,6 @@
                                 HorizontalOptions="Fill"
                                 Text="Счета"
                                 TextColor="White" />
-                            <Button
-                                BackgroundColor="Transparent"
-                                Command="{Binding NavigateToCommand}"
-                                CommandParameter="PaymentsPage"
-                                HorizontalOptions="Fill"
-                                Text="Платежи"
-                                TextColor="White" />
                         </StackLayout>
 
                         <Button
