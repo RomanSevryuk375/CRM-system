@@ -5,7 +5,7 @@ namespace Shared.Contracts.Worker;
 public record WorkerUpdateRequest
 {
     [JsonPropertyName("userId")]
-    public long? UserId { get; init; }
+    public int? UserId { get; init; }
 
     [JsonPropertyName("name")]
     public string? Name { get; init; } = string.Empty;

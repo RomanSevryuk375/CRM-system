@@ -100,7 +100,7 @@ public class WorkerController : ControllerBase
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<int>> UpdateWorker(int id, [FromBody] WorkerRequest request, CancellationToken ct)
+    public async Task<ActionResult<int>> UpdateWorker(int id, [FromBody] WorkerUpdateRequest request, CancellationToken ct)
     {
         var model = new WorkerUpdateModel(
             request.Name,
