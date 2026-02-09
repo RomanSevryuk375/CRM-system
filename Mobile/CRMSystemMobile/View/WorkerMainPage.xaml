@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.WorkerMainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:contracts="clr-namespace:Shared.Contracts.Order;assembly=Shared"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="Рабочий стол мастера"
+    x:DataType="vm:WorkerMainViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *, Auto">
+        <Grid
+            Margin="0,10"
+            Padding="15,10"
+            ColumnDefinitions="50, *, 50"
+            HeightRequest="60">
+            <Border
+                BackgroundColor="White"
+                HeightRequest="50"
+                StrokeShape="RoundRectangle 25"
+                StrokeThickness="0"
+                WidthRequest="50">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToProfileCommand}" />
+                </Border.GestureRecognizers>
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    Text="{Binding WorkerInitials}"
+                    TextColor="#112347"
+                    VerticalOptions="Center" />
+            </Border>
+
+            <Label
+                Grid.Column="1"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="Мои задачи"
+                TextColor="White"
+                VerticalOptions="Center" />
+
+            <Border
+                Grid.Row="0"
+                Grid.Column="2"
+                BackgroundColor="#ffffff"
+                HeightRequest="50"
+                StrokeShape="RoundRectangle 25"
+                StrokeThickness="0"
+                WidthRequest="50">
+                <ImageButton
+                    Padding="8"
+                    Command="{Binding ToggleMenuCommand}"
+                    Source="show_menu.svg" />
+            </Border>
+        </Grid>
+
+        <RefreshView
+            Grid.Row="1"
+            Command="{Binding LoadInitialCommand}"
+            IsRefreshing="{Binding IsRefreshing}"
+            RefreshColor="#112347">
+            <CollectionView
+                Margin="0,10,0,0"
+                ItemsSource="{Binding AssignedOrders}"
+                RemainingItemsThreshold="2"
+                RemainingItemsThresholdReachedCommand="{Binding LoadNextPageCommand}">
+                <CollectionView.EmptyView>
+                    <Label
+                        Margin="0,0,0,75"
+                        HorizontalOptions="Center"
+                        Text="Нет активных задач"
+                        TextColor="Gray"
+                        VerticalOptions="Center" />
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="contracts:OrderResponse">
+                        <Border
+                            Margin="15,6"
+                            Padding="15"
+                            BackgroundColor="#213868"
+                            StrokeShape="RoundRectangle 12"
+                            StrokeThickness="0">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerMainViewModel}}, Path=GoToWorkOrderCommand}" CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+
+                            <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    Text="{Binding Car}"
+                                    TextColor="White" />
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    FontAttributes="Bold"
+                                    Text="{Binding Id, StringFormat='#{0}'}"
+                                    TextColor="#FFB347" />
+
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    FontSize="12"
+                                    Text="{Binding Status}"
+                                    TextColor="#ACACAC" />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    FontSize="12"
+                                    Text="{Binding Date, StringFormat='{0:dd.MM}'}"
+                                    TextColor="White" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <Grid
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            BackgroundColor="#80000000"
+            IsVisible="{Binding IsMenuOpen}"
+            ZIndex="999">
+            <BoxView BackgroundColor="Transparent">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToggleMenuCommand}" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+
+            <Border
+                Padding="20"
+                BackgroundColor="#1C2D4F"
+                HeightRequest="{OnPlatform Default=250}"
+                StrokeShape="RoundRectangle 20,20,0,0"
+                VerticalOptions="End">
+                <VerticalStackLayout Spacing="15">
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding GoToProfileCommand}"
+                        Text="Профиль"
+                        TextColor="White" />
+                    <Button
+                        BackgroundColor="Transparent"
+                        Text="Расписание"
+                        TextColor="White" />
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding LogoutCommand}"
+                        Text="Выйти"
+                        TextColor="#FF453A" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -1,5 +1,4 @@
-﻿using Shared.Contracts.Work;
-using Shared.Contracts.WorkInOrder;
+﻿using Shared.Contracts.WorkInOrder;
 using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;

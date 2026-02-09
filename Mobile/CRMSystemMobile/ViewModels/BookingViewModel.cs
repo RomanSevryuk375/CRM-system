@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using CRMSystemMobile.Message;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Car;
 using Shared.Contracts.Order;

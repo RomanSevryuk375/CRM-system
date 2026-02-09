@@ -48,14 +48,6 @@ public class OrderService(HttpClient httpClient)
             }
         }
 
-        if (orderFilter.PriorityIds?.Any() == true)
-        {
-            foreach (var id in orderFilter.PriorityIds)
-            {
-                query += $"&PriorityIds={id}";
-            }
-        }
-
         if (orderFilter.WorkerIds?.Any() == true)
         {
             foreach (var id in orderFilter.WorkerIds)
@@ -82,7 +74,7 @@ public class OrderService(HttpClient httpClient)
             {
                 totalCount = int.Parse(values.First());
             }
-
+            var json = await response.Content.ReadAsStringAsync();
             var items = await response.Content.ReadFromJsonAsync<List<OrderResponse>>();
             return (items, totalCount);
         }
