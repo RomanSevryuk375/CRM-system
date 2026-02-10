@@ -10,47 +10,41 @@ using Shared.Filters;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/bills")]
 
-public class BillController : ControllerBase
+public class BillController(
+    IBillService billService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IBillService _billService;
-    private readonly IMapper _mapper;
-
-    public BillController(
-        IBillService billService,
-        IMapper mapper)
-    {
-        _billService = billService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<List<BillItem>>> GetPagedBills([FromQuery] BillFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<BillItem>>> GetPagedBills(
+        [FromQuery] BillFilter filter, CancellationToken ct)
     {
-        var dto = await _billService.GetPagedBills(filter, ct);
-        var count = await _billService.GetCountBills(filter, ct);
+        var dto = await billService.GetPagedBills(filter, ct);
+        var count = await billService.GetCountBills(filter, ct);
 
-        var response = _mapper.Map<List<BillResponse>>(dto);
+        var response = mapper.Map<List<BillResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
         return Ok(response);
     }
 
-    [HttpGet("bill-debt/{id}")]
+    [HttpGet("debt/{id}")]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<long>> FetchDebt(long id, CancellationToken ct)
+    public async Task<ActionResult<long>> FetchDebt(
+        long id, CancellationToken ct)
     {
-        var Id = await _billService.FetchDebtOfBill(id, ct);
+        var debt = await billService.FetchDebtOfBill(id, ct);
 
-        return Ok(Id);
+        return Ok(debt);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> CreateBill([FromBody] BillRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateBill(
+        [FromBody] BillRequest request, CancellationToken ct)
     {
         var (bill, errors) = Bill.Create(
             0,
@@ -61,30 +55,33 @@ public class BillController : ControllerBase
             request.ActualBillDate);
 
         if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var Id = await _billService.CreateBill(bill!, ct);
+        await billService.CreateBill(bill!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> UpdateBill(long id, [FromBody]BillUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateBill(
+        long id, [FromBody]BillUpdateRequest request, CancellationToken ct)
     {
-        var model = _mapper.Map<BillUpdateModel>(request);
+        var model = mapper.Map<BillUpdateModel>(request);
 
-        var Id = await _billService.UpdateBill(id, model, ct);
+        await billService.UpdateBill(id, model, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> Delete(long id, CancellationToken ct)
+    public async Task<ActionResult> Delete(long id, CancellationToken ct)
     {
-        var Id = await _billService.Delete(id, ct);
+        await billService.Delete(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }

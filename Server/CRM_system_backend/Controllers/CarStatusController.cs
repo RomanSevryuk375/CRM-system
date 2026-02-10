@@ -8,28 +8,19 @@ using Shared.Contracts;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/car-statuses")]
 
-public class CarStatusController : ControllerBase
+public class CarStatusController(
+    ICarStatusService carStatusService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly ICarStatusService _carStatusService;
-    private readonly IMapper _mapper;
-
-    public CarStatusController(
-        ICarStatusService carStatusService,
-        IMapper mapper)
-    {
-        _carStatusService = carStatusService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<CarStatusItem>>> GetCarStatuses(CancellationToken ct)
     {
-        var dto = await _carStatusService.GetCarStatuses(ct);
+        var dto = await carStatusService.GetCarStatuses(ct);
 
-        var response = _mapper.Map<List<CarStatusResponse>>(dto);
+        var response = mapper.Map<List<CarStatusResponse>>(dto);
 
         return Ok(response);
     }

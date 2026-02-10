@@ -7,28 +7,19 @@ using Shared.Contracts;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/work-in-order-statuses")]
 [ApiController]
-public class WorkInOrderStatusController : ControllerBase
+public class WorkInOrderStatusController(
+    IWorkInOrderStatusService service,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IWorkInOrderStatusService _service;
-    private readonly IMapper _mapper;
-
-    public WorkInOrderStatusController(
-        IWorkInOrderStatusService service,
-        IMapper mapper)
-    {
-        _service = service;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<WorkInOrderStatusItem>>> GetWiOStatuses(CancellationToken ct)
     {
-        var dto = await _service.GetWiOStatuses(ct);
+        var dto = await service.GetWiOStatuses(ct);
 
-        var response = _mapper.Map<List<WorkInOrderStatusResponse>>(dto);
+        var response = mapper.Map<List<WorkInOrderStatusResponse>>(dto);
 
         return Ok(response);
     }

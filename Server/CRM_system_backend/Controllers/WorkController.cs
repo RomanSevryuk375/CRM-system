@@ -10,28 +10,20 @@ using Shared.Filters;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class WorkController : ControllerBase
+[Route("api/v1/workers")]
+public class WorkController(
+    IWorkService workService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IWorkService _workService;
-    private readonly IMapper _mapper;
-
-    public WorkController(
-        IWorkService workService,
-        IMapper mapper)
-    {
-        _workService = workService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<WorkItem>>> GetPagedWork([FromQuery] WorkFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<WorkItem>>> GetPagedWork(
+        [FromQuery] WorkFilter filter, CancellationToken ct)
     {
-        var dto = await _workService.GetPagedWork(filter, ct);
-        var count = await _workService.GetCountWork(ct);
+        var dto = await workService.GetPagedWork(filter, ct);
+        var count = await workService.GetCountWork(ct);
 
-        var response = _mapper.Map<List<WorkResponse>>(dto);
+        var response = mapper.Map<List<WorkResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -40,7 +32,8 @@ public class WorkController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> CreateWork([FromBody] WorkRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateWork(
+        [FromBody] WorkRequest request, CancellationToken ct)
     {
         var (work, errors) = Work.Create(
             0,
@@ -50,16 +43,19 @@ public class WorkController : ControllerBase
             request.StandardTime);
 
         if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var workId = await _workService.CreateWork(work!, ct);
+        await workService.CreateWork(work!, ct);
 
-        return Ok(workId);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> UpdateWork(long id, [FromBody] WorkRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateWork(
+        long id, [FromBody] WorkRequest request, CancellationToken ct)
     {
         var model = new WorkUpdateModel(
             request.Title,
@@ -67,17 +63,17 @@ public class WorkController : ControllerBase
             request.Description,
             request.StandardTime);
 
-        var Id = await _workService.UpdateWork(id, model, ct);
+        await workService.UpdateWork(id, model, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("${id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> DeleteWork(long id, CancellationToken ct)
+    public async Task<ActionResult> DeleteWork(long id, CancellationToken ct)
     {
-        var Id = await _workService.DeleteWork(id, ct);
+        await workService.DeleteWork(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }

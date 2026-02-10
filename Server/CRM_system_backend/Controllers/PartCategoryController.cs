@@ -8,35 +8,27 @@ using Shared.Contracts.PartCategory;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/part-categories")]
 [ApiController]
-public class PartCategoryController : ControllerBase
+public class PartCategoryController(
+    IPartCategoryService partCategoryService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IPartCategoryService _partCategoryService;
-    private readonly IMapper _mapper;
-
-    public PartCategoryController(
-        IPartCategoryService partCategoryService,
-        IMapper mapper)
-    {
-        _partCategoryService = partCategoryService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<PartCategoryItem>>> GetPartCategories(CancellationToken ct)
     {
-        var dto = await _partCategoryService.GetPartCategories(ct);
+        var dto = await partCategoryService.GetPartCategories(ct);
 
-        var response = _mapper.Map<PartCategoryResponse>(dto);
+        var response = mapper.Map<PartCategoryResponse>(dto);
 
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> CreatePartCategory([FromBody] PartCategoryRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreatePartCategory(
+        [FromBody] PartCategoryRequest request, CancellationToken ct)
     {
         var (partCategory, errors) = PartCategory.Create(
             0,
@@ -46,31 +38,32 @@ public class PartCategoryController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _partCategoryService.CreatePartCategory(partCategory!, ct);
+        await partCategoryService.CreatePartCategory(partCategory!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdatePartCategory(int id, [FromBody]PartCategoryUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdatePartCategory(
+        int id, [FromBody]PartCategoryUpdateRequest request, CancellationToken ct)
     {
         var model = new PartCategoryUpdateModel(
             request.Name,
             request.Description);
 
-        var Id = await _partCategoryService.UpdatePartCategory(id, model, ct);
+        await partCategoryService.UpdatePartCategory(id, model, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> DeletePartCategory(int id, CancellationToken ct)
+    public async Task<ActionResult> DeletePartCategory(int id, CancellationToken ct)
     {
-        var Id = await _partCategoryService.DeletePartCategory(id, ct);
+        await partCategoryService.DeletePartCategory(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }
 

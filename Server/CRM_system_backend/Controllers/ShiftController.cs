@@ -8,35 +8,27 @@ using Shared.Contracts.Shift;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/shifts")]
 [ApiController]
-public class ShiftController : ControllerBase
+public class ShiftController(
+    IShiftService shiftService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IShiftService _shiftService;
-    private readonly IMapper _mapper;
-
-    public ShiftController(
-        IShiftService shiftService,
-        IMapper mapper)
-    {
-        _shiftService = shiftService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<ShiftItem>>> GetShifts(CancellationToken ct)
     {
-        var dto = await _shiftService.GetShifts(ct);
+        var dto = await shiftService.GetShifts(ct);
 
-        var response = _mapper.Map<List<ShiftResponse>>(dto);
+        var response = mapper.Map<List<ShiftResponse>>(dto);
 
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> CreateShift([FromBody] ShiftRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateShift(
+        [FromBody] ShiftRequest request, CancellationToken ct)
     {
         var (shift, errors) = Shift.Create(
             0,
@@ -44,34 +36,37 @@ public class ShiftController : ControllerBase
             request.StartAt,
             request.EndAt);
 
-        if(errors is not null && errors.Any()) 
+        if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var Id = await _shiftService.CreateShift(shift!, ct);
+        await shiftService.CreateShift(shift!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateShift(int id, [FromBody]ShiftUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateShift(
+        int id, [FromBody]ShiftUpdateRequest request, CancellationToken ct)
     {
         var model = new ShiftUpdateModel(
             request.Name,
             request.StartAt,
             request.EndAt);
 
-        var Id = await _shiftService.UpdateShift(id, model, ct);
+        await shiftService.UpdateShift(id, model, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> DeleteShift(int id, CancellationToken ct)
+    public async Task<ActionResult> DeleteShift(int id, CancellationToken ct)
     {
-        var Id = await _shiftService.DeleteShift(id, ct);
+        await shiftService.DeleteShift(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }

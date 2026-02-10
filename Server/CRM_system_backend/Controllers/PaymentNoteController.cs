@@ -10,28 +10,20 @@ using Shared.Filters;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class PaymentNoteController : ControllerBase
+[Route("api/v1/payment-notes")]
+public class PaymentNoteController(
+    IPaymentNoteService paymentNoteService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IPaymentNoteService _paymentNoteService;
-    private readonly IMapper _mapper;
-
-    public PaymentNoteController(
-        IPaymentNoteService paymentNoteService,
-        IMapper mapper)
-    {
-        _paymentNoteService = paymentNoteService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<List<PaymentNote>>> GetPaymentNote([FromQuery] PaymentNoteFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<PaymentNote>>> GetPaymentNote(
+        [FromQuery] PaymentNoteFilter filter, CancellationToken ct)
     {
-        var dto  = await _paymentNoteService.GetPagedPaymentNotes(filter, ct);
-        var count = await _paymentNoteService.GetCountPaymentNotes(filter, ct);
+        var dto  = await paymentNoteService.GetPagedPaymentNotes(filter, ct);
+        var count = await paymentNoteService.GetCountPaymentNotes(filter, ct);
 
-        var  response = _mapper.Map<List<PaymentNoteResponse>>(dto);
+        var  response = mapper.Map<List<PaymentNoteResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -40,7 +32,8 @@ public class PaymentNoteController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<long>> CreatePaymentNote([FromBody] PaymentNoteRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreatePaymentNote(
+        [FromBody] PaymentNoteRequest request, CancellationToken ct)
     {
         var (paymentNote, errors) = PaymentNote.Create(
             0,
@@ -52,26 +45,27 @@ public class PaymentNoteController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _paymentNoteService.CreatePaymentNote(paymentNote!, ct);
+        await paymentNoteService.CreatePaymentNote(paymentNote!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdatePaymentNote(long id, [FromBody] PaymentMethodEnum? method, CancellationToken ct)
+    public async Task<ActionResult<int>> UpdatePaymentNote(
+        long id, [FromBody] PaymentMethodEnum? method, CancellationToken ct)
     {
-        var Id = await _paymentNoteService.UpratePaymentNote(id, method, ct);
+        await paymentNoteService.UpratePaymentNote(id, method, ct);
         
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> DeletePaymentNote(int id, CancellationToken ct)
+    public async Task<ActionResult> DeletePaymentNote(int id, CancellationToken ct)
     {
-        var result = await _paymentNoteService.DeletePaymentNote(id, ct);
+        await paymentNoteService.DeletePaymentNote(id, ct);
 
-        return Ok(result);
+        return NoContent();
     }
 }

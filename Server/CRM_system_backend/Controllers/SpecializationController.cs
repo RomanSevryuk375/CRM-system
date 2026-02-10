@@ -9,63 +9,59 @@ using Shared.Contracts.Specialization;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/specializations")]
 
-public class SpecializationController : ControllerBase
+public class SpecializationController(
+    ISpecializationService specializationService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly ISpecializationService _specializationService;
-    private readonly IMapper _mapper;
-
-    public SpecializationController(
-        ISpecializationService specializationService,
-        IMapper mapper)
-    {
-        _specializationService = specializationService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<SpecializationItem>>> GetSpecialization(CancellationToken ct)
     {
-        var dto = await _specializationService.GetSpecializations(ct);
+        var dto = await specializationService.GetSpecializations(ct);
 
-        var response = _mapper.Map<List<SpecializationResponse>>(dto);
+        var response = mapper.Map<List<SpecializationResponse>>(dto);
 
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> CreateSpecialization([FromBody]SpecializationRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateSpecialization(
+        [FromBody]SpecializationRequest request, CancellationToken ct)
     {
         var (specialization, errors) = Specialization.Create(
             0,
             request.Name);
 
         if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var Id = await _specializationService.CreateSpecialization(specialization!, ct);
+        await specializationService.CreateSpecialization(specialization!, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateSpecialization([FromBody] SpecializationUpdateRequest request, int id, CancellationToken ct)
+    public async Task<ActionResult> UpdateSpecialization(
+        [FromBody] SpecializationUpdateRequest request, int id, CancellationToken ct)
     {
-        var Id = await _specializationService.UpdateSpecialization(id, request.Name, ct);
+        await specializationService.UpdateSpecialization(id, request.Name, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> DeleteSpecialization(int id, CancellationToken ct)
+    public async Task<ActionResult> DeleteSpecialization(
+        int id, CancellationToken ct)
     {
-        var Id = await _specializationService.DeleteSpecialization(id, ct);
+        await specializationService.DeleteSpecialization(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }

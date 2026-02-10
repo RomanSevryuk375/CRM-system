@@ -7,28 +7,19 @@ using Shared.Contracts;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/roles")]
 [ApiController]
-public class RoleController : ControllerBase
+public class RoleController(
+    IRoleService roleService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IRoleService _roleService;
-    private readonly IMapper _mapper;
-
-    public RoleController(
-        IRoleService roleService,
-        IMapper mapper)
-    {
-        _roleService = roleService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<RoleItem>>> GetRoles(CancellationToken ct)
     {
-        var dto = await _roleService.GetRoles(ct);
+        var dto = await roleService.GetRoles(ct);
 
-        var response = _mapper.Map<List<RoleResponse>>(dto);
+        var response = mapper.Map<List<RoleResponse>>(dto);
 
         return Ok(response);
     }
