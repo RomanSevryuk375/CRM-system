@@ -9,38 +9,31 @@ using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/positions")]
 [ApiController]
-public class PositionController : ControllerBase
+public class PositionController(
+    IPositionService positionService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IPositionService _positionSrevice;
-    private readonly IMapper _mapper;
-
-    public PositionController(
-        IPositionService positionService,
-        IMapper mapper)
-    {
-        _positionSrevice = positionService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<PositionItem>>> GetPagedPositions([FromQuery] PositionFilter positionFilter, CancellationToken ct)
+    public async Task<ActionResult<List<PositionItem>>> GetPagedPositions(
+        [FromQuery] PositionFilter positionFilter, CancellationToken ct)
     {
-        var dto = await _positionSrevice.GetPagedPositions(positionFilter, ct);
-        var count = await _positionSrevice.GetCountPositions(positionFilter, ct);
+        var dto = await positionService.GetPagedPositions(positionFilter, ct);
+        var count = await positionService.GetCountPositions(positionFilter, ct);
 
-        var response = _mapper.Map<List<PositionResponse>>(dto);
+        var response = mapper.Map<List<PositionResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
         return Ok(response);
     }
 
-    [HttpPost("with-part")]
+    [HttpPost("parts")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> CreatePositionWithPart([FromBody] PositionWithPartRequest request, CancellationToken ct)
+    public async Task<ActionResult<long>> CreatePositionWithPart(
+        [FromBody] PositionWithPartRequest request, CancellationToken ct)
     {
         var (part, partErrors) = Part.Create(
             0,
@@ -53,8 +46,10 @@ public class PositionController : ControllerBase
             request.Manufacturer,
             request.Applicability);
 
-        if(partErrors is not null && partErrors.Any()) 
+        if (partErrors is not null && partErrors.Any())
+        {
             return BadRequest(partErrors);
+        }
 
         var (position, positionErrors) = Position.Create(
             0,
@@ -65,16 +60,19 @@ public class PositionController : ControllerBase
             request.Quantity);
 
         if (positionErrors is not null && positionErrors.Any())
+        {
             return BadRequest(positionErrors);
+        }
 
-        var Id = await _positionSrevice.CreatePositionWithPart(position!, part!, ct);
+        await positionService.CreatePositionWithPart(position!, part!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> UpdatePosition(long id,[FromBody] PositionUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdatePosition(
+        long id,[FromBody] PositionUpdateRequest request, CancellationToken ct)
     {
         var model = new PositionUpdateModel(
             request.CellId,
@@ -82,17 +80,18 @@ public class PositionController : ControllerBase
             request.PurchasePrice,
             request.Quantity);
 
-        var Id = await _positionSrevice.UpdatePosition(id, model, ct);
+        await positionService.UpdatePosition(id, model, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> DeletePosition(long id, CancellationToken ct)
+    public async Task<ActionResult> DeletePosition(
+        long id, CancellationToken ct)
     {
-        var Id = await _positionSrevice.DeletePosition(id, ct);
+        await positionService.DeletePosition(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }

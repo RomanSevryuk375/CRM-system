@@ -11,29 +11,21 @@ using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/acceptance-images")]
 [ApiController]
-public class AcceptanceImgController : ControllerBase
+public class AcceptanceImgController(
+    IAcceptanceImgService acceptanceImgService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IAcceptanceImgService _acceptanceImgService;
-    private readonly IMapper _mapper;
-
-    public AcceptanceImgController(
-        IAcceptanceImgService acceptanceImgService,
-        IMapper mapper)
-    {
-        _acceptanceImgService = acceptanceImgService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<AcceptanceImgItem>>> GetAcceptanceIng([FromQuery]AcceptanceImgFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<AcceptanceImgItem>>> GetAcceptanceIng(
+        [FromQuery]AcceptanceImgFilter filter, CancellationToken ct)
     {
-        var dto = await _acceptanceImgService.GetAcceptanceIng(filter, ct);
-        var count = await _acceptanceImgService.GetCountAcceptanceImg(filter, ct);
+        var dto = await acceptanceImgService.GetAcceptanceIng(filter, ct);
+        var count = await acceptanceImgService.GetCountAcceptanceImg(filter, ct);
 
-        var response = _mapper.Map<List<AcceptanceImgResponse>>(dto);
+        var response = mapper.Map<List<AcceptanceImgResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -42,43 +34,49 @@ public class AcceptanceImgController : ControllerBase
 
     [HttpGet("{id}/download")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<IActionResult> DownloadImage(long id, CancellationToken ct)
+    public async Task<IActionResult> DownloadImage(
+        long id, CancellationToken ct)
     {
-        var (stream, contentType) = await _acceptanceImgService.GetImageStream(id, ct);
+        var (stream, contentType) = await acceptanceImgService.GetImageStream(id, ct);
 
         return File(stream, contentType, $"attachment_{id}.jpg");
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> CreateAcceptanceImg([FromForm] CreateAcceptanceImgRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateAcceptanceImg(
+        [FromForm] CreateAcceptanceImgRequest request, CancellationToken ct)
     {
-        if (request.File is null || request.File.Length == 0) 
+        if (request.File is null || request.File.Length == 0)
+        {
             return BadRequest("File is required");
+        }
 
         using var strem = request.File.OpenReadStream();
         var fileItem = new FileItem(strem, request.File.FileName, request.File.ContentType);
 
-        var Id = await _acceptanceImgService.CreateAcceptanceImg(request.AcceptanceId, fileItem, request.Description, ct);
+        await acceptanceImgService.CreateAcceptanceImg(request.AcceptanceId, fileItem, request.Description, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> UpdateAcceptanceImg(long id, [FromBody] AcceptanceImgUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateAcceptanceImg(
+        long id, [FromBody] AcceptanceImgUpdateRequest request, CancellationToken ct)
     {
-        var Id = await _acceptanceImgService.UpdateAcceptanceImg(id, request.FilePath, request.Description, ct);
+        await acceptanceImgService.UpdateAcceptanceImg(id, request.FilePath, request.Description, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> DeleteAcceptanceImg(long id, CancellationToken ct)
+    public async Task<ActionResult> DeleteAcceptanceImg(
+        long id, CancellationToken ct)
     {
-        var Id = await _acceptanceImgService.DeleteAcceptanceImg(id, ct);
+        await acceptanceImgService.DeleteAcceptanceImg(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }

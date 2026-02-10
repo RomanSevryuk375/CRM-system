@@ -7,28 +7,19 @@ using Shared.Contracts;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/order-priorities")]
 [ApiController]
-public class OrderPriorityController : ControllerBase
+public class OrderPriorityController(
+    IOrderPriorityService orderPriorityService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IOrderPriorityService _orderPriorityService;
-    private readonly IMapper _mapper;
-
-    public OrderPriorityController(
-        IOrderPriorityService orderPriorityService,
-        IMapper mapper)
-    {
-        _orderPriorityService = orderPriorityService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<OrderPriorityItem>>> GetPriorities(CancellationToken ct)
     {
-        var dto = await _orderPriorityService.GetPriorities(ct);
+        var dto = await orderPriorityService.GetPriorities(ct);
 
-        var response = _mapper.Map<List<OrderPriorityResponse>>(dto);
+        var response = mapper.Map<List<OrderPriorityResponse>>(dto);
 
         return Ok(response);
     }

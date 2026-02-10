@@ -10,34 +10,27 @@ using Shared.Filters;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class TaxController : ControllerBase
+[Route("api/v1/taxes")]
+public class TaxController(
+    ITaxService taxService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly ITaxService _taxService;
-    private readonly IMapper _mapper;
-
-    public TaxController(
-        ITaxService taxService,
-        IMapper mapper)
-    {
-        _taxService = taxService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<TaxItem>>> GetTaxes([FromQuery] TaxFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<TaxItem>>> GetTaxes(
+        [FromQuery] TaxFilter filter, CancellationToken ct)
     {
-        var dto = await _taxService.GetTaxes(filter, ct);
+        var dto = await taxService.GetTaxes(filter, ct);
 
-        var response = _mapper.Map<List<TaxResponse>>(dto);
+        var response = mapper.Map<List<TaxResponse>>(dto);
 
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> CreateTax([FromBody] TaxRequest taxRequest, CancellationToken ct)
+    public async Task<ActionResult<int>> CreateTax(
+        [FromBody] TaxRequest taxRequest, CancellationToken ct)
     {
         var (tax, errors) = Tax.Create(
             0,
@@ -48,30 +41,31 @@ public class TaxController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _taxService.CreateTax(tax!, ct);
+        await taxService.CreateTax(tax!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateTax(int id, [FromBody] TaxUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateTax(
+        int id, [FromBody] TaxUpdateRequest request, CancellationToken ct)
     {
         var model = new TaxUpdateModel(
             request.Name,
             request.Rate);
 
-        var result = await _taxService.UpdateTax(id, model, ct);
+        await taxService.UpdateTax(id, model, ct);
 
-        return Ok(result);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> DeleteTax(int id, CancellationToken ct)
+    public async Task<ActionResult> DeleteTax(int id, CancellationToken ct)
     {
-        var result = await _taxService.DeleteTax(id, ct);
+        await taxService.DeleteTax(id, ct);
 
-        return Ok(result);
+        return NoContent();
     }
 }

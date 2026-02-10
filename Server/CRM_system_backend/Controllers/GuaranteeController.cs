@@ -10,29 +10,21 @@ using Shared.Filters;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/guarantees")]
 
-public class GuaranteeController : ControllerBase
+public class GuaranteeController(
+    IGuaranteeService guaranteeService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IGuaranteeService _guaranteeService;
-    private readonly IMapper _mapper;
-
-    public GuaranteeController(
-        IGuaranteeService guaranteeService,
-        IMapper mapper)
-    {
-        _guaranteeService = guaranteeService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<List<GuaranteeItem>>> GetPagedGuarantees([FromQuery]GuaranteeFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<GuaranteeItem>>> GetPagedGuarantees(
+        [FromQuery]GuaranteeFilter filter, CancellationToken ct)
     {
-        var dto = await _guaranteeService.GetPagedGuarantees(filter, ct);
-        var count = await _guaranteeService.GetCountGuarantees(filter, ct);
+        var dto = await guaranteeService.GetPagedGuarantees(filter, ct);
+        var count = await guaranteeService.GetCountGuarantees(filter, ct);
 
-        var response = _mapper.Map<List<GuaranteeResponse>>(dto);
+        var response = mapper.Map<List<GuaranteeResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -41,7 +33,8 @@ public class GuaranteeController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> CreateGuarantee(GuaranteeRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateGuarantee(
+        GuaranteeRequest request, CancellationToken ct)
     {
         var (guarantee, errors) = Guarantee.Create(
             0,
@@ -51,33 +44,37 @@ public class GuaranteeController : ControllerBase
             request.Description, 
             request.Terms);
 
-        if(errors is not null && errors.Any())
+        if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var Id = await _guaranteeService.CreateGuarantee(guarantee!, ct);
+        await guaranteeService.CreateGuarantee(guarantee!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> UpdateGuarantee(long id, GuaranteeUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateGuarantee(
+        long id, GuaranteeUpdateRequest request, CancellationToken ct)
     {
         var model = new GuaranteeUpdateModel(
             request.Description,
             request.Terms);
 
-        var Id = await _guaranteeService.UpdateGuarantee(id, model, ct);
+        await guaranteeService.UpdateGuarantee(id, model, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> DeleteGuarantee(long id, CancellationToken ct)
+    public async Task<ActionResult> DeleteGuarantee(
+        long id, CancellationToken ct)
     {
-        var Id = await _guaranteeService.DeleteGuarantee(id, ct);
+        await guaranteeService.DeleteGuarantee(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }

@@ -7,28 +7,19 @@ using Shared.Contracts;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/order-statuses")]
 [ApiController]
-public class OrderStatusController : ControllerBase
+public class OrderStatusController(
+    IOrderStatusService orderStatusService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IOrderStatusService _orderStatusService;
-    private readonly IMapper _mapper;
-
-    public OrderStatusController(
-        IOrderStatusService orderStatusService,
-        IMapper mapper)
-    {
-        _orderStatusService = orderStatusService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<OrderStatusItem>>> GetOrderStatuses(CancellationToken ct)
     {
-        var dto = await _orderStatusService.GetOrderStatuses(ct);
+        var dto = await orderStatusService.GetOrderStatuses(ct);
 
-        var response = _mapper.Map<List<OrderStatusResponse>>(dto);
+        var response = mapper.Map<List<OrderStatusResponse>>(dto);
 
         return Ok(response);
     }

@@ -7,28 +7,19 @@ using Shared.Contracts;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/tax-types")]
 [ApiController]
-public class TaxTypeController : ControllerBase
+public class TaxTypeController(
+    ITaxTypeService taxTypeService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly ITaxTypeService _taxTypeService;
-    private readonly IMapper _mapper;
-
-    public TaxTypeController(
-        ITaxTypeService taxTypeService,
-        IMapper mapper)
-    {
-        _taxTypeService = taxTypeService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<TaxTypeItem>>> GetTaxTypes(CancellationToken ct)
     {
-        var dto = await _taxTypeService.GetTaxTypes(ct);
+        var dto = await taxTypeService.GetTaxTypes(ct);
 
-        var response = _mapper.Map<List<TaxTypeResponse>>(dto);
+        var response = mapper.Map<List<TaxTypeResponse>>(dto);
 
         return Ok(response);
     }
