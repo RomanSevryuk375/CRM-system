@@ -8,28 +8,19 @@ using Shared.Contracts;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/bill-statuses")]
 
-public class BillStatusController : ControllerBase
+public class BillStatusController(
+    IBillStatusService billStatusService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IBillStatusService _billStatusService;
-    private readonly IMapper _mapper;
-
-    public BillStatusController(
-        IBillStatusService billStatusService,
-        IMapper mapper)
-    {
-        _billStatusService = billStatusService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<BillStatusItem>>> GetAllBillStatuses(CancellationToken ct)
     {
-        var dto = await _billStatusService.GetAllBillStatuses(ct);
+        var dto = await billStatusService.GetAllBillStatuses(ct);
 
-        var response = _mapper.Map<List<BillStatusResponse>>(dto);
+        var response = mapper.Map<List<BillStatusResponse>>(dto);
 
         return Ok(response);
     }

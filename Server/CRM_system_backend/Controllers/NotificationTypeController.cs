@@ -7,30 +7,21 @@ using Shared.Contracts;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/notification-types")]
 [ApiController]
 
 
-public class NotificationTypeController : ControllerBase
+public class NotificationTypeController(
+    INotificationTypeService notificationTypeService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly INotificationTypeService _notificationTypeService;
-    private readonly IMapper _mapper;
-
-    public NotificationTypeController(
-        INotificationTypeService notificationTypeService,
-        IMapper mapper)
-    {
-        _notificationTypeService = notificationTypeService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<NotificationTypeItem>>> GetNotificationTypes(CancellationToken ct)
     {
-        var dto = await _notificationTypeService.GetNotificationTypes(ct);
+        var dto = await notificationTypeService.GetNotificationTypes(ct);
 
-        var response = _mapper.Map<NotificationTypeResponse>(dto);
+        var response = mapper.Map<NotificationTypeResponse>(dto);
 
         return Ok(response);
     }

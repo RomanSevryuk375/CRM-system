@@ -8,21 +8,15 @@ using Shared.Contracts.User;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class UserController : ControllerBase
+[Route("api/v1/users")]
+public class UserController(IUserService userService) : ControllerBase
 {
-    private readonly IUserService _userService;
-
-    public UserController(IUserService userService)
-    {
-        _userService = userService;
-    }
-
     [HttpPost("login")]
-    public async Task<ActionResult<LoginResponse>> LoginUser([FromBody] LoginRequest loginRequest, CancellationToken ct)
+    public async Task<ActionResult<LoginResponse>> LoginUser(
+        [FromBody] LoginRequest loginRequest, CancellationToken ct)
     {
-        var token = await _userService.LoginUser(loginRequest.Login, loginRequest.Password, ct);
-        var user = await _userService.GetUsersByLogin(loginRequest.Login, ct);
+        var token = await userService.LoginUser(loginRequest.Login, loginRequest.Password, ct);
+        var user = await userService.GetUsersByLogin(loginRequest.Login, ct);
 
         var cookieOptions = new CookieOptions
         {
@@ -65,12 +59,12 @@ public class UserController : ControllerBase
     [HttpGet("by-login/{login}")]
     public async Task<ActionResult<UserItem>> GetUserByLogin(string login, CancellationToken ct)
     {
-        var user = await _userService.GetUsersByLogin(login, ct);
+        var user = await userService.GetUsersByLogin(login, ct);
         return Ok(user);
     }
 
     [HttpPost]
-    public async Task<ActionResult<long>> CreateUser([FromBody] UserRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateUser([FromBody] UserRequest request, CancellationToken ct)
     {
         var (user, errors) = CRMSystem.Core.Models.User.Create(
             0,
@@ -80,19 +74,21 @@ public class UserController : ControllerBase
 
 
         if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var userId = await _userService.CreateUser(user!, ct);
+        await userService.CreateUser(user!, ct);
 
-        return userId;
+        return Created();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> DeleteUser(int id, CancellationToken ct)
+    public async Task<ActionResult> DeleteUser(int id, CancellationToken ct)
     {
-        var result = await _userService.DeleteUser(id, ct);
+        await userService.DeleteUser(id, ct);
 
-        return Ok(id);
+        return NoContent();
     }
 }

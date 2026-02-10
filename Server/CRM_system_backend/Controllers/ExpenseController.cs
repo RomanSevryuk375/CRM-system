@@ -10,28 +10,20 @@ using Shared.Filters;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class ExpenseController : ControllerBase 
+[Route("api/v1/expenses")]
+public class ExpenseController(
+    IExpenseService expenseService,
+    IMapper mapper) : ControllerBase 
 {
-    private readonly IExpenseService _expenseService;
-    private readonly IMapper _mapper;
-
-    public ExpenseController(
-        IExpenseService expenseService,
-        IMapper mapper)
-    {
-        _expenseService = expenseService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<ExpenseItem>>> GetPagedExpense([FromQuery] ExpenseFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<ExpenseItem>>> GetPagedExpense(
+        [FromQuery] ExpenseFilter filter, CancellationToken ct)
     {
-        var dto = await _expenseService.GetPagedExpenses(filter, ct);
-        var count = await _expenseService.GetCountExpenses(filter, ct);
+        var dto = await expenseService.GetPagedExpenses(filter, ct);
+        var count = await expenseService.GetCountExpenses(filter, ct);
 
-        var response = _mapper.Map<List<ExpenseResponse>>(dto);
+        var response = mapper.Map<List<ExpenseResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -40,7 +32,8 @@ public class ExpenseController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> CreateExpense([FromBody] ExpenseRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateExpense(
+        [FromBody] ExpenseRequest request, CancellationToken ct)
     {
         var (expense, errors) = Expense.Create(
             0,
@@ -52,16 +45,19 @@ public class ExpenseController : ControllerBase
             request.Sum);
 
         if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var Id = await _expenseService.CreateExpenses(expense!, ct);
+        await expenseService.CreateExpenses(expense!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> UpdateExpense(int id, [FromBody] ExpenseUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateExpense(
+        int id, [FromBody] ExpenseUpdateRequest request, CancellationToken ct)
     {
         var model = new ExpenseUpdateModel(
             request.Date,
@@ -69,17 +65,18 @@ public class ExpenseController : ControllerBase
             request.ExpenseTypeId,
             request.Sum);
 
-        var Id = await _expenseService.UpdateExpense(id, model, ct);
+        await expenseService.UpdateExpense(id, model, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> DeleteExpense(long id, CancellationToken ct)
+    public async Task<ActionResult> DeleteExpense(
+        long id, CancellationToken ct)
     {
-        var result = await _expenseService.DeleteExpense(id, ct);
+        await expenseService.DeleteExpense(id, ct);
 
-        return Ok(result);
+        return NoContent();
     }
 }

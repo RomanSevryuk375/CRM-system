@@ -9,29 +9,21 @@ using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/vi/supplies")]
 [ApiController]
-public class SupplyController : ControllerBase
+public class SupplyController(
+    ISupplyService supplyService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly ISupplyService _supplyService;
-    private readonly IMapper _mapper;
-
-    public SupplyController(
-        ISupplyService supplyService,
-        IMapper mapper)
-    {
-        _supplyService = supplyService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<SupplyItem>>> GetPagedSupplies([FromQuery]SupplyFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<SupplyItem>>> GetPagedSupplies(
+        [FromQuery]SupplyFilter filter, CancellationToken ct)
     {
-        var dto = await _supplyService.GetPagedSupplies(filter, ct);
-        var count = await _supplyService.GetCountSupplies(filter, ct);
+        var dto = await supplyService.GetPagedSupplies(filter, ct);
+        var count = await supplyService.GetCountSupplies(filter, ct);
 
-        var response = _mapper.Map<List<SupplyResponse>>(dto);
+        var response = mapper.Map<List<SupplyResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -40,27 +32,30 @@ public class SupplyController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> CreateSupply(SupplyRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateSupply(
+        SupplyRequest request, CancellationToken ct)
     {
         var (supply, errors) = Supply.Create(
             0,
             request.SupplierId,
             request.Date);
 
-        if(errors is not null && errors.Any())
+        if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var Id = await _supplyService.CreateSupply(supply!, ct);
+        await supplyService.CreateSupply(supply!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> DeleteSupply(long id, CancellationToken ct)
+    public async Task<ActionResult> DeleteSupply(long id, CancellationToken ct)
     {
-        var Id = await _supplyService.DeleteSupply(id, ct);
+        await supplyService.DeleteSupply(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }

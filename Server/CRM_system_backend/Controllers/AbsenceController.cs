@@ -9,32 +9,22 @@ using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/absences")]
 [ApiController]
-public class AbsenceController : ControllerBase
+public class AbsenceController(
+    IAbsenceService absenceService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IAbsenceService _absenceService;
-    private readonly IMapper _mapper;
-
-    public AbsenceController(
-        IAbsenceService absenceService,
-        IMapper mapper)
-    {
-        _absenceService = absenceService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<AbsenceItem>>> GetPagedAbsence(
-        [FromQuery] AbsenceFilter filter,
-        CancellationToken ct)
+        [FromQuery] AbsenceFilter filter, CancellationToken ct)
     {
-        var dto = await _absenceService.GetPagedAbsence(filter, ct);
+        var dto = await absenceService.GetPagedAbsence(filter, ct);
 
-        var response = _mapper.Map<List<AbsenceResponse>>(dto);
+        var response = mapper.Map<List<AbsenceResponse>>(dto);
 
-        var count = await _absenceService.GetCountAbsence(filter, ct);
+        var count = await absenceService.GetCountAbsence(filter, ct);
         Response.Headers.Append("x-total-count", count.ToString());
 
         return Ok(response);
@@ -43,8 +33,7 @@ public class AbsenceController : ControllerBase
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateAbsence(
-        [FromBody] AbsenceRequest request,
-        CancellationToken ct)
+        [FromBody] AbsenceRequest request, CancellationToken ct)
     {
         var (absence, errors) = Absence.Create(
             0,
@@ -54,35 +43,34 @@ public class AbsenceController : ControllerBase
             request.EndDate);
 
         if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var Id = await _absenceService.CreateAbsence(absence!, ct);
+        await absenceService.CreateAbsence(absence!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> UpdateAbsence(
-        int id, 
-        [FromBody] AbsenceUpdateRequest request,
-        CancellationToken ct)
+        int id, [FromBody] AbsenceUpdateRequest request, CancellationToken ct)
     {
-        var model = _mapper.Map<AbsenceUpdateModel>(request);
+        var model = mapper.Map<AbsenceUpdateModel>(request);
 
-        var Id = await _absenceService.UpdateAbsence(id, model, ct);
+        await absenceService.UpdateAbsence(id, model, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> DeleteAbsence(
-        int id,
-        CancellationToken ct)
+        int id, CancellationToken ct)
     {
-        var Id = await _absenceService.DeleteAbsence(id, ct);
+        await absenceService.DeleteAbsence(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }

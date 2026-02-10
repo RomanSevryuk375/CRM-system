@@ -9,34 +9,26 @@ using Shared.Contracts.Supplier;
 namespace CRM_system_backend.Controllers;
 
 [Controller]
-[Route("api/[controller]")]
-public class SupplierController : ControllerBase
+[Route("api/v1/suppliers")]
+public class SupplierController(
+    ISupplierService supplierService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly ISupplierService _supplierService;
-    private readonly IMapper _mapper;
-
-    public SupplierController(
-        ISupplierService supplierService,
-        IMapper mapper)
-    {
-        _supplierService = supplierService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<SupplierItem>>> GetSuppliers(CancellationToken ct)
     {
-        var dto = await _supplierService.GetSuppliers(ct);
+        var dto = await supplierService.GetSuppliers(ct);
 
-        var response = _mapper.Map<List<SupplierResponse>>(dto);
+        var response = mapper.Map<List<SupplierResponse>>(dto);
 
         return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> CreateSupplier ([FromBody] SupplierRequest request, CancellationToken ct)
+    public async Task<ActionResult<int>> CreateSupplier(
+        [FromBody] SupplierRequest request, CancellationToken ct)
     {
         var (supplier, errors) = Supplier.Create(
             0,
@@ -44,32 +36,36 @@ public class SupplierController : ControllerBase
             request.Contacts);
 
         if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var Id = await _supplierService.CreateSupplier(supplier!, ct);
+        await supplierService.CreateSupplier(supplier!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdateSupplier(int id, [FromBody] SupplierUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult<int>> UpdateSupplier(
+        int id, [FromBody] SupplierUpdateRequest request, CancellationToken ct)
     {
         var model = new SupplierUpdateModel(
             request.Name,
             request.Contacts);
 
-        var Id = await _supplierService.UpdateSupplier(id, model, ct);
+        await supplierService.UpdateSupplier(id, model, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> DeleteSupplier(int id, CancellationToken ct)
+    public async Task<ActionResult<int>> DeleteSupplier(
+        int id, CancellationToken ct)
     {
-        var result = await _supplierService.DeleteSupplier(id, ct);
+        await supplierService.DeleteSupplier(id, ct);
 
-        return Ok(result);
+        return NoContent();
     }
 }

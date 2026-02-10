@@ -10,29 +10,21 @@ using Shared.Filters;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/acceptances")]
 
-public class AcceptanceController : ControllerBase
+public class AcceptanceController(
+    IAcceptanceService acceptanceService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IAcceptanceService _acceptanceService;
-    private readonly IMapper _mapper;
-
-    public AcceptanceController(
-        IAcceptanceService acceptanceService,
-        IMapper mapper)
-    {
-        _acceptanceService = acceptanceService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<AcceptanceItem>>> GetPagedAcceptance([FromQuery] AcceptanceFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<AcceptanceItem>>> GetPagedAcceptance(
+        [FromQuery] AcceptanceFilter filter, CancellationToken ct)
     {
-        var dto = await _acceptanceService.GetPagedAcceptance(filter, ct);
-        var count = await _acceptanceService.GetCountAcceptance(filter, ct);
+        var dto = await acceptanceService.GetPagedAcceptance(filter, ct);
+        var count = await acceptanceService.GetCountAcceptance(filter, ct);
 
-        var response = _mapper.Map<List<AcceptanceResponse>>(dto);
+        var response = mapper.Map<List<AcceptanceResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -41,7 +33,8 @@ public class AcceptanceController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> CreateAcceptance([FromBody] AcceptanceRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateAcceptance(
+        [FromBody] AcceptanceRequest request, CancellationToken ct)
     {
         var (acceptance, errors) = Acceptance.Create(
             0,
@@ -55,31 +48,34 @@ public class AcceptanceController : ControllerBase
             request.ClientSign,
             request.WorkerSign);
 
-        if(errors is not null && errors.Any())
+        if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var Id = await _acceptanceService.CreateAcceptance(acceptance!, ct);
+        await acceptanceService.CreateAcceptance(acceptance!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> UpdateAcceptance(long id, [FromBody] AcceptanceUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateAcceptance(
+        long id, [FromBody] AcceptanceUpdateRequest request, CancellationToken ct)
     {
-        var model = _mapper.Map<AcceptanceUpdateModel>(request);
+        var model = mapper.Map<AcceptanceUpdateModel>(request);
 
-        var Id = await _acceptanceService.UpdateAcceptance(id, model, ct);
+        await acceptanceService.UpdateAcceptance(id, model, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> DeleteAcceptance(long id, CancellationToken ct)
+    public async Task<ActionResult> DeleteAcceptance(long id, CancellationToken ct)
     {
-        var Id = await _acceptanceService.DeleteAcceptance(id, ct);
+        await acceptanceService.DeleteAcceptance(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }

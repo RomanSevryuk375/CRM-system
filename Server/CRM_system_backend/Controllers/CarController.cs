@@ -11,28 +11,20 @@ using Shared.Filters;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class CarController : ControllerBase
+[Route("api/v1/cars")]
+public class CarController(
+    ICarService carService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly ICarService _carService;
-    private readonly IMapper _mapper;
-
-    public CarController(
-        ICarService carService,
-        IMapper mapper)
-    {
-        _carService = carService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<List<CarItem>>> GetPagedCars([FromQuery]CarFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<CarItem>>> GetPagedCars(
+        [FromQuery]CarFilter filter, CancellationToken ct)
     {
-        var dto = await _carService.GetPagedCars(filter, ct);
-        var cout = await _carService.GetCountCars(filter, ct);
+        var dto = await carService.GetPagedCars(filter, ct);
+        var cout = await carService.GetCountCars(filter, ct);
 
-        var response = _mapper.Map<List<CarResponse>>(dto);
+        var response = mapper.Map<List<CarResponse>>(dto);
 
         Response.Headers.Append("x-total-count", cout.ToString());
 
@@ -41,18 +33,19 @@ public class CarController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<CarItem>> GetCarById(long id, CancellationToken ct)
+    public async Task<ActionResult<CarItem>> GetCarById(
+        long id, CancellationToken ct)
     {
-        var car = await _carService.GetCarById(id, ct);
+        var car = await carService.GetCarById(id, ct);
 
         return Ok(car);
     }
 
     [HttpPost]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<long>> CreateCar([FromBody] CarRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateCar(
+        [FromBody] CarRequest request, CancellationToken ct)
     {
-        Console.WriteLine($"CONTROLLER DEBUG: Recieved JSON mapped to: OwnerId={request.OwnerId}, StatusId={request.StatusId}");
         var (car, errors) = Car.Create(
             0,
             request.OwnerId,
@@ -64,17 +57,20 @@ public class CarController : ControllerBase
             request.StateNumber,
             request.Mileage);
 
-        if(errors is not null && errors.Any())
+        if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
-        var Id = await _carService.CreateCar(car!, ct);
+        await carService.CreateCar(car!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<long>> UpdateCar(long id, [FromBody]CarUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateCar(
+        long id, [FromBody]CarUpdateRequest request, CancellationToken ct)
     {
         var model = new CarUpdateModel(
             request.StatusId,
@@ -83,17 +79,18 @@ public class CarController : ControllerBase
             request.YearOfManufacture,
             request.Mileage);
 
-        var Id = await _carService.UpdateCar(id, model, ct);
+        await carService.UpdateCar(id, model, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<long>> DeleteCar(long id, CancellationToken ct)
+    public async Task<ActionResult> DeleteCar(
+        long id, CancellationToken ct)
     {
-        var Id = await _carService.DeleteCar(id, ct);
+        await carService.DeleteCar(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }
