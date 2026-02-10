@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.AddPartPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="Добавить запчасть"
+    x:DataType="vm:AddPartViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *">
+        <!--  Header  -->
+        <Grid
+            Grid.Row="0"
+            Padding="15,20"
+            ColumnDefinitions="Auto, *"
+            HeightRequest="80">
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+            <Label
+                Grid.Column="1"
+                Margin="-24,0,0,0"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="Добавить запчасть"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="30" Spacing="20">
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Выберите запчасть"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="50"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <Picker
+                            Title="Нажмите для выбора"
+                            Margin="10,0"
+                            ItemDisplayBinding="{Binding Part}"
+                            ItemsSource="{Binding Positions}"
+                            SelectedItem="{Binding SelectedPosition}"
+                            TextColor="White"
+                            TitleColor="Gray" />
+                    </Border>
+                    <Label
+                        FontSize="12"
+                        IsVisible="{Binding SelectedPosition, Converter={StaticResource IsNotNullConverter}}"
+                        Text="{Binding SelectedPosition.SellingPrice, StringFormat='Цена: {0} BYN'}"
+                        TextColor="#4CD964" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Количество"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="50"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <Entry
+                            Margin="10,0"
+                            Keyboard="Numeric"
+                            Text="{Binding Quantity}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <Button
+                    Margin="0,20,0,0"
+                    BackgroundColor="#3296F8"
+                    Command="{Binding SaveCommand}"
+                    CornerRadius="8"
+                    FontAttributes="Bold"
+                    Text="Добавить"
+                    TextColor="White" />
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    Color="White" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
