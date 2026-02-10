@@ -142,21 +142,35 @@ namespace CRMSystemMobile
             builder.Services.AddHttpClient<PartSetService>(client =>
             {
                 client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            }).AddHttpMessageHandler<AuthHttpMessageHandler>();
+            })
+            .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
             builder.Services.AddHttpClient<WorkInOrderService>(client =>
             {
                 client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            }).AddHttpMessageHandler<AuthHttpMessageHandler>();
+            })
+            .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
             builder.Services.AddHttpClient<WorkProposalService>(client =>
             {
                 client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            }).AddHttpMessageHandler<AuthHttpMessageHandler>();
+            })
+            .AddHttpMessageHandler<AuthHttpMessageHandler>();
             builder.Services.AddHttpClient<WorkerService>(client =>
             {
                 client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            }).AddHttpMessageHandler<AuthHttpMessageHandler>();
+            })
+            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services.AddHttpClient<PositionService>(client => 
+            { 
+                client.BaseAddress = new Uri(ApiConfig.BaseUrl); 
+            })
+            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services.AddHttpClient<WorkService>(client =>
+            {
+                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+            })
+            .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
             builder.Services.AddSingleton<AppShell>();
             builder.Services.AddSingleton<App>();
@@ -186,6 +200,12 @@ namespace CRMSystemMobile
             builder.Services.AddTransient<WorkerMainPage>();
             builder.Services.AddTransient<WorkerProfileViewModel>();
             builder.Services.AddTransient<WorkerProfilePage>();
+            builder.Services.AddTransient<WorkerOrderDetailsViewModel>();
+            builder.Services.AddTransient<WorkerOrderDetailsPage>();
+            builder.Services.AddTransient<AddPartViewModel>();
+            builder.Services.AddTransient<AddPartPage>();
+            builder.Services.AddTransient<AddProposalViewModel>();
+            builder.Services.AddTransient<AddProposalPage>();
 
             return builder.Build();
         }

@@ -28,7 +28,10 @@ public partial class App : Application
                 case 3:
                     await Shell.Current.GoToAsync("//WorkerMainPage");
                     break;
-                case 2 & 1:
+                case 2:
+                    await Shell.Current.GoToAsync("//MainPage");
+                    break;
+                case 1:
                     await Shell.Current.GoToAsync("//MainPage");
                     break;
                 default:

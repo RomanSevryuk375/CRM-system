@@ -7,6 +7,7 @@ using CRMSystemMobile.Services;
 using Shared.Contracts.Order;
 using Shared.Filters;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace CRMSystemMobile.ViewModels;
 
@@ -70,6 +71,33 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     public partial Color CompletedText { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsRefreshing { get; set; }
+
+    [RelayCommand]
+    private async Task Refresh()
+    {
+        try
+        {
+            IsRefreshing = true;    
+
+            // 1. Сбрасываем счетчик страниц на начало
+            _currentPage = 1;
+
+            // 2. Сбрасываем общее количество (чтобы логика пагинации не блокировала загрузку)
+            _totalItems = 0;
+
+            // 3. Вызываем метод загрузки данных (тот же, что используется при старте)
+            // Важно: Внутри метода загрузки, если страница == 1, нужно очищать коллекцию Orders
+            await LoadNextPage();
+        }
+        finally
+        {
+            // 4. Выключаем анимацию обновления
+            IsRefreshing = false;
+        }
+    }
 
     [RelayCommand]
     private void ToggleMenuSheet()
@@ -185,11 +213,13 @@ public partial class MainViewModel : ObservableObject
         {
             return;
         }
-
-        IsLoadingMore = true;
+        
+        if (!IsRefreshing && Orders.Count > 0 && Orders.Count >= _totalItems) return;
 
         try
         {
+            IsLoadingMore = true;
+
             var filter = new OrderFilter(
                 OrderIds: [],
                 StatusIds: _activeStatuses,
@@ -206,12 +236,21 @@ public partial class MainViewModel : ObservableObject
             var (items, total) = await _orderService.GetOrders(filter);
             _totalItems = total;
 
+            if (_currentPage == 1)
+            {
+                Orders.Clear();
+            }
+
             foreach (var item in items ?? [])
             {
                 Orders.Add(item);
             }
 
             _currentPage++;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
         }
         finally
         {
