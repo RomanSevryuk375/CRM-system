@@ -25,7 +25,7 @@ public class PositionController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<PositionItem>>> GetPagedPositions([FromQuery] PositionFilter positionFilter, CancellationToken ct)
     {
         var dto = await _positionSrevice.GetPagedPositions(positionFilter, ct);
