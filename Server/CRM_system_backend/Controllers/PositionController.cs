@@ -16,7 +16,7 @@ public class PositionController(
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult<List<PositionItem>>> GetPagedPositions(
         [FromQuery] PositionFilter positionFilter, CancellationToken ct)
     {
