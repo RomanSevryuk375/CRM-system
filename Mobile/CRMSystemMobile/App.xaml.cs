@@ -21,7 +21,20 @@ public partial class App : Application
 
         if (!string.IsNullOrEmpty(token) && _identityService.IsTokenValid(token))
         {
-            await Shell.Current.GoToAsync("//MainPage");
+            var (_, roleId) = await _identityService.GetProfileIdAsync();
+
+            switch (roleId)
+            {
+                case 3:
+                    await Shell.Current.GoToAsync("//WorkerMainPage");
+                    break;
+                case 2 & 1:
+                    await Shell.Current.GoToAsync("//MainPage");
+                    break;
+                default:
+                    await Shell.Current.DisplayAlert("Ошибка", "Неверный логин или пароль", "ОК");
+                    break;
+            }
         }
         else
         {

@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CRMSystemMobile.Extentions;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Login;
 
 namespace CRMSystemMobile.ViewModel;
 
-public partial class LoginViewModel(LoginService loginService) : ObservableObject
+public partial class LoginViewModel(LoginService loginService, IdentityService identityService) : ObservableObject
 {
     [ObservableProperty]
     public partial string UserLogin { get; set; }
@@ -39,7 +40,20 @@ public partial class LoginViewModel(LoginService loginService) : ObservableObjec
 
         if (response != null)
         {
-            await Shell.Current.GoToAsync("//MainPage");
+            var (_, roleId) = await identityService.GetProfileIdAsync();
+
+            switch (roleId)
+            {
+                case 3:
+                    await Shell.Current.GoToAsync("//WorkerMainPage");
+                    break;
+                case 2 & 1:
+                    await Shell.Current.GoToAsync("//MainPage");
+                    break;
+                default:
+                    await Shell.Current.DisplayAlert("Ошибка", "Неверный логин или пароль", "ОК");
+                    break;
+            }
         }
         else
         {

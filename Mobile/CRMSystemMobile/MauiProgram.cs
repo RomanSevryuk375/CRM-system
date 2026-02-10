@@ -153,6 +153,10 @@ namespace CRMSystemMobile
             {
                 client.BaseAddress = new Uri(ApiConfig.BaseUrl);
             }).AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services.AddHttpClient<WorkerService>(client =>
+            {
+                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+            }).AddHttpMessageHandler<AuthHttpMessageHandler>();
 
             builder.Services.AddSingleton<AppShell>();
             builder.Services.AddSingleton<App>();
@@ -178,6 +182,10 @@ namespace CRMSystemMobile
             builder.Services.AddTransient<OrderDetailsPage>();
             builder.Services.AddTransient<BillDetailsViewModel>();
             builder.Services.AddTransient<BillDetailsPage>();
+            builder.Services.AddTransient<WorkerMainViewModel>();
+            builder.Services.AddTransient<WorkerMainPage>();
+            builder.Services.AddTransient<WorkerProfileViewModel>();
+            builder.Services.AddTransient<WorkerProfilePage>();
 
             return builder.Build();
         }
