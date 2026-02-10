@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.WorkerOrderDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:contracts="clr-namespace:Shared.Contracts.WorkInOrder;assembly=Shared"
+    xmlns:contractsPart="clr-namespace:Shared.Contracts.PartSet;assembly=Shared"
+    xmlns:contractsProp="clr-namespace:Shared.Contracts.WorkProposal;assembly=Shared"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="Детали заказа"
+    x:DataType="vm:WorkerOrderDetailsViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <Grid
+            Grid.Row="0"
+            Padding="15,20,15,10"
+            BackgroundColor="#112347"
+            ColumnDefinitions="50, *"
+            HeightRequest="70">
+
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+
+            <Label
+                Grid.Column="1"
+                FontAttributes="Bold"
+                FontSize="22"
+                HorizontalOptions="Center"
+                Text="{Binding Order.Id, StringFormat='Заказ #{0}'}"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="15,0,15,80" Spacing="15">
+                <Border
+                    Padding="15"
+                    BackgroundColor="#213868"
+                    StrokeShape="RoundRectangle 12"
+                    StrokeThickness="0">
+                    <Grid ColumnDefinitions="50, *">
+                        <Image
+                            Grid.Column="0"
+                            Aspect="AspectFit"
+                            HeightRequest="40"
+                            HorizontalOptions="Start"
+                            Source="car.png" />
+
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Margin="10,0,0,0"
+                            Spacing="2">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="18"
+                                Text="{Binding Order.Car}"
+                                TextColor="White" />
+                            <Label
+                                FontSize="12"
+                                Text="{Binding Order.Date, StringFormat='Дата приема: {0:dd.MM.yyyy}'}"
+                                TextColor="#ACACAC" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <StackLayout BindableLayout.ItemsSource="{Binding Tasks}" Spacing="10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="contracts:WorkInOrderResponse">
+                            <Border
+                                Padding="15"
+                                BackgroundColor="#213868"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0">
+                                <VerticalStackLayout Spacing="12">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <Label
+                                            Grid.Column="0"
+                                            FontAttributes="Bold"
+                                            FontSize="16"
+                                            Text="{Binding Job}"
+                                            TextColor="White" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            FontAttributes="Italic"
+                                            FontSize="12"
+                                            Text="{Binding Status}"
+                                            TextColor="#FFB347" />
+                                    </Grid>
+                                    <Button
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=ChangeWorkStatusCommand}"
+                                        CommandParameter="{Binding .}"
+                                        CornerRadius="8"
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        HeightRequest="45">
+                                        <Button.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding StatusId}"
+                                                TargetType="Button"
+                                                Value="2">
+                                                <Setter Property="Text" Value="Начать выполнение" />
+                                                <Setter Property="BackgroundColor" Value="#3296F8" />
+                                                <Setter Property="TextColor" Value="White" />
+                                            </DataTrigger>
+
+                                            <DataTrigger
+                                                Binding="{Binding StatusId}"
+                                                TargetType="Button"
+                                                Value="1">
+                                                <Setter Property="Text" Value="Завершить работу" />
+                                                <Setter Property="BackgroundColor" Value="#34C759" />
+                                                <Setter Property="TextColor" Value="White" />
+                                            </DataTrigger>
+
+                                            <DataTrigger
+                                                Binding="{Binding StatusId}"
+                                                TargetType="Button"
+                                                Value="3">
+                                                <Setter Property="Text" Value="Выполнено" />
+                                                <Setter Property="BackgroundColor" Value="#2B2B2B" />
+                                                <Setter Property="TextColor" Value="#707070" />
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                        </Button.Triggers>
+                                    </Button>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+
+                <Label
+                    Margin="5,10,0,0"
+                    FontSize="14"
+                    IsVisible="{Binding HasParts}"
+                    Text="Запчасти"
+                    TextColor="#ACACAC" />
+
+                <StackLayout BindableLayout.ItemsSource="{Binding Parts}" Spacing="10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="contractsPart:PartSetResponse">
+                            <Border
+                                Padding="15"
+                                BackgroundColor="#1C2D4F"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                        <Label
+                                            FontSize="15"
+                                            Text="{Binding Position}"
+                                            TextColor="White" />
+                                        <Label
+                                            FontSize="12"
+                                            Text="{Binding Quantity, StringFormat='Кол-во: {0}'}"
+                                            TextColor="#ACACAC" />
+                                    </VerticalStackLayout>
+                                    <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="15"
+                                        Text="{Binding SoldPrice, StringFormat='{0} BYN'}"
+                                        TextColor="White"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+
+                <Label
+                    Margin="5,10,0,0"
+                    FontSize="14"
+                    IsVisible="{Binding HasProposals}"
+                    Text="Предложения"
+                    TextColor="#ACACAC" />
+
+                <StackLayout BindableLayout.ItemsSource="{Binding Proposals}" Spacing="10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="contractsProp:WorkProposalResponse">
+                            <Border
+                                Padding="15"
+                                BackgroundColor="#1C2D4F"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                        <Label
+                                            FontSize="15"
+                                            Text="{Binding Job}"
+                                            TextColor="White" />
+                                        <Label
+                                            FontSize="12"
+                                            Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}"
+                                            TextColor="#ACACAC" />
+                                    </VerticalStackLayout>
+
+                                    <Border
+                                        Grid.Column="1"
+                                        Padding="8,4"
+                                        BackgroundColor="Transparent"
+                                        Stroke="#ACACAC"
+                                        StrokeShape="RoundRectangle 5"
+                                        StrokeThickness="1"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            FontSize="11"
+                                            Text="{Binding Status}"
+                                            TextColor="#ACACAC" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+
+                <ActivityIndicator
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    Color="White" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Border
+            Grid.Row="1"
+            Margin="0,0,25,30"
+            BackgroundColor="#3296F8"
+            HeightRequest="60"
+            HorizontalOptions="End"
+            StrokeShape="RoundRectangle 30"
+            StrokeThickness="0"
+            VerticalOptions="End"
+            WidthRequest="60"
+            ZIndex="10">
+
+            <Border.Shadow>
+                <Shadow
+                    Brush="Black"
+                    Opacity="0.4"
+                    Radius="5"
+                    Offset="2,2" />
+            </Border.Shadow>
+
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ShowAddMenuCommand}" />
+            </Border.GestureRecognizers>
+
+            <Label
+                Margin="0,-4,0,0"
+                FontSize="36"
+                HorizontalOptions="Center"
+                Text="+"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Border>
+
+    </Grid>
+</ContentPage>

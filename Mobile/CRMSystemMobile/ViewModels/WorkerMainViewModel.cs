@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging; 
+using CommunityToolkit.Mvvm.Messaging;
 using CRMSystemMobile.Extentions;
-using CRMSystemMobile.Message;       
+using CRMSystemMobile.Message;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Order;
 using Shared.Filters;
@@ -14,8 +14,8 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
 {
     private readonly OrderService _orderService;
     private readonly IdentityService _identityService;
-    private readonly WorkerService _workerService; 
-    
+    private readonly WorkerService _workerService;
+
     public WorkerMainViewModel(
         OrderService orderService,
         IdentityService identityService,
@@ -149,7 +149,14 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
     [RelayCommand]
     private async Task GoToWorkOrder(OrderResponse order)
     {
-        await Shell.Current.DisplayAlert("Инфо", $"Переход к заказу {order.Id}", "OK");
+        if (order == null) return;
+
+        var navParam = new Dictionary<string, object>
+    {
+        { "Order", order }
+    };
+
+        await Shell.Current.GoToAsync("WorkerOrderDetailsPage", navParam);
     }
 
     [RelayCommand]

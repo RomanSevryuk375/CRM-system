@@ -7,6 +7,9 @@ public record PositionResponse
     [JsonPropertyName("id")]
     public long Id { get; init; }
 
+    [JsonPropertyName("part")]
+    public string Part { get; init; } = string.Empty;
+
     [JsonPropertyName("partId")]
     public long PartId { get; init; }
 

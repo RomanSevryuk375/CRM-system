@@ -11,9 +11,10 @@
     Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False">
     <Grid>
-        <VerticalStackLayout BackgroundColor="#112347">
+        <Grid BackgroundColor="#112347" RowDefinitions="Auto, *">
 
             <Grid
+                Grid.Row="0"
                 Padding="15,30,15,10"
                 BackgroundColor="#112347"
                 ColumnDefinitions="auto, * , auto"
@@ -86,102 +87,116 @@
                 </Border>
 
             </Grid>
+            <RefreshView
+                Grid.Row="1"
+                Command="{Binding RefreshCommand}"
+                IsRefreshing="{Binding IsRefreshing}"
+                RefreshColor="#FFB347">
 
-            <CollectionView
-                ItemsSource="{Binding Orders}"
-                RemainingItemsThreshold="2"
-                RemainingItemsThresholdReachedCommand="{Binding LoadNextPageCommand}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="contracts:OrderResponse">
-                        <Border
-                            Margin="10"
-                            Padding="16"
-                            BackgroundColor="#213868"
-                            Stroke="Transparent"
-                            StrokeShape="RoundRectangle 12">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GoToOrderDetailsCommand}" CommandParameter="{Binding .}" />
-                            </Border.GestureRecognizers>
-                            <Grid RowDefinitions="100, Auto" RowSpacing="25">
+                <CollectionView
+                    ItemsSource="{Binding Orders}"
+                    RemainingItemsThreshold="2"
+                    RemainingItemsThresholdReachedCommand="{Binding LoadNextPageCommand}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="contracts:OrderResponse">
+                            <Border
+                                Margin="10"
+                                Padding="16"
+                                BackgroundColor="#213868"
+                                Stroke="Transparent"
+                                StrokeShape="RoundRectangle 12">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GoToOrderDetailsCommand}" CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Grid RowDefinitions="60, Auto" RowSpacing="25">
 
-                                <Grid
-                                    Grid.Row="0"
-                                    ColumnDefinitions="80, *"
-                                    ColumnSpacing="16">
+                                    <Grid
+                                        Grid.Row="0"
+                                        ColumnDefinitions="80, *"
+                                        ColumnSpacing="16">
 
-                                    <Border
-                                        Grid.Column="0"
-                                        HeightRequest="80"
-                                        Stroke="Transparent"
-                                        StrokeShape="RoundRectangle 8"
-                                        WidthRequest="80">
-                                        <Image
-                                            Margin="0"
-                                            Aspect="AspectFit"
-                                            Background="Transparent"
-                                            Source="car.png" />
-                                    </Border>
+                                        <Border
+                                            Grid.Column="0"
+                                            HeightRequest="80"
+                                            Stroke="Transparent"
+                                            StrokeShape="RoundRectangle 8"
+                                            WidthRequest="80">
+                                            <Image
+                                                Margin="0"
+                                                Aspect="AspectFit"
+                                                Background="Transparent"
+                                                Source="car.png" />
+                                        </Border>
 
-                                    <VerticalStackLayout
-                                        Grid.Column="1"
-                                        Spacing="2"
-                                        VerticalOptions="Center">
+                                        <VerticalStackLayout
+                                            Grid.Column="1"
+                                            Spacing="2"
+                                            VerticalOptions="Center">
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="17"
+                                                TextColor="#ffffff">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding Car}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label FontSize="14" TextColor="#ACACAC">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Приоритет: " />
+                                                        <Span Text="{Binding Priority}" TextColor="#ffffff" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <Grid
+                                        Grid.Row="1"
+                                        ColumnDefinitions="*, Auto"
+                                        VerticalOptions="End">
                                         <Label
+                                            Grid.Column="0"
+                                            FontSize="15"
+                                            Text="{Binding Date}"
+                                            TextColor="#ffffff" />
+
+                                        <Label
+                                            Grid.Column="1"
                                             FontAttributes="Bold"
-                                            FontSize="17"
-                                            TextColor="#ffffff">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="{Binding Car}" />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-
-                                        <Label FontSize="14" TextColor="#ACACAC">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="Приоритет: " />
-                                                    <Span Text="{Binding Priority}" TextColor="#ffffff" />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-                                    </VerticalStackLayout>
+                                            FontSize="16"
+                                            Text="{Binding Status}"
+                                            TextColor="#FFB347" />
+                                    </Grid>
                                 </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
 
-                                <Grid
-                                    Grid.Row="1"
-                                    ColumnDefinitions="*, Auto"
-                                    VerticalOptions="End">
-                                    <Label
-                                        Grid.Column="0"
-                                        FontSize="15"
-                                        Text="{Binding Date}"
-                                        TextColor="#ffffff" />
-
-                                    <Label
-                                        Grid.Column="1"
-                                        FontAttributes="Bold"
-                                        FontSize="16"
-                                        Text="{Binding Status}"
-                                        TextColor="#FFB347" />
-                                </Grid>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-
-                <CollectionView.Footer>
-                    <ActivityIndicator
-                        Margin="10"
-                        IsRunning="{Binding IsLoadingMore}"
-                        IsVisible="{Binding IsLoadingMore}"
-                        Color="#112347" />
-                </CollectionView.Footer>
-            </CollectionView>
-        </VerticalStackLayout>
+                    <CollectionView.Footer>
+                        <ActivityIndicator
+                            Margin="10"
+                            IsRunning="{Binding IsLoadingMore}"
+                            IsVisible="{Binding IsLoadingMore}"
+                            Color="#112347" />
+                    </CollectionView.Footer>
+                    <CollectionView.EmptyView>
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="Список пуст"
+                            TextColor="White"
+                            VerticalOptions="Center" />
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
 
         <Grid
             Grid.Row="0"
+            Grid.RowSpan="2"
             BackgroundColor="Transparent"
             IsVisible="{Binding IsMenuSheetOpen}">
             <Grid RowDefinitions="*, Auto">

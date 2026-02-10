@@ -1,4 +1,5 @@
-﻿using Shared.Contracts.WorkInOrder;
+﻿using Shared.Contracts.PartSet;
+using Shared.Contracts.WorkInOrder;
 using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
@@ -79,6 +80,24 @@ public class WorkInOrderService(HttpClient httpClient)
         }
     }
 
+    public async Task<List<WorkInOrderResponse>?> GetWorkInOrderByOrder(long orderId)
+    {
+        try
+        {
+            var response = await httpClient.GetAsync($"api/WorkInOrder/order/{orderId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<List<WorkInOrderResponse>>();
+            }
+            return [];
+        }
+        catch
+        {
+            return [];
+        }
+    }
+
     public async Task<string?> AddWorkToOrder(WorkInOrderRequest request)
     {
         try
@@ -103,6 +122,23 @@ public class WorkInOrderService(HttpClient httpClient)
         {
             Debug.WriteLine(ex.ToString());
             return null;
+        }
+    }
+
+    public async Task<string?> UpdateWiO(long id, WorkInOrderUpdateRequest model)
+    {
+        try
+        {
+            var response = await httpClient.PutAsJsonAsync($"api/WorkInOrder/{id}", model);
+
+            if (response.IsSuccessStatusCode) return null;
+
+            var error = await response.Content.ReadAsStringAsync();
+            return error;
+        }
+        catch (Exception ex)
+        {
+            return ex.Message;
         }
     }
 

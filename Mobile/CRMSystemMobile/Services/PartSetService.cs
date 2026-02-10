@@ -72,6 +72,25 @@ public class PartSetService(HttpClient httpClient)
         }
     }
 
+    public async Task<List<PartSetResponse>?> GetPartsByOrder(long orderId)
+    {
+        try
+        {
+            var response = await httpClient.GetAsync($"order/{orderId}");
+            // Если не сработает, попробуйте: $"api/PartSet/order/{orderId}" или просто $"order/{orderId}" 
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<List<PartSetResponse>>();
+            }
+            return [];
+        }
+        catch
+        {
+            return [];
+        }
+    }
+
     public async Task<string?> AddToSet(PartSetRequest request)
     {
         try
