@@ -28,7 +28,11 @@ public class Program
             .AddNpgSql(builder.Configuration.GetConnectionString("SystemDbContext")!)
             .AddRedis(builder.Configuration.GetConnectionString("Redis")!); // I couldn't implement health check for S3
         builder.Services.AddHttpContextAccessor();
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+            }); ;
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));

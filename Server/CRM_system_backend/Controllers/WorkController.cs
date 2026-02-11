@@ -10,7 +10,7 @@ using Shared.Filters;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/v1/workers")]
+[Route("api/v1/works")]
 public class WorkController(
     IWorkService workService,
     IMapper mapper) : ControllerBase
