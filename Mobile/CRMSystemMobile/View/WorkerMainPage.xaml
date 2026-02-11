@@ -63,7 +63,7 @@
             Grid.Row="1"
             Command="{Binding LoadInitialCommand}"
             IsRefreshing="{Binding IsRefreshing}"
-            RefreshColor="#112347">
+            RefreshColor="White">
             <CollectionView
                 Margin="0,10,0,0"
                 ItemsSource="{Binding AssignedOrders}"
@@ -123,6 +123,17 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </RefreshView>
+
+        <ActivityIndicator
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            HeightRequest="50"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            WidthRequest="50"
+            Color="White" />
 
         <Grid
             Grid.Row="0"
