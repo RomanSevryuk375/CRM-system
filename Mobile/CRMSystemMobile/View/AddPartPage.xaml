@@ -66,16 +66,46 @@
                         FontSize="12"
                         Text="Количество"
                         TextColor="#ACACAC" />
+
                     <Border
+                        Padding="0"
                         BackgroundColor="#213868"
                         HeightRequest="50"
                         StrokeShape="RoundRectangle 5"
                         StrokeThickness="0">
-                        <Entry
-                            Margin="10,0"
-                            Keyboard="Numeric"
-                            Text="{Binding Quantity}"
-                            TextColor="White" />
+
+                        <Grid ColumnDefinitions="50, *, 50">
+
+                            <Button
+                                Grid.Column="0"
+                                Padding="0"
+                                BackgroundColor="Transparent"
+                                Command="{Binding DecreaseQuantityCommand}"
+                                FontAttributes="Bold"
+                                FontSize="24"
+                                Text="-"
+                                TextColor="White" />
+
+                            <Entry
+                                Grid.Column="1"
+                                FontAttributes="Bold"
+                                FontSize="18"
+                                HorizontalTextAlignment="Center"
+                                Keyboard="Numeric"
+                                Text="{Binding Quantity}"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+
+                            <Button
+                                Grid.Column="2"
+                                Padding="0"
+                                BackgroundColor="Transparent"
+                                Command="{Binding IncreaseQuantityCommand}"
+                                FontAttributes="Bold"
+                                FontSize="24"
+                                Text="+"
+                                TextColor="White" />
+                        </Grid>
                     </Border>
                 </VerticalStackLayout>
 

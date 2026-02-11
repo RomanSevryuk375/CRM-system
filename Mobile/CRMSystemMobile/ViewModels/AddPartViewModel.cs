@@ -31,6 +31,21 @@ public partial class AddPartViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty]
     public partial bool IsBusy { get; set; }
 
+    [RelayCommand]
+    private void IncreaseQuantity()
+    {
+        Quantity++;
+    }
+
+    [RelayCommand]
+    private void DecreaseQuantity()
+    {
+        if (Quantity > 1)
+        {
+            Quantity--;
+        }
+    }
+
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.ContainsKey("OrderId"))
