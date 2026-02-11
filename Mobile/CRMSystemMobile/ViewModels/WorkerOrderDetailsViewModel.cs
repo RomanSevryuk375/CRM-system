@@ -15,18 +15,20 @@ namespace CRMSystemMobile.ViewModels;
 public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttributable
 {
     private readonly WorkInOrderService _workInOrderService;
+    private readonly PartSetService _partSetService;
+    private readonly WorkProposalService _workProposalService;
     private readonly IdentityService _identityService;
-    private readonly PartSetService _partService;         
-    private readonly WorkProposalService _proposalService;
 
     public WorkerOrderDetailsViewModel(
-        WorkInOrderService wioService,
-        PartSetService partService,
-        WorkProposalService proposalService)
+        WorkInOrderService workInOrderService,
+        PartSetService partSetService,
+        WorkProposalService workProposalService,
+        IdentityService identityService)
     {
-        _workInOrderService = wioService;
-        _partService = partService;
-        _proposalService = proposalService;
+        _workInOrderService = workInOrderService;
+        _partSetService = partSetService;
+        _workProposalService = workProposalService;
+        _identityService = identityService;
     }
 
     [ObservableProperty]
@@ -34,60 +36,133 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
 
     [ObservableProperty]
     public partial bool IsBusy { get; set; }
-    public ObservableCollection<WorkInOrderResponse> Tasks { get; } = [];
-    public ObservableCollection<PartSetResponse> Parts { get; } = [];
-    public ObservableCollection<WorkProposalResponse> Proposals { get; } = [];
 
-    public bool HasParts => Parts.Count > 0;
-    public bool HasProposals => Proposals.Count > 0;
+    [ObservableProperty]
+    public partial bool IsRefreshing { get; set; }
+
+    [ObservableProperty]
+    public partial int SelectedTab { get; set; } = 0;
+
+    public ObservableCollection<WorkInOrderResponse> MyWorks { get; } = [];
+    public ObservableCollection<PartSetResponse> OrderParts { get; } = [];
+    public ObservableCollection<WorkProposalResponse> MyProposals { get; } = [];
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.ContainsKey("Order") && query["Order"] is OrderResponse order)
+        if (query.ContainsKey("Order"))
         {
-            Order = order;
-            LoadDataCommand.Execute(null);
+            Order = (OrderResponse)query["Order"];
+            LoadAllDataCommand.Execute(null);
         }
     }
 
     [RelayCommand]
-    private async Task LoadData()
+    private async Task LoadAllData()
     {
-        if (IsBusy || Order == null) return;
+        if (Order == null) return;
         IsBusy = true;
 
         try
         {
-            var tasksTask = _workInOrderService.GetWorkInOrderByOrder(Order.Id);
-            var partsTask = _partService.GetPartsByOrder(Order.Id);
-            var proposalsTask = _proposalService.GetProposalsByOrder(Order.Id);
-
-            await Task.WhenAll(tasksTask, partsTask, proposalsTask);
-
-            var tasks = await tasksTask;
-            var parts = await partsTask;
-            var proposals = await proposalsTask;
-
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                Tasks.Clear();
-                if (tasks != null) foreach (var t in tasks) Tasks.Add(t);
-
-                Parts.Clear();
-                if (parts != null) foreach (var p in parts) Parts.Add(p);
-
-                Proposals.Clear();
-                if (proposals != null) foreach (var p in proposals) Proposals.Add(p);
-
-                // Обновляем видимость заголовков
-                OnPropertyChanged(nameof(HasParts));
-                OnPropertyChanged(nameof(HasProposals));
-            });
+            await Task.WhenAll(
+                LoadWorksInternal(),
+                LoadPartsInternal(),
+                LoadProposalsInternal()
+            );
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить данные", "ОК");
         }
         finally
         {
             IsBusy = false;
+            IsRefreshing = false;
         }
+    }
+
+    private async Task LoadWorksInternal()
+    {
+        var (profileId, _) = await _identityService.GetProfileIdAsync();
+        var filter = new WorkInOrderFilter(
+            OrderIds: [Order.Id],
+            WorkerIds: [(int)profileId],
+            JobIds: [],
+            StatusIds: [],
+            SortBy: null,
+            Page: 1,
+            Limit: 100,
+            IsDescending: true
+        );
+        var (items, _) = await _workInOrderService.GetWorksInOrder(filter);
+
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            MyWorks.Clear();
+            if (items != null) foreach (var i in items) MyWorks.Add(i);
+        });
+    }
+
+    private async Task LoadPartsInternal()
+    {
+        var filter = new PartSetFilter(
+            OrderIds: [Order.Id],
+            PositionIds: [],
+            ProposalIds: [],
+            SortBy: null,
+            Page: 1,
+            Limit: 100,
+            IsDescending: true
+        );
+        var (items, _) = await _partSetService.GetPartSets(filter);
+
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            OrderParts.Clear();
+            if (items != null) foreach (var i in items) OrderParts.Add(i);
+        });
+    }
+
+    private async Task LoadProposalsInternal()
+    {
+        var (profileId, _) = await _identityService.GetProfileIdAsync();
+        var filter = new WorkProposalFilter(
+            OrderIds: [Order.Id],
+            WorkerIds: [(int)profileId],
+            JobIds: [], StatusIds: [], SortBy: null, Page: 1, Limit: 100, IsDescending: true
+        );
+        var (items, _) = await _workProposalService.GetWorkProposals(filter);
+
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            MyProposals.Clear();
+            if (items != null) foreach (var i in items) MyProposals.Add(i);
+        });
+    }
+
+    [RelayCommand]
+    private void SelectTab(string tabIndex)
+    {
+        if (int.TryParse(tabIndex, out int index))
+        {
+            SelectedTab = index;
+        }
+    }
+
+    [RelayCommand]
+    private async Task GoToAddPart()
+    {
+        if (Order == null) return;
+        var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
+        await Shell.Current.GoToAsync("AddPartPage", navParam);
+    }
+
+    [RelayCommand]
+    private async Task GoToAddProposal()
+    {
+        if (Order == null) return;
+        var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
+        await Shell.Current.GoToAsync("AddProposalPage", navParam);
     }
 
     [RelayCommand]
@@ -98,7 +173,7 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
         WorkStatusEnum newStatus;
         string actionName = "";
 
-        if (work.StatusId == (int)WorkStatusEnum.Pending) 
+        if (work.StatusId == (int)WorkStatusEnum.Pending)
         {
             newStatus = WorkStatusEnum.InProgress;
             actionName = "начата";
@@ -118,7 +193,8 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
 
         if (!confirm) return;
 
-        var request = new WorkInOrderUpdateRequest { 
+        var request = new WorkInOrderUpdateRequest
+        {
             WorkerId = null,
             StatusId = newStatus,
             TimeSpent = null
@@ -128,7 +204,7 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
 
         if (error == null)
         {
-            await LoadData(); 
+            await LoadAllData();
         }
         else
         {
@@ -137,27 +213,5 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
     }
 
     [RelayCommand]
-    private async Task ShowAddMenu()
-    {
-        if (Order == null) return;
-
-        string action = await Shell.Current.DisplayActionSheet("Добавить к заказу:", "Отмена", null, "Запчасть", "Предложить работу");
-
-        var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
-
-        if (action == "Запчасть")
-        {
-            await Shell.Current.GoToAsync("AddPartPage", navParam);
-        }
-        else if (action == "Предложить работу")
-        {
-            await Shell.Current.GoToAsync("AddProposalPage", navParam);
-        }
-    }
-
-    [RelayCommand]
-    private async Task GoBack()
-    {
-        await Shell.Current.GoToAsync("..");
-    }
+    private async Task GoBack() => await Shell.Current.GoToAsync("..");
 }
