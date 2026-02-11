@@ -150,6 +150,7 @@
                         TextColor="White" />
                     <Button
                         BackgroundColor="Transparent"
+                        Command="{Binding GoToScheduleCommand}"
                         Text="Расписание"
                         TextColor="White" />
                     <Button
