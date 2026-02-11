@@ -65,10 +65,10 @@ public class WorkProposalController(
             null);
     }
 
-    [HttpPut("{id}/accept")]
+    [HttpPut("{id}/status")]
     [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult> PathcStatusProposal(
-        long id, ProposalStatusRequest request, CancellationToken ct)
+        long id, [FromBody] ProposalStatusRequest request, CancellationToken ct)
     {
         if (request.Status == ProposalStatusEnum.Accepted)
         {

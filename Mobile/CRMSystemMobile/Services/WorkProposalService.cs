@@ -1,4 +1,5 @@
 ﻿using Shared.Contracts.WorkProposal;
+using Shared.Enums;
 using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
@@ -79,26 +80,6 @@ public class WorkProposalService(HttpClient httpClient)
         }
     }
 
-    public async Task<List<WorkProposalResponse>?> GetProposalsByOrder(long orderId)
-    {
-        try
-        {
-            // Используем фильтр для получения предложений по ID заказа
-            string query = $"OrderIds={orderId}&Page=1&Limit=100";
-            var response = await httpClient.GetAsync($"api/WorkProposal?{query}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<List<WorkProposalResponse>>();
-            }
-            return [];
-        }
-        catch
-        {
-            return [];
-        }
-    }
-
     public async Task<string?> CreateWorkPropsal(WorkProposalRequest request)
     {
         try
@@ -153,42 +134,35 @@ public class WorkProposalService(HttpClient httpClient)
         }
     }
 
-    public async Task<string?> RejectWorkPropsal(long id)
+    public async Task<string?> RejectWorkProposal(long id)
     {
-        try
+        var request = new ProposalStatusRequest
         {
-            var response = await httpClient.PutAsync($"api/WorkProposal/{id}/reject", null);
+            Status = ProposalStatusEnum.Rejected
+        };
 
-            if (response.IsSuccessStatusCode)
-            {
-                return null;
-            }
-
-            var errorContent = await response.Content.ReadAsStringAsync();
-
-            if (string.IsNullOrWhiteSpace(errorContent))
-            {
-                return $"Server error: {response.StatusCode}";
-            }
-
-            return errorContent.Trim('"');
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex);
-            return $"Server error: {ex.Message}";
-        }
+        return await SendStatusUpdate(id, request);
     }
 
-    public async Task<string?> AcceptWorkPropsal(long id)
+    public async Task<string?> AcceptWorkProposal(long id)
+    {
+        var request = new ProposalStatusRequest
+        {
+            Status = ProposalStatusEnum.Accepted
+        };
+
+        return await SendStatusUpdate(id, request);
+    }
+
+    private async Task<string?> SendStatusUpdate(long id, ProposalStatusRequest request)
     {
         try
         {
-            var response = await httpClient.PutAsync($"api/WorkProposal/{id}/accept", null);
+            var response = await httpClient.PutAsJsonAsync($"api/v1/work-proposals/{id}/status", request);
 
             if (response.IsSuccessStatusCode)
             {
-                return null;
+                return null; 
             }
 
             var errorContent = await response.Content.ReadAsStringAsync();
@@ -203,7 +177,7 @@ public class WorkProposalService(HttpClient httpClient)
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            return $"Server error: {ex.Message}";
+            return $"Client error: {ex.Message}";
         }
     }
 }

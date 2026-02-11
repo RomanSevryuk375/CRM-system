@@ -80,24 +80,6 @@ public class WorkInOrderService(HttpClient httpClient)
         }
     }
 
-    public async Task<List<WorkInOrderResponse>?> GetWorkInOrderByOrder(long orderId)
-    {
-        try
-        {
-            var response = await httpClient.GetAsync($"api/WorkInOrder/order/{orderId}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<List<WorkInOrderResponse>>();
-            }
-            return [];
-        }
-        catch
-        {
-            return [];
-        }
-    }
-
     public async Task<string?> AddWorkToOrder(WorkInOrderRequest request)
     {
         try
@@ -125,11 +107,11 @@ public class WorkInOrderService(HttpClient httpClient)
         }
     }
 
-    public async Task<string?> UpdateWiO(long id, WorkInOrderUpdateRequest model)
+    public async Task<string?> UpdateWorkInOrder(long id, WorkInOrderUpdateRequest model)
     {
         try
         {
-            var response = await httpClient.PutAsJsonAsync($"api/WorkInOrder/{id}", model);
+            var response = await httpClient.PutAsJsonAsync($"api/works-in-order/{id}", model);
 
             if (response.IsSuccessStatusCode) return null;
 
@@ -142,7 +124,7 @@ public class WorkInOrderService(HttpClient httpClient)
         }
     }
 
-    public async Task<string?> DeleteWorkFromOrder(long id)
+    public async Task<string?> DeleteWorkInOrder(long id)
     {
         try
         {

@@ -17,7 +17,7 @@ public class ScheduleController(
 {
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<ScheduleItem>>> GetPagedSchedules(
+    public async Task<ActionResult<List<ScheduleResponse>>> GetPagedSchedules(
         [FromQuery] ScheduleFilter filter, CancellationToken ct)
     {
         var dto = await scheduleService.GetPagedSchedules(filter, ct);

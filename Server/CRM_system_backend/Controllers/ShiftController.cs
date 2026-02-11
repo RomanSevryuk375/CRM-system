@@ -15,8 +15,8 @@ public class ShiftController(
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<ShiftItem>>> GetShifts(CancellationToken ct)
+    [Authorize(Policy = "AdminWorkerPolicy")]
+    public async Task<ActionResult<List<ShiftResponse>>> GetShifts(CancellationToken ct)
     {
         var dto = await shiftService.GetShifts(ct);
 

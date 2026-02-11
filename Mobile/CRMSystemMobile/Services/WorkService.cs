@@ -18,7 +18,7 @@ public class WorkService(HttpClient httpClient)
                 query += $"&SortBy={filter.SortBy}";
             }
 
-            string url = $"api/v1/workers?{query}";
+            string url = $"api/v1/works?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -51,7 +51,7 @@ public class WorkService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/v1/workers", request);
+            var response = await httpClient.PostAsJsonAsync("api/v1/works", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -78,7 +78,7 @@ public class WorkService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.DeleteAsync($"api/v1/workersipco/{id}");
+            var response = await httpClient.DeleteAsync($"api/v1/works/{id}");
 
             if (response.IsSuccessStatusCode)
             {

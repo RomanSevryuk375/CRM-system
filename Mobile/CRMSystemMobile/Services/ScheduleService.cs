@@ -17,7 +17,7 @@ public class ScheduleService(HttpClient httpClient, IdentityService identityServ
 
             var query = $"Page=1&Limit=50&IsDescending=true&SortBy=date&WorkerIds={profileId}";
 
-            string url = $"api/Schedule?{query}";
+            string url = $"api/v1/schedules?{query}";
 
             var response = await httpClient.GetAsync(url);
 

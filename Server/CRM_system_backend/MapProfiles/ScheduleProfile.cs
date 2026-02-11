@@ -15,6 +15,8 @@ public class ScheduleProfile : Profile
             .ForMember(dest => dest.Worker,
                         opt => opt.MapFrom(src => $"{src.Worker!.Name} {src.Worker.Surname}"))
             .ForMember(dest => dest.Shift,
-                        opt => opt.MapFrom(src => $"{src.Shift!.Name}"));
+                        opt => opt.MapFrom(src => $"{src.Shift!.Name}"))
+            .ForMember(dest => dest.DateTime,
+                        opt => opt.MapFrom(src => src.Date));
     }
 }

@@ -26,7 +26,7 @@ public class PositionService(HttpClient httpClient)
                 }
             }
 
-            string url = $"api/Position?{query}";
+            string url = $"api/v1/positions?{query}";
 
             var response = await httpClient.GetAsync(url);
 

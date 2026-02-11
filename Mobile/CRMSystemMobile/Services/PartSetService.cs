@@ -118,7 +118,7 @@ public class PartSetService(HttpClient httpClient)
         }
     }
 
-    public async Task<string?> DeleteFromSet(long id)
+    public async Task<string?> DeletePartSet(long id)
     {
         try
         {

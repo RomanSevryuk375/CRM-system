@@ -47,6 +47,9 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
     public ObservableCollection<PartSetResponse> OrderParts { get; } = [];
     public ObservableCollection<WorkProposalResponse> MyProposals { get; } = [];
 
+    public bool HasParts => OrderParts.Count > 0;
+    public bool HasProposals => MyProposals.Count > 0;
+
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.ContainsKey("Order"))
@@ -200,7 +203,7 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
             TimeSpent = null
         };
 
-        var error = await _workInOrderService.UpdateWiO(work.Id, request);
+        var error = await _workInOrderService.UpdateWorkInOrder(work.Id, request);
 
         if (error == null)
         {
@@ -209,6 +212,74 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
         else
         {
             await Shell.Current.DisplayAlert("Ошибка", error, "ОК");
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteTask(WorkInOrderResponse item)
+    {
+        if (item == null) return;
+
+        bool confirm = await Shell.Current.DisplayAlert("Удаление",
+            $"Удалить работу \"{item.Job}\"?", "Да", "Нет");
+
+        if (!confirm) return;
+
+        string? error = await _workInOrderService.DeleteWorkInOrder(item.Id);
+
+        if (error == null)
+        {
+            MyWorks.Remove(item);
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert("Ошибка", error, "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeletePart(PartSetResponse item)
+    {
+        if (item == null) return;
+
+        bool confirm = await Shell.Current.DisplayAlert("Удаление",
+            $"Удалить запчасть \"{item.Position}\"?", "Да", "Нет");
+
+        if (!confirm) return;
+
+        string? error = await _partSetService.DeletePartSet(item.Id);
+
+        if (error == null)
+        {
+            OrderParts.Remove(item);
+            OnPropertyChanged(nameof(HasParts));
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert("Ошибка", error, "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteProposal(WorkProposalResponse item)
+    {
+        if (item == null) return;
+
+        bool confirm = await Shell.Current.DisplayAlert("Удаление",
+            $"Удалить предложение \"{item.Job}\"?", "Да", "Нет");
+
+        if (!confirm) return;
+
+        string? error = await _workProposalService.DeleteWorkPropsal(item.Id);
+
+        if (error == null)
+        {
+            MyProposals.Remove(item);
+            OnPropertyChanged(nameof(HasProposals));
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert("Ошибка", error, "OK");
         }
     }
 

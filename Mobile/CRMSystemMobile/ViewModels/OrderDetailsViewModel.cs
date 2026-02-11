@@ -124,7 +124,7 @@ public partial class OrderDetailsViewModel : ObservableObject, IQueryAttributabl
     [RelayCommand]
     private async Task AcceptProposal(WorkProposalResponse proposal)
     {
-        var error = await _workProposalService.AcceptWorkPropsal(proposal.Id);
+        var error = await _workProposalService.AcceptWorkProposal(proposal.Id);
         if (error == null)
         {
             await Shell.Current.DisplayAlert("Успех", "Предложение принято", "ОК");
@@ -139,7 +139,7 @@ public partial class OrderDetailsViewModel : ObservableObject, IQueryAttributabl
     [RelayCommand]
     private async Task RejectProposal(WorkProposalResponse proposal)
     {
-        var error = await _workProposalService.RejectWorkPropsal(proposal.Id);
+        var error = await _workProposalService.RejectWorkProposal(proposal.Id);
         if (error == null)
         {
             await Shell.Current.DisplayAlert("Успех", "Предложение отклонено", "ОК");

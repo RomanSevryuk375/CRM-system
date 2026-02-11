@@ -217,19 +217,31 @@
                                         StrokeShape="RoundRectangle 12"
                                         StrokeThickness="0">
                                         <VerticalStackLayout Spacing="10">
-                                            <Grid ColumnDefinitions="*, Auto">
+                                            <Grid ColumnDefinitions="*, Auto, 40">
                                                 <Label
                                                     Grid.Column="0"
                                                     FontAttributes="Bold"
                                                     FontSize="16"
                                                     Text="{Binding Job}"
-                                                    TextColor="White" />
+                                                    TextColor="White"
+                                                    VerticalOptions="Center" />
                                                 <Label
                                                     Grid.Column="1"
+                                                    Margin="0,0,10,0"
                                                     FontAttributes="Italic"
                                                     FontSize="12"
                                                     Text="{Binding Status}"
-                                                    TextColor="#FFB347" />
+                                                    TextColor="#FFB347"
+                                                    VerticalOptions="Center" />
+                                                <ImageButton
+                                                    Grid.Column="2"
+                                                    Padding="5"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=DeleteTaskCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    HeightRequest="30"
+                                                    HorizontalOptions="Start"
+                                                    Source="delete.png"
+                                                    WidthRequest="30" />
                                             </Grid>
 
                                             <Button
@@ -320,10 +332,10 @@
                                         BackgroundColor="#213868"
                                         StrokeShape="RoundRectangle 12"
                                         StrokeThickness="0">
-                                        <Grid ColumnDefinitions="*, Auto">
-                                            <VerticalStackLayout Grid.Column="0">
+                                        <Grid ColumnDefinitions="*, Auto, 40">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
                                                 <Label
-                                                    FontSize="16"
+                                                    FontSize="15"
                                                     Text="{Binding Position}"
                                                     TextColor="White" />
                                                 <Label
@@ -331,12 +343,24 @@
                                                     Text="{Binding Quantity, StringFormat='Кол-во: {0}'}"
                                                     TextColor="#ACACAC" />
                                             </VerticalStackLayout>
+
                                             <Label
                                                 Grid.Column="1"
+                                                Margin="0,0,10,0"
                                                 FontAttributes="Bold"
+                                                FontSize="15"
                                                 Text="{Binding SoldPrice, StringFormat='{0} BYN'}"
                                                 TextColor="White"
                                                 VerticalOptions="Center" />
+                                            <ImageButton
+                                                Grid.Column="2"
+                                                Padding="5"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=DeletePartCommand}"
+                                                CommandParameter="{Binding .}"
+                                                HeightRequest="30"
+                                                Source="delete.png"
+                                                VerticalOptions="Center"
+                                                WidthRequest="30" />
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -380,10 +404,10 @@
                                         BackgroundColor="#213868"
                                         StrokeShape="RoundRectangle 12"
                                         StrokeThickness="0">
-                                        <Grid ColumnDefinitions="*, Auto">
-                                            <VerticalStackLayout Grid.Column="0">
+                                        <Grid ColumnDefinitions="*, Auto, 40">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
                                                 <Label
-                                                    FontSize="16"
+                                                    FontSize="15"
                                                     Text="{Binding Job}"
                                                     TextColor="White" />
                                                 <Label
@@ -391,12 +415,29 @@
                                                     Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}"
                                                     TextColor="#ACACAC" />
                                             </VerticalStackLayout>
-                                            <Label
+                                            <Border
                                                 Grid.Column="1"
-                                                FontAttributes="Italic"
-                                                Text="{Binding Status}"
-                                                TextColor="#FFB347"
-                                                VerticalOptions="Center" />
+                                                Margin="0,0,10,0"
+                                                Padding="8,4"
+                                                BackgroundColor="Transparent"
+                                                Stroke="#ACACAC"
+                                                StrokeShape="RoundRectangle 5"
+                                                StrokeThickness="1"
+                                                VerticalOptions="Center">
+                                                <Label
+                                                    FontSize="11"
+                                                    Text="{Binding Status}"
+                                                    TextColor="#ACACAC" />
+                                            </Border>
+                                            <ImageButton
+                                                Grid.Column="2"
+                                                Padding="5"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=DeleteProposalCommand}"
+                                                CommandParameter="{Binding .}"
+                                                HeightRequest="30"
+                                                Source="delete.png"
+                                                VerticalOptions="Center"
+                                                WidthRequest="30" />
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
