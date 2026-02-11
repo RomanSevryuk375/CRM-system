@@ -18,7 +18,7 @@ public class CarService(HttpClient httpClient)
                 query += $"&SortBy={filter.SortBy}";
             }
 
-            string url = $"api/Car?{query}";
+            string url = $"api/v1/cars?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -51,7 +51,7 @@ public class CarService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/Car", request);
+            var response = await httpClient.PostAsJsonAsync("api/v1/cars", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -62,7 +62,7 @@ public class CarService(HttpClient httpClient)
 
             if (string.IsNullOrWhiteSpace(errorContent))
             {
-                return $"Ошибка сервера: {response.StatusCode}";
+                return $"Server error: {response.StatusCode}";
             }
 
             return errorContent.Trim('"');
@@ -70,7 +70,7 @@ public class CarService(HttpClient httpClient)
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            return $"Ошибка соединения: {ex.Message}";
+            return $"Server error: {ex.Message}";
         }
     }
 }

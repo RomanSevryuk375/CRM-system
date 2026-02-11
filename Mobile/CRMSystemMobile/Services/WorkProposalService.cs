@@ -50,7 +50,7 @@ public class WorkProposalService(HttpClient httpClient)
                 }
             }
 
-            string url = $"api/WorkProposal?{query}";
+            string url = $"api/v1/work-proposals?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -83,7 +83,7 @@ public class WorkProposalService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/WorkProposal", request);
+            var response = await httpClient.PostAsJsonAsync("api/v1/work-proposals", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -110,7 +110,7 @@ public class WorkProposalService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.DeleteAsync($"api/WorkProposal{id}");
+            var response = await httpClient.DeleteAsync($"api/v1/work-proposals/{id}");
 
             if (response.IsSuccessStatusCode)
             {

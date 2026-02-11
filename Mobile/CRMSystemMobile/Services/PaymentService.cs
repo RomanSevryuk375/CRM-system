@@ -37,7 +37,7 @@ public class PaymentService(HttpClient httpClient)
 
         try
         {
-            var response = await httpClient.GetAsync($"api/PaymentNote?{query}");
+            var response = await httpClient.GetAsync($"api/v1/payment-notes?{query}");
 
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
@@ -67,7 +67,7 @@ public class PaymentService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/PaymentNote", request);
+            var response = await httpClient.PostAsJsonAsync("api/v1/payment-notes", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -77,14 +77,14 @@ public class PaymentService(HttpClient httpClient)
             var errorContent = await response.Content.ReadAsStringAsync();
             if (string.IsNullOrWhiteSpace(errorContent))
             {
-                return $"Ошибка сервера: {response.StatusCode}";
+                return $"Server error: {response.StatusCode}";
             }
 
             return errorContent.Trim('"');
         }
         catch (Exception ex)
         {
-            return $"Ошибка соединения: {ex.Message}";
+            return $"Server error: {ex.Message}";
         }
     }
 }

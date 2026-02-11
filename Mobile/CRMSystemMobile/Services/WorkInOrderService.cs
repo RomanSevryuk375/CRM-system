@@ -50,7 +50,7 @@ public class WorkInOrderService(HttpClient httpClient)
                 }
             }
 
-            string url = $"api/WorkInOrder?{query}";
+            string url = $"api/works-in-order?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -83,7 +83,7 @@ public class WorkInOrderService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/WorkInOrder", request);
+            var response = await httpClient.PostAsJsonAsync("api/works-in-order", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -110,7 +110,7 @@ public class WorkInOrderService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.DeleteAsync($"api/WorkInOrder{id}");
+            var response = await httpClient.DeleteAsync($"api/works-in-order/{id}");
 
             if (response.IsSuccessStatusCode)
             {
