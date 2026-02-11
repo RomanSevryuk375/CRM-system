@@ -165,4 +165,11 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
         IsMenuOpen = false;
         await Shell.Current.GoToAsync("WorkerProfilePage");
     }
+
+    [RelayCommand]
+    private async Task GoToSchedule()
+    {
+        IsMenuOpen = false;
+        await Shell.Current.GoToAsync("WorkerSchedulePage");
+    }
 }

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.WorkerSchedulePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:Shared.Contracts.Schedule;assembly=Shared"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="Расписание"
+    x:DataType="vm:WorkerScheduleViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *">
+        <!--  Header  -->
+        <Grid
+            Grid.Row="0"
+            Padding="15,20"
+            ColumnDefinitions="Auto, *"
+            HeightRequest="80">
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+
+            <Label
+                Grid.Column="1"
+                Margin="-24,0,0,0"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="Мое расписание"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <RefreshView
+            Grid.Row="1"
+            Command="{Binding LoadSchedulesCommand}"
+            IsRefreshing="{Binding IsRefreshing}"
+            RefreshColor="#112347">
+
+            <CollectionView Margin="0,10,0,0" ItemsSource="{Binding Schedules}">
+                <CollectionView.EmptyView>
+                    <Label
+                        Margin="0,0,0,50"
+                        HorizontalOptions="Center"
+                        Text="Расписание не назначено"
+                        TextColor="Gray"
+                        VerticalOptions="Center" />
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ScheduleResponse">
+                        <Border
+                            Margin="15,6"
+                            Padding="20"
+                            BackgroundColor="#213868"
+                            StrokeShape="RoundRectangle 12"
+                            StrokeThickness="0">
+
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
+                                <Border
+                                    Grid.Column="0"
+                                    BackgroundColor="#3296F8"
+                                    HeightRequest="60"
+                                    StrokeShape="RoundRectangle 10"
+                                    StrokeThickness="0"
+                                    WidthRequest="60">
+                                    <VerticalStackLayout Spacing="0" VerticalOptions="Center">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="24"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding DateTime, StringFormat='{0:dd}'}"
+                                            TextColor="White" />
+                                        <Label
+                                            FontSize="12"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding DateTime, StringFormat='{0:MMM}'}"
+                                            TextColor="White"
+                                            TextTransform="Uppercase" />
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <VerticalStackLayout
+                                    Grid.Column="1"
+                                    Spacing="5"
+                                    VerticalOptions="Center">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="18"
+                                        Text="{Binding Shift}"
+                                        TextColor="White" />
+
+                                    <Label
+                                        FontSize="14"
+                                        Text="{Binding DateTime, StringFormat='{0:dddd, yyyy}'}"
+                                        TextColor="#ACACAC" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <ActivityIndicator
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            Color="White" />
+    </Grid>
+</ContentPage>

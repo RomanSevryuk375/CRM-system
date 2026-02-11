@@ -21,5 +21,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("WorkerOrderDetailsPage", typeof(WorkerOrderDetailsPage));
         Routing.RegisterRoute("AddPartPage", typeof(AddPartPage));
         Routing.RegisterRoute("AddProposalPage", typeof(AddProposalPage));
+        Routing.RegisterRoute("WorkerSchedulePage", typeof(WorkerSchedulePage));
     }
 }
