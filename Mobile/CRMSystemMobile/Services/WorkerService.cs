@@ -9,7 +9,7 @@ public class WorkerService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.GetAsync($"api/Worker/{id}");
+            var response = await httpClient.GetAsync($"api/v1/workers/{id}");
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadFromJsonAsync<WorkerResponse>();
@@ -27,7 +27,7 @@ public class WorkerService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PutAsJsonAsync($"api/Worker/{id}", request);
+            var response = await httpClient.PutAsJsonAsync($"api/v1/workers/{id}", request);
             return response.IsSuccessStatusCode;
         }
         catch (Exception ex)

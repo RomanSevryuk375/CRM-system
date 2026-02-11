@@ -9,10 +9,8 @@ public class ClientService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.GetAsync($"api/Client/{id}");
+            var response = await httpClient.GetAsync($"api/v1/clients/{id}");
             var json = await response.Content.ReadAsStringAsync();
-
-            System.Diagnostics.Debug.WriteLine($"RAW JSON: {json}");
 
             return await response.Content.ReadFromJsonAsync<ClientsResponse>();
         }
@@ -27,7 +25,8 @@ public class ClientService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PutAsJsonAsync($"api/Client/{id}", request);
+            var response = await httpClient.PutAsJsonAsync($"api/v1/clients/{id}", request);
+
             return response.IsSuccessStatusCode;
         }
         catch (Exception ex)

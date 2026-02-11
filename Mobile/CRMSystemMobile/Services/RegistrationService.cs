@@ -14,7 +14,7 @@ public class RegistrationService
     {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync("api/Client/with-user", request);
+            var response = await _httpClient.PostAsJsonAsync("api/v1/clients/user", request);
             var content = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)

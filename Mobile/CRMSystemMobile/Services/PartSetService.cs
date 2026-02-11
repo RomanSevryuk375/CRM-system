@@ -42,7 +42,7 @@ public class PartSetService(HttpClient httpClient)
                 }
             }
 
-            string url = $"api/PartSet?{query}";
+            string url = $"api/v1/part-sets?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -95,7 +95,7 @@ public class PartSetService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/PartSet", request);
+            var response = await httpClient.PostAsJsonAsync("api/v1/part-sets", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -122,7 +122,7 @@ public class PartSetService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.DeleteAsync($"api/PartSet/{id}");
+            var response = await httpClient.DeleteAsync($"api/v1/part-sets/{id}");
 
             if (response.IsSuccessStatusCode)
             {
