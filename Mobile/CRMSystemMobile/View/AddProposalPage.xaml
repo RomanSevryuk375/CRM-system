@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.AddProposalPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="Предложить работу"
+    x:DataType="vm:AddProposalViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <Grid
+            Grid.Row="0"
+            Padding="15,20"
+            ColumnDefinitions="Auto, *"
+            HeightRequest="80">
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+
+            <Label
+                Grid.Column="1"
+                Margin="-24,0,0,0"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="Предложить работу"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="30" Spacing="20">
+
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        FontSize="12"
+                        Text="Выберите вид работы"
+                        TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#213868"
+                        HeightRequest="50"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="0">
+                        <Picker
+                            Title="Нажмите для выбора"
+                            Margin="10,0"
+                            ItemDisplayBinding="{Binding Title}"
+                            ItemsSource="{Binding Jobs}"
+                            SelectedItem="{Binding SelectedJob}"
+                            TextColor="White"
+                            TitleColor="Gray" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout IsVisible="{Binding SelectedJob, Converter={StaticResource IsNotNullConverter}}" Spacing="10">
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label
+                            FontSize="12"
+                            Text="Описание"
+                            TextColor="#ACACAC" />
+                        <Border
+                            Padding="10"
+                            BackgroundColor="#1C2D4F"
+                            StrokeShape="RoundRectangle 5"
+                            StrokeThickness="0">
+                            <Label
+                                FontSize="14"
+                                Text="{Binding SelectedJob.Description}"
+                                TextColor="White" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label
+                            FontSize="12"
+                            Text="Нормативное время (ч)"
+                            TextColor="#ACACAC" />
+                        <Border
+                            BackgroundColor="#1C2D4F"
+                            HeightRequest="45"
+                            StrokeShape="RoundRectangle 5"
+                            StrokeThickness="0">
+                            <Entry
+                                Margin="10,0"
+                                IsReadOnly="True"
+                                Text="{Binding SelectedJob.StandardTime}"
+                                TextColor="White" />
+                        </Border>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <Label
+                    Margin="0,10"
+                    FontSize="12"
+                    HorizontalTextAlignment="Center"
+                    Text="Клиент получит уведомление и сможет принять или отклонить это предложение в своем личном кабинете."
+                    TextColor="Gray" />
+
+                <Button
+                    Margin="0,10,0,0"
+                    BackgroundColor="#3296F8"
+                    Command="{Binding SaveCommand}"
+                    CornerRadius="8"
+                    FontAttributes="Bold"
+                    HeightRequest="50"
+                    Text="Отправить клиенту"
+                    TextColor="White" />
+
+                <!--  Индикатор загрузки  -->
+                <ActivityIndicator
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    Color="White" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

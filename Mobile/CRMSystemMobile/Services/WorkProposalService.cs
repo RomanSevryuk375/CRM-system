@@ -79,6 +79,26 @@ public class WorkProposalService(HttpClient httpClient)
         }
     }
 
+    public async Task<List<WorkProposalResponse>?> GetProposalsByOrder(long orderId)
+    {
+        try
+        {
+            // Используем фильтр для получения предложений по ID заказа
+            string query = $"OrderIds={orderId}&Page=1&Limit=100";
+            var response = await httpClient.GetAsync($"api/WorkProposal?{query}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<List<WorkProposalResponse>>();
+            }
+            return [];
+        }
+        catch
+        {
+            return [];
+        }
+    }
+
     public async Task<string?> CreateWorkPropsal(WorkProposalRequest request)
     {
         try
