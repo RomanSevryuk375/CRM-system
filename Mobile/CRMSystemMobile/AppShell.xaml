@@ -5,8 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:CRMSystemMobile"
     xmlns:view="clr-namespace:CRMSystemMobile.View"
-    Shell.FlyoutBehavior="Disabled"
-    Title="CRM System">
+    Title="CRM System"
+    Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
         Title="Login"
@@ -23,4 +23,8 @@
         ContentTemplate="{DataTemplate view:MainPage}"
         Route="MainPage" />
 
+    <ShellContent
+        Title="WorkerMain"
+        ContentTemplate="{DataTemplate view:WorkerMainPage}"
+        Route="WorkerMainPage" />
 </Shell>

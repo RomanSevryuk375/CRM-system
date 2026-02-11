@@ -7,28 +7,19 @@ using Shared.Contracts;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/expense-types")]
 [ApiController]
-public class ExpenseTypeController : ControllerBase
+public class ExpenseTypeController(
+    IExpenseTypeService expenseTypeService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IExpenseTypeService _expenseTypeService;
-    private readonly IMapper _mapper;
-
-    public ExpenseTypeController(
-        IExpenseTypeService expenseTypeService,
-        IMapper mapper)
-    {
-        _expenseTypeService = expenseTypeService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<ExpenseTypeItem>>> GetExpenseType(CancellationToken ct)
     {
-        var dto = await _expenseTypeService.GetExpenseType(ct);
+        var dto = await expenseTypeService.GetExpenseType(ct);
 
-        var response = _mapper.Map<List<ExpenseTypeResponse>>(dto);
+        var response = mapper.Map<List<ExpenseTypeResponse>>(dto);
 
         return Ok(response);
     }

@@ -1,4 +1,4 @@
-﻿using Shared.Contracts.Work;
+﻿using Shared.Contracts.PartSet;
 using Shared.Contracts.WorkInOrder;
 using Shared.Filters;
 using System.Diagnostics;
@@ -51,7 +51,7 @@ public class WorkInOrderService(HttpClient httpClient)
                 }
             }
 
-            string url = $"api/WorkInOrder?{query}";
+            string url = $"api/works-in-order?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -84,7 +84,7 @@ public class WorkInOrderService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/WorkInOrder", request);
+            var response = await httpClient.PostAsJsonAsync("api/works-in-order", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -107,11 +107,28 @@ public class WorkInOrderService(HttpClient httpClient)
         }
     }
 
-    public async Task<string?> DeleteWorkFromOrder(long id)
+    public async Task<string?> UpdateWorkInOrder(long id, WorkInOrderUpdateRequest model)
     {
         try
         {
-            var response = await httpClient.DeleteAsync($"api/WorkInOrder{id}");
+            var response = await httpClient.PutAsJsonAsync($"api/works-in-order/{id}", model);
+
+            if (response.IsSuccessStatusCode) return null;
+
+            var error = await response.Content.ReadAsStringAsync();
+            return error;
+        }
+        catch (Exception ex)
+        {
+            return ex.Message;
+        }
+    }
+
+    public async Task<string?> DeleteWorkInOrder(long id)
+    {
+        try
+        {
+            var response = await httpClient.DeleteAsync($"api/works-in-order/{id}");
 
             if (response.IsSuccessStatusCode)
             {

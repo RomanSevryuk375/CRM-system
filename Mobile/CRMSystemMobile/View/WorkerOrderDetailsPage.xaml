@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="CRMSystemMobile.View.WorkerOrderDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:modelsPart="clr-namespace:Shared.Contracts.PartSet;assembly=Shared"
+    xmlns:modelsProp="clr-namespace:Shared.Contracts.WorkProposal;assembly=Shared"
+    xmlns:modelsWork="clr-namespace:Shared.Contracts.WorkInOrder;assembly=Shared"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="Детали заказа"
+    x:DataType="vm:WorkerOrderDetailsViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, Auto, Auto, *">
+        <Grid
+            Grid.Row="0"
+            Padding="15,20"
+            ColumnDefinitions="Auto, *"
+            HeightRequest="80">
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+            <Label
+                Grid.Column="1"
+                Margin="-24,0,0,0"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="{Binding Order.Id, StringFormat='Заказ #{0}'}"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <Border
+            Grid.Row="1"
+            Margin="15,0,15,10"
+            Padding="15"
+            BackgroundColor="#213868"
+            StrokeShape="RoundRectangle 10"
+            StrokeThickness="0">
+            <Grid ColumnDefinitions="Auto, *">
+                <Image
+                    Grid.Column="0"
+                    Margin="0,0,15,0"
+                    HeightRequest="40"
+                    Source="car.png"
+                    WidthRequest="40" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="{Binding Order.Car}"
+                        TextColor="White" />
+                    <Label
+                        FontSize="12"
+                        Text="{Binding Order.Date, StringFormat='Принят: {0:dd.MM.yyyy}'}"
+                        TextColor="#ACACAC" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+        <Grid
+            Grid.Row="2"
+            Padding="15,0"
+            ColumnDefinitions="*, *, *"
+            ColumnSpacing="10"
+            HeightRequest="40">
+            <Button
+                Grid.Column="0"
+                Padding="0"
+                Command="{Binding SelectTabCommand}"
+                CommandParameter="0"
+                CornerRadius="8"
+                FontSize="12"
+                Text="Работы">
+                <Button.Triggers>
+                    <DataTrigger
+                        Binding="{Binding SelectedTab}"
+                        TargetType="Button"
+                        Value="0">
+                        <Setter Property="BackgroundColor" Value="#3296F8" />
+                        <Setter Property="TextColor" Value="White" />
+                        <Setter Property="BorderWidth" Value="0" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding SelectedTab}"
+                        TargetType="Button"
+                        Value="1">
+                        <Setter Property="BackgroundColor" Value="Transparent" />
+                        <Setter Property="TextColor" Value="#ACACAC" />
+                        <Setter Property="BorderColor" Value="#ACACAC" />
+                        <Setter Property="BorderWidth" Value="1" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding SelectedTab}"
+                        TargetType="Button"
+                        Value="2">
+                        <Setter Property="BackgroundColor" Value="Transparent" />
+                        <Setter Property="TextColor" Value="#ACACAC" />
+                        <Setter Property="BorderColor" Value="#ACACAC" />
+                        <Setter Property="BorderWidth" Value="1" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+            <Button
+                Grid.Column="1"
+                Padding="0"
+                Command="{Binding SelectTabCommand}"
+                CommandParameter="1"
+                CornerRadius="8"
+                FontSize="12"
+                Text="Запчасти">
+                <Button.Triggers>
+                    <DataTrigger
+                        Binding="{Binding SelectedTab}"
+                        TargetType="Button"
+                        Value="1">
+                        <Setter Property="BackgroundColor" Value="#3296F8" />
+                        <Setter Property="TextColor" Value="White" />
+                        <Setter Property="BorderWidth" Value="0" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding SelectedTab}"
+                        TargetType="Button"
+                        Value="0">
+                        <Setter Property="BackgroundColor" Value="Transparent" />
+                        <Setter Property="TextColor" Value="#ACACAC" />
+                        <Setter Property="BorderColor" Value="#ACACAC" />
+                        <Setter Property="BorderWidth" Value="1" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding SelectedTab}"
+                        TargetType="Button"
+                        Value="2">
+                        <Setter Property="BackgroundColor" Value="Transparent" />
+                        <Setter Property="TextColor" Value="#ACACAC" />
+                        <Setter Property="BorderColor" Value="#ACACAC" />
+                        <Setter Property="BorderWidth" Value="1" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+
+            <Button
+                Grid.Column="2"
+                Padding="0"
+                Command="{Binding SelectTabCommand}"
+                CommandParameter="2"
+                CornerRadius="8"
+                FontSize="12"
+                Text="Предлож.">
+                <Button.Triggers>
+                    <DataTrigger
+                        Binding="{Binding SelectedTab}"
+                        TargetType="Button"
+                        Value="2">
+                        <Setter Property="BackgroundColor" Value="#3296F8" />
+                        <Setter Property="TextColor" Value="White" />
+                        <Setter Property="BorderWidth" Value="0" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding SelectedTab}"
+                        TargetType="Button"
+                        Value="0">
+                        <Setter Property="BackgroundColor" Value="Transparent" />
+                        <Setter Property="TextColor" Value="#ACACAC" />
+                        <Setter Property="BorderColor" Value="#ACACAC" />
+                        <Setter Property="BorderWidth" Value="1" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding SelectedTab}"
+                        TargetType="Button"
+                        Value="1">
+                        <Setter Property="BackgroundColor" Value="Transparent" />
+                        <Setter Property="TextColor" Value="#ACACAC" />
+                        <Setter Property="BorderColor" Value="#ACACAC" />
+                        <Setter Property="BorderWidth" Value="1" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+        </Grid>
+
+        <RefreshView
+            Grid.Row="3"
+            Command="{Binding LoadAllDataCommand}"
+            IsRefreshing="{Binding IsRefreshing}"
+            RefreshColor="#112347">
+            <ScrollView>
+                <Grid Padding="0,15">
+                    <StackLayout IsVisible="False">
+                        <StackLayout.Triggers>
+                            <DataTrigger
+                                Binding="{Binding SelectedTab}"
+                                TargetType="StackLayout"
+                                Value="0">
+                                <Setter Property="IsVisible" Value="True" />
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+
+                        <CollectionView ItemsSource="{Binding MyWorks}">
+                            <CollectionView.EmptyView>
+                                <Label
+                                    Margin="0,30,0,0"
+                                    HorizontalOptions="Center"
+                                    Text="Нет назначенных работ"
+                                    TextColor="Gray" />
+                            </CollectionView.EmptyView>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="modelsWork:WorkInOrderResponse">
+                                    <Border
+                                        Margin="15,6"
+                                        Padding="15"
+                                        BackgroundColor="#213868"
+                                        StrokeShape="RoundRectangle 12"
+                                        StrokeThickness="0">
+                                        <VerticalStackLayout Spacing="10">
+                                            <Grid ColumnDefinitions="*, Auto, 40">
+                                                <Label
+                                                    Grid.Column="0"
+                                                    FontAttributes="Bold"
+                                                    FontSize="16"
+                                                    Text="{Binding Job}"
+                                                    TextColor="White"
+                                                    VerticalOptions="Center" />
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Margin="0,0,10,0"
+                                                    FontAttributes="Italic"
+                                                    FontSize="12"
+                                                    Text="{Binding Status}"
+                                                    TextColor="#FFB347"
+                                                    VerticalOptions="Center" />
+                                                <ImageButton
+                                                    Grid.Column="2"
+                                                    Padding="5"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=DeleteTaskCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    HeightRequest="30"
+                                                    HorizontalOptions="Start"
+                                                    Source="delete.png"
+                                                    WidthRequest="30" />
+                                            </Grid>
+
+                                            <Button
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=ChangeStatusCommand}"
+                                                CommandParameter="{Binding .}"
+                                                CornerRadius="8"
+                                                FontAttributes="Bold"
+                                                HeightRequest="40">
+                                                <Button.Triggers>
+                                                    <DataTrigger
+                                                        Binding="{Binding StatusId}"
+                                                        TargetType="Button"
+                                                        Value="2">
+                                                        <Setter Property="Text" Value="Начать" />
+                                                        <Setter Property="BackgroundColor" Value="#3296F8" />
+                                                    </DataTrigger>
+                                                    <DataTrigger
+                                                        Binding="{Binding StatusId}"
+                                                        TargetType="Button"
+                                                        Value="1">
+                                                        <Setter Property="Text" Value="Завершить" />
+                                                        <Setter Property="BackgroundColor" Value="#4CD964" />
+                                                    </DataTrigger>
+                                                    <DataTrigger
+                                                        Binding="{Binding StatusId}"
+                                                        TargetType="Button"
+                                                        Value="3">
+                                                        <Setter Property="IsVisible" Value="False" />
+                                                    </DataTrigger>
+                                                </Button.Triggers>
+                                            </Button>
+
+                                            <Label
+                                                FontSize="12"
+                                                HorizontalOptions="Center"
+                                                IsVisible="False"
+                                                Text="Работа выполнена"
+                                                TextColor="#4CD964">
+                                                <Label.Triggers>
+                                                    <DataTrigger
+                                                        Binding="{Binding StatusId}"
+                                                        TargetType="Label"
+                                                        Value="3">
+                                                        <Setter Property="IsVisible" Value="True" />
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+
+                    <StackLayout IsVisible="False">
+                        <StackLayout.Triggers>
+                            <DataTrigger
+                                Binding="{Binding SelectedTab}"
+                                TargetType="StackLayout"
+                                Value="1">
+                                <Setter Property="IsVisible" Value="True" />
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+
+                        <Button
+                            Margin="15,0,15,10"
+                            BackgroundColor="Transparent"
+                            BorderColor="#3296F8"
+                            BorderWidth="1"
+                            Command="{Binding GoToAddPartCommand}"
+                            CornerRadius="8"
+                            Text="+ Добавить запчасть"
+                            TextColor="#3296F8" />
+
+                        <CollectionView ItemsSource="{Binding OrderParts}">
+                            <CollectionView.EmptyView>
+                                <Label
+                                    Margin="0,30,0,0"
+                                    HorizontalOptions="Center"
+                                    Text="Запчасти не добавлены"
+                                    TextColor="Gray" />
+                            </CollectionView.EmptyView>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="modelsPart:PartSetResponse">
+                                    <Border
+                                        Margin="15,6"
+                                        Padding="15"
+                                        BackgroundColor="#213868"
+                                        StrokeShape="RoundRectangle 12"
+                                        StrokeThickness="0">
+                                        <Grid ColumnDefinitions="*, Auto, 40">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label
+                                                    FontSize="15"
+                                                    Text="{Binding Position}"
+                                                    TextColor="White" />
+                                                <Label
+                                                    FontSize="12"
+                                                    Text="{Binding Quantity, StringFormat='Кол-во: {0}'}"
+                                                    TextColor="#ACACAC" />
+                                            </VerticalStackLayout>
+
+                                            <Label
+                                                Grid.Column="1"
+                                                Margin="0,0,10,0"
+                                                FontAttributes="Bold"
+                                                FontSize="15"
+                                                Text="{Binding SoldPrice, StringFormat='{0} BYN'}"
+                                                TextColor="White"
+                                                VerticalOptions="Center" />
+                                            <ImageButton
+                                                Grid.Column="2"
+                                                Padding="5"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=DeletePartCommand}"
+                                                CommandParameter="{Binding .}"
+                                                HeightRequest="30"
+                                                Source="delete.png"
+                                                VerticalOptions="Center"
+                                                WidthRequest="30" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+
+                    <StackLayout IsVisible="False">
+                        <StackLayout.Triggers>
+                            <DataTrigger
+                                Binding="{Binding SelectedTab}"
+                                TargetType="StackLayout"
+                                Value="2">
+                                <Setter Property="IsVisible" Value="True" />
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+
+                        <Button
+                            Margin="15,0,15,10"
+                            BackgroundColor="Transparent"
+                            BorderColor="#3296F8"
+                            BorderWidth="1"
+                            Command="{Binding GoToAddProposalCommand}"
+                            CornerRadius="8"
+                            Text="+ Предложить работу"
+                            TextColor="#3296F8" />
+
+                        <CollectionView ItemsSource="{Binding MyProposals}">
+                            <CollectionView.EmptyView>
+                                <Label
+                                    Margin="0,30,0,0"
+                                    HorizontalOptions="Center"
+                                    Text="Нет предложений"
+                                    TextColor="Gray" />
+                            </CollectionView.EmptyView>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="modelsProp:WorkProposalResponse">
+                                    <Border
+                                        Margin="15,6"
+                                        Padding="15"
+                                        BackgroundColor="#213868"
+                                        StrokeShape="RoundRectangle 12"
+                                        StrokeThickness="0">
+                                        <Grid ColumnDefinitions="*, Auto, 40">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label
+                                                    FontSize="15"
+                                                    Text="{Binding Job}"
+                                                    TextColor="White" />
+                                                <Label
+                                                    FontSize="12"
+                                                    Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}"
+                                                    TextColor="#ACACAC" />
+                                            </VerticalStackLayout>
+                                            <Border
+                                                Grid.Column="1"
+                                                Margin="0,0,10,0"
+                                                Padding="8,4"
+                                                BackgroundColor="Transparent"
+                                                Stroke="#ACACAC"
+                                                StrokeShape="RoundRectangle 5"
+                                                StrokeThickness="1"
+                                                VerticalOptions="Center">
+                                                <Label
+                                                    FontSize="11"
+                                                    Text="{Binding Status}"
+                                                    TextColor="#ACACAC" />
+                                            </Border>
+                                            <ImageButton
+                                                Grid.Column="2"
+                                                Padding="5"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=DeleteProposalCommand}"
+                                                CommandParameter="{Binding .}"
+                                                HeightRequest="30"
+                                                Source="delete.png"
+                                                VerticalOptions="Center"
+                                                WidthRequest="30" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+
+                </Grid>
+            </ScrollView>
+        </RefreshView>
+
+        <ActivityIndicator
+            Grid.Row="3"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            Color="White" />
+
+    </Grid>
+</ContentPage>

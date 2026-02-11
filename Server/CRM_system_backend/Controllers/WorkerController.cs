@@ -11,28 +11,20 @@ using Shared.Filters;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class WorkerController : ControllerBase
+[Route("api/v1/workers")]
+public class WorkerController(
+    IWorkerService workerService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IWorkerService _workerService;
-    private readonly IMapper _mapper;
-
-    public WorkerController(
-        IWorkerService workerService,
-        IMapper mapper)
-    {
-        _workerService = workerService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<WorkerItem>>> GetPagedWorkers([FromQuery] WorkerFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<WorkerItem>>> GetPagedWorkers(
+        [FromQuery] WorkerFilter filter, CancellationToken ct)
     {
-        var dto = await _workerService.GetPagedWorkers(filter, ct);
-        var count = await _workerService.GetCountWorkers(filter, ct);
+        var dto = await workerService.GetPagedWorkers(filter, ct);
+        var count = await workerService.GetCountWorkers(filter, ct);
 
-        var response = _mapper.Map<List<WorkerResponse>>(dto);
+        var response = mapper.Map<List<WorkerResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -41,15 +33,17 @@ public class WorkerController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<WorkerItem>> GetWorkerById(int id, CancellationToken ct)
+    public async Task<ActionResult<WorkerItem>> GetWorkerById(
+        int id, CancellationToken ct)
     {
-        var response = await _workerService.GetWorkerById(id, ct);
+        var response = await workerService.GetWorkerById(id, ct);
 
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreateWorker([FromBody] WorkerRequest request, CancellationToken ct)
+    public async Task<ActionResult<int>> CreateWorker(
+        [FromBody] WorkerRequest request, CancellationToken ct)
     {
         var (worker, errorsWorker) = Worker.Create(
             0,
@@ -63,13 +57,17 @@ public class WorkerController : ControllerBase
         if (errorsWorker is not null && errorsWorker.Any())
             return BadRequest(errorsWorker);
 
-        var Id = await _workerService.CreateWorker(worker!, ct);
+        var workerId = await workerService.CreateWorker(worker!, ct);
 
-        return Ok(Id);
+        return CreatedAtAction(
+            nameof(GetWorkerById), 
+            new { Id = workerId}, 
+            null);
     }
 
-    [HttpPost("with-user")]
-    public async Task<ActionResult<int>> CreateWorker([FromBody]  WorkerWithUserRequest request, CancellationToken ct)
+    [HttpPost("user")]
+    public async Task<ActionResult<int>> CreateWorker(
+        [FromBody]  WorkerWithUserRequest request, CancellationToken ct)
     {
         var (user, errorsUser) = CRMSystem.Core.Models.User.Create(
             0,
@@ -78,7 +76,9 @@ public class WorkerController : ControllerBase
             request.Password);
 
         if (errorsUser is not null && errorsUser.Any())
+        {
             return BadRequest(errorsUser);
+        }
 
         var (worker, errorsWorker) = Worker.Create(
             0,
@@ -90,17 +90,23 @@ public class WorkerController : ControllerBase
             request.Email);
 
         if (errorsWorker is not null && errorsWorker.Any())
+        {
             return BadRequest(errorsWorker);
+        }
 
-        var Id = await _workerService.CreateWorkerWithUser(worker!, user!, ct);
+        var workerId = await workerService.CreateWorkerWithUser(worker!, user!, ct);
 
-        return Ok(Id);
+        return CreatedAtAction(
+            nameof(GetWorkerById),
+            new { Id = workerId },
+            null);
 
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<int>> UpdateWorker(int id, [FromBody] WorkerRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateWorker(
+        int id, [FromBody] WorkerUpdateRequest request, CancellationToken ct)
     {
         var model = new WorkerUpdateModel(
             request.Name,
@@ -109,17 +115,18 @@ public class WorkerController : ControllerBase
             request.PhoneNumber,
             request.Email);
 
-        var result = await _workerService.UpdateWorker(id, model, ct);
+        await workerService.UpdateWorker(id, model, ct);
 
-        return Ok(result);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> DeleteWorker(int id, CancellationToken ct)
+    public async Task<ActionResult> DeleteWorker(
+        int id, CancellationToken ct)
     {
-        var result = await _workerService.DeleteWorker(id, ct);
+        await workerService.DeleteWorker(id, ct);
 
-        return Ok(result);
+        return NoContent();
     }
 }

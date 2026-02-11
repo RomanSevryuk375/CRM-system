@@ -5,33 +5,26 @@ using CRMSystem.Core.ProjectionModels.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Order;
+using Shared.Enums;
 using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class OrderController : ControllerBase
+[Route("api/v1/orders")]
+public class OrderController(
+    IOrderService orderService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IOrderService _orderService;
-    private readonly IMapper _mapper;
-
-    public OrderController(
-        IOrderService orderService,
-        IMapper mapper)
-    {
-        _orderService = orderService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<List<OrderItem>>> GetOrders([FromQuery] OrderFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<OrderItem>>> GetOrders(
+        [FromQuery] OrderFilter filter, CancellationToken ct)
     {
-        var dto = await _orderService.GetPagedOrders(filter, ct);
-        var count = await _orderService.GetCountOrders(filter, ct);
+        var dto = await orderService.GetPagedOrders(filter, ct);
+        var count = await orderService.GetCountOrders(filter, ct);
 
-        var response = _mapper.Map<List<OrderResponse>>(dto);
+        var response = mapper.Map<List<OrderResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -40,7 +33,8 @@ public class OrderController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<long>> CreateOrder([FromBody] OrderRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateOrder(
+        [FromBody] OrderRequest request, CancellationToken ct)
     {
         var (order, errors) = Order.Create(
             0,
@@ -52,14 +46,15 @@ public class OrderController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _orderService.CreateOrder(order!, ct);
+        await orderService.CreateOrder(order!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
-    [HttpPost("/with-bill")]
+    [HttpPost("/bill")]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<long>> CreateOrderWithBill([FromBody] OrderWithBillRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateOrderWithBill(
+        [FromBody] OrderWithBillRequest request, CancellationToken ct)
     {
         var (order, errorsOrder) = Order.Create(
             0,
@@ -69,7 +64,9 @@ public class OrderController : ControllerBase
             request.PriorityId);
 
         if (errorsOrder is not null && errorsOrder.Any())
+        {
             return BadRequest(errorsOrder);
+        }
 
         var (bill, errorsBill) = Bill.Create(
             0,
@@ -80,46 +77,48 @@ public class OrderController : ControllerBase
             request.ActualBillDate);
 
         if (errorsBill is not null && errorsBill.Any())
+        {
             return BadRequest(errorsBill);
+        }
 
-        var Id = await _orderService.CreateOrderWithBill(order!, bill!, ct);
+        await orderService.CreateOrderWithBill(order!, bill!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> UpdateOrder([FromBody] OrderUpdateRequest request, int id, CancellationToken ct)
+    public async Task<ActionResult> UpdateOrder(
+        [FromBody] OrderUpdateRequest request, int id, CancellationToken ct)
     {
-        var Id = await _orderService.UpdateOrder(id, request.PriorityId, ct);
+        await orderService.UpdateOrder(id, request.PriorityId, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
-    [HttpPatch("close/{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> CloseOrder(long id, CancellationToken ct)
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> PathcStatusOrder(
+        long id, [FromBody] OrderPatchRequest request, CancellationToken ct)
     {
-        var Id = await _orderService.CloseOrder(id, ct);
+        if (request.OrderStatus == OrderStatusEnum.Closed)
+        {
+            await orderService.CloseOrder(id, ct);
+        }
+        else if (request.OrderStatus == OrderStatusEnum.Completed)
+        {
+            await orderService.CompleteOrder(id, ct);
+        }
 
-        return Ok(Id);
-    }
-
-    [HttpPatch("complete/{id}")]
-    [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> CompleteOrder(long id, CancellationToken ct)
-    {
-        var Id = await _orderService.CompleteOrder(id, ct);
-
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> DeleteOrder(long id, CancellationToken ct)
+    public async Task<ActionResult> DeleteOrder(
+        long id, CancellationToken ct)
     {
-        var result = await _orderService.DeleteOrder(id, ct);
+        await orderService.DeleteOrder(id, ct);
 
-        return Ok(result);
+        return NoContent();
     }
 }

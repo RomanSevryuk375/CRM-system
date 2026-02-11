@@ -48,14 +48,6 @@ public class OrderService(HttpClient httpClient)
             }
         }
 
-        if (orderFilter.PriorityIds?.Any() == true)
-        {
-            foreach (var id in orderFilter.PriorityIds)
-            {
-                query += $"&PriorityIds={id}";
-            }
-        }
-
         if (orderFilter.WorkerIds?.Any() == true)
         {
             foreach (var id in orderFilter.WorkerIds)
@@ -66,7 +58,7 @@ public class OrderService(HttpClient httpClient)
 
         try
         {
-            var response = await httpClient.GetAsync($"api/Order?{query}");
+            var response = await httpClient.GetAsync($"api/v1/orders?{query}");
 
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
@@ -82,7 +74,7 @@ public class OrderService(HttpClient httpClient)
             {
                 totalCount = int.Parse(values.First());
             }
-
+            var json = await response.Content.ReadAsStringAsync();
             var items = await response.Content.ReadFromJsonAsync<List<OrderResponse>>();
             return (items, totalCount);
         }
@@ -97,7 +89,7 @@ public class OrderService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/Order", request);
+            var response = await httpClient.PostAsJsonAsync("api/v1/orders", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -107,14 +99,14 @@ public class OrderService(HttpClient httpClient)
             var errorContent = await response.Content.ReadAsStringAsync();
             if (string.IsNullOrWhiteSpace(errorContent))
             {
-                return $"Ошибка сервера: {response.StatusCode}";
+                return $"Server error: {response.StatusCode}";
             }
 
             return errorContent.Trim('"');
         }
         catch (Exception ex)
         {
-            return $"Ошибка соединения: {ex.Message}";
+            return $"Server error: {ex.Message}";
         }
     }
 }

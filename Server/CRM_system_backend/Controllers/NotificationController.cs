@@ -9,29 +9,21 @@ using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/notifications")]
 [ApiController]
-public class NotificationController : ControllerBase
+public class NotificationController(
+    INotificationService notificationService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly INotificationService _notificationService;
-    private readonly IMapper _mapper;
-
-    public NotificationController(
-        INotificationService notificationService,
-        IMapper mapper)
-    {
-        _notificationService = notificationService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<List<NotificationItem>>> GetPagedNotifications([FromQuery]NotificationFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<NotificationItem>>> GetPagedNotifications(
+        [FromQuery]NotificationFilter filter, CancellationToken ct)
     {
-        var dto = await _notificationService.GetPagedNotifications(filter, ct);
-        var count = await _notificationService.GetCountNotifications(filter, ct);
+        var dto = await notificationService.GetPagedNotifications(filter, ct);
+        var count = await notificationService.GetCountNotifications(filter, ct);
 
-        var response = _mapper.Map<List<NotificationResponse>>(dto);
+        var response = mapper.Map<List<NotificationResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -40,7 +32,8 @@ public class NotificationController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> CreateNotification(NotificationRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateNotification(
+        NotificationRequest request, CancellationToken ct)
     {
         var (notification, errors) = Notification.Create(
             0,
@@ -54,17 +47,18 @@ public class NotificationController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _notificationService.CreateNotification(notification!, ct);
+        await notificationService.CreateNotification(notification!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> DeleteNotification(long id, CancellationToken ct)
+    public async Task<ActionResult> DeleteNotification(
+        long id, CancellationToken ct)
     {
-        var Id = await _notificationService.DeleteNotification(id, ct);
+        await notificationService.DeleteNotification(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }

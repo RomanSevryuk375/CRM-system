@@ -7,28 +7,19 @@ using Shared.Contracts;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/work-proposal-statuses")]
 [ApiController]
-public class WorkProposalStatusController : ControllerBase
+public class WorkProposalStatusController(
+    IWorkProposalStatusService service,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IWorkProposalStatusService _service;
-    private readonly IMapper _mapper;
-
-    public WorkProposalStatusController(
-        IWorkProposalStatusService service,
-        IMapper mapper)
-    {
-        _service = service;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<List<WorkProposalStatusItem>>> GetProposalStatuses(CancellationToken ct)
     {
-        var dto = await _service.GetProposalStatuses(ct);
+        var dto = await service.GetProposalStatuses(ct);
 
-        var response = _mapper.Map<List<WorkProposalStatusResponse>>(dto);
+        var response = mapper.Map<List<WorkProposalStatusResponse>>(dto);
 
         return Ok(response);
     }

@@ -5,33 +5,26 @@ using CRMSystem.Core.ProjectionModels.WorkProposal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.WorkProposal;
+using Shared.Enums;
 using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class WorkProposalController : ControllerBase
+[Route("api/v1/work-proposals")]
+public class WorkProposalController(
+    IWorkProposalService workProposalService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IWorkProposalService _workPropossalService;
-    private readonly IMapper _mapper;
-
-    public WorkProposalController(
-        IWorkProposalService workProposalService,
-        IMapper mapper)
-    {
-        _workPropossalService = workProposalService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<List<WorkProposalItem>>> GetPagedProposals([FromQuery] WorkProposalFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<WorkProposalItem>>> GetPagedProposals(
+        [FromQuery] WorkProposalFilter filter, CancellationToken ct)
     {
-        var dto = await _workPropossalService.GetPagedProposals(filter, ct);
-        var count = await _workPropossalService.GetCountProposals(filter, ct);
+        var dto = await workProposalService.GetPagedProposals(filter, ct);
+        var count = await workProposalService.GetCountProposals(filter, ct);
 
-        var response = _mapper.Map<List<WorkProposalResponse>>(dto);
+        var response = mapper.Map<List<WorkProposalResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -40,16 +33,18 @@ public class WorkProposalController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<WorkProposalItem>> GetProposalById(long id, CancellationToken ct)
+    public async Task<ActionResult<WorkProposalItem>> GetProposalById(
+        long id, CancellationToken ct)
     {
-        var dto = await _workPropossalService.GetProposalById(id, ct);
+        var dto = await workProposalService.GetProposalById(id, ct);
 
         return Ok(dto);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> CreateProposal([FromBody] WorkProposalRequest request, CancellationToken ct)
+    public async Task<ActionResult<long>> CreateProposal(
+        [FromBody] WorkProposalRequest request, CancellationToken ct)
     {
         var (workProposal, errors) = WorkProposal.Create(
             0,
@@ -62,36 +57,37 @@ public class WorkProposalController : ControllerBase
         if (errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _workPropossalService.CreateProposal(workProposal!, ct);
+        var proposalId = await workProposalService.CreateProposal(workProposal!, ct);
 
-        return Ok(Id);
+        return CreatedAtAction(
+            nameof(GetProposalById), 
+            new { Id = proposalId }, 
+            null);
     }
 
-    [HttpPut("{id}/accept")]
+    [HttpPut("{id}/status")]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<long>> AcceptProposal(long id, CancellationToken ct)
+    public async Task<ActionResult> PathcStatusProposal(
+        long id, [FromBody] ProposalStatusRequest request, CancellationToken ct)
     {
-        await _workPropossalService.AcceptProposal(id, ct);
+        if (request.Status == ProposalStatusEnum.Accepted)
+        {
+            await workProposalService.AcceptProposal(id, ct);
+        }
+        else if (request.Status == ProposalStatusEnum.Rejected)
+        {
+            await workProposalService.RejectProposal(id, ct);
+        }
 
-        return Ok(0);
+        return NoContent();
     }
-
-    [HttpPut("{id}/reject")]
-    [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<long>> RejectProposal(long id, CancellationToken ct)
-    {
-        await _workPropossalService.RejectProposal(id, ct);
-
-        return Ok(0);
-    }
-
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<long>> DeleteWorkProposal(long id, CancellationToken ct)
+    public async Task<ActionResult> DeleteWorkProposal(long id, CancellationToken ct)
     {
-        var result = await _workPropossalService.DeleteProposal(id, ct);
+        await workProposalService.DeleteProposal(id, ct);
 
-        return Ok(result);
+        return NoContent();
     }
 }

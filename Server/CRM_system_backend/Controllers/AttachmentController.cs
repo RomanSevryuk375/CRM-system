@@ -10,29 +10,21 @@ using Shared.Filters;
 namespace CRM_system_backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/attachments")]
 
-public class AttachmentController : ControllerBase
+public class AttachmentController(
+    IAttachmentService attachmentService,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IAttachmentService _attachmentService;
-    private readonly IMapper _mapper;
-
-    public AttachmentController(
-        IAttachmentService attachmentService,
-        IMapper mapper)
-    {
-        _attachmentService = attachmentService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<AttachmentItem>>> GetPagedAttachments([FromQuery]AttachmentFilter filter, CancellationToken ct)
+    public async Task<ActionResult<List<AttachmentItem>>> GetPagedAttachments(
+        [FromQuery]AttachmentFilter filter, CancellationToken ct)
     {
-        var dto = await _attachmentService.GetPagedAttachments(filter, ct);
-        var count = await _attachmentService.GetCountAttachment(filter, ct);
+        var dto = await attachmentService.GetPagedAttachments(filter, ct);
+        var count = await attachmentService.GetCountAttachment(filter, ct);
 
-        var response = _mapper.Map<List<AttachmentResponse>>(dto);
+        var response = mapper.Map<List<AttachmentResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
 
@@ -41,7 +33,8 @@ public class AttachmentController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> CreateAttachment([FromBody]AttachmentRequest request, CancellationToken ct)
+    public async Task<ActionResult> CreateAttachment(
+        [FromBody]AttachmentRequest request, CancellationToken ct)
     {
         var (attachment, errors) = Attachment.Create(
             0,
@@ -53,26 +46,28 @@ public class AttachmentController : ControllerBase
         if(errors is not null && errors.Any())
             return BadRequest(errors);
 
-        var Id = await _attachmentService.CreateAttachment(attachment!, ct);
+        await attachmentService.CreateAttachment(attachment!, ct);
 
-        return Ok(Id);
+        return Created();
     }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> UpdateAttachment(long id, [FromBody] AttachmentUpdateRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateAttachment(
+        long id, [FromBody] AttachmentUpdateRequest request, CancellationToken ct)
     {
-        var Id = await _attachmentService.UpdateAttachment(id, request.Description, ct);
+        await attachmentService.UpdateAttachment(id, request.Description, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> DeletingAttachment(long id, CancellationToken ct)
+    public async Task<ActionResult> DeletingAttachment(
+        long id, CancellationToken ct)
     {
-        var Id = await _attachmentService.DeletingAttachment(id, ct);
+        await attachmentService.DeletingAttachment(id, ct);
 
-        return Ok(Id);
+        return NoContent();
     }
 }
