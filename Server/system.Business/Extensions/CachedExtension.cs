@@ -28,16 +28,18 @@ public static class CachedExtension
         logger?.LogInformation("Returning {Type} from Db", typeof(T).Name);
         var data = await factory();
 
-        if (data != null)
+        if (data == null)
         {
-            var options = new DistributedCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromHours(24)
-            };
-
-            await cache.SetStringAsync(key, JsonConvert.SerializeObject(data), options, ct);
-            logger?.LogInformation("Caching {Type} success", typeof(T).Name);
+            return data;
         }
+
+        var options = new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromHours(24)
+        };
+
+        await cache.SetStringAsync(key, JsonConvert.SerializeObject(data), options, ct);
+        logger?.LogInformation("Caching {Type} success", typeof(T).Name);
 
         return data;
     }

@@ -1,5 +1,4 @@
 ﻿using CRMSystem.Business.Abstractions;
-using CRMSystem.Business.Extensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
@@ -72,12 +71,11 @@ public class ScheduleService(
     {
         await unitOfWork.BeginTransactionAsync(ct);
 
-        int shiftId;
         try
         {
             logger.LogInformation("Creating shift start");
 
-            shiftId = await shiftRepository.Create(shift, ct);
+            var shiftId = await shiftRepository.Create(shift, ct);
 
             if (!await workerRepository.Exists(schedule.WorkerId, ct))
             {

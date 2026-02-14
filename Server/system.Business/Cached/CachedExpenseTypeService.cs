@@ -19,6 +19,6 @@ public class CachedExpenseTypeService(
             CACHE_KEY,
             () => decorated.GetExpenseType(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }

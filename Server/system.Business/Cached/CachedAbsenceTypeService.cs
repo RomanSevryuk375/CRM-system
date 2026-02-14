@@ -43,7 +43,7 @@ public class CachedAbsenceTypeService(
             CACHE_KEY,
             () => decorated.GetAllAbsenceType(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 
     public async Task<int> UpdateAbsenceType(int id, string name, CancellationToken ct)

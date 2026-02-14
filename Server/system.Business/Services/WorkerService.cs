@@ -80,12 +80,11 @@ public class WorkerService(
     {
         await unitOfWork.BeginTransactionAsync(ct);
 
-        long userId;
         try
         {
             logger.LogInformation("Creating user start");
 
-            userId = await userRepository.Create(user, ct);
+            var userId = await userRepository.Create(user, ct);
             worker.SetUserId(userId);
 
             var Id = await workerRepository.Create(worker, ct);

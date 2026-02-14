@@ -19,6 +19,6 @@ public class CachedWorkInOrderStatusService(
             CACHE_KEY,
             () => decorated.GetWiOStatuses(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }

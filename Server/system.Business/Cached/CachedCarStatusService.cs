@@ -19,6 +19,6 @@ public class CachedCarStatusService(
             CACHE_KEY,
             () => decorated.GetCarStatuses(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }

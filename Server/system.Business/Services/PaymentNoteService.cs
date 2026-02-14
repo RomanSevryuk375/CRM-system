@@ -49,7 +49,7 @@ public class PaymentNoteService(
 
         if (!await paymentMethodRepository.Exists((int)paymentNote.MethodId, ct))
         {
-            logger.LogError("Method {mrthodId} not found", (int)paymentNote.MethodId);
+            logger.LogError("Method {methodId} not found", (int)paymentNote.MethodId);
             throw new NotFoundException($"Method {(int)paymentNote.MethodId} not found");
         }
 
@@ -72,7 +72,7 @@ public class PaymentNoteService(
 
         if (method.HasValue && !await paymentMethodRepository.Exists((int)method, ct))
         {
-            logger.LogError("Method {mrthodId} not found", (int)method);
+            logger.LogError("Method {methodId} not found", (int)method);
             throw new NotFoundException($"Method {(int)method} not found");
         }
 

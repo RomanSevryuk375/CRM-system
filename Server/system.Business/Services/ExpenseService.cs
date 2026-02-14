@@ -48,7 +48,7 @@ public class ExpenseService(
         }
 
         if (expense.TaxId.HasValue
-                && !await taxRepository.Exists((int)expense.TaxId.Value, ct))
+                && !await taxRepository.Exists(expense.TaxId.Value, ct))
         {
             logger.LogError("Tax{TaxId} not found", (int)expense.TaxId);
             throw new NotFoundException($"Tax{(int)expense.TaxId} not found");

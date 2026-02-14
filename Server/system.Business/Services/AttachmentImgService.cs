@@ -17,7 +17,8 @@ public class AttachmentImgService(
     ILogger<AttachmentImgService> logger,
     IFileService fileService) : IAttachmentImgService
 {
-    public async Task<List<AttachmentImgItem>> GetPagedAttachmentImg(AttachmentImgFilter filter, CancellationToken ct)
+    public async Task<List<AttachmentImgItem>> GetPagedAttachmentImg(
+        AttachmentImgFilter filter, CancellationToken ct)
     {
         logger.LogInformation("AttachmentImg getting start");
 
@@ -35,7 +36,7 @@ public class AttachmentImgService(
 
         var stream = await fileService.GetFile(img.FilePath, ct);
 
-        string contentType = "application/octet-stream";
+        const string contentType = "application/octet-stream";
 
         return (stream, contentType);
     }
@@ -51,7 +52,8 @@ public class AttachmentImgService(
         return count;
     }
 
-    public async Task<long> CreateAttachmentImg(long attachmentId, FileItem file, string? description, CancellationToken ct)
+    public async Task<long> CreateAttachmentImg(
+        long attachmentId, FileItem file, string? description, CancellationToken ct)
     {
         logger.LogInformation("AttachmentImg creating start");
 
@@ -94,7 +96,8 @@ public class AttachmentImgService(
         return attachmentImgRes;
     }
 
-    public async Task<long> UpdateAttachmentImg(long id, string? filePath, string? description, CancellationToken ct)
+    public async Task<long> UpdateAttachmentImg(
+        long id, string? filePath, string? description, CancellationToken ct)
     {
         logger.LogInformation("AttachmentImg updating start");
 

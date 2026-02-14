@@ -77,14 +77,11 @@ public class BillService(
     public async Task<long> UpdateBill(long id, BillUpdateModel model, CancellationToken ct)
     {
         _logger.LogInformation("Updating bill start");
-
-        if (model.StatusId is not null)
+        
+        if (model.StatusId is not null && !await statusRepository.Exists((int)model.StatusId, ct))
         {
-            if (!await statusRepository.Exists((int)model.StatusId, ct))
-            {
-                _logger.LogError("Status{StatusId} not found", (int)model.StatusId);
-                throw new NotFoundException($"Status{(int)model.StatusId} not found");
-            }
+            _logger.LogError("Status{StatusId} not found", (int)model.StatusId);
+            throw new NotFoundException($"Status{(int)model.StatusId} not found");
         }
 
         var Id = await billRepository.Update(id, model, ct);
@@ -105,11 +102,11 @@ public class BillService(
         return Id;
     }
 
-    public async Task<decimal> FetchDebtOfBill(long id, CancellationToken ct)
+    public async Task<decimal> FetchDebtOfBill(long orderId, CancellationToken ct)
     {
         _logger.LogInformation("Recalculating debt of bill start");
 
-        var debt = await billRepository.RecalculateDebt(id, ct);
+        var debt = await billRepository.RecalculateDebt(orderId, ct);
 
         _logger.LogInformation("Recalculating debt of bill success");
 

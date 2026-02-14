@@ -50,7 +50,7 @@ public class ClientService(
         var client = await clientRepository.GetById(id, ct);
         if (client is null)
         {
-            logger.LogError("Client{ClinetId} not found", id);
+            logger.LogError("Client{clientId} not found", id);
             throw new NotFoundException($"Client{id} not found");
         }
 
@@ -80,12 +80,11 @@ public class ClientService(
     {
         await unitOfWork.BeginTransactionAsync(ct);
 
-        long userId;
         try
         {
             logger.LogInformation("Creating user start");
 
-            userId = await userRepository.Create(user, ct);
+            var userId = await userRepository.Create(user, ct);
             client.SetUserId(userId);
 
             var Id = await clientRepository.Create(client, ct);

@@ -76,7 +76,8 @@ public class SkillService(
             throw new NotFoundException($"Worker {model.WorkerId} not found");
         }
 
-        if (model.SpecializationId.HasValue && !await specializationRepository.Exists(model.SpecializationId.Value, ct))
+        if (model.SpecializationId.HasValue 
+            && !await specializationRepository.Exists(model.SpecializationId.Value, ct))
         {
             logger.LogError("Specialization {specializationId} not found", model.SpecializationId);
             throw new NotFoundException($"Specialization {model.SpecializationId} not found");

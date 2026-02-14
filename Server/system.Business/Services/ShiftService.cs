@@ -29,7 +29,7 @@ public class ShiftService(
         if (await shiftRepository.HasOverLap(shift.StartAt, shift.EndAt, ct))
         {
             logger.LogInformation("Has date overlaps");
-            throw new ConflictException($"Has date overlaps");
+            throw new ConflictException("Has date overlaps");
         }
 
         var Id = await shiftRepository.Create(shift, ct);

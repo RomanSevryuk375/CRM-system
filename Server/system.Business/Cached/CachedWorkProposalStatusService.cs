@@ -19,6 +19,6 @@ public class CachedWorkProposalStatusService(
             CACHE_KEY,
             () => decorated.GetProposalStatuses(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }
