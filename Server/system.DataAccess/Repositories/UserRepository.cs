@@ -28,17 +28,17 @@ public class UserRepository(
     {
         var hashedPassword = myPasswordHasher.Generate(user.PasswordHash);
 
-        var userEntyties = new UserEntity
+        var userEntity = new UserEntity
         {
             RoleId = user.RoleId,
             Login = user.Login,
             PasswordHash = hashedPassword
         };
 
-        await context.Users.AddAsync(userEntyties, ct);
+        await context.Users.AddAsync(userEntity, ct);
         await context.SaveChangesAsync(ct);
 
-        return userEntyties.Id;
+        return userEntity.Id;
     }
 
     public async Task<long> Update(long id, UserUpdateModel model, CancellationToken ct)

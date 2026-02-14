@@ -78,7 +78,7 @@ public class PositionRepository(
 
     public async Task<long> Create(Position position, CancellationToken ct)
     {
-        var positionentity = new PositionEntity
+        var positionEntity = new PositionEntity
         {
             PartId = position.PartId,
             CellId = position.CellId,
@@ -87,10 +87,10 @@ public class PositionRepository(
             Quantity = position.Quantity
         };
 
-        await context.AddAsync(positionentity, ct);
+        await context.AddAsync(positionEntity, ct);
         await context.SaveChangesAsync(ct);
 
-        return positionentity.Id;
+        return positionEntity.Id;
     }
 
     public async Task<long> Update(long id, PositionUpdateModel model, CancellationToken ct)

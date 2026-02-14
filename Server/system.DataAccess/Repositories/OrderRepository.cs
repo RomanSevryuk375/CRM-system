@@ -44,7 +44,8 @@ public class OrderRepository(
 
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
         {
-            query = query.Where(o => o.WorksInOrder.Any(w => filter.WorkerIds.Contains(w.WorkerId)));
+            query = query.Where(o => o.WorksInOrder
+                .Any(w => filter.WorkerIds.Contains(w.WorkerId)));
         }
 
         return query;

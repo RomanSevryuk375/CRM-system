@@ -14,7 +14,8 @@ public class AcceptanceRepository(
     SystemDbContext context,
     IMapper mapper) : IAcceptanceRepository
 {
-    private static IQueryable<AcceptanceEntity> ApplyFilter(IQueryable<AcceptanceEntity> query, AcceptanceFilter filter)
+    private static IQueryable<AcceptanceEntity> ApplyFilter(
+        IQueryable<AcceptanceEntity> query, AcceptanceFilter filter)
     {
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
         {
@@ -92,7 +93,7 @@ public class AcceptanceRepository(
 
     public async Task<long> Create(Acceptance acceptance, CancellationToken ct)
     {
-        var accptanceEntity = new AcceptanceEntity
+        var acceptanceEntity = new AcceptanceEntity
         {
             OrderId = acceptance.OrderId,
             WorkerId = acceptance.WorkerId,
@@ -105,10 +106,10 @@ public class AcceptanceRepository(
             WorkerSign = acceptance.WorkerSign
         };
 
-        await context.AddAsync(accptanceEntity, ct);
+        await context.AddAsync(acceptanceEntity, ct);
         await context.SaveChangesAsync(ct);
 
-        return accptanceEntity.Id;
+        return acceptanceEntity.Id;
     }
 
     public async Task<long> Update(long id, AcceptanceUpdateModel model, CancellationToken ct)

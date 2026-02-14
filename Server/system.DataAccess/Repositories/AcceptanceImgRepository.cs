@@ -16,7 +16,8 @@ public class AcceptanceImgRepository(
     SystemDbContext context,
     IMapper mapper) : IAcceptanceImgRepository
 {
-    private static IQueryable<AcceptanceImgEntity> ApplyFilter(IQueryable<AcceptanceImgEntity> query, AcceptanceImgFilter filter)
+    private static IQueryable<AcceptanceImgEntity> ApplyFilter(
+        IQueryable<AcceptanceImgEntity> query, AcceptanceImgFilter filter)
     {
         if (filter.AcceptanceIds != null && filter.AcceptanceIds.Any())
         {
@@ -61,17 +62,17 @@ public class AcceptanceImgRepository(
 
     public async Task<long> Create(AcceptanceImg acceptanceImg, CancellationToken ct)
     {
-        var accptanceImgEntity = new AcceptanceImgEntity
+        var acceptanceImgEntity = new AcceptanceImgEntity
         {
             AcceptanceId = acceptanceImg.AcceptanceId,
             FilePath = acceptanceImg.FilePath,
             Description = acceptanceImg.Description,
         };
 
-        await context.AddAsync(accptanceImgEntity, ct);
+        await context.AddAsync(acceptanceImgEntity, ct);
         await context.SaveChangesAsync(ct);
 
-        return accptanceImgEntity.Id;
+        return acceptanceImgEntity.Id;
     }
 
     public async Task<long> Update(long id, string? filePath, string? description, CancellationToken ct)

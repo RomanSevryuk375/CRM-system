@@ -14,7 +14,8 @@ public class WorkInOrderRepository(
     SystemDbContext context,
     IMapper mapper) : IWorkInOrderRepository
 {
-    private static IQueryable<WorkInOrderEntity> ApplyFilter(IQueryable<WorkInOrderEntity> query, WorkInOrderFilter filter)
+    private static IQueryable<WorkInOrderEntity> ApplyFilter(
+        IQueryable<WorkInOrderEntity> query, WorkInOrderFilter filter)
     {
         if (filter.OrderIds != null && filter.OrderIds.Any())
         {

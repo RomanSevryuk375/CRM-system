@@ -65,16 +65,16 @@ public class SupplyRepository(
 
     public async Task<long> Create(Supply supply, CancellationToken ct)
     {
-        var sullpyEntity = new SupplyEntity
+        var supplyEntity = new SupplyEntity
         {
             SupplierId = supply.SupplierId,
             Date = supply.Date,
         };
 
-        await context.Supplies.AddAsync(sullpyEntity, ct);
+        await context.Supplies.AddAsync(supplyEntity, ct);
         await context.SaveChangesAsync(ct);
 
-        return sullpyEntity.Id;
+        return supplyEntity.Id;
     }
 
     public async Task<long> Delete(long id, CancellationToken ct)
