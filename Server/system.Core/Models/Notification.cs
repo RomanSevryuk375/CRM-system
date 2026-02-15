@@ -6,7 +6,14 @@ namespace CRMSystem.Core.Models;
 
 public class Notification
 {
-    private Notification(long id, long clientId, long carId, NotificationTypeEnum typeId, NotificationStatusEnum statusId, string message, DateTime sendAt) 
+    private Notification(
+        long id,
+        long clientId,
+        long carId,
+        NotificationTypeEnum typeId,
+        NotificationStatusEnum statusId,
+        string message,
+        DateTime sendAt) 
     {
         Id = id;
         ClientId = clientId;
@@ -24,7 +31,14 @@ public class Notification
     public DateTime SendAt { get; }
     public NotificationStatusEnum StatusId { get; }
 
-    public static (Notification? notification, List<string> errors) Create(long id, long clientId, long carId, NotificationTypeEnum typeId, NotificationStatusEnum statusId, string message, DateTime sendAt)
+    public static (Notification? notification, List<string> errors) Create(
+        long id,
+        long clientId,
+        long carId,
+        NotificationTypeEnum typeId,
+        NotificationStatusEnum statusId,
+        string message,
+        DateTime sendAt)
     {
         var errors = new List<string>();
 

@@ -24,26 +24,47 @@ public class Absence
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "Absence ID");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "Absence ID");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var workerIdError = DomainValidator.ValidateId(workerId, "Worker ID");
-        if (!string.IsNullOrEmpty(workerIdError)) errors.Add(workerIdError);
+        var workerIdError = DomainValidator
+            .ValidateId(workerId, "Worker ID");
+        if (!string.IsNullOrEmpty(workerIdError))
+        {
+            errors.Add(workerIdError);
+        }
 
-        var typeIdError = DomainValidator.ValidateId(typeId, "Type ID");
-        if (!string.IsNullOrEmpty(typeIdError)) errors.Add(typeIdError);
+        var typeIdError = DomainValidator
+            .ValidateId(typeId, "Type ID");
+        if (!string.IsNullOrEmpty(typeIdError))
+        {
+            errors.Add(typeIdError);
+        }
 
-        var endDateError = DomainValidator.ValidateDateRange(startDate, endDate);
-        if (!string.IsNullOrEmpty(endDateError)) errors.Add(endDateError);
+        var endDateError = DomainValidator
+            .ValidateDateRange(startDate, endDate);
+        if (!string.IsNullOrEmpty(endDateError))
+        {
+            errors.Add(endDateError);
+        }
 
         if (errors.Any())
         {
             return (null, errors);
         }
 
-        var absence = new Absence(id, workerId, typeId, startDate, endDate);
+        var absence = new Absence(
+            id, 
+            workerId,
+            typeId,
+            startDate, 
+            endDate);
 
-        return (absence, new List<string>());
+        return (absence, []);
     }
 
     public bool OverlapsWith(DateOnly start, DateOnly? end)
