@@ -33,19 +33,24 @@ public class UserService(
         }
 
         var profileId = 0L;
-        if (user.RoleId == (int)RoleEnum.Client)
+        switch (user.RoleId)
         {
-            var clinet = await clientRepository.GetByUserId(user.Id, ct)
-                ?? throw new NotFoundException($"Client with user Id{user.Id} not exists");
+            case (int)RoleEnum.Client:
+            {
+                var client = await clientRepository.GetByUserId(user.Id, ct)
+                             ?? throw new NotFoundException($"Client with user Id{user.Id} not exists");
 
-            profileId = clinet.Id;
-        }
-        else if (user.RoleId == (int)RoleEnum.Worker)
-        {
-            var worker = await workerRepository.GetByUserId(user.Id, ct)
-                ?? throw new NotFoundException($"Worker with user Id{user.Id} not exists");
+                profileId = client.Id;
+                break;
+            }
+            case (int)RoleEnum.Worker:
+            {
+                var worker = await workerRepository.GetByUserId(user.Id, ct)
+                             ?? throw new NotFoundException($"Worker with user Id{user.Id} not exists");
 
-            profileId += worker.Id;
+                profileId += worker.Id;
+                break;
+            }
         }
 
             var token = jwtProvider.GenerateToken(user, profileId);

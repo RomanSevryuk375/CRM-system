@@ -60,17 +60,17 @@ public class TaxRepository(
     public async Task<int> Create(Tax tax, CancellationToken ct)
     {
 
-        var taxEntitie = new TaxEntity
+        var taxEntity = new TaxEntity
         {
             Name = tax.Name,
             Rate = tax.Rate,
             TypeId = (int)tax.TypeId,
         };
 
-        await context.Taxes.AddAsync(taxEntitie, ct);
+        await context.Taxes.AddAsync(taxEntity, ct);
         await context.SaveChangesAsync(ct);
 
-        return taxEntitie.Id;
+        return taxEntity.Id;
     }
 
     public async Task<int> Update(int id, TaxUpdateModel model, CancellationToken ct)

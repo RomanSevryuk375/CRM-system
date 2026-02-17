@@ -42,7 +42,7 @@ public class CachedPartCategoryService(
             CACHE_KEY,
             () => decorated.GetPartCategories(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 
     public async Task<int> UpdatePartCategory(int id, PartCategoryUpdateModel model, CancellationToken ct)

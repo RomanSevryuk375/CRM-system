@@ -23,15 +23,12 @@ public class OrderService(
     {
         logger.LogInformation("Getting orders start");
 
-        if (userContext.RoleId == (int)RoleEnum.Worker)
+        filter = userContext.RoleId switch
         {
-            filter = filter with { WorkerIds = [(int)userContext.ProfileId] };
-        }
-
-        if (userContext.RoleId == (int)RoleEnum.Client)
-        {
-            filter = filter with { ClientIds = [userContext.ProfileId] };
-        }
+            (int)RoleEnum.Worker => filter with { WorkerIds = [(int)userContext.ProfileId] },
+            (int)RoleEnum.Client => filter with { ClientIds = [userContext.ProfileId] },
+            _ => filter
+        };
 
         var orders = await orderRepository.GetPaged(filter, ct);
 
@@ -84,7 +81,6 @@ public class OrderService(
     {
         await unitOfWork.BeginTransactionAsync(ct);
 
-        long orderId;
         try
         {
             logger.LogInformation("Creating orders start");
@@ -107,10 +103,10 @@ public class OrderService(
                 throw new NotFoundException($"Status {order.StatusId} not found");
             }
 
-            orderId = await orderRepository.Create(order, ct);
+            var orderId = await orderRepository.Create(order, ct);
 
             bill.SetOrderId(orderId);
-            var newBill = await billRepository.Create(bill, ct);
+            await billRepository.Create(bill, ct);
 
             logger.LogInformation("Creating orders success");
 

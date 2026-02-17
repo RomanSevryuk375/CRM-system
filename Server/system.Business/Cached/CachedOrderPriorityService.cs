@@ -19,6 +19,6 @@ public class CachedOrderPriorityService(
             CACHE_KEY,
             () => decorated.GetPriorities(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }

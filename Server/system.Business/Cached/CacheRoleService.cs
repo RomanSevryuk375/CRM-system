@@ -19,6 +19,6 @@ public class CacheRoleService(
             CACHE_KEY,
             () => decorated.GetRoles(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }

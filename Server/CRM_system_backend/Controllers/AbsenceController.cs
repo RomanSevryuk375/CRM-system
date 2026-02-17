@@ -17,7 +17,7 @@ public class AbsenceController(
 {
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<AbsenceItem>>> GetPagedAbsence(
+    public async Task<ActionResult<List<AbsenceResponse>>> GetPagedAbsence(
         [FromQuery] AbsenceFilter filter, CancellationToken ct)
     {
         var dto = await absenceService.GetPagedAbsence(filter, ct);
@@ -42,7 +42,7 @@ public class AbsenceController(
             request.StartDate,
             request.EndDate);
 
-        if (errors is not null && errors.Any())
+        if (errors.Any())
         {
             return BadRequest(errors);
         }

@@ -19,6 +19,6 @@ public class CachedTaxTypeService(
             CAHCE_KEY,
             () => decorated.GetTaxTypes(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }

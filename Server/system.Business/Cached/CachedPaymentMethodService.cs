@@ -19,7 +19,7 @@ public class CachedPaymentMethodService(
             CACHE_KEY,
             () => decorated.GetPaymentMethods(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
 
     }
 }

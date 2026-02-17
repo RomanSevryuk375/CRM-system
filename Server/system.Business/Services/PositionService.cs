@@ -42,7 +42,6 @@ public class PositionService(
     {
         await unitOfWork.BeginTransactionAsync(ct);
 
-        long newPartId;
         try
         {
             logger.LogInformation("Creating part start");
@@ -53,7 +52,7 @@ public class PositionService(
                 throw new NotFoundException($"Part category {part.CategoryId} not found");
             }
 
-            newPartId = await partRepository.Create(part,ct);
+            var newPartId = await partRepository.Create(part,ct);
 
             logger.LogInformation("Creating part success");
 

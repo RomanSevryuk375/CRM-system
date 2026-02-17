@@ -55,7 +55,8 @@ public class MinioFileService : IFileService
         }
     }
 
-    public async Task<string> UploadFile(Stream fileStream, string fileName, string contentType, CancellationToken ct)
+    public async Task<string> UploadFile(
+        Stream fileStream, string fileName, string contentType, CancellationToken ct)
     {
         var uniqueFileName = $"{Guid.NewGuid()}_{fileName}";
 

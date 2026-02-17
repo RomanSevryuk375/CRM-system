@@ -28,8 +28,11 @@ public class StorageCellService(
 
         if (await storageCellRepository.HasOverlaps(storageCell.Rack, storageCell.Shelf, ct))
         {
-            logger.LogError("Storage cell is exist with shelf{shelfName} and rack{rackName}", storageCell.Shelf, storageCell.Rack);
-            throw new ConflictException($"Storage cell is exist with shelf{storageCell.Shelf} and rack{storageCell.Rack}");
+            logger.LogError("Storage cell is exist with shelf{shelfName} and rack{rackName}", 
+                storageCell.Shelf, storageCell.Rack);
+            
+            throw new ConflictException(
+                $"Storage cell is exist with shelf{storageCell.Shelf} and rack{storageCell.Rack}");
         }
 
         var Id = await storageCellRepository.Create(storageCell, ct);
@@ -46,8 +49,11 @@ public class StorageCellService(
         if ((!string.IsNullOrEmpty(model.Shelf) && !string.IsNullOrEmpty(model.Rack))
             && await storageCellRepository.HasOverlaps(model.Rack, model.Shelf, ct))
         {
-            logger.LogError("Storage cell is exist with shelf{shelfName} and rack{rackName}", model.Shelf, model.Rack);
-            throw new ConflictException($"Storage cell is exist with shelf{model.Shelf} and rack{model.Rack}");
+            logger.LogError("Storage cell is exist with shelf{shelfName} and rack{rackName}",
+                model.Shelf, model.Rack);
+            
+            throw new ConflictException(
+                $"Storage cell is exist with shelf{model.Shelf} and rack{model.Rack}");
         }
 
         var Id = await storageCellRepository.Update(id, model, ct);

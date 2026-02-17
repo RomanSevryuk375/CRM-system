@@ -47,7 +47,8 @@ public class GuaranteeService(
 
         var Id = await guaranteeRepository.Create(guarantee, ct);
 
-        logger.LogInformation("Creating guarantee for order {OrderId} success with ID {GuaranteeId}", guarantee.OrderId, Id);
+        logger.LogInformation("Creating guarantee for order {OrderId} success with ID {GuaranteeId}",
+            guarantee.OrderId, Id);
 
         return Id;
     }
