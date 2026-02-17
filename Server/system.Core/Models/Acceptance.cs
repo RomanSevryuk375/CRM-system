@@ -35,32 +35,66 @@ public class Acceptance
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "Absence ID");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "Absence ID");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var orderIdError = DomainValidator.ValidateId(orderId, "Absence ID");
-        if (!string.IsNullOrEmpty(orderIdError)) errors.Add(orderIdError);
+        var orderIdError = DomainValidator
+            .ValidateId(orderId, "Absence ID");
+        if (!string.IsNullOrEmpty(orderIdError))
+        {
+            errors.Add(orderIdError);
+        }
 
-        var workerIdError = DomainValidator.ValidateId(workerId, "Absence ID");
-        if (!string.IsNullOrEmpty(workerIdError)) errors.Add(workerIdError);
+        var workerIdError = DomainValidator
+            .ValidateId(workerId, "Absence ID");
+        if (!string.IsNullOrEmpty(workerIdError))
+        {
+            errors.Add(workerIdError);
+        }
 
-        var mileageError = DomainValidator.ValidateId(mileage, "Absence ID");
-        if (!string.IsNullOrEmpty(mileageError)) errors.Add(mileageError);
+        var mileageError = DomainValidator
+            .ValidateId(mileage, "Absence ID");
+        if (!string.IsNullOrEmpty(mileageError))
+        {
+            errors.Add(mileageError);
+        }
 
-        var fuelLevelError = DomainValidator.ValidateId(fuelLevel, "Absence ID");
-        if (!string.IsNullOrEmpty(fuelLevelError)) errors.Add(fuelLevelError);
+        var fuelLevelError = DomainValidator.
+            ValidateId(fuelLevel, "Absence ID");
+        if (!string.IsNullOrEmpty(fuelLevelError))
+        {
+            errors.Add(fuelLevelError);
+        }
 
-        var createAtError = DomainValidator.ValidateDate(createdAt, "createdAt");
-        if (!string.IsNullOrEmpty(createAtError)) errors.Add(createAtError);
+        var createAtError = DomainValidator
+            .ValidateDate(createdAt, "createdAt");
+        if (!string.IsNullOrEmpty(createAtError))
+        {
+            errors.Add(createAtError);
+        }
 
-        var externalDefectsError = DomainValidator.ValidateString(externalDefects, ValidationConstants.MAX_DESCRIPTION_LENGTH, "externalDefects");
-        if (!string.IsNullOrEmpty(externalDefectsError)) errors.Add(externalDefectsError);
+        var externalDefectsError = DomainValidator
+            .ValidateString(externalDefects, ValidationConstants.MAX_DESCRIPTION_LENGTH, "externalDefects");
+        if (!string.IsNullOrEmpty(externalDefectsError))
+        {
+            errors.Add(externalDefectsError);
+        }
 
-        var internalDefectsError = DomainValidator.ValidateString(internalDefects, ValidationConstants.MAX_DESCRIPTION_LENGTH, "externalDefects");
-        if (!string.IsNullOrEmpty(internalDefectsError)) errors.Add(internalDefectsError);
+        var internalDefectsError = DomainValidator
+            .ValidateString(internalDefects, ValidationConstants.MAX_DESCRIPTION_LENGTH, "externalDefects");
+        if (!string.IsNullOrEmpty(internalDefectsError))
+        {
+            errors.Add(internalDefectsError);
+        }
 
         if (errors.Any())
+        {
             return (null, errors);
+        }
 
         var acceptance = new Acceptance(
             id,
@@ -72,9 +106,8 @@ public class Acceptance
             externalDefects, 
             internalDefects, 
             clientSign, 
-            workerSign
-        );
+            workerSign);
 
-        return (acceptance, new List<string>());
+        return (acceptance, []);
     }
 }

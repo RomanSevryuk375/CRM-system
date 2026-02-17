@@ -19,6 +19,6 @@ public class CachedNotificationStatusService(
             CACHE_KEY,
             () => decorated.GetNotificationStatuses(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }

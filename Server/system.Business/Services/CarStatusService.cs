@@ -13,10 +13,10 @@ public class CarStatusService(
     {
         logger.LogInformation("Car status getting start");
 
-        var carSatsus = await carStatusRepository.Get(ct);
+        var carStatus = await carStatusRepository.Get(ct);
 
         logger.LogInformation("Car status getting success");
 
-        return carSatsus;
+        return carStatus;
     }
 }

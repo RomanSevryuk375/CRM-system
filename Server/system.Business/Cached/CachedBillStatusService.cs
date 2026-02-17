@@ -19,6 +19,6 @@ public class CachedBillStatusService(
             CACHE_KEY,
             () => decorated.GetAllBillStatuses(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }

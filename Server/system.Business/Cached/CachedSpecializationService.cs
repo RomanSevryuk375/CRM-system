@@ -38,7 +38,7 @@ public class CachedSpecializationService(
             CACHE_KEY,
             () => decorated.GetSpecializations(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 
     public async Task<int> UpdateSpecialization(int id, string? name, CancellationToken ct)

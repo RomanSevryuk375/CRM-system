@@ -185,7 +185,7 @@ public class WorkProposalServiceIntegrationTests : BaseIntegrationTest, IClassFi
 
         var movedPartSet = await dbContext.PartSets.FirstOrDefaultAsync(ps => ps.PositionId == position.Id);
         movedPartSet!.OrderId.Should().Be(order.Id);     
-        movedPartSet!.ProposalId.Should().BeNull();   
+        movedPartSet.ProposalId.Should().BeNull();   
 
         var deletedProposal = dbContext.WorkProposals.Count();
         deletedProposal.Should().Be(0);

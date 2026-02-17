@@ -60,7 +60,7 @@ public class CachedPartSetService(
             key,
             () => decorated.GetPartSetsByOrderId(orderId, ct),
             TimeSpan.FromMinutes(15),
-            logger, ct) ?? [];
+            logger, ct);
     }
 
     public async Task<long> UpdatePartSet(long id, PartSetUpdateModel model, CancellationToken ct)

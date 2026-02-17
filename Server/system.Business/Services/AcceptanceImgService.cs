@@ -5,7 +5,6 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 using CRMSystem.Core.ProjectionModels.AccetanceImg;
 using Shared.Filters;
@@ -35,7 +34,7 @@ public class AcceptanceImgService(
             ?? throw new NotFoundException($"Image {id} not found");
         var stream = await fileService.GetFile(img.FilePath, ct);
 
-        string contentType = "application/octet-stream";
+        const string contentType = "application/octet-stream";
 
         return (stream, contentType);
     }
@@ -51,7 +50,8 @@ public class AcceptanceImgService(
         return count;
     }
 
-    public async Task<long> CreateAcceptanceImg(long AcceptanceId, FileItem file, string? description, CancellationToken ct)
+    public async Task<long> CreateAcceptanceImg(
+        long AcceptanceId, FileItem file, string? description, CancellationToken ct)
     {
         logger.LogInformation("Creating acceptanceImg start");
 
@@ -94,7 +94,8 @@ public class AcceptanceImgService(
         return Id;
     }
 
-    public async Task<long> UpdateAcceptanceImg(long id, string? filePath, string? description, CancellationToken ct)
+    public async Task<long> UpdateAcceptanceImg(
+        long id, string? filePath, string? description, CancellationToken ct)
     {
         logger.LogInformation("Updating Acceptance{AcceptanceId} start", id);
 

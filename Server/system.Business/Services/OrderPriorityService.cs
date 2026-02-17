@@ -13,10 +13,10 @@ public class OrderPriorityService(
     {
         logger.LogInformation("Getting order priorities start");
 
-        var prioritys = await orderPriorityRepository.Get(ct);
+        var priorities = await orderPriorityRepository.Get(ct);
 
         logger.LogInformation("Getting order priorities success");
 
-        return prioritys;
+        return priorities;
     }
 }

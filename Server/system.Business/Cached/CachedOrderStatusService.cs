@@ -19,6 +19,6 @@ public class CachedOrderStatusService(
             CACHE_KEY,
             () => decorated.GetOrderStatuses(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }

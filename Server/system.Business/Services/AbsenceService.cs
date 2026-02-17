@@ -59,11 +59,11 @@ public class AbsenceService(
             throw new NotFoundException($"Worker {absence.WorkerId} not found");
         }
 
-        var abcense = await absenceRepository.Create(absence, ct);
+        var absenceId = await absenceRepository.Create(absence, ct);
 
         logger.LogInformation("Creating absence success");
 
-        return abcense;
+        return absenceId;
     }
 
     public async Task<int> UpdateAbsence(int id, AbsenceUpdateModel model, CancellationToken ct)

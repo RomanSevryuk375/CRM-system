@@ -169,9 +169,9 @@ public class BillRepository(
         return bill.Id;
     }
 
-    public async Task<decimal> RecalculateDebt(long Id, CancellationToken ct)
+    public async Task<decimal> RecalculateDebt(long id, CancellationToken ct)
     {
-        var bill = await context.Bills.FirstOrDefaultAsync(b => b.Id == Id, ct)
+        var bill = await context.Bills.FirstOrDefaultAsync(b => b.Id == id, ct)
             ?? throw new NotFoundException("Bill not found");
 
         var payedSum = await context.PaymentNotes

@@ -15,10 +15,10 @@ public class NotificationStatusService(
     {
         logger.LogInformation("Notification status getting start");
 
-        var carSatsus = await repo.Get(ct);
+        var carStatus = await repo.Get(ct);
 
         logger.LogInformation("Notification status getting success");
 
-        return carSatsus;
+        return carStatus;
     }
 }
