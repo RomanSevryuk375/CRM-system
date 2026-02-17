@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.NotificationStatus;
 using CRMSystem.DataAccess.Entites;
 using Shared.Contracts;
 

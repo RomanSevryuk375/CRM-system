@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.NotificationStatus;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess.Repositories;

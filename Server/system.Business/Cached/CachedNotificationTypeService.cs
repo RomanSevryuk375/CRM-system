@@ -3,6 +3,7 @@ using CRMSystem.Core.ProjectionModels;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using CRMSystem.Business.Extensions;
+using CRMSystem.Core.ProjectionModels.NotificationType;
 
 namespace CRMSystem.Business.Cached;
 

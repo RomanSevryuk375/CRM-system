@@ -18,20 +18,34 @@ public class Supply
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "id");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var supplierIdError = DomainValidator.ValidateId(supplierId, "supplierId");
-        if (!string.IsNullOrEmpty(supplierIdError)) errors.Add(supplierIdError);
+        var supplierIdError = DomainValidator
+            .ValidateId(supplierId, "supplierId");
+        if (!string.IsNullOrEmpty(supplierIdError))
+        {
+            errors.Add(supplierIdError);
+        }
 
-        var dateError = DomainValidator.ValidateDate(date, "date");
-        if (!string.IsNullOrEmpty(dateError)) errors.Add(dateError);
+        var dateError = DomainValidator
+            .ValidateDate(date, "date");
+        if (!string.IsNullOrEmpty(dateError))
+        {
+            errors.Add(dateError);
+        }
 
-        if (errors.Any()) 
+        if (errors.Any())
+        {
             return (null,  errors);
+        }
 
         var supply = new Supply(id, supplierId, date);
 
-        return (supply, new List<string>());
+        return (supply, []);
     }
 }

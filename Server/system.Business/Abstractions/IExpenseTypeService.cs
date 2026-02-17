@@ -1,4 +1,5 @@
 ﻿using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.ExpenseType;
 
 namespace CRMSystem.Business.Abstractions;
 

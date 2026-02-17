@@ -1,6 +1,6 @@
-﻿namespace CRMSystem.Core.ProjectionModels;
+﻿namespace CRMSystem.Core.ProjectionModels.CarStatus;
 
-public record WorkInOrderStatusItem
+public record CarStatusItem
 {
     public int Id { get; init; }
     public string Name { get; init; } = string.Empty;

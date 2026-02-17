@@ -2,6 +2,7 @@
 using CRMSystem.Business.Extensions;
 using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Specialization;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 

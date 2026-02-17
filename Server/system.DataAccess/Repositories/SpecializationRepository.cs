@@ -6,6 +6,7 @@ using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
+using CRMSystem.Core.ProjectionModels.Specialization;
 
 namespace CRMSystem.DataAccess.Repositories;
 

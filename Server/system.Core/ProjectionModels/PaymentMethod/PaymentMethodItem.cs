@@ -1,6 +1,6 @@
-﻿namespace CRMSystem.Core.ProjectionModels;
+﻿namespace CRMSystem.Core.ProjectionModels.PaymentMethod;
 
-public record TaxTypeItem
+public record PaymentMethodItem
 {
     public int Id { get; init; }
     public string Name { get; init; } = string.Empty;

@@ -17,17 +17,27 @@ public class Specialization
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "id");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var nameError = DomainValidator.ValidateString(name, "name");
-        if (!string.IsNullOrEmpty(nameError)) errors.Add(nameError);
+        var nameError = DomainValidator
+            .ValidateString(name, "name");
+        if (!string.IsNullOrEmpty(nameError))
+        {
+            errors.Add(nameError);
+        }
 
         if (errors.Any())
+        {
             return (null , errors);
+        }
 
         var specialization = new Specialization(id, name);
 
-        return (specialization, new List<string>());
+        return (specialization, []);
     }
 }

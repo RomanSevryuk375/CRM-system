@@ -24,7 +24,11 @@ public class Bill
 
     public void SetOrderId(long orderId)
     {
-        if(orderId <= 0) throw new ConflictException(nameof(orderId));
+        if(orderId <= 0)
+        {
+            throw new ConflictException(nameof(orderId));
+        }
+
         OrderId = orderId;
     }
 

@@ -19,21 +19,35 @@ public class StorageCell
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "id");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var rackError = DomainValidator.ValidateString(rack, ValidationConstants.MAX_STORAGE_ITEM_LENGTH, "rack");
-        if (!string.IsNullOrEmpty(rackError)) errors.Add(rackError);
+        var rackError = DomainValidator
+            .ValidateString(rack, ValidationConstants.MAX_STORAGE_ITEM_LENGTH, "rack");
+        if (!string.IsNullOrEmpty(rackError))
+        {
+            errors.Add(rackError);
+        }
 
-        var shelfError = DomainValidator.ValidateString(shelf, ValidationConstants.MAX_STORAGE_ITEM_LENGTH, "shelf");
-        if (!string.IsNullOrEmpty(shelfError)) errors.Add(shelfError);
+        var shelfError = DomainValidator
+            .ValidateString(shelf, ValidationConstants.MAX_STORAGE_ITEM_LENGTH, "shelf");
+        if (!string.IsNullOrEmpty(shelfError))
+        {
+            errors.Add(shelfError);
+        }
 
         if(errors.Any())
+        {
             return (null, errors);
+        }
 
         var storageCell = new StorageCell(id, rack, shelf);
 
-        return (storageCell, new List<string>());
+        return (storageCell, []);
 
     }
 }

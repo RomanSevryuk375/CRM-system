@@ -19,7 +19,11 @@ public class Client
 
     public void SetUserId(long userId)
     {
-        if (userId <= 0) throw new ConflictException("Invalid ID");
+        if (userId <= 0)
+        {
+            throw new ConflictException("Invalid ID");
+        }
+
         UserId = userId;
     }
 

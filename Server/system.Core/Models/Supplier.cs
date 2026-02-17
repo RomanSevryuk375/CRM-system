@@ -19,20 +19,34 @@ public class Supplier
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "id");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var nameError = DomainValidator.ValidateString(name, ValidationConstants.MAX_NAME_LENGTH, "name");
-        if (!string.IsNullOrEmpty(nameError)) errors.Add(nameError);
+        var nameError = DomainValidator
+            .ValidateString(name, ValidationConstants.MAX_NAME_LENGTH, "name");
+        if (!string.IsNullOrEmpty(nameError))
+        {
+            errors.Add(nameError);
+        }
 
-        var contactsError = DomainValidator.ValidateString(contacts, ValidationConstants.MAX_DESCRIPTION_LENGTH, "contacts");
-        if (!string.IsNullOrEmpty(contactsError)) errors.Add(contactsError);
+        var contactsError = DomainValidator
+            .ValidateString(contacts, ValidationConstants.MAX_DESCRIPTION_LENGTH, "contacts");
+        if (!string.IsNullOrEmpty(contactsError))
+        {
+            errors.Add(contactsError);
+        }
 
         if (errors.Any())
+        {
             return (null, errors);
+        }
 
         var supplier = new Supplier(id, name, contacts);
 
-        return (supplier, new List<string>());
+        return (supplier, []);
     }
 }

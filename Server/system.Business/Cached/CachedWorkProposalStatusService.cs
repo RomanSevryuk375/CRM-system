@@ -1,6 +1,7 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Business.Extensions;
 using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.WorkProposalStatus;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
