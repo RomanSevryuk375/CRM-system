@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.NotificationType;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;

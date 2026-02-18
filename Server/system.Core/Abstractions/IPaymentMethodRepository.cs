@@ -1,4 +1,5 @@
 ﻿using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.PaymentMethod;
 
 namespace CRMSystem.Core.Abstractions;
 

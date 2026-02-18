@@ -6,7 +6,14 @@ namespace CRMSystem.Core.Models;
 
 public class Worker
 {
-    private Worker(int id, long userId, string name, string surname, decimal hourlyRate, string phoneNumber, string email)
+    private Worker(
+        int id,
+        long userId,
+        string name,
+        string surname,
+        decimal hourlyRate,
+        string phoneNumber,
+        string email)
     {
         Id = id;
         UserId = userId;
@@ -19,7 +26,11 @@ public class Worker
 
     public void SetUserId (long userId)
     {
-        if (userId <= 0) throw new ConflictException("Invalid ID");
+        if (userId <= 0)
+        {
+            throw new ConflictException("Invalid ID");
+        }
+
         UserId = userId;
     }
 
@@ -31,40 +42,73 @@ public class Worker
     public string PhoneNumber { get; }
     public string Email { get; }
 
-    public static (Worker? worker, List<string> errors) Create(int id, long userId, string name, string surname, decimal hourlyRate, string phoneNumber, string email)
+    public static (Worker? worker, List<string> errors) Create(
+        int id, long userId, string name, string surname, decimal hourlyRate, string phoneNumber, string email)
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "id");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var userIdError = DomainValidator.ValidateId(userId, "userId");
-        if (!string.IsNullOrEmpty(userIdError)) errors.Add(userIdError);
+        var userIdError = DomainValidator
+            .ValidateId(userId, "userId");
+        if (!string.IsNullOrEmpty(userIdError))
+        {
+            errors.Add(userIdError);
+        }
 
-        var nameError = DomainValidator.ValidateString(name, "name");
-        if (!string.IsNullOrEmpty(nameError)) errors.Add(nameError);
+        var nameError = DomainValidator
+            .ValidateString(name, "name");
+        if (!string.IsNullOrEmpty(nameError))
+        {
+            errors.Add(nameError);
+        }
 
-        var surnameError = DomainValidator.ValidateString(surname, "surname");
-        if (!string.IsNullOrEmpty(surnameError)) errors.Add(surnameError);
+        var surnameError = DomainValidator
+            .ValidateString(surname, "surname");
+        if (!string.IsNullOrEmpty(surnameError))
+        {
+            errors.Add(surnameError);
+        }
 
-        var phoneError = DomainValidator.ValidateString(phoneNumber, "phone");
-        if (!string.IsNullOrEmpty(phoneError)) errors.Add(phoneError);
+        var phoneError = DomainValidator
+            .ValidateString(phoneNumber, "phone");
+        if (!string.IsNullOrEmpty(phoneError))
+        {
+            errors.Add(phoneError);
+        }
 
         if (!Regex.IsMatch(phoneNumber, @"^(\+375|80)(29|44|33|25)\d{7}$"))
+        {
             errors.Add("Phone number should be in format +375XXXXXXXXX or 80XXXXXXXXX");
+        }
 
-        var emailError = DomainValidator.ValidateString(email, "email");
-        if (!string.IsNullOrEmpty(emailError)) errors.Add(emailError);
+        var emailError = DomainValidator
+            .ValidateString(email, "email");
+        if (!string.IsNullOrEmpty(emailError))
+        {
+            errors.Add(emailError);
+        }
 
-        var hourlyRateError = DomainValidator.ValidateMoney(hourlyRate, "hourlyRate");
-        if (!string.IsNullOrEmpty(hourlyRateError)) errors.Add(hourlyRateError);
+        var hourlyRateError = DomainValidator
+            .ValidateMoney(hourlyRate, "hourlyRate");
+        if (!string.IsNullOrEmpty(hourlyRateError))
+        {
+            errors.Add(hourlyRateError);
+        }
 
         if (errors.Any())
+        {
             return (null, errors);
+        }
 
         var worker = new Worker(id, userId, name, surname, hourlyRate, phoneNumber, email);
 
-        return (worker, new List<string>());
+        return (worker, []);
 
     }
 }

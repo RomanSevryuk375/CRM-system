@@ -4,7 +4,13 @@ namespace CRMSystem.Core.Models;
 
 public class PartSet
 {
-    private PartSet(long id, long? orderId, long positionId, long? proposalId, decimal quantity, decimal soldPrice)
+    private PartSet(
+        long id,
+        long? orderId,
+        long positionId,
+        long? proposalId,
+        decimal quantity,
+        decimal soldPrice)
     {
         Id = id;
         OrderId = orderId;
@@ -20,27 +26,52 @@ public class PartSet
     public decimal Quantity { get; }
     public decimal SoldPrice { get; }
 
-    public static (PartSet? partSet, List<string> errors) Create(long id, long? orderId, long positionId, long? proposalId, decimal quantity, decimal soldPrice)
+    public static (PartSet? partSet, List<string> errors) Create(
+        long id, long? orderId, long positionId, long? proposalId, decimal quantity, decimal soldPrice)
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "id");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var positionError = DomainValidator.ValidateId(positionId, "position");
-        if (!string.IsNullOrEmpty(positionError)) errors.Add(positionError);
+        var positionError = DomainValidator
+            .ValidateId(positionId, "position");
+        if (!string.IsNullOrEmpty(positionError))
+        {
+            errors.Add(positionError);
+        }
 
-        var quantityError = DomainValidator.ValidateMoney(quantity, "quantity");
-        if (!string.IsNullOrEmpty(quantityError)) errors.Add(quantityError);
+        var quantityError = DomainValidator
+            .ValidateMoney(quantity, "quantity");
+        if (!string.IsNullOrEmpty(quantityError))
+        {
+            errors.Add(quantityError);
+        }
 
-        var soldPriceError = DomainValidator.ValidateMoney(soldPrice, "soldPrice");
-        if (!string.IsNullOrEmpty(soldPriceError)) errors.Add(soldPriceError);
+        var soldPriceError = DomainValidator
+            .ValidateMoney(soldPrice, "soldPrice");
+        if (!string.IsNullOrEmpty(soldPriceError))
+        {
+            errors.Add(soldPriceError);
+        }
 
         if (errors.Any())
+        {
             return (null, errors);
+        }
 
-        var partSet = new PartSet(id, orderId, positionId, proposalId, quantity, soldPrice);
+        var partSet = new PartSet(
+            id,
+            orderId,
+            positionId,
+            proposalId,
+            quantity,
+            soldPrice);
 
-        return (partSet, new List<string>());
+        return (partSet, []);
     }
 }

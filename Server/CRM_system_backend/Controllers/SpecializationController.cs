@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.Specialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Specialization;

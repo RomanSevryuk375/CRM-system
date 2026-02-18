@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels;
+﻿namespace CRMSystem.Core.ProjectionModels.NotificationType;
 
 public record NotificationTypeItem
 {

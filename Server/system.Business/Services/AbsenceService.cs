@@ -42,24 +42,36 @@ public class AbsenceService(
         return count;
     }
 
-    public async Task<int> CreateAbsence(Absence absence, CancellationToken ct)
+    public async Task<int> CreateAbsence(AbsenceCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating absence start");
 
-        var absences = await absenceRepository.GetByWorkerId(absence.WorkerId, ct);
+        var absences = await absenceRepository.GetByWorkerId(createModel.WorkerId, ct);
 
-        if (absences.Any(x => x!.OverlapsWith(absence.StartDate, absence.EndDate)))
+        if (absences.Any(x => x!.OverlapsWith(createModel.StartDate, createModel.EndDate)))
         {
-            throw new ConflictException($"Has date overlaps for worker{absence.WorkerId}");
+            throw new ConflictException($"Has date overlaps for worker{createModel.WorkerId}");
         }
 
-        if (!await workerRepository.Exists(absence.WorkerId, ct))
+        if (!await workerRepository.Exists(createModel.WorkerId, ct))
         {
-            logger.LogInformation("Worker{WorkerId} not found", absence.WorkerId);
-            throw new NotFoundException($"Worker {absence.WorkerId} not found");
+            logger.LogInformation("Worker{WorkerId} not found", createModel.WorkerId);
+            throw new NotFoundException($"Worker {createModel.WorkerId} not found");
         }
+        
+        var (absence, errors) = Absence.Create(
+            0,
+            createModel.WorkerId,
+            createModel.TypeId,
+            createModel.StartDate,
+            createModel.EndDate);
 
-        var absenceId = await absenceRepository.Create(absence, ct);
+        if (errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
+        }
+        
+        var absenceId = await absenceRepository.Create(absence!, ct);
 
         logger.LogInformation("Creating absence success");
 

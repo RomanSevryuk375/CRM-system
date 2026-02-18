@@ -35,21 +35,11 @@ public class AbsenceController(
     public async Task<ActionResult<int>> CreateAbsence(
         [FromBody] AbsenceRequest request, CancellationToken ct)
     {
-        var (absence, errors) = Absence.Create(
-            0,
-            request.WorkerId,
-            request.TypeId,
-            request.StartDate,
-            request.EndDate);
+        var createModel = mapper.Map<AbsenceCreateModel>(request);
+        
+        var id = await absenceService.CreateAbsence(createModel, ct);
 
-        if (errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await absenceService.CreateAbsence(absence!, ct);
-
-        return Created();
+        return CreatedAtAction(nameof(GetPagedAbsence), new { id }, null);
     }
 
     [HttpPut("{id}")]
