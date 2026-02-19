@@ -14,5 +14,7 @@ public class AttachmentProfile : Profile
         CreateMap<AttachmentEntity, AttachmentItem>()
             .ForMember(dest => dest.Worker,
                         opt => opt.MapFrom(src => $"{src.Worker!.Name} {src.Worker.Surname}"));
+
+        CreateMap<AttachmentRequest, AttachmentCreateModel>();
     }
 }

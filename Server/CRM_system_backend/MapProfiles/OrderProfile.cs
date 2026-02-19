@@ -18,5 +18,7 @@ public class OrderProfile : Profile
                         opt => opt.MapFrom(src => $"{src.Car!.Brand} ({src.Car.StateNumber})"))
             .ForMember(dest => dest.Priority,
                         opt => opt.MapFrom(src => src.OrderPriority!.Name));
+
+        CreateMap<OrderRequest, OrderCreateModel>();
     }
 }

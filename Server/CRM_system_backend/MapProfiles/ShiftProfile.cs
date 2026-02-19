@@ -12,5 +12,7 @@ public class ShiftProfile : Profile
         CreateMap<ShiftItem, ShiftResponse>();
 
         CreateMap<ShiftEntity, ShiftItem>();
+        
+        CreateMap<ShiftRequest, ShiftCreateModel>();
     }
 }

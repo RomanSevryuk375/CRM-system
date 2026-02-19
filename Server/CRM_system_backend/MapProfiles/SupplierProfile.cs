@@ -12,5 +12,7 @@ public class SupplierProfile : Profile
         CreateMap<SupplierItem, SupplierResponse>();
 
         CreateMap<SupplierEntity, SupplierItem>();
+
+        CreateMap<SupplierRequest, SupplierCreateModel>();
     }
 }

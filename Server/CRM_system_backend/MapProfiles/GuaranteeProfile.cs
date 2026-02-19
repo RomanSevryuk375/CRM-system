@@ -12,5 +12,7 @@ public class GuaranteeProfile : Profile
         CreateMap<GuaranteeItem, GuaranteeResponse>();
 
         CreateMap<GuaranteeEntity, GuaranteeItem>();
+        
+        CreateMap<GuaranteeRequest, GuaranteeCreateModel>();
     }
 }

@@ -14,5 +14,7 @@ public class SupplySetProfile : Profile
         CreateMap<SupplySetEntity, SupplySetItem>()
             .ForMember(dest => dest.Position,
                         opt => opt.MapFrom(src => $"{src.Position!.Part!.Name}"));
+
+        CreateMap<SupplySetRequest, SupplySetCreateModel>();
     }
 }

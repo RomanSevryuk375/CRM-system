@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.ProjectionModels.OrderPriority;
 using CRMSystem.DataAccess.Entites;
 using Shared.Contracts;
