@@ -1,4 +1,5 @@
-﻿using CRMSystem.Business.Abstractions;
+﻿using AutoMapper;
+using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace CRM_system_backend.Controllers;
 
 [ApiController]
 [Route("api/v1/users")]
-public class UserController(IUserService userService) : ControllerBase
+public class UserController(IUserService userService, IMapper mapper) : ControllerBase
 {
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponse>> LoginUser(
@@ -60,25 +61,16 @@ public class UserController(IUserService userService) : ControllerBase
     public async Task<ActionResult<UserItem>> GetUserByLogin(string login, CancellationToken ct)
     {
         var user = await userService.GetUsersByLogin(login, ct);
+        
         return Ok(user);
     }
 
     [HttpPost]
     public async Task<ActionResult> CreateUser([FromBody] UserRequest request, CancellationToken ct)
     {
-        var (user, errors) = CRMSystem.Core.Models.User.Create(
-            0,
-            request.RoleId,
-            request.Login,
-            request.Password);
+        var createModel = mapper.Map<UserCreateModel>(request);
 
-
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await userService.CreateUser(user!, ct);
+        await userService.CreateUser(createModel, ct);
 
         return Created();
     }

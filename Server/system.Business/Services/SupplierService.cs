@@ -22,42 +22,52 @@ public class SupplierService(
         return suppliers;
     }
 
-    public async Task<int> CreateSupplier(Supplier supplier, CancellationToken ct)
+    public async Task<int> CreateSupplier(SupplierCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating supplier start");
 
-        if (await supplierRepository.ExistsByName(supplier.Name, ct))
+        if (await supplierRepository.ExistsByName(createModel.Name, ct))
         {
-            logger.LogError("Supplier is exist with this name{supplierName}", supplier.Name);
-            throw new ConflictException($"Supplier is exist with this name{supplier.Name}");
+            logger.LogError("Supplier is exist with this name{supplierName}", createModel.Name);
+            throw new ConflictException($"Supplier is exist with this name{createModel.Name}");
         }
 
-        var Id = await supplierRepository.Create(supplier, ct);
+        var (supplier, errors) = Supplier.Create(
+            0,
+            createModel.Name,
+            createModel.Contacts);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
+        }
+        
+        var id = await supplierRepository.Create(supplier!, ct);
 
         logger.LogInformation("Creating supplier success");
 
-        return Id;
+        return id;
     }
 
     public async Task<int> UpdateSupplier(int id, SupplierUpdateModel model, CancellationToken ct)
     {
         logger.LogInformation("Updating supplier start");
 
-        var Id = await supplierRepository.Update(id, model, ct);
+        var supplierId = await supplierRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating supplier success");
 
-        return Id;
+        return supplierId;
     }
 
     public async Task<int> DeleteSupplier(int id, CancellationToken ct)
     {
         logger.LogInformation("Deleting supplier start");
 
-        var Id = await supplierRepository.Delete(id, ct);
+        var supplierId = await supplierRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting supplier success");
 
-        return Id;
+        return supplierId;
     }
 }

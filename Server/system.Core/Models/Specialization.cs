@@ -13,7 +13,7 @@ public class Specialization
 
     public string Name { get; }
 
-    public static (Specialization? specialization, List<string> errors) Create (int id, string name)
+    public static (Specialization? specialization, List<string>? errors) Create (int id, string name)
     {
         var errors = new List<string>();
 

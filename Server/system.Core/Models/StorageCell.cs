@@ -15,7 +15,7 @@ public class StorageCell
     public string Rack { get; }
     public string Shelf { get; }
 
-    public static (StorageCell? storageCell, List<string> errors) Create(int id, string rack, string shelf)
+    public static (StorageCell? storageCell, List<string>? errors) Create(int id, string rack, string shelf)
     {
         var errors = new List<string>();
 

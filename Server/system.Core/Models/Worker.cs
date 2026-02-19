@@ -42,7 +42,7 @@ public class Worker
     public string PhoneNumber { get; }
     public string Email { get; }
 
-    public static (Worker? worker, List<string> errors) Create(
+    public static (Worker? worker, List<string>? errors) Create(
         int id, long userId, string name, string surname, decimal hourlyRate, string phoneNumber, string email)
     {
         var errors = new List<string>();

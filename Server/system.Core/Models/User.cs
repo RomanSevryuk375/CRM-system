@@ -18,7 +18,7 @@ public class User
     public string Login { get; } 
     public string PasswordHash { get; } 
 
-    public static (User? user, List<string> errors) Create(long id, int roleId, string login, string passwordHash)
+    public static (User? user, List<string>? errors) Create(long id, int roleId, string login, string passwordHash)
     {
         var errors = new List<string>();
 

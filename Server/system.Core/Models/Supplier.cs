@@ -15,7 +15,7 @@ public class Supplier
     public string Name { get; } 
     public string Contacts { get; } 
 
-    public static (Supplier? supplier, List<string> errors) Create(int id, string name, string contacts)
+    public static (Supplier? supplier, List<string>? errors) Create(int id, string name, string contacts)
     {
         var errors = new List<string>();
 

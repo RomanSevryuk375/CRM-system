@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.SupplySet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,19 +34,9 @@ public class SupplySetController(
     public async Task<ActionResult<long>> CreateSupplySet(
         [FromBody] SupplySetRequest request, CancellationToken ct)
     {
-        var (supplySet, errors) = SupplySet.Create(
-            0,
-            request.SupplyId,
-            request.PositionId,
-            request.Quantity,
-            request.PurchasePrice);
+        var createModel = mapper.Map<SupplySetCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await supplySetService.CreateSupplySet(supplySet!, ct);
+        await supplySetService.CreateSupplySet(createModel, ct);
 
         return Created();
     }
@@ -57,9 +46,7 @@ public class SupplySetController(
     public async Task<ActionResult> UpdateSupplySet(
         long id, [FromBody] SupplySetUpdateRequest request, CancellationToken ct)
     {
-        var model = new SupplySetUpdateModel(
-            request.Quantity,
-            request.PurchasePrice);
+        var model = mapper.Map<SupplySetUpdateModel>(request);
 
         await supplySetService.UpdateSupplySet(id, model, ct);
 

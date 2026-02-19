@@ -31,7 +31,7 @@ public class Notification
     public DateTime SendAt { get; }
     public NotificationStatusEnum StatusId { get; }
 
-    public static (Notification? notification, List<string> errors) Create(
+    public static (Notification? notification, List<string>? errors) Create(
         long id,
         long clientId,
         long carId,

@@ -1,5 +1,4 @@
 ﻿using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using CRMSystem.Business.Extensions;

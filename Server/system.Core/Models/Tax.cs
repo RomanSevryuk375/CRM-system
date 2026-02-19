@@ -19,7 +19,7 @@ public class Tax
     public decimal Rate { get; }
     public TaxTypeEnum TypeId { get; } 
 
-    public static (Tax? tax, List<string> errors) Create (int id, string name, decimal rate, TaxTypeEnum typeId)
+    public static (Tax? tax, List<string>? errors) Create (int id, string name, decimal rate, TaxTypeEnum typeId)
     {
         var errors = new List<string>();
 

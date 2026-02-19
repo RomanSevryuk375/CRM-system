@@ -1,5 +1,4 @@
-﻿using CRMSystem.Core.ProjectionModels;
-using CRMSystem.Core.ProjectionModels.NotificationType;
+﻿using CRMSystem.Core.ProjectionModels.NotificationType;
 
 namespace CRMSystem.Core.Abstractions;
 

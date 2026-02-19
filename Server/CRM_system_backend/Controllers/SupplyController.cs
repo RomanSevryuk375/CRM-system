@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Supply;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,17 +34,9 @@ public class SupplyController(
     public async Task<ActionResult> CreateSupply(
         SupplyRequest request, CancellationToken ct)
     {
-        var (supply, errors) = Supply.Create(
-            0,
-            request.SupplierId,
-            request.Date);
+        var createModel = mapper.Map<SupplyCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await supplyService.CreateSupply(supply!, ct);
+        await supplyService.CreateSupply(createModel, ct);
 
         return Created();
     }

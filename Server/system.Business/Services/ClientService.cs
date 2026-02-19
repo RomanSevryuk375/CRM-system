@@ -3,6 +3,7 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Client;
+using CRMSystem.Core.ProjectionModels.User;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
 using Shared.Filters;
@@ -59,41 +60,80 @@ public class ClientService(
         return client;
     }
 
-    public async Task<long> CreateClient(Client client, CancellationToken ct)
+    public async Task<long> CreateClient(ClientCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating client start");
 
-        if (!await userRepository.Exists(client.UserId, ct))
+        if (!await userRepository.Exists(createModel.UserId, ct))
         {
-            logger.LogError("User{UserId} not found", client.UserId);
-            throw new NotFoundException($"User{client.UserId} not found");
+            logger.LogError("User{UserId} not found", createModel.UserId);
+            throw new NotFoundException($"User{createModel.UserId} not found");
+        }
+        
+        var (client, errors) = Client.Create(
+            0,
+            createModel.UserId,
+            createModel.Name,
+            createModel.Surname,
+            createModel.PhoneNumber,
+            createModel.Email);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await clientRepository.Create(client, ct);
+        var id = await clientRepository.Create(client!, ct);
 
         logger.LogInformation("Creating client success");
 
-        return Id;
+        return id;
     }
 
-    public async Task<long> CreateClientWithUser(Client client, User user, CancellationToken ct)
+    public async Task<long> CreateClientWithUser(
+        ClientCreateModel clientCreateModel,
+        UserCreateModel userCreateModel,
+        CancellationToken ct)
     {
         await unitOfWork.BeginTransactionAsync(ct);
 
         try
         {
+            var (user, errorsUser) = User.Create(
+                0,
+                userCreateModel.RoleId,
+                userCreateModel.Login,
+                userCreateModel.PasswordHash);
+
+            if (errorsUser is not null && errorsUser.Any())
+            {
+                throw new ValidationException(string.Join(", ", errorsUser));
+            }
+            
             logger.LogInformation("Creating user start");
 
-            var userId = await userRepository.Create(user, ct);
-            client.SetUserId(userId);
+            var userId = await userRepository.Create(user!, ct);
+            
+            var (client, errorsClient) = Client.Create(
+                0,
+                userId,
+                clientCreateModel.Name,
+                clientCreateModel.Surname,
+                clientCreateModel.PhoneNumber,
+                clientCreateModel.Email);
 
-            var Id = await clientRepository.Create(client, ct);
+            if (errorsClient is not null && errorsClient.Any())
+            {
+                throw new ValidationException(string.Join(", ", errorsClient));
+            }
+
+            var id = await clientRepository.Create(client!, ct);
 
             logger.LogInformation("Creating client success");
 
             await unitOfWork.CommitTransactionAsync(ct);
 
-            return Id;
+            return id;
         }
         catch (Exception ex)
         {
@@ -109,21 +149,21 @@ public class ClientService(
     {
         logger.LogInformation("Updating client start");
 
-        var Id = await clientRepository.Update(id, model, ct);
+        var clientId = await clientRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating client success");
 
-        return Id;
+        return clientId;
     }
 
     public async Task<long> DeleteClient(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting client start");
 
-        var Id = await clientRepository.Delete(id, ct);
+        var clientId = await clientRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting client success");
 
-        return Id;
+        return clientId;
     }
 }

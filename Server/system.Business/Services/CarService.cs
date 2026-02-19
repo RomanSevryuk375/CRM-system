@@ -59,49 +59,65 @@ public class CarService(
         return car;
     }
 
-    public async Task<long> CreateCar(Car car, CancellationToken ct)
+    public async Task<long> CreateCar(CarCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating car started");
 
-        if (!await clientsRepository.Exists(car.OwnerId, ct))
+        if (!await clientsRepository.Exists(createModel.OwnerId, ct))
         {
-            logger.LogError("Client{ClientId} not found", car.OwnerId);
-            throw new NotFoundException($"Client{car.OwnerId} not found");
+            logger.LogError("Client{ClientId} not found", createModel.OwnerId);
+            throw new NotFoundException($"Client{createModel.OwnerId} not found");
         }
 
-        if (!await carStatusRepository.Exists((int)car.StatusId, ct)
-        || car.StatusId is CarStatusEnum.AtWork)
+        if (!await carStatusRepository.Exists((int)createModel.StatusId, ct)
+        || createModel.StatusId is CarStatusEnum.AtWork)
         {
-            logger.LogError("Status{StatusId} not found or invalid status", (int)car.StatusId);
-            throw new NotFoundException($"Car{(int)car.StatusId} not found or invalid status");
+            logger.LogError("Status{StatusId} not found or invalid status", (int)createModel.StatusId);
+            throw new NotFoundException($"Car{(int)createModel.StatusId} not found or invalid status");
+        }
+        
+        var (car, errors) = Car.Create(
+            0,
+            createModel.OwnerId,
+            createModel.StatusId,
+            createModel.Brand,
+            createModel.Model,
+            createModel.YearOfManufacture,
+            createModel.VinNumber,
+            createModel.StateNumber,
+            createModel.Mileage);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await carRepository.Create(car, ct);
+        var id = await carRepository.Create(car!, ct);
 
         logger.LogInformation("Creating car success");
 
-        return Id;
+        return id;
     }
 
     public async Task<long> UpdateCar(long id, CarUpdateModel model, CancellationToken ct)
     {
         logger.LogInformation("Updating car start");
 
-        var Id = await carRepository.Update(id, model, ct);
+        var carId = await carRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating car success");
 
-        return Id;
+        return carId;
     }
 
     public async Task<long> DeleteCar(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting car start");
 
-        var Id = await carRepository.Delete(id, ct);
+        var carId = await carRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting car success");
 
-        return Id;
+        return carId;
     }
 }

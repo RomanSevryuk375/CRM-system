@@ -40,7 +40,7 @@ public class Bill
     public DateOnly? ActualBillDate { get; }
     public DateTime LastBillDate => CreatedAt.AddDays(14);
 
-    public static (Bill? bill, List<string> errors ) Create (
+    public static (Bill? bill, List<string>? errors ) Create (
         long id, 
         long orderId, 
         BillStatusEnum statusId,

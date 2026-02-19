@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Car;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Car;
-using Shared.Enums;
 using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
@@ -46,23 +44,9 @@ public class CarController(
     public async Task<ActionResult> CreateCar(
         [FromBody] CarRequest request, CancellationToken ct)
     {
-        var (car, errors) = Car.Create(
-            0,
-            request.OwnerId,
-            (CarStatusEnum)request.StatusId,
-            request.Brand,
-            request.Model,
-            request.YearOfManufacture,
-            request.VinNumber,
-            request.StateNumber,
-            request.Mileage);
+        var createModel = mapper.Map<CarCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await carService.CreateCar(car!, ct);
+        await carService.CreateCar(createModel, ct);
 
         return Created();
     }
@@ -72,14 +56,9 @@ public class CarController(
     public async Task<ActionResult> UpdateCar(
         long id, [FromBody]CarUpdateRequest request, CancellationToken ct)
     {
-        var model = new CarUpdateModel(
-            request.StatusId,
-            request.Brand,
-            request.Model,
-            request.YearOfManufacture,
-            request.Mileage);
+        var updateModel = mapper.Map<CarUpdateModel>(request);
 
-        await carService.UpdateCar(id, model, ct);
+        await carService.UpdateCar(id, updateModel, ct);
 
         return NoContent();
     }

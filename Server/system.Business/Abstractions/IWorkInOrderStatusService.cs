@@ -1,5 +1,4 @@
-﻿using CRMSystem.Core.ProjectionModels;
-using CRMSystem.Core.ProjectionModels.WorkInOrderStatus;
+﻿using CRMSystem.Core.ProjectionModels.WorkInOrderStatus;
 
 namespace CRMSystem.Business.Abstractions;
 

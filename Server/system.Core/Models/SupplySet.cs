@@ -19,7 +19,7 @@ public class SupplySet
     public decimal Quantity { get; }
     public decimal PurchasePrice { get; }
 
-    public static (SupplySet? supplySet, List<string> errors) Create(
+    public static (SupplySet? supplySet, List<string>? errors) Create(
         long id, long supplyId, long positionId, decimal quantity, decimal purchasePrice)
     {
         var errors = new List<string>();

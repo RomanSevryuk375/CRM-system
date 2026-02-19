@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Supplier;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,17 +29,9 @@ public class SupplierController(
     public async Task<ActionResult<int>> CreateSupplier(
         [FromBody] SupplierRequest request, CancellationToken ct)
     {
-        var (supplier, errors) = Supplier.Create(
-            0,
-            request.Name,
-            request.Contacts);
+        var createModel = mapper.Map<SupplierCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await supplierService.CreateSupplier(supplier!, ct);
+        await supplierService.CreateSupplier(createModel, ct);
 
         return Created();
     }

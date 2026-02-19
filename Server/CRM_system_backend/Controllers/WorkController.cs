@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Work;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,19 +34,9 @@ public class WorkController(
     public async Task<ActionResult> CreateWork(
         [FromBody] WorkRequest request, CancellationToken ct)
     {
-        var (work, errors) = Work.Create(
-            0,
-            request.Title,
-            request.Category,
-            request.Description,
-            request.StandardTime);
+        var createModel = mapper.Map<WorkCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await workService.CreateWork(work!, ct);
+        await workService.CreateWork(createModel, ct);
 
         return Created();
     }
@@ -57,11 +46,7 @@ public class WorkController(
     public async Task<ActionResult> UpdateWork(
         long id, [FromBody] WorkRequest request, CancellationToken ct)
     {
-        var model = new WorkUpdateModel(
-            request.Title,
-            request.Category,
-            request.Description,
-            request.StandardTime);
+        var model = mapper.Map<WorkUpdateModel>(request);
 
         await workService.UpdateWork(id, model, ct);
 

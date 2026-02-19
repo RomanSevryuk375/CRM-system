@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Expense;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,21 +34,9 @@ public class ExpenseController(
     public async Task<ActionResult> CreateExpense(
         [FromBody] ExpenseRequest request, CancellationToken ct)
     {
-        var (expense, errors) = Expense.Create(
-            0,
-            request.Date,
-            request.Category,
-            request.TaxId,
-            request.PartSetId,
-            request.ExpenseTypeId,
-            request.Sum);
+        var createModel = mapper.Map<ExpenseCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await expenseService.CreateExpenses(expense!, ct);
+        await expenseService.CreateExpenses(createModel!, ct);
 
         return Created();
     }
@@ -59,11 +46,7 @@ public class ExpenseController(
     public async Task<ActionResult> UpdateExpense(
         int id, [FromBody] ExpenseUpdateRequest request, CancellationToken ct)
     {
-        var model = new ExpenseUpdateModel(
-            request.Date,
-            request.Category,
-            request.ExpenseTypeId,
-            request.Sum);
+        var model = mapper.Map<ExpenseUpdateModel>(request);
 
         await expenseService.UpdateExpense(id, model, ct);
 

@@ -28,7 +28,7 @@ public class Schedule
     public int ShiftId { get; private set; }
     public DateTime Date { get; }
 
-    public static (Schedule? schedule, List<string> errors) Create(
+    public static (Schedule? schedule, List<string>? errors) Create(
         int id, int workerId, int shiftId, DateTime dateTime)
     {
         var errors = new List<string>();

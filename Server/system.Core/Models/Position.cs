@@ -38,7 +38,7 @@ public class Position
     public decimal SellingPrice { get; }
     public decimal Quantity { get; }
 
-    public static (Position? position, List<string> errors) Create(
+    public static (Position? position, List<string>? errors) Create(
         long id, long partId, int cellId, decimal purchasePrice, decimal sellingPrice, decimal quantity)
     {
         var errors = new List<string>();

@@ -32,7 +32,7 @@ public class Expense
     public ExpenseTypeEnum ExpenseTypeId { get; }
     public decimal Sum { get; }
 
-    public static (Expense? expense, List<string> errors) Create(
+    public static (Expense? expense, List<string>? errors) Create(
         long id, 
         DateTime date, 
         string category, 

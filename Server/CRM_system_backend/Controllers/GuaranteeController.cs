@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Guarantee;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,20 +35,9 @@ public class GuaranteeController(
     public async Task<ActionResult> CreateGuarantee(
         GuaranteeRequest request, CancellationToken ct)
     {
-        var (guarantee, errors) = Guarantee.Create(
-            0,
-            request.OrderId,
-            request.DateStart,
-            request.DateEnd, 
-            request.Description, 
-            request.Terms);
+        var createModel =mapper.Map<GuaranteeCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await guaranteeService.CreateGuarantee(guarantee!, ct);
+        await guaranteeService.CreateGuarantee(createModel, ct);
 
         return Created();
     }
@@ -59,9 +47,7 @@ public class GuaranteeController(
     public async Task<ActionResult> UpdateGuarantee(
         long id, GuaranteeUpdateRequest request, CancellationToken ct)
     {
-        var model = new GuaranteeUpdateModel(
-            request.Description,
-            request.Terms);
+        var model = mapper.Map<GuaranteeUpdateModel>(request);
 
         await guaranteeService.UpdateGuarantee(id, model, ct);
 

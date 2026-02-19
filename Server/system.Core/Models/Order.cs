@@ -24,7 +24,7 @@ public class Order
     public DateOnly Date { get; }
     public OrderPriorityEnum PriorityId { get; }
 
-    public static (Order? order, List<string> errors) Create(
+    public static (Order? order, List<string>? errors) Create(
         long id, OrderStatusEnum statusId, long carId, DateOnly date, OrderPriorityEnum priorityId)
     {
         var errors = new List<string>();

@@ -38,35 +38,49 @@ public class NotificationService(
         return count;
     }
 
-    public async Task<long> CreateNotification(Notification notification, CancellationToken ct)
+    public async Task<long> CreateNotification(NotificationCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating notification start");
 
-        if (!await clientRepository.Exists(notification.ClientId, ct))
+        if (!await clientRepository.Exists(createModel.ClientId, ct))
         {
-            logger.LogError("Client {ClientId} not found", notification.ClientId);
-            throw new NotFoundException($"Client {notification.ClientId} not found");
+            logger.LogError("Client {ClientId} not found", createModel.ClientId);
+            throw new NotFoundException($"Client {createModel.ClientId} not found");
         }
 
-        if (!await carRepository.Exists(notification.CarId, ct))
+        if (!await carRepository.Exists(createModel.CarId, ct))
         {
-            logger.LogError("Car {CarId} not found", notification.CarId);
-            throw new NotFoundException($"Car {notification.CarId} not found");
+            logger.LogError("Car {CarId} not found", createModel.CarId);
+            throw new NotFoundException($"Car {createModel.CarId} not found");
         }
 
-        if (!await notificationStatusRepository.Exists((int)notification.StatusId, ct))
+        if (!await notificationStatusRepository.Exists((int)createModel.StatusId, ct))
         {
-            logger.LogError("Status {StatusId} not found", (int)notification.StatusId);
-            throw new NotFoundException($"Status {(int)notification.StatusId} not found");
+            logger.LogError("Status {StatusId} not found", (int)createModel.StatusId);
+            throw new NotFoundException($"Status {(int)createModel.StatusId} not found");
         }
 
-        if (!await notificationTypeRepository.Exists((int)notification.TypeId, ct))
+        if (!await notificationTypeRepository.Exists((int)createModel.TypeId, ct))
         {
-            logger.LogError("Type {TypeId} not found", (int)notification.TypeId);
-            throw new NotFoundException($"Type {(int)notification.TypeId} not found");
+            logger.LogError("Type {TypeId} not found", (int)createModel.TypeId);
+            throw new NotFoundException($"Type {(int)createModel.TypeId} not found");
+        }
+        
+        var (notification, errors) = Notification.Create(
+            0,
+            createModel.ClientId,
+            createModel.CarId,
+            createModel.TypeId,
+            createModel.StatusId,
+            createModel.Message,
+            createModel.SendAt);
+
+        if(errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var id = await notificationRepository.Create(notification, ct);
+        var id = await notificationRepository.Create(notification!, ct);
 
         logger.LogInformation("Creating notification success");
 

@@ -19,7 +19,7 @@ public class Work
     public string Description { get;} 
     public decimal StandardTime { get; }
 
-    public static (Work? work, List<string> errors) Create(
+    public static (Work? work, List<string>? errors) Create(
         long id, string title, string category, string description, decimal standardTime)
     {
         var errors = new List<string>();

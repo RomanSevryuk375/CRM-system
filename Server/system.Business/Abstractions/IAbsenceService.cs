@@ -1,6 +1,4 @@
 ﻿using CRMSystem.Core.ProjectionModels.Absence;
-using CRMSystem.Core.Models;
-using Shared.Contracts.Absence;
 using Shared.Filters;
 
 namespace CRMSystem.Business.Abstractions;

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Acceptance;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,24 +35,9 @@ public class AcceptanceController(
     public async Task<ActionResult> CreateAcceptance(
         [FromBody] AcceptanceRequest request, CancellationToken ct)
     {
-        var (acceptance, errors) = Acceptance.Create(
-            0,
-            request.OrderId,
-            request.WorkerId,
-            request.CreatedAt,
-            request.Mileage,
-            request.FuelLevel,
-            request.ExternalDefects,
-            request.InternalDefects,
-            request.ClientSign,
-            request.WorkerSign);
+        var createModel = mapper.Map<AcceptanceCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await acceptanceService.CreateAcceptance(acceptance!, ct);
+        await acceptanceService.CreateAcceptance(createModel, ct);
 
         return Created();
     }

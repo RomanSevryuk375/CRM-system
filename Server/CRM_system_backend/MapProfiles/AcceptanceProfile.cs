@@ -17,6 +17,6 @@ public class AcceptanceProfile : Profile
 
         CreateMap<AcceptanceUpdateRequest, AcceptanceUpdateModel>();
 
-        CreateMap<AcceptanceRequest, AcceptanceUpdateModel>();
+        CreateMap<AcceptanceRequest, AcceptanceCreateModel>();
     }
 }

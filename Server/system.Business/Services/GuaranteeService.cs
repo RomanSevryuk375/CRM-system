@@ -35,43 +35,56 @@ public class GuaranteeService(
         return count;
     }
 
-    public async Task<long> CreateGuarantee(Guarantee guarantee, CancellationToken ct)
+    public async Task<long> CreateGuarantee(GuaranteeCreateModel createModel, CancellationToken ct)
     {
-        logger.LogInformation("Creating guarantee for order {OrderId} start", guarantee.OrderId);
+        logger.LogInformation("Creating guarantee for order {OrderId} start", createModel.OrderId);
 
-        if (!await orderRepository.Exists(guarantee.OrderId, ct))
+        if (!await orderRepository.Exists(createModel.OrderId, ct))
         {
-            logger.LogError("Order{OrderId} not found", guarantee.OrderId);
-            throw new NotFoundException($"Order{guarantee.OrderId} not found");
+            logger.LogError("Order{OrderId} not found", createModel.OrderId);
+            throw new NotFoundException($"Order{createModel.OrderId} not found");
+        }
+        
+        var (guarantee, errors) = Guarantee.Create(
+            0,
+            createModel.OrderId,
+            createModel.DateStart,
+            createModel.DateEnd, 
+            createModel.Description, 
+            createModel.Terms);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await guaranteeRepository.Create(guarantee, ct);
+        var id = await guaranteeRepository.Create(guarantee!, ct);
 
         logger.LogInformation("Creating guarantee for order {OrderId} success with ID {GuaranteeId}",
-            guarantee.OrderId, Id);
+            createModel.OrderId, id);
 
-        return Id;
+        return id;
     }
 
     public async Task<long> UpdateGuarantee(long id, GuaranteeUpdateModel model, CancellationToken ct)
     {
         logger.LogInformation("Updating guarantee {Id} start", id);
 
-        var Id = await guaranteeRepository.Update(id, model, ct);
+        var guaranteeId = await guaranteeRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating guarantee {Id} success", id);
 
-        return Id;
+        return guaranteeId;
     }
 
     public async Task<long> DeleteGuarantee(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting guarantee {Id} start", id);
 
-        var Id = await guaranteeRepository.Delete(id, ct);
+        var guaranteeId = await guaranteeRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting guarantee {Id} success", id);
 
-        return Id;
+        return guaranteeId;
     }
 }

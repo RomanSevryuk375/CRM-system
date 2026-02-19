@@ -1,7 +1,7 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Business.Extensions;
 using CRMSystem.Core.ProjectionModels.Client;
-using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.User;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Shared.Filters;
@@ -13,14 +13,17 @@ public class CachedClientService(
     IDistributedCache distributed,
     ILogger<CachedClientService> logger) : IClientService
 {
-    public async Task<long> CreateClient(Client client, CancellationToken ct)
+    public async Task<long> CreateClient(ClientCreateModel createModel, CancellationToken ct)
     {
-        return await decorated.CreateClient(client, ct);
+        return await decorated.CreateClient(createModel, ct);
     }
 
-    public async Task<long> CreateClientWithUser(Client client, User user, CancellationToken ct)
+    public async Task<long> CreateClientWithUser(
+        ClientCreateModel clientCreateModel,
+        UserCreateModel userCreateModel,
+        CancellationToken ct)
     {
-        return await decorated.CreateClientWithUser(client, user, ct);
+        return await decorated.CreateClientWithUser(clientCreateModel , userCreateModel, ct);
     }
 
     public async Task<long> DeleteClient(long id, CancellationToken ct)

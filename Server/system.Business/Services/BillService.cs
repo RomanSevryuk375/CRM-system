@@ -45,33 +45,46 @@ public class BillService(
         return count;
     }
 
-    public async Task<long> CreateBill(Bill bill, CancellationToken ct)
+    public async Task<long> CreateBill(BillCreateModel createModel, CancellationToken ct)
     {
         _logger.LogInformation("Creating bill start");
 
-        if (!await orderRepository.Exists(bill.OrderId, ct))
+        if (!await orderRepository.Exists(createModel.OrderId, ct))
         {
-            _logger.LogError("Order{OrderId} not found", bill.OrderId);
-            throw new NotFoundException($"Order{bill.OrderId} not found");
+            _logger.LogError("Order{OrderId} not found", createModel.OrderId);
+            throw new NotFoundException($"Order{createModel.OrderId} not found");
         }
 
-        if (await orderRepository.GetStatus(bill.OrderId, ct) == (int)OrderStatusEnum.Closed)
+        if (await orderRepository.GetStatus(createModel.OrderId, ct) == (int)OrderStatusEnum.Closed)
         {
-            _logger.LogError("Order{OrderId} is closed", bill.OrderId);
-            throw new ConflictException($"Order {bill.OrderId} is closed");
+            _logger.LogError("Order{OrderId} is closed", createModel.OrderId);
+            throw new ConflictException($"Order {createModel.OrderId} is closed");
         }
 
-        if (!await statusRepository.Exists((int)bill.StatusId, ct))
+        if (!await statusRepository.Exists((int)createModel.StatusId, ct))
         {
-            _logger.LogError("Status{StatusId} not found", bill.StatusId);
-            throw new NotFoundException($"Status{bill.StatusId} not found");
+            _logger.LogError("Status{StatusId} not found", createModel.StatusId);
+            throw new NotFoundException($"Status{createModel.StatusId} not found");
         }
 
         _logger.LogInformation("Creating bill success");
+        
+        var (bill, errors) = Bill.Create(
+            0,
+            createModel.OrderId,
+            createModel.StatusId,
+            createModel.CreatedAt,
+            createModel.Amount,
+            createModel.ActualBillDate);
 
-        var Id = await billRepository.Create(bill, ct);
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
+        }
 
-        return Id;
+        var id = await billRepository.Create(bill!, ct);
+
+        return id;
     }
 
     public async Task<long> UpdateBill(long id, BillUpdateModel model, CancellationToken ct)

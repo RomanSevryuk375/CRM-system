@@ -1,6 +1,4 @@
-﻿using Shared.Enums;
-
-namespace CRMSystem.Core.ProjectionModels.PaymentNote;
+﻿namespace CRMSystem.Core.ProjectionModels.PaymentNote;
 
 public record PaymentNoteItem
 {

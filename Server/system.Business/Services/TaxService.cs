@@ -24,42 +24,53 @@ public class TaxService(
         return taxes;
     }
 
-    public async Task<int> CreateTax(Tax tax, CancellationToken ct)
+    public async Task<int> CreateTax(TaxCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating tax start");
 
-        if (!await taxTypeRepository.Exists((int)tax.TypeId, ct))
+        if (!await taxTypeRepository.Exists((int)createModel.TypeId, ct))
         {
-            logger.LogError("Tax{taxId} not found", (int)tax.TypeId);
-            throw new NotFoundException($"Tax {(int)tax.TypeId} not found");
+            logger.LogError("Tax{taxId} not found", (int)createModel.TypeId);
+            throw new NotFoundException($"Tax {(int)createModel.TypeId} not found");
+        }
+        
+        var (tax, errors) = Tax.Create(
+            0,
+            createModel.Name,
+            createModel.Rate,
+            createModel.TypeId);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await taxRepository.Create(tax, ct);
+        var id = await taxRepository.Create(tax!, ct);
 
         logger.LogInformation("Creating tax success");
 
-        return Id;
+        return id;
     }
 
     public async Task<int> UpdateTax(int id, TaxUpdateModel model, CancellationToken ct)
     {
         logger.LogInformation("Updating tax start");
 
-        var Id = await taxRepository.Update(id, model, ct);
+        var taxId = await taxRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating tax success");
 
-        return Id;
+        return taxId;
     }
 
     public async Task<int> DeleteTax(int id, CancellationToken ct)
     {
         logger.LogInformation("Deleting tax start");
 
-        var Id = await taxRepository.Delete(id, ct);
+        var taxId = await taxRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting tax success");
 
-        return Id;
+        return taxId;
     }
 }

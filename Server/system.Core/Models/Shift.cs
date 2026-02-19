@@ -18,7 +18,7 @@ public class Shift
     public TimeOnly StartAt { get; }
     public TimeOnly EndAt { get; }
 
-    public static (Shift? shift, List<string> errors) Create(
+    public static (Shift? shift, List<string>? errors) Create(
         int id, string name, TimeOnly startAt, TimeOnly endAt)
     {
         var errors = new List<string>();
