@@ -101,7 +101,7 @@ public class ExpenseServiceTest
                             .ReturnsAsync(true);
 
         _expenseRepoMock.Setup(x => x.Create(
-                            expense,
+                            It.IsAny<Expense>(),
                             It.IsAny<CancellationToken>()))
                             .ReturnsAsync(expenseId);
 

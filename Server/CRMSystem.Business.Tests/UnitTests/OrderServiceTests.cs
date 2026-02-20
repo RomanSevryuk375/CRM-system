@@ -62,7 +62,7 @@ public class OrderServiceTests
         await act.Should().ThrowAsync<NotFoundException>();
 
         _orderRepoMock.Verify(x => x.Create(
-                        order,
+                        It.IsAny<Order>(),
                         It.IsAny<CancellationToken>()),
                         Times.Never);
     }
@@ -144,7 +144,7 @@ public class OrderServiceTests
                     .ReturnsAsync(true);
 
         _orderRepoMock.Setup(x => x.Create(
-                        order,
+                        It.IsAny<Order>(),
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(orderId);
 
@@ -182,7 +182,7 @@ public class OrderServiceTests
                     .ReturnsAsync(true);
 
         _orderRepoMock.Setup(x => x.Create(
-                        order,
+                        It.IsAny<Order>(),
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(orderId);
 
@@ -243,7 +243,7 @@ public class OrderServiceTests
                     .ReturnsAsync(true);
 
         _orderRepoMock.Setup(x => x.Create(
-                        order,
+                        It.IsAny<Order>(),
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(orderId);
 

@@ -105,7 +105,7 @@ public class SkillServiceTests
     [Fact]
     public async Task UpdateSkill_ShouldThrowNotFoundException_WhenSpecializationDoesNotExist()
     {
-        var skillId = 0;
+        const int skillId = 0;
         var model = new SkillUpdateModel(1, 2);
 
         _workerRepoMock.Setup(x => x.Exists(

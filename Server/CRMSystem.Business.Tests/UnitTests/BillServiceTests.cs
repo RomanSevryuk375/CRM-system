@@ -133,7 +133,7 @@ public class BillServiceTests
                        .ReturnsAsync(true);
 
         _billRepoMock.Setup(x => x.Create(
-                        bill,
+                        It.IsAny<Bill>(),
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(billId);
 
