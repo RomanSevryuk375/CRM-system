@@ -1,6 +1,4 @@
-﻿// Ignore Spelling: Img
-
-using AutoMapper;
+﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.ProjectionModels.AccetanceImg;
@@ -47,13 +45,13 @@ public class AcceptanceImgController(
     public async Task<ActionResult> CreateAcceptanceImg(
         [FromForm] CreateAcceptanceImgRequest request, CancellationToken ct)
     {
-        if (request.File is null || request.File.Length == 0)
+        if (request.File.Length == 0)
         {
             return BadRequest("File is required");
         }
 
-        using var strem = request.File.OpenReadStream();
-        var fileItem = new FileItem(strem, request.File.FileName, request.File.ContentType);
+        await using var stream = request.File.OpenReadStream();
+        var fileItem = new FileItem(stream, request.File.FileName, request.File.ContentType);
 
         await acceptanceImgService.CreateAcceptanceImg(request.AcceptanceId, fileItem, request.Description, ct);
 

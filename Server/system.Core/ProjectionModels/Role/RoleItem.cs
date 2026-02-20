@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.Core.ProjectionModels;
+﻿namespace CRMSystem.Core.ProjectionModels.Role;
 
 public record RoleItem
 {

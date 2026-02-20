@@ -31,8 +31,7 @@ public class AbsenceServiceTests
             _userContextMock.Object,
             _loggerMock.Object);
     }
-
-    // Этот тест проверяет логику домена напрямую, его менять не нужно
+    
     [Theory]
     [InlineData("2025-01-05", "2025-01-10", "2025-01-07", "2025-01-08", true)]
     [InlineData("2025-01-07", "2025-01-14", "2025-01-05", "2025-01-08", true)]

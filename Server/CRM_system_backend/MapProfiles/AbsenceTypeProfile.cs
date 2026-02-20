@@ -12,5 +12,7 @@ public class AbsenceTypeProfile : Profile
         CreateMap<AbsenceTypeEntity, AbsenceTypeItem>();
 
         CreateMap<AbsenceTypeItem, AbsenceTypeResponse>();
+
+        CreateMap<AbsenceTypeRequest, AbsenceTypeCreateModel>();
     }
 }

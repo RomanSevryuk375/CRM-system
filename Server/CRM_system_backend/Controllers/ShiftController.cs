@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Shift;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,18 +29,9 @@ public class ShiftController(
     public async Task<ActionResult> CreateShift(
         [FromBody] ShiftRequest request, CancellationToken ct)
     {
-        var (shift, errors) = Shift.Create(
-            0,
-            request.Name,
-            request.StartAt,
-            request.EndAt);
+        var createModel = mapper.Map<ShiftCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await shiftService.CreateShift(shift!, ct);
+        await shiftService.CreateShift(createModel, ct);
 
         return Created();
     }
@@ -51,10 +41,7 @@ public class ShiftController(
     public async Task<ActionResult> UpdateShift(
         int id, [FromBody]ShiftUpdateRequest request, CancellationToken ct)
     {
-        var model = new ShiftUpdateModel(
-            request.Name,
-            request.StartAt,
-            request.EndAt);
+        var model = mapper.Map<ShiftUpdateModel>(request);
 
         await shiftService.UpdateShift(id, model, ct);
 

@@ -28,7 +28,7 @@ public class WorkInOrder
     public decimal TimeSpent { get; }
     public WorkStatusEnum StatusId { get; }
     
-    public static (WorkInOrder? workInOrder, List<string> errors) Create(
+    public static (WorkInOrder? workInOrder, List<string>? errors) Create(
         long id, long orderId, long jobId, int workerId, WorkStatusEnum statusId, decimal timeSpent)
     {
         var errors = new List<string>();

@@ -123,7 +123,7 @@ public class CarServiceTests
                         .ReturnsAsync(true);
 
         _carRepoMock.Setup(x => x.Create(
-                            car,
+                            It.IsAny<Car>(),
                             It.IsAny<CancellationToken>()))
                         .ReturnsAsync(carId);
 

@@ -56,7 +56,7 @@ public class ShiftServiceTests
             .ReturnsAsync(false);
 
         _shiftRepoMock.Setup(x => x.Create(
-            shift, 
+            It.IsAny<Shift>(),
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedId);
 

@@ -1,12 +1,11 @@
 ﻿using CRMSystem.Core.ProjectionModels.Acceptance;
-using CRMSystem.Core.Models;
 using Shared.Filters;
 
 namespace CRMSystem.Business.Abstractions;
 
 public interface IAcceptanceService
 {
-    Task<long> CreateAcceptance(Acceptance acceptance, CancellationToken ct);
+    Task<long> CreateAcceptance(AcceptanceCreateModel createModel, CancellationToken ct);
     Task<long> DeleteAcceptance(long id, CancellationToken ct);
     Task<int> GetCountAcceptance(AcceptanceFilter filter, CancellationToken ct);
     Task<List<AcceptanceItem>> GetPagedAcceptance(AcceptanceFilter filter, CancellationToken ct);

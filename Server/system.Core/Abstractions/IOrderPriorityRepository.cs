@@ -1,5 +1,4 @@
-﻿using CRMSystem.Core.ProjectionModels;
-using CRMSystem.Core.ProjectionModels.OrderPriority;
+﻿using CRMSystem.Core.ProjectionModels.OrderPriority;
 
 namespace CRMSystem.Core.Abstractions;
 

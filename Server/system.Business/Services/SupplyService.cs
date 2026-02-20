@@ -35,21 +35,31 @@ public class SupplyService(
         return count;
     }
 
-    public async Task<long> CreateSupply(Supply supply, CancellationToken ct)
+    public async Task<long> CreateSupply(SupplyCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating supplies start");
 
-        if (!await supplierRepository.Exists(supply.SupplierId, ct))
+        if (!await supplierRepository.Exists(createModel.SupplierId, ct))
         {
-            logger.LogError("Supplier{supplierId} not found", supply.SupplierId);
-            throw new NotFoundException($"Supplier {supply.SupplierId} not found");
+            logger.LogError("Supplier{supplierId} not found", createModel.SupplierId);
+            throw new NotFoundException($"Supplier {createModel.SupplierId} not found");
         }
 
-        var Id = await supplySetRepository.Create(supply, ct);
+        var (supply, errors) = Supply.Create(
+            0,
+            createModel.SupplierId,
+            createModel.Date);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
+        }
+        
+        var id = await supplySetRepository.Create(supply!, ct);
 
         logger.LogInformation("Creating supplies success");
 
-        return Id;
+        return id;
     }
 
     public async Task<long> DeleteSupply(long id, CancellationToken ct)

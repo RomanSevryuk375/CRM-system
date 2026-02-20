@@ -27,7 +27,7 @@ public class WorkProposal
     public ProposalStatusEnum StatusId { get; }
     public DateTime Date { get; }
 
-    public static (WorkProposal? workPropossal, List<string> errors) Create(
+    public static (WorkProposal? workPropossal, List<string>? errors) Create(
         long id, long orderId, long jobId, int workerId, ProposalStatusEnum statusId, DateTime date)
     {
         var errors = new List<string>();

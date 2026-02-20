@@ -1,6 +1,5 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.ProjectionModels.OrderStatus;
 using Microsoft.Extensions.Logging;
 

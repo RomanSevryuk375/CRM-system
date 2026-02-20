@@ -41,7 +41,7 @@ public class ScheduleServiceTests
     [Fact]
     public async Task CreateSchedule_ShouldThrowNotFoundException_WhenWorkerDoesNotExist()
     {
-        var schedule = ValidObjects.CreateValidSchedul();
+        var schedule = ValidObjects.CreateValidSchedule();
 
         _workerRepoMock.Setup(x => x.Exists(
             schedule.WorkerId,
@@ -61,7 +61,7 @@ public class ScheduleServiceTests
     [Fact]
     public async Task CreateSchedule_ShouldThrowNotFoundException_WhenShiftDoesNotExist()
     {
-        var schedule = ValidObjects.CreateValidSchedul();
+        var schedule = ValidObjects.CreateValidSchedule();
 
         _workerRepoMock.Setup(x => x.Exists(
             schedule.WorkerId,
@@ -86,7 +86,7 @@ public class ScheduleServiceTests
     [Fact]
     public async Task CreateSchedule_ShouldRollback_WhenShiftDoesNotExist()
     {
-        var schedule = ValidObjects.CreateValidSchedul();
+        var schedule = ValidObjects.CreateValidSchedule();
         var shift = ValidObjects.CreateValidShift();
 
         _workerRepoMock.Setup(x => x.Exists(
@@ -95,7 +95,7 @@ public class ScheduleServiceTests
             .ReturnsAsync(true);
 
         _shiftRepoMock.Setup(x => x.Create(
-            shift,
+            It.IsAny<Shift>(),
             It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception("Some think going wrong"));
 

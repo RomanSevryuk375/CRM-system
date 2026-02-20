@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,20 +46,9 @@ public class WorkInOrderController(
     public async Task<ActionResult<long>> CreateWiO(
         [FromBody] WorkInOrderRequest request, CancellationToken ct)
     {
-        var (work, errors) = WorkInOrder.Create(
-            0,
-            request.OrderId,
-            request.JobId,
-            request.WorkerId,
-            request.StatusId,
-            request.TimeSpent);
+        var createModel = mapper.Map<WorkInOrderCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await workInOrderService.CreateWiO(work!, ct);
+        await workInOrderService.CreateWiO(createModel, ct);
 
         return Created();
     }
@@ -70,10 +58,7 @@ public class WorkInOrderController(
     public async Task<ActionResult<long>> UpdateWiO(
         long id, [FromBody] WorkInOrderUpdateRequest request, CancellationToken ct)
     {
-        var model = new WorkInOrderUpdateModel(
-            request.WorkerId,
-            request.StatusId,
-            request.TimeSpent);
+        var model = mapper.Map<WorkInOrderUpdateModel>(request);
 
         await workInOrderService.UpdateWiO(id, model, ct);
 
@@ -82,10 +67,10 @@ public class WorkInOrderController(
 
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> DeleteWIO(
+    public async Task<ActionResult<long>> DeleteWio(
         long id, CancellationToken ct)
     {
-        await workInOrderService.DeleteWIO(id, ct);
+        await workInOrderService.DeleteWio(id, ct);
 
         return NoContent();
     }

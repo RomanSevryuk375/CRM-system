@@ -2,6 +2,7 @@
 
 public record AcceptanceCreateModel
 (
+    long Id,
     long OrderId,
     int WorkerId,
     DateTime CreatedAt,

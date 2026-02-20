@@ -77,25 +77,36 @@ public class UserService(
         return user;
     }
 
-    public async Task<long> CreateUser(User user, CancellationToken ct)
+    public async Task<long> CreateUser(UserCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating user start");
+        
+        var (user, errors) = User.Create(
+            0,
+            createModel.RoleId,
+            createModel.Login,
+            createModel.PasswordHash);
+        
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
+        }
 
-        var Id = await userRepository.Create(user, ct);
+        var id = await userRepository.Create(user!, ct);
 
         logger.LogInformation("Creating user success");
 
-        return Id;
+        return id;
     }
 
     public async Task<long> DeleteUser(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting user start");
 
-        var Id = await userRepository.Delete(id, ct);
+        var userId = await userRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting user success");
 
-        return Id;
+        return userId;
     }
 }

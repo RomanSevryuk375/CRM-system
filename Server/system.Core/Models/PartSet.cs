@@ -26,7 +26,7 @@ public class PartSet
     public decimal Quantity { get; }
     public decimal SoldPrice { get; }
 
-    public static (PartSet? partSet, List<string> errors) Create(
+    public static (PartSet? partSet, List<string>? errors) Create(
         long id, long? orderId, long positionId, long? proposalId, decimal quantity, decimal soldPrice)
     {
         var errors = new List<string>();

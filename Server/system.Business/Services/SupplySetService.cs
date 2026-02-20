@@ -36,48 +36,60 @@ public class SupplySetService(
         return count;
     }
 
-    public async Task<long> CreateSupplySet(SupplySet supplySet, CancellationToken ct)
+    public async Task<long> CreateSupplySet(SupplySetCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating supply sets start");
 
-        if (!await supplyRepository.Exists(supplySet.SupplyId, ct))
+        if (!await supplyRepository.Exists(createModel.SupplyId, ct))
         {
-            logger.LogError("Supply{supplyId} not found", supplySet.SupplyId);
-            throw new NotFoundException($"Supply {supplySet.SupplyId} not found");
+            logger.LogError("Supply{supplyId} not found", createModel.SupplyId);
+            throw new NotFoundException($"Supply {createModel.SupplyId} not found");
         }
 
-        if (!await positionRepository.Exists(supplySet.PositionId, ct))
+        if (!await positionRepository.Exists(createModel.PositionId, ct))
         {
-            logger.LogError("Position{positionId} not found", supplySet.PositionId);
-            throw new NotFoundException($"Position {supplySet.PositionId} not found");
+            logger.LogError("Position{positionId} not found", createModel.PositionId);
+            throw new NotFoundException($"Position {createModel.PositionId} not found");
         }
 
-        var Id = await supplySetRepository.Create(supplySet, ct);
+        var (supplySet, errors) = SupplySet.Create(
+            0,
+            createModel.SupplyId,
+            createModel.PositionId,
+            createModel.Quantity,
+            createModel.PurchasePrice);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
+        }
+        
+        var id = await supplySetRepository.Create(supplySet!, ct);
 
         logger.LogInformation("Creating supply sets success");
 
-        return Id;
+        return id;
     }
 
     public async Task<long> UpdateSupplySet(long id, SupplySetUpdateModel model, CancellationToken ct)
     {
         logger.LogInformation("Updating supply sets start");
 
-        var Id = await supplySetRepository.Update(id, model, ct);
+        var setId = await supplySetRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating supply sets success");
 
-        return Id;
+        return setId;
     }
 
     public async Task<long> DeleteSupplySet(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting supply sets start");
 
-        var Id = await supplySetRepository.Delete(id, ct);
+        var setId = await supplySetRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting supply sets success");
 
-        return Id;
+        return setId;
     }
 }

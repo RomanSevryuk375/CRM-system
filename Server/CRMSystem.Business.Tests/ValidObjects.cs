@@ -1,16 +1,36 @@
 ﻿using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Bill;
+using CRMSystem.Core.ProjectionModels.Car;
+using CRMSystem.Core.ProjectionModels.Client;
+using CRMSystem.Core.ProjectionModels.Expense;
+using CRMSystem.Core.ProjectionModels.Guarantee;
+using CRMSystem.Core.ProjectionModels.Notification;
+using CRMSystem.Core.ProjectionModels.Order;
+using CRMSystem.Core.ProjectionModels.Part;
+using CRMSystem.Core.ProjectionModels.PartCategory;
+using CRMSystem.Core.ProjectionModels.PartSet;
+using CRMSystem.Core.ProjectionModels.Position;
+using CRMSystem.Core.ProjectionModels.Schedule;
+using CRMSystem.Core.ProjectionModels.Shift;
+using CRMSystem.Core.ProjectionModels.Specialization;
+using CRMSystem.Core.ProjectionModels.StorageCell;
+using CRMSystem.Core.ProjectionModels.Supplier;
+using CRMSystem.Core.ProjectionModels.Supply;
+using CRMSystem.Core.ProjectionModels.SupplySet;
+using CRMSystem.Core.ProjectionModels.Tax;
+using CRMSystem.Core.ProjectionModels.User;
+using CRMSystem.Core.ProjectionModels.Worker;
+using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using FluentAssertions;
 using Shared.Enums;
-using Order = CRMSystem.Core.Models.Order;
 
 namespace CRMSystem.Business.Tests;
 
 internal static class ValidObjects
 {
-    internal static Notification CreateValidNotification()
+    internal static NotificationCreateModel CreateValidNotification()
     {
-        var (notification, errors) = Notification.Create(
-            0,
+        var notification = new NotificationCreateModel(
             1,
             2,
             NotificationTypeEnum.Client,
@@ -19,7 +39,6 @@ internal static class ValidObjects
             new DateTime(2025, 1, 1));
 
         notification.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return notification;
     }
@@ -39,10 +58,9 @@ internal static class ValidObjects
         return absence;
     }
 
-    internal static Bill CreateValidBill()
+    internal static BillCreateModel CreateValidBill()
     {
-        var (bill, errors) = Bill.Create(
-            0,
+        var bill = new BillCreateModel(
             1,
             BillStatusEnum.Unpaid,
             new DateTime(2025, 1, 1),
@@ -50,15 +68,13 @@ internal static class ValidObjects
             null);
 
         bill.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return bill;
     }
 
-    internal static Car CreateValidCar(CarStatusEnum status)
+    internal static CarCreateModel CreateValidCar(CarStatusEnum status)
     {
-        var (car, errors) = Car.Create(
-            0,
+        var car = new CarCreateModel(
             1,
             status,
             "Test",
@@ -69,59 +85,51 @@ internal static class ValidObjects
             15000);
 
         car.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return car;
     }
 
-    internal static User CreateValidUserClient()
+    internal static UserCreateModel CreateValidUserClient()
     {
-        var (user, errorsUser) = User.Create(
-            0,
+        var user = new UserCreateModel(
             (int)RoleEnum.Client,
             "ClientUser",
             "TestTestTest");
 
         user.Should().NotBeNull();
-        errorsUser.Should().BeEmpty();
 
         return user;
     }
 
-    internal static User CreateValidWorkerUser()
+    internal static UserCreateModel CreateValidWorkerUser()
     {
-        var (user, errorsUser) = User.Create(
-            0,
+        var user = new UserCreateModel(
             (int)RoleEnum.Worker,
             "ClientUser",
             "TestTestTest");
 
         user.Should().NotBeNull();
-        errorsUser.Should().BeEmpty();
 
         return user;
     }
 
-    internal static Client CreateValidClient(long UserId)
+    internal static ClientCreateModel CreateValidClient(long userId)
     {
-        var (client, errorsClient) = Client.Create(
-            0,
-            UserId,
+        var client = new ClientCreateModel(
+            userId,
             "TestTest",
             "TestTestTest",
             "80444444444",
             "TEstTestTest");
 
         client.Should().NotBeNull();
-        errorsClient.Should().BeEmpty();
 
         return client;
     }
 
-    internal static Expense CreateValidExpense(int? taxId, long? partSetId)
+    internal static ExpenseCreateModel CreateValidExpense(int? taxId, long? partSetId)
     {
-        var (expense, errors) = Expense.Create(
-            0,
+        var expense = new ExpenseCreateModel(
             new DateTime(2025, 1, 1),
             "Test",
             taxId,
@@ -130,15 +138,13 @@ internal static class ValidObjects
             123);
 
         expense.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return expense;
     }
 
-    internal static Guarantee CreateValidGuarantee()
+    internal static GuaranteeCreateModel CreateValidGuarantee()
     {
-        var (guarantee, errors) = Guarantee.Create(
-            0,
+        var guarantee = new GuaranteeCreateModel(
             1,
             new DateOnly(2025, 1, 1),
             new DateOnly(2026, 1, 1),
@@ -146,43 +152,37 @@ internal static class ValidObjects
             "Test");
 
         guarantee.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return guarantee;
     }
 
-    internal static Order CreateValidOrder()
+    internal static OrderCreateModel CreateValidOrder()
     {
-        var (order, errors) = Order.Create(
-                        123,
+        var order = new OrderCreateModel(
                         OrderStatusEnum.Accepted,
                         123,
                         new DateOnly(2025, 1, 1),
                         OrderPriorityEnum.Medium);
-
-        errors.Should().BeEmpty();
+        
         order.Should().NotBeNull();
 
         return order;
     }
 
-    internal static PartCategory CreateValidPartCategory()
+    internal static PartCategoryCreateModel CreateValidPartCategory()
     {
-        var (category, errors) = PartCategory.Create(
-            0,
+        var category = new PartCategoryCreateModel(
             "Test",
             "Test");
-
-        errors.Should().BeEmpty();
+        
         category.Should().NotBeNull();
 
         return category;
     }
 
-    internal static Part CreateValidPart()
+    internal static PartCreateModel CreateValidPart()
     {
-        var (part, errors) = Part.Create(
-            0,
+        var part = new PartCreateModel(
             1,
             "Test",
             "Test",
@@ -193,15 +193,13 @@ internal static class ValidObjects
             "Test");
 
         part.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return part;
     }
 
-    internal static PartSet CreateValidPartSet(long? orderId, long? proposalId)
+    internal static PartSetCreateModel CreateValidPartSet(long? orderId, long? proposalId)
     {
-        var (partSet, errors) = PartSet.Create(
-            0,
+        var partSet = new PartSetCreateModel(
             orderId,
             1,
             proposalId,
@@ -209,7 +207,6 @@ internal static class ValidObjects
             1);
 
         partSet.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return partSet;
     }
@@ -229,10 +226,9 @@ internal static class ValidObjects
         return note;
     }
 
-    internal static Position CreateValidPosition()
+    internal static PositionCreateModel CreateValidPosition()
     {
-        var (position, errors) = Position.Create(
-            0,
+        var position = new PositionCreateModel(
             1,
             2,
             50,
@@ -240,35 +236,30 @@ internal static class ValidObjects
             3);
 
         position.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return position;
     }
 
-    internal static Schedule CreateValidSchedul()
+    internal static ScheduleCreateModel CreateValidSchedule()
     {
-        var (schedule, errors) = Schedule.Create(
-            0,
+        var schedule = new ScheduleCreateModel(
             1,
             2,
             new DateTime(2025, 1, 1));
 
         schedule.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return schedule;
     }
 
-    internal static Shift CreateValidShift()
+    internal static ShiftCreateModel CreateValidShift()
     {
-        var (shift, errors) = Shift.Create(
-            0,
+        var shift = new ShiftCreateModel(
             "Test",
             new TimeOnly(6, 30),
             new TimeOnly(18, 30));
 
         shift.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return shift;
     }
@@ -286,90 +277,77 @@ internal static class ValidObjects
         return skill;
     }
 
-    internal static Specialization CreateValidSpecialization()
+    internal static SpecializationCreateModel CreateValidSpecialization()
     {
-        var (spec, error) = Specialization.Create(
-            1,
+        var spec = new SpecializationCreateModel(
             "Test");
 
         spec.Should().NotBeNull();
-        error.Should().BeEmpty();
 
         return spec;
     }
 
-    internal static StorageCell CreateValidStorageCell()
+    internal static StorageCellCreateModel CreateValidStorageCell()
     {
-        var (cell, errors) = StorageCell.Create(
-            1,
+        var cell = new StorageCellCreateModel(
             "Test",
             "Test");
 
         cell.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return cell;
     }
 
-    internal static Supplier CreateValidSupplier()
+    internal static SupplierCreateModel CreateValidSupplier()
     {
-        var (supplier, errors) = Supplier.Create(
-            1,
+        var supplier = new SupplierCreateModel(
             "Test",
             "Test");
 
         supplier.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return supplier;
     }
 
-    internal static Supply CreateValidSupply()
+    internal static SupplyCreateModel CreateValidSupply()
     {
-        var (supply, errors) = Supply.Create(
-            0,
+        var supply = new SupplyCreateModel(
             1,
             new DateOnly(2025, 1, 1));
 
         supply.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return supply;
     }
 
-    internal static SupplySet CreateValidSupplySet()
+    internal static SupplySetCreateModel CreateValidSupplySet()
     {
-        var (set, errors) = SupplySet.Create(
-            0,
+        var set = new SupplySetCreateModel(
             1,
             2,
             3,
             4);
 
         set.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return set;
     }
 
-    internal static Tax CreateValidTax()
+    internal static TaxCreateModel CreateValidTax()
     {
-        var (tax, errors) = Tax.Create(
-            0,
+        var tax = new TaxCreateModel(
             "Test",
             1,
             TaxTypeEnum.LocalFees);
 
         tax.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return tax;
     }
 
-    internal static Worker CreateValidWorker()
+    internal static WorkerCreateModel CreateValidWorker()
     {
-        var (worker, errors) = Worker.Create(
-            0,
+        var worker = new WorkerCreateModel(
             1,
             "Test",
             "Test",
@@ -378,15 +356,13 @@ internal static class ValidObjects
             "Test");
 
         worker.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return worker;
     }
 
-    internal static WorkInOrder CreateValidWorkInOrder()
+    internal static WorkInOrderCreateModel CreateValidWorkInOrder()
     {
-        var (wio, errors) = WorkInOrder.Create(
-            0,
+        var wio = new WorkInOrderCreateModel(
             1,
             2,
             3,
@@ -394,7 +370,6 @@ internal static class ValidObjects
             4);
 
         wio.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return wio;
     }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.ProjectionModels.Specialization;
 using CRMSystem.DataAccess.Entites;
 using Shared.Contracts.Specialization;
@@ -13,5 +12,7 @@ public class SpecializationProfile : Profile
         CreateMap<SpecializationItem, SpecializationResponse>();
 
         CreateMap<SpecializationEntity, SpecializationItem>();
+
+        CreateMap<SpecializationRequest, SpecializationCreateModel>();
     }
 }

@@ -1,5 +1,4 @@
-﻿using CRMSystem.Core.ProjectionModels;
-using CRMSystem.Core.ProjectionModels.WorkProposalStatus;
+﻿using CRMSystem.Core.ProjectionModels.WorkProposalStatus;
 
 namespace CRMSystem.Core.Abstractions;
 

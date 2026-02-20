@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRMSystem.Core.ProjectionModels.User;
 using CRMSystem.DataAccess.Entites;
+using Shared.Contracts.User;
 
 namespace CRM_system_backend.MapProfiles;
 
@@ -11,5 +12,7 @@ public class UserProfile : Profile
         CreateMap<UserEntity, UserItem>()
             .ForMember(dest => dest.Role,
                         opt => opt.MapFrom(src => $"{src.Role!.Name}"));
+
+        CreateMap<UserRequest, UserCreateModel>();
     }
 }

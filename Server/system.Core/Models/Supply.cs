@@ -14,7 +14,7 @@ public class Supply
     public int SupplierId { get; }
     public DateOnly Date { get; }
 
-    public static (Supply? supply, List<string> errors) Create (long id, int supplierId, DateOnly date)
+    public static (Supply? supply, List<string>? errors) Create (long id, int supplierId, DateOnly date)
     {
         var errors = new List<string>();
 

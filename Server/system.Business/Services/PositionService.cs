@@ -3,6 +3,7 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Position;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Part;
 using Microsoft.Extensions.Logging;
 using Shared.Filters;
 
@@ -38,7 +39,10 @@ public class PositionService(
         return count;
     }
 
-    public async Task<long> CreatePositionWithPart(Position position, Part part, CancellationToken ct)
+    public async Task<long> CreatePositionWithPart(
+        PositionCreateModel positionCreateModel,
+        PartCreateModel partCreateModel,
+        CancellationToken ct)
     {
         await unitOfWork.BeginTransactionAsync(ct);
 
@@ -46,26 +50,54 @@ public class PositionService(
         {
             logger.LogInformation("Creating part start");
 
-            if (!await partCategoryRepository.Exists(part.CategoryId, ct))
+            if (!await partCategoryRepository.Exists(partCreateModel.CategoryId, ct))
             {
-                logger.LogError("Part category{categoryId} not found", part.CategoryId);
-                throw new NotFoundException($"Part category {part.CategoryId} not found");
+                logger.LogError("Part category{categoryId} not found", partCreateModel.CategoryId);
+                throw new NotFoundException($"Part category {partCreateModel.CategoryId} not found");
             }
 
-            var newPartId = await partRepository.Create(part,ct);
+            var (part, partErrors) = Part.Create(
+                0,
+                partCreateModel.CategoryId,
+                partCreateModel.OemArticle,
+                partCreateModel.ManufacturerArticle,
+                partCreateModel.InternalArticle,
+                partCreateModel.Description,
+                partCreateModel.Name,
+                partCreateModel.Manufacturer,
+                partCreateModel.Applicability);
+
+            if (partErrors is not null && partErrors.Any())
+            {
+                throw new ValidationException(string.Join(", ", partErrors));
+            }
+            
+            var newPartId = await partRepository.Create(part!,ct);
 
             logger.LogInformation("Creating part success");
 
             logger.LogInformation("Creating position start");
 
-            if (!await cellRepository.Exists(position.CellId, ct))
+            if (!await cellRepository.Exists(positionCreateModel.CellId, ct))
             {
-                logger.LogError("Cell {cellId} not found", position.CellId);
-                throw new NotFoundException($"Cell {position.CellId} not found");
+                logger.LogError("Cell {cellId} not found", positionCreateModel.CellId);
+                throw new NotFoundException($"Cell {positionCreateModel.CellId} not found");
             }
+            
+            var (position, positionErrors) = Position.Create(
+                0,
+                newPartId,
+                positionCreateModel.CellId,
+                positionCreateModel.PurchasePrice,
+                positionCreateModel.SellingPrice,
+                positionCreateModel.Quantity);
 
-            position.SetPartId(newPartId);
-            var newPositionId = await positionRepository.Create(position, ct);
+            if (positionErrors is not null && positionErrors.Any())
+            {
+                throw new ValidationException(string.Join(", ", positionErrors));
+            }
+            
+            var newPositionId = await positionRepository.Create(position!, ct);
 
             logger.LogInformation("Creating position success");
 
@@ -93,21 +125,21 @@ public class PositionService(
             throw new NotFoundException($"Cell {model.CellId} not found");
         }
 
-        var Id = await positionRepository.Update(id, model, ct);
+        var positionId = await positionRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating position success");
 
-        return Id;
+        return positionId;
     }
 
     public async Task<long> DeletePosition(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting position start");
 
-        var Id = await positionRepository.Delete(id, ct);
+        var positionId = await positionRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting position success");
 
-        return Id;
+        return positionId;
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.PartSet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -57,20 +56,9 @@ public class PartSetController(
     public async Task<ActionResult> AddToPartSet(
         [FromBody] PartSetRequest request, CancellationToken ct)
     {
-        var (partSet, errors) = PartSet.Create(
-            0,
-            request.OrderId,
-            request.PositionId,
-            request.ProposalId,
-            request.Quantity,
-            request.SoldPrice);
+        var createModel = mapper.Map<PartSetCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        var partSetId = await partSetService.AddToPartSet(partSet!, ct);
+        var partSetId = await partSetService.AddToPartSet(createModel, ct);
 
         return CreatedAtAction(
             nameof(GetPartSetById),
@@ -83,9 +71,7 @@ public class PartSetController(
     public async Task<ActionResult> UpdatePartSet(
         long id, [FromBody] PartSetUpdateRequest request, CancellationToken ct)
     {
-        var model = new PartSetUpdateModel(
-            request.Quantity,
-            request.SoldPrice);
+        var model = mapper.Map<PartSetUpdateModel>(request);
 
         await partSetService.UpdatePartSet(id, model, ct);
 

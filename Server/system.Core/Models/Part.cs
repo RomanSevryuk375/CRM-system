@@ -39,7 +39,7 @@ public class Part
     public string Manufacturer { get; } 
     public string Applicability { get; } 
 
-    public static (Part? part, List<string> errors) Create(
+    public static (Part? part, List<string>? errors) Create(
         long id,
         int categoryId,
         string? oemArticle,

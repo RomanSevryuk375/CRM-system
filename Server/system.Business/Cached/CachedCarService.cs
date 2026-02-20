@@ -1,7 +1,6 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Business.Extensions;
 using CRMSystem.Core.ProjectionModels.Car;
-using CRMSystem.Core.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Shared.Filters;
@@ -13,9 +12,9 @@ public class CachedCarService(
     IDistributedCache distributed,
     ILogger<CachedCarService> logger) : ICarService
 {
-    public async Task<long> CreateCar(Car car, CancellationToken ct)
+    public async Task<long> CreateCar(CarCreateModel createModel, CancellationToken ct)
     {
-        return await decorated.CreateCar(car, ct);
+        return await decorated.CreateCar(createModel, ct);
     }
 
     public async Task<long> DeleteCar(long id, CancellationToken ct)

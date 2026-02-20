@@ -14,5 +14,9 @@ public class PositionProfile : Profile
         CreateMap<PositionEntity, PositionItem>()
             .ForMember(dest => dest.Part,
                         opt => opt.MapFrom(src => $"{src.Part!.Name}"));
+        
+        CreateMap<PositionRequest, PositionCreateModel>();
+
+        CreateMap<PositionUpdateRequest, PositionUpdateModel>();
     }
 }

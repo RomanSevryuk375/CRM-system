@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.StorageCell;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,17 +29,9 @@ public class StorageCellController(
     public async Task<ActionResult> CreateStorageCell(
         [FromBody] StorageCellRequest request, CancellationToken ct)
     {
-        var (cell, errors) = StorageCell.Create(
-            0,
-            request.Rack,
-            request.Shelf);
+        var createModel = mapper.Map<StorageCellCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await storageCellService.CreateStorageCell(cell!, ct);
+        await storageCellService.CreateStorageCell(createModel, ct);
 
         return Created();
     }
@@ -50,9 +41,7 @@ public class StorageCellController(
     public async Task<ActionResult> UpdateStorageCell(
         int id, [FromBody] StorageCellUpdateRequest request, CancellationToken ct)
     {
-        var model = new StorageCellUpdateModel(
-            request.Rack,
-            request.Shelf);
+        var model = mapper.Map<StorageCellUpdateModel>(request);
 
         await storageCellService.UpdateStorageCell(id, model, ct);
 

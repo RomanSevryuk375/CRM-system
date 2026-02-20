@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Tax;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,18 +29,11 @@ public class TaxController(
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult<int>> CreateTax(
-        [FromBody] TaxRequest taxRequest, CancellationToken ct)
+        [FromBody] TaxRequest request, CancellationToken ct)
     {
-        var (tax, errors) = Tax.Create(
-            0,
-            taxRequest.Name,
-            taxRequest.Rate,
-            taxRequest.TypeId);
+        var createModel = mapper.Map<TaxCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-            return BadRequest(errors);
-
-        await taxService.CreateTax(tax!, ct);
+        await taxService.CreateTax(createModel, ct);
 
         return Created();
     }
@@ -51,9 +43,7 @@ public class TaxController(
     public async Task<ActionResult> UpdateTax(
         int id, [FromBody] TaxUpdateRequest request, CancellationToken ct)
     {
-        var model = new TaxUpdateModel(
-            request.Name,
-            request.Rate);
+        var model = mapper.Map<TaxUpdateModel>(request);
 
         await taxService.UpdateTax(id, model, ct);
 

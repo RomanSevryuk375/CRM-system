@@ -35,21 +35,37 @@ public class PartService(
         return count;
     }
 
-    public async Task<long> CreatePart(Part part, CancellationToken ct)
+    public async Task<long> CreatePart(PartCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating part start");
 
-        if (!await partCategoryRepository.Exists(part.CategoryId, ct))
+        if (!await partCategoryRepository.Exists(createModel.CategoryId, ct))
         {
-            logger.LogError("Part category{categoryId} not found", part.CategoryId);
-            throw new NotFoundException($"Part category {part.CategoryId} not found");
+            logger.LogError("Part category{categoryId} not found", createModel.CategoryId);
+            throw new NotFoundException($"Part category {createModel.CategoryId} not found");
+        }
+        
+        var (part, errors) = Part.Create(
+            0,
+            createModel.CategoryId,
+            createModel.OemArticle,
+            createModel.ManufacturerArticle,
+            createModel.InternalArticle,
+            createModel.Description,
+            createModel.Name,
+            createModel.Manufacturer,
+            createModel.Applicability);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await partRepository.Create(part, ct);
+        var id = await partRepository.Create(part!, ct);
 
         logger.LogInformation("Creating part success");
 
-        return Id;
+        return id;
     }
 
     public async Task<long> UpdatePart(long id, PartUpdateModel model, CancellationToken ct)
