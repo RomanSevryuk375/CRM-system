@@ -43,7 +43,9 @@ public class PaymentNoteController(
             request.MethodId);
 
         if (errors is not null && errors.Any())
+        {
             return BadRequest(errors);
+        }
 
         await paymentNoteService.CreatePaymentNote(paymentNote!, ct);
 

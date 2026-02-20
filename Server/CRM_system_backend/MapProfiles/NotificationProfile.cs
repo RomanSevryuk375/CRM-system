@@ -20,5 +20,7 @@ public class NotificationProfile : Profile
                         opt => opt.MapFrom(src => $"{src.NotificationType!.Name}"))
             .ForMember(dest => dest.Status,
                         opt => opt.MapFrom(src => $"{src.Status!.Name}"));
+        
+        CreateMap<NotificationRequest, NotificationCreateModel>();
     }
 }

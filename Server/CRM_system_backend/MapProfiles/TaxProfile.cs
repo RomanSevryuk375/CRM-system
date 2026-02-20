@@ -14,5 +14,9 @@ public class TaxProfile : Profile
         CreateMap<TaxEntity, TaxItem>()
             .ForMember(dest => dest.Type,
                         opt => opt.MapFrom(src => $"{src.TaxType!.Name}"));
+
+        CreateMap<TaxRequest, TaxCreateModel>();
+        
+        CreateMap<TaxUpdateRequest, TaxUpdateModel>();
     }
 }

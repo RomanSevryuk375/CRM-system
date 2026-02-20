@@ -40,7 +40,7 @@ public class Car
     public string StateNumber { get; }
     public int Mileage { get; }
 
-    public static (Car? car, List<string> errors) Create(
+    public static (Car? car, List<string>? errors) Create(
         long id,
         long ownerId,
         CarStatusEnum statusId,

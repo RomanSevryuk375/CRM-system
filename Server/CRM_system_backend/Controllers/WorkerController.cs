@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.User;
 using CRMSystem.Core.ProjectionModels.Worker;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,19 +45,9 @@ public class WorkerController(
     public async Task<ActionResult<int>> CreateWorker(
         [FromBody] WorkerRequest request, CancellationToken ct)
     {
-        var (worker, errorsWorker) = Worker.Create(
-            0,
-            request.UserId,
-            request.Name,
-            request.Surname,
-            request.HourlyRate,
-            request.PhoneNumber,
-            request.Email);
+        var createModel = mapper.Map<WorkerCreateModel>(request);
 
-        if (errorsWorker is not null && errorsWorker.Any())
-            return BadRequest(errorsWorker);
-
-        var workerId = await workerService.CreateWorker(worker!, ct);
+        var workerId = await workerService.CreateWorker(createModel, ct);
 
         return CreatedAtAction(
             nameof(GetWorkerById), 
@@ -69,32 +59,10 @@ public class WorkerController(
     public async Task<ActionResult<int>> CreateWorker(
         [FromBody]  WorkerWithUserRequest request, CancellationToken ct)
     {
-        var (user, errorsUser) = CRMSystem.Core.Models.User.Create(
-            0,
-            request.RoleId,
-            request.Login,
-            request.Password);
+        var workerCreateModel = mapper.Map<WorkerCreateModel>(request);
+        var userCreateModel = mapper.Map<UserCreateModel>(request); 
 
-        if (errorsUser is not null && errorsUser.Any())
-        {
-            return BadRequest(errorsUser);
-        }
-
-        var (worker, errorsWorker) = Worker.Create(
-            0,
-            1,
-            request.Name,
-            request.Surname,
-            request.HourlyRate,
-            request.PhoneNumber,
-            request.Email);
-
-        if (errorsWorker is not null && errorsWorker.Any())
-        {
-            return BadRequest(errorsWorker);
-        }
-
-        var workerId = await workerService.CreateWorkerWithUser(worker!, user!, ct);
+        var workerId = await workerService.CreateWorkerWithUser(workerCreateModel, userCreateModel, ct);
 
         return CreatedAtAction(
             nameof(GetWorkerById),
@@ -108,12 +76,7 @@ public class WorkerController(
     public async Task<ActionResult> UpdateWorker(
         int id, [FromBody] WorkerUpdateRequest request, CancellationToken ct)
     {
-        var model = new WorkerUpdateModel(
-            request.Name,
-            request.Surname,
-            request.HourlyRate,
-            request.PhoneNumber,
-            request.Email);
+        var model = mapper.Map<WorkerUpdateModel>(request);
 
         await workerService.UpdateWorker(id, model, ct);
 

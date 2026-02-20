@@ -1,7 +1,8 @@
-﻿namespace CRMSystem.Core.ProjectionModels;
+﻿namespace CRMSystem.Core.ProjectionModels.Role;
 
-public record OrderStatusItem
+public record RoleItem
 {
     public int Id { get; init; }
     public string Name { get; init; } = string.Empty;
 };
+

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
+using CRMSystem.Core.ProjectionModels.Specialization;
 
 namespace CRMSystem.DataAccess.Repositories;
 

@@ -18,17 +18,27 @@ public class NotificationStatus
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "id");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var nameError = DomainValidator.ValidateString(name, ValidationConstants.MAX_TYPE_NAME, "name");
-        if (!string.IsNullOrEmpty(nameError)) errors.Add(nameError);
+        var nameError = DomainValidator
+            .ValidateString(name, ValidationConstants.MAX_TYPE_NAME, "name");
+        if (!string.IsNullOrEmpty(nameError))
+        {
+            errors.Add(nameError);
+        }
 
         if (errors.Any())
+        {
             return (null, errors);
+        }
 
         var notificationStatus = new NotificationStatus(id, name);
 
-        return (notificationStatus, new List<string>());
+        return (notificationStatus, []);
     }
 }

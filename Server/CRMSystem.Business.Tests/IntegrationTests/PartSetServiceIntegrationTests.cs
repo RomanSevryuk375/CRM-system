@@ -1,5 +1,5 @@
 ﻿using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.PartSet;
 using CRMSystem.DataAccess.Entites;
 using FluentAssertions;
 using Shared.Enums;
@@ -140,13 +140,12 @@ public class PartSetServiceIntegrationTests : BaseIntegrationTest, IClassFixture
         dbContext.Positions.Add(position);
         await dbContext.SaveChangesAsync();
 
-        await _partSetService.AddToPartSet(PartSet.Create(
-            0,
+        await _partSetService.AddToPartSet(new PartSetCreateModel(
             order.Id,
             position.Id,
             null,
             1,
-            120).partSet!, default);
+            120), CancellationToken.None);
 
         dbContext.ChangeTracker.Clear();
 

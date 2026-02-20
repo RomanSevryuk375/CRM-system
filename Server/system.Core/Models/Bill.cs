@@ -24,7 +24,11 @@ public class Bill
 
     public void SetOrderId(long orderId)
     {
-        if(orderId <= 0) throw new ConflictException(nameof(orderId));
+        if(orderId <= 0)
+        {
+            throw new ConflictException(nameof(orderId));
+        }
+
         OrderId = orderId;
     }
 
@@ -36,7 +40,7 @@ public class Bill
     public DateOnly? ActualBillDate { get; }
     public DateTime LastBillDate => CreatedAt.AddDays(14);
 
-    public static (Bill? bill, List<string> errors ) Create (
+    public static (Bill? bill, List<string>? errors ) Create (
         long id, 
         long orderId, 
         BillStatusEnum statusId,

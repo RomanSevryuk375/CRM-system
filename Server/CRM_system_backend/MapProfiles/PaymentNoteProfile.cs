@@ -12,5 +12,7 @@ public class PaymentNoteProfile : Profile
         CreateMap<PaymentNoteItem, PaymentNoteResponse>();
 
         CreateMap<PaymentNoteEntity, PaymentNoteItem>();
+        
+        CreateMap<PaymentNoteRequest, PaymentNoteCreateModel>();
     }
 }

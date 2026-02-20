@@ -18,5 +18,7 @@ public class WorkProposalProfile : Profile
                         opt => opt.MapFrom(src => $"{src.Worker!.Name} {src.Worker.Surname}"))
             .ForMember(dest => dest.Status,
                         opt => opt.MapFrom(src => $"{src.Status!.Name}"));
+
+        CreateMap<WorkProposalRequest, WorkProposalCreateModel>();
     }
 }

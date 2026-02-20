@@ -172,8 +172,8 @@ public class NotificationServiceTests
             .ReturnsAsync(true);
 
         _notificationRepoMock.Setup(x => x.Create(
-            notification,
-            It.IsAny<CancellationToken>()))
+                It.IsAny<Notification>(),
+                It.IsAny<CancellationToken>()))
             .ReturnsAsync(notificationId);
 
         var result  = await _service.CreateNotification(notification, CancellationToken.None);

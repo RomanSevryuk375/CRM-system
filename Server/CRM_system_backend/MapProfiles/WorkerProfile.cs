@@ -12,5 +12,9 @@ public class WorkerProfile : Profile
         CreateMap<WorkerItem, WorkerResponse>();
 
         CreateMap<WorkerEntity, WorkerItem>();
+        
+        CreateMap<WorkerRequest, WorkerCreateModel>();
+        
+        CreateMap<WorkerUpdateRequest, WorkerUpdateModel>();
     }
 }

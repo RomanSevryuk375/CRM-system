@@ -18,5 +18,9 @@ public class ScheduleProfile : Profile
                         opt => opt.MapFrom(src => $"{src.Shift!.Name}"))
             .ForMember(dest => dest.DateTime,
                         opt => opt.MapFrom(src => src.Date));
+
+        CreateMap<ScheduleRequest, ScheduleCreateModel>();
+        
+        CreateMap<ScheduleUpdateRequest, ScheduleUpdateModel>();
     }
 }

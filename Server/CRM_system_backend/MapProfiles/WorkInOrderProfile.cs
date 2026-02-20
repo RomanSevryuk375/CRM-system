@@ -18,5 +18,9 @@ public class WorkInOrderProfile : Profile
                         opt => opt.MapFrom(src => $"{src.Worker!.Name} {src.Worker.Surname}"))
             .ForMember(dest => dest.Status,
                         opt => opt.MapFrom(src => $"{src.WorkInOrderStatus!.Name}"));
+        
+        CreateMap<WorkInOrderRequest, WorkInOrderCreateModel>();
+        
+        CreateMap<WorkInOrderUpdateRequest, WorkInOrderUpdateModel>();
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Attachment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,17 +35,9 @@ public class AttachmentController(
     public async Task<ActionResult> CreateAttachment(
         [FromBody]AttachmentRequest request, CancellationToken ct)
     {
-        var (attachment, errors) = Attachment.Create(
-            0,
-            request.OrderId,
-            request.WorkerId,
-            request.CreateAt,
-            request.Description);
+        var createModel = mapper.Map<AttachmentCreateModel>(request);
 
-        if(errors is not null && errors.Any())
-            return BadRequest(errors);
-
-        await attachmentService.CreateAttachment(attachment!, ct);
+        await attachmentService.CreateAttachment(createModel, ct);
 
         return Created();
     }

@@ -6,8 +6,8 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
-using CRMSystem.Core.ProjectionModels.AccetanceImg;
 using CRMSystem.Core.Exceptions;
+using CRMSystem.Core.ProjectionModels.AccetanceImg;
 using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;

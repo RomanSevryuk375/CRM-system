@@ -58,7 +58,7 @@ public class GuaranteeServiceTests
                         .ReturnsAsync(true);
 
         _guaranteeRepoMock.Setup(x => x.Create(
-                            guarantee,
+                            It.IsAny<Guarantee>(),
                             It.IsAny<CancellationToken>()))
                             .ReturnsAsync(guaranteeId);
 

@@ -1,8 +1,8 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Specialization;
 using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
@@ -22,21 +22,30 @@ public class SpecializationService(
         return specializations;
     }
 
-    public async Task<int> CreateSpecialization(Specialization specialization, CancellationToken ct)
+    public async Task<int> CreateSpecialization(SpecializationCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating specialization start");
 
-        if (await specializationRepository.ExistsByName(specialization.Name, ct))
+        if (await specializationRepository.ExistsByName(createModel.Name, ct))
         {
-            logger.LogError("Specialization {specializationId} not found", specialization.Name);
-            throw new NotFoundException($"Specialization {specialization.Name} not found");
+            logger.LogError("Specialization {specializationId} not found", createModel.Name);
+            throw new NotFoundException($"Specialization {createModel.Name} not found");
+        }
+        
+        var (specialization, errors) = Specialization.Create(
+            0,
+            createModel.Name);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await specializationRepository.Create(specialization, ct);
+        var id = await specializationRepository.Create(specialization!, ct);
 
         logger.LogInformation("Creating specialization success");
 
-        return Id;
+        return id;
     }
 
     public async Task<int> UpdateSpecialization(int id, string? name, CancellationToken ct)
@@ -49,21 +58,21 @@ public class SpecializationService(
             throw new NotFoundException($"Specialization {name} not found");
         }
 
-        var Id = await specializationRepository.Update(id, name, ct);
+        var specializationId = await specializationRepository.Update(id, name, ct);
 
         logger.LogInformation("Deleting specialization success");
 
-        return Id;
+        return specializationId;
     }
 
     public async Task<int> DeleteSpecialization(int id, CancellationToken ct)
     {
         logger.LogInformation("Deleting specialization start");
 
-        var Id = await specializationRepository.Delete(id, ct);
+        var specializationId = await specializationRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting specialization success");
 
-        return Id;
+        return specializationId;
     }
 }
