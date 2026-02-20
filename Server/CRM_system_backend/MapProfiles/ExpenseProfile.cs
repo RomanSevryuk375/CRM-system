@@ -18,5 +18,7 @@ public class ExpenseProfile : Profile
                         opt => opt.MapFrom(src => $"{src.ExpenseType!.Name}"));
 
         CreateMap<ExpenseRequest, ExpenseCreateModel>();
+        
+        CreateMap<ExpenseUpdateRequest, ExpenseUpdateModel>();
     }
 }

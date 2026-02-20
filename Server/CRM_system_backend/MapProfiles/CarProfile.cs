@@ -18,5 +18,7 @@ public class CarProfile : Profile
                         opt => opt.MapFrom(src => $"{src.Status!.Name}"));
 
         CreateMap<CarRequest, CarCreateModel>();
+        
+        CreateMap<CarUpdateRequest, CarUpdateModel>();
     }
 }

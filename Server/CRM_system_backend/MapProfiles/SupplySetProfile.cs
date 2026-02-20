@@ -16,5 +16,7 @@ public class SupplySetProfile : Profile
                         opt => opt.MapFrom(src => $"{src.Position!.Part!.Name}"));
 
         CreateMap<SupplySetRequest, SupplySetCreateModel>();
+
+        CreateMap<SupplySetUpdateRequest, SupplySetUpdateModel>();
     }
 }

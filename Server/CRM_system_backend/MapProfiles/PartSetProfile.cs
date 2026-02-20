@@ -16,5 +16,7 @@ public class PartSetProfile : Profile
                         opt => opt.MapFrom(src => $"{src.Position!.Part!.Name}"));
 
         CreateMap<PartSetRequest, PartSetCreateModel>();
+        
+        CreateMap<PartSetUpdateRequest, PartSetUpdateModel>();
     }
 }

@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Img
 
 using AutoMapper;
+using CRMSystem.Core.ProjectionModels.Acceptance;
 using CRMSystem.Core.ProjectionModels.AccetanceImg;
 using CRMSystem.DataAccess.Entites;
 using Shared.Contracts.AcceptanceImg;

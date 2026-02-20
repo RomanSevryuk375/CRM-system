@@ -14,5 +14,7 @@ public class WorkProfile : Profile
         CreateMap<WorkEntity, WorkItem>();
         
         CreateMap<WorkRequest, WorkCreateModel>();
+        
+        CreateMap<WorkUpdateRequest, WorkUpdateModel>();
     }
 }

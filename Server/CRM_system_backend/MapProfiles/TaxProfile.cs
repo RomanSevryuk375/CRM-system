@@ -16,5 +16,7 @@ public class TaxProfile : Profile
                         opt => opt.MapFrom(src => $"{src.TaxType!.Name}"));
 
         CreateMap<TaxRequest, TaxCreateModel>();
+        
+        CreateMap<TaxUpdateRequest, TaxUpdateModel>();
     }
 }

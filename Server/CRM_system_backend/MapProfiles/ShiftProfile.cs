@@ -14,5 +14,7 @@ public class ShiftProfile : Profile
         CreateMap<ShiftEntity, ShiftItem>();
         
         CreateMap<ShiftRequest, ShiftCreateModel>();
+        
+        CreateMap<ShiftUpdateRequest, ShiftUpdateModel>();
     }
 }

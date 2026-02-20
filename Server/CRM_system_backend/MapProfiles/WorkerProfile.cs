@@ -14,5 +14,7 @@ public class WorkerProfile : Profile
         CreateMap<WorkerEntity, WorkerItem>();
         
         CreateMap<WorkerRequest, WorkerCreateModel>();
+        
+        CreateMap<WorkerUpdateRequest, WorkerUpdateModel>();
     }
 }

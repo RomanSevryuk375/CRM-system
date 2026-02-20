@@ -12,7 +12,7 @@ public class SpecializationProfile : Profile
         CreateMap<SpecializationItem, SpecializationResponse>();
 
         CreateMap<SpecializationEntity, SpecializationItem>();
-        
+
         CreateMap<SpecializationRequest, SpecializationCreateModel>();
     }
 }

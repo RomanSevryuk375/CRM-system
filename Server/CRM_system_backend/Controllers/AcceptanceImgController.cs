@@ -1,6 +1,4 @@
-﻿// Ignore Spelling: Img
-
-using AutoMapper;
+﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.ProjectionModels.AccetanceImg;

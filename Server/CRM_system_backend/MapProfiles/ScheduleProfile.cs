@@ -20,5 +20,7 @@ public class ScheduleProfile : Profile
                         opt => opt.MapFrom(src => src.Date));
 
         CreateMap<ScheduleRequest, ScheduleCreateModel>();
+        
+        CreateMap<ScheduleUpdateRequest, ScheduleUpdateModel>();
     }
 }

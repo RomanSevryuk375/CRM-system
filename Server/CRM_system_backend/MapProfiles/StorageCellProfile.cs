@@ -14,5 +14,7 @@ public class StorageCellProfile : Profile
         CreateMap<StorageCellEntity, StorageCellItem>();
         
         CreateMap<StorageCellRequest, StorageCellCreateModel>();
+        
+        CreateMap<StorageCellUpdateRequest, StorageCellUpdateModel>();
     }
 }

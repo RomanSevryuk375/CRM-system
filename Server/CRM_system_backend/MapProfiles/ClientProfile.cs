@@ -14,5 +14,7 @@ public class ClientProfile : Profile
         CreateMap<ClientEntity, ClientItem>();
         
         CreateMap<ClientsRequest, ClientCreateModel>();
+        
+        CreateMap<ClientUpdateRequest, ClientUpdateModel>();
     }
 }

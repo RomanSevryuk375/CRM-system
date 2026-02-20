@@ -20,5 +20,7 @@ public class WorkInOrderProfile : Profile
                         opt => opt.MapFrom(src => $"{src.WorkInOrderStatus!.Name}"));
         
         CreateMap<WorkInOrderRequest, WorkInOrderCreateModel>();
+        
+        CreateMap<WorkInOrderUpdateRequest, WorkInOrderUpdateModel>();
     }
 }
