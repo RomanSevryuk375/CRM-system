@@ -13,7 +13,7 @@ public record WorkerUpdateRequest
     [JsonPropertyName("surname")]
     public string? Surname { get; init; } = string.Empty;
 
-    [JsonPropertyName("gourlyRate")]
+    [JsonPropertyName("hourlyRate")]
     public decimal? HourlyRate { get; init; }
 
     [JsonPropertyName("phoneNumber")]
