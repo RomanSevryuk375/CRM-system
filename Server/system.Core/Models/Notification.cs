@@ -1,5 +1,4 @@
-﻿using CRMSystem.Core.Constants;
-using CRMSystem.Core.Validation;
+﻿using CRMSystem.Core.Validation;
 using Shared.Enums;
 
 namespace CRMSystem.Core.Models;

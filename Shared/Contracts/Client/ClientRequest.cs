@@ -2,7 +2,7 @@
 
 namespace Shared.Contracts.Client;
 
-public record ClientsRequest
+public record ClientRequest
 {
     [JsonPropertyName("id")]
     public long Id { get; init; }

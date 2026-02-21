@@ -1,6 +1,7 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Business.Cached;
 using CRMSystem.Business.Services;
+using FluentValidation;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -176,6 +177,8 @@ public static class DependencyInjection
                 provider.GetRequiredService<IDistributedCache>(),
                 provider.GetRequiredService<ILogger<CachedWorkProposalStatusService>>()
             ));
+        
+        Services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
         return Services;
     }

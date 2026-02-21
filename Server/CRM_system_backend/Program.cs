@@ -6,6 +6,7 @@ using CRMSystem.Business.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.DataAccess;
 using CRMSystem.DataAccess.Extensions;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -32,7 +33,8 @@ public class Program
             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
-            }); ;
+            }); 
+        builder.Services.AddFluentValidationAutoValidation(); 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));

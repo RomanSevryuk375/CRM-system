@@ -1,6 +1,5 @@
 ﻿// Ignore Spelling: Img
 
-using CRMSystem.Core.Constants;
 using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
