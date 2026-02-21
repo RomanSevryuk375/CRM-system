@@ -43,7 +43,7 @@ public class ClientController(
 
     [HttpPost]
     public async Task<ActionResult> CreateClient(
-        ClientsRequest request, CancellationToken ct)
+        ClientRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<ClientCreateModel>(request);
 

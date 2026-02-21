@@ -13,7 +13,7 @@ public class ClientProfile : Profile
 
         CreateMap<ClientEntity, ClientItem>();
         
-        CreateMap<ClientsRequest, ClientCreateModel>();
+        CreateMap<ClientRequest, ClientCreateModel>();
         
         CreateMap<ClientUpdateRequest, ClientUpdateModel>();
     }

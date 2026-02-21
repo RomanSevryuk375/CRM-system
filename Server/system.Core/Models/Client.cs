@@ -1,6 +1,5 @@
 ﻿namespace CRMSystem.Core.Models;
 
-using Constants;
 using Exceptions;
 using Validation;
 using System.Text.RegularExpressions;

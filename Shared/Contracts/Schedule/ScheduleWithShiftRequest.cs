@@ -4,9 +4,6 @@ namespace Shared.Contracts.Schedule;
 
 public record ScheduleWithShiftRequest
 {
-    [JsonPropertyName("id")]
-    public int Id { get; init; }
-
     [JsonPropertyName("workerId")]
     public int WorkerId { get; init; }
 
