@@ -8,41 +8,48 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
-            .WriteTo.Console()
-            .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
-            .CreateLogger();
-
-        var builder = WebApplication.CreateBuilder(args);
-        builder.Host.UseSerilog(); 
-        
-        builder.Services.AddInfrastructure(builder.Configuration);
-        builder.Services.AddCustomCors();
-
-        var app = builder.Build();
-
-
-        if (app.Environment.IsDevelopment())
+        try
         {
-            app.MapOpenApi();
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            var builder = WebApplication.CreateBuilder(args);
+        
+            builder.Host.UseSerilog((context, configuration) => configuration
+                .ReadFrom.Configuration(context.Configuration)); 
+        
+            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddCustomCors();
+
+            var app = builder.Build();
+
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseCors("Frontend");
+            app.ApplyMigrations(); 
+
+            app.UseCustomException(); 
+            app.MapHealthChecks("/health");
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            Log.Information("Starting web host");
+            app.Run();
         }
-
-        app.UseCors("Frontend");
-        app.ApplyMigrations(); 
-
-        app.UseCustomException(); 
-        app.MapHealthChecks("/health");
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        app.MapControllers();
-
-        Log.Information("Starting web host");
-        app.Run();
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Host terminated unexpectedly");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
     }
 }
 
