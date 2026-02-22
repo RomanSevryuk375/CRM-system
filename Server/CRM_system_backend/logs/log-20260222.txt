@@ -1,0 +1,308 @@
+2026-02-22 15:14:58.160 +00:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-22 15:14:58.501 +00:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-22 15:14:58.511 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-22 15:14:58.513 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-22 15:14:58.514 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-22 15:14:58.518 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-22 15:14:58.674 +00:00 [INF] Starting web host
+2026-02-22 15:14:58.750 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-02-22 15:14:58.869 +00:00 [INF] Now listening on: http://[::]:8080
+2026-02-22 15:14:58.870 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-22 15:14:58.871 +00:00 [INF] Hosting environment: Development
+2026-02-22 15:14:58.871 +00:00 [INF] Content root path: /app
+2026-02-22 18:16:09.259 +03:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-22 18:16:09.566 +03:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-22 18:16:09.578 +03:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-22 18:16:09.582 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-22 18:16:09.585 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-22 18:16:09.591 +03:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-22 18:16:09.742 +03:00 [INF] Starting web host
+2026-02-22 18:16:09.954 +03:00 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address http://[::1]:5066: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+2026-02-22 18:17:02.820 +03:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-22 18:17:03.289 +03:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-22 18:17:03.308 +03:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-22 18:17:03.312 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-22 18:17:03.318 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-22 18:17:03.328 +03:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-22 18:17:03.738 +03:00 [INF] Starting web host
+2026-02-22 18:17:04.120 +03:00 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address http://[::1]:5066: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+2026-02-22 18:17:42.300 +03:00 [ERR] An error occurred using the connection to database 'AUTOService' on server 'tcp://localhost:5438'.
+2026-02-22 15:20:26.766 +00:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-22 15:20:27.169 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-22 15:20:27.180 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-22 15:20:27.184 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-22 15:20:27.186 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-22 15:20:27.192 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-22 15:20:27.356 +00:00 [INF] Starting web host
+2026-02-22 15:20:27.428 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-02-22 15:20:27.544 +00:00 [INF] Now listening on: http://[::]:8080
+2026-02-22 15:20:27.546 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-22 15:20:27.546 +00:00 [INF] Hosting environment: Development
+2026-02-22 15:20:27.547 +00:00 [INF] Content root path: /app
+2026-02-22 15:20:29.667 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger - null null
+2026-02-22 15:20:29.730 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger - 301 0 null 64.2121ms
+2026-02-22 15:20:29.740 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/index.html - null null
+2026-02-22 15:20:29.824 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/index.html - 200 null text/html;charset=utf-8 81.5324ms
+2026-02-22 15:20:29.871 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/swagger-ui.css - null null
+2026-02-22 15:20:29.871 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/index.css - null null
+2026-02-22 15:20:29.875 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/swagger-ui-bundle.js - null null
+2026-02-22 15:20:29.903 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/index.js - null null
+2026-02-22 15:20:29.903 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/swagger-ui-standalone-preset.js - null null
+2026-02-22 15:20:29.913 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/index.js - 200 null application/javascript;charset=utf-8 10.1551ms
+2026-02-22 15:20:29.920 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/index.css - 200 152 text/css 48.9867ms
+2026-02-22 15:20:29.921 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/swagger-ui.css - 200 23647 text/css 49.8476ms
+2026-02-22 15:20:29.932 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/swagger-ui-bundle.js - 200 424767 text/javascript 56.4083ms
+2026-02-22 15:20:29.932 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/swagger-ui-standalone-preset.js - 200 77352 text/javascript 28.4252ms
+2026-02-22 15:20:30.117 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-22 15:20:30.129 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/favicon-32x32.png - null null
+2026-02-22 15:20:30.132 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/favicon-32x32.png - 200 628 image/png 2.5364ms
+2026-02-22 15:20:30.370 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 253.284ms
+2026-02-22 15:20:39.928 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/api/v1/absences?Page=1&Limit=3 - null null
+2026-02-22 15:20:40.098 +00:00 [INF] Authorization failed. These requirements were not met:
+ClaimsAuthorizationRequirement:Claim.Type=userRoleId and Claim.Value is one of the following values: (1|3)
+2026-02-22 15:20:40.103 +00:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-02-22 15:20:40.104 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/api/v1/absences?Page=1&Limit=3 - 401 0 null 175.7113ms
+2026-02-22 15:21:01.995 +00:00 [INF] Request starting HTTP/1.1 POST http://localhost:5066/api/v1/users/login - application/json 47
+2026-02-22 15:21:02.006 +00:00 [INF] CORS policy execution failed.
+2026-02-22 15:21:02.008 +00:00 [INF] Request origin http://localhost:5066 does not have permission to access the resource.
+2026-02-22 15:21:02.014 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.UserController.LoginUser (CRM_system_backend)'
+2026-02-22 15:21:02.035 +00:00 [INF] Route matched with {action = "LoginUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Shared.Contracts.Login.LoginResponse]] LoginUser(Shared.Contracts.Login.LoginRequest, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.UserController (CRM_system_backend).
+2026-02-22 15:21:02.181 +00:00 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-02-22 15:21:02.275 +00:00 [INF] Logging user start
+2026-02-22 15:21:02.276 +00:00 [INF] Getting user by login start
+2026-02-22 15:21:02.628 +00:00 [INF] Executed DbCommand (17ms) [Parameters=[@__login_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, r.name, u.role_id, u.login, u.password_hash
+FROM users AS u
+INNER JOIN roles AS r ON u.role_id = r.id
+WHERE u.login = @__login_0
+LIMIT 1
+2026-02-22 15:21:02.637 +00:00 [ERR] Userstring not found
+2026-02-22 15:21:44.883 +00:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-22 15:21:45.350 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-22 15:21:45.363 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-22 15:21:45.365 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-22 15:21:45.367 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-22 15:21:45.373 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-22 15:21:45.570 +00:00 [INF] Starting web host
+2026-02-22 15:21:45.689 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-02-22 15:21:45.823 +00:00 [INF] Now listening on: http://[::]:8080
+2026-02-22 15:21:45.826 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-22 15:21:45.827 +00:00 [INF] Hosting environment: Development
+2026-02-22 15:21:45.828 +00:00 [INF] Content root path: /app
+2026-02-22 15:23:02.918 +00:00 [INF] Request starting HTTP/1.1 POST http://localhost:5066/api/v1/users/login - application/json 51
+2026-02-22 15:23:02.999 +00:00 [INF] CORS policy execution failed.
+2026-02-22 15:23:03.000 +00:00 [INF] Request origin http://localhost:5066 does not have permission to access the resource.
+2026-02-22 15:23:03.156 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.UserController.LoginUser (CRM_system_backend)'
+2026-02-22 15:23:03.180 +00:00 [INF] Route matched with {action = "LoginUser", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Shared.Contracts.Login.LoginResponse]] LoginUser(Shared.Contracts.Login.LoginRequest, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.UserController (CRM_system_backend).
+2026-02-22 15:23:03.336 +00:00 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-02-22 15:23:03.420 +00:00 [INF] Logging user start
+2026-02-22 15:23:03.421 +00:00 [INF] Getting user by login start
+2026-02-22 15:23:03.732 +00:00 [INF] Executed DbCommand (15ms) [Parameters=[@__login_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, r.name, u.role_id, u.login, u.password_hash
+FROM users AS u
+INNER JOIN roles AS r ON u.role_id = r.id
+WHERE u.login = @__login_0
+LIMIT 1
+2026-02-22 15:23:03.747 +00:00 [INF] Getting user by login success
+2026-02-22 15:23:04.035 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT c.id AS "Id", c.user_id AS "UserId", c.name AS "Name", c.surname AS "Surname", c.phone_number AS "PhoneNumber", c.email AS "Email"
+FROM clients AS c
+WHERE c.user_id = @__userId_0
+LIMIT 1
+2026-02-22 15:23:04.066 +00:00 [INF] Logging user success
+2026-02-22 15:23:04.066 +00:00 [INF] Getting user by login start
+2026-02-22 15:23:04.072 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__login_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u.id, r.name, u.role_id, u.login, u.password_hash
+FROM users AS u
+INNER JOIN roles AS r ON u.role_id = r.id
+WHERE u.login = @__login_0
+LIMIT 1
+2026-02-22 15:23:04.073 +00:00 [INF] Getting user by login success
+2026-02-22 15:23:04.085 +00:00 [INF] Executing OkObjectResult, writing value of type 'Shared.Contracts.Login.LoginResponse'.
+2026-02-22 15:23:04.106 +00:00 [INF] Executed action CRM_system_backend.Controllers.UserController.LoginUser (CRM_system_backend) in 922.8311ms
+2026-02-22 15:23:04.111 +00:00 [INF] Executed endpoint 'CRM_system_backend.Controllers.UserController.LoginUser (CRM_system_backend)'
+2026-02-22 15:23:04.123 +00:00 [INF] Request finished HTTP/1.1 POST http://localhost:5066/api/v1/users/login - 200 null application/json; charset=utf-8 1206.3221ms
+2026-02-22 15:23:31.911 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/api/v1/cars?Page=1&Limit=3 - null null
+2026-02-22 15:23:31.982 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.CarController.GetPagedCars (CRM_system_backend)'
+2026-02-22 15:23:31.994 +00:00 [INF] Route matched with {action = "GetPagedCars", controller = "Car"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[CRMSystem.Core.ProjectionModels.Car.CarItem]]] GetPagedCars(Shared.Filters.CarFilter, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.CarController (CRM_system_backend).
+2026-02-22 15:23:32.015 +00:00 [INF] Car getting success
+2026-02-22 15:23:32.162 +00:00 [INF] Executed DbCommand (47ms) [Parameters=[@__filter_OwnerIds_0='?' (DbType = Object), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT c1.id, c0.name, c1.status_id, c1.brand, c1.model, c1.year_of_manufacture, c1.vin_number, c1.state_number, c1.mileage, c2.name, c2.surname
+FROM (
+    SELECT c.id, c.brand, c.mileage, c.model, c.owner_id, c.state_number, c.status_id, c.vin_number, c.year_of_manufacture
+    FROM cars AS c
+    WHERE c.owner_id = ANY (@__filter_OwnerIds_0)
+    ORDER BY c.id
+    LIMIT @__p_2 OFFSET @__p_1
+) AS c1
+INNER JOIN car_statuses AS c0 ON c1.status_id = c0.id
+INNER JOIN clients AS c2 ON c1.owner_id = c2.id
+ORDER BY c1.id
+2026-02-22 15:23:32.166 +00:00 [INF] Car getting success
+2026-02-22 15:23:32.169 +00:00 [INF] Car getting count start
+2026-02-22 15:23:32.191 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM cars AS c
+2026-02-22 15:23:32.194 +00:00 [INF] Car getting count success
+2026-02-22 15:23:32.212 +00:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Shared.Contracts.Car.CarResponse, Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-22 15:23:32.223 +00:00 [INF] Executed action CRM_system_backend.Controllers.CarController.GetPagedCars (CRM_system_backend) in 228.4804ms
+2026-02-22 15:23:32.226 +00:00 [INF] Executed endpoint 'CRM_system_backend.Controllers.CarController.GetPagedCars (CRM_system_backend)'
+2026-02-22 15:23:32.227 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/api/v1/cars?Page=1&Limit=3 - 200 null application/json; charset=utf-8 316.5243ms
+2026-02-22 15:24:22.833 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/api/v1/clients?Page=1&Limit=3 - null null
+2026-02-22 15:24:22.841 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.ClientController.GetPagedClient (CRM_system_backend)'
+2026-02-22 15:24:22.850 +00:00 [INF] Route matched with {action = "GetPagedClient", controller = "Client"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[CRMSystem.Core.ProjectionModels.Client.ClientItem]]] GetPagedClient(Shared.Filters.ClientFilter, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.ClientController (CRM_system_backend).
+2026-02-22 15:24:22.857 +00:00 [INF] Getting client start
+2026-02-22 15:24:22.867 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__filter_ClientIds_0='?' (DbType = Object), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT c.id AS "Id", c.user_id AS "UserId", c.name AS "Name", c.surname AS "Surname", c.phone_number AS "PhoneNumber", c.email AS "Email"
+FROM clients AS c
+WHERE c.id = ANY (@__filter_ClientIds_0)
+ORDER BY c.id
+LIMIT @__p_2 OFFSET @__p_1
+2026-02-22 15:24:22.869 +00:00 [INF] Getting client success
+2026-02-22 15:24:22.870 +00:00 [INF] Getting count client start
+2026-02-22 15:24:22.876 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM clients AS c
+2026-02-22 15:24:22.877 +00:00 [INF] Getting count client success
+2026-02-22 15:24:22.881 +00:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Shared.Contracts.Client.ClientsResponse, Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-22 15:24:22.883 +00:00 [INF] Executed action CRM_system_backend.Controllers.ClientController.GetPagedClient (CRM_system_backend) in 32.3658ms
+2026-02-22 15:24:22.883 +00:00 [INF] Executed endpoint 'CRM_system_backend.Controllers.ClientController.GetPagedClient (CRM_system_backend)'
+2026-02-22 15:24:22.884 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/api/v1/clients?Page=1&Limit=3 - 200 null application/json; charset=utf-8 50.8482ms
+2026-02-22 15:24:39.112 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/api/v1/car-statuses - null null
+2026-02-22 15:24:39.116 +00:00 [INF] Authorization failed. These requirements were not met:
+ClaimsAuthorizationRequirement:Claim.Type=userRoleId and Claim.Value is one of the following values: (1)
+2026-02-22 15:24:39.126 +00:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-02-22 15:24:39.128 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/api/v1/car-statuses - 403 0 null 15.0197ms
+2026-02-22 15:25:49.937 +00:00 [INF] Request starting HTTP/1.1 POST http://localhost:5066/api/v1/cars - application/json 189
+2026-02-22 15:25:49.938 +00:00 [INF] CORS policy execution failed.
+2026-02-22 15:25:49.938 +00:00 [INF] Request origin http://localhost:5066 does not have permission to access the resource.
+2026-02-22 15:25:49.941 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.CarController.CreateCar (CRM_system_backend)'
+2026-02-22 15:25:49.946 +00:00 [INF] Route matched with {action = "CreateCar", controller = "Car"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] CreateCar(Shared.Contracts.Car.CarRequest, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.CarController (CRM_system_backend).
+2026-02-22 15:25:49.987 +00:00 [INF] Creating car started
+2026-02-22 15:25:50.002 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM clients AS c
+    WHERE c.id = @__id_0)
+2026-02-22 15:25:50.015 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM car_statuses AS c
+    WHERE c.id::bigint = @__id_0)
+2026-02-22 15:25:50.167 +00:00 [INF] Executed DbCommand (11ms) [Parameters=[@p0='?', @p1='?' (DbType = Int32), @p2='?', @p3='?' (DbType = Int64), @p4='?', @p5='?' (DbType = Int32), @p6='?', @p7='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO cars (brand, mileage, model, owner_id, state_number, status_id, vin_number, year_of_manufacture)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7)
+RETURNING id;
+2026-02-22 15:25:50.191 +00:00 [INF] Creating car success
+2026-02-22 15:25:50.193 +00:00 [INF] Executing CreatedResult, writing value of type 'null'.
+2026-02-22 15:25:50.194 +00:00 [INF] Executed action CRM_system_backend.Controllers.CarController.CreateCar (CRM_system_backend) in 247.2446ms
+2026-02-22 15:25:50.195 +00:00 [INF] Executed endpoint 'CRM_system_backend.Controllers.CarController.CreateCar (CRM_system_backend)'
+2026-02-22 15:25:50.197 +00:00 [INF] Request finished HTTP/1.1 POST http://localhost:5066/api/v1/cars - 201 0 null 259.791ms
