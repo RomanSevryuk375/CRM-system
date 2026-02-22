@@ -1,14 +1,5 @@
 using CRM_system_backend.Extensions;
 using CRM_system_backend.Middlewares;
-using CRMSystem.Business.Abstractions;
-using CRMSystem.Business.Extensions;
-using CRMSystem.Business.Services;
-using CRMSystem.Core.Abstractions;
-using CRMSystem.DataAccess;
-using CRMSystem.DataAccess.Extensions;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace CRM_system_backend;
@@ -24,91 +15,25 @@ public class Program
             .CreateLogger();
 
         var builder = WebApplication.CreateBuilder(args);
-
-        builder.Services.AddHealthChecks()
-            .AddNpgSql(builder.Configuration.GetConnectionString("SystemDbContext")!)
-            .AddRedis(builder.Configuration.GetConnectionString("Redis")!); // I couldn't implement health check for S3
-        builder.Services.AddHttpContextAccessor();
-        builder.Services.AddControllers()
-            .AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
-            }); 
-        builder.Services.AddFluentValidationAutoValidation(); 
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-        builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
-        builder.Services.AddOpenApi();
-
-        builder.Services.AddCors(options =>
-        {
-            options.AddPolicy("Frontend", policy =>
-            {
-                policy.WithOrigins("http://localhost:5173")
-                      .AllowAnyMethod()
-                      .AllowAnyHeader()
-                      .AllowCredentials()
-                      .WithExposedHeaders("x-total-count");
-            });
-            options.AddPolicy("AllowAllOriginsDevelopment",
-                policy =>
-                {
-                    policy.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader()
-                          .WithExposedHeaders("x-total-count");
-                });
-        });
-
-        builder.Services.AddDbContext<SystemDbContext>(options =>
-        {
-            options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(SystemDbContext)))
-                   .UseSnakeCaseNamingConvention();
-        });
-
-        builder.Services.AddStackExchangeRedisCache(redisOptions =>
-        {
-            var connetion = builder.Configuration
-                .GetConnectionString("Redis");
-
-            redisOptions.Configuration = connetion;
-        });
-
-        builder.Services.AddScoped<IUserContext, UserContext>();
-        builder.Services.AddScoped<IJwtProvider, JwtProvider>();
-        builder.Services.AddScoped<IMyPasswordHasher, MyPasswordHasher>();
-        builder.Services.AddScoped<IFileService, MinioFileService>();
-
-        builder.Services.AddRepositories();
-        builder.Services.AddServices();
-        builder.Services.AddApiAuthentication(builder.Configuration);
-
-        builder.Services.AddDataProtection()
-            .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"))
-            .SetApplicationName("AUTOService");
+        builder.Host.UseSerilog(); 
+        
+        builder.Services.AddInfrastructure(builder.Configuration);
+        builder.Services.AddCustomCors();
 
         var app = builder.Build();
+
 
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
             app.UseSwagger();
             app.UseSwaggerUI();
-            app.UseCors("Frontend");
-        }
-        else
-        {
-            //app.UseHttpsRedirection();
-            app.UseCors("Frontend");
         }
 
-        using (var scope = app.Services.CreateScope())
-        {
-            var dbContext = scope.ServiceProvider.GetRequiredService<SystemDbContext>();
-            dbContext.Database.Migrate();
-        }
+        app.UseCors("Frontend");
+        app.ApplyMigrations(); 
 
-        app.UseCustomException();
+        app.UseCustomException(); 
         app.MapHealthChecks("/health");
 
         app.UseAuthentication();
@@ -116,9 +41,8 @@ public class Program
 
         app.MapControllers();
 
+        Log.Information("Starting web host");
         app.Run();
-
-
     }
 }
 
