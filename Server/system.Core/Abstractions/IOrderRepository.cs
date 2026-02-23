@@ -10,6 +10,7 @@ public interface IOrderRepository
     Task<long> Create(Order order, CancellationToken ct);
     Task<long> Delete(long id, CancellationToken ct);
     Task<int> GetCount(OrderFilter filter, CancellationToken ct);
+    Task<OrderDocumentModel?> GetDocumentData(long id, CancellationToken ct);
     Task<List<OrderItem>> GetPaged(OrderFilter filter, CancellationToken ct);
     Task<long> Update(long id, OrderPriorityEnum? priorityId, CancellationToken ct);
     Task<bool> Exists(long id, CancellationToken ct);
