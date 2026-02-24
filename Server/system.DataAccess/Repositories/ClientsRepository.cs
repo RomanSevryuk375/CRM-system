@@ -23,6 +23,15 @@ public class ClientsRepository(
 
         return query;
     }
+    
+    public async Task<ClientItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Clients
+            .AsNoTracking()
+            .Where(c => c.Id == id)
+            .ProjectTo<ClientItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
 
     public async Task<List<ClientItem>> GetPaged(ClientFilter filter, CancellationToken ct)
     {
@@ -66,15 +75,6 @@ public class ClientsRepository(
         query = ApplyFilter(query, filter);
 
         return await query.CountAsync(ct);
-    }
-
-    public async Task<ClientItem?> GetById(long id, CancellationToken ct)
-    {
-        return await context.Clients
-            .AsNoTracking()
-            .Where(c => c.Id == id)
-            .ProjectTo<ClientItem>(mapper.ConfigurationProvider, ct)
-            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<ClientItem?> GetByUserId(long userId, CancellationToken ct)

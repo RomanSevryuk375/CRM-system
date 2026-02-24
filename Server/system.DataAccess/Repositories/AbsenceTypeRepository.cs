@@ -21,6 +21,15 @@ public class AbsenceTypeRepository(
             .ToListAsync(ct);
     }
 
+    public async Task<List<AbsenceTypeItem>> GetById (int id, CancellationToken ct)
+    {
+        return await context.AbsenceTypes
+            .Where(a => a.Id == id)
+            .AsNoTracking()
+            .ProjectTo<AbsenceTypeItem>(mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
+    }
+    
     public async Task<List<AbsenceTypeItem>> GetByName (string name, CancellationToken ct)
     {
         return await context.AbsenceTypes

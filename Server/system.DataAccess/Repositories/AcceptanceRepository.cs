@@ -35,6 +35,15 @@ public class AcceptanceRepository(
         return query;
     }
 
+    public async Task<AcceptanceItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.AcceptanceImgs
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<AcceptanceItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<AcceptanceItem>> GetPaged(AcceptanceFilter filter, CancellationToken ct)
     {
         var query = context.Acceptances.AsNoTracking();

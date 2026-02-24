@@ -21,6 +21,15 @@ public class CarRepository(
 
         return query;
     }
+    
+    public async Task<CarItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Cars
+            .AsNoTracking()
+            .Where(c => c.Id == id)
+            .ProjectTo<CarItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
 
     public async Task<List<CarItem>> GetPaged(CarFilter filter, CancellationToken ct)
     {
@@ -79,15 +88,6 @@ public class CarRepository(
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
-    }
-
-    public async Task<CarItem?> GetById(long id, CancellationToken ct)
-    {
-        return await context.Cars
-            .AsNoTracking()
-            .Where(c => c.Id == id)
-            .ProjectTo<CarItem>(mapper.ConfigurationProvider, ct)
-            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<int> GetCount(CarFilter filter, CancellationToken ct)

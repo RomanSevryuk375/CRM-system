@@ -10,5 +10,6 @@ public interface IGuaranteeRepository
     Task<long> Delete(long id, CancellationToken ct);
     Task<int> GetCount(GuaranteeFilter filter, CancellationToken ct);
     Task<List<GuaranteeItem>> GetPaged(GuaranteeFilter filter, CancellationToken ct);
+    Task<GuaranteeItem?> GetById(long id, CancellationToken ct);
     Task<long> Update(long id, GuaranteeUpdateModel model, CancellationToken ct);
 }

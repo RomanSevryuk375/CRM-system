@@ -10,6 +10,7 @@ public interface IWorkInOrderRepository
     Task<long> Delete(long id, CancellationToken ct);
     Task<int> GetCount(WorkInOrderFilter filter, CancellationToken ct);
     Task<List<WorkInOrderItem>> GetPaged(WorkInOrderFilter filter, CancellationToken ct);
+    Task<WorkInOrderItem?> GetById(long id, CancellationToken ct);
     Task<long> Update(long id, WorkInOrderUpdateModel model, CancellationToken ct);
     Task<List<WorkInOrderItem>> GetByOrderId(long orderId, CancellationToken ct);
 }

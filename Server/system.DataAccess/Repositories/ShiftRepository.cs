@@ -20,6 +20,15 @@ public class ShiftRepository(
             .ProjectTo<ShiftItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
     }
+    
+    public async Task<ShiftItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.Shifts
+            .AsNoTracking()
+            .Where(s => s.Id == id)
+            .ProjectTo<ShiftItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
 
     public async Task<int> Create(Shift shift, CancellationToken ct)
     {

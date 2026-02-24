@@ -10,6 +10,15 @@ public class ExpenseTypeRepository(
     SystemDbContext context,
     IMapper mapper) : IExpenseTypeRepository
 {
+    public async Task<List<ExpenseTypeItem>> GetById(int id, CancellationToken ct)
+    {
+        return await context.ExpenseTypes
+            .AsNoTracking()
+            .Where(e => e.Id == id)
+            .ProjectTo<ExpenseTypeItem>(mapper.ConfigurationProvider, ct)
+            .ToListAsync(ct);
+    }
+    
     public async Task<List<ExpenseTypeItem>> Get(CancellationToken ct)
     {
         return await context.ExpenseTypes

@@ -10,6 +10,7 @@ public interface IAcceptanceRepository
     Task<long> Delete(long id, CancellationToken ct);
     Task<int> GetCount(AcceptanceFilter filter, CancellationToken ct);
     Task<List<AcceptanceItem>> GetPaged(AcceptanceFilter filter, CancellationToken ct);
+    Task<AcceptanceItem?> GetById(long id, CancellationToken ct);
     Task<long> Update(long id, AcceptanceUpdateModel model, CancellationToken ct);
     Task<bool> Exists(long id, CancellationToken ct);
 }

@@ -10,6 +10,15 @@ public class OrderPriorityRepository(
     SystemDbContext context,
     IMapper mapper) : IOrderPriorityRepository
 {
+    public async Task<OrderPriorityItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.OrderPriorities
+            .AsNoTracking()
+            .Where(o => o.Id == id)
+            .ProjectTo<OrderPriorityItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<OrderPriorityItem>> Get(CancellationToken ct)
     {
         return await context.OrderPriorities

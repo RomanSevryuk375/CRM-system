@@ -10,6 +10,15 @@ public class CarStatusRepository(
     SystemDbContext context,
     IMapper mapper) : ICarStatusRepository
 {
+    public async Task<CarStatusItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.CarStatuses
+            .AsNoTracking()
+            .Where(c => c.Id == id)
+            .ProjectTo<CarStatusItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<CarStatusItem>> Get(CancellationToken ct)
     {
         return await context.CarStatuses

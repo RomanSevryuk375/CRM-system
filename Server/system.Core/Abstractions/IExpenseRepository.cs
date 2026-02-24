@@ -10,5 +10,6 @@ public interface IExpenseRepository
     Task<long> Delete(long id, CancellationToken ct);
     Task<int> GetCount(ExpenseFilter filter, CancellationToken ct);
     Task<List<ExpenseItem>> GetPaged(ExpenseFilter filter, CancellationToken ct);
+    Task<ExpenseItem?> GetById(long id, CancellationToken ct);
     Task<long> Update(long id, ExpenseUpdateModel model, CancellationToken ct);
 }

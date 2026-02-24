@@ -24,6 +24,15 @@ public class TaxRepository(
         return query;
     }
 
+    public async Task<TaxItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.Taxes
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<TaxItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<TaxItem>> Get(TaxFilter filter, CancellationToken ct)
     {
         var query = context.Taxes.AsNoTracking();

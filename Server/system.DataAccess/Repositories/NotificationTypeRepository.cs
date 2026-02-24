@@ -10,6 +10,15 @@ public class NotificationTypeRepository(
     SystemDbContext context,
     IMapper mapper) : INotificationTypeRepository
 {
+    public async Task<NotificationTypeItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.NotificationTypes
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<NotificationTypeItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<bool> Exists(int id, CancellationToken ct)
     {
         return await context.NotificationTypes

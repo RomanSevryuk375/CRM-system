@@ -10,6 +10,15 @@ public class WorkProposalStatusRepository(
     SystemDbContext context,
     IMapper mapper) : IWorkProposalStatusRepository
 {
+    public async Task<WorkProposalStatusItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.WorkProposalStatuses
+            .AsNoTracking()
+            .Where(x => x.Id == id)
+            .ProjectTo<WorkProposalStatusItem>(mapper.ConfigurationProvider,ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<WorkProposalStatusItem>> Get(CancellationToken ct)
     {
         return await context.WorkProposalStatuses

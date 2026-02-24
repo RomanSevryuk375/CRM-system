@@ -20,6 +20,15 @@ public class SpecializationRepository(
             .ProjectTo<SpecializationItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
     }
+    
+    public async Task<SpecializationItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.Specializations
+            .AsNoTracking()
+            .Where(s => s.Id == id)
+            .ProjectTo<SpecializationItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
 
     public async Task<int> Create(Specialization specialization, CancellationToken ct)
     {

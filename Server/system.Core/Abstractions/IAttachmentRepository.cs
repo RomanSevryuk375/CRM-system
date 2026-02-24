@@ -10,6 +10,7 @@ public interface IAttachmentRepository
     Task<long> Delete(long id, CancellationToken ct);
     Task<int> GetCount(AttachmentFilter filter, CancellationToken ct);
     Task<List<AttachmentItem>> GetPaged(AttachmentFilter filter, CancellationToken ct);
+    Task<AttachmentItem?> GetById(long id, CancellationToken ct);
     Task<long> Update(long id, string? description, CancellationToken ct);
     Task<bool> Exists(long id, CancellationToken ct);
 }

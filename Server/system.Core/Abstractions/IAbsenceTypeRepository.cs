@@ -9,5 +9,6 @@ public interface IAbsenceTypeRepository
     Task<int> Delete(int id, CancellationToken ct);
     Task<List<AbsenceTypeItem>> GetAll(CancellationToken ct);
     Task<List<AbsenceTypeItem>> GetByName(string name, CancellationToken ct);
+    Task<List<AbsenceTypeItem>> GetById(int id, CancellationToken ct);
     Task<int> Update(int id, string name, CancellationToken ct);
 }

@@ -10,6 +10,14 @@ public class TaxTypeRepository(
     SystemDbContext context,
     IMapper mapper) : ITaxTypeRepository
 {
+    public async Task<TaxTypeItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.TaxTypes
+            .AsNoTracking()
+            .Where(t => t.Id == id)
+            .ProjectTo<TaxTypeItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
     public async Task<List<TaxTypeItem>> Get(CancellationToken ct)
     {
         return await context.TaxTypes
