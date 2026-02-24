@@ -2,7 +2,7 @@
 
 namespace CRMSystemMobile;
 
-public partial class App : Application
+public partial class App
 {
     private readonly AppShell _shell;
     private readonly IdentityService _identityService;
@@ -19,32 +19,31 @@ public partial class App : Application
     {
         var token = await SecureStorage.Default.GetAsync("jwt_token");
 
-        if (!string.IsNullOrEmpty(token) && _identityService.IsTokenValid(token))
+        switch (string.IsNullOrEmpty(token))
         {
-            var (_, roleId) = await _identityService.GetProfileIdAsync();
+            case false when token != null && _identityService.IsTokenValid(token):
+                var (_, roleId) = await _identityService.GetProfileIdAsync();
 
-            switch (roleId)
-            {
-                case 3:
-                    await Shell.Current.GoToAsync("//WorkerMainPage");
-                    break;
-                case 2:
-                    await Shell.Current.GoToAsync("//MainPage");
-                    break;
-                case 1:
-                    await Shell.Current.GoToAsync("//MainPage");
-                    break;
-                default:
-                    await Shell.Current.DisplayAlert("Ошибка", "Неверный логин или пароль", "ОК");
-                    break;
-            }
-        }
-        else
-        {
-            if (!string.IsNullOrEmpty(token))
-            {
+                switch (roleId)
+                {
+                    case 3:
+                        await Shell.Current.GoToAsync("//WorkerMainPage");
+                        break;
+                    case 2:
+                        await Shell.Current.GoToAsync("//MainPage");
+                        break;
+                    case 1:
+                        await Shell.Current.GoToAsync("//MainPage");
+                        break;
+                    default:
+                        await Shell.Current.DisplayAlert("Ошибка", "Неверный логин или пароль", "ОК");
+                        break;
+                }
+
+                break;
+            case false:
                 SecureStorage.Default.Remove("jwt_token");
-            }
+                break;
         }
     }
 

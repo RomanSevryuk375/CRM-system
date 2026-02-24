@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage
     x:Class="CRMSystemMobile.View.BookingPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -148,7 +149,9 @@
                                 <DataTemplate>
                                     <Grid Padding="15,12" BackgroundColor="Transparent">
                                         <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BookingViewModel}}, Path=SelectPriorityItemCommand}" CommandParameter="{Binding .}" />
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BookingViewModel}}, Path=SelectPriorityItemCommand}"
+                                                CommandParameter="{Binding .}" />
                                         </Grid.GestureRecognizers>
 
                                         <Label

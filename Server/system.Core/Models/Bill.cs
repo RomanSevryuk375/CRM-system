@@ -43,7 +43,7 @@ public class Bill
         var statusIdError = DomainValidator.ValidateId(statusId, "statusId");
         if (!string.IsNullOrEmpty(statusIdError)) errors.Add(statusIdError);
 
-        var createdAtError = DomainValidator.ValidateDate(createdAt, "createdAt");
+        var createdAtError = DomainValidator.ValidateDateEmpty(createdAt, "createdAt");
         if (!string.IsNullOrEmpty(createdAtError)) errors.Add(createdAtError);
 
         var amountError = DomainValidator.ValidateMoney(amount, "amount");

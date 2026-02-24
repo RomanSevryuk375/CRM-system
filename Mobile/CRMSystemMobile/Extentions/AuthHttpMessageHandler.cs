@@ -14,16 +14,13 @@ public class AuthHttpMessageHandler : DelegatingHandler
 
         var response = await base.SendAsync(request, cancellationToken);
 
-        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-        {
-            SecureStorage.Default.Remove("jwt_token");
+        if (response.StatusCode != System.Net.HttpStatusCode.Unauthorized) return response;
+        SecureStorage.Default.Remove("jwt_token");
 
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                var nav = Shell.Current.Navigation.NavigationStack;
-                await Shell.Current.GoToAsync("//LoginPage");
-            });
-        }
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            Shell.Current.GoToAsync("//LoginPage");
+        });
 
         return response;
     }

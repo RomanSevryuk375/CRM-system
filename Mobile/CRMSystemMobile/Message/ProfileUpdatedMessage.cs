@@ -2,7 +2,4 @@
 
 namespace CRMSystemMobile.Message;
 
-public class ProfileUpdatedMessage : ValueChangedMessage<string>
-{
-    public ProfileUpdatedMessage(string value) : base(value) { }
-}
+public class ProfileUpdatedMessage(string value) : ValueChangedMessage<string>(value);

@@ -40,7 +40,7 @@ public class WorkProposal
         var statusError = DomainValidator.ValidateId(statusId, "status");
         if (!string.IsNullOrEmpty(statusError)) errors.Add(statusError);
 
-        var dateError = DomainValidator.ValidateDate(date, "date");
+        var dateError = DomainValidator.ValidateDateEmpty(date, "date");
         if (!string.IsNullOrEmpty(dateError)) errors.Add(dateError);
 
         if (errors.Any())

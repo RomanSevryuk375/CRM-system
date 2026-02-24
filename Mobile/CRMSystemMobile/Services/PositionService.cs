@@ -20,13 +20,11 @@ public class PositionService(HttpClient httpClient)
 
             if (filter.PartIds?.Any() == true)
             {
-                foreach (var id in filter.PartIds)
-                {
-                    query += $"&PartIds={id}";
-                }
+                query = filter.PartIds.Aggregate(query, (current, id) => current + $"&PartIds={id}");
+                query = filter.PartIds.Aggregate(query, (current, id) => current + $"&PartIds={id}");
             }
 
-            string url = $"api/v1/positions?{query}";
+            var url = $"api/v1/positions?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -39,7 +37,7 @@ public class PositionService(HttpClient httpClient)
 
             response.EnsureSuccessStatusCode();
 
-            int totalCount = 0;
+            var totalCount = 0;
             if (response.Headers.TryGetValues("x-total-count", out var values))
             {
                 int.TryParse(values.FirstOrDefault(), out totalCount);

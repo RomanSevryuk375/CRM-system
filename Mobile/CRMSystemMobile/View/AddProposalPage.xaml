@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage
     x:Class="CRMSystemMobile.View.AddProposalPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -50,7 +51,7 @@
                         <Picker
                             Title="Нажмите для выбора"
                             Margin="10,0"
-                            ItemDisplayBinding="{Binding Title}"
+                            ItemDisplayBinding="{Binding SelectedJob.Title}"
                             ItemsSource="{Binding Jobs}"
                             SelectedItem="{Binding SelectedJob}"
                             TextColor="White"
@@ -58,7 +59,8 @@
                     </Border>
                 </VerticalStackLayout>
 
-                <VerticalStackLayout IsVisible="{Binding SelectedJob, Converter={StaticResource IsNotNullConverter}}" Spacing="10">
+                <VerticalStackLayout
+                    IsVisible="{Binding SelectedJob, Converter={StaticResource StringNotEmptyConverter}}" Spacing="10">
 
                     <VerticalStackLayout Spacing="5">
                         <Label

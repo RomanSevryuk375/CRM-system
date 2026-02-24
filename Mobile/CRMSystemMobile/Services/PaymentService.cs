@@ -18,21 +18,12 @@ public class PaymentService(HttpClient httpClient)
 
         if (filter.BillIds?.Any() == true)
         {
-            foreach (var id in filter.BillIds)
-            {
-                if (id.HasValue)
-                {
-                    query += $"&BillIds={id}";
-                }
-            }
+            query = filter.BillIds.OfType<long?>().Aggregate(query, (current, id) => current + $"&BillIds={id}");
         }
 
         if (filter.MethodIds?.Any() == true)
         {
-            foreach (var id in filter.MethodIds)
-            {
-                query += $"&MethodIds={id}";
-            }
+            query = filter.MethodIds.Aggregate(query, (current, id) => current + $"&MethodIds={id}");
         }
 
         try
@@ -48,7 +39,7 @@ public class PaymentService(HttpClient httpClient)
 
             response.EnsureSuccessStatusCode();
 
-            int totalCount = 0;
+            var totalCount = 0;
             if (response.Headers.TryGetValues("x-total-count", out var values))
             {
                 int.TryParse(values.FirstOrDefault(), out totalCount);
@@ -63,6 +54,7 @@ public class PaymentService(HttpClient httpClient)
             return (null, 0);
         }
     }
+
     public async Task<string?> CreatePayment(PaymentNoteRequest request)
     {
         try
@@ -75,12 +67,9 @@ public class PaymentService(HttpClient httpClient)
             }
 
             var errorContent = await response.Content.ReadAsStringAsync();
-            if (string.IsNullOrWhiteSpace(errorContent))
-            {
-                return $"Server error: {response.StatusCode}";
-            }
-
-            return errorContent.Trim('"');
+            return string.IsNullOrWhiteSpace(errorContent)
+                ? $"Server error: {response.StatusCode}"
+                : errorContent.Trim('"');
         }
         catch (Exception ex)
         {

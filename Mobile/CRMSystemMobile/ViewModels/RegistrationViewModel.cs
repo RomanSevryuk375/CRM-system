@@ -11,24 +11,16 @@ using System.Text.RegularExpressions;
 
 namespace CRMSystemMobile.ViewModels;
 
-public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorInfo
+public partial class RegistrationViewModel(
+    RegistrationService registrationService,
+    LoginService loginService)
+    : ObservableObject, INotifyDataErrorInfo
 {
-
     private readonly Dictionary<string, List<string>> _errors = new();
-    private readonly RegistrationService registrationService;
-    private readonly LoginService loginService;
-
-    public RegistrationViewModel(
-        RegistrationService registrationService,
-        LoginService loginService)
-    {
-        this.registrationService = registrationService;
-        this.loginService = loginService;
-    }
 
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
-    public bool HasErrors => _errors.Any(kv => kv.Value?.Count > 0);
+    public bool HasErrors => _errors.Any(kv => kv.Value.Count > 0);
 
     public IEnumerable GetErrors(string? propertyName)
     {
@@ -47,43 +39,33 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
             list = new List<string>();
             _errors[propertyName] = list;
         }
-        if (!list.Contains(error))
-        {
-            list.Add(error);
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            OnPropertyChanged(nameof(HasErrors));
-        }
+
+        if (list.Contains(error)) return;
+        list.Add(error);
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        OnPropertyChanged(nameof(HasErrors));
     }
 
     private void ClearErrors(string propertyName)
     {
-        if (_errors.Remove(propertyName))
-        {
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-            OnPropertyChanged(nameof(HasErrors));
-        }
+        if (!_errors.Remove(propertyName)) return;
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        OnPropertyChanged(nameof(HasErrors));
     }
 
-    [ObservableProperty]
-    public partial string NameSurnameError { get; set; }
+    [ObservableProperty] public partial string? NameSurnameError { get; set; }
 
-    [ObservableProperty]
-    public partial string ClientPhoneNumberError { get; set; }
+    [ObservableProperty] public partial string? ClientPhoneNumberError { get; set; }
 
-    [ObservableProperty]
-    public partial string ClientEmailError { get; set; }
+    [ObservableProperty] public partial string? ClientEmailError { get; set; }
 
-    [ObservableProperty]
-    public partial string UserLoginError { get; set; }
+    [ObservableProperty] public partial string? UserLoginError { get; set; }
 
-    [ObservableProperty]
-    public partial string UserPasswordError { get; set; }
+    [ObservableProperty] public partial string? UserPasswordError { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsPasswordHidden { get; set; } = true;
+    [ObservableProperty] public partial bool IsPasswordHidden { get; set; } = true;
 
-    [ObservableProperty]
-    public partial string PasswordIcon { get; set; } = "eye_hide.png";
+    [ObservableProperty] public partial string PasswordIcon { get; set; } = "eye_hide.png";
 
     [RelayCommand]
     private void TogglePassword()
@@ -135,6 +117,7 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
                         AddError(propertyName, "Укажите фамилию и имя через пробел.");
                     }
                 }
+
                 break;
 
             case nameof(ClientPhoneNumber):
@@ -150,6 +133,7 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
                         AddError(propertyName, "Неверный формат телефона. Пример: (+375/80)(29/44/33/25)XXX-XX-XX");
                     }
                 }
+
                 break;
 
             case nameof(ClientEmail):
@@ -164,6 +148,7 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
                         AddError(propertyName, "Неверный формат e-mail.");
                     }
                 }
+
                 break;
 
             case nameof(UserLogin):
@@ -189,8 +174,6 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
                 }
 
                 break;
-            default:
-                break;
         }
 
         UpdateErrorString(propertyName);
@@ -205,28 +188,23 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
         ValidateProperty(nameof(UserPassword), UserPassword);
     }
 
-    [ObservableProperty]
-    public partial string NameSurname { get; set; }
+    [ObservableProperty] public partial string? NameSurname { get; set; }
 
     partial void OnNameSurnameChanged(string value) => ValidateProperty(nameof(NameSurname), value);
 
-    [ObservableProperty]
-    public partial string ClientPhoneNumber { get; set; }
+    [ObservableProperty] public partial string? ClientPhoneNumber { get; set; }
 
     partial void OnClientPhoneNumberChanged(string value) => ValidateProperty(nameof(ClientPhoneNumber), value);
 
-    [ObservableProperty]
-    public partial string ClientEmail { get; set; }
+    [ObservableProperty] public partial string? ClientEmail { get; set; }
 
     partial void OnClientEmailChanged(string value) => ValidateProperty(nameof(ClientEmail), value);
 
-    [ObservableProperty]
-    public partial string UserLogin { get; set; }
+    [ObservableProperty] public partial string? UserLogin { get; set; }
 
     partial void OnUserLoginChanged(string value) => ValidateProperty(nameof(UserLogin), value);
 
-    [ObservableProperty]
-    public partial string UserPassword { get; set; }
+    [ObservableProperty] public partial string UserPassword { get; set; }
 
     partial void OnUserPasswordChanged(string value) => ValidateProperty(nameof(UserPassword), value);
 
@@ -241,13 +219,13 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
             return;
         }
 
-        var words = (NameSurname ?? string.Empty).Trim()
+        var words = (NameSurname)?.Trim()
             .Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
         var request = new ClientRegisterRequest
         {
-            Name = words.Length > 1 ? words[1] : "Имя",
-            Surname = words.Length > 0 ? words[0] : "Фамилия",
+            Name = words is { Length: > 1 } ? words[1] : "Имя",
+            Surname = words is { Length: > 0 } ? words[0] : "Фамилия",
             PhoneNumber = ClientPhoneNumber,
             Email = ClientEmail,
             RoleId = (int)RoleEnum.Client,
@@ -282,8 +260,7 @@ public partial class RegistrationViewModel : ObservableObject, INotifyDataErrorI
 
     [RelayCommand]
     private static async Task OnGoToLogin() => await Shell.Current.GoToAsync("//LoginPage");
+
     [GeneratedRegex(@"^(\+375|80)(29|44|33|25)\d{7}$")]
     private static partial Regex MyRegex { get; }
-
-
 }

@@ -10,24 +10,18 @@ namespace CRMSystemMobile.ViewModels;
 public partial class BookingViewModel(OrderService orderService)
     : ObservableObject, IQueryAttributable
 {
-    [ObservableProperty]
-    public partial CarResponse SelectedCar { get; set; }
+    [ObservableProperty] public partial CarResponse? SelectedCar { get; set; }
 
-    [ObservableProperty]
-    public partial DateTime SelectedDate { get; set; } = DateTime.Now.AddDays(1);
+    [ObservableProperty] public partial DateTime SelectedDate { get; set; } = DateTime.Now.AddDays(1);
 
-    [ObservableProperty]
-    public partial DateTime MinDate { get; set; } = DateTime.Now;
+    [ObservableProperty] public partial DateTime MinDate { get; set; } = DateTime.Now;
 
-    [ObservableProperty]
-    public partial string Description { get; set; }
+    [ObservableProperty] public partial string? Description { get; set; }
     public List<string> Priorities { get; } = ["Низкий", "Обычный", "Высокий"];
 
-    [ObservableProperty]
-    public partial string SelectedPriorityName { get; set; } = "Обычный";
+    [ObservableProperty] public partial string SelectedPriorityName { get; set; } = "Обычный";
 
-    [ObservableProperty]
-    public partial bool IsPriorityDropdownOpen { get; set; }
+    [ObservableProperty] public partial bool IsPriorityDropdownOpen { get; set; }
 
     [RelayCommand]
     private void TogglePriorityDropdown()
@@ -39,14 +33,14 @@ public partial class BookingViewModel(OrderService orderService)
     private void SelectPriorityItem(string priority)
     {
         SelectedPriorityName = priority;
-        IsPriorityDropdownOpen = false; 
+        IsPriorityDropdownOpen = false;
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.ContainsKey("SelectedCar"))
+        if (query.TryGetValue("SelectedCar", out var value))
         {
-            SelectedCar = (CarResponse)query["SelectedCar"];
+            SelectedCar = (CarResponse)value;
         }
     }
 

@@ -10,11 +10,9 @@ public partial class WorkerScheduleViewModel(ScheduleService scheduleService) : 
 {
     public ObservableCollection<ScheduleResponse> Schedules { get; } = [];
 
-    [ObservableProperty]
-    public partial bool IsBusy { get; set; }
+    [ObservableProperty] public partial bool IsBusy { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsRefreshing { get; set; }
+    [ObservableProperty] public partial bool IsRefreshing { get; set; }
 
     [RelayCommand]
     private async Task LoadSchedules()
@@ -37,7 +35,7 @@ public partial class WorkerScheduleViewModel(ScheduleService scheduleService) : 
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить расписание", "ОК");
+            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось загрузить расписание. {ex}", "ОК");
         }
         finally
         {

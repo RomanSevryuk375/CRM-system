@@ -8,32 +8,20 @@ using Shared.Contracts.Client;
 
 namespace CRMSystemMobile.ViewModels;
 
-public partial class ProfileViewModel : ObservableObject
+public partial class ProfileViewModel(ClientService clientService, IdentityService identityService)
+    : ObservableObject
 {
-    private readonly ClientService _clientService;
-    private readonly IdentityService _identityService;
     private long _currentClientId;
 
-    public ProfileViewModel(ClientService clientService, IdentityService identityService)
-    {
-        _clientService = clientService;
-        _identityService = identityService;
-    }
+    [ObservableProperty] public partial string? Name { get; set; }
 
-    [ObservableProperty]
-    public partial string Name { get; set; }
+    [ObservableProperty] public partial string? Surname { get; set; }
 
-    [ObservableProperty]
-    public partial string Surname { get; set; }
+    [ObservableProperty] public partial string? PhoneNumber { get; set; }
 
-    [ObservableProperty]
-    public partial string PhoneNumber { get; set; }
+    [ObservableProperty] public partial string? Email { get; set; }
 
-    [ObservableProperty]
-    public partial string Email { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsLoading { get; set; }
+    [ObservableProperty] public partial bool IsLoading { get; set; }
 
     public string Initials => $"{Surname?.FirstOrDefault()}{Name?.FirstOrDefault()}".ToUpper();
 
@@ -41,12 +29,12 @@ public partial class ProfileViewModel : ObservableObject
     public async Task LoadProfile()
     {
         IsLoading = true;
-        var (profileId, roleId) = await _identityService.GetProfileIdAsync();
+        var (profileId, _) = await identityService.GetProfileIdAsync();
         _currentClientId = profileId;
 
         if (profileId > 0)
         {
-            var client = await _clientService.GetClientById(profileId);
+            var client = await clientService.GetClientById(profileId);
             if (client != null)
             {
                 Name = client.Name;
@@ -57,6 +45,7 @@ public partial class ProfileViewModel : ObservableObject
                 OnPropertyChanged(nameof(Initials));
             }
         }
+
         IsLoading = false;
     }
 
@@ -70,14 +59,15 @@ public partial class ProfileViewModel : ObservableObject
 
         IsLoading = true;
 
-        var request = new ClientUpdateRequest(
-            Name,
-            Surname,
-            PhoneNumber,
-            Email
-        );
+        var request = new ClientUpdateRequest
+        {
+            Name = Name,
+            Surname = Surname,
+            PhoneNumber = PhoneNumber,
+            Email = Email,
+        };
 
-        var success = await _clientService.UpdateClient(_currentClientId, request);
+        var success = await clientService.UpdateClient(_currentClientId, request);
 
         if (success)
         {
@@ -98,7 +88,7 @@ public partial class ProfileViewModel : ObservableObject
     [RelayCommand]
     public async Task Logout()
     {
-        bool answer = await Shell.Current.DisplayAlert("Выход", "Выйти из аккаунта?", "Да", "Нет");
+        var answer = await Shell.Current.DisplayAlert("Выход", "Выйти из аккаунта?", "Да", "Нет");
         if (answer)
         {
             SecureStorage.Default.Remove("jwt_token");

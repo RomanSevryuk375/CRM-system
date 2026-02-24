@@ -2,7 +2,7 @@ using CRMSystemMobile.ViewModels;
 
 namespace CRMSystemMobile.View;
 
-public partial class WorkerSchedulePage : ContentPage
+public partial class WorkerSchedulePage
 {
     private readonly WorkerScheduleViewModel _viewModel;
 

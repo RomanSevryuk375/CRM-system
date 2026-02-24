@@ -1,13 +1,14 @@
 ﻿using CRMSystemMobile.Extentions;
 using CRMSystemMobile.Services;
 using CRMSystemMobile.View;
-using CRMSystemMobile.ViewModel;
 using CRMSystemMobile.ViewModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
+using LoginViewModel = CRMSystemMobile.ViewModels.LoginViewModel;
 #if IOS
 using UIKit;
 #endif
+
 #if ANDROID
 using Android.OS;
 using Android.Views;
@@ -37,7 +38,8 @@ namespace CRMSystemMobile
 #if ANDROID
                 handler.PlatformView.Background = null;
                 handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
-                handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
+                handler.PlatformView.BackgroundTintList =
+ Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
 #endif
             });
 
@@ -54,7 +56,7 @@ namespace CRMSystemMobile
 #if NET8_0_OR_GREATER
                             if (Build.VERSION.SdkInt < (BuildVersionCodes)35)
                             {
-                                window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#112347"));
+                                window?.SetStatusBarColor(Android.Graphics.Color.ParseColor("#112347"));
                             }
                             else
                             {
@@ -97,85 +99,66 @@ namespace CRMSystemMobile
             builder.Services.AddTransient<AuthHttpMessageHandler>();
             builder.Services.AddSingleton<IdentityService>();
 
-            builder.Services.AddHttpClient<OrderService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services.AddHttpClient<OrderService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
-            builder.Services.AddHttpClient<ClientService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services
+                .AddHttpClient<ClientService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
-            builder.Services.AddHttpClient<BillService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services.AddHttpClient<BillService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
-            builder.Services.AddHttpClient<LoginService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services.AddHttpClient<LoginService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
             builder.Services.AddHttpClient<RegistrationService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+                {
+                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+                })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
-            builder.Services.AddHttpClient<CarService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services.AddHttpClient<CarService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
             builder.Services.AddHttpClient<PaymentService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+                {
+                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+                })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
             builder.Services.AddHttpClient<PartSetService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+                {
+                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+                })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
             builder.Services.AddHttpClient<WorkInOrderService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+                {
+                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+                })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
             builder.Services.AddHttpClient<WorkProposalService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
-            builder.Services.AddHttpClient<WorkerService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
-            builder.Services.AddHttpClient<PositionService>(client => 
-            { 
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl); 
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
-            builder.Services.AddHttpClient<WorkService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+                {
+                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+                })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services
+                .AddHttpClient<WorkerService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services.AddHttpClient<PositionService>(client =>
+                {
+                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+                })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
+            builder.Services.AddHttpClient<WorkService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
             builder.Services.AddHttpClient<ScheduleService>(client =>
-            {
-                client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-            })
-            .AddHttpMessageHandler<AuthHttpMessageHandler>();
+                {
+                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
+                })
+                .AddHttpMessageHandler<AuthHttpMessageHandler>();
 
             builder.Services.AddSingleton<AppShell>();
             builder.Services.AddSingleton<App>();

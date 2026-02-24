@@ -8,28 +8,18 @@ using System.Collections.ObjectModel;
 
 namespace CRMSystemMobile.ViewModels;
 
-public partial class AddPartViewModel : ObservableObject, IQueryAttributable
+public partial class AddPartViewModel(PositionService positionService, PartSetService partSetService)
+    : ObservableObject, IQueryAttributable
 {
-    private readonly PositionService _positionService;
-    private readonly PartSetService _partSetService;
     private long _orderId;
-
-    public AddPartViewModel(PositionService positionService, PartSetService partSetService)
-    {
-        _positionService = positionService;
-        _partSetService = partSetService;
-    }
 
     public ObservableCollection<PositionResponse> Positions { get; } = [];
 
-    [ObservableProperty]
-    public partial PositionResponse SelectedPosition { get; set; }
+    [ObservableProperty] public partial PositionResponse? SelectedPosition { get; set; }
 
-    [ObservableProperty]
-    public partial decimal Quantity { get; set; } = 1;
+    [ObservableProperty] public partial decimal Quantity { get; set; } = 1;
 
-    [ObservableProperty]
-    public partial bool IsBusy { get; set; }
+    [ObservableProperty] public partial bool IsBusy { get; set; }
 
     [RelayCommand]
     private void IncreaseQuantity()
@@ -48,11 +38,9 @@ public partial class AddPartViewModel : ObservableObject, IQueryAttributable
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.ContainsKey("OrderId"))
-        {
-            _orderId = Convert.ToInt64(query["OrderId"]);
-            LoadPositionsCommand.Execute(null);
-        }
+        if (!query.TryGetValue("OrderId", out var value)) return;
+        _orderId = Convert.ToInt64(value);
+        LoadPositionsCommand.Execute(null);
     }
 
     [RelayCommand]
@@ -72,26 +60,24 @@ public partial class AddPartViewModel : ObservableObject, IQueryAttributable
                 IsDescending: false
             );
 
-            var (items, totalCount) = await _positionService.GetPositions(filter);
+            var (items, totalCount) = await positionService.GetPositions(filter);
 
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 Positions.Clear();
 
-                if (items != null)
+                if (items == null) return;
+                foreach (var item in items)
                 {
-                    foreach (var item in items)
-                    {
-                        Positions.Add(item);
-                    }
+                    Positions.Add(item);
                 }
             });
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error loading positions: {ex}");
-            MainThread.BeginInvokeOnMainThread(async () =>
-                await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить список запчастей", "ОК"));
+            MainThread.BeginInvokeOnMainThread(() =>
+                Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить список запчастей", "ОК"));
         }
         finally
         {
@@ -118,7 +104,7 @@ public partial class AddPartViewModel : ObservableObject, IQueryAttributable
             SoldPrice = SelectedPosition.SellingPrice
         };
 
-        var error = await _partSetService.AddToSet(request);
+        var error = await partSetService.AddToSet(request);
 
         IsBusy = false;
 

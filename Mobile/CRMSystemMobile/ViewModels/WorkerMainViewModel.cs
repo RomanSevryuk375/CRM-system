@@ -30,25 +30,21 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
 
     public ObservableCollection<OrderResponse> AssignedOrders { get; } = [];
 
-    [ObservableProperty]
-    public partial bool IsBusy { get; set; }
+    [ObservableProperty] public partial bool IsBusy { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsRefreshing { get; set; }
+    [ObservableProperty] public partial bool IsRefreshing { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsMenuOpen { get; set; }
+    [ObservableProperty] public partial bool IsMenuOpen { get; set; }
 
-    [ObservableProperty]
-    public partial string WorkerInitials { get; set; } = "??";
+    [ObservableProperty] public partial string WorkerInitials { get; set; } = "??";
 
     private int _currentPage = 1;
-    private int _totalItems = 0;
-    private const int _pageSize = 20;
+    private int _totalItems;
+    private const int PageSize = 20;
 
     public void Receive(ProfileUpdatedMessage message)
     {
-        MainThread.BeginInvokeOnMainThread(async () => await LoadWorkerInfo());
+        MainThread.BeginInvokeOnMainThread(async void () => await LoadWorkerInfo());
     }
 
     [RelayCommand]
@@ -85,7 +81,10 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
         {
             await LoadDataInternal();
         }
-        catch { /* ... */ }
+        catch
+        {
+            /* ... */
+        }
     }
 
     private async Task LoadDataInternal()
@@ -102,7 +101,7 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
             WorkerIds: [(int)profileId],
             SortBy: "date",
             Page: _currentPage,
-            Limit: _pageSize,
+            Limit: PageSize,
             IsDescending: true
         );
 
@@ -128,8 +127,8 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
             var worker = await _workerService.GetWorkerById((int)profileId);
             if (worker != null)
             {
-                var s = worker.Surname?.FirstOrDefault().ToString() ?? "";
-                var n = worker.Name?.FirstOrDefault().ToString() ?? "";
+                var s = worker.Surname.FirstOrDefault().ToString();
+                var n = worker.Name.FirstOrDefault().ToString();
                 WorkerInitials = (s + n).ToUpper();
             }
         }
@@ -147,14 +146,14 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
     }
 
     [RelayCommand]
-    private async Task GoToWorkOrder(OrderResponse order)
+    private async Task GoToWorkOrder(OrderResponse? order)
     {
         if (order == null) return;
 
         var navParam = new Dictionary<string, object>
-    {
-        { "Order", order }
-    };
+        {
+            { "Order", order }
+        };
 
         await Shell.Current.GoToAsync("WorkerOrderDetailsPage", navParam);
     }

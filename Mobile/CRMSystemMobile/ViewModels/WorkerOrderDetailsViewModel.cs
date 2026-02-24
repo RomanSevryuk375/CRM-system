@@ -12,36 +12,20 @@ using System.Collections.ObjectModel;
 
 namespace CRMSystemMobile.ViewModels;
 
-public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttributable
+public partial class WorkerOrderDetailsViewModel(
+    WorkInOrderService workInOrderService,
+    PartSetService partSetService,
+    WorkProposalService workProposalService,
+    IdentityService identityService)
+    : ObservableObject, IQueryAttributable
 {
-    private readonly WorkInOrderService _workInOrderService;
-    private readonly PartSetService _partSetService;
-    private readonly WorkProposalService _workProposalService;
-    private readonly IdentityService _identityService;
+    [ObservableProperty] public partial OrderResponse? Order { get; set; }
 
-    public WorkerOrderDetailsViewModel(
-        WorkInOrderService workInOrderService,
-        PartSetService partSetService,
-        WorkProposalService workProposalService,
-        IdentityService identityService)
-    {
-        _workInOrderService = workInOrderService;
-        _partSetService = partSetService;
-        _workProposalService = workProposalService;
-        _identityService = identityService;
-    }
+    [ObservableProperty] public partial bool IsBusy { get; set; }
 
-    [ObservableProperty]
-    public partial OrderResponse Order { get; set; }
+    [ObservableProperty] public partial bool IsRefreshing { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsBusy { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsRefreshing { get; set; }
-
-    [ObservableProperty]
-    public partial int SelectedTab { get; set; } = 0;
+    [ObservableProperty] public partial int SelectedTab { get; set; } = 0;
 
     public ObservableCollection<WorkInOrderResponse> MyWorks { get; } = [];
     public ObservableCollection<PartSetResponse> OrderParts { get; } = [];
@@ -52,17 +36,14 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.ContainsKey("Order"))
-        {
-            Order = (OrderResponse)query["Order"];
-            LoadAllDataCommand.Execute(null);
-        }
+        if (!query.TryGetValue("Order", out var value)) return;
+        Order = (OrderResponse)value;
+        LoadAllDataCommand.Execute(null);
     }
 
     [RelayCommand]
     private async Task LoadAllData()
     {
-        if (Order == null) return;
         IsBusy = true;
 
         try
@@ -75,7 +56,7 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Ошибка", "Не удалось загрузить данные", "ОК");
+            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось загрузить данные. {ex}", "ОК");
         }
         finally
         {
@@ -86,7 +67,7 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
 
     private async Task LoadWorksInternal()
     {
-        var (profileId, _) = await _identityService.GetProfileIdAsync();
+        var (profileId, _) = await identityService.GetProfileIdAsync();
         var filter = new WorkInOrderFilter(
             OrderIds: [Order.Id],
             WorkerIds: [(int)profileId],
@@ -97,12 +78,14 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
             Limit: 100,
             IsDescending: true
         );
-        var (items, _) = await _workInOrderService.GetWorksInOrder(filter);
+        var (items, _) = await workInOrderService.GetWorksInOrder(filter);
 
         MainThread.BeginInvokeOnMainThread(() =>
         {
             MyWorks.Clear();
-            if (items != null) foreach (var i in items) MyWorks.Add(i);
+            if (items == null) return;
+            foreach (var i in items)
+                MyWorks.Add(i);
         });
     }
 
@@ -117,36 +100,39 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
             Limit: 100,
             IsDescending: true
         );
-        var (items, _) = await _partSetService.GetPartSets(filter);
+        var (items, _) = await partSetService.GetPartSets(filter);
 
         MainThread.BeginInvokeOnMainThread(() =>
         {
             OrderParts.Clear();
-            if (items != null) foreach (var i in items) OrderParts.Add(i);
+            if (items == null) return;
+            foreach (var i in items)
+                OrderParts.Add(i);
         });
     }
 
     private async Task LoadProposalsInternal()
     {
-        var (profileId, _) = await _identityService.GetProfileIdAsync();
+        var (profileId, _) = await identityService.GetProfileIdAsync();
         var filter = new WorkProposalFilter(
             OrderIds: [Order.Id],
             WorkerIds: [(int)profileId],
             JobIds: [], StatusIds: [], SortBy: null, Page: 1, Limit: 100, IsDescending: true
         );
-        var (items, _) = await _workProposalService.GetWorkProposals(filter);
+        var (items, _) = await workProposalService.GetWorkProposals(filter);
 
         MainThread.BeginInvokeOnMainThread(() =>
         {
             MyProposals.Clear();
-            if (items != null) foreach (var i in items) MyProposals.Add(i);
+            if (items == null) return;
+            foreach (var i in items) MyProposals.Add(i);
         });
     }
 
     [RelayCommand]
     private void SelectTab(string tabIndex)
     {
-        if (int.TryParse(tabIndex, out int index))
+        if (int.TryParse(tabIndex, out var index))
         {
             SelectedTab = index;
         }
@@ -155,7 +141,6 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
     [RelayCommand]
     private async Task GoToAddPart()
     {
-        if (Order == null) return;
         var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
         await Shell.Current.GoToAsync("AddPartPage", navParam);
     }
@@ -163,35 +148,33 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
     [RelayCommand]
     private async Task GoToAddProposal()
     {
-        if (Order == null) return;
         var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
         await Shell.Current.GoToAsync("AddProposalPage", navParam);
     }
 
     [RelayCommand]
-    private async Task ChangeStatus(WorkInOrderResponse work)
+    private async Task ChangeStatus(WorkInOrderResponse? work)
     {
         if (work == null) return;
 
         WorkStatusEnum newStatus;
-        string actionName = "";
+        string actionName;
 
-        if (work.StatusId == (int)WorkStatusEnum.Pending)
+        switch (work.StatusId)
         {
-            newStatus = WorkStatusEnum.InProgress;
-            actionName = "начата";
-        }
-        else if (work.StatusId == (int)WorkStatusEnum.InProgress)
-        {
-            newStatus = WorkStatusEnum.Completed;
-            actionName = "завершена";
-        }
-        else
-        {
-            return;
+            case (int)WorkStatusEnum.Pending:
+                newStatus = WorkStatusEnum.InProgress;
+                actionName = "Начата";
+                break;
+            case (int)WorkStatusEnum.InProgress:
+                newStatus = WorkStatusEnum.Completed;
+                actionName = "Завершена";
+                break;
+            default:
+                return;
         }
 
-        bool confirm = await Shell.Current.DisplayAlert("Подтверждение",
+        var confirm = await Shell.Current.DisplayAlert("Подтверждение",
             $"Работа будет {actionName}. Продолжить?", "Да", "Нет");
 
         if (!confirm) return;
@@ -203,7 +186,7 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
             TimeSpent = null
         };
 
-        var error = await _workInOrderService.UpdateWorkInOrder(work.Id, request);
+        var error = await workInOrderService.UpdateWorkInOrder(work.Id, request);
 
         if (error == null)
         {
@@ -216,16 +199,16 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
     }
 
     [RelayCommand]
-    private async Task DeleteTask(WorkInOrderResponse item)
+    private async Task DeleteTask(WorkInOrderResponse? item)
     {
         if (item == null) return;
 
-        bool confirm = await Shell.Current.DisplayAlert("Удаление",
+        var confirm = await Shell.Current.DisplayAlert("Удаление",
             $"Удалить работу \"{item.Job}\"?", "Да", "Нет");
 
         if (!confirm) return;
 
-        string? error = await _workInOrderService.DeleteWorkInOrder(item.Id);
+        var error = await workInOrderService.DeleteWorkInOrder(item.Id);
 
         if (error == null)
         {
@@ -238,16 +221,16 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
     }
 
     [RelayCommand]
-    private async Task DeletePart(PartSetResponse item)
+    private async Task DeletePart(PartSetResponse? item)
     {
         if (item == null) return;
 
-        bool confirm = await Shell.Current.DisplayAlert("Удаление",
+        var confirm = await Shell.Current.DisplayAlert("Удаление",
             $"Удалить запчасть \"{item.Position}\"?", "Да", "Нет");
 
         if (!confirm) return;
 
-        string? error = await _partSetService.DeletePartSet(item.Id);
+        var error = await partSetService.DeletePartSet(item.Id);
 
         if (error == null)
         {
@@ -261,16 +244,16 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
     }
 
     [RelayCommand]
-    private async Task DeleteProposal(WorkProposalResponse item)
+    private async Task DeleteProposal(WorkProposalResponse? item)
     {
         if (item == null) return;
 
-        bool confirm = await Shell.Current.DisplayAlert("Удаление",
+        var confirm = await Shell.Current.DisplayAlert("Удаление",
             $"Удалить предложение \"{item.Job}\"?", "Да", "Нет");
 
         if (!confirm) return;
 
-        string? error = await _workProposalService.DeleteWorkPropsal(item.Id);
+        var error = await workProposalService.DeleteWorkPropsal(item.Id);
 
         if (error == null)
         {
@@ -284,5 +267,5 @@ public partial class WorkerOrderDetailsViewModel : ObservableObject, IQueryAttri
     }
 
     [RelayCommand]
-    private async Task GoBack() => await Shell.Current.GoToAsync("..");
+    private static async Task GoBack() => await Shell.Current.GoToAsync("..");
 }
