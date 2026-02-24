@@ -17,7 +17,10 @@ public partial class WorkerScheduleViewModel(ScheduleService scheduleService) : 
     [RelayCommand]
     private async Task LoadSchedules()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
 
         try
         {

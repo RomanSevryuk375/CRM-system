@@ -101,7 +101,10 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
     [RelayCommand]
     private static async Task GoToDetails(BillResponse? bill)
     {
-        if (bill == null) return;
+        if (bill == null)
+        {
+            return;
+        }
 
         var navParam = new Dictionary<string, object>
         {

@@ -30,9 +30,17 @@ public partial class BillDetailsViewModel(PaymentService paymentService, BillSer
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (!query.TryGetValue("Bill", out var value)) return;
+        if (!query.TryGetValue("Bill", out var value))
+        {
+            return;
+        }
+
         Bill = (BillResponse)value;
-        if (Bill == null) return;
+        if (Bill == null)
+        {
+            return;
+        }
+
         RemainingDebt = Bill.Amount;
         UpdateDebtInfoCommand.Execute(null);
         LoadBillPaymentsCommand.Execute(null);
@@ -41,7 +49,10 @@ public partial class BillDetailsViewModel(PaymentService paymentService, BillSer
     [RelayCommand]
     private async Task UpdateDebtInfo()
     {
-        if (Bill == null) return;
+        if (Bill == null)
+        {
+            return;
+        }
 
         var debt = await billService.GetBillDebt(Bill.Id);
 
@@ -58,7 +69,10 @@ public partial class BillDetailsViewModel(PaymentService paymentService, BillSer
     [RelayCommand]
     private async Task LoadBillPayments()
     {
-        if (Bill == null) return;
+        if (Bill == null)
+        {
+            return;
+        }
 
         try
         {
@@ -91,14 +105,20 @@ public partial class BillDetailsViewModel(PaymentService paymentService, BillSer
     [RelayCommand]
     private async Task MakePayment()
     {
-        if (IsBusy || Bill == null) return;
+        if (IsBusy || Bill == null)
+        {
+            return;
+        }
 
         if (PaymentAmount > RemainingDebt)
         {
             var confirm = await Shell.Current.DisplayAlert("Внимание",
                 $"Сумма платежа ({PaymentAmount}) больше текущего долга ({RemainingDebt}). Продолжить?",
                 "Да", "Нет");
-            if (!confirm) return;
+            if (!confirm)
+            {
+                return;
+            }
         }
 
         if (PaymentAmount <= 0)

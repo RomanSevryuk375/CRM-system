@@ -29,7 +29,11 @@ public partial class OrderDetailsViewModel(
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (!query.TryGetValue("OrderId", out var value)) return;
+        if (!query.TryGetValue("OrderId", out var value))
+        {
+            return;
+        }
+
         OrderId = Convert.ToInt64(value);
         OrderTitle = $"Заказ #{OrderId}";
         LoadDataCommand.Execute(null);
@@ -38,7 +42,11 @@ public partial class OrderDetailsViewModel(
     [RelayCommand]
     private async Task LoadData()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
+
         IsBusy = true;
 
         try
@@ -75,7 +83,10 @@ public partial class OrderDetailsViewModel(
         var (items, _) = await workInOrderService.GetWorksInOrder(filter);
         if (items != null)
         {
-            foreach (var item in items) Works.Add(item);
+            foreach (var item in items)
+            {
+                Works.Add(item);
+            }
         }
     }
 
@@ -88,7 +99,10 @@ public partial class OrderDetailsViewModel(
         var (items, _) = await partSetService.GetPartSets(filter);
         if (items != null)
         {
-            foreach (var item in items) Parts.Add(item);
+            foreach (var item in items)
+            {
+                Parts.Add(item);
+            }
         }
     }
 
@@ -101,7 +115,10 @@ public partial class OrderDetailsViewModel(
         var (items, _) = await workProposalService.GetWorkProposals(filter);
         if (items != null)
         {
-            foreach (var item in items) Proposals.Add(item);
+            foreach (var item in items)
+            {
+                Proposals.Add(item);
+            }
         }
     }
 

@@ -174,7 +174,10 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private static async Task GoToOrderDetails(OrderResponse? order)
     {
-        if (order == null) return;
+        if (order == null)
+        {
+            return;
+        }
 
         var navParam = new Dictionary<string, object>
         {
@@ -198,7 +201,10 @@ public partial class MainViewModel : ObservableObject
             return;
         }
 
-        if (!IsRefreshing && Orders.Count > 0 && Orders.Count >= _totalItems) return;
+        if (!IsRefreshing && Orders.Count > 0 && Orders.Count >= _totalItems)
+        {
+            return;
+        }
 
         try
         {

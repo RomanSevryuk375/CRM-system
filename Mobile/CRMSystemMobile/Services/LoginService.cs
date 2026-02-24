@@ -14,7 +14,11 @@ public class LoginService(HttpClient httpClient)
         {
             var response = await httpClient.PostAsJsonAsync(url, request);
 
-            if (!response.IsSuccessStatusCode) return null;
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
             var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
 
             if (result?.Token != null)

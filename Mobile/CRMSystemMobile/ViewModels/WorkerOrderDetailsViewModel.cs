@@ -36,7 +36,11 @@ public partial class WorkerOrderDetailsViewModel(
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (!query.TryGetValue("Order", out var value)) return;
+        if (!query.TryGetValue("Order", out var value))
+        {
+            return;
+        }
+
         Order = (OrderResponse)value;
         LoadAllDataCommand.Execute(null);
     }
@@ -83,9 +87,15 @@ public partial class WorkerOrderDetailsViewModel(
         MainThread.BeginInvokeOnMainThread(() =>
         {
             MyWorks.Clear();
-            if (items == null) return;
+            if (items == null)
+            {
+                return;
+            }
+
             foreach (var i in items)
+            {
                 MyWorks.Add(i);
+            }
         });
     }
 
@@ -105,9 +115,15 @@ public partial class WorkerOrderDetailsViewModel(
         MainThread.BeginInvokeOnMainThread(() =>
         {
             OrderParts.Clear();
-            if (items == null) return;
+            if (items == null)
+            {
+                return;
+            }
+
             foreach (var i in items)
+            {
                 OrderParts.Add(i);
+            }
         });
     }
 
@@ -124,8 +140,15 @@ public partial class WorkerOrderDetailsViewModel(
         MainThread.BeginInvokeOnMainThread(() =>
         {
             MyProposals.Clear();
-            if (items == null) return;
-            foreach (var i in items) MyProposals.Add(i);
+            if (items == null)
+            {
+                return;
+            }
+
+            foreach (var i in items)
+            {
+                MyProposals.Add(i);
+            }
         });
     }
 
@@ -155,7 +178,10 @@ public partial class WorkerOrderDetailsViewModel(
     [RelayCommand]
     private async Task ChangeStatus(WorkInOrderResponse? work)
     {
-        if (work == null) return;
+        if (work == null)
+        {
+            return;
+        }
 
         WorkStatusEnum newStatus;
         string actionName;
@@ -177,7 +203,10 @@ public partial class WorkerOrderDetailsViewModel(
         var confirm = await Shell.Current.DisplayAlert("Подтверждение",
             $"Работа будет {actionName}. Продолжить?", "Да", "Нет");
 
-        if (!confirm) return;
+        if (!confirm)
+        {
+            return;
+        }
 
         var request = new WorkInOrderUpdateRequest
         {
@@ -201,12 +230,18 @@ public partial class WorkerOrderDetailsViewModel(
     [RelayCommand]
     private async Task DeleteTask(WorkInOrderResponse? item)
     {
-        if (item == null) return;
+        if (item == null)
+        {
+            return;
+        }
 
         var confirm = await Shell.Current.DisplayAlert("Удаление",
             $"Удалить работу \"{item.Job}\"?", "Да", "Нет");
 
-        if (!confirm) return;
+        if (!confirm)
+        {
+            return;
+        }
 
         var error = await workInOrderService.DeleteWorkInOrder(item.Id);
 
@@ -223,12 +258,18 @@ public partial class WorkerOrderDetailsViewModel(
     [RelayCommand]
     private async Task DeletePart(PartSetResponse? item)
     {
-        if (item == null) return;
+        if (item == null)
+        {
+            return;
+        }
 
         var confirm = await Shell.Current.DisplayAlert("Удаление",
             $"Удалить запчасть \"{item.Position}\"?", "Да", "Нет");
 
-        if (!confirm) return;
+        if (!confirm)
+        {
+            return;
+        }
 
         var error = await partSetService.DeletePartSet(item.Id);
 
@@ -246,12 +287,18 @@ public partial class WorkerOrderDetailsViewModel(
     [RelayCommand]
     private async Task DeleteProposal(WorkProposalResponse? item)
     {
-        if (item == null) return;
+        if (item == null)
+        {
+            return;
+        }
 
         var confirm = await Shell.Current.DisplayAlert("Удаление",
             $"Удалить предложение \"{item.Job}\"?", "Да", "Нет");
 
-        if (!confirm) return;
+        if (!confirm)
+        {
+            return;
+        }
 
         var error = await workProposalService.DeleteWorkPropsal(item.Id);
 

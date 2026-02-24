@@ -26,7 +26,11 @@ public partial class AddProposalViewModel(
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (!query.TryGetValue("OrderId", out var value)) return;
+        if (!query.TryGetValue("OrderId", out var value))
+        {
+            return;
+        }
+
         _orderId = Convert.ToInt64(value);
         LoadJobsCommand.Execute(null);
     }
@@ -34,7 +38,10 @@ public partial class AddProposalViewModel(
     [RelayCommand]
     private async Task LoadJobs()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
 
         try
         {

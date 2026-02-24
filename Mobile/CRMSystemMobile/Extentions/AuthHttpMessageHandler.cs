@@ -14,7 +14,11 @@ public class AuthHttpMessageHandler : DelegatingHandler
 
         var response = await base.SendAsync(request, cancellationToken);
 
-        if (response.StatusCode != System.Net.HttpStatusCode.Unauthorized) return response;
+        if (response.StatusCode != System.Net.HttpStatusCode.Unauthorized)
+        {
+            return response;
+        }
+
         SecureStorage.Default.Remove("jwt_token");
 
         MainThread.BeginInvokeOnMainThread(() =>

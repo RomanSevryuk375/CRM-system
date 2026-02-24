@@ -38,7 +38,11 @@ public partial class AddPartViewModel(PositionService positionService, PartSetSe
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (!query.TryGetValue("OrderId", out var value)) return;
+        if (!query.TryGetValue("OrderId", out var value))
+        {
+            return;
+        }
+
         _orderId = Convert.ToInt64(value);
         LoadPositionsCommand.Execute(null);
     }
@@ -46,7 +50,10 @@ public partial class AddPartViewModel(PositionService positionService, PartSetSe
     [RelayCommand]
     private async Task LoadPositions()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
 
         try
         {
@@ -66,7 +73,11 @@ public partial class AddPartViewModel(PositionService positionService, PartSetSe
             {
                 Positions.Clear();
 
-                if (items == null) return;
+                if (items == null)
+                {
+                    return;
+                }
+
                 foreach (var item in items)
                 {
                     Positions.Add(item);

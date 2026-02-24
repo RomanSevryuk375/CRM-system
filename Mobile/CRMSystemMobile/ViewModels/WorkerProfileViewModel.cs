@@ -67,7 +67,11 @@ public partial class WorkerProfileViewModel : ObservableObject
     [RelayCommand]
     public async Task SaveProfile()
     {
-        if (IsLoading) return;
+        if (IsLoading)
+        {
+            return;
+        }
+
         IsLoading = true;
 
         var request = new WorkerUpdateRequest

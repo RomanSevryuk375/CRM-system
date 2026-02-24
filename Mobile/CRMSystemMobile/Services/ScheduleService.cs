@@ -12,7 +12,10 @@ public class ScheduleService(HttpClient httpClient, IdentityService identityServ
         try
         {
             var (profileId, _) = await identityService.GetProfileIdAsync();
-            if (profileId <= 0) return null;
+            if (profileId <= 0)
+            {
+                return null;
+            }
 
             var query = $"Page=1&Limit=50&IsDescending=true&SortBy=date&WorkerIds={profileId}";
 

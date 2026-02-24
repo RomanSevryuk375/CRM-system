@@ -40,7 +40,11 @@ public partial class RegistrationViewModel(
             _errors[propertyName] = list;
         }
 
-        if (list.Contains(error)) return;
+        if (list.Contains(error))
+        {
+            return;
+        }
+
         list.Add(error);
         ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         OnPropertyChanged(nameof(HasErrors));
@@ -48,7 +52,11 @@ public partial class RegistrationViewModel(
 
     private void ClearErrors(string propertyName)
     {
-        if (!_errors.Remove(propertyName)) return;
+        if (!_errors.Remove(propertyName))
+        {
+            return;
+        }
+
         ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         OnPropertyChanged(nameof(HasErrors));
     }

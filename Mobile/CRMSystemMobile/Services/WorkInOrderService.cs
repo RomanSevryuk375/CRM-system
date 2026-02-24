@@ -97,7 +97,10 @@ public class WorkInOrderService(HttpClient httpClient)
         {
             var response = await httpClient.PutAsJsonAsync($"api/works-in-order/{id}", model);
 
-            if (response.IsSuccessStatusCode) return null;
+            if (response.IsSuccessStatusCode)
+            {
+                return null;
+            }
 
             var error = await response.Content.ReadAsStringAsync();
             return error;

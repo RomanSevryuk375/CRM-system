@@ -60,7 +60,11 @@ public class BillService(HttpClient httpClient)
 
             var response = await httpClient.GetAsync(url);
 
-            if (!response.IsSuccessStatusCode) return null;
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
             var content = await response.Content.ReadAsStringAsync();
             if (decimal.TryParse(content, System.Globalization.NumberStyles.Any,
                     System.Globalization.CultureInfo.InvariantCulture, out var debt))

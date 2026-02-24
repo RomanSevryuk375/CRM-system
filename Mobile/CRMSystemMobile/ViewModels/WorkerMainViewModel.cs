@@ -50,7 +50,11 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
     [RelayCommand]
     private async Task LoadInitial()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
+
         try
         {
             IsBusy = true;
@@ -76,7 +80,11 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
     [RelayCommand]
     private async Task LoadNextPage()
     {
-        if (IsBusy || (AssignedOrders.Count >= _totalItems && _totalItems != 0)) return;
+        if (IsBusy || (AssignedOrders.Count >= _totalItems && _totalItems != 0))
+        {
+            return;
+        }
+
         try
         {
             await LoadDataInternal();
@@ -90,7 +98,10 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
     private async Task LoadDataInternal()
     {
         var (profileId, _) = await _identityService.GetProfileIdAsync();
-        if (profileId <= 0) return;
+        if (profileId <= 0)
+        {
+            return;
+        }
 
         var filter = new OrderFilter(
             OrderIds: [],
@@ -112,7 +123,10 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
         {
             if (items != null)
             {
-                foreach (var item in items) AssignedOrders.Add(item);
+                foreach (var item in items)
+                {
+                    AssignedOrders.Add(item);
+                }
             }
         });
 
@@ -148,7 +162,10 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
     [RelayCommand]
     private async Task GoToWorkOrder(OrderResponse? order)
     {
-        if (order == null) return;
+        if (order == null)
+        {
+            return;
+        }
 
         var navParam = new Dictionary<string, object>
         {
