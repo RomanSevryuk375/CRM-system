@@ -3,7 +3,6 @@ using CRMSystem.Business.Services;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.ProjectionModels.Skill;
 using FluentAssertions;
 using Moq;
@@ -106,7 +105,7 @@ public class SkillServiceTests
     [Fact]
     public async Task UpdateSkill_ShouldThrowNotFoundException_WhenSpecializationDoesNotExist()
     {
-        var skillId = 0;
+        const int skillId = 0;
         var model = new SkillUpdateModel(1, 2);
 
         _workerRepoMock.Setup(x => x.Exists(

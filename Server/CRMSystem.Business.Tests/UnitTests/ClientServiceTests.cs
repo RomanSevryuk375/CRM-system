@@ -42,19 +42,19 @@ public class ClientServiceTests
 
         var user = ValidObjects.CreateValidUserClient();
 
-        var client = ValidObjects.CreateValidClient(user.Id);
+        var client = ValidObjects.CreateValidClient(userId);
 
         _userRepoMock.Setup(x => x.Create(
-                          user,
+                          It.IsAny<User>(), 
                           It.IsAny<CancellationToken>()))
                         .ReturnsAsync(userId);
 
         _clientRepoMock.Setup(x => x.Create(
-                          client!,
+                          It.IsAny<Client>(),
                           It.IsAny<CancellationToken>()))
                         .ThrowsAsync(new Exception("Some think going wrong"));
 
-        var act = () => _service.CreateClientWithUser(client!, user, It.IsAny<CancellationToken>());
+        var act = () => _service.CreateClientWithUser(client, user, It.IsAny<CancellationToken>());
 
         await act.Should().ThrowAsync<Exception>();
 

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Bill;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,20 +45,9 @@ public class BillController(
     public async Task<ActionResult> CreateBill(
         [FromBody] BillRequest request, CancellationToken ct)
     {
-        var (bill, errors) = Bill.Create(
-            0,
-            request.OrderId,
-            request.StatusId,
-            request.CreatedAt,
-            request.Amount,
-            request.ActualBillDate);
+        var createModel = mapper.Map<BillCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await billService.CreateBill(bill!, ct);
+        await billService.CreateBill(createModel, ct);
 
         return Created();
     }

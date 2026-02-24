@@ -1,5 +1,4 @@
-﻿
-using CRMSystem.Core.Constants;
+﻿using CRMSystem.Core.Validation;
 using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

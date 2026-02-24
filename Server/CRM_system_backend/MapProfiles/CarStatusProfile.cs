@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.CarStatus;
 using CRMSystem.DataAccess.Entites;
 using Shared.Contracts;
 

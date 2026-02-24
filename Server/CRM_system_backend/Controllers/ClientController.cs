@@ -2,6 +2,7 @@
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Client;
+using CRMSystem.Core.ProjectionModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Client;
@@ -42,22 +43,11 @@ public class ClientController(
 
     [HttpPost]
     public async Task<ActionResult> CreateClient(
-        ClientsRequest request, CancellationToken ct)
+        ClientRequest request, CancellationToken ct)
     {
-        var (client, errors) = Client.Create(
-            0,
-            request.UserId,
-            request.Name,
-            request.Surname,
-            request.PhoneNumber,
-            request.Email);
+        var createModel = mapper.Map<ClientCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        var clientId = await clientService.CreateClient(client!, ct);
+        var clientId = await clientService.CreateClient(createModel, ct);
 
         return CreatedAtAction(
             nameof(GetClientById), 
@@ -69,31 +59,10 @@ public class ClientController(
     public async Task<ActionResult> CreateClientWithUser(
         [FromBody] ClientRegisterRequest request, CancellationToken ct)
     {
-        var (user, errorsUser) = CRMSystem.Core.Models.User.Create(
-            0,
-            request.RoleId,
-            request.Login,
-            request.Password);
+        var clientCreateModel = mapper.Map<ClientCreateModel>(request);
+        var userCreateModel = mapper.Map<UserCreateModel>(request);
 
-        if (errorsUser is not null && errorsUser.Any())
-        {
-            return BadRequest(errorsUser);
-        }
-
-        var (client, errorsClient) = Client.Create(
-            0,
-            0,
-            request.Name,
-            request.Surname,
-            request.PhoneNumber,
-            request.Email);
-
-        if (errorsClient is not null && errorsClient.Any())
-        {
-            return BadRequest(errorsClient);
-        }
-
-        var clientId = await clientService.CreateClientWithUser(client!, user!, ct);
+        var clientId = await clientService.CreateClientWithUser(clientCreateModel!, userCreateModel!, ct);
 
         return CreatedAtAction(
             nameof(GetClientById),
@@ -106,11 +75,7 @@ public class ClientController(
     public async Task<ActionResult> UpdateClient(
         long id, [FromBody] ClientUpdateRequest request, CancellationToken ct)
     {
-        var model = new ClientUpdateModel(
-            request.Name,
-            request.Surname,
-            request.PhoneNumber,
-            request.Email);
+        var model = mapper.Map<ClientUpdateModel>(request);
 
         await clientService.UpdateClient(id, model, ct);
 

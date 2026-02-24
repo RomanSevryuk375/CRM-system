@@ -3,7 +3,6 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Attachment;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 using Shared.Filters;
 
@@ -37,23 +36,35 @@ public class AttachmentService(
         return count;
     }
 
-    public async Task<long> CreateAttachment(Attachment attachment, CancellationToken ct)
+    public async Task<long> CreateAttachment(AttachmentCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating attachments start");
 
-        if (!await orderRepository.Exists(attachment.OrderId, ct))
+        if (!await orderRepository.Exists(createModel.OrderId, ct))
         {
-            logger.LogInformation("Order{OrderId} not found", attachment.OrderId);
-            throw new NotFoundException($"Order{attachment.OrderId} not found");
+            logger.LogInformation("Order{OrderId} not found", createModel.OrderId);
+            throw new NotFoundException($"Order{createModel.OrderId} not found");
         }
 
-        if (!await workerRepository.Exists(attachment.WorkerId, ct))
+        if (!await workerRepository.Exists(createModel.WorkerId, ct))
         {
-            logger.LogInformation("Worker{WorkerId} not found", attachment.WorkerId);
-            throw new NotFoundException($"Worker{attachment.WorkerId} not found");
+            logger.LogInformation("Worker{WorkerId} not found", createModel.WorkerId);
+            throw new NotFoundException($"Worker{createModel.WorkerId} not found");
+        }
+        
+        var (attachment, errors) = Attachment.Create(
+            0,
+            createModel.OrderId,
+            createModel.WorkerId,
+            createModel.CreateAt,
+            createModel.Description);
+
+        if(errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var id = await attachmentRepository.Create(attachment, ct);
+        var id = await attachmentRepository.Create(attachment!, ct);
 
         logger.LogInformation("Creating attachments success");
 
@@ -64,21 +75,21 @@ public class AttachmentService(
     {
         logger.LogInformation("Updating attachments start");
 
-        var Id = await attachmentRepository.Update(id, description, ct);
+        var attachmentId = await attachmentRepository.Update(id, description, ct);
 
         logger.LogInformation("Updating attachments success");
 
-        return Id;
+        return attachmentId;
     }
 
     public async Task<long> DeletingAttachment(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting attachments start");
 
-        var Id = await attachmentRepository.Delete(id, ct);
+        var attachmentId = await attachmentRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting attachments success");
 
-        return Id;
+        return attachmentId;
     }
 }

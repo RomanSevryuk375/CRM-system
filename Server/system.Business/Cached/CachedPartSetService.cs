@@ -1,7 +1,6 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Business.Extensions;
 using CRMSystem.Core.ProjectionModels.PartSet;
-using CRMSystem.Core.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Shared.Filters;
@@ -13,15 +12,15 @@ public class CachedPartSetService(
     IDistributedCache distributed,
     ILogger<CachedPartSetService> logger) : IPartSetService
 {
-    public async Task<long> AddToPartSet(PartSet partSet, CancellationToken ct)
+    public async Task<long> AddToPartSet(PartSetCreateModel createModel, CancellationToken ct)
     {
-        var key = $"dict_{partSet.OrderId}";
+        var key = $"dict_{createModel.OrderId}";
 
         await distributed.RemoveAsync(key, ct);
 
         logger.LogInformation("Removing cache success");
 
-        return await decorated.AddToPartSet(partSet, ct);
+        return await decorated.AddToPartSet(createModel, ct);
     }
 
     public async Task<long> DeleteFromPartSet(long id, CancellationToken ct)
@@ -60,7 +59,7 @@ public class CachedPartSetService(
             key,
             () => decorated.GetPartSetsByOrderId(orderId, ct),
             TimeSpan.FromMinutes(15),
-            logger, ct) ?? [];
+            logger, ct);
     }
 
     public async Task<long> UpdatePartSet(long id, PartSetUpdateModel model, CancellationToken ct)

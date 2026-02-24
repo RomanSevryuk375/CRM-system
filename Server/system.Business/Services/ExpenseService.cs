@@ -37,35 +37,49 @@ public class ExpenseService(
         return client;
     }
 
-    public async Task<long> CreateExpenses(Expense expense, CancellationToken ct)
+    public async Task<long> CreateExpenses(ExpenseCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating expenses start");
 
-        if (!await expenseTypeRepository.Exists((int)expense.ExpenseTypeId, ct))
+        if (!await expenseTypeRepository.Exists((int)createModel.ExpenseTypeId, ct))
         {
-            logger.LogError("Expense{ExpenseTypeId} not found", expense.ExpenseTypeId);
-            throw new NotFoundException($"Expense{(int)expense.ExpenseTypeId} not found");
+            logger.LogError("Expense{ExpenseTypeId} not found", createModel.ExpenseTypeId);
+            throw new NotFoundException($"Expense{(int)createModel.ExpenseTypeId} not found");
         }
 
-        if (expense.TaxId.HasValue
-                && !await taxRepository.Exists((int)expense.TaxId.Value, ct))
+        if (createModel.TaxId.HasValue
+                && !await taxRepository.Exists(createModel.TaxId.Value, ct))
         {
-            logger.LogError("Tax{TaxId} not found", (int)expense.TaxId);
-            throw new NotFoundException($"Tax{(int)expense.TaxId} not found");
+            logger.LogError("Tax{TaxId} not found", (int)createModel.TaxId);
+            throw new NotFoundException($"Tax{(int)createModel.TaxId} not found");
         }
 
-        if (expense.PartSetId.HasValue
-                && !await partSetRepository.Exists(expense.PartSetId.Value, ct))
+        if (createModel.PartSetId.HasValue
+                && !await partSetRepository.Exists(createModel.PartSetId.Value, ct))
         {
-            logger.LogError("PartSet{PartSetId} not found", (int)expense.PartSetId.Value);
-            throw new NotFoundException($"PartSet{(int)expense.PartSetId.Value} not found");
+            logger.LogError("PartSet{PartSetId} not found", (int)createModel.PartSetId.Value);
+            throw new NotFoundException($"PartSet{(int)createModel.PartSetId.Value} not found");
+        }
+        
+        var (expense, errors) = Expense.Create(
+            0,
+            createModel.Date,
+            createModel.Category,
+            createModel.TaxId,
+            createModel.PartSetId,
+            createModel.ExpenseTypeId,
+            createModel.Sum);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
         logger.LogInformation("Creating expenses success");
 
-        var Id = await expenseRepository.Create(expense, ct);
+        var id = await expenseRepository.Create(expense!, ct);
 
-        return Id;
+        return id;
     }
 
     public async Task<long> UpdateExpense(long id, ExpenseUpdateModel model, CancellationToken ct)
@@ -79,21 +93,21 @@ public class ExpenseService(
             throw new NotFoundException($"Expense{(int)model.ExpenseTypeId.Value} not found");
         }
 
-        var Id = await expenseRepository.Update(id, model, ct);
+        var expenseId = await expenseRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating expenses success");
 
-        return Id;
+        return expenseId;
     }
 
     public async Task<long> DeleteExpense(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting expenses start");
 
-        var Id = await expenseRepository.Delete(id, ct);
+        var expenseId = await expenseRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting expenses success");
 
-        return Id;
+        return expenseId;
     }
 }

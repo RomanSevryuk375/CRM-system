@@ -14,5 +14,9 @@ public class PartSetProfile : Profile
         CreateMap<PartSetEntity, PartSetItem>()
             .ForMember(dest => dest.Position,
                         opt => opt.MapFrom(src => $"{src.Position!.Part!.Name}"));
+
+        CreateMap<PartSetRequest, PartSetCreateModel>();
+        
+        CreateMap<PartSetUpdateRequest, PartSetUpdateModel>();
     }
 }

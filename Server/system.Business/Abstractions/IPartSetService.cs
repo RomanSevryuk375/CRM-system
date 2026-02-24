@@ -1,12 +1,11 @@
 ﻿using CRMSystem.Core.ProjectionModels.PartSet;
-using CRMSystem.Core.Models;
 using Shared.Filters;
 
 namespace CRMSystem.Business.Abstractions;
 
 public interface IPartSetService
 {
-    Task<long> AddToPartSet(PartSet partSet, CancellationToken ct);
+    Task<long> AddToPartSet(PartSetCreateModel createModel, CancellationToken ct);
     Task<long> DeleteFromPartSet(long id, CancellationToken ct);
     Task<List<PartSetItem>> GetPagedPartSets(PartSetFilter filter, CancellationToken ct);
     Task<int> GetCountPartSets(PartSetFilter filter, CancellationToken ct);

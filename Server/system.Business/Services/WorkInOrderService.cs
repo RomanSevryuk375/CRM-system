@@ -55,43 +55,56 @@ public class WorkInOrderService(
         return works;
     }
 
-    public async Task<long> CreateWiO(WorkInOrder workInOrder, CancellationToken ct)
+    public async Task<long> CreateWiO(WorkInOrderCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating work in order start");
 
-        if (!await orderRepository.Exists(workInOrder.OrderId, ct))
+        if (!await orderRepository.Exists(createModel.OrderId, ct))
         {
-            logger.LogError("Order{OrderId} not found", workInOrder.OrderId);
-            throw new NotFoundException($"Order{workInOrder.OrderId} not found");
+            logger.LogError("Order{OrderId} not found", createModel.OrderId);
+            throw new NotFoundException($"Order{createModel.OrderId} not found");
         }
 
-        if (!await workInOrderStatusRepository.Exists((int)workInOrder.StatusId, ct))
+        if (!await workInOrderStatusRepository.Exists((int)createModel.StatusId, ct))
         {
-            logger.LogError("Status{StatusId} not found", workInOrder.StatusId);
-            throw new NotFoundException($"Status{workInOrder.StatusId} not found");
+            logger.LogError("Status{StatusId} not found", createModel.StatusId);
+            throw new NotFoundException($"Status{createModel.StatusId} not found");
         }
 
-        if (!await workerRepository.Exists(workInOrder.WorkerId, ct))
+        if (!await workerRepository.Exists(createModel.WorkerId, ct))
         {
-            logger.LogError("Worker {workerId} not found", workInOrder.WorkerId);
-            throw new NotFoundException($"Worker {workInOrder.WorkerId} not found");
+            logger.LogError("Worker {workerId} not found", createModel.WorkerId);
+            throw new NotFoundException($"Worker {createModel.WorkerId} not found");
         }
 
-        if (!await workRepository.Exists(workInOrder.JobId, ct))
+        if (!await workRepository.Exists(createModel.JobId, ct))
         {
-            logger.LogError("Work {workId} not found", workInOrder.JobId);
-            throw new NotFoundException($"Work {workInOrder.JobId} not found");
+            logger.LogError("Work {workId} not found", createModel.JobId);
+            throw new NotFoundException($"Work {createModel.JobId} not found");
+        }
+        
+        var (work, errors) = WorkInOrder.Create(
+            0,
+            createModel.OrderId,
+            createModel.JobId,
+            createModel.WorkerId,
+            createModel.StatusId,
+            createModel.TimeSpent);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await workInOrderRepository.Create(workInOrder, ct);
+        var id = await workInOrderRepository.Create(work!, ct);
 
         logger.LogInformation("Creating work in order success");
 
         logger.LogInformation("Recalculating bill start");
-        await billRepository.RecalculateAmount(workInOrder.OrderId, ct);
+        await billRepository.RecalculateAmount(work!.OrderId, ct);
         logger.LogInformation("Recalculating bill success");
 
-        return Id;
+        return id;
     }
 
     public async Task<long> UpdateWiO(long id, WorkInOrderUpdateModel model, CancellationToken ct)
@@ -110,21 +123,21 @@ public class WorkInOrderService(
             throw new NotFoundException($"Worker {model.WorkerId} not found");
         }
 
-        var Id = await workInOrderRepository.Update(id, model, ct);
+        var workId = await workInOrderRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating work in order success");
 
-        return Id;
+        return workId;
     }
 
-    public async Task<long> DeleteWIO(long id, CancellationToken ct)
+    public async Task<long> DeleteWio(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting work in order start");
 
-        var Id = await workInOrderRepository.Delete(id, ct);
+        var workId = await workInOrderRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting work in order success");
 
-        return Id;
+        return workId;
     }
 }

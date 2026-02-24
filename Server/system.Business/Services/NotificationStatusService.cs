@@ -2,7 +2,7 @@
 
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
-using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.NotificationStatus;
 using Microsoft.Extensions.Logging;
 
 namespace CRMSystem.Business.Services;
@@ -15,10 +15,10 @@ public class NotificationStatusService(
     {
         logger.LogInformation("Notification status getting start");
 
-        var carSatsus = await repo.Get(ct);
+        var carStatus = await repo.Get(ct);
 
         logger.LogInformation("Notification status getting success");
 
-        return carSatsus;
+        return carStatus;
     }
 }

@@ -81,32 +81,32 @@ public class WorkRepository(
 
     public async Task<long> Update(long id, WorkUpdateModel model, CancellationToken ct)
     {
-        var entty = await context.Works.FirstOrDefaultAsync(w => w.Id == id, ct)
+        var entity = await context.Works.FirstOrDefaultAsync(w => w.Id == id, ct)
             ?? throw new NotFoundException("Work not found");
 
         if (!string.IsNullOrWhiteSpace(model.Title))
         {
-            entty.Title = model.Title;
+            entity.Title = model.Title;
         }
 
         if (!string.IsNullOrWhiteSpace(model.Categoty))
         {
-            entty.Category = model.Categoty;
+            entity.Category = model.Categoty;
         }
 
         if (!string.IsNullOrWhiteSpace(model.Description))
         {
-            entty.Description = model.Description;
+            entity.Description = model.Description;
         }
 
         if (model.StandartTime.HasValue)
         {
-            entty.StandardTime = model.StandartTime.Value;
+            entity.StandardTime = model.StandartTime.Value;
         }
 
         await context.SaveChangesAsync(ct);
 
-        return entty.Id;
+        return entity.Id;
     }
 
     public async Task<long> Delete(long id, CancellationToken ct)

@@ -11,7 +11,7 @@ public record AttachmentRequest
     public int WorkerId { get; init; }
 
     [JsonPropertyName("createAt")]
-    public DateTime CreateAt { get; init; }
+    public DateTime CreatedAt { get; init; }
 
     [JsonPropertyName("description")]
     public string? Description { get; init; }

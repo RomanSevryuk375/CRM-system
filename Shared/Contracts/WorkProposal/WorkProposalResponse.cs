@@ -17,7 +17,7 @@ public record WorkProposalResponse
     public long JobId { get; init; }
 
     [JsonPropertyName("worker")]
-    public string Woker { get; init; } = string.Empty;
+    public string Worker { get; init; } = string.Empty;
 
     [JsonPropertyName("workerId")]
     public int WorkerId { get; init; }

@@ -16,12 +16,12 @@ public class ExpenseRepository(
 {
     private static IQueryable<ExpenseEntity> ApplyFilter(IQueryable<ExpenseEntity> query, ExpenseFilter filter)
     {
-        if (filter.TaxIds != null && filter.TaxIds.Any())
+        if (filter.TaxIds.Any())
         {
             query = query.Where(e => filter.TaxIds.Contains(e.TaxId));
         }
 
-        if (filter.PartSetIds != null && filter.PartSetIds.Any())
+        if (filter.PartSetIds.Any())
         {
             query = query.Where(e => filter.PartSetIds.Contains(e.PartSetId));
         }

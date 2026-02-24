@@ -1,5 +1,4 @@
-﻿using CRMSystem.Core.Constants;
-using CRMSystem.Core.Validation;
+﻿using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
 
@@ -18,17 +17,29 @@ public class ExpenseType
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "id");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var nameError = DomainValidator.ValidateString(name, ValidationConstants.MAX_TYPE_NAME, "name");
-        if (!string.IsNullOrEmpty(nameError)) errors.Add(nameError);
+        var nameError = DomainValidator
+            .ValidateString(name, ValidationConstants.MAX_TYPE_NAME, "name");
+        if (!string.IsNullOrEmpty(nameError))
+        {
+            errors.Add(nameError);
+        }
 
         if (errors.Any())
+        {
             return (null, errors);
+        }
 
-        var expenseType = new ExpenseType(id, name);
+        var expenseType = new ExpenseType(
+            id, 
+            name);
 
-        return (expenseType, new List<string>());
+        return (expenseType, []);
     }
 }

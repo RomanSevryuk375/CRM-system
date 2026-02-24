@@ -36,32 +36,49 @@ public class AcceptanceService(
         return count;
     }
 
-    public async Task<long> CreateAcceptance(Acceptance acceptance, CancellationToken ct)
+    public async Task<long> CreateAcceptance(AcceptanceCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating acceptance start");
 
-        if(!await workerRepository.Exists(acceptance.WorkerId, ct))
+        if(!await workerRepository.Exists(createModel.WorkerId, ct))
         { 
-            logger.LogInformation("Worker{WorkerId} not found", acceptance.WorkerId);
-            throw new NotFoundException($"Worker {acceptance.WorkerId} not found");
+            logger.LogInformation("Worker{WorkerId} not found", createModel.WorkerId);
+            throw new NotFoundException($"Worker {createModel.WorkerId} not found");
         }
 
-        if (!await orderRepository.Exists(acceptance.OrderId, ct))
+        if (!await orderRepository.Exists(createModel.OrderId, ct))
         {
-            logger.LogInformation("Order{OrderId} not found", acceptance.OrderId);
-            throw new NotFoundException($"Order {acceptance.OrderId} not found");
+            logger.LogInformation("Order{OrderId} not found", createModel.OrderId);
+            throw new NotFoundException($"Order {createModel.OrderId} not found");
         }
 
-        if (await orderRepository.GetStatus(acceptance.OrderId, ct) == (int)OrderStatusEnum.Completed ||
-            await orderRepository.GetStatus(acceptance.OrderId, ct) == (int)OrderStatusEnum.Closed)
+        if (await orderRepository.GetStatus(createModel.OrderId, ct) == (int)OrderStatusEnum.Completed ||
+            await orderRepository.GetStatus(createModel.OrderId, ct) == (int)OrderStatusEnum.Closed)
         {
-            logger.LogInformation("Order{OrderId} is completed or closed", acceptance.OrderId);
-            throw new ConflictException($"Order {acceptance.OrderId} is completed or closed");
+            logger.LogInformation("Order{OrderId} is completed or closed", createModel.OrderId);
+            throw new ConflictException($"Order {createModel.OrderId} is completed or closed");
+        }
+        
+        var (acceptance, errors) = Acceptance.Create(
+            0,
+            createModel.OrderId,
+            createModel.WorkerId,
+            createModel.CreatedAt,
+            createModel.Mileage,
+            createModel.FuelLevel,
+            createModel.ExternalDefects,
+            createModel.InternalDefects,
+            createModel.ClientSign,
+            createModel.WorkerSign);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
         logger.LogInformation("Creating acceptance success");
 
-        return await acceptanceRepository.Create(acceptance, ct);
+        return await acceptanceRepository.Create(acceptance!, ct);
     }
 
     public async Task<long> UpdateAcceptance(long id, AcceptanceUpdateModel model, CancellationToken ct)

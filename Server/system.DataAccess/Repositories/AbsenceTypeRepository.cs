@@ -23,10 +23,6 @@ public class AbsenceTypeRepository(
 
     public async Task<List<AbsenceTypeItem>> GetByName (string name, CancellationToken ct)
     {
-        var query = context.AbsenceTypes
-            .Where(a => a.Name == name)
-            .AsNoTracking();
-
         return await context.AbsenceTypes
             .Where(a => a.Name == name)
             .AsNoTracking()

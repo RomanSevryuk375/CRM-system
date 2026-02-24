@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.WorkProposal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,18 +45,9 @@ public class WorkProposalController(
     public async Task<ActionResult<long>> CreateProposal(
         [FromBody] WorkProposalRequest request, CancellationToken ct)
     {
-        var (workProposal, errors) = WorkProposal.Create(
-            0,
-            request.OrderId,
-            request.JobId,
-            request.WorkerId,
-            request.StatusId,
-            request.Date);
+        var createModel = mapper.Map<WorkProposalCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-            return BadRequest(errors);
-
-        var proposalId = await workProposalService.CreateProposal(workProposal!, ct);
+        var proposalId = await workProposalService.CreateProposal(createModel, ct);
 
         return CreatedAtAction(
             nameof(GetProposalById), 

@@ -1,5 +1,5 @@
 ﻿using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.WorkInOrder;
 using CRMSystem.DataAccess.Entites;
 using FluentAssertions;
 using Shared.Enums;
@@ -105,13 +105,12 @@ public class WorkInOrderServiceIntegrationTests : BaseIntegrationTest, IClassFix
 
         dbContext.ChangeTracker.Clear();
 
-        await _wioService.CreateWiO(WorkInOrder.Create(
-            0,
+        await _wioService.CreateWiO(new WorkInOrderCreateModel(
             order.Id,
             work.Id,
             worker.Id,
             WorkStatusEnum.InProgress,
-            2).workInOrder!, default);
+            2), CancellationToken.None);
 
         var updatedBill = await dbContext.Bills.FindAsync(bill.Id);
 

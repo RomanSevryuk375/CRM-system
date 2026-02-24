@@ -14,5 +14,9 @@ public class PartProfile : Profile
         CreateMap<PartEntity, PartItem>()
             .ForMember(dest => dest.Category,
                         opt => opt.MapFrom(src => $"{src.PartCategory!.Name}"));
+
+        CreateMap<PartRequest, PartCreateModel>();
+        
+        CreateMap<PartUpdateRequest, PartUpdateModel>();
     }
 }

@@ -18,5 +18,7 @@ public class AbsenceProfile : Profile
                         opt => opt.MapFrom(src => $"{src.Worker!.Name} {src.Worker.Surname}"))
             .ForMember(dest => dest.TypeName,
                         opt => opt.MapFrom(src => $"{src.AbsenceType!.Name}"));
+
+        CreateMap<AbsenceRequest, AbsenceCreateModel>();
     }
 }

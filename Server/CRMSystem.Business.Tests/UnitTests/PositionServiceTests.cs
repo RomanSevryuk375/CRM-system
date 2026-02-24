@@ -80,12 +80,12 @@ public class PositionServiceTests
             .ReturnsAsync(true);
 
         _partRepoMock.Setup(x => x.Create(
-            part,
+            It.IsAny<Part>(),
             It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception("Some think going wrong"));
 
         _positionRepoMock.Setup(x => x.Create(
-            position,
+            It.IsAny<Position>(),
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(positionId);
 

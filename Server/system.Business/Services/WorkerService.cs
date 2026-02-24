@@ -2,6 +2,7 @@
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.User;
 using CRMSystem.Core.ProjectionModels.Worker;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
@@ -59,42 +60,82 @@ public class WorkerService(
         return worker;
     }
 
-    public async Task<int> CreateWorker(Worker worker, CancellationToken ct)
+    public async Task<int> CreateWorker(WorkerCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating worker start");
 
-        if (!await userRepository.Exists(worker.UserId, ct))
+        if (!await userRepository.Exists(createModel.UserId, ct))
         {
-            logger.LogError("User{UserId} not found", worker.UserId);
-            throw new NotFoundException($"User{worker.UserId} not found");
+            logger.LogError("User{UserId} not found", createModel.UserId);
+            throw new NotFoundException($"User{createModel.UserId} not found");
+        }
+        
+        var (worker, errors) = Worker.Create(
+            0,
+            createModel.UserId,
+            createModel.Name,
+            createModel.Surname,
+            createModel.HourlyRate,
+            createModel.PhoneNumber,
+            createModel.Email);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await workerRepository.Create(worker, ct);
+        var id = await workerRepository.Create(worker!, ct);
 
         logger.LogInformation("Creating worker success");
 
-        return Id;
+        return id;
     }
 
-    public async Task<int> CreateWorkerWithUser(Worker worker, User user, CancellationToken ct)
+    public async Task<int> CreateWorkerWithUser(
+        WorkerCreateModel workerCreateModel,
+        UserCreateModel userCreateModel,
+        CancellationToken ct)
     {
         await unitOfWork.BeginTransactionAsync(ct);
 
-        long userId;
         try
         {
             logger.LogInformation("Creating user start");
+            
+            var (user, errorsUser) = User.Create(
+                0,
+                userCreateModel.RoleId,
+                userCreateModel.Login,
+                userCreateModel.PasswordHash);
 
-            userId = await userRepository.Create(user, ct);
-            worker.SetUserId(userId);
+            if (errorsUser is not null && errorsUser.Any())
+            {
+                throw new ValidationException(string.Join(", ", errorsUser));
+            }
 
-            var Id = await workerRepository.Create(worker, ct);
+            var userId = await userRepository.Create(user!, ct);
+            
+            var (worker, errorsWorker) = Worker.Create(
+                0,
+                userId,
+                workerCreateModel.Name,
+                workerCreateModel.Surname,
+                workerCreateModel.HourlyRate,
+                workerCreateModel.PhoneNumber,
+                workerCreateModel.Email);
+
+            if (errorsWorker is not null && errorsWorker.Any())
+            {
+                throw new ValidationException(string.Join(", ", errorsWorker));
+            }
+
+            var id = await workerRepository.Create(worker!, ct);
 
             logger.LogInformation("Creating worker success");
 
             await unitOfWork.CommitTransactionAsync(ct);
 
-            return Id;
+            return id;
         }
         catch (Exception ex)
         {
@@ -110,21 +151,21 @@ public class WorkerService(
     {
         logger.LogInformation("Updating worker start");
 
-        var Id = await workerRepository.Update(id, model, ct);
+        var workerId = await workerRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating worker success");
 
-        return Id;
+        return workerId;
     }
 
     public async Task<int> DeleteWorker(int id, CancellationToken ct)
     {
         logger.LogInformation("Deleting worker start");
 
-        var Id = await workerRepository.Delete(id, ct);
+        var workerId = await workerRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting worker success");
 
-        return Id;
+        return workerId;
     }
 }

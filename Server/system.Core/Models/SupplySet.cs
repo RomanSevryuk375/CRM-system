@@ -19,30 +19,53 @@ public class SupplySet
     public decimal Quantity { get; }
     public decimal PurchasePrice { get; }
 
-    public static (SupplySet? supplySet, List<string> errors) Create(long id, long supplyId, long positionId, decimal quantity, decimal purchasePrice)
+    public static (SupplySet? supplySet, List<string>? errors) Create(
+        long id, long supplyId, long positionId, decimal quantity, decimal purchasePrice)
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "id");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var supplyError = DomainValidator.ValidateId(supplyId, "supplyId");
-        if (!string.IsNullOrEmpty(supplyError)) errors.Add(supplyError);
+        var supplyError = DomainValidator
+            .ValidateId(supplyId, "supplyId");
+        if (!string.IsNullOrEmpty(supplyError))
+        {
+            errors.Add(supplyError);
+        }
 
-        var positionIdError = DomainValidator.ValidateId(positionId, "positionId");
-        if (!string.IsNullOrEmpty(positionIdError)) errors.Add(positionIdError);
+        var positionIdError = DomainValidator
+            .ValidateId(positionId, "positionId");
+        if (!string.IsNullOrEmpty(positionIdError))
+        {
+            errors.Add(positionIdError);
+        }
 
-        var quantityError = DomainValidator.ValidateMoney(quantity, "quantity");
-        if (!string.IsNullOrEmpty(quantityError)) errors.Add(quantityError);
+        var quantityError = DomainValidator
+            .ValidateMoney(quantity, "quantity");
+        if (!string.IsNullOrEmpty(quantityError))
+        {
+            errors.Add(quantityError);
+        }
 
-        var priceError = DomainValidator.ValidateMoney(purchasePrice, "price");
-        if (!string.IsNullOrEmpty(priceError)) errors.Add(priceError);
+        var priceError = DomainValidator
+            .ValidateMoney(purchasePrice, "price");
+        if (!string.IsNullOrEmpty(priceError))
+        {
+            errors.Add(priceError);
+        }
 
         if (errors.Any())
+        {
             return (null, errors);
+        }
 
         var supplySet = new SupplySet(id, supplyId, positionId, quantity, purchasePrice);
 
-        return (supplySet, new List<string>());
+        return (supplySet, []);
     }
 }

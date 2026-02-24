@@ -1,4 +1,4 @@
-﻿using CRMSystem.Core.ProjectionModels;
+﻿using CRMSystem.Core.ProjectionModels.TaxType;
 
 namespace CRMSystem.Core.Abstractions;
 

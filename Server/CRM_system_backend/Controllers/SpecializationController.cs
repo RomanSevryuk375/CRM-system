@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
-using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.Specialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Specialization;
@@ -31,16 +30,9 @@ public class SpecializationController(
     public async Task<ActionResult> CreateSpecialization(
         [FromBody]SpecializationRequest request, CancellationToken ct)
     {
-        var (specialization, errors) = Specialization.Create(
-            0,
-            request.Name);
+        var createModel = mapper.Map<SpecializationCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await specializationService.CreateSpecialization(specialization!, ct);
+        await specializationService.CreateSpecialization(createModel, ct);
 
         return NoContent();
     }

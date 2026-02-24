@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Part;
 using CRMSystem.Core.ProjectionModels.Position;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,36 +35,10 @@ public class PositionController(
     public async Task<ActionResult<long>> CreatePositionWithPart(
         [FromBody] PositionWithPartRequest request, CancellationToken ct)
     {
-        var (part, partErrors) = Part.Create(
-            0,
-            request.CategoryId,
-            request.OemArticle,
-            request.ManufacturerArticle,
-            request.InternalArticle,
-            request.Description,
-            request.Name,
-            request.Manufacturer,
-            request.Applicability);
+        var partCreateModel = mapper.Map<PartCreateModel>(request);
+        var positionCreateModel = mapper.Map<PositionCreateModel>(request);
 
-        if (partErrors is not null && partErrors.Any())
-        {
-            return BadRequest(partErrors);
-        }
-
-        var (position, positionErrors) = Position.Create(
-            0,
-            1,
-            request.CellId,
-            request.PurchasePrice,
-            request.SellingPrice,
-            request.Quantity);
-
-        if (positionErrors is not null && positionErrors.Any())
-        {
-            return BadRequest(positionErrors);
-        }
-
-        await positionService.CreatePositionWithPart(position!, part!, ct);
+        await positionService.CreatePositionWithPart(positionCreateModel, partCreateModel, ct);
 
         return Created();
     }
@@ -74,11 +48,7 @@ public class PositionController(
     public async Task<ActionResult> UpdatePosition(
         long id,[FromBody] PositionUpdateRequest request, CancellationToken ct)
     {
-        var model = new PositionUpdateModel(
-            request.CellId,
-            request.PurchasePrice,
-            request.PurchasePrice,
-            request.Quantity);
+        var model = mapper.Map<PositionUpdateModel>(request);
 
         await positionService.UpdatePosition(id, model, ct);
 

@@ -1,5 +1,4 @@
-﻿using CRMSystem.Core.Constants;
-using CRMSystem.Core.Validation;
+﻿using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
 
@@ -19,27 +18,50 @@ public class Work
     public string Description { get;} 
     public decimal StandardTime { get; }
 
-    public static (Work? work, List<string> errors) Create(long id, string title, string category, string description, decimal standardTime)
+    public static (Work? work, List<string>? errors) Create(
+        long id, string title, string category, string description, decimal standardTime)
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "id");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "id");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var titleError = DomainValidator.ValidateString(title, ValidationConstants.MAX_NAME_LENGTH, "title");
-        if (!string.IsNullOrEmpty(titleError)) errors.Add(titleError);
+        var titleError = DomainValidator
+            .ValidateString(title, ValidationConstants.MAX_NAME_LENGTH, "title");
+        if (!string.IsNullOrEmpty(titleError))
+        {
+            errors.Add(titleError);
+        }
 
-        var categoryError = DomainValidator.ValidateString(category, ValidationConstants.MAX_CATEGORY_LENGTH, "category");
-        if (!string.IsNullOrEmpty(categoryError)) errors.Add(categoryError);
+        var categoryError = DomainValidator
+            .ValidateString(category, ValidationConstants.MAX_CATEGORY_LENGTH, "category");
+        if (!string.IsNullOrEmpty(categoryError))
+        {
+            errors.Add(categoryError);
+        }
 
-        var descriptionError = DomainValidator.ValidateString(description, ValidationConstants.MAX_DESCRIPTION_LENGTH, "description");
-        if (!string.IsNullOrEmpty(descriptionError)) errors.Add(descriptionError);
+        var descriptionError = DomainValidator
+            .ValidateString(description, ValidationConstants.MAX_DESCRIPTION_LENGTH, "description");
+        if (!string.IsNullOrEmpty(descriptionError))
+        {
+            errors.Add(descriptionError);
+        }
 
-        var standardTimeError = DomainValidator.ValidateMoney(standardTime, "time");
-        if (!string.IsNullOrEmpty(standardTimeError)) errors.Add(standardTimeError);
+        var standardTimeError = DomainValidator
+            .ValidateMoney(standardTime, "time");
+        if (!string.IsNullOrEmpty(standardTimeError))
+        {
+            errors.Add(standardTimeError);
+        }
 
         if (errors.Any())
+        {
             return (null, errors);
+        }
 
         var work = new Work(id, title, category, description, standardTime);
 

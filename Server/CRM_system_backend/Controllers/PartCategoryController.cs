@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.PartCategory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,15 +29,9 @@ public class PartCategoryController(
     public async Task<ActionResult> CreatePartCategory(
         [FromBody] PartCategoryRequest request, CancellationToken ct)
     {
-        var (partCategory, errors) = PartCategory.Create(
-            0,
-            request.Name,
-            request.Description);
+        var createModel = mapper.Map<PartCategoryCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-            return BadRequest(errors);
-
-        await partCategoryService.CreatePartCategory(partCategory!, ct);
+        await partCategoryService.CreatePartCategory(createModel, ct);
 
         return Created();
     }
@@ -48,9 +41,7 @@ public class PartCategoryController(
     public async Task<ActionResult> UpdatePartCategory(
         int id, [FromBody]PartCategoryUpdateRequest request, CancellationToken ct)
     {
-        var model = new PartCategoryUpdateModel(
-            request.Name,
-            request.Description);
+        var model = mapper.Map<PartCategoryUpdateModel>(request);
 
         await partCategoryService.UpdatePartCategory(id, model, ct);
 

@@ -44,7 +44,8 @@ public class OrderRepository(
 
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
         {
-            query = query.Where(o => o.WorksInOrder.Any(w => filter.WorkerIds.Contains(w.WorkerId)));
+            query = query.Where(o => o.WorksInOrder
+                .Any(w => filter.WorkerIds.Contains(w.WorkerId)));
         }
 
         return query;
@@ -96,6 +97,15 @@ public class OrderRepository(
             .Take(filter.Limit)
             .ToListAsync(ct);
     }
+    
+    public async Task<OrderItem?> GetById(long orderId, CancellationToken ct)
+    {
+        return await context.Orders
+            .AsNoTracking()
+            .Where(o => o.Id == orderId)
+            .ProjectTo<OrderItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
 
     public async Task<OrderItem?> GetByProposalId(long proposalId, CancellationToken ct)
     {
@@ -119,7 +129,7 @@ public class OrderRepository(
     public async Task<long> Create(Order order, CancellationToken ct)
     {
 
-        var orderEntitie = new OrderEntity
+        var orderEntity = new OrderEntity
         {
             StatusId = (int)order.StatusId,
             CarId = order.CarId,
@@ -127,10 +137,10 @@ public class OrderRepository(
             PriorityId = (int)order.PriorityId
         };
 
-        await context.Orders.AddAsync(orderEntitie, ct);
+        await context.Orders.AddAsync(orderEntity, ct);
         await context.SaveChangesAsync(ct);
 
-        return orderEntitie.Id;
+        return orderEntity.Id;
     }
 
     public async Task<long> Update(long id, OrderPriorityEnum? priorityId, CancellationToken ct)
@@ -172,6 +182,30 @@ public class OrderRepository(
         return entity.Id;
     }
 
+    public async Task<long> PatchOrderFileName(long id, string path, CancellationToken ct)
+    {
+        var entity = await context.Orders.FirstOrDefaultAsync(x => x.Id == id, ct)
+            ?? throw new NotFoundException("Order not found");
+        
+        entity.OrderPdfFileName = path;
+        
+        await context.SaveChangesAsync(ct);
+        
+        return entity.Id;
+    }
+    
+    public async Task<long> PatchOrderAgreementFileName(long id, string path, CancellationToken ct)
+    {
+        var entity = await context.Orders.FirstOrDefaultAsync(x => x.Id == id, ct)
+                     ?? throw new NotFoundException("Order not found");
+        
+        entity.OrderAgreementPdfFileName = path;
+        
+        await context.SaveChangesAsync(ct);
+        
+        return entity.Id;
+    }
+
     public async Task<long> Delete(long id, CancellationToken ct)
     {
         await context.Orders
@@ -209,5 +243,50 @@ public class OrderRepository(
         return await context.Bills
             .Where(b => b.OrderId == id)
             .AnyAsync(b => b.StatusId != (int)BillStatusEnum.Paid, ct);
+    }
+
+    public async Task<OrderDocumentModel?> GetDocumentData(long id, CancellationToken ct)
+    {
+        var finishDate = DateTime.Now;
+
+        return await context.Orders
+            .AsNoTracking()
+            .Where(o => o.Id == id)
+            .Select(o => new OrderDocumentModel(
+                o.Id,
+                new ClientData(
+                    o.Car!.Client!.Name, 
+                    o.Car.Client.Surname,
+                    o.Car.Client.PhoneNumber
+                ),
+                new CarLineData(
+                    o.Car.Brand,
+                    o.Car.Model,
+                    o.Car.YearOfManufacture, 
+                    o.Car.VinNumber,
+                    o.Car.StateNumber
+                ),
+                o.PartSets.Select(p => new PartLineData(
+                    p.Position == null
+                        ? "Not found"
+                        : p.Position.Part == null
+                            ? "Not found"
+                            : p.Position.Part.Name,
+                    p.SoldPrice,
+                    p.Quantity
+                )).ToList(),
+                o.WorksInOrder.Select(w => new WorkLineData(
+                    w.Work == null
+                        ? "Not found"
+                        : w.Work.Title,
+                    w.TimeSpent,
+                    w.Worker != null ? w.Worker.HourlyRate : 0m 
+                )).ToList(),
+                o.Date,
+                finishDate, 
+                o.Guarantees.Select(g => g.Description).ToList(),
+                o.Guarantees.Select(g => g.Terms).ToList()
+            ))
+            .FirstOrDefaultAsync(ct);
     }
 }

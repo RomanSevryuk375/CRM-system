@@ -64,12 +64,12 @@ public class WorkerServiceTests
         var worker = ValidObjects.CreateValidWorker();
         
         _userRepoMock.Setup(x => x.Create(
-            user,
+            It.IsAny<User>(),
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(userId);
 
         _workerRepoMock.Setup(x => x.Create(
-            worker, 
+            It.IsAny<Worker>(),
             It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception("Database crash"));
 

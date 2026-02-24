@@ -1,5 +1,4 @@
-﻿using CRMSystem.Core.Constants;
-using CRMSystem.Core.Validation;
+﻿using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
 
@@ -18,17 +17,29 @@ public class BillStatus
     {
         var errors = new List<string>();
 
-        var idError = DomainValidator.ValidateId(id, "Id");
-        if (!string.IsNullOrEmpty(idError)) errors.Add(idError);
+        var idError = DomainValidator
+            .ValidateId(id, "Id");
+        if (!string.IsNullOrEmpty(idError))
+        {
+            errors.Add(idError);
+        }
 
-        var nameError = DomainValidator.ValidateString(name, ValidationConstants.MAX_STATUS_NAME, "name");
-        if (!string.IsNullOrEmpty(nameError)) errors.Add(nameError);
+        var nameError = DomainValidator
+            .ValidateString(name, ValidationConstants.MAX_STATUS_NAME, "name");
+        if (!string.IsNullOrEmpty(nameError))
+        {
+            errors.Add(nameError);
+        }
 
         if (errors.Any())
+        {
             return (null, errors);
+        }
 
-        var billStatus = new BillStatus(id, name);
+        var billStatus = new BillStatus(
+            id, 
+            name);
 
-        return (billStatus, new List<string>());
+        return (billStatus, []);
     }
 }

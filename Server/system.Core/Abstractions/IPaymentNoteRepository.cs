@@ -9,7 +9,7 @@ public interface IPaymentNoteRepository
 {
     Task<long> Create(PaymentNote paymentNote, CancellationToken ct);
     Task<long> Delete(long id, CancellationToken ct);
-    Task<int> GetCount(PaymentNoteFilter fIlter, CancellationToken ct);
-    Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter fIlter, CancellationToken ct);
+    Task<int> GetCount(PaymentNoteFilter filter, CancellationToken ct);
+    Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter filter, CancellationToken ct);
     Task<long> Update(long id, PaymentMethodEnum? method, CancellationToken ct);
 }
