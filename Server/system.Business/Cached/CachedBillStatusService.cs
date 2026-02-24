@@ -21,4 +21,9 @@ public class CachedBillStatusService(
             TimeSpan.FromHours(24),
             logger, ct);
     }
+
+    public async Task<BillStatusItem> GetBillStatusById(int id, CancellationToken ct)
+    {
+        return await decorated.GetBillStatusById(id, ct);
+    }
 }

@@ -16,6 +16,12 @@ public class NotificationService(
     INotificationTypeRepository notificationTypeRepository,
     ILogger<NotificationService> logger) : INotificationService
 {
+    public async Task<NotificationItem> GetNotificationById(long id, CancellationToken ct)
+    {
+        return await notificationRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Notification {id} not found");
+    }
+    
     public async Task<List<NotificationItem>> GetPagedNotifications(NotificationFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting notifications start");

@@ -15,6 +15,12 @@ public class ExpenseService(
     ITaxRepository taxRepository,
     ILogger<ExpenseService> logger) : IExpenseService
 {
+    public async Task<ExpenseItem> GetExpenseById(long id, CancellationToken ct)
+    {
+        return await expenseRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Expense {id} not found");
+    }
+    
     public async Task<List<ExpenseItem>> GetPagedExpenses(ExpenseFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting expenses start");

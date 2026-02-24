@@ -13,6 +13,12 @@ public class PartCategoryService(
     IPartCategoryRepository repo,
     ILogger<PartCategoryService> logger) : IPartCategoryService
 {
+    public async Task<PartCategoryItem> GetPartCategoryById(int id, CancellationToken ct)
+    {
+        return await repo.GetById(id, ct)
+               ?? throw new NotFoundException($"PartCategory {id} not found");
+    }
+    
     public async Task<List<PartCategoryItem>> GetPartCategories(CancellationToken ct)
     {
         logger.LogInformation("Getting part category start");

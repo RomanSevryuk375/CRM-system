@@ -8,7 +8,7 @@ public interface IBillRepository
 {
     Task<long> Create(Bill bill, CancellationToken ct);
     Task<long> Delete(long id, CancellationToken ct);
-    Task<BillItem?> GetById(int id, CancellationToken ct);
+    Task<BillItem?> GetById(long id, CancellationToken ct);
     Task<int> GetCount(BillFilter filter, CancellationToken ct);
     Task<List<BillItem>> GetPaged(BillFilter filter, CancellationToken ct);
     Task<long> Update(long id, BillUpdateModel model, CancellationToken ct);

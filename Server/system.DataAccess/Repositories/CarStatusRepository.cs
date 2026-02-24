@@ -27,7 +27,7 @@ public class CarStatusRepository(
             .ToListAsync(ct);
     }
 
-    public async Task<bool> Exists(long id, CancellationToken ct)
+    public async Task<bool> Exists(int id, CancellationToken ct)
     {
         return await context.CarStatuses
             .AnyAsync(c => c.Id == id, ct);

@@ -9,5 +9,6 @@ public interface IExpenseService
     Task<long> DeleteExpense(long id, CancellationToken ct);
     Task<int> GetCountExpenses(ExpenseFilter filter, CancellationToken ct);
     Task<List<ExpenseItem>> GetPagedExpenses(ExpenseFilter filter, CancellationToken ct);
+    Task<ExpenseItem> GetExpenseById(long id, CancellationToken ct);
     Task<long> UpdateExpense(long id, ExpenseUpdateModel model, CancellationToken ct);
 }

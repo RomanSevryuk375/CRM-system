@@ -21,4 +21,9 @@ public class CachedWorkProposalStatusService(
             TimeSpan.FromHours(24),
             logger, ct);
     }
+
+    public async Task<WorkProposalStatusItem> GetWorkProposalStatusById(int id, CancellationToken ct)
+    {
+        return await decorated.GetWorkProposalStatusById(id, ct);
+    }
 }

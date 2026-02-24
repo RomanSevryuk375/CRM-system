@@ -21,4 +21,9 @@ public class CachedWorkInOrderStatusService(
             TimeSpan.FromHours(24),
             logger, ct);
     }
+
+    public async Task<WorkInOrderStatusItem> GetWorkInOrderStatusById(int id, CancellationToken ct)
+    {
+        return await decorated.GetWorkInOrderStatusById(id, ct);
+    }
 }

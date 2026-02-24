@@ -10,5 +10,6 @@ public interface IWorkInOrderService
     Task<int> GetCountWiO(WorkInOrderFilter filter, CancellationToken ct);
     Task<List<WorkInOrderItem>> GetPagedWiO(WorkInOrderFilter filter, CancellationToken ct);
     Task<List<WorkInOrderItem>> GetWiOByOrderId(long orderId, CancellationToken ct);
+    Task<WorkInOrderItem> GetWorkInOrderById(long id, CancellationToken ct);
     Task<long> UpdateWiO(long id, WorkInOrderUpdateModel model, CancellationToken ct);
 }

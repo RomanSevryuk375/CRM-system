@@ -11,5 +11,6 @@ public interface IPaymentNoteService
     Task<long> DeletePaymentNote(long id, CancellationToken ct);
     Task<int> GetCountPaymentNotes(PaymentNoteFilter filter, CancellationToken ct);
     Task<List<PaymentNoteItem>> GetPagedPaymentNotes(PaymentNoteFilter filter, CancellationToken ct);
+    Task<PaymentNoteItem> GetPaymentNoteById(long id, CancellationToken ct);
     Task<long> UpratePaymentNote(long id, PaymentMethodEnum? method, CancellationToken ct);
 }

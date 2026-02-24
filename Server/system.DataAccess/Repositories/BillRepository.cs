@@ -30,7 +30,7 @@ public class BillRepository(
         return query;
     }
 
-    public async Task<BillItem?> GetById(int id, CancellationToken ct)
+    public async Task<BillItem?> GetById(long id, CancellationToken ct)
     {
         return await context.Bills
             .AsNoTracking()

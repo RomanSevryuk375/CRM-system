@@ -10,7 +10,7 @@ public class PaymentMethodRepository(
     SystemDbContext context,
     IMapper mapper) : IPaymentMethodRepository
 {
-    public async Task<PaymentMethodItem?> Get(int id, CancellationToken ct)
+    public async Task<PaymentMethodItem?> GetById(int id, CancellationToken ct)
     {
         return await context.PaymentMethods
             .AsNoTracking()

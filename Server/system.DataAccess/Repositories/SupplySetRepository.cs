@@ -29,7 +29,7 @@ public class SupplySetRepository(
         return query;
     }
 
-    public async Task<SupplySetItem?> GetById(int id, CancellationToken ct)
+    public async Task<SupplySetItem?> GetById(long id, CancellationToken ct)
     {
         return await context.SupplySets
             .AsNoTracking()

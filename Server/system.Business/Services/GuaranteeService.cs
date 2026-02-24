@@ -13,6 +13,12 @@ public class GuaranteeService(
     IOrderRepository orderRepository,
     ILogger<GuaranteeService> logger) : IGuaranteeService
 {
+    public async Task<GuaranteeItem> GetGuaranteeById(long id, CancellationToken ct)
+    {
+        return await guaranteeRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Guarantee {id} not found");
+    }
+    
     public async Task<List<GuaranteeItem>> GetPagedGuarantees(GuaranteeFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting guarantees start"); 

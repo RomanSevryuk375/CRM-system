@@ -17,6 +17,12 @@ public class PositionService(
     ILogger<PositionService> logger,
     IUnitOfWork unitOfWork) : IPositionService
 {
+    public async Task<PositionItem> GetPositionById(int id, CancellationToken ct)
+    {
+        return await positionRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Position {id} not found");
+    }
+    
     public async Task<List<PositionItem>> GetPagedPositions(PositionFilter positionFilter, CancellationToken ct)
     {
         logger.LogInformation("Getting positions start");

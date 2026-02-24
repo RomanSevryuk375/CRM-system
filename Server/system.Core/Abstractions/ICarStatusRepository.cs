@@ -6,5 +6,5 @@ public interface ICarStatusRepository
 {
     Task<CarStatusItem?> GetById(int id, CancellationToken ct);
     Task<List<CarStatusItem>> Get(CancellationToken ct);
-    Task<bool> Exists(long id, CancellationToken ct);
+    Task<bool> Exists(int id, CancellationToken ct);
 }

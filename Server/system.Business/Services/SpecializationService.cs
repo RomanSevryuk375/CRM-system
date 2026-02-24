@@ -11,6 +11,12 @@ public class SpecializationService(
     ISpecializationRepository specializationRepository,
     ILogger<SpecializationService> logger) : ISpecializationService
 {
+    public async Task<SpecializationItem> GetSpecializationById(int id, CancellationToken ct)
+    {
+        return await specializationRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Specialization {id} not found");
+    }
+    
     public async Task<List<SpecializationItem>> GetSpecializations(CancellationToken ct)
     {
         logger.LogInformation("Getting specializations start");

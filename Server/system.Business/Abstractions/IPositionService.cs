@@ -13,5 +13,6 @@ public interface IPositionService
     Task<long> DeletePosition(long id, CancellationToken ct);
     Task<int> GetCountPositions(PositionFilter filter, CancellationToken ct);
     Task<List<PositionItem>> GetPagedPositions(PositionFilter positionFilter, CancellationToken ct);
+    Task<PositionItem> GetPositionById(int id, CancellationToken ct);
     Task<long> UpdatePosition(long id, PositionUpdateModel model, CancellationToken ct);
 }
