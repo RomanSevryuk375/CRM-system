@@ -97,6 +97,15 @@ public class OrderRepository(
             .Take(filter.Limit)
             .ToListAsync(ct);
     }
+    
+    public async Task<OrderItem?> GetById(long orderId, CancellationToken ct)
+    {
+        return await context.Orders
+            .AsNoTracking()
+            .Where(o => o.Id == orderId)
+            .ProjectTo<OrderItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
 
     public async Task<OrderItem?> GetByProposalId(long proposalId, CancellationToken ct)
     {
@@ -170,6 +179,30 @@ public class OrderRepository(
 
         await context.SaveChangesAsync(ct);
 
+        return entity.Id;
+    }
+
+    public async Task<long> PatchOrderFileName(long id, string path, CancellationToken ct)
+    {
+        var entity = await context.Orders.FirstOrDefaultAsync(x => x.Id == id, ct)
+            ?? throw new NotFoundException("Order not found");
+        
+        entity.OrderPdfFileName = path;
+        
+        await context.SaveChangesAsync(ct);
+        
+        return entity.Id;
+    }
+    
+    public async Task<long> PatchOrderAgreementFileName(long id, string path, CancellationToken ct)
+    {
+        var entity = await context.Orders.FirstOrDefaultAsync(x => x.Id == id, ct)
+                     ?? throw new NotFoundException("Order not found");
+        
+        entity.OrderAgreementPdfFileName = path;
+        
+        await context.SaveChangesAsync(ct);
+        
         return entity.Id;
     }
 

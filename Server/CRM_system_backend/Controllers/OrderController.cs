@@ -31,6 +31,15 @@ public class OrderController(
         return Ok(response);
     }
 
+    [HttpGet("/order-pdf/{id}")]
+    // [Authorize(Policy = "AdminClientPolicy")]
+    public async Task<IActionResult> DownloadOrderPdf(long id, CancellationToken ct)
+    {
+        var (stream, contentType) = await orderService.GetOrderPdfStream(id, ct);
+        
+        return File(stream, contentType, $"order_{id}.pdf");
+    }
+
     [HttpPost]
     [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult> CreateOrder(

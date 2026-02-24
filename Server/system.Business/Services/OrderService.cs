@@ -78,6 +78,8 @@ public class OrderService(
             createModel.StatusId,
             createModel.CarId,
             createModel.Date,
+            null,
+            null,
             createModel.PriorityId);
 
         if (errors is not null && errors.Any())
@@ -126,6 +128,8 @@ public class OrderService(
                 orderCreateModel.StatusId,
                 orderCreateModel.CarId,
                 orderCreateModel.Date,
+                null,
+                null,
                 orderCreateModel.PriorityId);
 
             if (errorsOrder is not null && errorsOrder.Any())
@@ -244,7 +248,23 @@ public class OrderService(
         var fileName = $"order_{orderId}_{DateTime.Now:yyyyMMdd}.pdf";
     
         var filePath = await fileService.UploadFile(stream, fileName, "application/pdf", ct);
+        
+        await orderRepository.PatchOrderFileName(orderId, filePath, ct);
 
         return filePath; 
+    }
+
+    public async Task<(Stream fieStream, string contentType)> GetOrderPdfStream(long id, CancellationToken ct)
+    {
+        var order = await orderRepository.GetById(id, ct)
+            ?? throw new NotFoundException($"Order {id} not found");
+        
+        if(order.OrderPdfFileName is null) throw new NotFoundException($"OrderPdfFilePath in order {id} not found");
+
+        var stream = await fileService.GetFile(order.OrderPdfFileName, ct);
+
+        const string contentType = "application/pdf";
+        
+        return (stream, contentType);
     }
 }

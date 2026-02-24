@@ -18,5 +18,6 @@ public interface IOrderService
     Task<long> DeleteOrder(long id, CancellationToken ct);
     Task<int> GetCountOrders(OrderFilter filter, CancellationToken ct);
     Task<List<OrderItem>> GetPagedOrders(OrderFilter filter, CancellationToken ct);
+    Task<(Stream fieStream, string contentType)> GetOrderPdfStream(long id, CancellationToken ct);
     Task<long> UpdateOrder(long id, OrderPriorityEnum? priorityId, CancellationToken ct);
 }
