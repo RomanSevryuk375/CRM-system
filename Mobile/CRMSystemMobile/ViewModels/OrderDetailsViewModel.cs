@@ -9,33 +9,19 @@ using System.Collections.ObjectModel;
 
 namespace CRMSystemMobile.ViewModels;
 
-public partial class OrderDetailsViewModel : ObservableObject, IQueryAttributable
+public partial class OrderDetailsViewModel(
+    WorkInOrderService workInOrderService,
+    PartSetService partSetService,
+    WorkProposalService workProposalService)
+    : ObservableObject, IQueryAttributable
 {
-    private readonly WorkInOrderService _workInOrderService;
-    private readonly PartSetService _partSetService;
-    private readonly WorkProposalService _workProposalService;
+    [ObservableProperty] public partial long OrderId { get; set; }
 
-    public OrderDetailsViewModel(
-        WorkInOrderService workInOrderService,
-        PartSetService partSetService,
-        WorkProposalService workProposalService)
-    {
-        _workInOrderService = workInOrderService;
-        _partSetService = partSetService;
-        _workProposalService = workProposalService;
-    }
+    [ObservableProperty] public partial string? OrderTitle { get; set; }
 
-    [ObservableProperty]
-    public partial long OrderId { get; set; }
+    [ObservableProperty] public partial bool IsBusy { get; set; }
 
-    [ObservableProperty]
-    public partial string OrderTitle { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsBusy { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsRefreshing { get; set; }
+    [ObservableProperty] public partial bool IsRefreshing { get; set; }
 
     public ObservableCollection<WorkInOrderResponse> Works { get; } = [];
     public ObservableCollection<PartSetResponse> Parts { get; } = [];
@@ -43,18 +29,24 @@ public partial class OrderDetailsViewModel : ObservableObject, IQueryAttributabl
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.ContainsKey("OrderId"))
+        if (!query.TryGetValue("OrderId", out var value))
         {
-            OrderId = Convert.ToInt64(query["OrderId"]);
-            OrderTitle = $"Заказ #{OrderId}";
-            LoadDataCommand.Execute(null);
+            return;
         }
+
+        OrderId = Convert.ToInt64(value);
+        OrderTitle = $"Заказ #{OrderId}";
+        LoadDataCommand.Execute(null);
     }
 
     [RelayCommand]
     private async Task LoadData()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
+
         IsBusy = true;
 
         try
@@ -88,10 +80,13 @@ public partial class OrderDetailsViewModel : ObservableObject, IQueryAttributabl
             Limit: 100,
             IsDescending: true);
 
-        var (items, _) = await _workInOrderService.GetWorksInOrder(filter);
+        var (items, _) = await workInOrderService.GetWorksInOrder(filter);
         if (items != null)
         {
-            foreach (var item in items) Works.Add(item);
+            foreach (var item in items)
+            {
+                Works.Add(item);
+            }
         }
     }
 
@@ -101,10 +96,13 @@ public partial class OrderDetailsViewModel : ObservableObject, IQueryAttributabl
             OrderIds: [OrderId],
             PositionIds: [], ProposalIds: [], SortBy: null, Page: 1, Limit: 100, IsDescending: true);
 
-        var (items, _) = await _partSetService.GetPartSets(filter);
+        var (items, _) = await partSetService.GetPartSets(filter);
         if (items != null)
         {
-            foreach (var item in items) Parts.Add(item);
+            foreach (var item in items)
+            {
+                Parts.Add(item);
+            }
         }
     }
 
@@ -114,17 +112,20 @@ public partial class OrderDetailsViewModel : ObservableObject, IQueryAttributabl
             OrderIds: [OrderId],
             JobIds: [], WorkerIds: [], StatusIds: [], SortBy: null, Page: 1, Limit: 100, IsDescending: true);
 
-        var (items, _) = await _workProposalService.GetWorkProposals(filter);
+        var (items, _) = await workProposalService.GetWorkProposals(filter);
         if (items != null)
         {
-            foreach (var item in items) Proposals.Add(item);
+            foreach (var item in items)
+            {
+                Proposals.Add(item);
+            }
         }
     }
 
     [RelayCommand]
     private async Task AcceptProposal(WorkProposalResponse proposal)
     {
-        var error = await _workProposalService.AcceptWorkProposal(proposal.Id);
+        var error = await workProposalService.AcceptWorkProposal(proposal.Id);
         if (error == null)
         {
             await Shell.Current.DisplayAlert("Успех", "Предложение принято", "ОК");
@@ -139,7 +140,7 @@ public partial class OrderDetailsViewModel : ObservableObject, IQueryAttributabl
     [RelayCommand]
     private async Task RejectProposal(WorkProposalResponse proposal)
     {
-        var error = await _workProposalService.RejectWorkProposal(proposal.Id);
+        var error = await workProposalService.RejectWorkProposal(proposal.Id);
         if (error == null)
         {
             await Shell.Current.DisplayAlert("Успех", "Предложение отклонено", "ОК");

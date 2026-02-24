@@ -9,60 +9,52 @@ using System.Collections.ObjectModel;
 
 namespace CRMSystemMobile.ViewModels;
 
-public partial class BillDetailsViewModel : ObservableObject, IQueryAttributable
+public partial class BillDetailsViewModel(PaymentService paymentService, BillService billService)
+    : ObservableObject, IQueryAttributable
 {
-    private readonly PaymentService _paymentService;
-    private readonly BillService _billService;
+    [ObservableProperty] public partial BillResponse? Bill { get; set; }
 
-    public BillDetailsViewModel(PaymentService paymentService, BillService billService)
-    {
-        _paymentService = paymentService;
-        _billService = billService;
-    }
+    [ObservableProperty] public partial decimal PaymentAmount { get; set; }
 
-    [ObservableProperty]
-    public partial BillResponse Bill { get; set; }
+    [ObservableProperty] public partial decimal RemainingDebt { get; set; }
 
-    [ObservableProperty]
-    public partial decimal PaymentAmount { get; set; }
-
-    [ObservableProperty]
-    public partial decimal RemainingDebt { get; set; }
-
-    [ObservableProperty]
-    public partial DateTime PaymentDate { get; set; } = DateTime.Now;
+    [ObservableProperty] public partial DateTime PaymentDate { get; set; } = DateTime.Now;
     public List<string> PaymentMethods { get; } = ["Картой", "Наличными", "ЕРИП"];
 
-    [ObservableProperty]
-    public partial string SelectedMethodName { get; set; } = "Картой";
+    [ObservableProperty] public partial string SelectedMethodName { get; set; } = "Картой";
 
-    [ObservableProperty]
-    public partial bool IsBusy { get; set; }
+    [ObservableProperty] public partial bool IsBusy { get; set; }
 
-    [ObservableProperty]
-    public partial bool CanPay { get; set; }
+    [ObservableProperty] public partial bool CanPay { get; set; }
     public ObservableCollection<PaymentNoteResponse> Payments { get; } = [];
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.ContainsKey("Bill"))
+        if (!query.TryGetValue("Bill", out var value))
         {
-            Bill = (BillResponse)query["Bill"];
-            if (Bill != null)
-            {
-                RemainingDebt = Bill.Amount;
-                UpdateDebtInfoCommand.Execute(null);
-                LoadBillPaymentsCommand.Execute(null);
-            }
+            return;
         }
+
+        Bill = (BillResponse)value;
+        if (Bill == null)
+        {
+            return;
+        }
+
+        RemainingDebt = Bill.Amount;
+        UpdateDebtInfoCommand.Execute(null);
+        LoadBillPaymentsCommand.Execute(null);
     }
 
     [RelayCommand]
     private async Task UpdateDebtInfo()
     {
-        if (Bill == null) return;
+        if (Bill == null)
+        {
+            return;
+        }
 
-        var debt = await _billService.GetBillDebt(Bill.Id);
+        var debt = await billService.GetBillDebt(Bill.Id);
 
         if (debt.HasValue)
         {
@@ -70,21 +62,17 @@ public partial class BillDetailsViewModel : ObservableObject, IQueryAttributable
 
             CanPay = RemainingDebt > 0;
 
-            if (CanPay)
-            {
-                PaymentAmount = RemainingDebt;
-            }
-            else
-            {
-                PaymentAmount = 0;
-            }
+            PaymentAmount = CanPay ? RemainingDebt : 0;
         }
     }
 
     [RelayCommand]
     private async Task LoadBillPayments()
     {
-        if (Bill == null) return;
+        if (Bill == null)
+        {
+            return;
+        }
 
         try
         {
@@ -97,7 +85,7 @@ public partial class BillDetailsViewModel : ObservableObject, IQueryAttributable
                 IsDescending: true
             );
 
-            var (items, _) = await _paymentService.GetMyPayments(filter);
+            var (items, _) = await paymentService.GetMyPayments(filter);
 
             Payments.Clear();
             if (items != null)
@@ -117,14 +105,20 @@ public partial class BillDetailsViewModel : ObservableObject, IQueryAttributable
     [RelayCommand]
     private async Task MakePayment()
     {
-        if (IsBusy || Bill == null) return;
+        if (IsBusy || Bill == null)
+        {
+            return;
+        }
 
         if (PaymentAmount > RemainingDebt)
         {
-            bool confirm = await Shell.Current.DisplayAlert("Внимание",
+            var confirm = await Shell.Current.DisplayAlert("Внимание",
                 $"Сумма платежа ({PaymentAmount}) больше текущего долга ({RemainingDebt}). Продолжить?",
                 "Да", "Нет");
-            if (!confirm) return;
+            if (!confirm)
+            {
+                return;
+            }
         }
 
         if (PaymentAmount <= 0)
@@ -153,7 +147,7 @@ public partial class BillDetailsViewModel : ObservableObject, IQueryAttributable
                 MethodId = methodEnum
             };
 
-            var error = await _paymentService.CreatePayment(request);
+            var error = await paymentService.CreatePayment(request);
 
             if (error == null)
             {
@@ -174,7 +168,7 @@ public partial class BillDetailsViewModel : ObservableObject, IQueryAttributable
     }
 
     [RelayCommand]
-    private async Task GoBack()
+    private static async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
     }

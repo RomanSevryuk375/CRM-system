@@ -6,12 +6,11 @@ namespace CRMSystemMobile.ViewModels;
 
 public partial class CarDetailsViewModel : ObservableObject, IQueryAttributable
 {
-    [ObservableProperty]
-    private CarResponse car;
+    [ObservableProperty] public partial CarResponse? Car { get; set; }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.TryGetValue("Car", out object? value))
+        if (query.TryGetValue("Car", out var value))
         {
             Car = (CarResponse)value;
         }
@@ -20,11 +19,6 @@ public partial class CarDetailsViewModel : ObservableObject, IQueryAttributable
     [RelayCommand]
     private async Task BookVisit()
     {
-        if (Car == null)
-        {
-            return;
-        }
-
         var navigationParameter = new Dictionary<string, object>
         {
             { "SelectedCar", Car }
@@ -34,7 +28,7 @@ public partial class CarDetailsViewModel : ObservableObject, IQueryAttributable
     }
 
     [RelayCommand]
-    private async Task GoBack()
+    private static async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
     }

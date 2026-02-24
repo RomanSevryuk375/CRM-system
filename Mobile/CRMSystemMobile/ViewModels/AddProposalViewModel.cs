@@ -10,54 +10,51 @@ using System.Collections.ObjectModel;
 
 namespace CRMSystemMobile.ViewModels;
 
-public partial class AddProposalViewModel : ObservableObject, IQueryAttributable
+public partial class AddProposalViewModel(
+    WorkService workService,
+    WorkProposalService proposalService,
+    IdentityService identityService)
+    : ObservableObject, IQueryAttributable
 {
-    private readonly WorkService _workService;
-    private readonly WorkProposalService _proposalService;
-    private readonly IdentityService _identityService;
     private long _orderId;
-
-    public AddProposalViewModel(WorkService workService, WorkProposalService proposalService, IdentityService identityService)
-    {
-        _workService = workService;
-        _proposalService = proposalService;
-        _identityService = identityService;
-    }
 
     public ObservableCollection<WorkResponse> Jobs { get; } = [];
 
-    [ObservableProperty]
-    public partial WorkResponse SelectedJob { get; set; }
+    [ObservableProperty] public partial WorkResponse? SelectedJob { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsBusy { get; set; }
+    [ObservableProperty] public partial bool IsBusy { get; set; }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.ContainsKey("OrderId"))
+        if (!query.TryGetValue("OrderId", out var value))
         {
-            _orderId = Convert.ToInt64(query["OrderId"]);
-            LoadJobsCommand.Execute(null);
+            return;
         }
+
+        _orderId = Convert.ToInt64(value);
+        LoadJobsCommand.Execute(null);
     }
 
     [RelayCommand]
     private async Task LoadJobs()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
 
         try
         {
             IsBusy = true;
 
             var filter = new WorkFilter(
-                SortBy: "title", 
+                SortBy: "title",
                 Page: 1,
-                Limit: 100,      
+                Limit: 100,
                 IsDescending: false
             );
 
-            var (items, totalCount) = await _workService.GetWorks(filter);
+            var (items, _) = await workService.GetWorks(filter);
 
             Jobs.Clear();
             if (items != null)
@@ -89,7 +86,7 @@ public partial class AddProposalViewModel : ObservableObject, IQueryAttributable
         }
 
         IsBusy = true;
-        var (workerId, _) = await _identityService.GetProfileIdAsync();
+        var (workerId, _) = await identityService.GetProfileIdAsync();
 
         var request = new WorkProposalRequest
         {
@@ -100,7 +97,7 @@ public partial class AddProposalViewModel : ObservableObject, IQueryAttributable
             Date = DateTime.Now
         };
 
-        var error = await _proposalService.CreateWorkPropsal(request);
+        var error = await proposalService.CreateWorkPropsal(request);
         IsBusy = false;
 
         if (error == null)

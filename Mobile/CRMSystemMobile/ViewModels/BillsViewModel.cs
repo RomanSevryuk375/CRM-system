@@ -12,17 +12,14 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
     public ObservableCollection<BillResponse> Bills { get; } = [];
 
     private int _currentPage = 1;
-    private int _totalItems = 0;
-    private const int _pageSize = 15;
+    private int _totalItems;
+    private const int PageSize = 15;
 
-    [ObservableProperty]
-    public partial bool IsBusy { get; set; }
+    [ObservableProperty] public partial bool IsBusy { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsLoadingMore { get; set; }
+    [ObservableProperty] public partial bool IsLoadingMore { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsRefreshing { get; set; }
+    [ObservableProperty] public partial bool IsRefreshing { get; set; }
 
     [RelayCommand]
     private async Task LoadInitial()
@@ -73,13 +70,13 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
     private async Task LoadDataInternal()
     {
         var filter = new BillFilter(
-             OrderIds: [],
-             ClientIds: [],
-             SortBy: "createdAt",
-             Page: _currentPage,
-             Limit: _pageSize,
-             IsDescending: true
-         );
+            OrderIds: [],
+            ClientIds: [],
+            SortBy: "createdAt",
+            Page: _currentPage,
+            Limit: PageSize,
+            IsDescending: true
+        );
 
         var (items, total) = await billService.GetBills(filter);
         _totalItems = total;
@@ -91,19 +88,23 @@ public partial class BillsViewModel(BillService billService) : ObservableObject
                 Bills.Add(item);
             }
         }
+
         _currentPage++;
     }
 
     [RelayCommand]
-    private async Task GoBack()
+    private static async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
     }
 
     [RelayCommand]
-    private async Task GoToDetails(BillResponse bill)
+    private static async Task GoToDetails(BillResponse? bill)
     {
-        if (bill == null) return;
+        if (bill == null)
+        {
+            return;
+        }
 
         var navParam = new Dictionary<string, object>
         {

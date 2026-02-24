@@ -18,42 +18,27 @@ public class OrderService(HttpClient httpClient)
 
         if (orderFilter.StatusIds?.Any() == true)
         {
-            foreach (var id in orderFilter.StatusIds)
-            {
-                query += $"&StatusIds={id}";
-            }
+            query = orderFilter.StatusIds.Aggregate(query, (current, id) => current + $"&StatusIds={id}");
         }
 
         if (orderFilter.CarIds?.Any() == true)
         {
-            foreach (var id in orderFilter.CarIds)
-            {
-                query += $"&CarIds={id}";
-            }
+            query = orderFilter.CarIds.Aggregate(query, (current, id) => current + $"&CarIds={id}");
         }
 
         if (orderFilter.ClientIds?.Any() == true)
         {
-            foreach (var id in orderFilter.ClientIds)
-            {
-                query += $"&ClientIds={id}";
-            }
+            query = orderFilter.ClientIds.Aggregate(query, (current, id) => current + $"&ClientIds={id}");
         }
 
         if (orderFilter.PriorityIds?.Any() == true)
         {
-            foreach (var id in orderFilter.PriorityIds)
-            {
-                query += $"&PriorityIds={id}";
-            }
+            query = orderFilter.PriorityIds.Aggregate(query, (current, id) => current + $"&PriorityIds={id}");
         }
 
         if (orderFilter.WorkerIds?.Any() == true)
         {
-            foreach (var id in orderFilter.WorkerIds)
-            {
-                query += $"&WorkerIds={id}";
-            }
+            query = orderFilter.WorkerIds.Aggregate(query, (current, id) => current + $"&WorkerIds={id}");
         }
 
         try
@@ -69,12 +54,13 @@ public class OrderService(HttpClient httpClient)
 
             response.EnsureSuccessStatusCode();
 
-            int totalCount = 0;
+            var totalCount = 0;
             if (response.Headers.TryGetValues("x-total-count", out var values))
             {
                 totalCount = int.Parse(values.First());
             }
-            var json = await response.Content.ReadAsStringAsync();
+
+            await response.Content.ReadAsStringAsync();
             var items = await response.Content.ReadFromJsonAsync<List<OrderResponse>>();
             return (items, totalCount);
         }
@@ -97,12 +83,9 @@ public class OrderService(HttpClient httpClient)
             }
 
             var errorContent = await response.Content.ReadAsStringAsync();
-            if (string.IsNullOrWhiteSpace(errorContent))
-            {
-                return $"Server error: {response.StatusCode}";
-            }
-
-            return errorContent.Trim('"');
+            return string.IsNullOrWhiteSpace(errorContent)
+                ? $"Server error: {response.StatusCode}"
+                : errorContent.Trim('"');
         }
         catch (Exception ex)
         {

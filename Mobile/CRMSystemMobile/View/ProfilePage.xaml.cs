@@ -2,7 +2,7 @@ using CRMSystemMobile.ViewModels;
 
 namespace CRMSystemMobile.View;
 
-public partial class ProfilePage : ContentPage
+public partial class ProfilePage
 {
     private readonly ProfileViewModel _viewModel;
 
@@ -11,6 +11,7 @@ public partial class ProfilePage : ContentPage
         InitializeComponent();
         BindingContext = _viewModel = viewModel;
     }
+
     protected override async void OnAppearing()
     {
         base.OnAppearing();

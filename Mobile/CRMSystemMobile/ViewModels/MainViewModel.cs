@@ -40,8 +40,8 @@ public partial class MainViewModel : ObservableObject
     }
 
     private int _currentPage = 1;
-    private int _totalItems = 0;
-    private const int _pageSize = 15;
+    private int _totalItems;
+    private const int PageSize = 15;
     private int[] _activeStatuses = [2, 3, 5];
 
     private readonly Color _activeBg = Colors.White;
@@ -51,50 +51,34 @@ public partial class MainViewModel : ObservableObject
 
     public ObservableCollection<OrderResponse> Orders { get; } = [];
 
-    [ObservableProperty]
-    public partial bool IsLoadingMore { get; set; }
+    [ObservableProperty] public partial bool IsLoadingMore { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsMenuSheetOpen { get; set; }
+    [ObservableProperty] public partial bool IsMenuSheetOpen { get; set; }
 
-    [ObservableProperty]
-    public partial string UserInitials { get; set; } = "??";
+    [ObservableProperty] public partial string UserInitials { get; set; } = "??";
 
-    [ObservableProperty]
-    public partial Color InProgressBg { get; set; }
+    [ObservableProperty] public partial Color InProgressBg { get; set; }
 
-    [ObservableProperty]
-    public partial Color InProgressText { get; set; }
+    [ObservableProperty] public partial Color InProgressText { get; set; }
 
-    [ObservableProperty]
-    public partial Color CompletedBg { get; set; }
+    [ObservableProperty] public partial Color CompletedBg { get; set; }
 
-    [ObservableProperty]
-    public partial Color CompletedText { get; set; }
+    [ObservableProperty] public partial Color CompletedText { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsRefreshing { get; set; }
+    [ObservableProperty] public partial bool IsRefreshing { get; set; }
 
     [RelayCommand]
     private async Task Refresh()
     {
         try
         {
-            IsRefreshing = true;    
-
-            // 1. Сбрасываем счетчик страниц на начало
+            IsRefreshing = true;
             _currentPage = 1;
-
-            // 2. Сбрасываем общее количество (чтобы логика пагинации не блокировала загрузку)
             _totalItems = 0;
-
-            // 3. Вызываем метод загрузки данных (тот же, что используется при старте)
-            // Важно: Внутри метода загрузки, если страница == 1, нужно очищать коллекцию Orders
             await LoadNextPage();
         }
         finally
         {
-            // 4. Выключаем анимацию обновления
             IsRefreshing = false;
         }
     }
@@ -140,8 +124,8 @@ public partial class MainViewModel : ObservableObject
             var client = await _clientService.GetClientById(profileId);
             if (client != null)
             {
-                var s = client.Surname?.FirstOrDefault().ToString() ?? "";
-                var n = client.Name?.FirstOrDefault().ToString() ?? "";
+                var s = client.Surname.FirstOrDefault().ToString();
+                var n = client.Name.FirstOrDefault().ToString();
 
                 UserInitials = string.IsNullOrEmpty(s) && string.IsNullOrEmpty(n) ? "--" : (s + n).ToUpper();
             }
@@ -168,11 +152,11 @@ public partial class MainViewModel : ObservableObject
 
     public void Receive(ProfileUpdatedMessage message)
     {
-        MainThread.BeginInvokeOnMainThread(async () => await LoadUserData());
+        MainThread.BeginInvokeOnMainThread(() => _ = LoadUserData());
     }
 
     [RelayCommand]
-    private async Task GoToProfile()
+    private static async Task GoToProfile()
     {
         await Shell.Current.GoToAsync("ProfilePage");
     }
@@ -188,14 +172,17 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task GoToOrderDetails(OrderResponse order)
+    private static async Task GoToOrderDetails(OrderResponse? order)
     {
-        if (order == null) return;
+        if (order == null)
+        {
+            return;
+        }
 
         var navParam = new Dictionary<string, object>
-    {
-        { "OrderId", order.Id }
-    };
+        {
+            { "OrderId", order.Id }
+        };
 
         await Shell.Current.GoToAsync("OrderDetailsPage", navParam);
     }
@@ -213,8 +200,11 @@ public partial class MainViewModel : ObservableObject
         {
             return;
         }
-        
-        if (!IsRefreshing && Orders.Count > 0 && Orders.Count >= _totalItems) return;
+
+        if (!IsRefreshing && Orders.Count > 0 && Orders.Count >= _totalItems)
+        {
+            return;
+        }
 
         try
         {
@@ -229,7 +219,7 @@ public partial class MainViewModel : ObservableObject
                 WorkerIds: [],
                 SortBy: null,
                 Page: _currentPage,
-                Limit: _pageSize,
+                Limit: PageSize,
                 IsDescending: true
             );
 
@@ -261,7 +251,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public async Task Logout()
     {
-        bool answer = await Shell.Current.DisplayAlert("Выход", "Выйти из аккаунта?", "Да", "Нет");
+        var answer = await Shell.Current.DisplayAlert("Выход", "Выйти из аккаунта?", "Да", "Нет");
         if (answer)
         {
             SecureStorage.Default.Remove("jwt_token");

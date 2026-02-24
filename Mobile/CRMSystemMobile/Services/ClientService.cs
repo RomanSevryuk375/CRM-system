@@ -10,7 +10,7 @@ public class ClientService(HttpClient httpClient)
         try
         {
             var response = await httpClient.GetAsync($"api/v1/clients/{id}");
-            var json = await response.Content.ReadAsStringAsync();
+            await response.Content.ReadAsStringAsync();
 
             return await response.Content.ReadFromJsonAsync<ClientsResponse>();
         }

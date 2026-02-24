@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage
     x:Class="CRMSystemMobile.View.WorkerOrderDetailsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -7,6 +8,7 @@
     xmlns:modelsProp="clr-namespace:Shared.Contracts.WorkProposal;assembly=Shared"
     xmlns:modelsWork="clr-namespace:Shared.Contracts.WorkInOrder;assembly=Shared"
     xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    x:Name="DetailsPage"
     Title="Детали заказа"
     x:DataType="vm:WorkerOrderDetailsViewModel"
     BackgroundColor="#112347"
@@ -236,20 +238,27 @@
                                                 <ImageButton
                                                     Grid.Column="2"
                                                     Padding="5"
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=DeleteTaskCommand}"
                                                     CommandParameter="{Binding .}"
                                                     HeightRequest="30"
                                                     HorizontalOptions="Start"
                                                     Source="delete.png"
-                                                    WidthRequest="30" />
+                                                    WidthRequest="30">
+                                                    <ImageButton.Command>
+                                                        <Binding Source="{x:Reference DetailsPage}"
+                                                                 Path="BindingContext.DeleteTaskCommand" />
+                                                    </ImageButton.Command>
+                                                </ImageButton>
                                             </Grid>
 
                                             <Button
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=ChangeStatusCommand}"
                                                 CommandParameter="{Binding .}"
                                                 CornerRadius="8"
                                                 FontAttributes="Bold"
                                                 HeightRequest="40">
+                                                <Button.Command>
+                                                    <Binding Source="{x:Reference DetailsPage}"
+                                                             Path="BindingContext.ChangeStatusCommand" />
+                                                </Button.Command>
                                                 <Button.Triggers>
                                                     <DataTrigger
                                                         Binding="{Binding StatusId}"
@@ -355,7 +364,7 @@
                                             <ImageButton
                                                 Grid.Column="2"
                                                 Padding="5"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=DeletePartCommand}"
+                                                Command="{Binding Source={x:Reference DetailsPage}, Path=BindingContext.DeleteTaskCommand}"
                                                 CommandParameter="{Binding .}"
                                                 HeightRequest="30"
                                                 Source="delete.png"
@@ -432,12 +441,15 @@
                                             <ImageButton
                                                 Grid.Column="2"
                                                 Padding="5"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerOrderDetailsViewModel}}, Path=DeleteProposalCommand}"
-                                                CommandParameter="{Binding .}"
                                                 HeightRequest="30"
                                                 Source="delete.png"
                                                 VerticalOptions="Center"
-                                                WidthRequest="30" />
+                                                WidthRequest="30">
+                                                <ImageButton.Command>
+                                                    <Binding Source="{x:Reference DetailsPage}"
+                                                             Path="BindingContext.DeleteProposalCommand" />
+                                                </ImageButton.Command>
+                                            </ImageButton>
                                         </Grid>
                                     </Border>
                                 </DataTemplate>

@@ -2,7 +2,7 @@ using CRMSystemMobile.ViewModels;
 
 namespace CRMSystemMobile.View;
 
-public partial class WorkerMainPage : ContentPage
+public partial class WorkerMainPage
 {
     private readonly WorkerMainViewModel _viewModel;
 
@@ -17,9 +17,6 @@ public partial class WorkerMainPage : ContentPage
     {
         base.OnAppearing();
 
-        if (_viewModel != null)
-        {
-            await _viewModel.LoadInitialCommand.ExecuteAsync(null);
-        }
+        await _viewModel.LoadInitialCommand.ExecuteAsync(null);
     }
 }

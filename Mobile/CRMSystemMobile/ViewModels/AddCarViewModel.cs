@@ -10,23 +10,17 @@ namespace CRMSystemMobile.ViewModels;
 
 public partial class AddCarViewModel(CarService carService, IdentityService identityService) : ObservableObject
 {
-    [ObservableProperty]
-    public partial string Brand { get; set; }
+    [ObservableProperty] public partial string? Brand { get; set; }
 
-    [ObservableProperty]
-    public partial string Model { get; set; }
+    [ObservableProperty] public partial string? Model { get; set; }
 
-    [ObservableProperty]
-    public partial int Year { get; set; } = DateTime.Now.Year;
+    [ObservableProperty] public partial int Year { get; set; } = DateTime.Now.Year;
 
-    [ObservableProperty]
-    public partial string VinNumber { get; set; }
+    [ObservableProperty] public partial string? VinNumber { get; set; }
 
-    [ObservableProperty]
-    public partial string StateNumber { get; set; }
+    [ObservableProperty] public partial string? StateNumber { get; set; }
 
-    [ObservableProperty]
-    public partial int Mileage { get; set; }
+    [ObservableProperty] public partial int Mileage { get; set; }
 
     [RelayCommand]
     private async Task SaveCar()
@@ -71,13 +65,11 @@ public partial class AddCarViewModel(CarService carService, IdentityService iden
             errors.Add("Некорректный формат VIN (нужно 17 символов, латиница без I, O, Q и цифры).");
         }
 
-        var stateNumPattern = @"^(\d{4}\s?[ABEIKMHOPCTX]{2}-[1-7]|[ABEIKMHOPCTX]{2}\s?\d{4}-[1-7]|(TA|TT|TY)\d{4}|E\d{3}[ABEIKMHOPCTX]{2}[1-7])$";
-
         if (string.IsNullOrWhiteSpace(StateNumber))
         {
             errors.Add("Гос. номер обязателен.");
         }
-        else if (!Regex.IsMatch(StateNumber.ToUpper(), stateNumPattern))
+        else if (!MyRegex().IsMatch(StateNumber.ToUpper()))
         {
             errors.Add("Некорректный формат гос. номера (пример: 1234 AB-7).");
         }
@@ -103,8 +95,8 @@ public partial class AddCarViewModel(CarService carService, IdentityService iden
             Brand = Brand,
             Model = Model,
             YearOfManufacture = Year,
-            VinNumber = VinNumber.ToUpper(),
-            StateNumber = StateNumber.ToUpper(),
+            VinNumber = VinNumber?.ToUpper(),
+            StateNumber = StateNumber?.ToUpper(),
             Mileage = Mileage
         };
 
@@ -122,5 +114,9 @@ public partial class AddCarViewModel(CarService carService, IdentityService iden
     }
 
     [RelayCommand]
-    private async Task GoBack() => await Shell.Current.GoToAsync("..");
+    private static async Task GoBack() => await Shell.Current.GoToAsync("..");
+
+    [GeneratedRegex(
+        @"^(\d{4}\s?[ABEIKMHOPCTX]{2}-[1-7]|[ABEIKMHOPCTX]{2}\s?\d{4}-[1-7]|(TA|TT|TY)\d{4}|E\d{3}[ABEIKMHOPCTX]{2}[1-7])$")]
+    private static partial Regex MyRegex();
 }

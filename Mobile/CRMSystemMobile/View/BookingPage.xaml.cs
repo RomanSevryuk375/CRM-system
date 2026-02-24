@@ -2,7 +2,7 @@ using CRMSystemMobile.ViewModels;
 
 namespace CRMSystemMobile.View;
 
-public partial class BookingPage : ContentPage
+public partial class BookingPage
 {
     public BookingPage(BookingViewModel viewModel)
     {

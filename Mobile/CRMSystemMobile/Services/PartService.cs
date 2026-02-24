@@ -20,13 +20,10 @@ public class PartService(HttpClient httpClient)
 
             if (filter.CategoryIds?.Any() == true)
             {
-                foreach(var id in filter.CategoryIds)
-                {
-                    query += $"&CategoryIds={id}";
-                }
+                query = filter.CategoryIds.Aggregate(query, (current, id) => current + $"&CategoryIds={id}");
             }
 
-            string url = $"api/v1/parts?{query}";
+            var url = $"api/v1/parts?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -39,7 +36,7 @@ public class PartService(HttpClient httpClient)
 
             response.EnsureSuccessStatusCode();
 
-            int totalCount = 0;
+            var totalCount = 0;
             if (response.Headers.TryGetValues("x-total-count", out var values))
             {
                 int.TryParse(values.FirstOrDefault(), out totalCount);
@@ -47,7 +44,7 @@ public class PartService(HttpClient httpClient)
 
             var items = await response.Content.ReadFromJsonAsync<List<PartResponse>>();
 
-            return(items, totalCount);
+            return (items, totalCount);
         }
         catch (Exception ex)
         {
@@ -56,12 +53,12 @@ public class PartService(HttpClient httpClient)
         }
     }
 
-    public async Task<string?> CreatePart (PartRequest request)
+    public async Task<string?> CreatePart(PartRequest request)
     {
         try
         {
             var response = await httpClient.PostAsJsonAsync("api/v1/parts", request);
-            
+
             if (response.IsSuccessStatusCode)
             {
                 return null;
@@ -69,21 +66,18 @@ public class PartService(HttpClient httpClient)
 
             var errorContent = await response.Content.ReadAsStringAsync();
 
-            if (string.IsNullOrWhiteSpace(errorContent))
-            {
-                return $"Server error: {response.StatusCode}";
-            }
-
-            return errorContent.Trim('"');
-
-        } catch (Exception ex)
+            return string.IsNullOrWhiteSpace(errorContent)
+                ? $"Server error: {response.StatusCode}"
+                : errorContent.Trim('"');
+        }
+        catch (Exception ex)
         {
             Debug.WriteLine(ex.ToString());
             return $"Connection error: {ex.Message}";
         }
     }
 
-    public async Task<string?> DeletePart (long id)
+    public async Task<string?> DeletePart(long id)
     {
         try
         {
@@ -102,8 +96,8 @@ public class PartService(HttpClient httpClient)
             }
 
             return errorContent.Trim('"');
-
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             Debug.WriteLine(ex.ToString());
             return $"Connection error: {ex.Message}";
