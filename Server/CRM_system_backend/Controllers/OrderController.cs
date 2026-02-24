@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Bill;
 using CRMSystem.Core.ProjectionModels.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,22 +31,23 @@ public class OrderController(
         return Ok(response);
     }
 
+    [HttpGet("/order-pdf/{id}")]
+    // [Authorize(Policy = "AdminClientPolicy")]
+    public async Task<IActionResult> DownloadOrderPdf(long id, CancellationToken ct)
+    {
+        var (stream, contentType) = await orderService.GetOrderPdfStream(id, ct);
+        
+        return File(stream, contentType, $"order_{id}.pdf");
+    }
+
     [HttpPost]
     [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult> CreateOrder(
         [FromBody] OrderRequest request, CancellationToken ct)
     {
-        var (order, errors) = Order.Create(
-            0,
-            request.StatusId,
-            request.CarId,
-            request.Date,
-            request.PriorityId);
+        var createModel = mapper.Map<OrderCreateModel>(request);
 
-        if (errors is not null && errors.Any())
-            return BadRequest(errors);
-
-        await orderService.CreateOrder(order!, ct);
+        await orderService.CreateOrder(createModel, ct);
 
         return Created();
     }
@@ -56,34 +57,19 @@ public class OrderController(
     public async Task<ActionResult> CreateOrderWithBill(
         [FromBody] OrderWithBillRequest request, CancellationToken ct)
     {
-        var (order, errorsOrder) = Order.Create(
-            0,
-            request.OrderStatusId,
-            request.CarId,
-            request.Date,
-            request.PriorityId);
+        var orderCreateModel = mapper.Map<OrderCreateModel>(request);
+        var billCreateModel = mapper.Map<BillCreateModel>(request);
 
-        if (errorsOrder is not null && errorsOrder.Any())
-        {
-            return BadRequest(errorsOrder);
-        }
-
-        var (bill, errorsBill) = Bill.Create(
-            0,
-            0,
-            request.BillStatusId,
-            request.CreatedAt,
-            request.Amount,
-            request.ActualBillDate);
-
-        if (errorsBill is not null && errorsBill.Any())
-        {
-            return BadRequest(errorsBill);
-        }
-
-        await orderService.CreateOrderWithBill(order!, bill!, ct);
+        await orderService.CreateOrderWithBill(orderCreateModel, billCreateModel, ct);
 
         return Created();
+    }
+    
+    [HttpPost("{id}/generate-pdf")]
+    public async Task<IActionResult> GeneratePdf(long id, CancellationToken ct)
+    {
+        var filePath = await orderService.CreateOrderPdfAndUpload(id, ct);
+        return Ok(new { Message = "PDF generated and uploaded", Path = filePath });
     }
 
     [HttpPut("{id}")]
@@ -100,13 +86,14 @@ public class OrderController(
     public async Task<IActionResult> PathcStatusOrder(
         long id, [FromBody] OrderPatchRequest request, CancellationToken ct)
     {
-        if (request.OrderStatus == OrderStatusEnum.Closed)
+        switch (request.OrderStatus)
         {
-            await orderService.CloseOrder(id, ct);
-        }
-        else if (request.OrderStatus == OrderStatusEnum.Completed)
-        {
-            await orderService.CompleteOrder(id, ct);
+            case OrderStatusEnum.Closed:
+                await orderService.CloseOrder(id, ct);
+                break;
+            case OrderStatusEnum.Completed:
+                await orderService.CompleteOrder(id, ct);
+                break;
         }
 
         return NoContent();

@@ -16,7 +16,8 @@ public class AttachmentImgRepository(
     SystemDbContext context,
     IMapper mapper) : IAttachmentImgRepository
 {
-    private static IQueryable<AttachmentImgEntity> ApplyFilter(IQueryable<AttachmentImgEntity> query, AttachmentImgFilter filter)
+    private static IQueryable<AttachmentImgEntity> ApplyFilter(
+        IQueryable<AttachmentImgEntity> query, AttachmentImgFilter filter)
     {
         if (filter.AttachmentIds != null && filter.AttachmentIds.Any())
         {

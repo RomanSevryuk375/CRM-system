@@ -17,7 +17,7 @@ public class PaymentNoteRepository(
 {
     private static IQueryable<PaymentNoteEntity> ApplyFilter(IQueryable<PaymentNoteEntity> query, PaymentNoteFilter filter)
     {
-        if (filter.BillIds != null && filter.BillIds.Any())
+        if (filter.BillIds.Any())
         {
             query = query.Where(p => filter.BillIds.Contains(p.BillId));
         }

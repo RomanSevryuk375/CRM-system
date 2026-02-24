@@ -1,8 +1,3 @@
 ﻿namespace CRMSystem.Core.Exceptions;
 
-public class FoundException : Exception
-{
-    public FoundException(string? message) : base(message)
-    {
-    }
-}
+public class FoundException(string? message) : Exception(message);

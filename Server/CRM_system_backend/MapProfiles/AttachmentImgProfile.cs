@@ -14,5 +14,7 @@ public class AttachmentImgProfile : Profile
         CreateMap<AttachmentImgItem, AttachmentImgResponse>();
 
         CreateMap<AttachmentImgEntity, AttachmentImgItem>();
+
+        CreateMap<AttachmentImgRequest, AttachmentImgCreateModel>();
     }
 }

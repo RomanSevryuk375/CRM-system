@@ -24,21 +24,31 @@ public class PartCategoryService(
         return categories;
     }
 
-    public async Task<int> CreatePartCategory(PartCategory partCategory, CancellationToken ct)
+    public async Task<int> CreatePartCategory(PartCategoryCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating part category start");
 
-        if (await repo.NameExists(partCategory.Name, ct))
+        if (await repo.NameExists(createModel.Name, ct))
         {
-            logger.LogError("Category with this this name{Name} is exist", partCategory.Name);
-            throw new ConflictException($"Category with this this name{partCategory.Name} is exist");
+            logger.LogError("Category with this this name{Name} is exist", createModel.Name);
+            throw new ConflictException($"Category with this this name{createModel.Name} is exist");
+        }
+        
+        var (partCategory, errors) = PartCategory.Create(
+            0,
+            createModel.Name,
+            createModel.Description);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await repo.Create(partCategory, ct);
+        var id = await repo.Create(partCategory!, ct);
 
         logger.LogInformation("Creating part category success");
 
-        return Id;
+        return id;
     }
 
     public async Task<int> UpdatePartCategory(int id, PartCategoryUpdateModel model, CancellationToken ct)
@@ -51,21 +61,21 @@ public class PartCategoryService(
             throw new ConflictException($"Category with this this name{model.Name} is exist");
         }
 
-        var Id = await repo.Update(id, model, ct);
+        var categoryId = await repo.Update(id, model, ct);
 
         logger.LogInformation("Updating part category success");
 
-        return Id;
+        return categoryId;
     }
 
     public async Task<int> DeletePartCategory(int id, CancellationToken ct)
     {
         logger.LogInformation("Deleting part category start");
 
-        var Id = await repo.Delete(id, ct);
+        var categoryId = await repo.Delete(id, ct);
 
         logger.LogInformation("Deleting part category success");
 
-        return Id;
+        return categoryId;
     }
 }

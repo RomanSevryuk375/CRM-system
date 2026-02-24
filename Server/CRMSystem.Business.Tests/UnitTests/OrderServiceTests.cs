@@ -23,6 +23,8 @@ public class OrderServiceTests
     private readonly Mock<ILogger<OrderService>> _loggerRepoMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly OrderService _service;
+    private readonly Mock<IOrderPdfService> _pdfServiceMock;
+    private readonly Mock<IFileService> _fileServiceMock;
 
     public OrderServiceTests()
     {
@@ -32,6 +34,8 @@ public class OrderServiceTests
         _orderPriorityRepoMock = new Mock<IOrderPriorityRepository>();
         _billRepoMock = new Mock<IBillRepository>();
         _userContextMock = new Mock<IUserContext>();
+        _pdfServiceMock = new Mock<IOrderPdfService>();
+        _fileServiceMock = new Mock<IFileService>();
         _loggerRepoMock = new Mock<ILogger<OrderService>>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
 
@@ -42,6 +46,8 @@ public class OrderServiceTests
             _orderPriorityRepoMock.Object,
             _billRepoMock.Object,
             _userContextMock.Object,
+            _pdfServiceMock.Object,
+            _fileServiceMock.Object,
             _loggerRepoMock.Object,
             _unitOfWorkMock.Object);
 
@@ -62,7 +68,7 @@ public class OrderServiceTests
         await act.Should().ThrowAsync<NotFoundException>();
 
         _orderRepoMock.Verify(x => x.Create(
-                        order,
+                        It.IsAny<Order>(),
                         It.IsAny<CancellationToken>()),
                         Times.Never);
     }
@@ -144,7 +150,7 @@ public class OrderServiceTests
                     .ReturnsAsync(true);
 
         _orderRepoMock.Setup(x => x.Create(
-                        order,
+                        It.IsAny<Order>(),
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(orderId);
 
@@ -182,7 +188,7 @@ public class OrderServiceTests
                     .ReturnsAsync(true);
 
         _orderRepoMock.Setup(x => x.Create(
-                        order,
+                        It.IsAny<Order>(),
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(orderId);
 
@@ -243,7 +249,7 @@ public class OrderServiceTests
                     .ReturnsAsync(true);
 
         _orderRepoMock.Setup(x => x.Create(
-                        order,
+                        It.IsAny<Order>(),
                         It.IsAny<CancellationToken>()))
                        .ReturnsAsync(orderId);
 

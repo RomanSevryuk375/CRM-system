@@ -12,5 +12,9 @@ public class PartCategoryProfile : Profile
         CreateMap<PartCategoryItem, PartCategoryResponse>();
 
         CreateMap<PartCategoryEntity, PartCategoryItem>();
+        
+        CreateMap<PartCategoryRequest, PartCategoryCreateModel>();
+
+        CreateMap<PartCategoryUpdateRequest, PartCategoryUpdateModel>();
     }
 }

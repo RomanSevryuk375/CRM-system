@@ -1,8 +1,8 @@
 ﻿using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using CRMSystem.Business.Extensions;
+using CRMSystem.Core.ProjectionModels.NotificationType;
 
 namespace CRMSystem.Business.Cached;
 
@@ -19,6 +19,6 @@ public class CachedNotificationTypeService(
             CACHE_KEY,
             () => decorated.GetNotificationTypes(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }

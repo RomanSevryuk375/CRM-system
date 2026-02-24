@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Notification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,19 +34,9 @@ public class NotificationController(
     public async Task<ActionResult> CreateNotification(
         NotificationRequest request, CancellationToken ct)
     {
-        var (notification, errors) = Notification.Create(
-            0,
-            request.ClientId,
-            request.CarId,
-            request.TypeId,
-            request.StatusId,
-            request.Message,
-            request.SendAt);
+        var createModel = mapper.Map<NotificationCreateModel>(request);
 
-        if(errors is not null && errors.Any())
-            return BadRequest(errors);
-
-        await notificationService.CreateNotification(notification!, ct);
+        await notificationService.CreateNotification(createModel, ct);
 
         return Created();
     }

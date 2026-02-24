@@ -16,5 +16,7 @@ public class BillProfile : Profile
         CreateMap<BillEntity, BillItem>()
             .ForMember(dest => dest.Status,
                         opt => opt.MapFrom(src => $"{src.Status!.Name}"));
+
+        CreateMap<BillResponse, BillCreateModel>();
     }
 }

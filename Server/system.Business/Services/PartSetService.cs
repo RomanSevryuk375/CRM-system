@@ -66,47 +66,62 @@ public class PartSetService(
         return count;
     }
 
-    public async Task<long> AddToPartSet(PartSet partSet, CancellationToken ct)
+    public async Task<long> AddToPartSet(PartSetCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Adding to part set start");
 
-        if (partSet.OrderId.HasValue && !await orderRepository.Exists(partSet.OrderId.Value, ct))
+        if (createModel.OrderId.HasValue 
+            && !await orderRepository.Exists(createModel.OrderId.Value, ct))
         {
-            logger.LogError("Order{OrderId} not found", partSet.OrderId);
-            throw new NotFoundException($"Order{partSet.OrderId} not found");
+            logger.LogError("Order{OrderId} not found", createModel.OrderId);
+            throw new NotFoundException($"Order{createModel.OrderId} not found");
         }
 
-        if (partSet.ProposalId.HasValue && !await workProposalRepository.Exists(partSet.ProposalId.Value, ct))
+        if (createModel.ProposalId.HasValue 
+            && !await workProposalRepository.Exists(createModel.ProposalId.Value, ct))
         {
-            logger.LogError("Proposal{proposalId} not found", partSet.ProposalId);
-            throw new NotFoundException($"Proposal{partSet.ProposalId} not found");
+            logger.LogError("Proposal{proposalId} not found", createModel.ProposalId);
+            throw new NotFoundException($"Proposal{createModel.ProposalId} not found");
         }
 
-        if (!await positionRepository.Exists(partSet.PositionId, ct))
+        if (!await positionRepository.Exists(createModel.PositionId, ct))
         {
-            logger.LogError("Position{positionId} not found", partSet.PositionId);
-            throw new NotFoundException($"Position {partSet.PositionId} not found");
+            logger.LogError("Position{positionId} not found", createModel.PositionId);
+            throw new NotFoundException($"Position {createModel.PositionId} not found");
+        }
+        
+        var (partSet, errors) = PartSet.Create(
+            0,
+            createModel.OrderId,
+            createModel.PositionId,
+            createModel.ProposalId,
+            createModel.Quantity,
+            createModel.SoldPrice);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await partSetRepository.Create(partSet, ct);
+        var id = await partSetRepository.Create(partSet!, ct);
 
         logger.LogInformation("Adding to part set success");
 
-        if (partSet.OrderId.HasValue)
+        if (partSet!.OrderId.HasValue)
         {
             logger.LogInformation("Recalculating bill start");
             await billRepository.RecalculateAmount(partSet.OrderId.Value, ct);
             logger.LogInformation("Recalculating bill success");
         }
 
-        return Id;
+        return id;
     }
 
     public async Task<long> UpdatePartSet(long id, PartSetUpdateModel model, CancellationToken ct)
     {
         logger.LogInformation("Updating part set start");
 
-        var Id = await partSetRepository.Update(id, model, ct);
+        var partSetId = await partSetRepository.Update(id, model, ct);
 
         var partSet = await partSetRepository.GetById(id, ct);
 
@@ -119,14 +134,14 @@ public class PartSetService(
 
         logger.LogInformation("Updating part set success");
 
-        return Id;
+        return partSetId;
     }
 
     public async Task<long> DeleteFromPartSet(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting part set start");
 
-        var Id = await partSetRepository.Delete(id, ct);
+        var partSetId = await partSetRepository.Delete(id, ct);
 
         var partSet = await partSetRepository.GetById(id, ct);
 
@@ -139,6 +154,6 @@ public class PartSetService(
 
         logger.LogInformation("Deleting part set success");
 
-        return Id;
+        return partSetId;
     }
 }

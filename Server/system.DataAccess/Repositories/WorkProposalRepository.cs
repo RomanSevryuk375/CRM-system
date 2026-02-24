@@ -15,7 +15,8 @@ public class WorkProposalRepository(
     SystemDbContext context,
     IMapper mapper) : IWorkProposalRepository
 {
-    private static IQueryable<WorkProposalEntity> ApplyFilter(IQueryable<WorkProposalEntity> query, WorkProposalFilter filter)
+    private static IQueryable<WorkProposalEntity> ApplyFilter(
+        IQueryable<WorkProposalEntity> query, WorkProposalFilter filter)
     {
         if (filter.OrderIds != null && filter.OrderIds.Any())
         {

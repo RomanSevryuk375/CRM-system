@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.ExpenseType;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;

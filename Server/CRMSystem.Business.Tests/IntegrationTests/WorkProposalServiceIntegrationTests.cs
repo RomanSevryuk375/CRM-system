@@ -160,16 +160,17 @@ public class WorkProposalServiceIntegrationTests : BaseIntegrationTest, IClassFi
         dbContext.WorkProposals.Add(proposal);
         await dbContext.SaveChangesAsync();
 
-        var partset = new PartSetEntity
-        (
-            null,
-            position.Id,
-            proposal.Id,
-            1,
-            120
-        );
+        var partSet = new PartSetEntity
+        {
+            OrderId = null,
+            PositionId = position.Id,
+            ProposalId = proposal.Id,
+            Quantity = 1,
+            SoldPrice = 120
+        };
+            
 
-        dbContext.PartSets.Add(partset);
+        dbContext.PartSets.Add(partSet);
         await dbContext.SaveChangesAsync();
 
         dbContext.ChangeTracker.Clear();
@@ -185,7 +186,7 @@ public class WorkProposalServiceIntegrationTests : BaseIntegrationTest, IClassFi
 
         var movedPartSet = await dbContext.PartSets.FirstOrDefaultAsync(ps => ps.PositionId == position.Id);
         movedPartSet!.OrderId.Should().Be(order.Id);     
-        movedPartSet!.ProposalId.Should().BeNull();   
+        movedPartSet.ProposalId.Should().BeNull();   
 
         var deletedProposal = dbContext.WorkProposals.Count();
         deletedProposal.Should().Be(0);
@@ -336,16 +337,16 @@ public class WorkProposalServiceIntegrationTests : BaseIntegrationTest, IClassFi
         dbContext.WorkProposals.Add(proposal);
         await dbContext.SaveChangesAsync();
 
-        var partset = new PartSetEntity
-        (
-            null,
-            position.Id,
-            proposal.Id,
-            1,
-            120
-        );
+        var partSet = new PartSetEntity
+        {
+            OrderId = null,
+            PositionId = position.Id,
+            ProposalId = proposal.Id,
+            Quantity = 1,
+            SoldPrice = 120
+        };
 
-        dbContext.PartSets.Add(partset);
+        dbContext.PartSets.Add(partSet);
         await dbContext.SaveChangesAsync();
 
         dbContext.ChangeTracker.Clear();

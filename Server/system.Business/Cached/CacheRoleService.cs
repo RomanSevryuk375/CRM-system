@@ -1,6 +1,6 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Business.Extensions;
-using CRMSystem.Core.ProjectionModels;
+using CRMSystem.Core.ProjectionModels.Role;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
@@ -19,6 +19,6 @@ public class CacheRoleService(
             CACHE_KEY,
             () => decorated.GetRoles(ct),
             TimeSpan.FromHours(24),
-            logger, ct) ?? [];
+            logger, ct);
     }
 }

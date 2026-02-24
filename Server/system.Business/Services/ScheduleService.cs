@@ -1,9 +1,9 @@
 ﻿using CRMSystem.Business.Abstractions;
-using CRMSystem.Business.Extensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Schedule;
+using CRMSystem.Core.ProjectionModels.Shift;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
 using Shared.Filters;
@@ -45,52 +45,86 @@ public class ScheduleService(
         return count;
     }
 
-    public async Task<int> CreateSchedule(Schedule schedule, CancellationToken ct)
+    public async Task<int> CreateSchedule(ScheduleCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating schedule start");
 
-        if (!await workerRepository.Exists(schedule.WorkerId, ct))
+        if (!await workerRepository.Exists(createModel.WorkerId, ct))
         {
-            logger.LogError("Worker {workerId} not found", schedule.WorkerId);
-            throw new NotFoundException($"Worker {schedule.WorkerId} not found");
+            logger.LogError("Worker {workerId} not found", createModel.WorkerId);
+            throw new NotFoundException($"Worker {createModel.WorkerId} not found");
         }
 
-        if (!await shiftRepository.Exists(schedule.ShiftId, ct))
+        if (!await shiftRepository.Exists(createModel.ShiftId, ct))
         {
-            logger.LogError("Shift {shiftId} not found", schedule.ShiftId);
-            throw new NotFoundException($"Shift {schedule.ShiftId} not found");
+            logger.LogError("Shift {shiftId} not found", createModel.ShiftId);
+            throw new NotFoundException($"Shift {createModel.ShiftId} not found");
+        }
+        
+        var (schedule, errors) = Schedule.Create(
+            0,
+            createModel.WorkerId,
+            createModel.ShiftId,
+            createModel.DateTime);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await scheduleRepository.Create(schedule, ct);
+        var id = await scheduleRepository.Create(schedule!, ct);
 
         logger.LogInformation("Creating schedule success");
 
-        return Id;
+        return id;
     }
 
-    public async Task<int> CreateWithShift(Schedule schedule, Shift shift, CancellationToken ct)
+    public async Task<int> CreateWithShift(
+        ScheduleCreateModel scheduleCreateModel,
+        ShiftCreateModel shiftCreateModel,
+        CancellationToken ct)
     {
         await unitOfWork.BeginTransactionAsync(ct);
 
-        int shiftId;
         try
         {
             logger.LogInformation("Creating shift start");
+            
+            var (shift, errorsShift) = Shift.Create(
+                0,
+                shiftCreateModel.Name,
+                shiftCreateModel.StartAt,
+                shiftCreateModel.EndAt);
 
-            shiftId = await shiftRepository.Create(shift, ct);
-
-            if (!await workerRepository.Exists(schedule.WorkerId, ct))
+            if (errorsShift is not null && errorsShift.Any())
             {
-                logger.LogError("Worker {workerId} not found", schedule.WorkerId);
-                throw new NotFoundException($"Worker {schedule.WorkerId} not found");
+                throw new ValidationException(string.Join(", ", errorsShift));
+            }
+
+            var shiftId = await shiftRepository.Create(shift!, ct);
+
+            if (!await workerRepository.Exists(scheduleCreateModel.WorkerId, ct))
+            {
+                logger.LogError("Worker {workerId} not found", scheduleCreateModel.WorkerId);
+                throw new NotFoundException($"Worker {scheduleCreateModel.WorkerId} not found");
             }
 
             logger.LogInformation("Creating shift success");
 
             logger.LogInformation("Creating schedule start");
+            
+            var(schedule, errorsSchedule) = Schedule.Create(
+                0,
+                scheduleCreateModel.WorkerId,
+                shiftId,
+                scheduleCreateModel.DateTime);
 
-            schedule.SetShiftId(shiftId);
-            var scheduleId = await scheduleRepository.Create(schedule, ct);
+            if (errorsSchedule is not null && errorsSchedule.Any())
+            {
+                throw new ValidationException(string.Join(", ", schedule));
+            }
+            
+            var scheduleId = await scheduleRepository.Create(schedule!, ct);
 
             logger.LogInformation("Creating schedule success");
 
@@ -112,21 +146,21 @@ public class ScheduleService(
     {
         logger.LogInformation("Updating schedule start");
 
-        var Id = await scheduleRepository.Update(id, model, ct);
+        var scheduleId = await scheduleRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating schedule success");
 
-        return Id;
+        return scheduleId;
     }
 
     public async Task<int> DeleteSchedule(int id, CancellationToken ct)
     {
         logger.LogInformation("Deleting schedule start");
 
-        var Id = await scheduleRepository.Delete(id, ct);
+        var scheduleId = await scheduleRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting schedule success");
 
-        return Id;
+        return scheduleId;
     }
 }

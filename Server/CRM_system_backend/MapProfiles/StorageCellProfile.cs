@@ -12,5 +12,9 @@ public class StorageCellProfile : Profile
         CreateMap<StorageCellItem, StorageCellResponse>();
 
         CreateMap<StorageCellEntity, StorageCellItem>();
+        
+        CreateMap<StorageCellRequest, StorageCellCreateModel>();
+        
+        CreateMap<StorageCellUpdateRequest, StorageCellUpdateModel>();
     }
 }

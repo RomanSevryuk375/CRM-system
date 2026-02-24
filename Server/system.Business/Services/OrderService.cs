@@ -3,6 +3,7 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Order;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Bill;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
 using Shared.Filters;
@@ -16,6 +17,8 @@ public class OrderService(
     IOrderPriorityRepository orderPriorityRepository,
     IBillRepository billRepository,
     IUserContext userContext,
+    IOrderPdfService pdfService,
+    IFileService fileService,
     ILogger<OrderService> logger,
     IUnitOfWork unitOfWork) : IOrderService
 {
@@ -23,15 +26,12 @@ public class OrderService(
     {
         logger.LogInformation("Getting orders start");
 
-        if (userContext.RoleId == (int)RoleEnum.Worker)
+        filter = userContext.RoleId switch
         {
-            filter = filter with { WorkerIds = [(int)userContext.ProfileId] };
-        }
-
-        if (userContext.RoleId == (int)RoleEnum.Client)
-        {
-            filter = filter with { ClientIds = [userContext.ProfileId] };
-        }
+            (int)RoleEnum.Worker => filter with { WorkerIds = [(int)userContext.ProfileId] },
+            (int)RoleEnum.Client => filter with { ClientIds = [userContext.ProfileId] },
+            _ => filter
+        };
 
         var orders = await orderRepository.GetPaged(filter, ct);
 
@@ -51,68 +51,109 @@ public class OrderService(
         return count;
     }
 
-    public async Task<long> CreateOrder(Order order, CancellationToken ct)
+    public async Task<long> CreateOrder(OrderCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating orders start");
 
-        if (!await carRepository.Exists(order.CarId, ct))
+        if (!await carRepository.Exists(createModel.CarId, ct))
         {
-            logger.LogError("Car {CarId} not found", order.CarId);
-            throw new NotFoundException($"Car {order.CarId} not found");
+            logger.LogError("Car {CarId} not found", createModel.CarId);
+            throw new NotFoundException($"Car {createModel.CarId} not found");
         }
 
-        if (!await orderPriorityRepository.Exists((int)order.PriorityId, ct))
+        if (!await orderPriorityRepository.Exists((int)createModel.PriorityId, ct))
         {
-            logger.LogInformation("Priority {priorityId} not found", (int)order.PriorityId);
-            throw new NotFoundException($"Priority {order.PriorityId} not found");
+            logger.LogInformation("Priority {priorityId} not found", (int)createModel.PriorityId);
+            throw new NotFoundException($"Priority {createModel.PriorityId} not found");
         }
 
-        if (!await orderStatusRepository.Exists((int)order.StatusId, ct))
+        if (!await orderStatusRepository.Exists((int)createModel.StatusId, ct))
         {
-            logger.LogInformation("Status{statusId} not found", order.StatusId);
-            throw new NotFoundException($"Status {order.StatusId} not found");
+            logger.LogInformation("Status{statusId} not found", createModel.StatusId);
+            throw new NotFoundException($"Status {createModel.StatusId} not found");
+        }
+        
+        var (order, errors) = Order.Create(
+            0,
+            createModel.StatusId,
+            createModel.CarId,
+            createModel.Date,
+            null,
+            null,
+            createModel.PriorityId);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await orderRepository.Create(order, ct);
+        var id = await orderRepository.Create(order!, ct);
 
         logger.LogInformation("Creating orders success");
 
-        return Id;
+        return id;
     }
 
-    public async Task<long> CreateOrderWithBill(Order order, Bill bill, CancellationToken ct)
+    public async Task<long> CreateOrderWithBill(
+        OrderCreateModel orderCreateModel, 
+        BillCreateModel billCreateModel,
+        CancellationToken ct)
     {
         await unitOfWork.BeginTransactionAsync(ct);
 
-        long orderId;
         try
         {
             logger.LogInformation("Creating orders start");
 
-            if (!await carRepository.Exists(order.CarId, ct))
+            if (!await carRepository.Exists(orderCreateModel.CarId, ct))
             {
-                logger.LogError("Car {CarId} not found", order.CarId);
-                throw new NotFoundException($"Car {order.CarId} not found");
+                logger.LogError("Car {CarId} not found", orderCreateModel.CarId);
+                throw new NotFoundException($"Car {orderCreateModel.CarId} not found");
             }
 
-            if (!await orderPriorityRepository.Exists((int)order.PriorityId, ct))
+            if (!await orderPriorityRepository.Exists((int)orderCreateModel.PriorityId, ct))
             {
-                logger.LogInformation("Priority {priorityId} not found", (int)order.PriorityId);
-                throw new NotFoundException($"Priority {order.PriorityId} not found");
+                logger.LogInformation("Priority {priorityId} not found", (int)orderCreateModel.PriorityId);
+                throw new NotFoundException($"Priority {orderCreateModel.PriorityId} not found");
             }
 
-            if (!await orderStatusRepository.Exists((int)order.StatusId, ct))
+            if (!await orderStatusRepository.Exists((int)orderCreateModel.StatusId, ct))
             {
-                logger.LogInformation("Status{statusId} not found", order.StatusId);
-                throw new NotFoundException($"Status {order.StatusId} not found");
+                logger.LogInformation("Status{statusId} not found", orderCreateModel.StatusId);
+                throw new NotFoundException($"Status {orderCreateModel.StatusId} not found");
+            }
+            
+            var (order, errorsOrder) = Order.Create(
+                0,
+                orderCreateModel.StatusId,
+                orderCreateModel.CarId,
+                orderCreateModel.Date,
+                null,
+                null,
+                orderCreateModel.PriorityId);
+
+            if (errorsOrder is not null && errorsOrder.Any())
+            {
+                throw new ValidationException(string.Join(", ", errorsOrder));
             }
 
-            orderId = await orderRepository.Create(order, ct);
+            var orderId = await orderRepository.Create(order!, ct);
+            
+            var (bill, errorsBill) = Bill.Create(
+                0,
+                orderId,
+                billCreateModel.StatusId,
+                billCreateModel.CreatedAt,
+                billCreateModel.Amount,
+                billCreateModel.ActualBillDate);
 
-            bill.SetOrderId(orderId);
-            var newBill = await billRepository.Create(bill, ct);
+            if (errorsBill is not null && errorsBill.Any())
+            {
+                throw new ValidationException(string.Join(", ", errorsBill));
+            }
+            await billRepository.Create(bill!, ct);
 
-            logger.LogInformation("Creating orders success");
+            logger.LogInformation("Creating order success");
 
             await unitOfWork.CommitTransactionAsync(ct);
 
@@ -138,22 +179,22 @@ public class OrderService(
             throw new NotFoundException($"Priority {priorityId} not found");
         }
 
-        var Id = await orderRepository.Update(id, priorityId, ct);
+        var orderId = await orderRepository.Update(id, priorityId, ct);
 
         logger.LogInformation("Updating orders success");
 
-        return Id;
+        return orderId;
     }
 
     public async Task<long> DeleteOrder(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting orders start");
 
-        var Id = await orderRepository.Delete(id, ct);
+        var orderId = await orderRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting orders success");
 
-        return Id;
+        return orderId;
     }
 
     public async Task<long> CloseOrder(long id, CancellationToken ct)
@@ -172,11 +213,11 @@ public class OrderService(
             throw new ConflictException($"Order{id} has not paid bill");
         }
 
-        var Id = await orderRepository.Close(id, ct);
+        var orderId = await orderRepository.Close(id, ct);
 
         logger.LogInformation("Closing orders success");
 
-        return Id;
+        return orderId;
     }
 
     public async Task<long> CompleteOrder(long id, CancellationToken ct)
@@ -189,10 +230,41 @@ public class OrderService(
             throw new ConflictException("Order has unfinished works");
         }
 
-        var Id = await orderRepository.Complete(id, ct);
+        var orderId = await orderRepository.Complete(id, ct);
 
         logger.LogInformation("Closing orders success");
 
-        return Id;
+        return orderId;
+    }
+    
+    public async Task<string> CreateOrderPdfAndUpload(long orderId, CancellationToken ct)
+    {
+        var orderData = await orderRepository.GetDocumentData(orderId, ct)
+                        ?? throw new NullReferenceException("data is null"); 
+        
+        var pdfBytes = pdfService.GenerateOrderPdf(orderData);
+
+        using var stream = new MemoryStream(pdfBytes);
+        var fileName = $"order_{orderId}_{DateTime.Now:yyyyMMdd}.pdf";
+    
+        var filePath = await fileService.UploadFile(stream, fileName, "application/pdf", ct);
+        
+        await orderRepository.PatchOrderFileName(orderId, filePath, ct);
+
+        return filePath; 
+    }
+
+    public async Task<(Stream fieStream, string contentType)> GetOrderPdfStream(long id, CancellationToken ct)
+    {
+        var order = await orderRepository.GetById(id, ct)
+            ?? throw new NotFoundException($"Order {id} not found");
+        
+        if(order.OrderPdfFileName is null) throw new NotFoundException($"OrderPdfFilePath in order {id} not found");
+
+        var stream = await fileService.GetFile(order.OrderPdfFileName, ct);
+
+        const string contentType = "application/pdf";
+        
+        return (stream, contentType);
     }
 }

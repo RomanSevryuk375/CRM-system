@@ -22,21 +22,34 @@ public class StorageCellService(
         return cells;
     }
 
-    public async Task<int> CreateStorageCell(StorageCell storageCell, CancellationToken ct)
+    public async Task<int> CreateStorageCell(StorageCellCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating storage cell start");
 
-        if (await storageCellRepository.HasOverlaps(storageCell.Rack, storageCell.Shelf, ct))
+        if (await storageCellRepository.HasOverlaps(createModel.Rack, createModel.Shelf, ct))
         {
-            logger.LogError("Storage cell is exist with shelf{shelfName} and rack{rackName}", storageCell.Shelf, storageCell.Rack);
-            throw new ConflictException($"Storage cell is exist with shelf{storageCell.Shelf} and rack{storageCell.Rack}");
+            logger.LogError("Storage cell is exist with shelf{shelfName} and rack{rackName}", 
+                createModel.Shelf, createModel.Rack);
+            
+            throw new ConflictException(
+                $"Storage cell is exist with shelf{createModel.Shelf} and rack{createModel.Rack}");
+        }
+        
+        var (cell, errors) = StorageCell.Create(
+            0,
+            createModel.Rack,
+            createModel.Shelf);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await storageCellRepository.Create(storageCell, ct);
+        var id = await storageCellRepository.Create(cell!, ct);
 
         logger.LogInformation("Creating storage cell success");
 
-        return Id;
+        return id;
     }
 
     public async Task<int> UpdateStorageCell(int id, StorageCellUpdateModel model, CancellationToken ct)
@@ -46,25 +59,28 @@ public class StorageCellService(
         if ((!string.IsNullOrEmpty(model.Shelf) && !string.IsNullOrEmpty(model.Rack))
             && await storageCellRepository.HasOverlaps(model.Rack, model.Shelf, ct))
         {
-            logger.LogError("Storage cell is exist with shelf{shelfName} and rack{rackName}", model.Shelf, model.Rack);
-            throw new ConflictException($"Storage cell is exist with shelf{model.Shelf} and rack{model.Rack}");
+            logger.LogError("Storage cell is exist with shelf{shelfName} and rack{rackName}",
+                model.Shelf, model.Rack);
+            
+            throw new ConflictException(
+                $"Storage cell is exist with shelf{model.Shelf} and rack{model.Rack}");
         }
 
-        var Id = await storageCellRepository.Update(id, model, ct);
+        var cellId = await storageCellRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating storage cell success");
 
-        return Id;
+        return cellId;
     }
 
     public async Task<int> DeleteStorageCell(int id, CancellationToken ct)
     {
         logger.LogInformation("Deleting storage cell start");
 
-        var Id = await storageCellRepository.Delete(id, ct);
+        var cellId = await storageCellRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting storage cell success");
 
-        return Id;
+        return cellId;
     }
 }

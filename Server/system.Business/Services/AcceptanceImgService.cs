@@ -5,9 +5,8 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Repositories;
-using Microsoft.Extensions.Logging;
 using CRMSystem.Core.ProjectionModels.AccetanceImg;
+using Microsoft.Extensions.Logging;
 using Shared.Filters;
 
 namespace CRMSystem.Business.Services;
@@ -29,13 +28,13 @@ public class AcceptanceImgService(
         return acceptanceImg;
     }
 
-    public async Task<(Stream FileStream, string ContentType)> GetImageStream(long id, CancellationToken ct)
+    public async Task<(Stream fileStream, string contentType)> GetImageStream(long id, CancellationToken ct)
     {
         var img = await acceptanceImgRepository.GetById(id, ct)
             ?? throw new NotFoundException($"Image {id} not found");
         var stream = await fileService.GetFile(img.FilePath, ct);
 
-        string contentType = "application/octet-stream";
+        const string contentType = "application/octet-stream";
 
         return (stream, contentType);
     }
@@ -51,14 +50,15 @@ public class AcceptanceImgService(
         return count;
     }
 
-    public async Task<long> CreateAcceptanceImg(long AcceptanceId, FileItem file, string? description, CancellationToken ct)
+    public async Task<long> CreateAcceptanceImg(
+        long acceptanceId, FileItem file, string? description, CancellationToken ct)
     {
         logger.LogInformation("Creating acceptanceImg start");
 
-        if (!await acceptanceRepository.Exists(AcceptanceId, ct))
+        if (!await acceptanceRepository.Exists(acceptanceId, ct))
         {
-            logger.LogError("Acceptance {AcceptanceId} not found", AcceptanceId);
-            throw new NotFoundException($"Acceptance {AcceptanceId} not found");
+            logger.LogError("Acceptance {AcceptanceId} not found", acceptanceId);
+            throw new NotFoundException($"Acceptance {acceptanceId} not found");
         }
 
         string path;
@@ -74,7 +74,7 @@ public class AcceptanceImgService(
 
         var (acceptanceImg, errors) = AcceptanceImg.Create(
             0,
-            AcceptanceId,
+            acceptanceId,
             path,
             description);
 
@@ -94,7 +94,8 @@ public class AcceptanceImgService(
         return Id;
     }
 
-    public async Task<long> UpdateAcceptanceImg(long id, string? filePath, string? description, CancellationToken ct)
+    public async Task<long> UpdateAcceptanceImg(
+        long id, string? filePath, string? description, CancellationToken ct)
     {
         logger.LogInformation("Updating Acceptance{AcceptanceId} start", id);
 

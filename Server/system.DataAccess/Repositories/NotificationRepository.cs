@@ -13,7 +13,8 @@ public class NotificationRepository(
     SystemDbContext context,
     IMapper mapper) : INotificationRepository
 {
-    private static IQueryable<NotificationEntity> ApplyFilter (IQueryable<NotificationEntity> query, NotificationFilter filter)
+    private static IQueryable<NotificationEntity> ApplyFilter (
+        IQueryable<NotificationEntity> query, NotificationFilter filter)
     {
         if (filter.ClientIds != null && filter.ClientIds.Any())
         {
@@ -108,7 +109,7 @@ public class NotificationRepository(
 
     public async Task<long> Create(Notification notification, CancellationToken ct)
     {
-        var noticationEntity = new NotificationEntity
+        var notificationEntity = new NotificationEntity
         {
             ClientId = notification.ClientId,
             CarId = notification.CarId,
@@ -118,10 +119,10 @@ public class NotificationRepository(
             SendAt = notification.SendAt,
         };
 
-        await context.AddAsync(noticationEntity, ct);
+        await context.AddAsync(notificationEntity, ct);
         await context.SaveChangesAsync(ct);
 
-        return noticationEntity.Id;
+        return notificationEntity.Id;
     }
 
     public async Task<long> Delete(long id, CancellationToken ct)

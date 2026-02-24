@@ -14,7 +14,8 @@ public class AttachmentRepository(
     SystemDbContext context,
     IMapper mapper) : IAttachmentRepository
 {
-    private static IQueryable<AttachmentEntity> ApplyFilter(IQueryable<AttachmentEntity> query, AttachmentFilter filter)
+    private static IQueryable<AttachmentEntity> ApplyFilter(
+        IQueryable<AttachmentEntity> query, AttachmentFilter filter)
     {
         if (filter.WorkerIds != null && filter.WorkerIds.Any())
         {

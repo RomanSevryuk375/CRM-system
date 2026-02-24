@@ -1,5 +1,6 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.ProjectionModels.Work;
 using CRMSystem.Core.Models;
 using Microsoft.Extensions.Logging;
@@ -33,36 +34,48 @@ public class WorkService(
         return count;
     }
 
-    public async Task<long> CreateWork(Work work, CancellationToken ct)
+    public async Task<long> CreateWork(WorkCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating work start");
 
-        var Id = await workRepository.Create(work, ct);
+        var (work, errors) = Work.Create(
+            0,
+            createModel.Title,
+            createModel.Category,
+            createModel.Description,
+            createModel.StandardTime);
+
+        if (errors is not null && errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
+        }
+        
+        var id = await workRepository.Create(work!, ct);
 
         logger.LogInformation("Creating work success");
 
-        return Id;
+        return id;
     }
 
     public async Task<long> UpdateWork(long id, WorkUpdateModel model, CancellationToken ct)
     {
         logger.LogInformation("Updating work start");
 
-        var Id = await workRepository.Update(id, model, ct);
+        var workId = await workRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating work success");
 
-        return Id;
+        return workId;
     }
 
     public async Task<long> DeleteWork(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting work start");
 
-        var Id = await workRepository.Delete(id, ct);
+        var workId = await workRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting work success");
 
-        return Id;
+        return workId;
     }
 }

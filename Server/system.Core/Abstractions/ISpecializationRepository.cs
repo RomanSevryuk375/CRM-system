@@ -1,5 +1,5 @@
-﻿using CRMSystem.Core.ProjectionModels;
-using CRMSystem.Core.Models;
+﻿using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.Specialization;
 
 namespace CRMSystem.Core.Abstractions;
 
