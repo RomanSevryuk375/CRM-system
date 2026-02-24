@@ -15,6 +15,12 @@ public record OrderRequest
     [JsonPropertyName("date")]
     public DateOnly Date { get; init; }
 
+    [JsonPropertyName("orderPdfFileName")]
+    public string? OrderPdfFileName { get; init; }
+
+    [JsonPropertyName("orderAgreementPdfFileName")]
+    public string? OrderAgreementPdfFileName { get; init; }
+
     [JsonPropertyName("priorityId")]
     public OrderPriorityEnum PriorityId { get; init; }
 };
