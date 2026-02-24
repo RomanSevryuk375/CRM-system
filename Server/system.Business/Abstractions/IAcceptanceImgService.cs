@@ -12,6 +12,6 @@ public interface IAcceptanceImgService
     Task<long> DeleteAcceptanceImg(long id, CancellationToken ct);
     Task<List<AcceptanceImgItem>> GetAcceptanceIng(AcceptanceImgFilter filter, CancellationToken ct);
     Task<int> GetCountAcceptanceImg(AcceptanceImgFilter filter, CancellationToken ct);
-    Task<(Stream FileStream, string ContentType)> GetImageStream(long id, CancellationToken ct);
+    Task<(Stream fileStream, string contentType)> GetImageStream(long id, CancellationToken ct);
     Task<long> UpdateAcceptanceImg(long id, string? filePath, string? description, CancellationToken ct);
 }

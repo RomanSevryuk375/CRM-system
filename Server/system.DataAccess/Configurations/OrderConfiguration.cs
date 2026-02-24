@@ -1,4 +1,5 @@
-﻿using CRMSystem.DataAccess.Entites;
+﻿using CRMSystem.Core.Validation;
+using CRMSystem.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -21,6 +22,12 @@ public class OrderConfiguration : IEntityTypeConfiguration<OrderEntity>
 
         builder.Property(o => o.Date)
             .IsRequired();
+
+        builder.Property(o => o.OrderPdfFileName)
+            .HasMaxLength(ValidationConstants.MAX_PATH_LENGTH);
+        
+        builder.Property(o => o.OrderAgreementPdfFileName)
+            .HasMaxLength(ValidationConstants.MAX_PATH_LENGTH);
 
         builder.Property(o => o.PriorityId)
             .IsRequired();
