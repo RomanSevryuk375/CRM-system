@@ -31,7 +31,7 @@ public class GuaranteeController(
     }
 
     [HttpPost]
-    [Authorize(Policy = "AdminPolicy")]
+    
     public async Task<ActionResult> CreateGuarantee(
         GuaranteeRequest request, CancellationToken ct)
     {

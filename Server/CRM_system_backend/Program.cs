@@ -1,5 +1,6 @@
 using CRM_system_backend.Extensions;
 using CRM_system_backend.Middlewares;
+using QuestPDF.Infrastructure;
 using Serilog;
 
 namespace CRM_system_backend;
@@ -15,8 +16,10 @@ public class Program
             builder.Host.UseSerilog((context, configuration) => configuration
                 .ReadFrom.Configuration(context.Configuration)); 
         
-            builder.Services.AddInfrastructure(builder.Configuration);
-            builder.Services.AddCustomCors();
+        QuestPDF.Settings.License = LicenseType.Community;
+        
+        builder.Services.AddInfrastructure(builder.Configuration);
+        builder.Services.AddCustomCors();
 
             var app = builder.Build();
 

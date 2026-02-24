@@ -2,14 +2,7 @@
 
 public class PartSetEntity
 {
-    public PartSetEntity(long? orderId, long positionId, long? proposalId, decimal quantity, decimal soldPrice)
-    {
-        OrderId = orderId;
-        PositionId = positionId;
-        ProposalId = proposalId;
-        Quantity = quantity;
-        SoldPrice = soldPrice;
-    }
+
     public long Id { get; set; }
     public long? OrderId { get; set; }
     public long PositionId { get; set; }

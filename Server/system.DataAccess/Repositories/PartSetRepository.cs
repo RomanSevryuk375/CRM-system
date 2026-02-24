@@ -109,13 +109,14 @@ public class PartSetRepository(
     public async Task<long> Create(PartSet partSet, CancellationToken ct)
     {
         var partSetEntity = new PartSetEntity
-        ( 
-            partSet.OrderId,
-            partSet.PositionId,
-            partSet.ProposalId,
-            partSet.Quantity,
-            partSet.SoldPrice
-        );
+        {
+            OrderId = partSet.OrderId,
+            PositionId = partSet.PositionId,
+            ProposalId = partSet.ProposalId,
+            Quantity = partSet.Quantity,
+            SoldPrice = partSet.SoldPrice
+        };
+
 
         await context.PartSets.AddAsync(partSetEntity, ct);
         await context.SaveChangesAsync(ct);
@@ -174,13 +175,13 @@ public class PartSetRepository(
             .Where(p => p.ProposalId == proposalId)
             .ToListAsync(ct);
 
-        var transfer = parts.Select(p => new PartSetEntity(
-            orderId,
-            p.PositionId,
-            null,
-            p.Quantity,
-            p.SoldPrice
-        )).ToList();
+        var transfer = parts.Select(p => new PartSetEntity{
+            OrderId = orderId,
+            PositionId = p.PositionId,
+            ProposalId = null,
+            Quantity = p.Quantity,
+            SoldPrice = p.SoldPrice
+        }).ToList();
 
         await context.PartSets.AddRangeAsync(transfer, ct);
 

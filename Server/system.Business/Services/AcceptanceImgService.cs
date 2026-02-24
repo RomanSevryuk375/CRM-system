@@ -28,7 +28,7 @@ public class AcceptanceImgService(
         return acceptanceImg;
     }
 
-    public async Task<(Stream FileStream, string ContentType)> GetImageStream(long id, CancellationToken ct)
+    public async Task<(Stream fileStream, string contentType)> GetImageStream(long id, CancellationToken ct)
     {
         var img = await acceptanceImgRepository.GetById(id, ct)
             ?? throw new NotFoundException($"Image {id} not found");
@@ -51,14 +51,14 @@ public class AcceptanceImgService(
     }
 
     public async Task<long> CreateAcceptanceImg(
-        long AcceptanceId, FileItem file, string? description, CancellationToken ct)
+        long acceptanceId, FileItem file, string? description, CancellationToken ct)
     {
         logger.LogInformation("Creating acceptanceImg start");
 
-        if (!await acceptanceRepository.Exists(AcceptanceId, ct))
+        if (!await acceptanceRepository.Exists(acceptanceId, ct))
         {
-            logger.LogError("Acceptance {AcceptanceId} not found", AcceptanceId);
-            throw new NotFoundException($"Acceptance {AcceptanceId} not found");
+            logger.LogError("Acceptance {AcceptanceId} not found", acceptanceId);
+            throw new NotFoundException($"Acceptance {acceptanceId} not found");
         }
 
         string path;
@@ -74,7 +74,7 @@ public class AcceptanceImgService(
 
         var (acceptanceImg, errors) = AcceptanceImg.Create(
             0,
-            AcceptanceId,
+            acceptanceId,
             path,
             description);
 

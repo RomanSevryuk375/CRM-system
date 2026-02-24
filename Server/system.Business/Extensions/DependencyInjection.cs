@@ -1,6 +1,7 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Business.Cached;
 using CRMSystem.Business.Services;
+using CRMSystem.Business.Services.QuestPDF;
 using FluentValidation;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,6 +43,8 @@ public static class DependencyInjection
         Services.AddScoped<IWorkerService, WorkerService>();
         Services.AddScoped<IWorkProposalService, WorkProposalService>();
 
+        Services.AddScoped<IOrderPdfService, OrderPdfService>();
+        
         Services.AddScoped<AbsenceTypeService>();
         Services.AddScoped<IAbsenceTypeService>(provider =>
             new CachedAbsenceTypeService(

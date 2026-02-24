@@ -31,6 +31,15 @@ public class OrderController(
         return Ok(response);
     }
 
+    [HttpGet("/order-pdf/{id}")]
+    // [Authorize(Policy = "AdminClientPolicy")]
+    public async Task<IActionResult> DownloadOrderPdf(long id, CancellationToken ct)
+    {
+        var (stream, contentType) = await orderService.GetOrderPdfStream(id, ct);
+        
+        return File(stream, contentType, $"order_{id}.pdf");
+    }
+
     [HttpPost]
     [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult> CreateOrder(
@@ -54,6 +63,13 @@ public class OrderController(
         await orderService.CreateOrderWithBill(orderCreateModel, billCreateModel, ct);
 
         return Created();
+    }
+    
+    [HttpPost("{id}/generate-pdf")]
+    public async Task<IActionResult> GeneratePdf(long id, CancellationToken ct)
+    {
+        var filePath = await orderService.CreateOrderPdfAndUpload(id, ct);
+        return Ok(new { Message = "PDF generated and uploaded", Path = filePath });
     }
 
     [HttpPut("{id}")]
