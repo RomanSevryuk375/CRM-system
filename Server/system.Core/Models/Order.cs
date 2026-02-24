@@ -75,19 +75,17 @@ public class Order
         {
             errors.Add(dateError);
         }
-        
-        var orderFileNameError = DomainValidator
-            .ValidateString(orderPdfFileName ,ValidationConstants.MAX_PATH_LENGTH, "filePath");
-        if (!string.IsNullOrEmpty(orderFileNameError))
+
+        if (orderPdfFileName is not null)
         {
-            errors.Add(orderFileNameError);
+            var error = DomainValidator.ValidateString(orderPdfFileName, ValidationConstants.MAX_PATH_LENGTH, "OrderPdfFileName");
+            if (!string.IsNullOrEmpty(error)) errors.Add(error);
         }
-        
-        var orderAgreementFileNameError = DomainValidator
-            .ValidateString(orderAgreementPdfFileName, ValidationConstants.MAX_PATH_LENGTH, "filePath");
-        if (!string.IsNullOrEmpty(orderAgreementFileNameError))
+
+        if (orderAgreementPdfFileName is not null)
         {
-            errors.Add(orderAgreementFileNameError);
+            var error = DomainValidator.ValidateString(orderAgreementPdfFileName, ValidationConstants.MAX_PATH_LENGTH, "OrderAgreementPdfFileName");
+            if (!string.IsNullOrEmpty(error)) errors.Add(error);
         }
 
         if (errors.Any())
