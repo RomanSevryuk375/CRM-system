@@ -55,6 +55,13 @@ public class OrderController(
 
         return Created();
     }
+    
+    [HttpPost("{id}/generate-pdf")]
+    public async Task<IActionResult> GeneratePdf(long id, CancellationToken ct)
+    {
+        var filePath = await orderService.CreateOrderPdfAndUpload(id, ct);
+        return Ok(new { Message = "PDF generated and uploaded", Path = filePath });
+    }
 
     [HttpPut("{id}")]
     [Authorize(Policy = "AdminPolicy")]

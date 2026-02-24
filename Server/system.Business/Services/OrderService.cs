@@ -17,6 +17,8 @@ public class OrderService(
     IOrderPriorityRepository orderPriorityRepository,
     IBillRepository billRepository,
     IUserContext userContext,
+    IOrderPdfService pdfService,
+    IFileService fileService,
     ILogger<OrderService> logger,
     IUnitOfWork unitOfWork) : IOrderService
 {
@@ -229,5 +231,20 @@ public class OrderService(
         logger.LogInformation("Closing orders success");
 
         return orderId;
+    }
+    
+    public async Task<string> CreateOrderPdfAndUpload(long orderId, CancellationToken ct)
+    {
+        var orderData = await orderRepository.GetDocumentData(orderId, ct)
+                        ?? throw new NullReferenceException("data is null"); 
+        
+        var pdfBytes = pdfService.GenerateOrderPdf(orderData);
+
+        using var stream = new MemoryStream(pdfBytes);
+        var fileName = $"order_{orderId}_{DateTime.Now:yyyyMMdd}.pdf";
+    
+        var filePath = await fileService.UploadFile(stream, fileName, "application/pdf", ct);
+
+        return filePath; 
     }
 }

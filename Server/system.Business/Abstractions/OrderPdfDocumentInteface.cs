@@ -2,7 +2,7 @@
 
 namespace CRMSystem.Business.Abstractions;
 
-public interface IOrderPdfDocument
+public interface IOrderPdfService
 {
     byte[] GenerateOrderPdf(OrderDocumentModel data);
 }

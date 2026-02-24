@@ -8,7 +8,7 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IAcceptanceImgService
 {
-    Task<long> CreateAcceptanceImg(long AcceptanceId, FileItem file, string? description, CancellationToken ct);
+    Task<long> CreateAcceptanceImg(long acceptanceId, FileItem file, string? description, CancellationToken ct);
     Task<long> DeleteAcceptanceImg(long id, CancellationToken ct);
     Task<List<AcceptanceImgItem>> GetAcceptanceIng(AcceptanceImgFilter filter, CancellationToken ct);
     Task<int> GetCountAcceptanceImg(AcceptanceImgFilter filter, CancellationToken ct);
