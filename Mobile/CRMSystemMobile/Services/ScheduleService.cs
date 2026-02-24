@@ -1,6 +1,5 @@
 ﻿using CRMSystemMobile.Extentions;
 using Shared.Contracts.Schedule;
-using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
 
@@ -13,11 +12,14 @@ public class ScheduleService(HttpClient httpClient, IdentityService identityServ
         try
         {
             var (profileId, _) = await identityService.GetProfileIdAsync();
-            if (profileId <= 0) return null;
+            if (profileId <= 0)
+            {
+                return null;
+            }
 
             var query = $"Page=1&Limit=50&IsDescending=true&SortBy=date&WorkerIds={profileId}";
 
-            string url = $"api/v1/schedules?{query}";
+            var url = $"api/v1/schedules?{query}";
 
             var response = await httpClient.GetAsync(url);
 

@@ -159,10 +159,12 @@ internal static class ValidObjects
     internal static OrderCreateModel CreateValidOrder()
     {
         var order = new OrderCreateModel(
-                        OrderStatusEnum.Accepted,
-                        123,
-                        new DateOnly(2025, 1, 1),
-                        OrderPriorityEnum.Medium);
+        OrderStatusEnum.Pending,       // status
+        1,                             // carId
+        DateOnly.FromDateTime(DateTime.Now), // date
+        null,                          // orderPdfFileName (ставим null)
+        null,                          // orderAgreementPdfFileName (ставим null)
+        OrderPriorityEnum.Medium);
         
         order.Should().NotBeNull();
 

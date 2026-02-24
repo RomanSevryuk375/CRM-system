@@ -1,20 +1,18 @@
-﻿using Shared.Contracts.Client;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
+using Shared.Contracts.Client;
+
+namespace CRMSystemMobile.Services;
 
 public record RegistrationResult(bool Success, string? ErrorMessage);
 
-public class RegistrationService
+public class RegistrationService(HttpClient httpClient)
 {
-    private readonly HttpClient _httpClient;
-
-    public RegistrationService(HttpClient httpClient) => _httpClient = httpClient;
-
     public async Task<RegistrationResult> RegisterUser(ClientRegisterRequest request)
     {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync("api/v1/clients/user", request);
+            var response = await httpClient.PostAsJsonAsync("api/v1/clients/user", request);
             var content = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
@@ -34,14 +32,15 @@ public class RegistrationService
                     {
                         if (prop.Value.ValueKind == JsonValueKind.Array)
                         {
-                            foreach (var item in prop.Value.EnumerateArray())
-                                messages.Add($"{prop.Name}: {item.GetString()}");
+                            messages.AddRange(prop.Value.EnumerateArray()
+                                .Select(item => $"{prop.Name}: {item.GetString()}"));
                         }
                         else
                         {
                             messages.Add($"{prop.Name}: {prop.Value.GetString()}");
                         }
                     }
+
                     return new RegistrationResult(false, string.Join(Environment.NewLine, messages));
                 }
 

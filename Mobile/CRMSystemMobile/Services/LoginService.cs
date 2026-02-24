@@ -8,25 +8,26 @@ public class LoginService(HttpClient httpClient)
 {
     public async Task<LoginResponse?> LoginUser(LoginRequest request)
     {
-        string url = $"api/v1/users/login";
+        var url = $"api/v1/users/login";
 
         try
         {
             var response = await httpClient.PostAsJsonAsync(url, request);
 
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
-
-                if (result?.Token != null)
-                {
-                    await SecureStorage.Default.SetAsync("jwt_token", result.Token);
-                }
-
-                return result;
+                return null;
             }
 
-            return null;
+            var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
+
+            if (result?.Token != null)
+            {
+                await SecureStorage.Default.SetAsync("jwt_token", result.Token);
+            }
+
+            return result;
+
         }
         catch (Exception ex)
         {

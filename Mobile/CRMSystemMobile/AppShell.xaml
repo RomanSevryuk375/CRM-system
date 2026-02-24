@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <Shell
     x:Class="CRMSystemMobile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:CRMSystemMobile"
     xmlns:view="clr-namespace:CRMSystemMobile.View"
     Title="CRM System"
-    Shell.FlyoutBehavior="Disabled">
+    FlyoutBehavior="Disabled">
 
     <ShellContent
         Title="Login"
-        ContentTemplate="{DataTemplate local:LoginPage}"
+        ContentTemplate="{DataTemplate view:LoginPage}"
         Route="LoginPage" />
 
     <ShellContent

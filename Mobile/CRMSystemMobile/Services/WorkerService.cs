@@ -14,6 +14,7 @@ public class WorkerService(HttpClient httpClient)
             {
                 return await response.Content.ReadFromJsonAsync<WorkerResponse>();
             }
+
             return null;
         }
         catch (Exception ex)

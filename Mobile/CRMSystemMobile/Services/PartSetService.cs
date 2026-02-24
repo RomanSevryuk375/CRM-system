@@ -20,29 +20,20 @@ public class PartSetService(HttpClient httpClient)
 
             if (filter.OrderIds?.Any() == true)
             {
-                foreach(var id in filter.OrderIds)
-                {
-                    query += $"&OrderIds={id}";
-                }
+                query = filter.OrderIds.Aggregate(query, (current, id) => current + $"&OrderIds={id}");
             }
 
             if (filter.PositionIds?.Any() == true)
             {
-                foreach (var id in filter.PositionIds)
-                {
-                    query += $"&PositionIds={id}";
-                }
+                query = filter.PositionIds.Aggregate(query, (current, id) => current + $"&PositionIds={id}");
             }
 
             if (filter.ProposalIds?.Any() == true)
             {
-                foreach (var id in filter.ProposalIds)
-                {
-                    query += $"&ProposalIds={id}";
-                }
+                query = filter.ProposalIds.Aggregate(query, (current, id) => current + $"&ProposalIds={id}");
             }
 
-            string url = $"api/v1/part-sets?{query}";
+            var url = $"api/v1/part-sets?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -55,7 +46,7 @@ public class PartSetService(HttpClient httpClient)
 
             response.EnsureSuccessStatusCode();
 
-            int totalCount = 0;
+            var totalCount = 0;
             if (response.Headers.TryGetValues("x-total-count", out var values))
             {
                 int.TryParse(values.FirstOrDefault(), out totalCount);
@@ -64,7 +55,7 @@ public class PartSetService(HttpClient httpClient)
             var items = await response.Content.ReadFromJsonAsync<List<PartSetResponse>>();
 
             return (items, totalCount);
-        } 
+        }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.ToString());
@@ -79,15 +70,17 @@ public class PartSetService(HttpClient httpClient)
             var response = await httpClient.GetAsync($"order/{orderId}");
             // Если не сработает, попробуйте: $"api/PartSet/order/{orderId}" или просто $"order/{orderId}" 
 
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<List<PartSetResponse>>();
+                return null;
             }
-            return [];
+
+            var items = await response.Content.ReadFromJsonAsync<List<PartSetResponse>>();
+            return items ?? [];
         }
         catch
         {
-            return [];
+            return null;
         }
     }
 
@@ -110,7 +103,7 @@ public class PartSetService(HttpClient httpClient)
             }
 
             return errorContent.Trim('"');
-        } 
+        }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.ToString());
@@ -131,13 +124,9 @@ public class PartSetService(HttpClient httpClient)
 
             var errorContent = await response.Content.ReadAsStringAsync();
 
-            if (string.IsNullOrWhiteSpace(errorContent))
-            {
-                return $"Server error: {response.StatusCode}";
-            }
-
-            return errorContent.Trim('"');
-
+            return string.IsNullOrWhiteSpace(errorContent)
+                ? $"Server error: {response.StatusCode}"
+                : errorContent.Trim('"');
         }
         catch (Exception ex)
         {
@@ -146,4 +135,3 @@ public class PartSetService(HttpClient httpClient)
         }
     }
 }
-

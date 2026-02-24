@@ -14,16 +14,16 @@ public record ClientRegisterRequest
     public string Surname { get; init; } = string.Empty;
 
     [JsonPropertyName("phoneNumber")]
-    public string PhoneNumber { get; init; } = string.Empty;
+    public string? PhoneNumber { get; init; } = string.Empty;
 
     [JsonPropertyName("email")]
-    public string Email { get; init; } = string.Empty;
+    public string? Email { get; init; } = string.Empty;
 
     [JsonPropertyName("roleId")]
     public int RoleId { get; init; }
 
     [JsonPropertyName("login")]
-    public string Login { get; init; } = string.Empty;
+    public string? Login { get; init; } = string.Empty;
 
     [JsonPropertyName("password")]
     public string Password { get; init; } = string.Empty;

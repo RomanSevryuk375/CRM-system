@@ -2,11 +2,11 @@ using CRMSystemMobile.ViewModels;
 
 namespace CRMSystemMobile.View;
 
-public partial class AddPartPage : ContentPage
+public partial class AddPartPage
 {
-	public AddPartPage(AddPartViewModel vm)
-	{
-		InitializeComponent();
+    public AddPartPage(AddPartViewModel vm)
+    {
+        InitializeComponent();
         BindingContext = vm;
     }
 }

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage
     x:Class="CRMSystemMobile.View.BillsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:contracts="clr-namespace:Shared.Contracts.Bill;assembly=Shared"
-    xmlns:d="http://schemas.microsoft.com/dotnet/2021/maui/design"
     xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
     Title="Счета"
     x:DataType="vm:BillsViewModel"
@@ -62,7 +62,9 @@
                             Stroke="Transparent"
                             StrokeShape="RoundRectangle 12">
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BillsViewModel}}, Path=GoToDetailsCommand}" CommandParameter="{Binding .}" />
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BillsViewModel}}, Path=GoToDetailsCommand}"
+                                    CommandParameter="{Binding .}" />
                             </Border.GestureRecognizers>
                             <Grid
                                 ColumnDefinitions="*, Auto"

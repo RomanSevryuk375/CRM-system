@@ -5,8 +5,8 @@ namespace Shared.Contracts.Login;
 public record LoginRequest
 {
     [JsonPropertyName("login")]
-    public string Login { get; init; } = string.Empty;
+    public string? Login { get; init; } = string.Empty;
 
     [JsonPropertyName("password")]
-    public string Password { get; init; } = string.Empty;
+    public string? Password { get; init; } = string.Empty;
 };

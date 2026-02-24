@@ -22,16 +22,16 @@ public partial class WorkerProfileViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    public partial string Name { get; set; }
+    public partial string? Name { get; set; }
 
     [ObservableProperty]
-    public partial string Surname { get; set; }
+    public partial string? Surname { get; set; }
 
     [ObservableProperty]
-    public partial string PhoneNumber { get; set; }
+    public partial string? PhoneNumber { get; set; }
 
     [ObservableProperty]
-    public partial string Email { get; set; }
+    public partial string? Email { get; set; }
 
     [ObservableProperty]
     public partial decimal HourlyRate { get; set; }
@@ -39,7 +39,7 @@ public partial class WorkerProfileViewModel : ObservableObject
     [ObservableProperty]
     public partial bool IsLoading { get; set; }
 
-    public string Initials => $"{Surname?.FirstOrDefault()}{Name?.FirstOrDefault()}".ToUpper();
+    public string Initials => $"{(Surname ?? string.Empty).FirstOrDefault()}{(Name ?? string.Empty).FirstOrDefault()}".ToUpper();
 
     [RelayCommand]
     public async Task LoadProfile()
@@ -67,7 +67,11 @@ public partial class WorkerProfileViewModel : ObservableObject
     [RelayCommand]
     public async Task SaveProfile()
     {
-        if (IsLoading) return;
+        if (IsLoading)
+        {
+            return;
+        }
+
         IsLoading = true;
 
         var request = new WorkerUpdateRequest

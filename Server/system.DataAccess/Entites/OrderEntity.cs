@@ -5,6 +5,8 @@ public class OrderEntity
     public long Id { get; set; }
     public int StatusId { get; set; }
     public long CarId { get; set; }
+    public string? OrderPdfFileName { get; set; } = string.Empty;
+    public string? OrderAgreementPdfFileName { get; set; } = string.Empty;
     public DateOnly Date { get; set; }
     public int PriorityId { get; set; }
 

@@ -14,8 +14,10 @@ public interface IOrderService
         OrderCreateModel orderCreateModel, 
         BillCreateModel billCreateModel, 
         CancellationToken ct);
+    Task<string> CreateOrderPdfAndUpload(long orderId, CancellationToken ct);
     Task<long> DeleteOrder(long id, CancellationToken ct);
     Task<int> GetCountOrders(OrderFilter filter, CancellationToken ct);
     Task<List<OrderItem>> GetPagedOrders(OrderFilter filter, CancellationToken ct);
+    Task<(Stream fieStream, string contentType)> GetOrderPdfStream(long id, CancellationToken ct);
     Task<long> UpdateOrder(long id, OrderPriorityEnum? priorityId, CancellationToken ct);
 }

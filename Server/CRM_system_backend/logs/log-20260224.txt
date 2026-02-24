@@ -1,0 +1,670 @@
+2026-02-24 09:01:06.292 +00:00 [INF] Executed DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 09:01:06.756 +00:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-24 09:01:06.768 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-24 09:01:06.770 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-24 09:01:06.773 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 09:01:06.779 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-24 09:01:07.009 +00:00 [INF] Starting web host
+2026-02-24 09:01:07.105 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-02-24 09:01:07.249 +00:00 [INF] Now listening on: http://[::]:8080
+2026-02-24 09:01:07.250 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-24 09:01:07.251 +00:00 [INF] Hosting environment: Development
+2026-02-24 09:01:07.252 +00:00 [INF] Content root path: /app
+2026-02-24 09:01:54.296 +00:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 09:01:54.766 +00:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-24 09:01:54.782 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-24 09:01:54.785 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-24 09:01:54.787 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 09:01:54.794 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-24 09:01:54.999 +00:00 [INF] Starting web host
+2026-02-24 09:01:55.084 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-02-24 09:01:55.230 +00:00 [INF] Now listening on: http://[::]:8080
+2026-02-24 09:01:55.231 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-24 09:01:55.231 +00:00 [INF] Hosting environment: Development
+2026-02-24 09:01:55.232 +00:00 [INF] Content root path: /app
+2026-02-24 09:06:40.641 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/index.html - null null
+2026-02-24 09:06:40.940 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/index.html - 200 null text/html;charset=utf-8 300.6601ms
+2026-02-24 09:06:41.307 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 09:06:41.656 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 348.0477ms
+2026-02-24 09:07:20.874 +00:00 [INF] Request starting HTTP/1.1 POST http://localhost:5066/api/v1/guarantees - application/json 283
+2026-02-24 09:07:20.935 +00:00 [INF] CORS policy execution failed.
+2026-02-24 09:07:20.936 +00:00 [INF] Request origin http://localhost:5066 does not have permission to access the resource.
+2026-02-24 09:07:21.124 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.GuaranteeController.CreateGuarantee (CRM_system_backend)'
+2026-02-24 09:07:21.165 +00:00 [INF] Route matched with {action = "CreateGuarantee", controller = "Guarantee"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] CreateGuarantee(Shared.Contracts.Guarantee.GuaranteeRequest, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.GuaranteeController (CRM_system_backend).
+2026-02-24 09:07:21.383 +00:00 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-02-24 09:07:21.516 +00:00 [INF] Creating guarantee for order 1 start
+2026-02-24 09:07:21.880 +00:00 [INF] Executed DbCommand (17ms) [Parameters=[@__id_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM work_orders AS w
+    WHERE w.id = @__id_0)
+2026-02-24 09:07:22.063 +00:00 [INF] Executed DbCommand (12ms) [Parameters=[@p0='?' (DbType = Date), @p1='?' (DbType = Date), @p2='?', @p3='?' (DbType = Int64), @p4='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO guarantees (date_end, date_start, description, order_id, terms)
+VALUES (@p0, @p1, @p2, @p3, @p4)
+RETURNING id;
+2026-02-24 09:07:22.096 +00:00 [INF] Creating guarantee for order 1 success with ID 1
+2026-02-24 09:07:22.108 +00:00 [INF] Executing CreatedResult, writing value of type 'null'.
+2026-02-24 09:07:22.115 +00:00 [INF] Executed action CRM_system_backend.Controllers.GuaranteeController.CreateGuarantee (CRM_system_backend) in 943.9158ms
+2026-02-24 09:07:22.117 +00:00 [INF] Executed endpoint 'CRM_system_backend.Controllers.GuaranteeController.CreateGuarantee (CRM_system_backend)'
+2026-02-24 09:07:22.127 +00:00 [INF] Request finished HTTP/1.1 POST http://localhost:5066/api/v1/guarantees - 201 0 null 1252.5087ms
+2026-02-24 09:07:35.157 +00:00 [INF] Request starting HTTP/1.1 POST http://localhost:5066/api/v1/orders/1/generate-pdf - null 0
+2026-02-24 09:07:35.173 +00:00 [INF] CORS policy execution failed.
+2026-02-24 09:07:35.176 +00:00 [INF] Request origin http://localhost:5066 does not have permission to access the resource.
+2026-02-24 09:07:35.179 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend)'
+2026-02-24 09:07:35.188 +00:00 [INF] Route matched with {action = "GeneratePdf", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GeneratePdf(Int64, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.OrderController (CRM_system_backend).
+2026-02-24 09:07:35.643 +00:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-02-24 09:07:35.709 +00:00 [INF] Executed DbCommand (14ms) [Parameters=[@__id_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT s.id, s.name, s.surname, s.phone_number, s.brand, s.model, s.year_of_manufacture, s.vin_number, s.state_number, s.id0, s.id1, s0.c, s0.sold_price, s0.quantity, s0.id, s0.id0, s0.id1, s1.c, s1.time_spent, s1.c0, s1.id, s1.id0, s1.id1, s.date, g.description, g.id, g0.terms, g0.id
+FROM (
+    SELECT w.id, c0.name, c0.surname, c0.phone_number, c.brand, c.model, c.year_of_manufacture, c.vin_number, c.state_number, w.date, c.id AS id0, c0.id AS id1
+    FROM work_orders AS w
+    INNER JOIN cars AS c ON w.car_id = c.id
+    INNER JOIN clients AS c0 ON c.owner_id = c0.id
+    WHERE w.id = @__id_0
+    LIMIT 1
+) AS s
+LEFT JOIN (
+    SELECT p1.name AS c, p.sold_price, p.quantity, p.id, p0.id AS id0, p1.id AS id1, p.order_id
+    FROM part_sets AS p
+    INNER JOIN positions AS p0 ON p.position_id = p0.id
+    INNER JOIN parts AS p1 ON p0.part_id = p1.id
+) AS s0 ON s.id = s0.order_id
+LEFT JOIN (
+    SELECT w1.title AS c, w0.time_spent, w2.hourly_rate AS c0, w0.id, w1.id AS id0, w2.id AS id1, w0.order_id
+    FROM works_in_order AS w0
+    INNER JOIN works_catalog AS w1 ON w0.job_id = w1.id
+    INNER JOIN workers AS w2 ON w0.worker_id = w2.id
+) AS s1 ON s.id = s1.order_id
+LEFT JOIN guarantees AS g ON s.id = g.order_id
+LEFT JOIN guarantees AS g0 ON s.id = g0.order_id
+ORDER BY s.id, s.id0, s.id1, s0.id, s0.id0, s0.id1, s1.id, s1.id0, s1.id1, g.id
+2026-02-24 09:07:41.479 +00:00 [ERR] MinIO upload failed
+Amazon.S3.AmazonS3Exception: The specified bucket does not exist
+ ---> Amazon.Runtime.Internal.HttpErrorResponseException: Exception of type 'Amazon.Runtime.Internal.HttpErrorResponseException' was thrown.
+   at Amazon.Runtime.HttpWebRequestMessage.ProcessHttpResponseMessage(HttpResponseMessage responseMessage)
+   at Amazon.Runtime.HttpWebRequestMessage.GetResponseAsync(CancellationToken cancellationToken)
+   at Amazon.Runtime.Internal.HttpHandler`1.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.RedirectHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.Unmarshaller.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.S3.Internal.AmazonS3ResponseHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.ErrorHandler.InvokeAsync[T](IExecutionContext executionContext)
+   --- End of inner exception stack trace ---
+   at Amazon.Runtime.Internal.HttpErrorResponseExceptionHandler.HandleExceptionStream(IRequestContext requestContext, IWebResponseData httpErrorResponse, HttpErrorResponseException exception, Stream responseStream)
+   at Amazon.Runtime.Internal.HttpErrorResponseExceptionHandler.HandleExceptionAsync(IExecutionContext executionContext, HttpErrorResponseException exception)
+   at Amazon.Runtime.Internal.ExceptionHandler`1.HandleAsync(IExecutionContext executionContext, Exception exception)
+   at Amazon.Runtime.Internal.ErrorHandler.ProcessExceptionAsync(IExecutionContext executionContext, Exception exception)
+   at Amazon.Runtime.Internal.ErrorHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.CallbackHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.Signer.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.S3.Internal.S3Express.S3ExpressPreSigner.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.EndpointDiscoveryHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.EndpointDiscoveryHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.RetryHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.RetryHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.CallbackHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.BaseAuthResolverHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.CallbackHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.S3.Internal.AmazonS3ExceptionHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.ErrorCallbackHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.Runtime.Internal.MetricsHandler.InvokeAsync[T](IExecutionContext executionContext)
+   at Amazon.S3.Transfer.Internal.SimpleUploadCommand.ExecuteAsync(CancellationToken cancellationToken)
+   at Amazon.S3.Transfer.TransferUtility.UploadAsync(TransferUtilityUploadRequest request, CancellationToken cancellationToken)
+   at CRMSystem.Business.Services.MinioFileService.UploadFile(Stream fileStream, String fileName, String contentType, CancellationToken ct) in C:\Work Space\AUTOService\CRM_system_for_car_service\Server\system.Business\Services\MinioFileService.cs:line 67
+2026-02-24 09:08:46.072 +00:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 09:08:46.601 +00:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-24 09:08:46.612 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-24 09:08:46.615 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-24 09:08:46.618 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 09:08:46.623 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-24 09:08:46.847 +00:00 [INF] Starting web host
+2026-02-24 09:08:46.944 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-02-24 09:08:47.088 +00:00 [INF] Now listening on: http://[::]:8080
+2026-02-24 09:08:47.089 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-24 09:08:47.091 +00:00 [INF] Hosting environment: Development
+2026-02-24 09:08:47.092 +00:00 [INF] Content root path: /app
+2026-02-24 09:08:56.794 +00:00 [INF] Request starting HTTP/1.1 POST http://localhost:5066/api/v1/orders/1/generate-pdf - null 0
+2026-02-24 09:08:56.918 +00:00 [INF] CORS policy execution failed.
+2026-02-24 09:08:56.920 +00:00 [INF] Request origin http://localhost:5066 does not have permission to access the resource.
+2026-02-24 09:08:57.093 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend)'
+2026-02-24 09:08:57.124 +00:00 [INF] Route matched with {action = "GeneratePdf", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GeneratePdf(Int64, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.OrderController (CRM_system_backend).
+2026-02-24 09:08:57.345 +00:00 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-02-24 09:08:57.965 +00:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-02-24 09:08:58.081 +00:00 [INF] Executed DbCommand (22ms) [Parameters=[@__id_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT s.id, s.name, s.surname, s.phone_number, s.brand, s.model, s.year_of_manufacture, s.vin_number, s.state_number, s.id0, s.id1, s0.c, s0.sold_price, s0.quantity, s0.id, s0.id0, s0.id1, s1.c, s1.time_spent, s1.c0, s1.id, s1.id0, s1.id1, s.date, g.description, g.id, g0.terms, g0.id
+FROM (
+    SELECT w.id, c0.name, c0.surname, c0.phone_number, c.brand, c.model, c.year_of_manufacture, c.vin_number, c.state_number, w.date, c.id AS id0, c0.id AS id1
+    FROM work_orders AS w
+    INNER JOIN cars AS c ON w.car_id = c.id
+    INNER JOIN clients AS c0 ON c.owner_id = c0.id
+    WHERE w.id = @__id_0
+    LIMIT 1
+) AS s
+LEFT JOIN (
+    SELECT p1.name AS c, p.sold_price, p.quantity, p.id, p0.id AS id0, p1.id AS id1, p.order_id
+    FROM part_sets AS p
+    INNER JOIN positions AS p0 ON p.position_id = p0.id
+    INNER JOIN parts AS p1 ON p0.part_id = p1.id
+) AS s0 ON s.id = s0.order_id
+LEFT JOIN (
+    SELECT w1.title AS c, w0.time_spent, w2.hourly_rate AS c0, w0.id, w1.id AS id0, w2.id AS id1, w0.order_id
+    FROM works_in_order AS w0
+    INNER JOIN works_catalog AS w1 ON w0.job_id = w1.id
+    INNER JOIN workers AS w2 ON w0.worker_id = w2.id
+) AS s1 ON s.id = s1.order_id
+LEFT JOIN guarantees AS g ON s.id = g.order_id
+LEFT JOIN guarantees AS g0 ON s.id = g0.order_id
+ORDER BY s.id, s.id0, s.id1, s0.id, s0.id0, s0.id1, s1.id, s1.id0, s1.id1, g.id
+2026-02-24 09:09:04.902 +00:00 [INF] File 315ec79e-2e79-4698-81c4-25362a875eef_order_1_20260224.pdf uploaded to MinIO
+2026-02-24 09:09:04.916 +00:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-24 09:09:04.968 +00:00 [INF] Executed action CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend) in 7838.9031ms
+2026-02-24 09:09:04.975 +00:00 [INF] Executed endpoint 'CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend)'
+2026-02-24 09:09:04.986 +00:00 [INF] Request finished HTTP/1.1 POST http://localhost:5066/api/v1/orders/1/generate-pdf - 200 null application/json; charset=utf-8 8194.3138ms
+2026-02-24 09:09:52.063 +00:00 [INF] Request starting HTTP/1.1 POST http://localhost:5066/api/v1/orders/1/generate-pdf - null 0
+2026-02-24 09:09:52.074 +00:00 [INF] CORS policy execution failed.
+2026-02-24 09:09:52.075 +00:00 [INF] Request origin http://localhost:5066 does not have permission to access the resource.
+2026-02-24 09:09:52.087 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend)'
+2026-02-24 09:09:52.088 +00:00 [INF] Route matched with {action = "GeneratePdf", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GeneratePdf(Int64, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.OrderController (CRM_system_backend).
+2026-02-24 09:09:52.153 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__id_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT s.id, s.name, s.surname, s.phone_number, s.brand, s.model, s.year_of_manufacture, s.vin_number, s.state_number, s.id0, s.id1, s0.c, s0.sold_price, s0.quantity, s0.id, s0.id0, s0.id1, s1.c, s1.time_spent, s1.c0, s1.id, s1.id0, s1.id1, s.date, g.description, g.id, g0.terms, g0.id
+FROM (
+    SELECT w.id, c0.name, c0.surname, c0.phone_number, c.brand, c.model, c.year_of_manufacture, c.vin_number, c.state_number, w.date, c.id AS id0, c0.id AS id1
+    FROM work_orders AS w
+    INNER JOIN cars AS c ON w.car_id = c.id
+    INNER JOIN clients AS c0 ON c.owner_id = c0.id
+    WHERE w.id = @__id_0
+    LIMIT 1
+) AS s
+LEFT JOIN (
+    SELECT p1.name AS c, p.sold_price, p.quantity, p.id, p0.id AS id0, p1.id AS id1, p.order_id
+    FROM part_sets AS p
+    INNER JOIN positions AS p0 ON p.position_id = p0.id
+    INNER JOIN parts AS p1 ON p0.part_id = p1.id
+) AS s0 ON s.id = s0.order_id
+LEFT JOIN (
+    SELECT w1.title AS c, w0.time_spent, w2.hourly_rate AS c0, w0.id, w1.id AS id0, w2.id AS id1, w0.order_id
+    FROM works_in_order AS w0
+    INNER JOIN works_catalog AS w1 ON w0.job_id = w1.id
+    INNER JOIN workers AS w2 ON w0.worker_id = w2.id
+) AS s1 ON s.id = s1.order_id
+LEFT JOIN guarantees AS g ON s.id = g.order_id
+LEFT JOIN guarantees AS g0 ON s.id = g0.order_id
+ORDER BY s.id, s.id0, s.id1, s0.id, s0.id0, s0.id1, s1.id, s1.id0, s1.id1, g.id
+2026-02-24 09:09:52.191 +00:00 [INF] File b37c70de-bb1e-4372-b7f0-9b53a7a94d7f_order_1_20260224.pdf uploaded to MinIO
+2026-02-24 09:09:52.193 +00:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-24 09:09:52.194 +00:00 [INF] Executed action CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend) in 105.5259ms
+2026-02-24 09:09:52.195 +00:00 [INF] Executed endpoint 'CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend)'
+2026-02-24 09:09:52.197 +00:00 [INF] Request finished HTTP/1.1 POST http://localhost:5066/api/v1/orders/1/generate-pdf - 200 null application/json; charset=utf-8 133.6452ms
+2026-02-24 09:11:44.484 +00:00 [INF] Request starting HTTP/1.1 POST http://localhost:5066/api/v1/orders/1/generate-pdf - null 0
+2026-02-24 09:11:44.486 +00:00 [INF] CORS policy execution failed.
+2026-02-24 09:11:44.487 +00:00 [INF] Request origin http://localhost:5066 does not have permission to access the resource.
+2026-02-24 09:11:44.491 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend)'
+2026-02-24 09:11:44.491 +00:00 [INF] Route matched with {action = "GeneratePdf", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GeneratePdf(Int64, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.OrderController (CRM_system_backend).
+2026-02-24 09:11:44.509 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT s.id, s.name, s.surname, s.phone_number, s.brand, s.model, s.year_of_manufacture, s.vin_number, s.state_number, s.id0, s.id1, s0.c, s0.sold_price, s0.quantity, s0.id, s0.id0, s0.id1, s1.c, s1.time_spent, s1.c0, s1.id, s1.id0, s1.id1, s.date, g.description, g.id, g0.terms, g0.id
+FROM (
+    SELECT w.id, c0.name, c0.surname, c0.phone_number, c.brand, c.model, c.year_of_manufacture, c.vin_number, c.state_number, w.date, c.id AS id0, c0.id AS id1
+    FROM work_orders AS w
+    INNER JOIN cars AS c ON w.car_id = c.id
+    INNER JOIN clients AS c0 ON c.owner_id = c0.id
+    WHERE w.id = @__id_0
+    LIMIT 1
+) AS s
+LEFT JOIN (
+    SELECT p1.name AS c, p.sold_price, p.quantity, p.id, p0.id AS id0, p1.id AS id1, p.order_id
+    FROM part_sets AS p
+    INNER JOIN positions AS p0 ON p.position_id = p0.id
+    INNER JOIN parts AS p1 ON p0.part_id = p1.id
+) AS s0 ON s.id = s0.order_id
+LEFT JOIN (
+    SELECT w1.title AS c, w0.time_spent, w2.hourly_rate AS c0, w0.id, w1.id AS id0, w2.id AS id1, w0.order_id
+    FROM works_in_order AS w0
+    INNER JOIN works_catalog AS w1 ON w0.job_id = w1.id
+    INNER JOIN workers AS w2 ON w0.worker_id = w2.id
+) AS s1 ON s.id = s1.order_id
+LEFT JOIN guarantees AS g ON s.id = g.order_id
+LEFT JOIN guarantees AS g0 ON s.id = g0.order_id
+ORDER BY s.id, s.id0, s.id1, s0.id, s0.id0, s0.id1, s1.id, s1.id0, s1.id1, g.id
+2026-02-24 09:11:44.541 +00:00 [INF] File b4c46147-d23f-4783-82ac-4fe885272592_order_1_20260224.pdf uploaded to MinIO
+2026-02-24 09:11:44.542 +00:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-24 09:11:44.543 +00:00 [INF] Executed action CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend) in 50.6155ms
+2026-02-24 09:11:44.544 +00:00 [INF] Executed endpoint 'CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend)'
+2026-02-24 09:11:44.544 +00:00 [INF] Request finished HTTP/1.1 POST http://localhost:5066/api/v1/orders/1/generate-pdf - 200 null application/json; charset=utf-8 60.5367ms
+2026-02-24 11:38:42.022 +00:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 11:46:58.145 +00:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 11:46:58.535 +00:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-24 11:46:58.544 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-24 11:46:58.546 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-24 11:46:58.547 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 11:46:58.555 +00:00 [INF] Applying migration '20260224114605_AddOrganizationAndOrderFields'.
+2026-02-24 11:46:58.593 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE work_orders ADD order_agreement_pdf_file_name character varying(256);
+2026-02-24 11:46:58.599 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE work_orders ADD order_pdf_file_name character varying(256);
+2026-02-24 11:46:58.600 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" (migration_id, product_version)
+VALUES ('20260224114605_AddOrganizationAndOrderFields', '9.0.13');
+2026-02-24 11:46:58.771 +00:00 [INF] Starting web host
+2026-02-24 11:46:58.856 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-02-24 11:46:58.970 +00:00 [INF] Now listening on: http://[::]:8080
+2026-02-24 11:46:58.972 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-24 11:46:58.973 +00:00 [INF] Hosting environment: Development
+2026-02-24 11:46:58.974 +00:00 [INF] Content root path: /app
+2026-02-24 11:47:23.376 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 11:47:23.613 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/v1/orders" for actions - CRM_system_backend.Controllers.OrderController.GetOrders (CRM_system_backend), CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend). Actions require a unique method/path combination for Swagger/OpenAPI 2.0 and 3.0. Use ConflictingActionsResolver as a workaround or provide your own implementation of PathGroupSelector.
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.PrepareGenerateOperation(IGrouping`2 group)
+   at System.Linq.Enumerable.IteratorSelectIterator`2.MoveNext()
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-02-24 11:47:23.667 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 292.6817ms
+2026-02-24 11:47:31.216 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/index.html - null null
+2026-02-24 11:47:31.293 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/index.html - 200 null text/html;charset=utf-8 76.5296ms
+2026-02-24 11:47:31.384 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 11:47:31.403 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/v1/orders" for actions - CRM_system_backend.Controllers.OrderController.GetOrders (CRM_system_backend), CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend). Actions require a unique method/path combination for Swagger/OpenAPI 2.0 and 3.0. Use ConflictingActionsResolver as a workaround or provide your own implementation of PathGroupSelector.
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.PrepareGenerateOperation(IGrouping`2 group)
+   at System.Linq.Enumerable.IteratorSelectIterator`2.MoveNext()
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-02-24 11:47:31.405 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 21.0961ms
+2026-02-24 11:48:03.076 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/index.html - null null
+2026-02-24 11:48:03.078 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/index.html - 200 null text/html;charset=utf-8 1.831ms
+2026-02-24 11:48:03.157 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 11:48:03.171 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/v1/orders" for actions - CRM_system_backend.Controllers.OrderController.GetOrders (CRM_system_backend), CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend). Actions require a unique method/path combination for Swagger/OpenAPI 2.0 and 3.0. Use ConflictingActionsResolver as a workaround or provide your own implementation of PathGroupSelector.
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.PrepareGenerateOperation(IGrouping`2 group)
+   at System.Linq.Enumerable.IteratorSelectIterator`2.MoveNext()
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-02-24 11:48:03.173 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 16.0023ms
+2026-02-24 11:48:04.047 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/index.html - null null
+2026-02-24 11:48:04.049 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/index.html - 200 null text/html;charset=utf-8 1.6678ms
+2026-02-24 11:48:04.148 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 11:48:04.160 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/v1/orders" for actions - CRM_system_backend.Controllers.OrderController.GetOrders (CRM_system_backend), CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend). Actions require a unique method/path combination for Swagger/OpenAPI 2.0 and 3.0. Use ConflictingActionsResolver as a workaround or provide your own implementation of PathGroupSelector.
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.PrepareGenerateOperation(IGrouping`2 group)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-02-24 11:48:04.163 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 14.2389ms
+2026-02-24 11:48:04.277 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/index.html - null null
+2026-02-24 11:48:04.281 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/index.html - 200 null text/html;charset=utf-8 3.1474ms
+2026-02-24 11:48:04.381 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 11:48:04.392 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/v1/orders" for actions - CRM_system_backend.Controllers.OrderController.GetOrders (CRM_system_backend), CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend). Actions require a unique method/path combination for Swagger/OpenAPI 2.0 and 3.0. Use ConflictingActionsResolver as a workaround or provide your own implementation of PathGroupSelector.
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.PrepareGenerateOperation(IGrouping`2 group)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-02-24 11:48:04.394 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 13.0819ms
+2026-02-24 11:48:04.474 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/index.html - null null
+2026-02-24 11:48:04.477 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/index.html - 200 null text/html;charset=utf-8 2.2282ms
+2026-02-24 11:48:04.547 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 11:48:04.558 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/v1/orders" for actions - CRM_system_backend.Controllers.OrderController.GetOrders (CRM_system_backend), CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend). Actions require a unique method/path combination for Swagger/OpenAPI 2.0 and 3.0. Use ConflictingActionsResolver as a workaround or provide your own implementation of PathGroupSelector.
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.PrepareGenerateOperation(IGrouping`2 group)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-02-24 11:48:04.561 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 14.5764ms
+2026-02-24 11:48:04.710 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/index.html - null null
+2026-02-24 11:48:04.712 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/index.html - 200 null text/html;charset=utf-8 2.2755ms
+2026-02-24 11:48:04.788 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 11:48:04.807 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/v1/orders" for actions - CRM_system_backend.Controllers.OrderController.GetOrders (CRM_system_backend), CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend). Actions require a unique method/path combination for Swagger/OpenAPI 2.0 and 3.0. Use ConflictingActionsResolver as a workaround or provide your own implementation of PathGroupSelector.
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.PrepareGenerateOperation(IGrouping`2 group)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-02-24 11:48:04.809 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 20.9004ms
+2026-02-24 11:49:48.811 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 11:49:48.824 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/v1/orders" for actions - CRM_system_backend.Controllers.OrderController.GetOrders (CRM_system_backend), CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend). Actions require a unique method/path combination for Swagger/OpenAPI 2.0 and 3.0. Use ConflictingActionsResolver as a workaround or provide your own implementation of PathGroupSelector.
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.PrepareGenerateOperation(IGrouping`2 group)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-02-24 11:49:48.827 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 16.0542ms
+2026-02-24 11:50:28.372 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 11:50:28.418 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/v1/orders" for actions - CRM_system_backend.Controllers.OrderController.GetOrders (CRM_system_backend), CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend). Actions require a unique method/path combination for Swagger/OpenAPI 2.0 and 3.0. Use ConflictingActionsResolver as a workaround or provide your own implementation of PathGroupSelector.
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.PrepareGenerateOperation(IGrouping`2 group)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-02-24 11:50:28.420 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 47.1887ms
+2026-02-24 11:50:40.504 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/ - null null
+2026-02-24 11:50:40.648 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/ - 404 0 null 143.6134ms
+2026-02-24 11:50:40.651 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5066/, Response status code: 404
+2026-02-24 11:50:47.198 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 11:50:47.210 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "GET api/v1/orders" for actions - CRM_system_backend.Controllers.OrderController.GetOrders (CRM_system_backend), CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend). Actions require a unique method/path combination for Swagger/OpenAPI 2.0 and 3.0. Use ConflictingActionsResolver as a workaround or provide your own implementation of PathGroupSelector.
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.PrepareGenerateOperation(IGrouping`2 group)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-02-24 11:50:47.212 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 13.4397ms
+2026-02-24 11:53:21.027 +00:00 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 11:53:21.410 +00:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-24 11:53:21.420 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-24 11:53:21.425 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-24 11:53:21.427 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 11:53:21.432 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-24 11:53:21.642 +00:00 [INF] Starting web host
+2026-02-24 11:53:21.713 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-02-24 11:53:21.835 +00:00 [INF] Now listening on: http://[::]:8080
+2026-02-24 11:53:21.837 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-24 11:53:21.838 +00:00 [INF] Hosting environment: Development
+2026-02-24 11:53:21.839 +00:00 [INF] Content root path: /app
+2026-02-24 11:53:22.377 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/index.html - null null
+2026-02-24 11:53:22.515 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/index.html - 200 null text/html;charset=utf-8 139.8802ms
+2026-02-24 11:53:22.753 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - null null
+2026-02-24 11:53:23.061 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 308.1816ms
+2026-02-24 11:53:37.538 +00:00 [INF] Request starting HTTP/1.1 POST http://localhost:5066/api/v1/orders/1/generate-pdf - null 0
+2026-02-24 11:53:37.572 +00:00 [INF] CORS policy execution failed.
+2026-02-24 11:53:37.575 +00:00 [INF] Request origin http://localhost:5066 does not have permission to access the resource.
+2026-02-24 11:53:37.760 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend)'
+2026-02-24 11:53:37.800 +00:00 [INF] Route matched with {action = "GeneratePdf", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GeneratePdf(Int64, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.OrderController (CRM_system_backend).
+2026-02-24 11:53:37.937 +00:00 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-02-24 11:53:38.448 +00:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-02-24 11:53:38.566 +00:00 [INF] Executed DbCommand (30ms) [Parameters=[@__id_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT s.id, s.name, s.surname, s.phone_number, s.brand, s.model, s.year_of_manufacture, s.vin_number, s.state_number, s.id0, s.id1, s0.c, s0.sold_price, s0.quantity, s0.id, s0.id0, s0.id1, s1.c, s1.time_spent, s1.c0, s1.id, s1.id0, s1.id1, s.date, g.description, g.id, g0.terms, g0.id
+FROM (
+    SELECT w.id, c0.name, c0.surname, c0.phone_number, c.brand, c.model, c.year_of_manufacture, c.vin_number, c.state_number, w.date, c.id AS id0, c0.id AS id1
+    FROM work_orders AS w
+    INNER JOIN cars AS c ON w.car_id = c.id
+    INNER JOIN clients AS c0 ON c.owner_id = c0.id
+    WHERE w.id = @__id_0
+    LIMIT 1
+) AS s
+LEFT JOIN (
+    SELECT p1.name AS c, p.sold_price, p.quantity, p.id, p0.id AS id0, p1.id AS id1, p.order_id
+    FROM part_sets AS p
+    INNER JOIN positions AS p0 ON p.position_id = p0.id
+    INNER JOIN parts AS p1 ON p0.part_id = p1.id
+) AS s0 ON s.id = s0.order_id
+LEFT JOIN (
+    SELECT w1.title AS c, w0.time_spent, w2.hourly_rate AS c0, w0.id, w1.id AS id0, w2.id AS id1, w0.order_id
+    FROM works_in_order AS w0
+    INNER JOIN works_catalog AS w1 ON w0.job_id = w1.id
+    INNER JOIN workers AS w2 ON w0.worker_id = w2.id
+) AS s1 ON s.id = s1.order_id
+LEFT JOIN guarantees AS g ON s.id = g.order_id
+LEFT JOIN guarantees AS g0 ON s.id = g0.order_id
+ORDER BY s.id, s.id0, s.id1, s0.id, s0.id0, s0.id1, s1.id, s1.id0, s1.id1, g.id
+2026-02-24 11:53:44.685 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT w.id, w.car_id, w.date, w.order_agreement_pdf_file_name, w.order_pdf_file_name, w.priority_id, w.status_id
+FROM work_orders AS w
+WHERE w.id = @__id_0
+LIMIT 1
+2026-02-24 11:53:44.794 +00:00 [INF] Executed DbCommand (7ms) [Parameters=[@p1='?' (DbType = Int64), @p0='?'], CommandType='"Text"', CommandTimeout='30']
+UPDATE work_orders SET order_pdf_file_name = @p0
+WHERE id = @p1;
+2026-02-24 11:53:45.033 +00:00 [INF] File 103fad15-e2bb-4b46-81fe-46688992196a_order_1_20260224.pdf uploaded to MinIO
+2026-02-24 11:53:45.043 +00:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-24 11:53:45.068 +00:00 [INF] Executed action CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend) in 7264.2097ms
+2026-02-24 11:53:45.069 +00:00 [INF] Executed endpoint 'CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend)'
+2026-02-24 11:53:45.076 +00:00 [INF] Request finished HTTP/1.1 POST http://localhost:5066/api/v1/orders/1/generate-pdf - 200 null application/json; charset=utf-8 7538.7186ms
+2026-02-24 11:54:00.042 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/order-pdf/1 - null null
+2026-02-24 11:54:00.044 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend)'
+2026-02-24 11:54:00.053 +00:00 [INF] Route matched with {action = "DownloadOrderPdf", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DownloadOrderPdf(Int64, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.OrderController (CRM_system_backend).
+2026-02-24 11:54:00.141 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__orderId_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT w.id, o.name, w.status_id, c.brand, c.state_number, w.car_id, w.date, w.priority_id, o0.name
+FROM work_orders AS w
+INNER JOIN order_statuses AS o ON w.status_id = o.id
+INNER JOIN cars AS c ON w.car_id = c.id
+INNER JOIN order_priorities AS o0 ON w.priority_id = o0.id
+WHERE w.id = @__orderId_0
+LIMIT 1
+2026-02-24 11:57:23.796 +00:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 11:57:24.132 +00:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-24 11:57:24.144 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-24 11:57:24.147 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-24 11:57:24.150 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 11:57:24.155 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-24 11:57:24.309 +00:00 [INF] Starting web host
+2026-02-24 11:57:24.376 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-02-24 11:57:24.484 +00:00 [INF] Now listening on: http://[::]:8080
+2026-02-24 11:57:24.488 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-24 11:57:24.489 +00:00 [INF] Hosting environment: Development
+2026-02-24 11:57:24.492 +00:00 [INF] Content root path: /app
+2026-02-24 11:57:27.329 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/order-pdf/1 - null null
+2026-02-24 11:57:27.482 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend)'
+2026-02-24 11:57:27.503 +00:00 [INF] Route matched with {action = "DownloadOrderPdf", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DownloadOrderPdf(Int64, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.OrderController (CRM_system_backend).
+2026-02-24 11:57:27.682 +00:00 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-02-24 11:57:28.195 +00:00 [INF] Executed DbCommand (25ms) [Parameters=[@__orderId_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT w.id, o.name, w.status_id, c.brand, c.state_number, w.car_id, w.date, w.priority_id, o0.name
+FROM work_orders AS w
+INNER JOIN order_statuses AS o ON w.status_id = o.id
+INNER JOIN cars AS c ON w.car_id = c.id
+INNER JOIN order_priorities AS o0 ON w.priority_id = o0.id
+WHERE w.id = @__orderId_0
+LIMIT 1
+2026-02-24 11:57:50.371 +00:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 11:57:50.753 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-24 11:57:50.762 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-24 11:57:50.766 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-24 11:57:50.768 +00:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 11:57:50.772 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-24 11:57:50.943 +00:00 [INF] Starting web host
+2026-02-24 11:57:51.012 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-02-24 11:57:51.127 +00:00 [INF] Now listening on: http://[::]:8080
+2026-02-24 11:57:51.130 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-24 11:57:51.131 +00:00 [INF] Hosting environment: Development
+2026-02-24 11:57:51.132 +00:00 [INF] Content root path: /app
+2026-02-24 11:58:04.639 +00:00 [INF] Request starting HTTP/1.1 POST http://localhost:5066/api/v1/orders/1/generate-pdf - null 0
+2026-02-24 11:58:04.711 +00:00 [INF] CORS policy execution failed.
+2026-02-24 11:58:04.712 +00:00 [INF] Request origin http://localhost:5066 does not have permission to access the resource.
+2026-02-24 11:58:04.826 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend)'
+2026-02-24 11:58:04.851 +00:00 [INF] Route matched with {action = "GeneratePdf", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GeneratePdf(Int64, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.OrderController (CRM_system_backend).
+2026-02-24 11:58:05.003 +00:00 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-02-24 11:58:05.438 +00:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-02-24 11:58:05.534 +00:00 [INF] Executed DbCommand (23ms) [Parameters=[@__id_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT s.id, s.name, s.surname, s.phone_number, s.brand, s.model, s.year_of_manufacture, s.vin_number, s.state_number, s.id0, s.id1, s0.c, s0.sold_price, s0.quantity, s0.id, s0.id0, s0.id1, s1.c, s1.time_spent, s1.c0, s1.id, s1.id0, s1.id1, s.date, g.description, g.id, g0.terms, g0.id
+FROM (
+    SELECT w.id, c0.name, c0.surname, c0.phone_number, c.brand, c.model, c.year_of_manufacture, c.vin_number, c.state_number, w.date, c.id AS id0, c0.id AS id1
+    FROM work_orders AS w
+    INNER JOIN cars AS c ON w.car_id = c.id
+    INNER JOIN clients AS c0 ON c.owner_id = c0.id
+    WHERE w.id = @__id_0
+    LIMIT 1
+) AS s
+LEFT JOIN (
+    SELECT p1.name AS c, p.sold_price, p.quantity, p.id, p0.id AS id0, p1.id AS id1, p.order_id
+    FROM part_sets AS p
+    INNER JOIN positions AS p0 ON p.position_id = p0.id
+    INNER JOIN parts AS p1 ON p0.part_id = p1.id
+) AS s0 ON s.id = s0.order_id
+LEFT JOIN (
+    SELECT w1.title AS c, w0.time_spent, w2.hourly_rate AS c0, w0.id, w1.id AS id0, w2.id AS id1, w0.order_id
+    FROM works_in_order AS w0
+    INNER JOIN works_catalog AS w1 ON w0.job_id = w1.id
+    INNER JOIN workers AS w2 ON w0.worker_id = w2.id
+) AS s1 ON s.id = s1.order_id
+LEFT JOIN guarantees AS g ON s.id = g.order_id
+LEFT JOIN guarantees AS g0 ON s.id = g0.order_id
+ORDER BY s.id, s.id0, s.id1, s0.id, s0.id0, s0.id1, s1.id, s1.id0, s1.id1, g.id
+2026-02-24 11:58:10.540 +00:00 [INF] File e6387dae-0d13-4717-b901-b90d83853197_order_1_20260224.pdf uploaded to MinIO
+2026-02-24 11:58:10.570 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT w.id, w.car_id, w.date, w.order_agreement_pdf_file_name, w.order_pdf_file_name, w.priority_id, w.status_id
+FROM work_orders AS w
+WHERE w.id = @__id_0
+LIMIT 1
+2026-02-24 11:58:10.670 +00:00 [INF] Executed DbCommand (8ms) [Parameters=[@p1='?' (DbType = Int64), @p0='?'], CommandType='"Text"', CommandTimeout='30']
+UPDATE work_orders SET order_pdf_file_name = @p0
+WHERE id = @p1;
+2026-02-24 11:58:10.689 +00:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-24 11:58:10.724 +00:00 [INF] Executed action CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend) in 5871.7508ms
+2026-02-24 11:58:10.728 +00:00 [INF] Executed endpoint 'CRM_system_backend.Controllers.OrderController.GeneratePdf (CRM_system_backend)'
+2026-02-24 11:58:10.736 +00:00 [INF] Request finished HTTP/1.1 POST http://localhost:5066/api/v1/orders/1/generate-pdf - 200 null application/json; charset=utf-8 6101.7585ms
+2026-02-24 11:58:18.400 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/order-pdf/1 - null null
+2026-02-24 11:58:18.405 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend)'
+2026-02-24 11:58:18.414 +00:00 [INF] Route matched with {action = "DownloadOrderPdf", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DownloadOrderPdf(Int64, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.OrderController (CRM_system_backend).
+2026-02-24 11:58:18.500 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__orderId_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT w.id, o.name, w.status_id, c.brand, c.state_number, w.car_id, w.date, w.priority_id, o0.name
+FROM work_orders AS w
+INNER JOIN order_statuses AS o ON w.status_id = o.id
+INNER JOIN cars AS c ON w.car_id = c.id
+INNER JOIN order_priorities AS o0 ON w.priority_id = o0.id
+WHERE w.id = @__orderId_0
+LIMIT 1
+2026-02-24 12:12:29.611 +00:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 12:12:29.976 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-02-24 12:12:29.986 +00:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-02-24 12:12:29.995 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-02-24 12:12:30.000 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-02-24 12:12:30.006 +00:00 [INF] No migrations were applied. The database is already up to date.
+2026-02-24 12:12:30.178 +00:00 [INF] Starting web host
+2026-02-24 12:12:30.261 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-02-24 12:12:30.372 +00:00 [INF] Now listening on: http://[::]:8080
+2026-02-24 12:12:30.373 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-24 12:12:30.374 +00:00 [INF] Hosting environment: Development
+2026-02-24 12:12:30.375 +00:00 [INF] Content root path: /app
+2026-02-24 12:12:36.734 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5066/order-pdf/1 - null null
+2026-02-24 12:12:36.885 +00:00 [INF] Executing endpoint 'CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend)'
+2026-02-24 12:12:36.905 +00:00 [INF] Route matched with {action = "DownloadOrderPdf", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DownloadOrderPdf(Int64, System.Threading.CancellationToken) on controller CRM_system_backend.Controllers.OrderController (CRM_system_backend).
+2026-02-24 12:12:37.070 +00:00 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-02-24 12:12:37.532 +00:00 [INF] Executed DbCommand (22ms) [Parameters=[@__orderId_0='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SELECT w.id, o.name, w.status_id, c.brand, c.state_number, w.car_id, w.date, w.order_pdf_file_name, w.order_agreement_pdf_file_name, w.priority_id, o0.name
+FROM work_orders AS w
+INNER JOIN order_statuses AS o ON w.status_id = o.id
+INNER JOIN cars AS c ON w.car_id = c.id
+INNER JOIN order_priorities AS o0 ON w.priority_id = o0.id
+WHERE w.id = @__orderId_0
+LIMIT 1
+2026-02-24 12:12:37.743 +00:00 [INF] Executing FileStreamResult, sending file with download name 'order_1.pdf' ...
+2026-02-24 12:12:37.764 +00:00 [INF] Executed action CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend) in 855.9806ms
+2026-02-24 12:12:37.770 +00:00 [INF] Executed endpoint 'CRM_system_backend.Controllers.OrderController.DownloadOrderPdf (CRM_system_backend)'
+2026-02-24 12:12:37.779 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:5066/order-pdf/1 - 200 null application/pdf 1046.1136ms

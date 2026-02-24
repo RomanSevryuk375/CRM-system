@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage
     x:Class="CRMSystemMobile.View.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -11,6 +12,10 @@
     Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
         <Grid BackgroundColor="#112347" RowDefinitions="Auto, *">
 
             <Grid
@@ -91,7 +96,7 @@
                 Grid.Row="1"
                 Command="{Binding RefreshCommand}"
                 IsRefreshing="{Binding IsRefreshing}"
-                RefreshColor="#FFB347">
+                RefreshColor="White">
 
                 <CollectionView
                     ItemsSource="{Binding Orders}"
@@ -106,7 +111,9 @@
                                 Stroke="Transparent"
                                 StrokeShape="RoundRectangle 12">
                                 <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GoToOrderDetailsCommand}" CommandParameter="{Binding .}" />
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GoToOrderDetailsCommand}"
+                                        CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
                                 <Grid RowDefinitions="60, Auto" RowSpacing="25">
 
@@ -192,6 +199,16 @@
                     </CollectionView.EmptyView>
                 </CollectionView>
             </RefreshView>
+            <ActivityIndicator
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                HeightRequest="50"
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsRefreshing}"
+                IsVisible="{Binding IsRefreshing}"
+                VerticalOptions="Center"
+                WidthRequest="50"
+                Color="White" />
         </Grid>
 
         <Grid

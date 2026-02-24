@@ -36,6 +36,8 @@ msbuild.wrn
 # Build artifacts
 bin/
 obj/
+logs/
+TestResults/
 
 # Visual Studio files
 .vs/
@@ -50,3 +52,8 @@ obj/
 
 # Publish
 publish/
+
+# Keys
+**/keys/
+qodana.yaml
+.idea/

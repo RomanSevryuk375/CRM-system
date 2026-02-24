@@ -4,21 +4,17 @@ using CRMSystemMobile.Extentions;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Login;
 
-namespace CRMSystemMobile.ViewModel;
+namespace CRMSystemMobile.ViewModels;
 
 public partial class LoginViewModel(LoginService loginService, IdentityService identityService) : ObservableObject
 {
-    [ObservableProperty]
-    public partial string UserLogin { get; set; }
+    [ObservableProperty] public partial string? UserLogin { get; set; }
 
-    [ObservableProperty]
-    public partial string UserPassword { get; set; }
+    [ObservableProperty] public partial string? UserPassword { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsPasswordHidden { get; set; } = true;
+    [ObservableProperty] public partial bool IsPasswordHidden { get; set; } = true;
 
-    [ObservableProperty]
-    public partial string PasswordIcon { get; set; } = "eye_hide.png";
+    [ObservableProperty] public partial string PasswordIcon { get; set; } = "eye_hide.png";
 
     [RelayCommand]
     private void TogglePassword()
@@ -48,8 +44,6 @@ public partial class LoginViewModel(LoginService loginService, IdentityService i
                     await Shell.Current.GoToAsync("//WorkerMainPage");
                     break;
                 case 2:
-                    await Shell.Current.GoToAsync("//MainPage");
-                    break;
                 case 1:
                     await Shell.Current.GoToAsync("//MainPage");
                     break;

@@ -20,13 +20,10 @@ public class BillService(HttpClient httpClient)
 
             if (filter.OrderIds?.Any() == true)
             {
-                foreach (var id in filter.OrderIds)
-                {
-                    query += $"&OrderIds={id}";
-                }
+                query = filter.OrderIds.Aggregate(query, (current, id) => current + $"&OrderIds={id}");
             }
 
-            string url = $"api/v1/bills?{query}";
+            var url = $"api/v1/bills?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -39,7 +36,7 @@ public class BillService(HttpClient httpClient)
 
             response.EnsureSuccessStatusCode();
 
-            int totalCount = 0;
+            var totalCount = 0;
             if (response.Headers.TryGetValues("x-total-count", out var values))
             {
                 int.TryParse(values.FirstOrDefault(), out totalCount);
@@ -54,22 +51,27 @@ public class BillService(HttpClient httpClient)
             return (null, 0);
         }
     }
+
     public async Task<decimal?> GetBillDebt(long billId)
     {
         try
         {
-            string url = $"api/v1/bills/debt/{billId}";
+            var url = $"api/v1/bills/debt/{billId}";
 
             var response = await httpClient.GetAsync(url);
 
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                if (decimal.TryParse(content, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal debt))
-                {
-                    return debt;
-                }
+                return null;
             }
+
+            var content = await response.Content.ReadAsStringAsync();
+            if (decimal.TryParse(content, System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture, out var debt))
+            {
+                return debt;
+            }
+
             return null;
         }
         catch (Exception ex)

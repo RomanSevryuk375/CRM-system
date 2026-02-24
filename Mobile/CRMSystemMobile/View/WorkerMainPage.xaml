@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage
     x:Class="CRMSystemMobile.View.WorkerMainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:contracts="clr-namespace:Shared.Contracts.Order;assembly=Shared"
     xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    x:Name="WorkerMain"
     Title="Рабочий стол мастера"
     x:DataType="vm:WorkerMainViewModel"
     BackgroundColor="#112347"
@@ -87,7 +89,12 @@
                             StrokeShape="RoundRectangle 12"
                             StrokeThickness="0">
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkerMainViewModel}}, Path=GoToWorkOrderCommand}" CommandParameter="{Binding .}" />
+                                <TapGestureRecognizer>
+                                    <TapGestureRecognizer.Command>
+                                        <Binding Source="{x:Reference WorkerMain}"
+                                                 Path="BindingContext.GoToWorkOrderCommand" />
+                                    </TapGestureRecognizer.Command>
+                                </TapGestureRecognizer>
                             </Border.GestureRecognizers>
 
                             <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">

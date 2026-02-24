@@ -2,7 +2,7 @@ using CRMSystemMobile.ViewModels;
 
 namespace CRMSystemMobile.View;
 
-public partial class MainPage : ContentPage
+public partial class MainPage
 {
     private readonly MainViewModel _viewModel;
 

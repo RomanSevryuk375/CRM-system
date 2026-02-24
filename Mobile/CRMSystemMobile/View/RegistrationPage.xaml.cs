@@ -2,7 +2,7 @@ using CRMSystemMobile.ViewModels;
 
 namespace CRMSystemMobile.View;
 
-public partial class RegistrationPage : ContentPage
+public partial class RegistrationPage
 {
     public RegistrationPage(RegistrationViewModel viewModel)
     {
@@ -30,7 +30,7 @@ public partial class RegistrationPage : ContentPage
         PasswordEntry.Focus();
     }
 
-    private void OnPasswordToggled(object sender, EventArgs e)
+    private void OnPasswordToggled()
     {
         PasswordEntry.CursorPosition = PasswordEntry.Text?.Length ?? 0;
     }

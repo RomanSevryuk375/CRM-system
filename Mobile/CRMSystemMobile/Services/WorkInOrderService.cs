@@ -1,5 +1,4 @@
-﻿using Shared.Contracts.PartSet;
-using Shared.Contracts.WorkInOrder;
+﻿using Shared.Contracts.WorkInOrder;
 using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
@@ -21,37 +20,25 @@ public class WorkInOrderService(HttpClient httpClient)
 
             if (filter.JobIds?.Any() == true)
             {
-                foreach (var id in filter.JobIds)
-                {
-                    query += $"&JobIds={id}";
-                }
+                query = filter.JobIds.Aggregate(query, (current, id) => current + $"&JobIds={id}");
             }
 
             if (filter.StatusIds?.Any() == true)
             {
-                foreach (var id in filter.StatusIds)
-                {
-                    query += $"&StatusIds={id}";
-                }
+                query = filter.StatusIds.Aggregate(query, (current, id) => current + $"&StatusIds={id}");
             }
 
             if (filter.OrderIds?.Any() == true)
             {
-                foreach (var id in filter.OrderIds)
-                {
-                    query += $"&OrderIds={id}";
-                }
+                query = filter.OrderIds.Aggregate(query, (current, id) => current + $"&OrderIds={id}");
             }
 
             if (filter.WorkerIds?.Any() == true)
             {
-                foreach (var id in filter.WorkerIds)
-                {
-                    query += $"&WorkerIds={id}";
-                }
+                query = filter.WorkerIds.Aggregate(query, (current, id) => current + $"&WorkerIds={id}");
             }
 
-            string url = $"api/works-in-order?{query}";
+            var url = $"api/works-in-order?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -64,7 +51,7 @@ public class WorkInOrderService(HttpClient httpClient)
 
             response.EnsureSuccessStatusCode();
 
-            int totalCount = 0;
+            var totalCount = 0;
             if (response.Headers.TryGetValues("x-total-count", out var values))
             {
                 int.TryParse(values.FirstOrDefault(), out totalCount);
@@ -93,12 +80,9 @@ public class WorkInOrderService(HttpClient httpClient)
 
             var errorContent = await response.Content.ReadAsStringAsync();
 
-            if (string.IsNullOrWhiteSpace(errorContent))
-            {
-                return $"Server error: {response.StatusCode}";
-            }
-
-            return errorContent.Trim('"');
+            return string.IsNullOrWhiteSpace(errorContent)
+                ? $"Server error: {response.StatusCode}"
+                : errorContent.Trim('"');
         }
         catch (Exception ex)
         {
@@ -113,7 +97,10 @@ public class WorkInOrderService(HttpClient httpClient)
         {
             var response = await httpClient.PutAsJsonAsync($"api/works-in-order/{id}", model);
 
-            if (response.IsSuccessStatusCode) return null;
+            if (response.IsSuccessStatusCode)
+            {
+                return null;
+            }
 
             var error = await response.Content.ReadAsStringAsync();
             return error;

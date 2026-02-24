@@ -1,8 +1,8 @@
-﻿using CRMSystemMobile.ViewModel;
+﻿using LoginViewModel = CRMSystemMobile.ViewModels.LoginViewModel;
 
-namespace CRMSystemMobile;
+namespace CRMSystemMobile.View;
 
-public partial class LoginPage : ContentPage
+public partial class LoginPage
 {
     public LoginPage(LoginViewModel loginViewModel)
     {
@@ -12,7 +12,7 @@ public partial class LoginPage : ContentPage
 
     private void OnLoginCompleted(object sender, EventArgs e) => PasswordEntry.Focus();
 
-    private void OnPasswordToggled(object sender, EventArgs e)
+    private void OnPasswordToggled()
     {
         PasswordEntry.CursorPosition = PasswordEntry.Text?.Length ?? 0;
     }

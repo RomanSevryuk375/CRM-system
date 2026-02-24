@@ -12,27 +12,23 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
     public ObservableCollection<CarResponse> Cars { get; } = [];
 
     private int _currentPage = 1;
-    private int _totalItems = 0;
-    private const int _pageSize = 15;
+    private int _totalItems;
+    private const int PageSize = 15;
 
-    [ObservableProperty]
-    public partial bool IsBusy { get; set; }
+    [ObservableProperty] public partial bool IsBusy { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsLoadingMore { get; set; }
+    [ObservableProperty] public partial bool IsLoadingMore { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsRefreshing { get; set; }
+    [ObservableProperty] public partial bool IsRefreshing { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsMenuOpen { get; set; } = false;
+    [ObservableProperty] public partial bool IsMenuOpen { get; set; } = false;
 
     [RelayCommand]
     private async Task LoadInitial()
     {
-        if (IsBusy) 
-        {  
-            return; 
+        if (IsBusy)
+        {
+            return;
         }
 
         try
@@ -80,10 +76,10 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
             OwnerIds: [],
             SortBy: null,
             Page: _currentPage,
-            Limit: _pageSize,
+            Limit: PageSize,
             IsDescending: true
         );
-        
+
         var (items, total) = await carService.GetCars(filter);
 
         _totalItems = total;
@@ -95,6 +91,7 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
                 Cars.Add(item);
             }
         }
+
         _currentPage++;
     }
 
@@ -112,6 +109,7 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
             IsMenuOpen = false;
             return;
         }
+
         await Shell.Current.GoToAsync("..");
     }
 
@@ -122,7 +120,7 @@ public partial class MyCarsViewModel(CarService carService) : ObservableObject
     }
 
     [RelayCommand]
-    private async Task GoToDetails(CarResponse car)
+    private static async Task GoToDetails(CarResponse? car)
     {
         if (car == null)
         {

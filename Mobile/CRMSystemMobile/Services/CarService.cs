@@ -18,7 +18,7 @@ public class CarService(HttpClient httpClient)
                 query += $"&SortBy={filter.SortBy}";
             }
 
-            string url = $"api/v1/cars?{query}";
+            var url = $"api/v1/cars?{query}";
 
             var response = await httpClient.GetAsync(url);
 
@@ -31,7 +31,7 @@ public class CarService(HttpClient httpClient)
 
             response.EnsureSuccessStatusCode();
 
-            int totalCount = 0;
+            var totalCount = 0;
             if (response.Headers.TryGetValues("x-total-count", out var values))
             {
                 int.TryParse(values.FirstOrDefault(), out totalCount);
@@ -60,12 +60,9 @@ public class CarService(HttpClient httpClient)
 
             var errorContent = await response.Content.ReadAsStringAsync();
 
-            if (string.IsNullOrWhiteSpace(errorContent))
-            {
-                return $"Server error: {response.StatusCode}";
-            }
-
-            return errorContent.Trim('"');
+            return string.IsNullOrWhiteSpace(errorContent)
+                ? $"Server error: {response.StatusCode}"
+                : errorContent.Trim('"');
         }
         catch (Exception ex)
         {
