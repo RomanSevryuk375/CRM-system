@@ -10,14 +10,13 @@ namespace CRM_system_backend.Controllers;
 
 [ApiController]
 [Route("api/v1/bills")]
-
 public class BillController(
     IBillService billService,
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<List<BillItem>>> GetPagedBills(
+    public async Task<ActionResult<List<BillResponse>>> GetPagedBills(
         [FromQuery] BillFilter filter, CancellationToken ct)
     {
         var dto = await billService.GetPagedBills(filter, ct);
@@ -29,8 +28,19 @@ public class BillController(
 
         return Ok(response);
     }
+    
+    [HttpGet("{id:long}")]
+    [Authorize(Policy = "AdminUserPolicy")]
+    public async Task<ActionResult<BillResponse>> GetBillById(
+        int id, CancellationToken ct)
+    {
+        var dto = await billService.GetBillById(id, ct);
+        var response = mapper.Map<BillResponse>(dto);
 
-    [HttpGet("debt/{id}")]
+        return Ok(response);
+    }
+
+    [HttpGet("{id:long}/debt")]
     [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<long>> FetchDebt(
         long id, CancellationToken ct)
@@ -46,25 +56,29 @@ public class BillController(
         [FromBody] BillRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<BillCreateModel>(request);
+        var id = await billService.CreateBill(createModel, ct);
+        
+        var createdDto = await billService.GetBillById(id, ct);
+        var response = mapper.Map<BillResponse>(createdDto);
 
-        await billService.CreateBill(createModel, ct);
-
-        return Created();
+        return CreatedAtAction(
+            nameof(GetBillById),
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:long}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> UpdateBill(
         long id, [FromBody]BillUpdateRequest request, CancellationToken ct)
     {
         var model = mapper.Map<BillUpdateModel>(request);
-
         await billService.UpdateBill(id, model, ct);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> Delete(long id, CancellationToken ct)
     {

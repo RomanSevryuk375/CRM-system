@@ -10,14 +10,13 @@ namespace CRM_system_backend.Controllers;
 
 [ApiController]
 [Route("api/v1/attachments")]
-
 public class AttachmentController(
     IAttachmentService attachmentService,
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<AttachmentItem>>> GetPagedAttachments(
+    public async Task<ActionResult<List<AttachmentResponse>>> GetPagedAttachments(
         [FromQuery]AttachmentFilter filter, CancellationToken ct)
     {
         var dto = await attachmentService.GetPagedAttachments(filter, ct);
@@ -29,6 +28,18 @@ public class AttachmentController(
 
         return Ok(response);
     }
+    
+    [HttpGet("{id:int}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
+    public async Task<ActionResult<AttachmentResponse>> GetAttachmentById(
+        long id, CancellationToken ct)
+    {
+        var dto = await attachmentService.GetAttachmentById(id, ct);
+
+        var response = mapper.Map<AttachmentResponse>(dto);
+
+        return Ok(response);
+    }
 
     [HttpPost]
     [Authorize(Policy = "AdminWorkerPolicy")]
@@ -36,13 +47,18 @@ public class AttachmentController(
         [FromBody]AttachmentRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<AttachmentCreateModel>(request);
+        var id = await attachmentService.CreateAttachment(createModel, ct);
 
-        await attachmentService.CreateAttachment(createModel, ct);
+        var createdDto = await attachmentService.GetAttachmentById(id, ct);
+        var response = mapper.Map<AttachmentResponse>(createdDto);
 
-        return Created();
+        return CreatedAtAction(
+            nameof(GetAttachmentById),
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:long}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> UpdateAttachment(
         long id, [FromBody] AttachmentUpdateRequest request, CancellationToken ct)
@@ -52,7 +68,7 @@ public class AttachmentController(
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> DeletingAttachment(
         long id, CancellationToken ct)

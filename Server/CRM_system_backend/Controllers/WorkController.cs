@@ -16,7 +16,7 @@ public class WorkController(
 {
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<WorkItem>>> GetPagedWork(
+    public async Task<ActionResult<List<WorkResponse>>> GetPagedWork(
         [FromQuery] WorkFilter filter, CancellationToken ct)
     {
         var dto = await workService.GetPagedWork(filter, ct);
@@ -28,6 +28,17 @@ public class WorkController(
 
         return Ok(response);
     }
+    
+    [HttpGet("{id:long}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
+    public async Task<ActionResult<WorkResponse>> GetWorkById(
+        long id, CancellationToken ct)
+    {
+        var dto = await workService.GetWorkById(id, ct);
+        var response = mapper.Map<WorkResponse>(dto);
+
+        return Ok(response);
+    }
 
     [HttpPost]
     [Authorize(Policy = "AdminWorkerPolicy")]
@@ -35,25 +46,29 @@ public class WorkController(
         [FromBody] WorkRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<WorkCreateModel>(request);
+        var id =  await workService.CreateWork(createModel, ct);
 
-        await workService.CreateWork(createModel, ct);
-
-        return Created();
+        var createdDto = await workService.GetWorkById(id, ct);
+        var response = mapper.Map<WorkResponse>(createdDto);
+        
+        return CreatedAtAction(
+            nameof(GetWorkById),
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:long}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> UpdateWork(
         long id, [FromBody] WorkRequest request, CancellationToken ct)
     {
         var model = mapper.Map<WorkUpdateModel>(request);
-
         await workService.UpdateWork(id, model, ct);
 
         return NoContent();
     }
 
-    [HttpDelete("${id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> DeleteWork(long id, CancellationToken ct)
     {

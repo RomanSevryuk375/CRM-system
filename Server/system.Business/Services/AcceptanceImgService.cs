@@ -17,7 +17,7 @@ public class AcceptanceImgService(
     ILogger<AcceptanceImgService> logger,
     IFileService fileService) : IAcceptanceImgService
 {
-    public async Task<AcceptanceImgItem> GetAcceptanceImgById(int id, CancellationToken ct)
+    public async Task<AcceptanceImgItem> GetAcceptanceImgById(long id, CancellationToken ct)
     {
         return await acceptanceImgRepository.GetById(id, ct)
                ?? throw new NotFoundException($"AcceptanceImg {id} not found");

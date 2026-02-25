@@ -8,15 +8,15 @@ using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/vi/supplies")]
 [ApiController]
+[Route("api/v1/supplies")]
 public class SupplyController(
     ISupplyService supplyService,
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<SupplyItem>>> GetPagedSupplies(
+    public async Task<ActionResult<List<SupplyResponse>>> GetPagedSupplies(
         [FromQuery]SupplyFilter filter, CancellationToken ct)
     {
         var dto = await supplyService.GetPagedSupplies(filter, ct);
@@ -28,6 +28,17 @@ public class SupplyController(
 
         return Ok(response);
     }
+    
+    [HttpGet("{id:long}")]
+    [Authorize(Policy = "AdminPolicy")]
+    public async Task<ActionResult<SupplyResponse>> GetPagedSupplyById(
+        long id, CancellationToken ct)
+    {
+        var dto = await supplyService.GetSupplyById(id, ct);
+        var response = mapper.Map<SupplyResponse>(dto);
+
+        return Ok(response);
+    }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
@@ -35,13 +46,18 @@ public class SupplyController(
         SupplyRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<SupplyCreateModel>(request);
+        var id = await supplyService.CreateSupply(createModel, ct);
+        
+        var createdDto = await supplyService.GetSupplyById(id, ct);
+        var response = mapper.Map<SupplyResponse>(createdDto);
 
-        await supplyService.CreateSupply(createModel, ct);
-
-        return Created();
+        return CreatedAtAction(
+            nameof(GetPagedSupplyById),
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeleteSupply(long id, CancellationToken ct)
     {

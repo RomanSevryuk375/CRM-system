@@ -9,8 +9,8 @@ using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/v1/schedules")]
 [ApiController]
+[Route("api/v1/schedules")]
 public class ScheduleController(
     IScheduleService scheduleService,
     IMapper mapper) : ControllerBase
@@ -29,6 +29,17 @@ public class ScheduleController(
 
         return Ok(response);
     }
+    
+    [HttpGet("{id:int}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
+    public async Task<ActionResult<ScheduleResponse>> GetScheduleById(
+        int id, CancellationToken ct)
+    {
+        var dto = await scheduleService.GetScheduleById(id, ct);
+        var response = mapper.Map<ScheduleResponse>(dto);
+
+        return Ok(response);
+    }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
@@ -36,10 +47,15 @@ public class ScheduleController(
         [FromBody]ScheduleRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<ScheduleCreateModel>(request);
+        var id = await scheduleService.CreateSchedule(createModel, ct);
+        
+        var createdDto = await scheduleService.GetScheduleById(id, ct);
+        var response = mapper.Map<ScheduleResponse>(createdDto);
 
-        await scheduleService.CreateSchedule(createModel, ct);
-
-        return Created();
+        return CreatedAtAction(
+            nameof(GetScheduleById),
+            new { id = createdDto.Id },
+            response);
     }
 
     [HttpPost("with-shift")]
@@ -49,25 +65,29 @@ public class ScheduleController(
     {
         var shiftCreateModel = mapper.Map<ShiftCreateModel>(request);
         var scheduleCreateModel = mapper.Map<ScheduleCreateModel>(request);
+        var id = await scheduleService.CreateWithShift(scheduleCreateModel, shiftCreateModel!, ct);
 
-        await scheduleService.CreateWithShift(scheduleCreateModel, shiftCreateModel!, ct);
+        var createdDto = await scheduleService.GetScheduleById(id, ct);
+        var response = mapper.Map<ScheduleResponse>(createdDto);
 
-        return NoContent();
+        return CreatedAtAction(
+            nameof(GetScheduleById),
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> UpdateSchedule(
         int id, ScheduleUpdateRequest request, CancellationToken ct)
     {
         var model = mapper.Map<ScheduleUpdateModel>(request);
-
         await scheduleService.UpdateSchedule(id, model, ct);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeleteSchedule
         (int id, CancellationToken ct)

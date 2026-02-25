@@ -24,7 +24,7 @@ public class PositionRepository(
         return query;
     }
 
-    public async Task<PositionItem?> GetById(int id, CancellationToken ct)
+    public async Task<PositionItem?> GetById(long id, CancellationToken ct)
     {
         return await context.Positions
             .AsNoTracking()

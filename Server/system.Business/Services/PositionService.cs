@@ -17,7 +17,7 @@ public class PositionService(
     ILogger<PositionService> logger,
     IUnitOfWork unitOfWork) : IPositionService
 {
-    public async Task<PositionItem> GetPositionById(int id, CancellationToken ct)
+    public async Task<PositionItem> GetPositionById(long id, CancellationToken ct)
     {
         return await positionRepository.GetById(id, ct)
                ?? throw new NotFoundException($"Position {id} not found");

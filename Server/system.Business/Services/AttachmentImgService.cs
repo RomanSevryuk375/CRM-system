@@ -17,7 +17,7 @@ public class AttachmentImgService(
     ILogger<AttachmentImgService> logger,
     IFileService fileService) : IAttachmentImgService
 {
-    public async Task<AttachmentImgItem> GetAttachmentImgById(int id, CancellationToken ct)
+    public async Task<AttachmentImgItem> GetAttachmentImgById(long id, CancellationToken ct)
     {
         return await attachmentImgRepository.GetById(id, ct)
                ?? throw new NotFoundException($"AttachmentImg {id} not found");

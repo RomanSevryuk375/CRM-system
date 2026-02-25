@@ -8,15 +8,15 @@ using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/v1/supply-sets")]
 [ApiController]
+[Route("api/v1/supply-sets")]
 public class SupplySetController(
     ISupplySetService supplySetService,
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<SupplySetItem>>> GetPagedSupplySets(
+    public async Task<ActionResult<List<SupplySetResponse>>> GetPagedSupplySets(
         [FromQuery] SupplySetFilter filter, CancellationToken ct)
     {
         var dto = await supplySetService.GetPagedSupplySets(filter, ct);
@@ -28,6 +28,17 @@ public class SupplySetController(
 
         return Ok(response);
     }
+    
+    [HttpGet("{id:long}")]
+    [Authorize(Policy = "AdminPolicy")]
+    public async Task<ActionResult<SupplySetResponse>> GetSupplySetById(
+        long id, CancellationToken ct)
+    {
+        var dto = await supplySetService.GetSupplySetById(id, ct);
+        var response = mapper.Map<SupplySetResponse>(dto);
+
+        return Ok(response);
+    }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
@@ -35,25 +46,29 @@ public class SupplySetController(
         [FromBody] SupplySetRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<SupplySetCreateModel>(request);
+        var id = await supplySetService.CreateSupplySet(createModel, ct);
+        
+        var createdDto = await supplySetService.GetSupplySetById(id, ct);
+        var response = mapper.Map<SupplySetResponse>(createdDto);
 
-        await supplySetService.CreateSupplySet(createModel, ct);
-
-        return Created();
+        return CreatedAtAction(
+            nameof(GetSupplySetById),
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:long}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> UpdateSupplySet(
         long id, [FromBody] SupplySetUpdateRequest request, CancellationToken ct)
     {
         var model = mapper.Map<SupplySetUpdateModel>(request);
-
         await supplySetService.UpdateSupplySet(id, model, ct);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeleteSupplySet(long id, CancellationToken ct)
     {

@@ -43,27 +43,39 @@ public class PaymentNoteService(
         return count;
     }
 
-    public async Task<long> CreatePaymentNote(PaymentNote paymentNote, CancellationToken ct)
+    public async Task<long> CreatePaymentNote(PaymentNoteCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating payment note start");
 
-        if (!await billRepository.Exists(paymentNote.BillId, ct))
+        if (!await billRepository.Exists(createModel.BillId, ct))
         {
-            logger.LogError("Bill{billId} not found", paymentNote.BillId);
-            throw new NotFoundException($"Bill {paymentNote.BillId} not found");
+            logger.LogError("Bill{billId} not found", createModel.BillId);
+            throw new NotFoundException($"Bill {createModel.BillId} not found");
         }
 
-        if (!await paymentMethodRepository.Exists((int)paymentNote.MethodId, ct))
+        if (!await paymentMethodRepository.Exists((int)createModel.MethodId, ct))
         {
-            logger.LogError("Method {methodId} not found", (int)paymentNote.MethodId);
-            throw new NotFoundException($"Method {(int)paymentNote.MethodId} not found");
+            logger.LogError("Method {methodId} not found", (int)createModel.MethodId);
+            throw new NotFoundException($"Method {(int)createModel.MethodId} not found");
+        }
+        
+        var (paymentNote, errors) = PaymentNote.Create(
+            0,
+            createModel.BillId,
+            createModel.Date,
+            createModel.Amount,
+            createModel.MethodId);
+        
+        if (errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var id = await paymentNoteRepository.Create(paymentNote, ct);
+        var id = await paymentNoteRepository.Create(paymentNote!, ct);
 
         logger.LogInformation("Creating payment note success");
 
-        logger.LogInformation("Recalculating bill{billId} start", paymentNote.BillId);
+        logger.LogInformation("Recalculating bill{billId} start", paymentNote!.BillId);
 
         await billRepository.RecalculateDebt(paymentNote.BillId, ct);
 

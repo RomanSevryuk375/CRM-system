@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels;
-using CRMSystem.Core.ProjectionModels.AccetanceImg;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.AcceptanceImg;
@@ -9,15 +8,15 @@ using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/v1/acceptance-images")]
 [ApiController]
+[Route("api/v1/acceptance-images")]
 public class AcceptanceImgController(
     IAcceptanceImgService acceptanceImgService,
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<AcceptanceImgItem>>> GetAcceptanceIng(
+    public async Task<ActionResult<List<AcceptanceImgResponse>>> GetAcceptanceIng(
         [FromQuery]AcceptanceImgFilter filter, CancellationToken ct)
     {
         var dto = await acceptanceImgService.GetAcceptanceIng(filter, ct);
@@ -29,8 +28,20 @@ public class AcceptanceImgController(
 
         return Ok(response);
     }
+    
+    [HttpGet("{id:int}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
+    public async Task<ActionResult<AcceptanceImgResponse>> GetAcceptanceIngById(
+        int id, CancellationToken ct)
+    {
+        var dto = await acceptanceImgService.GetAcceptanceImgById(id, ct);
+        var response = mapper.Map<AcceptanceImgResponse>(dto);
+        
 
-    [HttpGet("{id}/download")]
+        return Ok(response);
+    }
+
+    [HttpGet("{id:long}/img")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<IActionResult> DownloadImage(
         long id, CancellationToken ct)
@@ -52,26 +63,32 @@ public class AcceptanceImgController(
 
         await using var stream = request.File.OpenReadStream();
         var fileItem = new FileItem(stream, request.File.FileName, request.File.ContentType);
+        var id = await acceptanceImgService.CreateAcceptanceImg(
+            request.AcceptanceId, fileItem, request.Description, ct);
 
-        await acceptanceImgService.CreateAcceptanceImg(request.AcceptanceId, fileItem, request.Description, ct);
-
-        return Created();
+        var createdDto = await acceptanceImgService.GetAcceptanceImgById(id, ct);
+        var response = mapper.Map<AcceptanceImgResponse>(createdDto);
+        
+        return CreatedAtAction(
+            nameof(GetAcceptanceIngById),
+            new { Id = id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> UpdateAcceptanceImg(
-        long id, [FromBody] AcceptanceImgUpdateRequest request, CancellationToken ct)
+        int id, [FromBody] AcceptanceImgUpdateRequest request, CancellationToken ct)
     {
         await acceptanceImgService.UpdateAcceptanceImg(id, request.FilePath, request.Description, ct);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> DeleteAcceptanceImg(
-        long id, CancellationToken ct)
+        int id, CancellationToken ct)
     {
         await acceptanceImgService.DeleteAcceptanceImg(id, ct);
 

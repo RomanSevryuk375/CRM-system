@@ -10,14 +10,13 @@ namespace CRM_system_backend.Controllers;
 
 [ApiController]
 [Route("api/v1/acceptances")]
-
 public class AcceptanceController(
     IAcceptanceService acceptanceService,
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<AcceptanceItem>>> GetPagedAcceptance(
+    public async Task<ActionResult<List<AcceptanceResponse>>> GetPagedAcceptance(
         [FromQuery] AcceptanceFilter filter, CancellationToken ct)
     {
         var dto = await acceptanceService.GetPagedAcceptance(filter, ct);
@@ -29,6 +28,18 @@ public class AcceptanceController(
 
         return Ok(response);
     }
+    
+    [HttpGet("{id:long}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
+    public async Task<ActionResult<AcceptanceResponse>> GetAcceptanceById(
+        long id, CancellationToken ct)
+    {
+        var dto = await acceptanceService.GetAcceptanceById(id, ct);
+        var response = mapper.Map<AcceptanceResponse>(dto);
+        
+
+        return Ok(response);
+    }
 
     [HttpPost]
     [Authorize(Policy = "AdminWorkerPolicy")]
@@ -36,13 +47,18 @@ public class AcceptanceController(
         [FromBody] AcceptanceRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<AcceptanceCreateModel>(request);
+        var id = await acceptanceService.CreateAcceptance(createModel, ct);
+        
+        var createdDto = await acceptanceService.GetAcceptanceById(id, ct);
+        var response = mapper.Map<AcceptanceResponse>(createdDto);
 
-        await acceptanceService.CreateAcceptance(createModel, ct);
-
-        return Created();
+        return CreatedAtAction(
+            nameof(GetAcceptanceById),
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:long}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> UpdateAcceptance(
         long id, [FromBody] AcceptanceUpdateRequest request, CancellationToken ct)
@@ -54,9 +70,10 @@ public class AcceptanceController(
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult> DeleteAcceptance(long id, CancellationToken ct)
+    public async Task<ActionResult> DeleteAcceptance(
+        long id, CancellationToken ct)
     {
         await acceptanceService.DeleteAcceptance(id, ct);
 
