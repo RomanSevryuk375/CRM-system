@@ -24,6 +24,15 @@ public class PositionRepository(
         return query;
     }
 
+    public async Task<PositionItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Positions
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<PositionItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+
     public async Task<List<PositionItem>> GetPaged(PositionFilter filter, CancellationToken ct)
     {
         var query = context.Positions.AsNoTracking();

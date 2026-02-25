@@ -21,4 +21,9 @@ public class CachedOrderPriorityService(
             TimeSpan.FromHours(24),
             logger, ct);
     }
+
+    public async Task<OrderPriorityItem> GetOrderPriorityById(int id, CancellationToken ct)
+    {
+        return await decorated.GetOrderPriorityById(id, ct);
+    }
 }

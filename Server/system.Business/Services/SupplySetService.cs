@@ -14,6 +14,12 @@ public class SupplySetService(
     IPositionRepository positionRepository,
     ILogger<SupplySetService> logger) : ISupplySetService
 {
+    public async Task<SupplySetItem> GetSupplySetById(long id, CancellationToken ct)
+    {
+        return await supplySetRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"SupplySet {id} not found");
+    }
+    
     public async Task<List<SupplySetItem>> GetPagedSupplySets(SupplySetFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting supply sets start");

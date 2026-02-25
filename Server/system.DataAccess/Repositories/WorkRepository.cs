@@ -14,6 +14,16 @@ public class WorkRepository(
     SystemDbContext context,
     IMapper mapper) : IWorkRepository
 {
+    public async Task<WorkItem?> GetById (long id, CancellationToken ct)
+    {
+        return await context.Works
+            .AsNoTracking()
+            .Where(w => w.Id == id)
+            .ProjectTo<WorkItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+
+    }
+    
     public async Task<List<WorkItem>> GetPaged(WorkFilter filter, CancellationToken ct)
     {
         var query = context.Works.AsNoTracking();
@@ -46,16 +56,6 @@ public class WorkRepository(
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
-    }
-
-    public async Task<WorkItem?> GetById (long id, CancellationToken ct)
-    {
-        return await context.Works
-            .AsNoTracking()
-            .Where(w => w.Id == id)
-            .ProjectTo<WorkItem>(mapper.ConfigurationProvider, ct)
-            .FirstOrDefaultAsync(ct);
-
     }
 
     public async Task<int> GetCount(CancellationToken ct)

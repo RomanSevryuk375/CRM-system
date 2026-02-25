@@ -10,6 +10,7 @@ public interface IAbsenceRepository
     Task<int> Delete(int id, CancellationToken ct);
     Task<int> GetCount(AbsenceFilter filter, CancellationToken ct);
     Task<List<AbsenceItem>> GetPaged(AbsenceFilter filter, CancellationToken ct);
+    Task<AbsenceItem?> GetById(int id, CancellationToken ct);
     Task<int> Update(int id, AbsenceUpdateModel model, CancellationToken ct);
     Task<bool> Exists(int id, CancellationToken ct);
     Task<int?> GetWorkerId(int id, CancellationToken ct);

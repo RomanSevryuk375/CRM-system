@@ -10,5 +10,6 @@ public interface ISupplySetRepository
     Task<long> Delete(long id, CancellationToken ct);
     Task<int> GetCount(SupplySetFilter filter, CancellationToken ct);
     Task<List<SupplySetItem>> GetPaged(SupplySetFilter filter, CancellationToken ct);
+    Task<SupplySetItem?> GetById(long id, CancellationToken ct);
     Task<long> Update(long id, SupplySetUpdateModel model, CancellationToken ct);
 }

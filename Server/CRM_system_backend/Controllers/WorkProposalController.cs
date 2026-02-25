@@ -17,7 +17,7 @@ public class WorkProposalController(
 {
     [HttpGet]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<List<WorkProposalItem>>> GetPagedProposals(
+    public async Task<ActionResult<List<WorkProposalResponse>>> GetPagedProposals(
         [FromQuery] WorkProposalFilter filter, CancellationToken ct)
     {
         var dto = await workProposalService.GetPagedProposals(filter, ct);
@@ -30,49 +30,53 @@ public class WorkProposalController(
         return Ok(response);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:long}")]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<WorkProposalItem>> GetProposalById(
+    public async Task<ActionResult<WorkProposalResponse>> GetProposalById(
         long id, CancellationToken ct)
     {
         var dto = await workProposalService.GetProposalById(id, ct);
+        var response = mapper.Map<WorkProposalResponse>(dto);
 
-        return Ok(dto);
+        return Ok(response);
     }
 
     [HttpPost]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<long>> CreateProposal(
+    public async Task<ActionResult> CreateProposal(
         [FromBody] WorkProposalRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<WorkProposalCreateModel>(request);
-
-        var proposalId = await workProposalService.CreateProposal(createModel, ct);
+        var id = await workProposalService.CreateProposal(createModel, ct);
+        
+        var createdDto = await workProposalService.GetProposalById(id, ct);
+        var response = mapper.Map<WorkProposalResponse>(createdDto);
 
         return CreatedAtAction(
             nameof(GetProposalById), 
-            new { Id = proposalId }, 
-            null);
+            new { id = createdDto.Id }, 
+            response);
     }
 
-    [HttpPut("{id}/status")]
+    [HttpPatch("{id:long}")]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult> PathcStatusProposal(
+    public async Task<ActionResult> PatchStatusProposal(
         long id, [FromBody] ProposalStatusRequest request, CancellationToken ct)
     {
-        if (request.Status == ProposalStatusEnum.Accepted)
+        switch (request.Status)
         {
-            await workProposalService.AcceptProposal(id, ct);
-        }
-        else if (request.Status == ProposalStatusEnum.Rejected)
-        {
-            await workProposalService.RejectProposal(id, ct);
+            case ProposalStatusEnum.Accepted:
+                await workProposalService.AcceptProposal(id, ct);
+                break;
+            case ProposalStatusEnum.Rejected:
+                await workProposalService.RejectProposal(id, ct);
+                break;
         }
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeleteWorkProposal(long id, CancellationToken ct)
     {

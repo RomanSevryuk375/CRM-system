@@ -8,15 +8,15 @@ using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/v1/notifications")]
 [ApiController]
+[Route("api/v1/notifications")]
 public class NotificationController(
     INotificationService notificationService,
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<List<NotificationItem>>> GetPagedNotifications(
+    public async Task<ActionResult<List<NotificationResponse>>> GetPagedNotifications(
         [FromQuery]NotificationFilter filter, CancellationToken ct)
     {
         var dto = await notificationService.GetPagedNotifications(filter, ct);
@@ -28,6 +28,17 @@ public class NotificationController(
 
         return Ok(response);
     }
+    
+    [HttpGet("{id:long}")]
+    [Authorize(Policy = "AdminUserPolicy")]
+    public async Task<ActionResult<NotificationResponse>> GetNotificationById(
+        long id, CancellationToken ct)
+    {
+        var dto = await notificationService.GetNotificationById(id, ct);
+        var response = mapper.Map<NotificationResponse>(dto);
+
+        return Ok(response);
+    }
 
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
@@ -35,13 +46,18 @@ public class NotificationController(
         NotificationRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<NotificationCreateModel>(request);
+        var id = await notificationService.CreateNotification(createModel, ct);
+        
+        var createdModel = notificationService.GetNotificationById(id, ct);
+        var response = mapper.Map<NotificationResponse>(createdModel);
 
-        await notificationService.CreateNotification(createModel, ct);
-
-        return Created();
+        return CreatedAtAction(
+            nameof(GetNotificationById),
+            new { id = createdModel.Id },
+            response);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeleteNotification(
         long id, CancellationToken ct)

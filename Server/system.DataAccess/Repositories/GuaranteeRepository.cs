@@ -24,6 +24,15 @@ public class GuaranteeRepository(
         return query;
     }
 
+    public async Task<GuaranteeItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Guarantees
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<GuaranteeItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+
     public async Task<List<GuaranteeItem>> GetPaged(GuaranteeFilter filter, CancellationToken ct)
     {
         var query = context.Guarantees.AsNoTracking();

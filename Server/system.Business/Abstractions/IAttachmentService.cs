@@ -9,5 +9,6 @@ public interface IAttachmentService
     Task<long> DeletingAttachment(long id, CancellationToken ct);
     Task<int> GetCountAttachment(AttachmentFilter filter, CancellationToken ct);
     Task<List<AttachmentItem>> GetPagedAttachments(AttachmentFilter filter, CancellationToken ct);
+    Task<AttachmentItem> GetAttachmentById(long id, CancellationToken ct);
     Task<long> UpdateAttachment(long id, string? description, CancellationToken ct);
 }

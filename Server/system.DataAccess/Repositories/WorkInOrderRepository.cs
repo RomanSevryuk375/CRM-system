@@ -40,6 +40,15 @@ public class WorkInOrderRepository(
         return query;
     }
 
+    public async Task<WorkInOrderItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.WorksInOrder
+            .AsNoTracking()
+            .Where(w => w.Id == id)
+            .ProjectTo<WorkInOrderItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<WorkInOrderItem>> GetPaged(WorkInOrderFilter filter, CancellationToken ct)
     {
         var query = context.WorksInOrder.AsNoTracking();
@@ -102,13 +111,11 @@ public class WorkInOrderRepository(
 
     public async Task<List<WorkInOrderItem>> GetByOrderId(long orderId, CancellationToken ct)
     {
-        var worksInOrder = await context.WorksInOrder
+        return await context.WorksInOrder
             .AsNoTracking()
             .Where(w => w.OrderId == orderId)
             .ProjectTo<WorkInOrderItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
-
-        return worksInOrder;
     }
 
     public async Task<long> Create(WorkInOrder workInOrder, CancellationToken ct)

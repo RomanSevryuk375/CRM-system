@@ -1,21 +1,20 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.OrderPriority;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/v1/order-priorities")]
 [ApiController]
+[Route("api/v1/order-priorities")]
 public class OrderPriorityController(
     IOrderPriorityService orderPriorityService,
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<OrderPriorityItem>>> GetPriorities(CancellationToken ct)
+    public async Task<ActionResult<List<OrderPriorityResponse>>> GetPriorities(CancellationToken ct)
     {
         var dto = await orderPriorityService.GetPriorities(ct);
 

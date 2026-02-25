@@ -21,4 +21,9 @@ public class CachedNotificationTypeService(
             TimeSpan.FromHours(24),
             logger, ct);
     }
+
+    public async Task<NotificationTypeItem> GetNotificationTypeById(int id, CancellationToken ct)
+    {
+        return await decorated.GetNotificationTypeById(id, ct);
+    }
 }

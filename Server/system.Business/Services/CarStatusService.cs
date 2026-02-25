@@ -1,5 +1,6 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.ProjectionModels.CarStatus;
 using Microsoft.Extensions.Logging;
 
@@ -9,6 +10,12 @@ public class CarStatusService(
     ICarStatusRepository carStatusRepository,
     ILogger<CarStatusService> logger) : ICarStatusService
 {
+    public async Task<CarStatusItem> GetCarStatusById(int id, CancellationToken ct)
+    {
+        return await carStatusRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"CarStatus {id} not found");
+    }
+    
     public async Task<List<CarStatusItem>> GetCarStatuses(CancellationToken ct)
     {
         logger.LogInformation("Car status getting start");

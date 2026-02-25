@@ -22,6 +22,12 @@ public class OrderService(
     ILogger<OrderService> logger,
     IUnitOfWork unitOfWork) : IOrderService
 {
+    public async Task<OrderItem> GetOrderById(long id, CancellationToken ct)
+    {
+        return await orderRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Order {id} not found");
+    }
+    
     public async Task<List<OrderItem>> GetPagedOrders(OrderFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting orders start");

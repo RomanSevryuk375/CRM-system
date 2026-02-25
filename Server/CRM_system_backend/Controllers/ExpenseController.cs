@@ -16,7 +16,7 @@ public class ExpenseController(
 {
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<ExpenseItem>>> GetPagedExpense(
+    public async Task<ActionResult<List<ExpenseResponse>>> GetPagedExpense(
         [FromQuery] ExpenseFilter filter, CancellationToken ct)
     {
         var dto = await expenseService.GetPagedExpenses(filter, ct);
@@ -29,34 +29,49 @@ public class ExpenseController(
         return Ok(response);
     }
 
+    [HttpGet("{id:int}")]
+    [Authorize(Policy = "AdminPolicy")]
+    public async Task<ActionResult<ExpenseResponse>> GetExpenseById(
+        int id, CancellationToken ct)
+    {
+        var dto = await expenseService.GetExpenseById(id, ct);
+        var response = mapper.Map<ExpenseResponse>(dto);
+
+        return Ok(response);
+    }
+    
     [HttpPost]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> CreateExpense(
         [FromBody] ExpenseRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<ExpenseCreateModel>(request);
+        var id = await expenseService.CreateExpenses(createModel!, ct);
+        
+        var createdDto = await expenseService.GetExpenseById(id, ct);
+        var response = mapper.Map<ExpenseResponse>(createdDto);
 
-        await expenseService.CreateExpenses(createModel!, ct);
-
-        return Created();
+        return CreatedAtAction(
+            nameof(GetExpenseById), 
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> UpdateExpense(
         int id, [FromBody] ExpenseUpdateRequest request, CancellationToken ct)
     {
         var model = mapper.Map<ExpenseUpdateModel>(request);
-
         await expenseService.UpdateExpense(id, model, ct);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeleteExpense(
-        long id, CancellationToken ct)
+        int id, CancellationToken ct)
     {
         await expenseService.DeleteExpense(id, ct);
 

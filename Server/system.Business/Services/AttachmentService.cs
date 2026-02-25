@@ -14,6 +14,12 @@ public class AttachmentService(
     IWorkerRepository workerRepository,
     ILogger<AttachmentService> logger) : IAttachmentService
 {
+    public async Task<AttachmentItem> GetAttachmentById(long id, CancellationToken ct)
+    {
+        return await attachmentRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Attachment {id} not found");
+    }
+    
     public async Task<List<AttachmentItem>> GetPagedAttachments(AttachmentFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting attachments start");

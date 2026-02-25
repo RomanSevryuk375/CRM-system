@@ -22,4 +22,9 @@ public class CachedPaymentMethodService(
             logger, ct);
 
     }
+
+    public async Task<PaymentMethodItem> GetPaymentMethodById(int id, CancellationToken ct)
+    {
+        return await decorated.GetPaymentMethodById(id, ct);
+    }
 }

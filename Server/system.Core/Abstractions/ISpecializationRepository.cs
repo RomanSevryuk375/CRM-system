@@ -8,6 +8,7 @@ public interface ISpecializationRepository
     Task<int> Create(Specialization specialization, CancellationToken ct);
     Task<int> Delete(int id, CancellationToken ct);
     Task<List<SpecializationItem>> Get(CancellationToken ct);
+    Task<SpecializationItem?> GetById(int id, CancellationToken ct);
     Task<int> Update(int id, string? name, CancellationToken ct);
     Task<bool> Exists(int id, CancellationToken ct);
     Task<bool> ExistsByName(string name, CancellationToken ct);

@@ -16,7 +16,7 @@ public class CarController(
 {
     [HttpGet]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<List<CarItem>>> GetPagedCars(
+    public async Task<ActionResult<List<CarResponse>>> GetPagedCars(
         [FromQuery]CarFilter filter, CancellationToken ct)
     {
         var dto = await carService.GetPagedCars(filter, ct);
@@ -29,14 +29,15 @@ public class CarController(
         return Ok(response);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:long}")]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<CarItem>> GetCarById(
+    public async Task<ActionResult<CarResponse>> GetCarById(
         long id, CancellationToken ct)
     {
-        var car = await carService.GetCarById(id, ct);
+        var dto = await carService.GetCarById(id, ct);
+        var response = mapper.Map<CarResponse>(dto);
 
-        return Ok(car);
+        return Ok(response);
     }
 
     [HttpPost]
@@ -45,25 +46,29 @@ public class CarController(
         [FromBody] CarRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<CarCreateModel>(request);
+        var id = await carService.CreateCar(createModel, ct);
 
-        await carService.CreateCar(createModel, ct);
+        var createdDto = await carService.GetCarById(id, ct);
+        var response = mapper.Map<CarResponse>(createdDto);
 
-        return Created();
+        return CreatedAtAction(
+            nameof(GetCarById), 
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:long}")]
     [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult> UpdateCar(
         long id, [FromBody]CarUpdateRequest request, CancellationToken ct)
     {
         var updateModel = mapper.Map<CarUpdateModel>(request);
-
         await carService.UpdateCar(id, updateModel, ct);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult> DeleteCar(
         long id, CancellationToken ct)

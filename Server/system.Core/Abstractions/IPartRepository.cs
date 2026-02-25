@@ -10,6 +10,7 @@ public interface IPartRepository
     Task<long> Delete(long id, CancellationToken ct);
     Task<int> GetCount(PartFilter filter, CancellationToken ct);
     Task<List<PartItem>> GetPaged(PartFilter filter, CancellationToken ct);
+    Task<PartItem?> GetById(long id, CancellationToken ct);
     Task<long> Update(long id, PartUpdateModel model, CancellationToken ct);
     Task<bool> Exists(long id, CancellationToken ct);
 }

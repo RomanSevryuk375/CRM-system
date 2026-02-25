@@ -13,6 +13,7 @@ public interface IScheduleService
         CancellationToken ct);
     Task<int> DeleteSchedule(int id, CancellationToken ct);
     Task<int> GetCountSchedules(ScheduleFilter filter, CancellationToken ct);
+    Task<ScheduleItem> GetScheduleById(int id, CancellationToken ct);
     Task<List<ScheduleItem>> GetPagedSchedules(ScheduleFilter filter, CancellationToken ct);
     Task<int> UpdateSchedule(int id, ScheduleUpdateModel model, CancellationToken ct);
 }

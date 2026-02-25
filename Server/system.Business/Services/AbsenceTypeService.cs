@@ -22,6 +22,12 @@ public class AbsenceTypeService(
         return absenceType;
     }
 
+    public async Task<AbsenceTypeItem> GetAbsenceTypeById(int id, CancellationToken ct)
+    {
+        return await absenceTypeRepository.GetById(id, ct)
+            ?? throw new NotFoundException($"AbsenceType {id} not found");
+    }
+
     public async Task<int> CreateAbsenceType(AbsenceType absenceType, CancellationToken ct)
     {
         logger.LogInformation("Creating absenceType start");

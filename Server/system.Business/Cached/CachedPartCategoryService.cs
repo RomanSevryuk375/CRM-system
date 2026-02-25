@@ -44,6 +44,11 @@ public class CachedPartCategoryService(
             logger, ct);
     }
 
+    public async Task<PartCategoryItem> GetPartCategoryById(int id, CancellationToken ct)
+    {
+        return await decorated.GetPartCategoryById(id, ct);
+    }
+
     public async Task<int> UpdatePartCategory(int id, PartCategoryUpdateModel model, CancellationToken ct)
     {
         var partId = await decorated.UpdatePartCategory(id, model, ct);

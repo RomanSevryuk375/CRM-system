@@ -9,6 +9,7 @@ public interface ISupplyRepository
     Task<long> Create(Supply supply, CancellationToken ct);
     Task<long> Delete(long id, CancellationToken ct);
     Task<List<SupplyItem>> GetPaged(SupplyFilter filter, CancellationToken ct);
+    Task<SupplyItem?> GetById(long id, CancellationToken ct);
     Task<int> GetCount(SupplyFilter filter, CancellationToken ct);
     Task<bool> Exists(long id, CancellationToken ct);
 }

@@ -29,6 +29,15 @@ public class SupplySetRepository(
         return query;
     }
 
+    public async Task<SupplySetItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.SupplySets
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<SupplySetItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+
     public async Task<List<SupplySetItem>> GetPaged(SupplySetFilter filter, CancellationToken ct)
     {
         var query = context.SupplySets.AsNoTracking();

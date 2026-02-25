@@ -13,6 +13,15 @@ public class StorageCellRepository(
     SystemDbContext context,
     IMapper mapper) : IStorageCellRepository
 {
+    public async Task<StorageCellItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.StorageCells
+            .AsNoTracking()
+            .Where(s => s.Id == id)
+            .ProjectTo<StorageCellItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<StorageCellItem>> Get(CancellationToken ct)
     {
         return await context.StorageCells

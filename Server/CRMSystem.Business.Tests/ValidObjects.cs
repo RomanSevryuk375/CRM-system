@@ -9,6 +9,7 @@ using CRMSystem.Core.ProjectionModels.Order;
 using CRMSystem.Core.ProjectionModels.Part;
 using CRMSystem.Core.ProjectionModels.PartCategory;
 using CRMSystem.Core.ProjectionModels.PartSet;
+using CRMSystem.Core.ProjectionModels.PaymentNote;
 using CRMSystem.Core.ProjectionModels.Position;
 using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.ProjectionModels.Shift;
@@ -159,12 +160,12 @@ internal static class ValidObjects
     internal static OrderCreateModel CreateValidOrder()
     {
         var order = new OrderCreateModel(
-        OrderStatusEnum.Pending,       // status
-        1,                             // carId
-        DateOnly.FromDateTime(DateTime.Now), // date
-        null,                          // orderPdfFileName (ставим null)
-        null,                          // orderAgreementPdfFileName (ставим null)
-        OrderPriorityEnum.Medium);
+            OrderStatusEnum.Pending,       
+            1,                             
+            DateOnly.FromDateTime(DateTime.Now), 
+            null,                        
+            null,                   
+            OrderPriorityEnum.Medium);
         
         order.Should().NotBeNull();
 
@@ -213,21 +214,19 @@ internal static class ValidObjects
         return partSet;
     }
 
-    internal static PaymentNote CreateValidPaymentNote()
+    internal static PaymentNoteCreateModel CreateValidPaymentNote()
     {
-        var (note, errors) = PaymentNote.Create(
-            0,
+        var note = new PaymentNoteCreateModel(
             1,
             new DateTime(2025, 1, 1),
             100,
             PaymentMethodEnum.Cash);
 
         note.Should().NotBeNull();
-        errors.Should().BeEmpty();
 
         return note;
     }
-
+    
     internal static PositionCreateModel CreateValidPosition()
     {
         var position = new PositionCreateModel(

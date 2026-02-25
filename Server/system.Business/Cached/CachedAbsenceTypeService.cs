@@ -46,6 +46,11 @@ public class CachedAbsenceTypeService(
             logger, ct);
     }
 
+    public async Task<AbsenceTypeItem> GetAbsenceTypeById(int id, CancellationToken ct)
+    {
+        return await decorated.GetAbsenceTypeById(id, ct);
+    }
+
     public async Task<int> UpdateAbsenceType(int id, string name, CancellationToken ct)
     {
         var Id = await decorated.UpdateAbsenceType(id, name, ct);

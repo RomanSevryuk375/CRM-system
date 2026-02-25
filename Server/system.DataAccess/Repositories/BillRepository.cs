@@ -30,6 +30,15 @@ public class BillRepository(
         return query;
     }
 
+    public async Task<BillItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Bills
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<BillItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+
     public async Task<List<BillItem>> GetPaged(BillFilter filter, CancellationToken ct)
     {
         var query = context.Bills.AsNoTracking();

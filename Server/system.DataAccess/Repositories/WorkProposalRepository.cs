@@ -41,6 +41,15 @@ public class WorkProposalRepository(
         return query;
     }
 
+    public async Task<WorkProposalItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.WorkProposals
+            .AsNoTracking()
+            .Where(p => p.Id == id)
+            .ProjectTo<WorkProposalItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<WorkProposalItem>> GetPaged(WorkProposalFilter filter, CancellationToken ct)
     {
         var query = context.WorkProposals.AsNoTracking();
@@ -92,19 +101,9 @@ public class WorkProposalRepository(
             .ToListAsync(ct);
     }
 
-    public async Task<WorkProposalItem?> GetById(long id, CancellationToken ct)
-    {
-        return await context.WorkProposals
-            .AsNoTracking()
-            .Where(p => p.Id == id)
-            .ProjectTo<WorkProposalItem>(mapper.ConfigurationProvider, ct)
-            .FirstOrDefaultAsync(ct);
-    }
-
     public async Task<int> GetCount(WorkProposalFilter filter, CancellationToken ct)
     {
         var query = context.WorkProposals.AsNoTracking();
-
         query = ApplyFilter(query, filter);
 
         return await query.CountAsync(ct);
@@ -146,7 +145,7 @@ public class WorkProposalRepository(
     public async Task<long> AcceptProposal(long id, CancellationToken ct)
     {
         var workProposal = await context.WorkProposals
-            .SingleOrDefaultAsync(X => X.Id == id, ct)
+            .SingleOrDefaultAsync(x => x.Id == id, ct)
         ?? throw new NotFoundException("Work proposal not found");
 
         workProposal.StatusId = (int)ProposalStatusEnum.Accepted;
@@ -159,7 +158,7 @@ public class WorkProposalRepository(
     public async Task<long> RejectProposal(long id, CancellationToken ct)
     {
         var workProposal = await context.WorkProposals
-            .SingleOrDefaultAsync(X => X.Id == id, ct)
+            .SingleOrDefaultAsync(x => x.Id == id, ct)
         ?? throw new NotFoundException("Work proposal not found");
 
         workProposal.StatusId = (int)ProposalStatusEnum.Rejected;

@@ -1,5 +1,6 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.ProjectionModels.PaymentMethod;
 using Microsoft.Extensions.Logging;
 
@@ -9,6 +10,12 @@ public class PaymentMethodService(
     IPaymentMethodRepository paymentMethodRepository,
     ILogger<PaymentMethodService> logger) : IPaymentMethodService
 {
+    public async Task<PaymentMethodItem> GetPaymentMethodById(int id, CancellationToken ct)
+    {
+        return await paymentMethodRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"PaymentMethod {id} not found");
+    }
+    
     public async Task<List<PaymentMethodItem>> GetPaymentMethods(CancellationToken ct)
     {
         logger.LogInformation("Getting payment method start");

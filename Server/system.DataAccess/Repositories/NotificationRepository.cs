@@ -39,6 +39,15 @@ public class NotificationRepository(
         return query;
     }
 
+    public async Task<NotificationItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Notifications
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<NotificationItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+
     public async Task<List<NotificationItem>> GetPaged(NotificationFilter filter, CancellationToken ct)
     {
         var query = context.Notifications.AsNoTracking();

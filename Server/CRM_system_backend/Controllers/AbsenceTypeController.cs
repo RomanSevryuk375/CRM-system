@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Models;
-using CRMSystem.Core.ProjectionModels.AbsenceType;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.AbsenceType;
@@ -16,12 +15,23 @@ public class AbsenceTypeController(
 {
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<AbsenceTypeItem>>> GetAllAbsenceType(
+    public async Task<ActionResult<List<AbsenceTypeResponse>>> GetAllAbsenceType(
         CancellationToken ct)
     {
         var dto = await absenceTypeService.GetAllAbsenceType(ct);
 
         var response = mapper.Map<List<AbsenceTypeResponse>>(dto);
+
+        return Ok(response);
+    }
+    
+    [HttpGet("{id:int}")]
+    [Authorize(Policy = "AdminPolicy")]
+    public async Task<ActionResult<AbsenceTypeResponse>> GetAbsenceTypeById(
+        int id, CancellationToken ct)
+    {
+        var dto = await absenceTypeService.GetAbsenceTypeById(id, ct);
+        var response = mapper.Map<AbsenceTypeResponse>(dto);
 
         return Ok(response);
     }
@@ -31,21 +41,20 @@ public class AbsenceTypeController(
     public async Task<ActionResult> CreateAbsenceType(
         [FromBody] AbsenceTypeRequest request, CancellationToken ct)
     {
-        var (absenceType, errors) = AbsenceType.Create(
-            0,
-            request.Name);
+        var (absenceType, errors) = AbsenceType.Create(0, request.Name);
+        if (errors is not null && errors.Any()) return BadRequest(errors);
+        var id = await absenceTypeService.CreateAbsenceType(absenceType!, ct);
+        
+        var createdDto = await absenceTypeService.GetAbsenceTypeById(id, ct);
+        var response = mapper.Map<AbsenceTypeResponse>(createdDto);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await absenceTypeService.CreateAbsenceType(absenceType!, ct);
-
-        return Created();
+        return CreatedAtAction(
+            nameof(GetAbsenceTypeById),
+            new { Id = id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> UpdateAbsenceType(
         int id, [FromBody] AbsenceTypeUpdateRequest request, CancellationToken ct)
@@ -55,7 +64,7 @@ public class AbsenceTypeController(
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeleteAbsenceType(
         int id, CancellationToken ct)

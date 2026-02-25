@@ -10,6 +10,15 @@ public class BillStatusRepository(
     SystemDbContext context,
     IMapper mapper) : IBillStatusRepository
 {
+    public async Task<BillStatusItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.BillStatuses
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<BillStatusItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<BillStatusItem>> Get(CancellationToken ct)
     {
         return await context.BillStatuses

@@ -29,6 +29,15 @@ public class ScheduleRepository(
         return query;
     }
 
+    public async Task<ScheduleItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.Schedules
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<ScheduleItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+
     public async Task<List<ScheduleItem>> GetPaged(ScheduleFilter filter, CancellationToken ct)
     {
         var query = context.Schedules.AsNoTracking();

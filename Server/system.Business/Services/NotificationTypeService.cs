@@ -2,6 +2,7 @@
 
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.ProjectionModels.NotificationType;
 using Microsoft.Extensions.Logging;
 
@@ -11,6 +12,12 @@ public class NotificationTypeService(
     INotificationTypeRepository repo,
     ILogger<NotificationTypeService> logger) : INotificationTypeService
 {
+    public async Task<NotificationTypeItem> GetNotificationTypeById(int id, CancellationToken ct)
+    {
+        return await repo.GetById(id, ct)
+               ?? throw new NotFoundException($"NotificationType {id} not found");
+    }
+    
     public async Task<List<NotificationTypeItem>> GetNotificationTypes(CancellationToken ct)
     {
         logger.LogInformation("Getting NotificationType start");

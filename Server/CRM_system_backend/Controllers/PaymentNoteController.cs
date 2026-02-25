@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
+using CRMSystem.Core.ProjectionModels.PaymentNote;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.PaymentNote;
@@ -17,7 +17,7 @@ public class PaymentNoteController(
 {
     [HttpGet]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<List<PaymentNote>>> GetPaymentNote(
+    public async Task<ActionResult<List<PaymentNoteResponse>>> GetPaymentNote(
         [FromQuery] PaymentNoteFilter filter, CancellationToken ct)
     {
         var dto  = await paymentNoteService.GetPagedPaymentNotes(filter, ct);
@@ -29,32 +29,38 @@ public class PaymentNoteController(
 
         return Ok(response);
     }
+    
+    [HttpGet("{id:long}")]
+    [Authorize(Policy = "AdminUserPolicy")]
+    public async Task<ActionResult<PaymentNoteResponse>> GetPaymentNoteById(
+        long id, CancellationToken ct)
+    {
+        var dto  = await paymentNoteService.GetPaymentNoteById(id, ct);
+        var  response = mapper.Map<PaymentNoteResponse>(dto);
+
+        return Ok(response);
+    }
 
     [HttpPost]
     [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult> CreatePaymentNote(
         [FromBody] PaymentNoteRequest request, CancellationToken ct)
     {
-        var (paymentNote, errors) = PaymentNote.Create(
-            0,
-            request.BillId,
-            request.Date,
-            request.Amount,
-            request.MethodId);
+        var createModel = mapper.Map<PaymentNoteCreateModel>(request);
+        var id = await paymentNoteService.CreatePaymentNote(createModel, ct);
+        
+        var createdDto = await paymentNoteService.GetPaymentNoteById(id, ct);
+        var response = mapper.Map<PaymentNoteResponse>(createdDto);
 
-        if (errors is not null && errors.Any())
-        {
-            return BadRequest(errors);
-        }
-
-        await paymentNoteService.CreatePaymentNote(paymentNote!, ct);
-
-        return Created();
+        return CreatedAtAction(
+            nameof(GetPaymentNoteById),
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:long}")]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<int>> UpdatePaymentNote(
+    public async Task<ActionResult> UpdatePaymentNote(
         long id, [FromBody] PaymentMethodEnum? method, CancellationToken ct)
     {
         await paymentNoteService.UpratePaymentNote(id, method, ct);
@@ -62,7 +68,7 @@ public class PaymentNoteController(
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeletePaymentNote(int id, CancellationToken ct)
     {

@@ -21,4 +21,9 @@ public class CachedOrderStatusService(
             TimeSpan.FromHours(24),
             logger, ct);
     }
+
+    public async Task<OrderStatusItem> GetOrderStatusById(int id, CancellationToken ct)
+    {
+        return await decorated.GetOrderStatusById(id, ct);
+    }
 }

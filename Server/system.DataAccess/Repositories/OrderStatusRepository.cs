@@ -10,6 +10,15 @@ public class OrderStatusRepository(
     SystemDbContext context,
     IMapper mapper) : IOrderStatusRepository
 {
+    public async Task<OrderStatusItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.OrderStatuses
+            .AsNoTracking()
+            .Where(o => o.Id == id)
+            .ProjectTo<OrderStatusItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<OrderStatusItem>> Get(CancellationToken ct)
     {
         return await context.OrderStatuses

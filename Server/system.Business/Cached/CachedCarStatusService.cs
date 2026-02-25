@@ -21,4 +21,9 @@ public class CachedCarStatusService(
             TimeSpan.FromHours(24),
             logger, ct);
     }
+
+    public async Task<CarStatusItem> GetCarStatusById(int id, CancellationToken ct)
+    {
+        return await decorated.GetCarStatusById(id, ct);
+    }
 }

@@ -23,6 +23,15 @@ public class WorkerRepository(
 
         return query;
     }
+    
+    public async Task<WorkerItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.Workers
+            .AsNoTracking()
+            .Where(w => w.Id == id)
+            .ProjectTo<WorkerItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
 
     public async Task<List<WorkerItem>> GetPaged(WorkerFilter filter, CancellationToken ct)
     {
@@ -61,15 +70,6 @@ public class WorkerRepository(
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
-    }
-
-    public async Task<WorkerItem?> GetById(int id, CancellationToken ct)
-    {
-        return await context.Workers
-            .AsNoTracking()
-            .Where(w => w.Id == id)
-            .ProjectTo<WorkerItem>(mapper.ConfigurationProvider, ct)
-            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<WorkerItem?> GetByUserId(long userId, CancellationToken ct)

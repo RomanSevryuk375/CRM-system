@@ -18,6 +18,12 @@ public class ScheduleService(
     ILogger<ScheduleService> logger,
     IUnitOfWork unitOfWork) : IScheduleService
 {
+    public async Task<ScheduleItem> GetScheduleById(int id, CancellationToken ct)
+    {
+        return await scheduleRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Schedule {id} not found");
+    }
+    
     public async Task<List<ScheduleItem>> GetPagedSchedules(ScheduleFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting schedules start");

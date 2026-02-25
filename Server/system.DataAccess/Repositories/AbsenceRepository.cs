@@ -25,6 +25,15 @@ public class AbsenceRepository(
         return query;
     }
 
+    public async Task<AbsenceItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.Absences
+            .AsNoTracking()
+            .Where(x => x.Id == id)
+            .ProjectTo<AbsenceItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<AbsenceItem>> GetPaged(AbsenceFilter filter, CancellationToken ct)
     {
         var query = context.Absences.AsNoTracking();

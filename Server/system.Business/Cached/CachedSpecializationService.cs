@@ -40,6 +40,11 @@ public class CachedSpecializationService(
             logger, ct);
     }
 
+    public async Task<SpecializationItem> GetSpecializationById(int id, CancellationToken ct)
+    {
+        return await decorated.GetSpecializationById(id, ct);
+    }
+
     public async Task<int> UpdateSpecialization(int id, string? name, CancellationToken ct)
     {
         await distributed.RemoveAsync(CACHE_KEY, ct);

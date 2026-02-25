@@ -24,6 +24,15 @@ public class PartRepository(
         return query;
     }
 
+    public async Task<PartItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Parts
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<PartItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+
     public async Task<List<PartItem>> GetPaged(PartFilter filter, CancellationToken ct)
     {
         var query = context.Parts.AsNoTracking();

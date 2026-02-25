@@ -12,6 +12,12 @@ public class WorkService(
     IWorkRepository workRepository,
     ILogger<WorkService> logger) : IWorkService
 {
+    public async Task<WorkItem> GetWorkById(long id, CancellationToken ct)
+    {
+        return await workRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Work {id} not found");
+    }
+    
     public async Task<List<WorkItem>> GetPagedWork(WorkFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting works start");
