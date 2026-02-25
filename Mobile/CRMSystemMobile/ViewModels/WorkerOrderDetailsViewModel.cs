@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CRMSystemMobile.Extentions;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Order;
 using Shared.Contracts.PartSet;
@@ -9,6 +8,7 @@ using Shared.Contracts.WorkProposal;
 using Shared.Enums;
 using Shared.Filters;
 using System.Collections.ObjectModel;
+using CRMSystemMobile.Extensions;
 
 namespace CRMSystemMobile.ViewModels;
 
@@ -72,37 +72,39 @@ public partial class WorkerOrderDetailsViewModel(
     private async Task LoadWorksInternal()
     {
         var (profileId, _) = await identityService.GetProfileIdAsync();
-        var filter = new WorkInOrderFilter(
-            OrderIds: [Order.Id],
-            WorkerIds: [(int)profileId],
-            JobIds: [],
-            StatusIds: [],
-            SortBy: null,
-            Page: 1,
-            Limit: 100,
-            IsDescending: true
-        );
-        var (items, _) = await workInOrderService.GetWorksInOrder(filter);
-
-        MainThread.BeginInvokeOnMainThread(() =>
+        if (Order != null)
         {
-            MyWorks.Clear();
-            if (items == null)
+            var filter = new WorkInOrderFilter(
+                OrderIds: [Order.Id],
+                WorkerIds: [(int)profileId],
+                JobIds: [],
+                StatusIds: [],
+                SortBy: null,
+                Page: 1,
+                Limit: 100,
+                IsDescending: true
+            );
+            var (items, _) = await workInOrderService.GetWorksInOrder(filter);
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                return;
-            }
+                MyWorks.Clear();
+                if (items == null)
+                {
+                    return;
+                }
 
-            foreach (var i in items)
-            {
-                MyWorks.Add(i);
-            }
-        });
+                foreach (var i in items)
+                {
+                    MyWorks.Add(i);
+                }
+            });
+        }
     }
 
     private async Task LoadPartsInternal()
     {
         var filter = new PartSetFilter(
-            OrderIds: [Order.Id],
+            OrderIds: [Order?.Id],
             PositionIds: [],
             ProposalIds: [],
             SortBy: null,
@@ -131,7 +133,7 @@ public partial class WorkerOrderDetailsViewModel(
     {
         var (profileId, _) = await identityService.GetProfileIdAsync();
         var filter = new WorkProposalFilter(
-            OrderIds: [Order.Id],
+            OrderIds: [Order!.Id],
             WorkerIds: [(int)profileId],
             JobIds: [], StatusIds: [], SortBy: null, Page: 1, Limit: 100, IsDescending: true
         );
@@ -164,15 +166,21 @@ public partial class WorkerOrderDetailsViewModel(
     [RelayCommand]
     private async Task GoToAddPart()
     {
-        var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
-        await Shell.Current.GoToAsync("AddPartPage", navParam);
+        if (Order != null)
+        {
+            var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
+            await Shell.Current.GoToAsync("AddPartPage", navParam);
+        }
     }
 
     [RelayCommand]
     private async Task GoToAddProposal()
     {
-        var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
-        await Shell.Current.GoToAsync("AddProposalPage", navParam);
+        if (Order != null)
+        {
+            var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
+            await Shell.Current.GoToAsync("AddProposalPage", navParam);
+        }
     }
 
     [RelayCommand]

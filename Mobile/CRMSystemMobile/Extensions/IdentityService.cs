@@ -1,6 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 
-namespace CRMSystemMobile.Extentions;
+namespace CRMSystemMobile.Extensions;
 
 public class IdentityService
 {
@@ -38,13 +38,9 @@ public class IdentityService
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
 
-            if (jwtToken.ValidTo < DateTime.UtcNow)
-            {
-                System.Diagnostics.Debug.WriteLine("DEBUG: Токен просрочен");
-                return false;
-            }
-
-            return true;
+            if (jwtToken.ValidTo >= DateTime.UtcNow) return true;
+            System.Diagnostics.Debug.WriteLine("DEBUG: Токен просрочен");
+            return false;
         }
         catch
         {

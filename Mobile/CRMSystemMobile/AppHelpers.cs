@@ -1,23 +1,22 @@
-﻿namespace CRMSystemMobile
+﻿namespace CRMSystemMobile;
+
+internal static class AppHelpers
 {
-    internal static class AppHelpers
+
+    private static async void CheckAuthAndRedirect()
     {
-
-        private static async void CheckAuthAndRedirect()
+        try
         {
-            try
-            {
-                var token = await SecureStorage.Default.GetAsync("jwt_token");
+            var token = await SecureStorage.Default.GetAsync("jwt_token");
 
-                if (!string.IsNullOrEmpty(token))
-                {
-                    await Shell.Current.GoToAsync("//MainPage");
-                }
-            }
-            catch (Exception ex)
+            if (!string.IsNullOrEmpty(token))
             {
-                System.Diagnostics.Debug.WriteLine($"Auth check failed: {ex.Message}");
+                await Shell.Current.GoToAsync("//MainPage");
             }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Auth check failed: {ex.Message}");
         }
     }
 }

@@ -16,7 +16,7 @@ public class PaymentService(HttpClient httpClient)
             query += $"&SortBy={filter.SortBy}";
         }
 
-        if (filter.BillIds?.Any() == true)
+        if (filter.BillIds.Any() == true)
         {
             query = filter.BillIds.OfType<long?>().Aggregate(query, (current, id) => current + $"&BillIds={id}");
         }

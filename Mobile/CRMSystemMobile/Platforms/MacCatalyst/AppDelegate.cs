@@ -1,11 +1,10 @@
 ﻿using Foundation;
 
-namespace CRMSystemMobile
+namespace CRMSystemMobile;
+
+[Register("AppDelegate")]
+public class AppDelegate : MauiUIApplicationDelegate
 {
-    [Register("AppDelegate")]
-    public class AppDelegate : MauiUIApplicationDelegate
-    {
-        [Obsolete("Obsolete")]
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
-    }
+    [Obsolete("Obsolete")]
+    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 }
