@@ -12,7 +12,7 @@ namespace CRM_system_backend.Controllers;
 [Route("api/v1/users")]
 public class UserController(IUserService userService, IMapper mapper) : ControllerBase
 {
-    [HttpGet("/{login}")]
+    [HttpGet("{login}")]
     public async Task<ActionResult<UserItem>> GetUserByLogin(string login, CancellationToken ct)
     {
         var user = await userService.GetUsersByLogin(login, ct);
@@ -28,7 +28,7 @@ public class UserController(IUserService userService, IMapper mapper) : Controll
         return Ok(user);
     }
     
-    [HttpPost("/token")]
+    [HttpPost("token")]
     public async Task<ActionResult<LoginResponse>> LoginUser(
         [FromBody] LoginRequest loginRequest, CancellationToken ct)
     {

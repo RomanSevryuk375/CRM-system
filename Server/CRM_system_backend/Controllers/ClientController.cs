@@ -57,7 +57,7 @@ public class ClientController(
             response);
     }
 
-    [HttpPost("/users")]
+    [HttpPost("users")]
     public async Task<ActionResult> CreateClientWithUser(
         [FromBody] ClientRegisterRequest request, CancellationToken ct)
     {

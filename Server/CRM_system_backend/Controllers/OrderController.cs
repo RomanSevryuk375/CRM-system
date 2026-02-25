@@ -68,7 +68,7 @@ public class OrderController(
             response);
     }
 
-    [HttpPost("/bills")]
+    [HttpPost("bills")]
     [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult> CreateOrderWithBill(
         [FromBody] OrderWithBillRequest request, CancellationToken ct)

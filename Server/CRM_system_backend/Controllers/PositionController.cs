@@ -41,7 +41,7 @@ public class PositionController(
         return Ok(response);
     }
 
-    [HttpPost("/parts")]
+    [HttpPost("parts")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> CreatePositionWithPart(
         [FromBody] PositionWithPartRequest request, CancellationToken ct)

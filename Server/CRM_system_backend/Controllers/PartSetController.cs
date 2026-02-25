@@ -40,7 +40,7 @@ public class PartSetController(
         return Ok(response);
     }
 
-    [HttpGet("/orders/{orderId:long}")]
+    [HttpGet("orders/{orderId:long}")]
     [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<List<PartSetItem>>> GetPartSetsByOrderId(
         long orderId, CancellationToken ct)

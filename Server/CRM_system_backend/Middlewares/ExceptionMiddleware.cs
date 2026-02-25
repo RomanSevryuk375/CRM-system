@@ -52,7 +52,7 @@ public class CustomExceptionMiddleware
         var response = new
         {
             StatusCode = statusCode,
-            message = exception.Message,
+            Message = exception.Message,
         };
 
         return context.Response.WriteAsJsonAsync(response);
