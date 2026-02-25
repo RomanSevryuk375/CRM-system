@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage
     x:Class="CRMSystemMobile.View.MainPage"
@@ -12,10 +12,6 @@
     Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
         <Grid BackgroundColor="#112347" RowDefinitions="Auto, *">
 
             <Grid
@@ -111,9 +107,7 @@
                                 Stroke="Transparent"
                                 StrokeShape="RoundRectangle 12">
                                 <Border.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GoToOrderDetailsCommand}"
-                                        CommandParameter="{Binding .}" />
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GoToOrderDetailsCommand}" CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
                                 <Grid RowDefinitions="60, Auto" RowSpacing="25">
 
@@ -215,17 +209,22 @@
             Grid.Row="0"
             Grid.RowSpan="2"
             BackgroundColor="Transparent"
-            IsVisible="{Binding IsMenuSheetOpen}">
+            IsVisible="{Binding IsMenuSheetOpen}"
+            ZIndex="999">
             <Grid RowDefinitions="*, Auto">
-                <BoxView Grid.Row="0" BackgroundColor="#80000000">
+                <BoxView
+                    BackgroundColor="#80000000"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill">
                     <BoxView.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ToggleMenuSheetCommand}" />
                     </BoxView.GestureRecognizers>
                 </BoxView>
                 <Border
-                    Grid.Row="1"
+                    Padding="0"
                     BackgroundColor="#1C2D4F"
                     HeightRequest="{OnPlatform Default=350}"
+                    StrokeShape="RoundRectangle 20,20,0,0"
                     StrokeThickness="0"
                     VerticalOptions="End">
 

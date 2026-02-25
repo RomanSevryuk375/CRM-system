@@ -3,10 +3,12 @@ using CommunityToolkit.Mvvm.Input;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Schedule;
 using System.Collections.ObjectModel;
+using CRMSystemMobile.Extensions;
+using Shared.Filters;
 
 namespace CRMSystemMobile.ViewModels;
 
-public partial class WorkerScheduleViewModel(ScheduleService scheduleService) : ObservableObject
+public partial class WorkerScheduleViewModel(ScheduleService scheduleService, IdentityService identityService) : ObservableObject
 {
     public ObservableCollection<ScheduleResponse> Schedules { get; } = [];
 
@@ -17,15 +19,25 @@ public partial class WorkerScheduleViewModel(ScheduleService scheduleService) : 
     [RelayCommand]
     private async Task LoadSchedules()
     {
-        if (IsBusy)
-        {
-            return;
-        }
+        if (IsBusy) return;
 
         try
         {
             IsBusy = true;
-            var items = await scheduleService.GetMySchedules();
+
+            var (profileId, _) = await identityService.GetProfileIdAsync();
+
+            var filter = new ScheduleFilter
+            (
+                WorkerIds: profileId > 0 ? [(int)profileId] : [], 
+                ShiftIds: [],       
+                SortBy: "date",     
+                Page: 1,            
+                Limit: 100,        
+                IsDescending: true  
+            );
+
+            var (items, count) = await scheduleService.GetMySchedules(filter);
 
             Schedules.Clear();
             if (items != null)
@@ -38,7 +50,7 @@ public partial class WorkerScheduleViewModel(ScheduleService scheduleService) : 
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось загрузить расписание. {ex}", "ОК");
+            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось загрузить расписание. {ex.Message}", "ОК");
         }
         finally
         {
@@ -48,7 +60,7 @@ public partial class WorkerScheduleViewModel(ScheduleService scheduleService) : 
     }
 
     [RelayCommand]
-    private async Task GoBack()
+    private static async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
     }

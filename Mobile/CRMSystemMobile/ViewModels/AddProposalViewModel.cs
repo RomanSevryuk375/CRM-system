@@ -97,7 +97,7 @@ public partial class AddProposalViewModel(
             Date = DateTime.Now
         };
 
-        var error = await proposalService.CreateWorkPropsal(request);
+        var error = await proposalService.CreateWorkProposal(request);
         IsBusy = false;
 
         if (error == null)

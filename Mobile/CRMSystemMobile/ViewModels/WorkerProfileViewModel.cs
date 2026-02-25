@@ -99,7 +99,7 @@ public partial class WorkerProfileViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task Logout()
+    public static async Task Logout()
     {
         if (await Shell.Current.DisplayAlert("Выход", "Выйти?", "Да", "Нет"))
         {
@@ -109,5 +109,5 @@ public partial class WorkerProfileViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task GoBack() => await Shell.Current.GoToAsync("..");
+    private static async Task GoBack() => await Shell.Current.GoToAsync("..");
 }
