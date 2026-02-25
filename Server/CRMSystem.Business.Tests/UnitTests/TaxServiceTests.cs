@@ -11,19 +11,18 @@ public class TaxServiceTests
 {
     private readonly Mock<ITaxRepository> _taxRepoMock;
     private readonly Mock<ITaxTypeRepository> _taxTypeRepoMock;
-    private readonly Mock<ILogger<TaxService>> _loggerMock;
     private readonly TaxService _service;
 
     public TaxServiceTests()
     {
         _taxRepoMock = new Mock<ITaxRepository>();
         _taxTypeRepoMock = new Mock<ITaxTypeRepository>();
-        _loggerMock = new Mock<ILogger<TaxService>>();
+        var loggerMock = new Mock<ILogger<TaxService>>();
 
         _service = new TaxService(
             _taxRepoMock.Object,
             _taxTypeRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

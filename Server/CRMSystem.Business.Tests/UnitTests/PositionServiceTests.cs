@@ -14,7 +14,6 @@ public class PositionServiceTests
     private readonly Mock<IPartRepository> _partRepoMock;
     private readonly Mock<IStorageCellRepository> _storageCellRepoMock;
     private readonly Mock<IPartCategoryRepository> _partCategoryRepoMock;
-    private readonly Mock<ILogger<PositionService>> _loggerMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly PositionService _service;
 
@@ -24,7 +23,7 @@ public class PositionServiceTests
         _partRepoMock = new Mock<IPartRepository>();
         _storageCellRepoMock = new Mock<IStorageCellRepository>();
         _partCategoryRepoMock = new Mock<IPartCategoryRepository>();    
-        _loggerMock = new Mock<ILogger<PositionService>>();
+        var loggerMock = new Mock<ILogger<PositionService>>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
 
         _service = new PositionService(
@@ -32,7 +31,7 @@ public class PositionServiceTests
             _partRepoMock.Object,
             _storageCellRepoMock.Object,
             _partCategoryRepoMock.Object,
-            _loggerMock.Object,
+            loggerMock.Object,
             _unitOfWorkMock.Object);
     }
 

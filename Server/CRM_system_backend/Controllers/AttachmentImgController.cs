@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels;
 using Microsoft.AspNetCore.Authorization;

@@ -14,7 +14,6 @@ public class NotificationServiceTests
     private readonly Mock<ICarRepository> _carRepoMock;
     private readonly Mock<INotificationStatusRepository> _notificationStatusRepoMock;
     private readonly Mock<INotificationTypeRepository> _notificationTypeRepoMock;
-    private readonly Mock<ILogger<NotificationService>> _loggerMock;
     private readonly NotificationService _service;
 
     public NotificationServiceTests()
@@ -24,7 +23,7 @@ public class NotificationServiceTests
         _carRepoMock = new Mock<ICarRepository>();
         _notificationStatusRepoMock = new Mock<INotificationStatusRepository>();
         _notificationTypeRepoMock = new Mock<INotificationTypeRepository>();
-        _loggerMock = new Mock<ILogger<NotificationService>>();
+        var loggerMock = new Mock<ILogger<NotificationService>>();
 
         _service = new NotificationService(
             _notificationRepoMock.Object,
@@ -32,7 +31,7 @@ public class NotificationServiceTests
             _carRepoMock.Object,
             _notificationStatusRepoMock.Object,
             _notificationTypeRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

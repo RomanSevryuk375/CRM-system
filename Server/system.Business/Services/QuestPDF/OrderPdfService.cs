@@ -105,9 +105,9 @@ public class OrderPdfService : IOrderPdfService
                         table.ColumnsDefinition(cd =>
                         {
                             cd.RelativeColumn(5);
-                            cd.RelativeColumn(1);
-                            cd.RelativeColumn(1);
-                            cd.RelativeColumn(1);
+                            cd.RelativeColumn();
+                            cd.RelativeColumn();
+                            cd.RelativeColumn();
                         });
                         
                         table.Header(h =>
@@ -172,9 +172,9 @@ public class OrderPdfService : IOrderPdfService
                         table.ColumnsDefinition(cd =>
                         {
                             cd.RelativeColumn(5);
-                            cd.RelativeColumn(1);
-                            cd.RelativeColumn(1);
-                            cd.RelativeColumn(1);
+                            cd.RelativeColumn();
+                            cd.RelativeColumn();
+                            cd.RelativeColumn();
                         });
                         
                         table.Header(h =>
@@ -242,10 +242,10 @@ public class OrderPdfService : IOrderPdfService
                         table.ColumnsDefinition(cd =>
                         {
                             cd.RelativeColumn(2);
-                            cd.RelativeColumn(1);
-                            cd.RelativeColumn(1);
-                            cd.RelativeColumn(1);
-                            cd.RelativeColumn(1);
+                            cd.RelativeColumn();
+                            cd.RelativeColumn();
+                            cd.RelativeColumn();
+                            cd.RelativeColumn();
                             cd.RelativeColumn(2);
                         });
                         

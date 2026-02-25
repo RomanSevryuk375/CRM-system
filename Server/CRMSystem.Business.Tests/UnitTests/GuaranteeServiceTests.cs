@@ -11,19 +11,18 @@ public class GuaranteeServiceTests
 {
     private readonly Mock<IGuaranteeRepository> _guaranteeRepoMock;
     private readonly Mock<IOrderRepository> _orderRepoMock;
-    private readonly Mock<ILogger<GuaranteeService>> _loggerMock;
     private readonly GuaranteeService _service;
 
     public GuaranteeServiceTests()
     {
         _guaranteeRepoMock = new Mock<IGuaranteeRepository>();
         _orderRepoMock = new Mock<IOrderRepository>();
-        _loggerMock = new Mock<ILogger<GuaranteeService>>();
+        var loggerMock = new Mock<ILogger<GuaranteeService>>();
 
         _service = new GuaranteeService(
             _guaranteeRepoMock.Object,
             _orderRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

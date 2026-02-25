@@ -17,7 +17,6 @@ public class CarServiceTests
     private readonly Mock<IClientRepository> _clientRepoMock;
     private readonly Mock<ICarStatusRepository> _carStatusRepoMock;
     private readonly Mock<IUserContext> _userContextMock;
-    private readonly Mock<ILogger<CarService>> _loggerMock;
     private readonly CarService _service;
 
     public CarServiceTests()
@@ -26,14 +25,14 @@ public class CarServiceTests
         _clientRepoMock = new Mock<IClientRepository>();
         _carStatusRepoMock = new Mock<ICarStatusRepository>();
         _userContextMock = new Mock<IUserContext>();
-        _loggerMock = new Mock<ILogger<CarService>>();
+        var loggerMock = new Mock<ILogger<CarService>>();
 
         _service = new CarService(
             _carRepoMock.Object,
             _clientRepoMock.Object,
             _carStatusRepoMock.Object,
             _userContextMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

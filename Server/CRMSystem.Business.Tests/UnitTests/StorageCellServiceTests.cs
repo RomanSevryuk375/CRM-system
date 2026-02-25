@@ -10,17 +10,16 @@ namespace CRMSystem.Business.Tests.UnitTests;
 public class StorageCellServiceTests
 {
     private readonly Mock<IStorageCellRepository> _storageCellRepoMock;
-    private readonly Mock<ILogger<StorageCellService>> _loggerMock;
     private readonly StorageCellService _service;
 
     public StorageCellServiceTests()
     {
         _storageCellRepoMock = new Mock<IStorageCellRepository>();
-        _loggerMock = new Mock<ILogger<StorageCellService>>();
+        var loggerMock = new Mock<ILogger<StorageCellService>>();
 
         _service = new StorageCellService(
             _storageCellRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

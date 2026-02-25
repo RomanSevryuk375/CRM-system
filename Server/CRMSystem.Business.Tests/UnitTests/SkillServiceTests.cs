@@ -16,7 +16,6 @@ public class SkillServiceTests
     private readonly Mock<ISpecializationRepository> _specRepoMock;
     private readonly Mock<IWorkerRepository> _workerRepoMock;
     private readonly Mock<IUserContext> _userContextMock;
-    private readonly Mock<ILogger<SkillService>> _loggerMock;
     private readonly SkillService _service;
 
     public SkillServiceTests()
@@ -25,14 +24,14 @@ public class SkillServiceTests
         _specRepoMock = new Mock<ISpecializationRepository>();
         _workerRepoMock = new Mock<IWorkerRepository>();
         _userContextMock = new Mock<IUserContext>();
-        _loggerMock = new Mock<ILogger<SkillService>>();
+        var loggerMock = new Mock<ILogger<SkillService>>();
 
         _service = new SkillService(
             _skillRepoMock.Object,
             _specRepoMock.Object,
             _workerRepoMock.Object,
             _userContextMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

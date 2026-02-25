@@ -15,7 +15,6 @@ public class WorkerServiceTests
     private readonly Mock<IWorkerRepository> _workerRepoMock;
     private readonly Mock<IUserRepository> _userRepoMock;
     private readonly Mock<IUserContext> _userContextMock;
-    private readonly Mock<ILogger<WorkerService>> _loggerMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly WorkerService _service;
 
@@ -24,14 +23,14 @@ public class WorkerServiceTests
         _workerRepoMock = new Mock<IWorkerRepository>();
         _userRepoMock = new Mock<IUserRepository>();
         _userContextMock = new Mock<IUserContext>();
-        _loggerMock = new Mock<ILogger<WorkerService>>();
+        var loggerMock = new Mock<ILogger<WorkerService>>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
 
         _service = new WorkerService(
             _workerRepoMock.Object,
             _userRepoMock.Object,
             _userContextMock.Object,
-            _loggerMock.Object,
+            loggerMock.Object,
             _unitOfWorkMock.Object);
     }
 

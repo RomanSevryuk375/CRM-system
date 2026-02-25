@@ -60,14 +60,14 @@ public static class ApiExtensions
                 policy.RequireClaim("userRoleId", "1", "2");
             });
 
-            options.AddPolicy("AdminWorkerPolicy", options =>
+            options.AddPolicy("AdminWorkerPolicy", opt =>
             {
-                options.RequireClaim("userRoleId", "1", "3");
+                opt.RequireClaim("userRoleId", "1", "3");
             });
 
-            options.AddPolicy("UniPolicy", options =>
+            options.AddPolicy("UniPolicy", opt =>
             {
-                options.RequireClaim("userRoleId", "1", "2", "3");
+                opt.RequireClaim("userRoleId", "1", "2", "3");
             });
 
             options.AddPolicy("UserPolicy", policy =>

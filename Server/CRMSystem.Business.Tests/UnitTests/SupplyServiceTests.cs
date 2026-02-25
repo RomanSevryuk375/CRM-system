@@ -11,19 +11,18 @@ public class SupplyServiceTests
 {
     private readonly Mock<ISupplyRepository> _supplyRepoMock;
     private readonly Mock<ISupplierRepository> _supplierRepoMock;
-    private readonly Mock<ILogger<SupplyService>> _loggerMock;
     private readonly SupplyService _service;
 
     public SupplyServiceTests()
     {
         _supplyRepoMock = new Mock<ISupplyRepository>();
         _supplierRepoMock = new Mock<ISupplierRepository>();
-        _loggerMock = new Mock<ILogger<SupplyService>>();
+        var loggerMock = new Mock<ILogger<SupplyService>>();
 
         _service = new SupplyService(
             _supplyRepoMock.Object,
             _supplierRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

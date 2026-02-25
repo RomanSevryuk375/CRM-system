@@ -10,17 +10,16 @@ namespace CRMSystem.Business.Tests.UnitTests;
 public class SpecializationServiceTests
 {
     private readonly Mock<ISpecializationRepository> _specRepoMock;
-    private readonly Mock<ILogger<SpecializationService>> _loggerMock;
-    private SpecializationService _service;
+    private readonly SpecializationService _service;
 
     public SpecializationServiceTests()
     {
         _specRepoMock = new Mock<ISpecializationRepository>();
-        _loggerMock = new Mock<ILogger<SpecializationService>>();
+        var loggerMock = new Mock<ILogger<SpecializationService>>();
 
         _service = new SpecializationService(
             _specRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

@@ -20,11 +20,8 @@ public class OrderServiceTests
     private readonly Mock<IOrderPriorityRepository> _orderPriorityRepoMock;
     private readonly Mock<IBillRepository> _billRepoMock;
     private readonly Mock<IUserContext> _userContextMock;
-    private readonly Mock<ILogger<OrderService>> _loggerRepoMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly OrderService _service;
-    private readonly Mock<IOrderPdfService> _pdfServiceMock;
-    private readonly Mock<IFileService> _fileServiceMock;
 
     public OrderServiceTests()
     {
@@ -34,9 +31,9 @@ public class OrderServiceTests
         _orderPriorityRepoMock = new Mock<IOrderPriorityRepository>();
         _billRepoMock = new Mock<IBillRepository>();
         _userContextMock = new Mock<IUserContext>();
-        _pdfServiceMock = new Mock<IOrderPdfService>();
-        _fileServiceMock = new Mock<IFileService>();
-        _loggerRepoMock = new Mock<ILogger<OrderService>>();
+        var pdfServiceMock = new Mock<IOrderPdfService>();
+        var fileServiceMock = new Mock<IFileService>();
+        var loggerRepoMock = new Mock<ILogger<OrderService>>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
 
         _service = new OrderService(
@@ -46,9 +43,9 @@ public class OrderServiceTests
             _orderPriorityRepoMock.Object,
             _billRepoMock.Object,
             _userContextMock.Object,
-            _pdfServiceMock.Object,
-            _fileServiceMock.Object,
-            _loggerRepoMock.Object,
+            pdfServiceMock.Object,
+            fileServiceMock.Object,
+            loggerRepoMock.Object,
             _unitOfWorkMock.Object);
 
     }

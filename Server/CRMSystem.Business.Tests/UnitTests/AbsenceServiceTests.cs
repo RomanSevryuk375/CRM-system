@@ -14,22 +14,20 @@ public class AbsenceServiceTests
 {
     private readonly Mock<IAbsenceRepository> _absenceRepoMock;
     private readonly Mock<IWorkerRepository> _workerRepoMock;
-    private readonly Mock<IUserContext> _userContextMock;
-    private readonly Mock<ILogger<AbsenceService>> _loggerMock;
     private readonly AbsenceService _service;
 
     public AbsenceServiceTests()
     {
         _absenceRepoMock = new Mock<IAbsenceRepository>();
         _workerRepoMock = new Mock<IWorkerRepository>();
-        _userContextMock = new Mock<IUserContext>();
-        _loggerMock = new Mock<ILogger<AbsenceService>>();
+        var userContextMock = new Mock<IUserContext>();
+        var loggerMock = new Mock<ILogger<AbsenceService>>();
 
         _service = new AbsenceService(
             _absenceRepoMock.Object,
             _workerRepoMock.Object,
-            _userContextMock.Object,
-            _loggerMock.Object);
+            userContextMock.Object,
+            loggerMock.Object);
     }
     
     [Theory]
@@ -53,7 +51,7 @@ public class AbsenceServiceTests
         var newStartDate = DateOnly.Parse(newStart);
         DateOnly? newEndDate = newEnd != null ? DateOnly.Parse(newEnd) : null;
 
-        var result = absence!.OverlapsWith(newStartDate, newEndDate);
+        var result = absence.OverlapsWith(newStartDate, newEndDate);
 
         result.Should().Be(expectedResult);
     }

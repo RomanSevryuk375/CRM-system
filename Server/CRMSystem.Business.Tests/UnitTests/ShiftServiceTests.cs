@@ -10,16 +10,15 @@ namespace CRMSystem.Business.Tests.UnitTests;
 public class ShiftServiceTests
 {
     private readonly Mock<IShiftRepository> _shiftRepoMock;
-    private readonly Mock<ILogger<ShiftService>> _loggerMock;
     private readonly ShiftService _service;
 
     public ShiftServiceTests()
     {
         _shiftRepoMock = new Mock<IShiftRepository>();
-        _loggerMock = new Mock<ILogger<ShiftService>>();
+        var loggerMock = new Mock<ILogger<ShiftService>>();
         _service = new ShiftService(
             _shiftRepoMock.Object, 
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Img
 
 using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Core.ProjectionModels.AttachmentImg;
 using CRMSystem.DataAccess.Entites;
 using Shared.Contracts.AttachmentImg;
