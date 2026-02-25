@@ -1,4 +1,4 @@
-﻿using CRMSystemMobile.Extentions;
+﻿using CRMSystemMobile.Extensions;
 
 namespace CRMSystemMobile;
 

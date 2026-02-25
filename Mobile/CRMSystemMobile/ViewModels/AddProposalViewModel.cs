@@ -1,12 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CRMSystemMobile.Extentions;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Work;
 using Shared.Contracts.WorkProposal;
 using Shared.Enums;
 using Shared.Filters;
 using System.Collections.ObjectModel;
+using CRMSystemMobile.Extensions;
 
 namespace CRMSystemMobile.ViewModels;
 
@@ -112,5 +112,5 @@ public partial class AddProposalViewModel(
     }
 
     [RelayCommand]
-    private async Task GoBack() => await Shell.Current.GoToAsync("..");
+    public static async Task GoBack() => await Shell.Current.GoToAsync("..");
 }

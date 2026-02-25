@@ -1,4 +1,4 @@
-﻿namespace CRMSystemMobile.Extentions;
+﻿namespace CRMSystemMobile.Extensions;
 
 public class AuthHttpMessageHandler : DelegatingHandler
 {

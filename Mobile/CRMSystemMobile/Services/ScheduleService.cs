@@ -1,7 +1,7 @@
-﻿using CRMSystemMobile.Extentions;
-using Shared.Contracts.Schedule;
+﻿using Shared.Contracts.Schedule;
 using System.Diagnostics;
 using System.Net.Http.Json;
+using CRMSystemMobile.Extensions;
 
 namespace CRMSystemMobile.Services;
 

@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CRMSystemMobile.Extentions;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Car;
 using Shared.Enums;
 using System.Text.RegularExpressions;
+using CRMSystemMobile.Extensions;
 
 namespace CRMSystemMobile.ViewModels;
 
@@ -55,7 +55,7 @@ public partial class AddCarViewModel(CarService carService, IdentityService iden
             errors.Add("Год выпуска не может быть в будущем.");
         }
 
-        var vinPattern = @"^[A-HJ-NPR-Z0-9]{17}$";
+        const string vinPattern = @"^[A-HJ-NPR-Z0-9]{17}$";
         if (string.IsNullOrWhiteSpace(VinNumber))
         {
             errors.Add("VIN номер обязателен.");

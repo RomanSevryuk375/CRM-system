@@ -1,4 +1,4 @@
-﻿namespace CRMSystemMobile.Extentions;
+﻿namespace CRMSystemMobile.Extensions;
 
 public static class ApiConfig
 {
@@ -17,13 +17,11 @@ public static class ApiConfig
             }
 
             // Win application
-            if (DeviceInfo.Platform == DevicePlatform.WinUI)
-            {
-                return $"http://localhost:{Port}/";
-            }
-
-            // 3. Real IP
-            return $"http://{LocalIpAddress}:{Port}/";
+            return DeviceInfo.Platform == DevicePlatform.WinUI
+                ? $"http://localhost:{Port}/"
+                :
+                // 3. Real IP
+                $"http://{LocalIpAddress}:{Port}/";
         }
     }
 }

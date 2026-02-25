@@ -1,203 +1,33 @@
-﻿using CRMSystemMobile.Extentions;
-using CRMSystemMobile.Services;
-using CRMSystemMobile.View;
-using CRMSystemMobile.ViewModels;
+﻿using CRMSystemMobile.Extensions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.LifecycleEvents;
-using LoginViewModel = CRMSystemMobile.ViewModels.LoginViewModel;
-#if IOS
-using UIKit;
-#endif
 
-#if ANDROID
-using Android.OS;
-using Android.Views;
-#endif
+namespace CRMSystemMobile;
 
-namespace CRMSystemMobile
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        [Obsolete]
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+        var builder = MauiApp.CreateBuilder();
+
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            })
+            .ConfigurePlatformLifecycle()
+            .ConfigureCustomHandlers();
 
 #if DEBUG
-            builder.Logging.AddDebug();
-#endif
-            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (handler, view) =>
-            {
-#if ANDROID
-                handler.PlatformView.Background = null;
-                handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
-                handler.PlatformView.BackgroundTintList =
- Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
-#endif
-            });
-
-#if ANDROID
-            builder.ConfigureLifecycleEvents(static events =>
-            {
-                events.AddAndroid(static android => android.OnCreate(static (activity, bundle) =>
-                {
-                    if (bundle == null)
-                    {
-                        var window = activity.Window;
-                        if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
-                        {
-#if NET8_0_OR_GREATER
-                            if (Build.VERSION.SdkInt < (BuildVersionCodes)35)
-                            {
-                                window?.SetStatusBarColor(Android.Graphics.Color.ParseColor("#112347"));
-                            }
-                            else
-                            {
-                                var insetsController = window.InsetsController;
-                                if (insetsController != null)
-                                {
-                                    window.SetDecorFitsSystemWindows(true);
-                                    window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#112347"));
-                                }
-                            }
-#else
-                            window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#112347"));
-#endif
-                        }
-                    }
-
-                    if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
-                    {
-                        var decor = activity.Window?.DecorView;
-                        if (decor != null)
-                        {
-                            decor.SystemUiVisibility &= ~(StatusBarVisibility)SystemUiFlags.LightStatusBar;
-                        }
-                    }
-                }));
-            });
-#endif
-#if IOS
-            builder.ConfigureLifecycleEvents(events =>
-            {
-                events.AddiOS(iOS => iOS.FinishedLaunching((application, launchOptions) =>
-                {
-                    UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
-
-                    return true;
-                }));
-            });
+        builder.Logging.AddDebug();
 #endif
 
-            builder.Services.AddTransient<AuthHttpMessageHandler>();
-            builder.Services.AddSingleton<IdentityService>();
+        builder.Services
+            .AddApplicationServices()
+            .AddViewModels()
+            .AddViews();
 
-            builder.Services.AddHttpClient<OrderService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-
-            builder.Services
-                .AddHttpClient<ClientService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-
-            builder.Services.AddHttpClient<BillService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-
-            builder.Services.AddHttpClient<LoginService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-
-            builder.Services.AddHttpClient<RegistrationService>(client =>
-                {
-                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-                })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-
-            builder.Services.AddHttpClient<CarService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-
-            builder.Services.AddHttpClient<PaymentService>(client =>
-                {
-                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-                })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-
-            builder.Services.AddHttpClient<PartSetService>(client =>
-                {
-                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-                })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-
-            builder.Services.AddHttpClient<WorkInOrderService>(client =>
-                {
-                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-                })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-
-            builder.Services.AddHttpClient<WorkProposalService>(client =>
-                {
-                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-                })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-            builder.Services
-                .AddHttpClient<WorkerService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-            builder.Services.AddHttpClient<PositionService>(client =>
-                {
-                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-                })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-            builder.Services.AddHttpClient<WorkService>(client => { client.BaseAddress = new Uri(ApiConfig.BaseUrl); })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-            builder.Services.AddHttpClient<ScheduleService>(client =>
-                {
-                    client.BaseAddress = new Uri(ApiConfig.BaseUrl);
-                })
-                .AddHttpMessageHandler<AuthHttpMessageHandler>();
-
-            builder.Services.AddSingleton<AppShell>();
-            builder.Services.AddSingleton<App>();
-            builder.Services.AddTransient<LoginViewModel>();
-            builder.Services.AddTransient<LoginPage>();
-            builder.Services.AddTransient<RegistrationViewModel>();
-            builder.Services.AddTransient<RegistrationPage>();
-            builder.Services.AddTransient<MainViewModel>();
-            builder.Services.AddTransient<MainPage>();
-            builder.Services.AddTransient<MyCarsViewModel>();
-            builder.Services.AddTransient<MyCarsPage>();
-            builder.Services.AddTransient<ProfileViewModel>();
-            builder.Services.AddTransient<ProfilePage>();
-            builder.Services.AddTransient<AddCarViewModel>();
-            builder.Services.AddTransient<AddCarPage>();
-            builder.Services.AddTransient<CarDetailsViewModel>();
-            builder.Services.AddTransient<CarDetailsPage>();
-            builder.Services.AddTransient<BillsViewModel>();
-            builder.Services.AddTransient<BillsPage>();
-            builder.Services.AddTransient<BookingViewModel>();
-            builder.Services.AddTransient<BookingPage>();
-            builder.Services.AddTransient<OrderDetailsViewModel>();
-            builder.Services.AddTransient<OrderDetailsPage>();
-            builder.Services.AddTransient<BillDetailsViewModel>();
-            builder.Services.AddTransient<BillDetailsPage>();
-            builder.Services.AddTransient<WorkerMainViewModel>();
-            builder.Services.AddTransient<WorkerMainPage>();
-            builder.Services.AddTransient<WorkerProfileViewModel>();
-            builder.Services.AddTransient<WorkerProfilePage>();
-            builder.Services.AddTransient<WorkerOrderDetailsViewModel>();
-            builder.Services.AddTransient<WorkerOrderDetailsPage>();
-            builder.Services.AddTransient<AddPartViewModel>();
-            builder.Services.AddTransient<AddPartPage>();
-            builder.Services.AddTransient<AddProposalViewModel>();
-            builder.Services.AddTransient<AddProposalPage>();
-            builder.Services.AddTransient<WorkerScheduleViewModel>();
-            builder.Services.AddTransient<WorkerSchedulePage>();
-
-            return builder.Build();
-        }
+        return builder.Build();
     }
 }

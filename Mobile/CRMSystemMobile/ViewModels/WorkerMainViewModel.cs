@@ -1,12 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using CRMSystemMobile.Extentions;
 using CRMSystemMobile.Message;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Order;
 using Shared.Filters;
 using System.Collections.ObjectModel;
+using CRMSystemMobile.Extensions;
 
 namespace CRMSystemMobile.ViewModels;
 
