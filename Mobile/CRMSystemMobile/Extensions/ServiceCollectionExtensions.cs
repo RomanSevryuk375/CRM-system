@@ -36,56 +36,9 @@ public static class ServiceCollectionExtensions
                 .AddApiClient<WorkerService>()
                 .AddApiClient<PositionService>()
                 .AddApiClient<WorkService>()
+                .AddApiClient<SkillService>()
+                .AddApiClient<SpecializationService>()
                 .AddApiClient<ScheduleService>();
-
-            return services;
-        }
-
-        public IServiceCollection AddViewModels()
-        {
-            services.AddTransient<LoginViewModel>();
-            services.AddTransient<RegistrationViewModel>();
-            services.AddTransient<MainViewModel>();
-            services.AddTransient<MyCarsViewModel>();
-            services.AddTransient<ProfileViewModel>();
-            services.AddTransient<AddCarViewModel>();
-            services.AddTransient<CarDetailsViewModel>();
-            services.AddTransient<BillsViewModel>();
-            services.AddTransient<BookingViewModel>();
-            services.AddTransient<OrderDetailsViewModel>();
-            services.AddTransient<BillDetailsViewModel>();
-            services.AddTransient<WorkerMainViewModel>();
-            services.AddTransient<WorkerProfileViewModel>();
-            services.AddTransient<WorkerOrderDetailsViewModel>();
-            services.AddTransient<AddPartViewModel>();
-            services.AddTransient<AddProposalViewModel>();
-            services.AddTransient<WorkerScheduleViewModel>();
-
-            return services;
-        }
-
-        public IServiceCollection AddViews()
-        {
-            services.AddSingleton<AppShell>();
-            services.AddSingleton<App>();
-
-            services.AddTransient<LoginPage>();
-            services.AddTransient<RegistrationPage>();
-            services.AddTransient<MainPage>();
-            services.AddTransient<MyCarsPage>();
-            services.AddTransient<ProfilePage>();
-            services.AddTransient<AddCarPage>();
-            services.AddTransient<CarDetailsPage>();
-            services.AddTransient<BillsPage>();
-            services.AddTransient<BookingPage>();
-            services.AddTransient<OrderDetailsPage>();
-            services.AddTransient<BillDetailsPage>();
-            services.AddTransient<WorkerMainPage>();
-            services.AddTransient<WorkerProfilePage>();
-            services.AddTransient<WorkerOrderDetailsPage>();
-            services.AddTransient<AddPartPage>();
-            services.AddTransient<AddProposalPage>();
-            services.AddTransient<WorkerSchedulePage>();
 
             return services;
         }
