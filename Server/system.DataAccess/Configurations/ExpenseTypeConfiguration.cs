@@ -36,7 +36,7 @@ public class ExpenseTypeConfiguration : IEntityTypeConfiguration<ExpenseTypeEnti
             },
             new ExpenseTypeEntity
             {
-                Id = (int)ExpenseTypeEnum.ITAndCommunication,
+                Id = (int)ExpenseTypeEnum.ItAndCommunication,
                 Name = "IT и связь"
             },
             new ExpenseTypeEntity

@@ -6,7 +6,9 @@
 export interface SkillResponse {
     id: number;
     workerId: number;
+    worker: string;
     specializationId: number;
+    specialization: string;
 }
 
 export interface SkillFilter {
