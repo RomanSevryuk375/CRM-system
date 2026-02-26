@@ -20,7 +20,10 @@ public static class PlatformConfigExtensions
             events.AddAndroid(android => android.OnCreate(static (activity, bundle) =>
             {
                 var window = activity.Window;
-                if (window == null) return;
+                if (window == null)
+                {
+                    return;
+                }
 
                 if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
                 {

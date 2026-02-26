@@ -8,7 +8,7 @@ namespace CRMSystemMobile.Extensions
 {
     public static class HttpClientExtensions
     {
-        private static readonly JsonSerializerOptions _jsonOptions = new()
+        private static readonly JsonSerializerOptions JsonOptions = new()
         {
             PropertyNameCaseInsensitive = true
         };
@@ -40,7 +40,7 @@ namespace CRMSystemMobile.Extensions
                     int.TryParse(values.FirstOrDefault(), out totalCount);
                 }
 
-                var items = await response.Content.ReadFromJsonAsync<List<TResponse>>(_jsonOptions);
+                var items = await response.Content.ReadFromJsonAsync<List<TResponse>>(JsonOptions);
 
                 return (items, totalCount);
             }
@@ -53,7 +53,10 @@ namespace CRMSystemMobile.Extensions
 
         private static string BuildQueryString<T>(T filter)
         {
-            if (filter == null) return string.Empty;
+            if (filter == null)
+            {
+                return string.Empty;
+            }
 
             var properties = filter.GetType().GetProperties();
             var queryParams = new List<string>();
@@ -62,23 +65,34 @@ namespace CRMSystemMobile.Extensions
             {
                 var value = prop.GetValue(filter);
 
-                if (value == null) continue;
+                if (value == null)
+                {
+                    continue;
+                }
 
                 switch (value)
                 {
                     case string str:
-                        if (string.IsNullOrWhiteSpace(str)) continue;
+                        if (string.IsNullOrWhiteSpace(str))
+                        {
+                            continue;
+                        }
+
                         queryParams.Add($"{prop.Name}={Uri.EscapeDataString(str)}");
                         break;
 
                     case IEnumerable list:
                         foreach (var item in list)
                         {
-                            if (item == null) continue;
+                            if (item == null)
+                            {
+                                continue;
+                            }
 
                             var encodedItem = Uri.EscapeDataString(FormatValue(item));
                             queryParams.Add($"{prop.Name}={encodedItem}");
                         }
+
                         break;
 
                     default:
@@ -91,9 +105,12 @@ namespace CRMSystemMobile.Extensions
             return string.Join("&", queryParams);
         }
 
-        private static string FormatValue(object value)
+        private static string FormatValue(object? value)
         {
-            if (value == null) return string.Empty;
+            if (value == null)
+            {
+                return string.Empty;
+            }
 
             if (value.GetType().IsEnum)
             {

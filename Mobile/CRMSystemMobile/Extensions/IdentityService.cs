@@ -38,7 +38,11 @@ public class IdentityService
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
 
-            if (jwtToken.ValidTo >= DateTime.UtcNow) return true;
+            if (jwtToken.ValidTo >= DateTime.UtcNow)
+            {
+                return true;
+            }
+
             System.Diagnostics.Debug.WriteLine("DEBUG: Токен просрочен");
             return false;
         }
