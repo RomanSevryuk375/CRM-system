@@ -16,7 +16,7 @@ public class BillService(HttpClient httpClient)
     {
         try
         {
-            var url = $"api/v1/bills/debt/{billId}";
+            var url = $"api/v1/bills/{billId}/debt";
 
             var response = await httpClient.GetAsync(url);
 

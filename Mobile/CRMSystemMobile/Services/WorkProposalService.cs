@@ -86,7 +86,7 @@ public class WorkProposalService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PutAsJsonAsync($"api/v1/work-proposals/{id}/status", request);
+            var response = await httpClient.PatchAsJsonAsync($"api/v1/work-proposals/{id}", request);
 
             if (response.IsSuccessStatusCode)
             {
