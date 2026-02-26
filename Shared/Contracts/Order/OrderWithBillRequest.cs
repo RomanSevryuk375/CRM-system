@@ -18,13 +18,13 @@ public record OrderWithBillRequest
     [JsonPropertyName("priorityId")]
     public OrderPriorityEnum PriorityId { get; init; }
 
-    [JsonPropertyName("ownerId")]
+    [JsonPropertyName("orderId")]
     public long OrderId { get; init; }
 
     [JsonPropertyName("billStatusId")]
     public BillStatusEnum BillStatusId { get; init; }
 
-    [JsonPropertyName("createAt")]
+    [JsonPropertyName("createdAt")]
     public DateTime CreatedAt { get; init; }
 
     [JsonPropertyName("amount")]

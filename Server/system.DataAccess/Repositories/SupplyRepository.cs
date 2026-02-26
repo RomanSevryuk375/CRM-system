@@ -15,9 +15,9 @@ public class SupplyRepository(
 {
     private static IQueryable<SupplyEntity> ApplyFilter(IQueryable<SupplyEntity> query, SupplyFilter filter)
     {
-        if (filter.SuplierIds != null && filter.SuplierIds.Any())
+        if (filter.SupplierIds != null && filter.SupplierIds.Any())
         {
-            query = query.Where(s => filter.SuplierIds.Contains(s.SupplierId));
+            query = query.Where(s => filter.SupplierIds.Contains(s.SupplierId));
         }
 
         return query;

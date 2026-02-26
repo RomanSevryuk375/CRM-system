@@ -2,7 +2,7 @@
 
 public record SupplyFilter
 (
-    IEnumerable<long>? SuplierIds,
+    IEnumerable<long>? SupplierIds,
     string? SortBy,
     int Page,
     int Limit,

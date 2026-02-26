@@ -7,7 +7,7 @@ public record PartRequest
     [JsonPropertyName("categoryId")]
     public int CategoryId { get; init; }
 
-    [JsonPropertyName("oemArtiocle")]
+    [JsonPropertyName("oemArticle")]
     public string? OemArticle { get; init; }
 
     [JsonPropertyName("manufacturerArticle")]
