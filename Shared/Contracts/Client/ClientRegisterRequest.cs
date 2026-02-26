@@ -23,7 +23,7 @@ public record ClientRegisterRequest
     public int RoleId { get; init; }
 
     [JsonPropertyName("login")]
-    public string? Login { get; init; } = string.Empty;
+    public string Login { get; init; } = string.Empty;
 
     [JsonPropertyName("password")]
     public string Password { get; init; } = string.Empty;

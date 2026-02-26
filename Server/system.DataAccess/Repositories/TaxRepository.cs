@@ -16,9 +16,9 @@ public class TaxRepository(
 {
     private static IQueryable<TaxEntity> ApplyFilter(IQueryable<TaxEntity> query, TaxFilter filter)
     {
-        if (filter.TaxTyprIds != null && filter.TaxTyprIds.Any())
+        if (filter.TaxTypeIds != null && filter.TaxTypeIds.Any())
         {
-            query = query.Where(t => filter.TaxTyprIds.Contains(t.TypeId));
+            query = query.Where(t => filter.TaxTypeIds.Contains(t.TypeId));
         }
 
         return query;

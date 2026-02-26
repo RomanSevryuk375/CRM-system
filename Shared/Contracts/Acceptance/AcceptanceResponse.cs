@@ -16,7 +16,7 @@ public record AcceptanceResponse
     [JsonPropertyName("workerId")]
     public int WorkerId { get; init; }
 
-    [JsonPropertyName("createAt")]
+    [JsonPropertyName("createdAt")]
     public DateTime CreatedAt { get; init; }
 
     [JsonPropertyName("mileage")]

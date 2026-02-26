@@ -4,9 +4,6 @@ namespace Shared.Contracts.Client;
 
 public record ClientRequest
 {
-    [JsonPropertyName("id")]
-    public long Id { get; init; }
-
     [JsonPropertyName("userId")]
     public long UserId { get; init; }
 

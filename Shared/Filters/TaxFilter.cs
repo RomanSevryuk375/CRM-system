@@ -2,7 +2,7 @@
 
 public record TaxFilter
 (
-    IEnumerable<int>? TaxTyprIds,
+    IEnumerable<int>? TaxTypeIds,
     string? SortBy,
     bool IsDescending
 );

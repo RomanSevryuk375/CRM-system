@@ -4,7 +4,7 @@ namespace Shared.Contracts.Part;
 
 public record PartUpdateRequest
 {
-    [JsonPropertyName("oemArtiocle")]
+    [JsonPropertyName("oemArticle")]
     public string? OemArticle { get; init; }
 
     [JsonPropertyName("manufacturerArticle")]
