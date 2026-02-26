@@ -2,7 +2,7 @@
 
 public static class ApiConfig
 {
-    public const string LocalIpAddress = "192.168.1.10";
+    public const string LocalIpAddress = "192.168.227.227";
 
     public const string Port = "5066";
 

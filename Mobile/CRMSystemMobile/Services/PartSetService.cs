@@ -17,8 +17,7 @@ public class PartSetService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.GetAsync($"order/{orderId}");
-            // Если не сработает, попробуйте: $"api/PartSet/order/{orderId}" или просто $"order/{orderId}" 
+            var response = await httpClient.GetAsync($"api/v1/part-sets/orders/{orderId}");
 
             if (!response.IsSuccessStatusCode)
             {
