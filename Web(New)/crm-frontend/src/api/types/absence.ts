@@ -9,6 +9,7 @@
 }
 
 export interface AbsenceTypeResponse {
+    id: number;
     name: string;
 }
 

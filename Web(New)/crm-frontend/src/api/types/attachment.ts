@@ -40,7 +40,7 @@ export interface AttachmentFilter {
     isDescending: boolean;
 }
 
-export interface AttachmentFilter {
+export interface AttachmentImgFilter {
     attachmentIds?: number[];
     page: number;
     limit: number;
