@@ -1,6 +1,4 @@
 ﻿using Shared.Contracts.Schedule;
-using System.Diagnostics;
-using System.Net.Http.Json;
 using CRMSystemMobile.Extensions;
 using Shared.Filters;
 

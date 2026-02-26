@@ -1,7 +1,5 @@
 ﻿using Shared.Contracts.Position;
 using Shared.Filters;
-using System.Diagnostics;
-using System.Net.Http.Json;
 using CRMSystemMobile.Extensions;
 
 namespace CRMSystemMobile.Services;

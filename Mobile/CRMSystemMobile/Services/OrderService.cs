@@ -1,6 +1,5 @@
 ﻿using Shared.Contracts.Order;
 using Shared.Filters;
-using System.Diagnostics;
 using System.Net.Http.Json;
 using CRMSystemMobile.Extensions;
 
