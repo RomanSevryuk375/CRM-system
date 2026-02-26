@@ -308,7 +308,7 @@ public partial class WorkerOrderDetailsViewModel(
             return;
         }
 
-        var error = await workProposalService.AcceptWorkProposal(item.Id);
+        var error = await workProposalService.DeleteWorkProposal(item.Id);
 
         if (error == null)
         {
