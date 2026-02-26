@@ -1,46 +1,13 @@
 ﻿using Shared.Contracts.Schedule;
-using System.Diagnostics;
-using System.Net.Http.Json;
 using CRMSystemMobile.Extensions;
+using Shared.Filters;
 
 namespace CRMSystemMobile.Services;
 
-public class ScheduleService(HttpClient httpClient, IdentityService identityService)
+public class ScheduleService(HttpClient httpClient)
 {
-    public async Task<List<ScheduleResponse>?> GetMySchedules()
+    public async Task<(List<ScheduleResponse>?, int TotalCount)> GetMySchedules(ScheduleFilter filter)
     {
-        try
-        {
-            var (profileId, _) = await identityService.GetProfileIdAsync();
-            if (profileId <= 0)
-            {
-                return null;
-            }
-
-            var query = $"Page=1&Limit=50&IsDescending=true&SortBy=date&WorkerIds={profileId}";
-
-            var url = $"api/v1/schedules?{query}";
-
-            var response = await httpClient.GetAsync(url);
-
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                SecureStorage.Default.Remove("jwt_token");
-                await Shell.Current.GoToAsync("//LoginPage");
-                return null;
-            }
-
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<List<ScheduleResponse>>();
-            }
-
-            return null;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.ToString());
-            return null;
-        }
+        return await httpClient.GetPagedAsync<ScheduleResponse>("api/v1/schedules", filter);
     }
 }

@@ -3,6 +3,7 @@ using Shared.Enums;
 using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
+using CRMSystemMobile.Extensions;
 
 namespace CRMSystemMobile.Services;
 
@@ -10,65 +11,10 @@ public class WorkProposalService(HttpClient httpClient)
 {
     public async Task<(List<WorkProposalResponse>?, int TotalCount)> GetWorkProposals(WorkProposalFilter filter)
     {
-        try
-        {
-            var query = $"Page={filter.Page}&Limit={filter.Limit}&IsDescending={filter.IsDescending}";
-
-            if (!string.IsNullOrEmpty(filter.SortBy))
-            {
-                query += $"&SortBy={filter.SortBy}";
-            }
-
-            if (filter.StatusIds?.Any() == true)
-            {
-                query = filter.StatusIds.Aggregate(query, (current, id) => current + $"&StatusIds={id}");
-            }
-
-            if (filter.JobIds?.Any() == true)
-            {
-                query = filter.JobIds.Aggregate(query, (current, id) => current + $"&JobIds={id}");
-            }
-
-            if (filter.WorkerIds?.Any() == true)
-            {
-                query = filter.WorkerIds.Aggregate(query, (current, id) => current + $"&WorkerIds={id}");
-            }
-
-            if (filter.OrderIds?.Any() == true)
-            {
-                query = filter.OrderIds.Aggregate(query, (current, id) => current + $"&OrderIds={id}");
-            }
-
-            var url = $"api/v1/work-proposals?{query}";
-
-            var response = await httpClient.GetAsync(url);
-
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                SecureStorage.Default.Remove("jwt_token");
-                await Shell.Current.GoToAsync("//LoginPage");
-                return (null, 0);
-            }
-
-            response.EnsureSuccessStatusCode();
-
-            var totalCount = 0;
-            if (response.Headers.TryGetValues("x-total-count", out var values))
-            {
-                int.TryParse(values.FirstOrDefault(), out totalCount);
-            }
-
-            var items = await response.Content.ReadFromJsonAsync<List<WorkProposalResponse>>();
-            return (items, totalCount);
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.ToString());
-            return (null, 0);
-        }
+        return await httpClient.GetPagedAsync<WorkProposalResponse>("api/v1/work-proposals", filter);
     }
 
-    public async Task<string?> CreateWorkPropsal(WorkProposalRequest request)
+    public async Task<string?> CreateWorkProposal(WorkProposalRequest request)
     {
         try
         {
@@ -92,7 +38,7 @@ public class WorkProposalService(HttpClient httpClient)
         }
     }
 
-    public async Task<string?> DeleteWorkPropsal(long id)
+    public async Task<string?> DeleteWorkProposal(long id)
     {
         try
         {
