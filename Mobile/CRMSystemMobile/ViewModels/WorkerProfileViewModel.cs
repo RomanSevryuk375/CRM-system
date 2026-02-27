@@ -60,7 +60,11 @@ public partial class WorkerProfileViewModel : ObservableObject
 
         IsLoading = true;
         var (profileId, _) = await _identityService.GetProfileIdAsync();
-        if (profileId <= 0) return;
+        if (profileId <= 0)
+        {
+            return;
+        }
+
         _currentWorkerId = (int)profileId;
 
         var worker = await _workerService.GetWorkerById(_currentWorkerId);

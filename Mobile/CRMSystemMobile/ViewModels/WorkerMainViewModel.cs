@@ -121,12 +121,14 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
 
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            if (items != null)
+            if (items == null)
             {
-                foreach (var item in items)
-                {
-                    AssignedOrders.Add(item);
-                }
+                return;
+            }
+
+            foreach (var item in items)
+            {
+                AssignedOrders.Add(item);
             }
         });
 

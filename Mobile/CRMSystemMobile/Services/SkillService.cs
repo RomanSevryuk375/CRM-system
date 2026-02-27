@@ -25,8 +25,11 @@ public class SkillService(HttpClient httpClient)
         try
         {
             var response = await httpClient.PostAsJsonAsync("api/v1/skills", request);
-            if (response.IsSuccessStatusCode) return null;
-            
+            if (response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
             return await response.Content.ReadAsStringAsync();
         }
         catch (Exception ex)
@@ -40,7 +43,10 @@ public class SkillService(HttpClient httpClient)
         try
         {
             var response = await httpClient.DeleteAsync($"api/v1/skills/{id}");
-            if (response.IsSuccessStatusCode) return null;
+            if (response.IsSuccessStatusCode)
+            {
+                return null;
+            }
 
             return await response.Content.ReadAsStringAsync();
         }

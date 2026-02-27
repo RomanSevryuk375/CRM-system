@@ -1,7 +1,4 @@
 using CRMSystemMobile.Services;
-using CRMSystemMobile.View;
-using CRMSystemMobile.ViewModels;
-using LoginViewModel = CRMSystemMobile.ViewModels.LoginViewModel;
 
 namespace CRMSystemMobile.Extensions;
 
@@ -23,22 +20,25 @@ public static class ServiceCollectionExtensions
             services.AddTransient<AuthHttpMessageHandler>();
             services.AddSingleton<IdentityService>();
 
-            services.AddApiClient<OrderService>()
-                .AddApiClient<ClientService>()
+            services.AddApiClient<AbsenceService>()
                 .AddApiClient<BillService>()
-                .AddApiClient<LoginService>()
-                .AddApiClient<RegistrationService>()
                 .AddApiClient<CarService>()
-                .AddApiClient<PaymentService>()
+                .AddApiClient<ClientService>()
+                .AddApiClient<LoginService>()
+                .AddApiClient<OrderService>()
+                .AddApiClient<PartService>()
                 .AddApiClient<PartSetService>()
-                .AddApiClient<WorkInOrderService>()
-                .AddApiClient<WorkProposalService>()
-                .AddApiClient<WorkerService>()
+                .AddApiClient<PaymentService>()
                 .AddApiClient<PositionService>()
-                .AddApiClient<WorkService>()
+                .AddApiClient<RegistrationService>()
+                .AddApiClient<ScheduleService>()
+                .AddApiClient<ShiftService>()
                 .AddApiClient<SkillService>()
                 .AddApiClient<SpecializationService>()
-                .AddApiClient<ScheduleService>();
+                .AddApiClient<WorkerService>()
+                .AddApiClient<WorkInOrderService>()
+                .AddApiClient<WorkProposalService>()
+                .AddApiClient<WorkService>();
 
             return services;
         }
