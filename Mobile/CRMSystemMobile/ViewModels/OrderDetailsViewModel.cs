@@ -6,22 +6,24 @@ using Shared.Contracts.WorkInOrder;
 using Shared.Contracts.WorkProposal;
 using Shared.Filters;
 using System.Collections.ObjectModel;
+using Shared.Contracts.Order;
 
 namespace CRMSystemMobile.ViewModels;
 
 public partial class OrderDetailsViewModel(
     WorkInOrderService workInOrderService,
     PartSetService partSetService,
-    WorkProposalService workProposalService)
+    WorkProposalService workProposalService,
+    OrderService orderService)
     : ObservableObject, IQueryAttributable
 {
-    [ObservableProperty] public partial long OrderId { get; set; }
-
     [ObservableProperty] public partial string? OrderTitle { get; set; }
 
     [ObservableProperty] public partial bool IsBusy { get; set; }
 
     [ObservableProperty] public partial bool IsRefreshing { get; set; }
+
+    [ObservableProperty] public partial OrderResponse? Order { get; set; }
 
     public ObservableCollection<WorkInOrderResponse> Works { get; } = [];
     public ObservableCollection<PartSetResponse> Parts { get; } = [];
@@ -29,18 +31,18 @@ public partial class OrderDetailsViewModel(
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (!query.TryGetValue("OrderId", out var value))
+        if (!query.TryGetValue("Order", out var value))
         {
             return;
         }
 
-        OrderId = Convert.ToInt64(value);
-        OrderTitle = $"Заказ #{OrderId}";
+        Order = (OrderResponse)value;
+        if (Order != null) OrderTitle = $"Заказ #{Order.Id}";
         LoadDataCommand.Execute(null);
     }
 
     [RelayCommand]
-    private async Task LoadData()
+    public async Task LoadData()
     {
         if (IsBusy)
         {
@@ -71,7 +73,7 @@ public partial class OrderDetailsViewModel(
     private async Task LoadWorks()
     {
         var filter = new WorkInOrderFilter(
-            OrderIds: [OrderId],
+            OrderIds: [Order.Id],
             JobIds: null,
             WorkerIds: null,
             StatusIds: null,
@@ -93,7 +95,7 @@ public partial class OrderDetailsViewModel(
     private async Task LoadParts()
     {
         var filter = new PartSetFilter(
-            OrderIds: [OrderId],
+            OrderIds: [Order.Id],
             PositionIds: [], ProposalIds: [], SortBy: null, Page: 1, Limit: 100, IsDescending: true);
 
         var (items, _) = await partSetService.GetPartSets(filter);
@@ -109,7 +111,7 @@ public partial class OrderDetailsViewModel(
     private async Task LoadProposals()
     {
         var filter = new WorkProposalFilter(
-            OrderIds: [OrderId],
+            OrderIds: [Order.Id],
             JobIds: [], WorkerIds: [], StatusIds: [], SortBy: null, Page: 1, Limit: 100, IsDescending: true);
 
         var (items, _) = await workProposalService.GetWorkProposals(filter);
@@ -123,7 +125,46 @@ public partial class OrderDetailsViewModel(
     }
 
     [RelayCommand]
-    private async Task AcceptProposal(WorkProposalResponse proposal)
+    public async Task DownloadPdf()
+    {
+        if (IsBusy) return;
+
+        try
+        {
+            IsBusy = true;
+
+            var pdfBytes = await orderService.GetOrderPdf(Order.Id);
+
+            if (pdfBytes == null || pdfBytes.Length == 0)
+            {
+                await Shell.Current.DisplayAlert("Ошибка", "Файл заказ-наряда еще не сформирован или недоступен.",
+                    "ОК");
+                return;
+            }
+
+            var fileName = $"Order_{Order.Id}.pdf";
+            var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+
+            await File.WriteAllBytesAsync(filePath, pdfBytes);
+
+            await Launcher.Default.OpenAsync(new OpenFileRequest
+            {
+                Title = "Заказ-наряд",
+                File = new ReadOnlyFile(filePath)
+            });
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось открыть файл: {ex.Message}", "ОК");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    [RelayCommand]
+    public async Task AcceptProposal(WorkProposalResponse proposal)
     {
         var error = await workProposalService.AcceptWorkProposal(proposal.Id);
         if (error == null)
@@ -138,7 +179,7 @@ public partial class OrderDetailsViewModel(
     }
 
     [RelayCommand]
-    private async Task RejectProposal(WorkProposalResponse proposal)
+    public async Task RejectProposal(WorkProposalResponse proposal)
     {
         var error = await workProposalService.RejectWorkProposal(proposal.Id);
         if (error == null)
@@ -153,7 +194,7 @@ public partial class OrderDetailsViewModel(
     }
 
     [RelayCommand]
-    private async Task GoBack()
+    public static async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
     }

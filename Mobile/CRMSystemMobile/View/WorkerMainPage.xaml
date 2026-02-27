@@ -89,12 +89,9 @@
                             StrokeShape="RoundRectangle 12"
                             StrokeThickness="0">
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer>
-                                    <TapGestureRecognizer.Command>
-                                        <Binding Source="{x:Reference WorkerMain}"
-                                                 Path="BindingContext.GoToWorkOrderCommand" />
-                                    </TapGestureRecognizer.Command>
-                                </TapGestureRecognizer>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={x:Reference WorkerMain}, Path=BindingContext.GoToWorkOrderCommand}"
+                                    CommandParameter="{Binding .}" />
                             </Border.GestureRecognizers>
 
                             <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">

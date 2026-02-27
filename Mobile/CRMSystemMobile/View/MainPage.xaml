@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <ContentPage
     x:Class="CRMSystemMobile.View.MainPage"
@@ -6,6 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:contracts="clr-namespace:Shared.Contracts.Order;assembly=Shared"
     xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    x:Name="Main"
     Title="MainPage"
     x:DataType="vm:MainViewModel"
     Shell.FlyoutBehavior="Disabled"
@@ -86,7 +87,6 @@
                         Command="{Binding ToggleMenuSheetCommand}"
                         Source="show_menu.svg" />
                 </Border>
-
             </Grid>
             <RefreshView
                 Grid.Row="1"
@@ -107,7 +107,9 @@
                                 Stroke="Transparent"
                                 StrokeShape="RoundRectangle 12">
                                 <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GoToOrderDetailsCommand}" CommandParameter="{Binding .}" />
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={x:Reference Main}, Path=BindingContext.GoToOrderDetailsCommand}"
+                                        CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
                                 <Grid RowDefinitions="60, Auto" RowSpacing="25">
 
@@ -254,7 +256,7 @@
                             Grid.Row="2"
                             BackgroundColor="Transparent"
                             Command="{Binding LogoutCommand}"
-                            HorizontalOptions="Center"
+                            HorizontalOptions="Fill"
                             Text="Выйти"
                             TextColor="Red" />
                     </Grid>

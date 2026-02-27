@@ -125,7 +125,7 @@
                     Margin="0,10,0,5"
                     FontAttributes="Bold"
                     FontSize="20"
-                    Text="Мои навыки"
+                    Text="Мои навыки:"
                     TextColor="White" />
 
                 <StackLayout BindableLayout.ItemsSource="{Binding MySkills}" Spacing="8">

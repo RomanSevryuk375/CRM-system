@@ -10,14 +10,14 @@ public class WorkInOrderService(HttpClient httpClient)
 {
     public async Task<(List<WorkInOrderResponse>?, int TotalCount)> GetWorksInOrder(WorkInOrderFilter filter)
     {
-        return await httpClient.GetPagedAsync<WorkInOrderResponse>("api/works-in-order", filter);
+        return await httpClient.GetPagedAsync<WorkInOrderResponse>("api/v1/works-in-order", filter);
     }
 
     public async Task<string?> AddWorkToOrder(WorkInOrderRequest request)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/works-in-order", request);
+            var response = await httpClient.PostAsJsonAsync("api/v1/works-in-order", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -41,7 +41,7 @@ public class WorkInOrderService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PutAsJsonAsync($"api/works-in-order/{id}", model);
+            var response = await httpClient.PutAsJsonAsync($"api/v1/works-in-order/{id}", model);
 
             if (response.IsSuccessStatusCode)
             {
@@ -61,7 +61,7 @@ public class WorkInOrderService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.DeleteAsync($"api/works-in-order/{id}");
+            var response = await httpClient.DeleteAsync($"api/v1/works-in-order/{id}");
 
             if (response.IsSuccessStatusCode)
             {

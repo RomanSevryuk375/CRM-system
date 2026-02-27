@@ -181,7 +181,7 @@ public partial class MainViewModel : ObservableObject
 
         var navParam = new Dictionary<string, object>
         {
-            { "OrderId", order.Id }
+            { "Order", order }
         };
 
         await Shell.Current.GoToAsync("OrderDetailsPage", navParam);

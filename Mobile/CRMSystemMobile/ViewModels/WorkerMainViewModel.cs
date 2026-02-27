@@ -162,7 +162,7 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
     }
 
     [RelayCommand]
-    private async Task GoToWorkOrder(OrderResponse? order)
+    private static async Task GoToWorkOrder(OrderResponse? order)
     {
         if (order == null)
         {

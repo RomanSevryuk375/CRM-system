@@ -43,7 +43,7 @@ public class OrderController(
     }
 
     [HttpGet("{id:long}/pdf")]
-    [Authorize(Policy = "AdminClientPolicy")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<IActionResult> DownloadOrderPdf(long id, CancellationToken ct)
     {
         var (stream, contentType) = await orderService.GetOrderPdfStream(id, ct);

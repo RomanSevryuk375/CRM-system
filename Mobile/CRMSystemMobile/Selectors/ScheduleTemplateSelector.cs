@@ -1,6 +1,5 @@
 using CRMSystemMobile.Extensions;
 using Shared.Contracts.Absence;
-using Shared.Contracts.Schedule;
 
 namespace CRMSystemMobile.Selectors;
 
