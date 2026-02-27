@@ -16,7 +16,8 @@ public partial class WorkerOrderDetailsViewModel(
     WorkInOrderService workInOrderService,
     PartSetService partSetService,
     WorkProposalService workProposalService,
-    IdentityService identityService)
+    IdentityService identityService,
+    OrderService orderService)
     : ObservableObject, IQueryAttributable
 {
     [ObservableProperty] public partial OrderResponse? Order { get; set; }
@@ -234,9 +235,50 @@ public partial class WorkerOrderDetailsViewModel(
             await Shell.Current.DisplayAlert("Ошибка", error, "ОК");
         }
     }
+    
+    [RelayCommand]
+    public async Task DownloadPdf()
+    {
+        if (IsBusy) return;
+
+        try
+        {
+            IsBusy = true;
+
+            if (Order != null)
+            {
+                var pdfBytes = await orderService.GetOrderPdf(Order.Id);
+
+                if (pdfBytes == null || pdfBytes.Length == 0)
+                {
+                    await Shell.Current.DisplayAlert("Ошибка", "Файл заказ-наряда еще не сформирован или недоступен.", "ОК");
+                    return;
+                }
+
+                var fileName = $"Order_{Order.Id}.pdf";
+                var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+
+                await File.WriteAllBytesAsync(filePath, pdfBytes);
+
+                await Launcher.Default.OpenAsync(new OpenFileRequest
+                {
+                    Title = "Заказ-наряд",
+                    File = new ReadOnlyFile(filePath)
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось открыть файл: {ex.Message}", "ОК");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 
     [RelayCommand]
-    private async Task DeleteTask(WorkInOrderResponse? item)
+    private async Task DeleteWork(WorkInOrderResponse? item)
     {
         if (item == null)
         {

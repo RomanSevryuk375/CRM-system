@@ -11,6 +11,26 @@ public class OrderService(HttpClient httpClient)
     {
         return await httpClient.GetPagedAsync<OrderResponse>("api/v1/orders", filter);
     }
+    
+    public async Task<byte[]?> GetOrderPdf(long orderId)
+    {
+        try
+        {
+            var response = await httpClient.GetAsync($"api/v1/orders/{orderId}/pdf");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadAsByteArrayAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error downloading PDF: {ex.Message}");
+            return null;
+        }
+    }
 
     public async Task<string?> CreateOrder(OrderRequest request)
     {

@@ -12,7 +12,8 @@ namespace CRMSystemMobile.ViewModels;
 public partial class OrderDetailsViewModel(
     WorkInOrderService workInOrderService,
     PartSetService partSetService,
-    WorkProposalService workProposalService)
+    WorkProposalService workProposalService,
+    OrderService orderService)
     : ObservableObject, IQueryAttributable
 {
     [ObservableProperty] public partial long OrderId { get; set; }
@@ -40,7 +41,7 @@ public partial class OrderDetailsViewModel(
     }
 
     [RelayCommand]
-    private async Task LoadData()
+    public async Task LoadData()
     {
         if (IsBusy)
         {
@@ -121,9 +122,47 @@ public partial class OrderDetailsViewModel(
             }
         }
     }
+    
+    [RelayCommand]
+    public async Task DownloadPdf()
+    {
+        if (IsBusy) return;
+
+        try
+        {
+            IsBusy = true;
+
+            var pdfBytes = await orderService.GetOrderPdf(OrderId);
+
+            if (pdfBytes == null || pdfBytes.Length == 0)
+            {
+                await Shell.Current.DisplayAlert("Ошибка", "Файл заказ-наряда еще не сформирован или недоступен.", "ОК");
+                return;
+            }
+
+            var fileName = $"Order_{OrderId}.pdf";
+            var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+
+            await File.WriteAllBytesAsync(filePath, pdfBytes);
+
+            await Launcher.Default.OpenAsync(new OpenFileRequest
+            {
+                Title = "Заказ-наряд",
+                File = new ReadOnlyFile(filePath)
+            });
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось открыть файл: {ex.Message}", "ОК");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 
     [RelayCommand]
-    private async Task AcceptProposal(WorkProposalResponse proposal)
+    public async Task AcceptProposal(WorkProposalResponse proposal)
     {
         var error = await workProposalService.AcceptWorkProposal(proposal.Id);
         if (error == null)
@@ -138,7 +177,7 @@ public partial class OrderDetailsViewModel(
     }
 
     [RelayCommand]
-    private async Task RejectProposal(WorkProposalResponse proposal)
+    public async Task RejectProposal(WorkProposalResponse proposal)
     {
         var error = await workProposalService.RejectWorkProposal(proposal.Id);
         if (error == null)
@@ -153,7 +192,7 @@ public partial class OrderDetailsViewModel(
     }
 
     [RelayCommand]
-    private async Task GoBack()
+    public static async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
     }

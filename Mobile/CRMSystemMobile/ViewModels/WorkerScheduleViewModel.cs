@@ -19,7 +19,7 @@ public partial class WorkerScheduleViewModel(
 {
     private Dictionary<int, ShiftResponse>? _cachedShiftsDict;
 
-    private ObservableCollection<object> CalendarItems { get; } = [];
+    public ObservableCollection<object> CalendarItems { get; } = [];
 
     [ObservableProperty] public partial bool IsBusy { get; set; }
     [ObservableProperty] public partial bool IsRefreshing { get; set; }
