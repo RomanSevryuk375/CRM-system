@@ -34,7 +34,16 @@ export interface OrderWithBillRequest {
     actualBillDate?: string;
 }
 
+export interface OrderUpdateRequest {
+    priorityId: number;
+}
+
 export interface OrderPriorityResponse {
+    id: number;
+    name: string;
+}
+
+export interface OrderStatusResponse {
     id: number;
     name: string;
 }

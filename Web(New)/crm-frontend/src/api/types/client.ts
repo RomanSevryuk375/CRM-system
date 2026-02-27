@@ -40,3 +40,8 @@ export interface ClientFilter {
     limit: number;
     isDescending: boolean;
 }
+
+export interface RoleResponse {
+    id: number;
+    name: string;
+}
