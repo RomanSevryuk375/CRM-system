@@ -22,9 +22,9 @@ public partial class OrderDetailsViewModel(
     [ObservableProperty] public partial bool IsBusy { get; set; }
 
     [ObservableProperty] public partial bool IsRefreshing { get; set; }
-    
+
     [ObservableProperty] public partial OrderResponse? Order { get; set; }
-    
+
     public ObservableCollection<WorkInOrderResponse> Works { get; } = [];
     public ObservableCollection<PartSetResponse> Parts { get; } = [];
     public ObservableCollection<WorkProposalResponse> Proposals { get; } = [];
@@ -37,6 +37,7 @@ public partial class OrderDetailsViewModel(
         }
 
         Order = (OrderResponse)value;
+        if (Order != null) OrderTitle = $"Заказ #{Order.Id}";
         LoadDataCommand.Execute(null);
     }
 
@@ -122,7 +123,7 @@ public partial class OrderDetailsViewModel(
             }
         }
     }
-    
+
     [RelayCommand]
     public async Task DownloadPdf()
     {
@@ -136,7 +137,8 @@ public partial class OrderDetailsViewModel(
 
             if (pdfBytes == null || pdfBytes.Length == 0)
             {
-                await Shell.Current.DisplayAlert("Ошибка", "Файл заказ-наряда еще не сформирован или недоступен.", "ОК");
+                await Shell.Current.DisplayAlert("Ошибка", "Файл заказ-наряда еще не сформирован или недоступен.",
+                    "ОК");
                 return;
             }
 
