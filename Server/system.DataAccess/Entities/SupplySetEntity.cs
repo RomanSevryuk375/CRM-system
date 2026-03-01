@@ -1,4 +1,4 @@
-﻿namespace CRMSystem.DataAccess.Entites;
+﻿namespace CRMSystem.DataAccess.Entities;
 
 public class SupplySetEntity
 {

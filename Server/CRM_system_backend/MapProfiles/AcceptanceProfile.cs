@@ -11,7 +11,9 @@ public class AcceptanceProfile : Profile
     {
         CreateMap<AcceptanceEntity, AcceptanceItem>()
             .ForMember(desc => desc.Worker,
-                        opt => opt.MapFrom(src => $"{src.Worker!.Name} {src.Worker.Surname}"));
+                opt => opt.MapFrom(src => src.Worker != null
+                    ? $"{src.Worker.Name} {src.Worker.Surname}"
+                    : string.Empty));
 
         CreateMap<AcceptanceItem, AcceptanceResponse>();
 
