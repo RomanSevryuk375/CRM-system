@@ -45,12 +45,12 @@ export const useCreateClient = async () => {
     });
 };
 
-export const useRegisterClient = async () => {
+export const useRegisterClient = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: ClientRegisterRequest) => clientService.createWithUser(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: clientKeys.lists() });
+            void queryClient.invalidateQueries({ queryKey: clientKeys.lists() });
         },
     });
 };
