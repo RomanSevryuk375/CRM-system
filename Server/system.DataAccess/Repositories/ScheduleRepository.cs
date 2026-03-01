@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Schedule;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using Shared.Filters;

@@ -5,7 +5,7 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.Core.ProjectionModels.AccetanceImg;
+using CRMSystem.Core.ProjectionModels.AcceptanceImg;
 using Microsoft.Extensions.Logging;
 using Shared.Filters;
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRMSystem.Core.ProjectionModels.Tax;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Shared.Contracts.Tax;
 
 namespace CRM_system_backend.MapProfiles;
