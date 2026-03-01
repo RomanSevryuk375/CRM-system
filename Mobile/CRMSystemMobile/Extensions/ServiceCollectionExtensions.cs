@@ -21,6 +21,8 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IdentityService>();
 
             services.AddApiClient<AbsenceService>()
+                .AddApiClient<AcceptanceImgService>()
+                .AddApiClient<AcceptanceService>()
                 .AddApiClient<BillService>()
                 .AddApiClient<CarService>()
                 .AddApiClient<ClientService>()

@@ -25,6 +25,7 @@ public static class ViewModelsCollectionExtensions
             services.AddTransient<AddPartViewModel>();
             services.AddTransient<AddProposalViewModel>();
             services.AddTransient<WorkerScheduleViewModel>();
+            services.AddTransient<OrderAcceptanceViewModel>();
 
             return services;
         }

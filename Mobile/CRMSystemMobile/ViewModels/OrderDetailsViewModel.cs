@@ -37,7 +37,11 @@ public partial class OrderDetailsViewModel(
         }
 
         Order = (OrderResponse)value;
-        if (Order != null) OrderTitle = $"Заказ #{Order.Id}";
+        if (Order != null)
+        {
+            OrderTitle = $"Заказ #{Order.Id}";
+        }
+
         LoadDataCommand.Execute(null);
     }
 
@@ -127,7 +131,10 @@ public partial class OrderDetailsViewModel(
     [RelayCommand]
     public async Task DownloadPdf()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
 
         try
         {

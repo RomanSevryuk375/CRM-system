@@ -239,7 +239,10 @@ public partial class WorkerOrderDetailsViewModel(
     [RelayCommand]
     public async Task DownloadPdf()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
 
         try
         {
@@ -365,4 +368,14 @@ public partial class WorkerOrderDetailsViewModel(
 
     [RelayCommand]
     private static async Task GoBack() => await Shell.Current.GoToAsync("..");
+    
+    [RelayCommand]
+    private async Task GoToAcceptance()
+    {
+        if (Order != null)
+        {
+            var navParam = new Dictionary<string, object> { { "Order", Order } };
+            await Shell.Current.GoToAsync("OrderAcceptancePage", navParam);
+        }
+    }
 }

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="CRMSystemMobile.View.OrderAcceptancePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:extensions="clr-namespace:CRMSystemMobile.Extensions"
+    xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    Title="Акт приемки"
+    x:DataType="vm:OrderAcceptanceViewModel"
+    BackgroundColor="#112347"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *">
+        <Grid
+            Grid.Row="0"
+            Padding="15,20,15,10"
+            ColumnDefinitions="50, *"
+            HeightRequest="70">
+            <ImageButton
+                Command="{Binding GoBackCommand}"
+                HeightRequest="24"
+                HorizontalOptions="Start"
+                Source="back_icon.png"
+                WidthRequest="24" />
+            <Label
+                Grid.Column="1"
+                Margin="15,0"
+                FontAttributes="Bold"
+                FontSize="22"
+                Text="Акт приемки"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="15">
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Пробег (км)" TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#1C2D4F"
+                        HeightRequest="50"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="0">
+                        <Entry
+                            Margin="10,0"
+                            Keyboard="Numeric"
+                            Text="{Binding Mileage}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label
+                            Grid.Column="0"
+                            Text="Уровень топлива"
+                            TextColor="#ACACAC" />
+                        <Label
+                            Grid.Column="1"
+                            Text="{Binding FuelLevel, StringFormat='{0:P0}'}"
+                            TextColor="White" />
+                    </Grid>
+                    <Slider
+                        Maximum="1"
+                        Minimum="0"
+                        MinimumTrackColor="#3296F8"
+                        ThumbColor="White"
+                        Value="{Binding FuelLevel}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Внешние дефекты (кузов)" TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#1C2D4F"
+                        HeightRequest="100"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="0">
+                        <Editor
+                            Margin="10"
+                            AutoSize="TextChanges"
+                            Text="{Binding ExternalDefects}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Внутренние дефекты (салон)" TextColor="#ACACAC" />
+                    <Border
+                        BackgroundColor="#1C2D4F"
+                        HeightRequest="100"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="0">
+                        <Editor
+                            Margin="10"
+                            AutoSize="TextChanges"
+                            Text="{Binding InternalDefects}"
+                            TextColor="White" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <Button
+                    BackgroundColor="#3296F8"
+                    Command="{Binding SaveChangesCommand}"
+                    CornerRadius="8"
+                    FontAttributes="Bold"
+                    Text="Сохранить данные" />
+
+                <Label
+                    Margin="0,15,0,0"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Фотографии повреждений"
+                    TextColor="White" />
+
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                    <Button
+                        Grid.Column="0"
+                        BackgroundColor="Transparent"
+                        BorderColor="#3296F8"
+                        BorderWidth="1"
+                        Command="{Binding TakePhotoCommand}"
+                        FontSize="14"
+                        HeightRequest="45"
+                        ImageSource="camera.png"
+                        Text="Камера"
+                        TextColor="#3296F8" />
+
+                    <Button
+                        Grid.Column="1"
+                        BackgroundColor="Transparent"
+                        BorderColor="#3296F8"
+                        BorderWidth="1"
+                        Command="{Binding PickPhotoCommand}"
+                        FontSize="14"
+                        HeightRequest="45"
+                        ImageSource="galery.png"
+                        Text="Галерея"
+                        TextColor="#3296F8" />
+                </Grid>
+
+                <CollectionView HeightRequest="200" ItemsSource="{Binding Photos}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="5"
+                            Orientation="Vertical"
+                            Span="3"
+                            VerticalItemSpacing="5" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="extensions:AcceptancePhotoUiModel">
+                            <Border
+                                HeightRequest="100"
+                                StrokeShape="RoundRectangle 8"
+                                StrokeThickness="0"
+                                WidthRequest="100">
+                                <Image Aspect="AspectFill" Source="{Binding ImageSource}" />
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ActivityIndicator
+            Grid.RowSpan="2"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            Color="White" />
+    </Grid>
+</ContentPage>

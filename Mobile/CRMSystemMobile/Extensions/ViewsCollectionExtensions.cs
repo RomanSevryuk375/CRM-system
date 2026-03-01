@@ -28,6 +28,7 @@ public static class ViewsCollectionExtensions
             services.AddTransient<AddPartPage>();
             services.AddTransient<AddProposalPage>();
             services.AddTransient<WorkerSchedulePage>();
+            services.AddTransient<OrderAcceptancePage>();
 
             return services;
         }
