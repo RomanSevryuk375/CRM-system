@@ -83,7 +83,7 @@ public partial class OrderDetailsViewModel(
             StatusIds: null,
             SortBy: null,
             Page: 1,
-            Limit: 100,
+            Limit: 10,
             IsDescending: true);
 
         var (items, _) = await workInOrderService.GetWorksInOrder(filter);

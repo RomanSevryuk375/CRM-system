@@ -23,7 +23,7 @@ public class AcceptanceImgService(HttpClient httpClient)
         catch { return null; }
     }
 
-    public async Task<string?> UploadPhoto(long acceptanceId, FileResult fileResult)
+    public async Task<string?> UploadPhoto(long acceptanceId, FileResult fileResult, string description)
     {
         try
         {
@@ -36,7 +36,7 @@ public class AcceptanceImgService(HttpClient httpClient)
             fileContent.Headers.ContentType = new MediaTypeHeaderValue(fileResult.ContentType);
             content.Add(fileContent, "File", fileResult.FileName);
 
-            content.Add(new StringContent("Фото с телефона"), "Description");
+            content.Add(new StringContent(description ?? ""), "Description");
 
             var response = await httpClient.PostAsync("api/v1/acceptance-images", content);
             

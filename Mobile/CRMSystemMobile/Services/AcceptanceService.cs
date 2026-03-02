@@ -47,6 +47,43 @@ public class AcceptanceService(HttpClient httpClient)
             var error = await response.Content.ReadAsStringAsync();
             return (null, error);
         }
-        catch (Exception ex) { return (null, ex.Message); }
+        catch (Exception ex)
+        {
+            return (null, ex.Message);
+        }
+    }
+
+    public async Task<List<AcceptanceResponse>?> GetAcceptancesByOrderIds(IEnumerable<long> orderIds)
+    {
+        var filter = new AcceptanceFilter(
+            AcceptanceIds: [],
+            WorkerIds: [],
+            OrderIds: orderIds,
+            SortBy: null,
+            Page: 1,
+            Limit: 100,
+            IsDescending: true
+        );
+
+        var (items, _) = await httpClient.GetPagedAsync<AcceptanceResponse>("api/v1/acceptances", filter);
+        return items;
+    }
+
+    public async Task<string?> SignAcceptanceByClient(long acceptanceId)
+    {
+        try
+        {
+            var request = new AcceptanceUpdateRequest { ClientSign = true };
+
+            var response = await httpClient.PutAsJsonAsync($"api/v1/acceptances/{acceptanceId}", request);
+
+            if (response.IsSuccessStatusCode) return null;
+
+            return await response.Content.ReadAsStringAsync();
+        }
+        catch (Exception ex)
+        {
+            return ex.Message;
+        }
     }
 }

@@ -72,17 +72,16 @@ public partial class WorkerOrderDetailsViewModel(
 
     private async Task LoadWorksInternal()
     {
-        var (profileId, _) = await identityService.GetProfileIdAsync();
         if (Order != null)
         {
             var filter = new WorkInOrderFilter(
                 OrderIds: [Order.Id],
-                WorkerIds: [(int)profileId],
-                JobIds: [],
-                StatusIds: [],
+                WorkerIds: null,
+                JobIds: null,
+                StatusIds: null,
                 SortBy: null,
                 Page: 1,
-                Limit: 100,
+                Limit: 10,
                 IsDescending: true
             );
             var (items, _) = await workInOrderService.GetWorksInOrder(filter);

@@ -8,6 +8,7 @@ using Shared.Filters;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CRMSystemMobile.Extensions;
+using Shared.Contracts.Acceptance;
 
 namespace CRMSystemMobile.ViewModels;
 
@@ -16,12 +17,14 @@ public partial class MainViewModel : ObservableObject
     private readonly OrderService _orderService;
     private readonly ClientService _clientService;
     private readonly IdentityService _identityService;
+    private readonly AcceptanceService _acceptanceService;
 
-    public MainViewModel(OrderService orderService, ClientService clientService, IdentityService identityService)
+    public MainViewModel(OrderService orderService, ClientService clientService, IdentityService identityService, AcceptanceService acceptanceService)
     {
         _orderService = orderService;
         _clientService = clientService;
         _identityService = identityService;
+        _acceptanceService = acceptanceService;
 
         WeakReferenceMessenger.Default.RegisterAll(this);
 
@@ -66,6 +69,10 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] public partial Color CompletedText { get; set; }
 
     [ObservableProperty] public partial bool IsRefreshing { get; set; }
+
+    public ObservableCollection<AcceptanceResponse> PendingAcceptances { get; } = [];
+
+    public bool HasPendingAcceptances => PendingAcceptances.Count > 0;
 
     [RelayCommand]
     private async Task Refresh()
@@ -235,6 +242,11 @@ public partial class MainViewModel : ObservableObject
             {
                 Orders.Add(item);
             }
+            
+            if (Orders.Count > 0)
+            {
+                await CheckForPendingAcceptances();
+            }
 
             _currentPage++;
         }
@@ -246,6 +258,44 @@ public partial class MainViewModel : ObservableObject
         {
             IsLoadingMore = false;
         }
+    }
+
+    private async Task CheckForPendingAcceptances()
+    {
+        try
+        {
+            var orderIds = Orders.Select(o => o.Id).Distinct().ToList();
+
+            var acceptances = await _acceptanceService.GetAcceptancesByOrderIds(orderIds);
+
+            PendingAcceptances.Clear();
+            if (acceptances != null)
+            {
+                var unsigned = acceptances.Where(a => a.ClientSign != true);
+
+                foreach (var item in unsigned)
+                {
+                    PendingAcceptances.Add(item);
+                }
+            }
+            OnPropertyChanged(nameof(HasPendingAcceptances));
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error checking acceptances: {ex}");
+        }
+    }
+
+    [RelayCommand]
+    private static async Task OpenAcceptanceForSign(AcceptanceResponse acceptance)
+    {
+        var navParam = new Dictionary<string, object>
+        {
+            { "OrderId", acceptance.OrderId },
+            { "IsClientView", true }
+        };
+
+        await Shell.Current.GoToAsync("OrderAcceptancePage", navParam);
     }
 
     [RelayCommand]
