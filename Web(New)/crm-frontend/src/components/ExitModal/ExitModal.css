@@ -1,0 +1,108 @@
+.shadow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 300;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-ExitMenu {
+    background-color: #FFFFFF;
+    width: 402px;
+    height: 139px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.block-ExitMenu-header {
+    height: 33.3%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #112347;
+    justify-content: space-between;
+}
+
+.block-ExitMenu-body {
+    height: 33.3%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.block-ExitMenu-footer {
+    height: 33.3%;
+    width: calc(100% - 16px);
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    justify-content: end;
+}
+
+.block-ExitMenu-header-button {
+    width: 20px;
+    height: 20px;
+    border: none;
+    background-color: #112347;
+    margin-right: 16px;
+}
+
+.block-ExitMenu-footer-button {
+    height: 30px;
+    width: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: #3296F8;
+    border: none;
+    border-radius: 2px;
+    color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    text-align: center;
+    margin-left: 16px;
+}
+
+.block-ExitMenu-footer-button:hover {
+    background-color: #00488E;
+    transition: all 0.1s ease-in-out;
+}
+
+.ExitMenu-img {
+    height: 20px;
+    width: 20px;
+}
+
+.ExitMenu-lable {
+    color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    text-align: center;
+    margin-left: 16px;
+}
+
+.block-ExitMenu-body-text {
+    color: #333333;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    text-align: center;
+    margin-left: 16px;
+}
+
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Fonts/Roboto/Roboto-Black.woff2') format('ttf');
+    font-weight: 900;
+    font-style: normal;
+}
