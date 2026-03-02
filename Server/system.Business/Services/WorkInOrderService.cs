@@ -28,7 +28,7 @@ public class WorkInOrderService(
     {
         logger.LogInformation("Getting paged works in order start");
 
-        if (userContext.RoleId != (int)RoleEnum.Manager)
+        if (userContext.RoleId == (int)RoleEnum.Worker)
             filter = filter with { WorkerIds = [(int)userContext.ProfileId] };
 
         var works = await workInOrderRepository.GetPaged(filter, ct);

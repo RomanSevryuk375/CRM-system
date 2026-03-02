@@ -3,7 +3,7 @@
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.User;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;

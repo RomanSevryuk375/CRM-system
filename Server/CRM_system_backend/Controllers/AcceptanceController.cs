@@ -15,7 +15,7 @@ public class AcceptanceController(
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
-    [Authorize(Policy = "AdminWorkerPolicy")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<List<AcceptanceResponse>>> GetPagedAcceptance(
         [FromQuery] AcceptanceFilter filter, CancellationToken ct)
     {

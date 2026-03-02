@@ -1,5 +1,5 @@
 ﻿using CRMSystem.Business.Abstractions;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Shared.Enums;

@@ -24,11 +24,20 @@ namespace CRMSystemMobile.Extensions
 
                 var response = await httpClient.GetAsync(url);
 
+                Debug.WriteLine($"[API Request] GET {url}");
+
                 if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
                     SecureStorage.Default.Remove("jwt_token");
                     MainThread.BeginInvokeOnMainThread(async () => { await Shell.Current.GoToAsync("//LoginPage"); });
                     return (null, 0);
+                }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorBody = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"[API Error] Status: {response.StatusCode}");
+                    Debug.WriteLine($"[API Error] Body: {errorBody}");
                 }
 
                 response.EnsureSuccessStatusCode();

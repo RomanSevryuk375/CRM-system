@@ -37,7 +37,11 @@ public partial class OrderDetailsViewModel(
         }
 
         Order = (OrderResponse)value;
-        if (Order != null) OrderTitle = $"Заказ #{Order.Id}";
+        if (Order != null)
+        {
+            OrderTitle = $"Заказ #{Order.Id}";
+        }
+
         LoadDataCommand.Execute(null);
     }
 
@@ -79,7 +83,7 @@ public partial class OrderDetailsViewModel(
             StatusIds: null,
             SortBy: null,
             Page: 1,
-            Limit: 100,
+            Limit: 10,
             IsDescending: true);
 
         var (items, _) = await workInOrderService.GetWorksInOrder(filter);
@@ -127,7 +131,10 @@ public partial class OrderDetailsViewModel(
     [RelayCommand]
     public async Task DownloadPdf()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
 
         try
         {

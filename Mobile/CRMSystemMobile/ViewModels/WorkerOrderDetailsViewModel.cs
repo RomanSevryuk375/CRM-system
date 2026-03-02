@@ -72,17 +72,16 @@ public partial class WorkerOrderDetailsViewModel(
 
     private async Task LoadWorksInternal()
     {
-        var (profileId, _) = await identityService.GetProfileIdAsync();
         if (Order != null)
         {
             var filter = new WorkInOrderFilter(
                 OrderIds: [Order.Id],
-                WorkerIds: [(int)profileId],
-                JobIds: [],
-                StatusIds: [],
+                WorkerIds: null,
+                JobIds: null,
+                StatusIds: null,
                 SortBy: null,
                 Page: 1,
-                Limit: 100,
+                Limit: 10,
                 IsDescending: true
             );
             var (items, _) = await workInOrderService.GetWorksInOrder(filter);
@@ -239,7 +238,10 @@ public partial class WorkerOrderDetailsViewModel(
     [RelayCommand]
     public async Task DownloadPdf()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
 
         try
         {
@@ -365,4 +367,14 @@ public partial class WorkerOrderDetailsViewModel(
 
     [RelayCommand]
     private static async Task GoBack() => await Shell.Current.GoToAsync("..");
+    
+    [RelayCommand]
+    private async Task GoToAcceptance()
+    {
+        if (Order != null)
+        {
+            var navParam = new Dictionary<string, object> { { "Order", Order } };
+            await Shell.Current.GoToAsync("OrderAcceptancePage", navParam);
+        }
+    }
 }

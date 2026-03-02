@@ -34,7 +34,11 @@ public partial class WorkerScheduleViewModel(
     [RelayCommand]
     private async Task LoadInitial()
     {
-        if (IsBusy) return;
+        if (IsBusy)
+        {
+            return;
+        }
+
         IsBusy = true;
 
         try
@@ -63,7 +67,10 @@ public partial class WorkerScheduleViewModel(
     [RelayCommand]
     private async Task LoadNextPage()
     {
-        if (IsBusy || IsLoadingMore || (!_hasMoreSchedules && !_hasMoreAbsences)) return;
+        if (IsBusy || IsLoadingMore || (!_hasMoreSchedules && !_hasMoreAbsences))
+        {
+            return;
+        }
 
         IsLoadingMore = true;
         try
@@ -82,7 +89,10 @@ public partial class WorkerScheduleViewModel(
         try
         {
             var (profileId, _) = await identityService.GetProfileIdAsync();
-            if (profileId <= 0) return;
+            if (profileId <= 0)
+            {
+                return;
+            }
 
             var schedulesTask = _hasMoreSchedules
                 ? scheduleService.GetMySchedules(new ScheduleFilter(
@@ -108,11 +118,20 @@ public partial class WorkerScheduleViewModel(
             var (schedules, _) = await schedulesTask;
             var (absences, _) = await absencesTask;
 
-            if ((schedules?.Count ?? 0) < PageSize) _hasMoreSchedules = false;
-            if ((absences?.Count ?? 0) < PageSize) _hasMoreAbsences = false;
+            if ((schedules?.Count ?? 0) < PageSize)
+            {
+                _hasMoreSchedules = false;
+            }
+
+            if ((absences?.Count ?? 0) < PageSize)
+            {
+                _hasMoreAbsences = false;
+            }
 
             if ((schedules == null || schedules.Count == 0) && (absences == null || absences.Count == 0))
+            {
                 return;
+            }
 
             var batchList = new List<object>();
             var today = DateTime.Today;
@@ -121,7 +140,10 @@ public partial class WorkerScheduleViewModel(
             {
                 foreach (var schedule in schedules)
                 {
-                    if (schedule.DateTime.Date < today) continue;
+                    if (schedule.DateTime.Date < today)
+                    {
+                        continue;
+                    }
 
                     var timeRange = "Время не указано";
                     if (_cachedShiftsDict != null && _cachedShiftsDict.TryGetValue(schedule.ShiftId, out var shift))

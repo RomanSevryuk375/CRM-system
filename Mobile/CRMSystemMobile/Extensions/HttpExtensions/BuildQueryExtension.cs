@@ -17,7 +17,9 @@ public static class BuildQueryExtension
         foreach (var prop in properties)
         {
             var value = prop.GetValue(filter);
-
+            
+            if (value == null) continue;
+            
             switch (value)
             {
                 case string str:

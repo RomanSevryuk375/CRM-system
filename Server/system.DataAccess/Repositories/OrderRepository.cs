@@ -4,7 +4,7 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Order;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared.Enums;
 using Shared.Filters;

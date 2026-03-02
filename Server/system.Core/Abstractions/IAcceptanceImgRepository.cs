@@ -1,7 +1,7 @@
 ﻿// Ignore Spelling: Img
 
 using CRMSystem.Core.Models;
-using CRMSystem.Core.ProjectionModels.AccetanceImg;
+using CRMSystem.Core.ProjectionModels.AcceptanceImg;
 using Shared.Filters;
 
 namespace CRMSystem.Core.Abstractions;
