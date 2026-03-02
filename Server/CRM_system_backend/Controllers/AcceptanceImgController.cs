@@ -16,7 +16,7 @@ public class AcceptanceImgController(
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
-    [Authorize(Policy = "AdminWorkerPolicy")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<List<AcceptanceImgResponse>>> GetAcceptanceIng(
         [FromQuery]AcceptanceImgFilter filter, CancellationToken ct)
     {
@@ -43,7 +43,7 @@ public class AcceptanceImgController(
     }
 
     [HttpGet("{id:long}/img")]
-    [Authorize(Policy = "AdminWorkerPolicy")]
+    [Authorize(Policy = "UniPolicy")]
     public async Task<IActionResult> DownloadImage(
         long id, CancellationToken ct)
     {
