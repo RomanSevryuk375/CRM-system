@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Car;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using Shared.Filters;
@@ -20,6 +20,15 @@ public class CarRepository(
             query = query.Where(c => filter.OwnerIds.Contains(c.OwnerId));
 
         return query;
+    }
+    
+    public async Task<CarItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Cars
+            .AsNoTracking()
+            .Where(c => c.Id == id)
+            .ProjectTo<CarItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<List<CarItem>> GetPaged(CarFilter filter, CancellationToken ct)
@@ -79,15 +88,6 @@ public class CarRepository(
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
-    }
-
-    public async Task<CarItem?> GetById(long id, CancellationToken ct)
-    {
-        return await context.Cars
-            .AsNoTracking()
-            .Where(c => c.Id == id)
-            .ProjectTo<CarItem>(mapper.ConfigurationProvider, ct)
-            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<int> GetCount(CarFilter filter, CancellationToken ct)

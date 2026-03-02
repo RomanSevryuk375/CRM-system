@@ -5,7 +5,7 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.Core.ProjectionModels.AccetanceImg;
+using CRMSystem.Core.ProjectionModels.AcceptanceImg;
 using Microsoft.Extensions.Logging;
 using Shared.Filters;
 
@@ -17,6 +17,12 @@ public class AcceptanceImgService(
     ILogger<AcceptanceImgService> logger,
     IFileService fileService) : IAcceptanceImgService
 {
+    public async Task<AcceptanceImgItem> GetAcceptanceImgById(long id, CancellationToken ct)
+    {
+        return await acceptanceImgRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"AcceptanceImg {id} not found");
+    }
+    
     public async Task<List<AcceptanceImgItem>> GetAcceptanceIng(AcceptanceImgFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting acceptanceImg start");
@@ -87,11 +93,11 @@ public class AcceptanceImgService(
             throw new ConflictException($"Validation failed: {errorMsg}");
         }
 
-        var Id = await acceptanceImgRepository.Create(acceptanceImg!, ct);
+        var id = await acceptanceImgRepository.Create(acceptanceImg, ct);
 
         logger.LogInformation("Creating acceptanceImg success");
 
-        return Id;
+        return id;
     }
 
     public async Task<long> UpdateAcceptanceImg(
@@ -120,10 +126,10 @@ public class AcceptanceImgService(
 
         await fileService.DeleteFile(img.FilePath, ct);
 
-        var Id = await acceptanceImgRepository.Delete(id, ct);
+        var acceptanceId = await acceptanceImgRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting Acceptance{AcceptanceId} success", id);
 
-        return Id;
+        return acceptanceId;
     }
 }

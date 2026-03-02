@@ -19,12 +19,15 @@ public partial class CarDetailsViewModel : ObservableObject, IQueryAttributable
     [RelayCommand]
     private async Task BookVisit()
     {
-        var navigationParameter = new Dictionary<string, object>
+        if (Car != null)
         {
-            { "SelectedCar", Car }
-        };
+            var navigationParameter = new Dictionary<string, object>
+            {
+                { "SelectedCar", Car }
+            };
 
-        await Shell.Current.GoToAsync("BookingPage", navigationParameter);
+            await Shell.Current.GoToAsync("BookingPage", navigationParameter);
+        }
     }
 
     [RelayCommand]

@@ -8,7 +8,7 @@ public class LoginService(HttpClient httpClient)
 {
     public async Task<LoginResponse?> LoginUser(LoginRequest request)
     {
-        var url = $"api/v1/users/login";
+        const string url = "api/v1/users/token";
 
         try
         {

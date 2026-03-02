@@ -4,7 +4,7 @@ namespace Shared.Contracts.SupplySet;
 
 public record SupplySetRequest
 {
-    [JsonPropertyName("supplierId")]
+    [JsonPropertyName("supplyId")]
     public long SupplyId { get; init; }
 
     [JsonPropertyName("positionId")]

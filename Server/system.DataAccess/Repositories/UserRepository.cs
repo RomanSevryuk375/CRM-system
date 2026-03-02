@@ -3,7 +3,7 @@
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.User;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -16,9 +16,19 @@ public class UserRepository(
     IMyPasswordHasher myPasswordHasher,
     IMapper mapper) : IUserRepository
 {
+    public async Task<UserItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Users
+            .AsNoTracking()
+            .Where(u => u.Id == id)
+            .ProjectTo<UserItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<UserItem?> GetByLogin(string login, CancellationToken ct)
     {
-        return await context.Users.AsNoTracking()
+        return await context.Users
+            .AsNoTracking()
             .Where(u => u.Login == login)
             .ProjectTo<UserItem>(mapper.ConfigurationProvider, ct)
             .FirstOrDefaultAsync(ct);

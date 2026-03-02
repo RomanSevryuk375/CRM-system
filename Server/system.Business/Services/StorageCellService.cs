@@ -11,6 +11,12 @@ public class StorageCellService(
     IStorageCellRepository storageCellRepository,
     ILogger<StorageCellService> logger) : IStorageCellService
 {
+    public async Task<StorageCellItem> GetStorageCellById(int id, CancellationToken ct)
+    {
+        return await storageCellRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Cell {id} not found");
+    }
+    
     public async Task<List<StorageCellItem>> GetStorageCells(CancellationToken ct)
     {
         logger.LogInformation("Getting storage cells start");

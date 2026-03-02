@@ -13,8 +13,6 @@ public class PartSetServiceTests
     private readonly Mock<IPositionRepository> _positionRepoMock;
     private readonly Mock<IWorkProposalRepository> _workProposalRepoMock;
     private readonly Mock<IPartSetRepository> _partSetRepoMock;
-    private readonly Mock<IBillRepository> _billRepoMock;
-    private readonly Mock<ILogger<PartSetService>> _loggerMock;
     private readonly PartSetService _service;
 
     public PartSetServiceTests()
@@ -23,16 +21,16 @@ public class PartSetServiceTests
         _positionRepoMock = new Mock<IPositionRepository>();
         _workProposalRepoMock = new Mock<IWorkProposalRepository>();
         _partSetRepoMock = new Mock<IPartSetRepository>();
-        _billRepoMock = new Mock<IBillRepository>();
-        _loggerMock = new Mock<ILogger<PartSetService>>();
+        var billRepoMock = new Mock<IBillRepository>();
+        var loggerMock = new Mock<ILogger<PartSetService>>();
 
         _service = new PartSetService(
             _orderRepoMock.Object,
             _positionRepoMock.Object,
             _workProposalRepoMock.Object,
             _partSetRepoMock.Object,
-            _billRepoMock.Object,
-            _loggerMock.Object);
+            billRepoMock.Object,
+            loggerMock.Object);
     }
 
     [Fact]

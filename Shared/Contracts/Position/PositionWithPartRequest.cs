@@ -22,7 +22,7 @@ public record PositionWithPartRequest
     [JsonPropertyName("categoryId")]
     public int CategoryId { get; init; }
 
-    [JsonPropertyName("oenArticle")]
+    [JsonPropertyName("oemArticle")]
     public string? OemArticle { get; init; }
 
     [JsonPropertyName("manufacturerArticle")]

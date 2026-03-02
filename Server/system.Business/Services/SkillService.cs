@@ -16,6 +16,12 @@ public class SkillService(
     IUserContext userContext,
     ILogger<SkillService> logger) : ISkillService
 {
+    public async Task<SkillItem> GetSkillById(int id, CancellationToken ct)
+    {
+        return await skillRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Skill {id} not found");
+    }
+    
     public async Task<List<SkillItem>> GetSkills(SkillFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting skills start");
@@ -59,11 +65,11 @@ public class SkillService(
             throw new NotFoundException($"Specialization {skill.SpecializationId} not found");
         }
 
-        var Id = await skillRepository.Create(skill, ct);
+        var id = await skillRepository.Create(skill, ct);
 
         logger.LogInformation("Creating skill success");
 
-        return Id;
+        return id;
     }
 
     public async Task<int> UpdateSkill(int id, SkillUpdateModel model, CancellationToken ct)
@@ -85,19 +91,19 @@ public class SkillService(
 
         logger.LogInformation("Updating skill success");
 
-        var Id = await skillRepository.Update(id, model, ct);
+        var skillId = await skillRepository.Update(id, model, ct);
 
-        return Id;
+        return skillId;
     }
 
     public async Task<int> DeleteSkill(int id, CancellationToken ct)
     {
         logger.LogInformation("Deleting skill start");
 
-        var Id = await skillRepository.Delete(id, ct);
+        var skillId = await skillRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting skill success");
 
-        return Id;
+        return skillId;
     }
 }

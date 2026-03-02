@@ -13,7 +13,6 @@ public class PaymentNoteServiceTests
     private readonly Mock<IBillRepository> _billRepoMock;
     private readonly Mock<IPaymentNoteRepository> _paymentNoteRepoMock;
     private readonly Mock<IPaymentMethodRepository> _paymentMethodRepoMock;
-    private readonly Mock<ILogger<PaymentNoteService>> _loggerMock;
     private readonly PaymentNoteService _service;
 
     public PaymentNoteServiceTests()
@@ -21,13 +20,13 @@ public class PaymentNoteServiceTests
         _billRepoMock = new Mock<IBillRepository>();
         _paymentNoteRepoMock = new Mock<IPaymentNoteRepository>();
         _paymentMethodRepoMock = new Mock<IPaymentMethodRepository>();
-        _loggerMock = new Mock<ILogger<PaymentNoteService>>();
+        var loggerMock = new Mock<ILogger<PaymentNoteService>>();
 
         _service = new PaymentNoteService(
             _billRepoMock.Object,
             _paymentNoteRepoMock.Object,
             _paymentMethodRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

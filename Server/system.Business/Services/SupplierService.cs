@@ -11,6 +11,12 @@ public class SupplierService(
     ISupplierRepository supplierRepository,
     ILogger<SupplierService> logger) : ISupplierService
 {
+    public async Task<SupplierItem> GetSupplierById(int id, CancellationToken ct)
+    {
+        return await supplierRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Supplier {id} not found");
+    }
+    
     public async Task<List<SupplierItem>> GetSuppliers(CancellationToken ct)
     {
         logger.LogInformation("Getting suppliers start");

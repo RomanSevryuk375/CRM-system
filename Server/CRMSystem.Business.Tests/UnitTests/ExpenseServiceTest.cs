@@ -15,7 +15,6 @@ public class ExpenseServiceTest
     private readonly Mock<IExpenseTypeRepository> _expenseTypeRepoMock;
     private readonly Mock<IPartSetRepository> _partSetRepoMock;
     private readonly Mock<ITaxRepository> _taxRepoMock;
-    private readonly Mock<ILogger<ExpenseService>> _loggerMock;
     private readonly ExpenseService _service;
 
     public ExpenseServiceTest()
@@ -24,14 +23,14 @@ public class ExpenseServiceTest
         _expenseTypeRepoMock = new Mock<IExpenseTypeRepository>();
         _partSetRepoMock = new Mock<IPartSetRepository>();
         _taxRepoMock = new Mock<ITaxRepository>();
-        _loggerMock = new Mock<ILogger<ExpenseService>>();
+        var loggerMock = new Mock<ILogger<ExpenseService>>();
 
         _service = new ExpenseService(
             _expenseRepoMock.Object,
             _expenseTypeRepoMock.Object,
             _partSetRepoMock.Object,
             _taxRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

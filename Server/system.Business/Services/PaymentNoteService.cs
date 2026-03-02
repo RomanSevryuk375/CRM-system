@@ -15,6 +15,12 @@ public class PaymentNoteService(
     IPaymentMethodRepository paymentMethodRepository,
     ILogger<PaymentNoteService> logger) : IPaymentNoteService
 {
+    public async Task<PaymentNoteItem> GetPaymentNoteById(long id, CancellationToken ct)
+    {
+        return await paymentNoteRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"PaymentNote {id} not found");
+    }
+    
     public async Task<List<PaymentNoteItem>> GetPagedPaymentNotes(PaymentNoteFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting payment note start");
@@ -37,33 +43,45 @@ public class PaymentNoteService(
         return count;
     }
 
-    public async Task<long> CreatePaymentNote(PaymentNote paymentNote, CancellationToken ct)
+    public async Task<long> CreatePaymentNote(PaymentNoteCreateModel createModel, CancellationToken ct)
     {
         logger.LogInformation("Creating payment note start");
 
-        if (!await billRepository.Exists(paymentNote.BillId, ct))
+        if (!await billRepository.Exists(createModel.BillId, ct))
         {
-            logger.LogError("Bill{billId} not found", paymentNote.BillId);
-            throw new NotFoundException($"Bill {paymentNote.BillId} not found");
+            logger.LogError("Bill{billId} not found", createModel.BillId);
+            throw new NotFoundException($"Bill {createModel.BillId} not found");
         }
 
-        if (!await paymentMethodRepository.Exists((int)paymentNote.MethodId, ct))
+        if (!await paymentMethodRepository.Exists((int)createModel.MethodId, ct))
         {
-            logger.LogError("Method {methodId} not found", (int)paymentNote.MethodId);
-            throw new NotFoundException($"Method {(int)paymentNote.MethodId} not found");
+            logger.LogError("Method {methodId} not found", (int)createModel.MethodId);
+            throw new NotFoundException($"Method {(int)createModel.MethodId} not found");
+        }
+        
+        var (paymentNote, errors) = PaymentNote.Create(
+            0,
+            createModel.BillId,
+            createModel.Date,
+            createModel.Amount,
+            createModel.MethodId);
+        
+        if (errors.Any())
+        {
+            throw new ValidationException(string.Join(", ", errors));
         }
 
-        var Id = await paymentNoteRepository.Create(paymentNote, ct);
+        var id = await paymentNoteRepository.Create(paymentNote!, ct);
 
         logger.LogInformation("Creating payment note success");
 
-        logger.LogInformation("Recalculating bill{billId} start", paymentNote.BillId);
+        logger.LogInformation("Recalculating bill{billId} start", paymentNote!.BillId);
 
         await billRepository.RecalculateDebt(paymentNote.BillId, ct);
 
         logger.LogInformation("Recalculating bill{billId} success", paymentNote.BillId);
 
-        return Id;
+        return id;
     }
 
     public async Task<long> UpratePaymentNote(long id, PaymentMethodEnum? method, CancellationToken ct)
@@ -76,21 +94,21 @@ public class PaymentNoteService(
             throw new NotFoundException($"Method {(int)method} not found");
         }
 
-        var Id = await paymentNoteRepository.Update(id, method, ct);
+        var noteId = await paymentNoteRepository.Update(id, method, ct);
 
         logger.LogInformation("Updating payment note success");
 
-        return Id;
+        return noteId;
     }
 
     public async Task<long> DeletePaymentNote(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting payment note start");
 
-        var Id = await paymentNoteRepository.Delete(id, ct);
+        var noteId = await paymentNoteRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting payment note success");
 
-        return Id;
+        return noteId;
     }
 }

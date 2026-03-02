@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Expense;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using Shared.Filters;
@@ -34,6 +34,15 @@ public class ExpenseRepository(
         return query;
     }
 
+    public async Task<ExpenseItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Expenses
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<ExpenseItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<ExpenseItem>> GetPaged(ExpenseFilter filter, CancellationToken ct)
     {
         var query = context.Expenses.AsNoTracking();
@@ -96,7 +105,7 @@ public class ExpenseRepository(
 
     public async Task<long> Create(Expense expense, CancellationToken ct)
     {
-        var expenceEntity = new ExpenseEntity
+        var expenseEntity = new ExpenseEntity
         {
             Date = expense.Date,
             Category = expense.Category,
@@ -106,7 +115,7 @@ public class ExpenseRepository(
             Sum = expense.Sum
         };
 
-        await context.Expenses.AddAsync(expenceEntity, ct);
+        await context.Expenses.AddAsync(expenseEntity, ct);
         await context.SaveChangesAsync(ct);
 
         return expense.Id;

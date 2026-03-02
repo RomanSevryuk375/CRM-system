@@ -10,17 +10,16 @@ namespace CRMSystem.Business.Tests.UnitTests;
 public class SupplierServiceTests
 {
     private readonly Mock<ISupplierRepository> _supplierRepoMock;
-    private readonly Mock<ILogger<SupplierService>> _loggerMock;
     private readonly SupplierService _service;
 
     public SupplierServiceTests()
     {
         _supplierRepoMock = new Mock<ISupplierRepository>();
-        _loggerMock = new Mock<ILogger<SupplierService>>();
+        var loggerMock = new Mock<ILogger<SupplierService>>();
 
         _service = new SupplierService(
             _supplierRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

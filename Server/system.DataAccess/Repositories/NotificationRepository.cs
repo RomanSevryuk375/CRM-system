@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Notification;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared.Filters;
 
@@ -37,6 +37,15 @@ public class NotificationRepository(
         }
 
         return query;
+    }
+
+    public async Task<NotificationItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Notifications
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<NotificationItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<List<NotificationItem>> GetPaged(NotificationFilter filter, CancellationToken ct)

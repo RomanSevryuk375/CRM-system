@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage
     x:Class="CRMSystemMobile.View.WorkerOrderDetailsPage"
@@ -14,7 +14,7 @@
     BackgroundColor="#112347"
     Shell.NavBarIsVisible="False">
 
-    <Grid RowDefinitions="Auto, Auto, Auto, *">
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, *">
         <Grid
             Grid.Row="0"
             Padding="15,20"
@@ -39,7 +39,7 @@
 
         <Border
             Grid.Row="1"
-            Margin="15,0,15,10"
+            Margin="15,0"
             Padding="15"
             BackgroundColor="#213868"
             StrokeShape="RoundRectangle 10"
@@ -65,8 +65,49 @@
             </Grid>
         </Border>
 
-        <Grid
+        <Border
             Grid.Row="2"
+            Margin="15,15,15,0"
+            Padding="15"
+            BackgroundColor="#213868"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 10">
+            <Grid ColumnDefinitions="*, Auto">
+                <VerticalStackLayout Spacing="2">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="Заказ-наряд (PDF)"
+                        TextColor="White" />
+                    <Label
+                        FontSize="12"
+                        Text="Нажмите для скачивания"
+                        TextColor="#ACACAC" />
+                </VerticalStackLayout>
+
+                <Button
+                    Grid.Column="1"
+                    BackgroundColor="#3296F8"
+                    Command="{Binding DownloadPdfCommand}"
+                    CornerRadius="8"
+                    FontAttributes="Bold"
+                    HeightRequest="40"
+                    Text="Скачать"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <Button Grid.Row="3"
+                Text="Акт приемки"
+                Command="{Binding GoToAcceptanceCommand}" 
+                BackgroundColor="#1C2D4F" 
+                TextColor="White"
+                BorderColor="#3296F8" BorderWidth="1"
+                Margin="20"/>
+
+        <Grid
+            Grid.Row="4"
             Padding="15,0"
             ColumnDefinitions="*, *, *"
             ColumnSpacing="10"
@@ -186,7 +227,7 @@
         </Grid>
 
         <RefreshView
-            Grid.Row="3"
+            Grid.Row="5"
             Command="{Binding LoadAllDataCommand}"
             IsRefreshing="{Binding IsRefreshing}"
             RefreshColor="#112347">
@@ -244,8 +285,7 @@
                                                     Source="delete.png"
                                                     WidthRequest="30">
                                                     <ImageButton.Command>
-                                                        <Binding Source="{x:Reference DetailsPage}"
-                                                                 Path="BindingContext.DeleteTaskCommand" />
+                                                        <Binding Path="BindingContext.DeleteWorkCommand" Source="{x:Reference DetailsPage}" />
                                                     </ImageButton.Command>
                                                 </ImageButton>
                                             </Grid>
@@ -256,8 +296,7 @@
                                                 FontAttributes="Bold"
                                                 HeightRequest="40">
                                                 <Button.Command>
-                                                    <Binding Source="{x:Reference DetailsPage}"
-                                                             Path="BindingContext.ChangeStatusCommand" />
+                                                    <Binding Path="BindingContext.ChangeStatusCommand" Source="{x:Reference DetailsPage}" />
                                                 </Button.Command>
                                                 <Button.Triggers>
                                                     <DataTrigger
@@ -364,7 +403,7 @@
                                             <ImageButton
                                                 Grid.Column="2"
                                                 Padding="5"
-                                                Command="{Binding Source={x:Reference DetailsPage}, Path=BindingContext.DeleteTaskCommand}"
+                                                Command="{Binding Source={x:Reference DetailsPage}, Path=BindingContext.DeletePartCommand}"
                                                 CommandParameter="{Binding .}"
                                                 HeightRequest="30"
                                                 Source="delete.png"
@@ -446,8 +485,7 @@
                                                 VerticalOptions="Center"
                                                 WidthRequest="30">
                                                 <ImageButton.Command>
-                                                    <Binding Source="{x:Reference DetailsPage}"
-                                                             Path="BindingContext.DeleteProposalCommand" />
+                                                    <Binding Path="BindingContext.DeleteProposalCommand" Source="{x:Reference DetailsPage}" />
                                                 </ImageButton.Command>
                                             </ImageButton>
                                         </Grid>
@@ -462,7 +500,7 @@
         </RefreshView>
 
         <ActivityIndicator
-            Grid.Row="3"
+            Grid.Row="4"
             HorizontalOptions="Center"
             IsRunning="{Binding IsBusy}"
             IsVisible="{Binding IsBusy}"

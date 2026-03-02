@@ -1,6 +1,6 @@
 ﻿// Ignore Spelling: Img
 
-namespace Shared.Contracts.AttachmentImg;
+namespace CRM_system_backend.Contracts;
 
 public record AttachmentImgRequest
 {

@@ -7,7 +7,7 @@ public record SupplySetResponse
     [JsonPropertyName("id")]
     public long Id { get; init; }
 
-    [JsonPropertyName("supplierId")]
+    [JsonPropertyName("supplyId")]
     public long SupplyId { get; init; }
 
     [JsonPropertyName("position")]

@@ -18,7 +18,7 @@ public class WorkerController(
 {
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<WorkerItem>>> GetPagedWorkers(
+    public async Task<ActionResult<List<WorkerResponse>>> GetPagedWorkers(
         [FromQuery] WorkerFilter filter, CancellationToken ct)
     {
         var dto = await workerService.GetPagedWorkers(filter, ct);
@@ -31,59 +31,62 @@ public class WorkerController(
         return Ok(response);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<WorkerItem>> GetWorkerById(
+    public async Task<ActionResult<WorkerResponse>> GetWorkerById(
         int id, CancellationToken ct)
     {
-        var response = await workerService.GetWorkerById(id, ct);
+        var dto = await workerService.GetWorkerById(id, ct);
+        var response = mapper.Map<WorkerResponse>(dto);
 
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> CreateWorker(
+    public async Task<ActionResult> CreateWorker(
         [FromBody] WorkerRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<WorkerCreateModel>(request);
-
-        var workerId = await workerService.CreateWorker(createModel, ct);
+        var id = await workerService.CreateWorker(createModel, ct);
+        
+        var createdDto = await workerService.GetWorkerById(id, ct);
+        var response = mapper.Map<WorkerResponse>(createdDto);
 
         return CreatedAtAction(
             nameof(GetWorkerById), 
-            new { Id = workerId}, 
-            null);
+            new { id = createdDto.Id }, 
+            response);
     }
 
     [HttpPost("user")]
-    public async Task<ActionResult<int>> CreateWorker(
+    public async Task<ActionResult> CreateWorker(
         [FromBody]  WorkerWithUserRequest request, CancellationToken ct)
     {
         var workerCreateModel = mapper.Map<WorkerCreateModel>(request);
         var userCreateModel = mapper.Map<UserCreateModel>(request); 
-
-        var workerId = await workerService.CreateWorkerWithUser(workerCreateModel, userCreateModel, ct);
+        var id = await workerService.CreateWorkerWithUser(workerCreateModel, userCreateModel, ct);
+        
+        var createdDto = await workerService.GetWorkerById(id, ct);
+        var response = mapper.Map<WorkerResponse>(createdDto);
 
         return CreatedAtAction(
             nameof(GetWorkerById),
-            new { Id = workerId },
-            null);
-
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> UpdateWorker(
         int id, [FromBody] WorkerUpdateRequest request, CancellationToken ct)
     {
         var model = mapper.Map<WorkerUpdateModel>(request);
-
         await workerService.UpdateWorker(id, model, ct);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeleteWorker(
         int id, CancellationToken ct)

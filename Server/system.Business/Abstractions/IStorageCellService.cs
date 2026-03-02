@@ -7,5 +7,6 @@ public interface IStorageCellService
     Task<int> CreateStorageCell(StorageCellCreateModel createModel, CancellationToken ct);
     Task<int> DeleteStorageCell(int id, CancellationToken ct);
     Task<List<StorageCellItem>> GetStorageCells(CancellationToken ct);
+    Task<StorageCellItem> GetStorageCellById(int id, CancellationToken ct);
     Task<int> UpdateStorageCell(int id, StorageCellUpdateModel model, CancellationToken ct);
 }

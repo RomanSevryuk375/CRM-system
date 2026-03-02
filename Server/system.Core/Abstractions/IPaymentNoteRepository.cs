@@ -11,5 +11,6 @@ public interface IPaymentNoteRepository
     Task<long> Delete(long id, CancellationToken ct);
     Task<int> GetCount(PaymentNoteFilter filter, CancellationToken ct);
     Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter filter, CancellationToken ct);
+    Task<PaymentNoteItem?> GetById(long id, CancellationToken ct);
     Task<long> Update(long id, PaymentMethodEnum? method, CancellationToken ct);
 }

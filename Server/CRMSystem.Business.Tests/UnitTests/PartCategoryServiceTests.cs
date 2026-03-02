@@ -10,17 +10,16 @@ namespace CRMSystem.Business.Tests.UnitTests;
 public class PartCategoryServiceTests
 {
     private readonly Mock<IPartCategoryRepository> _partCategoryRepoMock;
-    private readonly Mock<ILogger<PartCategoryService>> _loggerMock;
     private readonly PartCategoryService _service;
 
     public PartCategoryServiceTests()
     {
         _partCategoryRepoMock = new Mock<IPartCategoryRepository>();
-        _loggerMock = new Mock<ILogger<PartCategoryService>>();
+        var loggerMock = new Mock<ILogger<PartCategoryService>>();
 
         _service = new PartCategoryService(
             _partCategoryRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

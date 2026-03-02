@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRMSystem.Core.ProjectionModels.Bill;
 using CRMSystem.Core.ProjectionModels.BillStatus;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Shared.Contracts;
 using Shared.Contracts.Bill;
 

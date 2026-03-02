@@ -1,6 +1,6 @@
 ﻿// Ignore Spelling: Imgs
 
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.DataAccess;

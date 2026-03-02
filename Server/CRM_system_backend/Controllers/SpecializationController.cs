@@ -9,18 +9,27 @@ namespace CRM_system_backend.Controllers;
 
 [ApiController]
 [Route("api/v1/specializations")]
-
 public class SpecializationController(
     ISpecializationService specializationService,
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<SpecializationItem>>> GetSpecialization(CancellationToken ct)
+    public async Task<ActionResult<List<SpecializationResponse>>> GetSpecialization(CancellationToken ct)
     {
         var dto = await specializationService.GetSpecializations(ct);
-
         var response = mapper.Map<List<SpecializationResponse>>(dto);
+
+        return Ok(response);
+    }
+    
+    [HttpGet("{id:int}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
+    public async Task<ActionResult<SpecializationResponse>> GetSpecializationById
+        (int id, CancellationToken ct)
+    {
+        var dto = await specializationService.GetSpecializationById(id, ct);
+        var response = mapper.Map<SpecializationResponse>(dto);
 
         return Ok(response);
     }
@@ -31,13 +40,18 @@ public class SpecializationController(
         [FromBody]SpecializationRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<SpecializationCreateModel>(request);
+        var id = await specializationService.CreateSpecialization(createModel, ct);
+        
+        var createdDto = specializationService.GetSpecializationById(id, ct);
+        var response = mapper.Map<SpecializationResponse>(createdDto);
 
-        await specializationService.CreateSpecialization(createModel, ct);
-
-        return NoContent();
+        return CreatedAtAction(
+            nameof(GetSpecializationById),
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> UpdateSpecialization(
         [FromBody] SpecializationUpdateRequest request, int id, CancellationToken ct)
@@ -47,7 +61,7 @@ public class SpecializationController(
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeleteSpecialization(
         int id, CancellationToken ct)

@@ -2,6 +2,7 @@
 using Shared.Filters;
 using System.Diagnostics;
 using System.Net.Http.Json;
+using CRMSystemMobile.Extensions;
 
 namespace CRMSystemMobile.Services;
 
@@ -9,69 +10,14 @@ public class WorkInOrderService(HttpClient httpClient)
 {
     public async Task<(List<WorkInOrderResponse>?, int TotalCount)> GetWorksInOrder(WorkInOrderFilter filter)
     {
-        try
-        {
-            var query = $"Page={filter.Page}&Limit={filter.Limit}&IsDescending={filter.IsDescending}";
-
-            if (!string.IsNullOrEmpty(filter.SortBy))
-            {
-                query += $"&SortBy={filter.SortBy}";
-            }
-
-            if (filter.JobIds?.Any() == true)
-            {
-                query = filter.JobIds.Aggregate(query, (current, id) => current + $"&JobIds={id}");
-            }
-
-            if (filter.StatusIds?.Any() == true)
-            {
-                query = filter.StatusIds.Aggregate(query, (current, id) => current + $"&StatusIds={id}");
-            }
-
-            if (filter.OrderIds?.Any() == true)
-            {
-                query = filter.OrderIds.Aggregate(query, (current, id) => current + $"&OrderIds={id}");
-            }
-
-            if (filter.WorkerIds?.Any() == true)
-            {
-                query = filter.WorkerIds.Aggregate(query, (current, id) => current + $"&WorkerIds={id}");
-            }
-
-            var url = $"api/works-in-order?{query}";
-
-            var response = await httpClient.GetAsync(url);
-
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                SecureStorage.Default.Remove("jwt_token");
-                await Shell.Current.GoToAsync("//LoginPage");
-                return (null, 0);
-            }
-
-            response.EnsureSuccessStatusCode();
-
-            var totalCount = 0;
-            if (response.Headers.TryGetValues("x-total-count", out var values))
-            {
-                int.TryParse(values.FirstOrDefault(), out totalCount);
-            }
-
-            var items = await response.Content.ReadFromJsonAsync<List<WorkInOrderResponse>>();
-            return (items, totalCount);
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.ToString());
-            return (null, 0);
-        }
+        return await httpClient.GetPagedAsync<WorkInOrderResponse>("api/v1/works-in-order", filter);
     }
 
     public async Task<string?> AddWorkToOrder(WorkInOrderRequest request)
     {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("api/works-in-order", request);
+            var response = await httpClient.PostAsJsonAsync("api/v1/works-in-order", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -95,7 +41,7 @@ public class WorkInOrderService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.PutAsJsonAsync($"api/works-in-order/{id}", model);
+            var response = await httpClient.PutAsJsonAsync($"api/v1/works-in-order/{id}", model);
 
             if (response.IsSuccessStatusCode)
             {
@@ -115,7 +61,7 @@ public class WorkInOrderService(HttpClient httpClient)
     {
         try
         {
-            var response = await httpClient.DeleteAsync($"api/works-in-order/{id}");
+            var response = await httpClient.DeleteAsync($"api/v1/works-in-order/{id}");
 
             if (response.IsSuccessStatusCode)
             {

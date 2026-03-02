@@ -1,9 +1,7 @@
-﻿// Ignore Spelling: Img
-
-using AutoMapper;
+﻿using AutoMapper;
+using CRM_system_backend.Contracts;
 using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels;
-using CRMSystem.Core.ProjectionModels.AttachmentImg;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.AttachmentImg;
@@ -19,7 +17,7 @@ public class AttachmentImgController(
 {
     [HttpGet]
     [Authorize(Policy = "AdminWorkerPolicy")]
-    public async Task<ActionResult<List<AttachmentImgItem>>> GetPagedAttachmentImg(
+    public async Task<ActionResult<List<AttachmentImgResponse>>> GetPagedAttachmentImg(
         [FromQuery] AttachmentImgFilter filter, CancellationToken ct)
     {
         var dto = await attachmentImgService.GetPagedAttachmentImg(filter, ct);
@@ -28,6 +26,17 @@ public class AttachmentImgController(
         var response = mapper.Map<List<AttachmentImgResponse>>(dto);
 
         Response.Headers.Append("x-total-count", count.ToString());
+
+        return Ok(response);
+    }
+    
+    [HttpGet("{id:int}")]
+    [Authorize(Policy = "AdminWorkerPolicy")]
+    public async Task<ActionResult<AttachmentImgResponse>> GetAttachmentImgBtId(
+        int id, CancellationToken ct)
+    {
+        var dto = await attachmentImgService.GetAttachmentImgById(id, ct);
+        var response = mapper.Map<AttachmentImgResponse>(dto);
 
         return Ok(response);
     }
@@ -47,21 +56,27 @@ public class AttachmentImgController(
     public async Task<ActionResult> CreateAttachmentImg(
         [FromBody] AttachmentImgRequest request, CancellationToken ct)
     {
-        if (request.File is null || request.File.Length == 0)
+        if (request.File.Length == 0)
         {
             return BadRequest("File is required");
         }
 
-        using var stream = request.File.OpenReadStream();
+        await using var stream = request.File.OpenReadStream();
         var fileItem = new FileItem(stream, request.File.FileName, request.File.ContentType);
 
-        var Id = await attachmentImgService.CreateAttachmentImg(
+        var id = await attachmentImgService.CreateAttachmentImg(
             request.AttachmentId, fileItem, request.Description, ct);
 
-        return Created();
+        var createdDto = await attachmentImgService.GetAttachmentImgById(id, ct);
+        var response = mapper.Map<AttachmentImgResponse>(createdDto);
+
+        return CreatedAtAction(
+            nameof(GetAttachmentImgBtId),
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:long}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> UpdateAttachmentImg(
         long id, [FromBody] AttachmentImgUpdateRequest request, CancellationToken ct)
@@ -71,7 +86,7 @@ public class AttachmentImgController(
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> DeleteAttachmentImg(
         long id, CancellationToken ct)

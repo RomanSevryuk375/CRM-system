@@ -12,6 +12,7 @@ public interface IAttachmentImgService
     Task<(Stream FileStream, string ContentType)> GetImageStream(long id, CancellationToken ct);
     Task<long> DeleteAttachmentImg(long id, CancellationToken ct);
     Task<int> GetCountAttachmentImg(AttachmentImgFilter filter, CancellationToken ct);
+    Task<AttachmentImgItem> GetAttachmentImgById(long id, CancellationToken ct);
     Task<List<AttachmentImgItem>> GetPagedAttachmentImg(AttachmentImgFilter filter, CancellationToken ct);
     Task<long> UpdateAttachmentImg(long id, string? filePath, string? description, CancellationToken ct);
 }

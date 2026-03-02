@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.AbsenceType;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 
@@ -21,6 +21,15 @@ public class AbsenceTypeRepository(
             .ToListAsync(ct);
     }
 
+    public async Task<AbsenceTypeItem?> GetById (int id, CancellationToken ct)
+    {
+        return await context.AbsenceTypes
+            .Where(a => a.Id == id)
+            .AsNoTracking()
+            .ProjectTo<AbsenceTypeItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<AbsenceTypeItem>> GetByName (string name, CancellationToken ct)
     {
         return await context.AbsenceTypes

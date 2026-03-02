@@ -1,7 +1,7 @@
 ﻿using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Skill;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -27,6 +27,15 @@ public class SkillRepository(
         }
 
         return query;
+    }
+
+    public async Task<SkillItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.Skills
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<SkillItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<List<SkillItem>> Get(SkillFilter filter, CancellationToken ct)

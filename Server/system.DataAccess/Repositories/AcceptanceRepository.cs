@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Acceptance;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using Shared.Filters;
@@ -35,6 +35,15 @@ public class AcceptanceRepository(
         return query;
     }
 
+    public async Task<AcceptanceItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.AcceptanceImgs
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<AcceptanceItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<AcceptanceItem>> GetPaged(AcceptanceFilter filter, CancellationToken ct)
     {
         var query = context.Acceptances.AsNoTracking();

@@ -5,5 +5,6 @@ namespace CRMSystem.Core.Abstractions;
 public interface ITaxTypeRepository
 {
     Task<List<TaxTypeItem>> Get(CancellationToken ct);
+    Task<TaxTypeItem?> GetById(int id, CancellationToken ct);
     Task<bool> Exists(int id, CancellationToken ct);
 }

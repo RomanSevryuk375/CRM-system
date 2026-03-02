@@ -18,6 +18,12 @@ public class UserService(
     IWorkerRepository workerRepository,
     ILogger<UserService> logger) : IUserService
 {
+    public async Task<UserItem> GetUserById(long id, CancellationToken ct)
+    {
+        return await userRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"User {id} not found");
+    }
+    
     public async Task<string> LoginUser(string login, string password, CancellationToken ct)
     {
         logger.LogInformation("Logging user start");

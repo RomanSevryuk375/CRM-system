@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.PartSet;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using Shared.Filters;
@@ -32,6 +32,15 @@ public class PartSetRepository(
         }
 
         return query;
+    }
+    
+    public async Task<PartSetItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.PartSets
+            .AsNoTracking()
+            .Where(p => p.Id == id)
+            .ProjectTo<PartSetItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<List<PartSetItem>> GetPaged(PartSetFilter filter, CancellationToken ct)
@@ -88,15 +97,6 @@ public class PartSetRepository(
             .Where(p => p.OrderId == orderId)
             .ProjectTo<PartSetItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
-    }
-
-    public async Task<PartSetItem?> GetById(long id, CancellationToken ct)
-    {
-        return await context.PartSets
-            .AsNoTracking()
-            .Where(p => p.Id == id)
-            .ProjectTo<PartSetItem>(mapper.ConfigurationProvider, ct)
-            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<int> GetCount(PartSetFilter filter, CancellationToken ct)

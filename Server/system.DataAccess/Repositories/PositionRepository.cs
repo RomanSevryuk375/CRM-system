@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Position;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using Shared.Filters;
@@ -22,6 +22,15 @@ public class PositionRepository(
         }
 
         return query;
+    }
+
+    public async Task<PositionItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Positions
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<PositionItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<List<PositionItem>> GetPaged(PositionFilter filter, CancellationToken ct)

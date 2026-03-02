@@ -1,6 +1,6 @@
 ﻿// Ignore Spelling: Img
 
-namespace Shared.Contracts.AcceptanceImg;
+namespace CRM_system_backend.Contracts;
 
 public record CreateAcceptanceImgRequest
 {

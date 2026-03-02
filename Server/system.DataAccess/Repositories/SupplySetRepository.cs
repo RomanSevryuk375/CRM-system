@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.SupplySet;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using Shared.Filters;
@@ -27,6 +27,15 @@ public class SupplySetRepository(
         }
 
         return query;
+    }
+
+    public async Task<SupplySetItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.SupplySets
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<SupplySetItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<List<SupplySetItem>> GetPaged(SupplySetFilter filter, CancellationToken ct)

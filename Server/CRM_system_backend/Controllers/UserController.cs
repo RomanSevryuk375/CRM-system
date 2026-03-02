@@ -12,12 +12,28 @@ namespace CRM_system_backend.Controllers;
 [Route("api/v1/users")]
 public class UserController(IUserService userService, IMapper mapper) : ControllerBase
 {
-    [HttpPost("login")]
+    [HttpGet("{login}")]
+    public async Task<ActionResult<UserItem>> GetUserByLogin(string login, CancellationToken ct)
+    {
+        var user = await userService.GetUsersByLogin(login, ct);
+        
+        return Ok(user);
+    }
+    
+    [HttpGet("{id:long}")]
+    public async Task<ActionResult<UserItem>> GetUserById(long id, CancellationToken ct)
+    {
+        var user = await userService.GetUserById(id, ct);
+        
+        return Ok(user);
+    }
+    
+    [HttpPost("token")]
     public async Task<ActionResult<LoginResponse>> LoginUser(
         [FromBody] LoginRequest loginRequest, CancellationToken ct)
     {
-        var token = await userService.LoginUser(loginRequest.Login, loginRequest.Password, ct);
-        var user = await userService.GetUsersByLogin(loginRequest.Login, ct);
+        var token = await userService.LoginUser(loginRequest.Login!, loginRequest.Password!, ct);
+        var user = await userService.GetUsersByLogin(loginRequest.Login!, ct);
 
         var cookieOptions = new CookieOptions
         {
@@ -42,7 +58,7 @@ public class UserController(IUserService userService, IMapper mapper) : Controll
         return Ok(response);
     }
 
-    [HttpPost("logout")]
+    [HttpPost("exit")]
     public IActionResult Logout()
     {
 
@@ -57,25 +73,21 @@ public class UserController(IUserService userService, IMapper mapper) : Controll
         return Ok(new { Message = "Logged out" });
     }
 
-    [HttpGet("by-login/{login}")]
-    public async Task<ActionResult<UserItem>> GetUserByLogin(string login, CancellationToken ct)
-    {
-        var user = await userService.GetUsersByLogin(login, ct);
-        
-        return Ok(user);
-    }
-
     [HttpPost]
     public async Task<ActionResult> CreateUser([FromBody] UserRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<UserCreateModel>(request);
+        var id = await userService.CreateUser(createModel, ct);
+        
+        var createdDto = await userService.GetUserById(id, ct);
 
-        await userService.CreateUser(createModel, ct);
-
-        return Created();
+        return CreatedAtAction(
+            nameof(GetUserById),
+            new { id = createdDto.Id},
+            createdDto);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeleteUser(int id, CancellationToken ct)
     {

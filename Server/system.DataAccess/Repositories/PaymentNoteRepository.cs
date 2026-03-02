@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.PaymentNote;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using Shared.Enums;
@@ -28,6 +28,15 @@ public class PaymentNoteRepository(
         }
 
         return query;
+    }
+
+    public async Task<PaymentNoteItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.PaymentNotes
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<PaymentNoteItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<List<PaymentNoteItem>> GetPaged(PaymentNoteFilter filter, CancellationToken ct)
@@ -71,11 +80,10 @@ public class PaymentNoteRepository(
 
     public async Task<int> GetCount(PaymentNoteFilter filter, CancellationToken ct)
     {
-        var quety = context.PaymentNotes.AsNoTracking();
+        var query = context.PaymentNotes.AsNoTracking();
+        query = ApplyFilter(query, filter);
 
-        quety = ApplyFilter(quety, filter);
-
-        return await quety.CountAsync(ct);
+        return await query.CountAsync(ct);
     }
 
     public async Task<long> Create(PaymentNote paymentNote, CancellationToken ct)

@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.PartCategory;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 
@@ -13,6 +13,15 @@ public class PartCategoryRepository(
     SystemDbContext context,
     IMapper mapper) : IPartCategoryRepository
 {
+    public async Task<PartCategoryItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.PartCategories
+            .AsNoTracking()
+            .Where(p => p.Id == id)
+            .ProjectTo<PartCategoryItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<PartCategoryItem>> Get(CancellationToken ct)
     {
         return await context.PartCategories

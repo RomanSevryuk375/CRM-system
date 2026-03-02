@@ -15,6 +15,6 @@ public partial class WorkerSchedulePage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.LoadSchedulesCommand.ExecuteAsync(null);
+        await _viewModel.LoadInitialCommand.ExecuteAsync(null);
     }
 }

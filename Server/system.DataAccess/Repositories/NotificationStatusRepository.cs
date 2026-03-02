@@ -10,6 +10,15 @@ public class NotificationStatusRepository(
     SystemDbContext context,
     IMapper mapper) : INotificationStatusRepository
 {
+    public async Task<NotificationStatusItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.NotificationsStatuses
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<NotificationStatusItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<NotificationStatusItem>> Get(CancellationToken ct)
     {
         return await context.NotificationsStatuses

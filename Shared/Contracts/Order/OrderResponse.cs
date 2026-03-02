@@ -5,7 +5,7 @@ namespace Shared.Contracts.Order;
 public record OrderResponse
 {
     [JsonPropertyName("id")]
-    public long Id { get; init; }
+    public long Id { get; set; }
 
     [JsonPropertyName("status")]
     public string Status { get; init; } = string.Empty;

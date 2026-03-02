@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Tax;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using Shared.Filters;
@@ -16,14 +16,23 @@ public class TaxRepository(
 {
     private static IQueryable<TaxEntity> ApplyFilter(IQueryable<TaxEntity> query, TaxFilter filter)
     {
-        if (filter.TaxTyprIds != null && filter.TaxTyprIds.Any())
+        if (filter.TaxTypeIds != null && filter.TaxTypeIds.Any())
         {
-            query = query.Where(t => filter.TaxTyprIds.Contains(t.TypeId));
+            query = query.Where(t => filter.TaxTypeIds.Contains(t.TypeId));
         }
 
         return query;
     }
 
+    public async Task<TaxItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.Taxes
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<TaxItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<TaxItem>> Get(TaxFilter filter, CancellationToken ct)
     {
         var query = context.Taxes.AsNoTracking();

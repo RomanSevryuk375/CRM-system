@@ -21,4 +21,9 @@ public class CacheRoleService(
             TimeSpan.FromHours(24),
             logger, ct);
     }
+
+    public async Task<RoleItem> GetRoleById(int id, CancellationToken ct)
+    {
+        return await decorated.GetRoleById(id, ct);
+    }
 }

@@ -12,7 +12,6 @@ public class SupplySetServiceTests
     private readonly Mock<ISupplyRepository> _supplyRepoMock;
     private readonly Mock<ISupplySetRepository> _supplySetRepoMock;
     private readonly Mock<IPositionRepository> _positionRepoMock;
-    private readonly Mock<ILogger<SupplySetService>> _loggerMock;
     private readonly SupplySetService _service;
 
     public SupplySetServiceTests()
@@ -20,13 +19,13 @@ public class SupplySetServiceTests
         _supplyRepoMock = new Mock<ISupplyRepository>();
         _supplySetRepoMock = new Mock<ISupplySetRepository>();
         _positionRepoMock = new Mock<IPositionRepository>();
-        _loggerMock = new Mock<ILogger<SupplySetService>>();
+        var loggerMock = new Mock<ILogger<SupplySetService>>();
 
         _service = new SupplySetService(
             _supplySetRepoMock.Object,
             _supplyRepoMock.Object,
             _positionRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

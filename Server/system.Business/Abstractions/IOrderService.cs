@@ -7,6 +7,7 @@ namespace CRMSystem.Business.Abstractions;
 
 public interface IOrderService
 {
+    Task<OrderItem> GetOrderById(long id, CancellationToken ct);
     Task<long> CloseOrder(long id, CancellationToken ct);
     Task<long> CompleteOrder(long id, CancellationToken ct);
     Task<long> CreateOrder(OrderCreateModel createModel, CancellationToken ct);

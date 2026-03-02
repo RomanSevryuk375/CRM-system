@@ -47,23 +47,23 @@ public class IntegrationTestFactory : WebApplicationFactory<IApiMarker>, IAsyncL
             DbAdapter = DbAdapter.Postgres,
             SchemasToInclude = new [] { "public" },
             TablesToIgnore = new Table[]
-                {
-                    "__EFMigrationsHistory",
-                    "roles",
-                    "order_statuses",
-                    "order_priorities",
-                    "bill_statuses",
-                    "car_statuses",
-                    "absence_types",
-                    "expense_types",
-                    "notification_statuses",
-                    "notification_types",
-                    "tax_types",
-                    "work_in_order_statuses",
-                    "work_proposal_statuses",
-                    "specializations",
-                    "payment_methods"
-                }
+            {
+                "__EFMigrationsHistory",
+                "roles",
+                "order_statuses",
+                "order_priorities",
+                "bill_statuses",
+                "car_statuses",
+                "absence_types",
+                "expense_types",
+                "notification_statuses",
+                "notification_types",
+                "tax_types",
+                "work_in_order_statuses",
+                "work_proposal_statuses",
+                "specializations",
+                "payment_methods"
+            }
         });
     }
     public string GetConnectionString() => _dbContainer.GetConnectionString();

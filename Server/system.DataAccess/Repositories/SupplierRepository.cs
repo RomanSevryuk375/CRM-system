@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Supplier;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 
@@ -13,6 +13,15 @@ public class SupplierRepository(
     SystemDbContext context,
     IMapper mapper) : ISupplierRepository
 {
+    public async Task<SupplierItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.Suppliers
+            .AsNoTracking()
+            .Where(s => s.Id == id)
+            .ProjectTo<SupplierItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<SupplierItem>> Get(CancellationToken ct)
     {
         return await context.Suppliers

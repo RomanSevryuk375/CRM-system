@@ -1,5 +1,5 @@
 ﻿using CRMSystem.Core.Validation;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Shared.Enums;
@@ -36,7 +36,7 @@ public class ExpenseTypeConfiguration : IEntityTypeConfiguration<ExpenseTypeEnti
             },
             new ExpenseTypeEntity
             {
-                Id = (int)ExpenseTypeEnum.ITAndCommunication,
+                Id = (int)ExpenseTypeEnum.ItAndCommunication,
                 Name = "IT и связь"
             },
             new ExpenseTypeEntity

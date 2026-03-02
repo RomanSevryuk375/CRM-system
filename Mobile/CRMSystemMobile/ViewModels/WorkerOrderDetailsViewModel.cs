@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CRMSystemMobile.Extentions;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Order;
 using Shared.Contracts.PartSet;
@@ -9,6 +8,7 @@ using Shared.Contracts.WorkProposal;
 using Shared.Enums;
 using Shared.Filters;
 using System.Collections.ObjectModel;
+using CRMSystemMobile.Extensions;
 
 namespace CRMSystemMobile.ViewModels;
 
@@ -16,7 +16,8 @@ public partial class WorkerOrderDetailsViewModel(
     WorkInOrderService workInOrderService,
     PartSetService partSetService,
     WorkProposalService workProposalService,
-    IdentityService identityService)
+    IdentityService identityService,
+    OrderService orderService)
     : ObservableObject, IQueryAttributable
 {
     [ObservableProperty] public partial OrderResponse? Order { get; set; }
@@ -71,38 +72,39 @@ public partial class WorkerOrderDetailsViewModel(
 
     private async Task LoadWorksInternal()
     {
-        var (profileId, _) = await identityService.GetProfileIdAsync();
-        var filter = new WorkInOrderFilter(
-            OrderIds: [Order.Id],
-            WorkerIds: [(int)profileId],
-            JobIds: [],
-            StatusIds: [],
-            SortBy: null,
-            Page: 1,
-            Limit: 100,
-            IsDescending: true
-        );
-        var (items, _) = await workInOrderService.GetWorksInOrder(filter);
-
-        MainThread.BeginInvokeOnMainThread(() =>
+        if (Order != null)
         {
-            MyWorks.Clear();
-            if (items == null)
+            var filter = new WorkInOrderFilter(
+                OrderIds: [Order.Id],
+                WorkerIds: null,
+                JobIds: null,
+                StatusIds: null,
+                SortBy: null,
+                Page: 1,
+                Limit: 10,
+                IsDescending: true
+            );
+            var (items, _) = await workInOrderService.GetWorksInOrder(filter);
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                return;
-            }
+                MyWorks.Clear();
+                if (items == null)
+                {
+                    return;
+                }
 
-            foreach (var i in items)
-            {
-                MyWorks.Add(i);
-            }
-        });
+                foreach (var i in items)
+                {
+                    MyWorks.Add(i);
+                }
+            });
+        }
     }
 
     private async Task LoadPartsInternal()
     {
         var filter = new PartSetFilter(
-            OrderIds: [Order.Id],
+            OrderIds: [Order?.Id],
             PositionIds: [],
             ProposalIds: [],
             SortBy: null,
@@ -131,7 +133,7 @@ public partial class WorkerOrderDetailsViewModel(
     {
         var (profileId, _) = await identityService.GetProfileIdAsync();
         var filter = new WorkProposalFilter(
-            OrderIds: [Order.Id],
+            OrderIds: [Order!.Id],
             WorkerIds: [(int)profileId],
             JobIds: [], StatusIds: [], SortBy: null, Page: 1, Limit: 100, IsDescending: true
         );
@@ -164,15 +166,21 @@ public partial class WorkerOrderDetailsViewModel(
     [RelayCommand]
     private async Task GoToAddPart()
     {
-        var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
-        await Shell.Current.GoToAsync("AddPartPage", navParam);
+        if (Order != null)
+        {
+            var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
+            await Shell.Current.GoToAsync("AddPartPage", navParam);
+        }
     }
 
     [RelayCommand]
     private async Task GoToAddProposal()
     {
-        var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
-        await Shell.Current.GoToAsync("AddProposalPage", navParam);
+        if (Order != null)
+        {
+            var navParam = new Dictionary<string, object> { { "OrderId", Order.Id } };
+            await Shell.Current.GoToAsync("AddProposalPage", navParam);
+        }
     }
 
     [RelayCommand]
@@ -226,9 +234,53 @@ public partial class WorkerOrderDetailsViewModel(
             await Shell.Current.DisplayAlert("Ошибка", error, "ОК");
         }
     }
+    
+    [RelayCommand]
+    public async Task DownloadPdf()
+    {
+        if (IsBusy)
+        {
+            return;
+        }
+
+        try
+        {
+            IsBusy = true;
+
+            if (Order != null)
+            {
+                var pdfBytes = await orderService.GetOrderPdf(Order.Id);
+
+                if (pdfBytes == null || pdfBytes.Length == 0)
+                {
+                    await Shell.Current.DisplayAlert("Ошибка", "Файл заказ-наряда еще не сформирован или недоступен.", "ОК");
+                    return;
+                }
+
+                var fileName = $"Order_{Order.Id}.pdf";
+                var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+
+                await File.WriteAllBytesAsync(filePath, pdfBytes);
+
+                await Launcher.Default.OpenAsync(new OpenFileRequest
+                {
+                    Title = "Заказ-наряд",
+                    File = new ReadOnlyFile(filePath)
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Ошибка", $"Не удалось открыть файл: {ex.Message}", "ОК");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 
     [RelayCommand]
-    private async Task DeleteTask(WorkInOrderResponse? item)
+    private async Task DeleteWork(WorkInOrderResponse? item)
     {
         if (item == null)
         {
@@ -300,7 +352,7 @@ public partial class WorkerOrderDetailsViewModel(
             return;
         }
 
-        var error = await workProposalService.DeleteWorkPropsal(item.Id);
+        var error = await workProposalService.DeleteWorkProposal(item.Id);
 
         if (error == null)
         {
@@ -315,4 +367,14 @@ public partial class WorkerOrderDetailsViewModel(
 
     [RelayCommand]
     private static async Task GoBack() => await Shell.Current.GoToAsync("..");
+    
+    [RelayCommand]
+    private async Task GoToAcceptance()
+    {
+        if (Order != null)
+        {
+            var navParam = new Dictionary<string, object> { { "Order", Order } };
+            await Shell.Current.GoToAsync("OrderAcceptancePage", navParam);
+        }
+    }
 }

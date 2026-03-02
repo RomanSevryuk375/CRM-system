@@ -15,6 +15,12 @@ public class AbsenceService(
     IUserContext userContext,
     ILogger<AbsenceService> logger) : IAbsenceService
 {
+    public async Task<AbsenceItem> GetAbsenceById(int id, CancellationToken ct)
+    {
+        return await absenceRepository.GetById(id, ct) ??
+               throw new NotFoundException($"Absence {id} not found");
+    }
+    
     public async Task<List<AbsenceItem>> GetPagedAbsence(AbsenceFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting absence start");

@@ -56,3 +56,4 @@ publish/
 
 qodana.yaml
 .idea/
+*.txt

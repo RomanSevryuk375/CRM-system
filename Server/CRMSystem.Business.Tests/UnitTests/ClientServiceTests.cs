@@ -13,7 +13,6 @@ public class ClientServiceTests
 {
     private readonly Mock<IClientRepository> _clientRepoMock;
     private readonly Mock<IUserRepository> _userRepoMock;
-    private readonly Mock<ILogger<ClientService>> _loggerMock;
     private readonly Mock<IUserContext> _userContextMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly ClientService _service;
@@ -22,7 +21,7 @@ public class ClientServiceTests
     {
         _clientRepoMock = new Mock<IClientRepository>();
         _userRepoMock = new Mock<IUserRepository>();
-        _loggerMock = new Mock<ILogger<ClientService>>();
+        var loggerMock = new Mock<ILogger<ClientService>>();
         _userContextMock = new Mock<IUserContext>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
 
@@ -30,7 +29,7 @@ public class ClientServiceTests
             _clientRepoMock.Object,
             _userRepoMock.Object,
             _userContextMock.Object,
-            _loggerMock.Object,
+            loggerMock.Object,
             _unitOfWorkMock.Object);
     }
 

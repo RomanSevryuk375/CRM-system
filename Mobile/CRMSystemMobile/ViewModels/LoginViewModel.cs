@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CRMSystemMobile.Extentions;
+using CRMSystemMobile.Extensions;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Login;
 

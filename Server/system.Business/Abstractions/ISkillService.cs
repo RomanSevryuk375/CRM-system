@@ -10,5 +10,6 @@ public interface ISkillService
     Task<int> DeleteSkill(int id, CancellationToken ct);
     Task<List<SkillItem>> GetSkills(SkillFilter filter, CancellationToken ct);
     Task<int> GetSkillsCount(SkillFilter filter, CancellationToken ct);
+    Task<SkillItem> GetSkillById(int id, CancellationToken ct);
     Task<int> UpdateSkill(int id, SkillUpdateModel model, CancellationToken ct);
 }

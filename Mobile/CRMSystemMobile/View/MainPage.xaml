@@ -1,22 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage
     x:Class="CRMSystemMobile.View.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:contracts="clr-namespace:Shared.Contracts.Order;assembly=Shared"
+    xmlns:contractsAccept="clr-namespace:Shared.Contracts.Acceptance;assembly=Shared"
     xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
+    x:Name="Main"
     Title="MainPage"
     x:DataType="vm:MainViewModel"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <Grid BackgroundColor="#112347" RowDefinitions="Auto, *">
+        <Grid BackgroundColor="#112347" RowDefinitions="Auto, Auto, *">
 
             <Grid
                 Grid.Row="0"
@@ -90,10 +88,60 @@
                         Command="{Binding ToggleMenuSheetCommand}"
                         Source="show_menu.svg" />
                 </Border>
+            </Grid>
+            <Grid
+                Grid.Row="1"
+                Margin="0,0,0,10"
+                HeightRequest="80"
+                IsVisible="{Binding HasPendingAcceptances}">
+                <CollectionView ItemsSource="{Binding PendingAcceptances}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
 
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="contractsAccept:AcceptanceResponse">
+
+                            <Border
+                                Margin="15,0,0,0"
+                                Padding="15,10"
+                                BackgroundColor="#FF9500"
+                                HeightRequest="70"
+                                StrokeShape="RoundRectangle 10"
+                                StrokeThickness="0"
+                                WidthRequest="300">
+
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=OpenAcceptanceForSignCommand}" CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+
+                                <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="14"
+                                            Text="Требуется подтверждение!"
+                                            TextColor="White" />
+                                        <Label
+                                            FontSize="12"
+                                            Text="{Binding OrderId, StringFormat='Акт по заказу #{0}'}"
+                                            TextColor="White" />
+                                    </VerticalStackLayout>
+
+                                    <Image
+                                        Grid.Column="1"
+                                        HeightRequest="20"
+                                        Source="arrow_right.png"
+                                        VerticalOptions="Center"
+                                        WidthRequest="20" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </Grid>
             <RefreshView
-                Grid.Row="1"
+                Grid.Row="2"
                 Command="{Binding RefreshCommand}"
                 IsRefreshing="{Binding IsRefreshing}"
                 RefreshColor="White">
@@ -111,9 +159,7 @@
                                 Stroke="Transparent"
                                 StrokeShape="RoundRectangle 12">
                                 <Border.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GoToOrderDetailsCommand}"
-                                        CommandParameter="{Binding .}" />
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference Main}, Path=BindingContext.GoToOrderDetailsCommand}" CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
                                 <Grid RowDefinitions="60, Auto" RowSpacing="25">
 
@@ -200,7 +246,7 @@
                 </CollectionView>
             </RefreshView>
             <ActivityIndicator
-                Grid.Row="0"
+                Grid.Row="2"
                 Grid.RowSpan="2"
                 HeightRequest="50"
                 HorizontalOptions="Center"
@@ -215,17 +261,22 @@
             Grid.Row="0"
             Grid.RowSpan="2"
             BackgroundColor="Transparent"
-            IsVisible="{Binding IsMenuSheetOpen}">
+            IsVisible="{Binding IsMenuSheetOpen}"
+            ZIndex="999">
             <Grid RowDefinitions="*, Auto">
-                <BoxView Grid.Row="0" BackgroundColor="#80000000">
+                <BoxView
+                    BackgroundColor="#80000000"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill">
                     <BoxView.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ToggleMenuSheetCommand}" />
                     </BoxView.GestureRecognizers>
                 </BoxView>
                 <Border
-                    Grid.Row="1"
+                    Padding="0"
                     BackgroundColor="#1C2D4F"
                     HeightRequest="{OnPlatform Default=350}"
+                    StrokeShape="RoundRectangle 20,20,0,0"
                     StrokeThickness="0"
                     VerticalOptions="End">
 
@@ -255,7 +306,7 @@
                             Grid.Row="2"
                             BackgroundColor="Transparent"
                             Command="{Binding LogoutCommand}"
-                            HorizontalOptions="Center"
+                            HorizontalOptions="Fill"
                             Text="Выйти"
                             TextColor="Red" />
                     </Grid>

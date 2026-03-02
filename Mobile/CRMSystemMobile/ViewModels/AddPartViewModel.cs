@@ -67,7 +67,7 @@ public partial class AddPartViewModel(PositionService positionService, PartSetSe
                 IsDescending: false
             );
 
-            var (items, totalCount) = await positionService.GetPositions(filter);
+            var (items, _) = await positionService.GetPositions(filter);
 
             MainThread.BeginInvokeOnMainThread(() =>
             {
@@ -131,5 +131,5 @@ public partial class AddPartViewModel(PositionService positionService, PartSetSe
     }
 
     [RelayCommand]
-    private async Task GoBack() => await Shell.Current.GoToAsync("..");
+    private static async Task GoBack() => await Shell.Current.GoToAsync("..");
 }

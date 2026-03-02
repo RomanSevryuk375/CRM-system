@@ -11,6 +11,12 @@ public class ShiftService(
     IShiftRepository shiftRepository,
     ILogger<ShiftService> logger) : IShiftService
 {
+    public async Task<ShiftItem> GetShiftById(int id, CancellationToken ct)
+    {
+        return await shiftRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Shift {id} not found");
+    }
+    
     public async Task<List<ShiftItem>> GetShifts(CancellationToken ct)
     {
         logger.LogInformation("Getting shift start");

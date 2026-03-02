@@ -15,6 +15,12 @@ public class AcceptanceService(
     IWorkerRepository workerRepository,
     ILogger<AcceptanceImgService> logger) : IAcceptanceService
 {
+    public async Task<AcceptanceItem> GetAcceptanceById(long id, CancellationToken ct)
+    {
+        return await acceptanceRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Acceptance {id} not found");
+    }
+    
     public async Task<List<AcceptanceItem>> GetPagedAcceptance(AcceptanceFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting acceptance start");

@@ -17,9 +17,7 @@ public class WorkInOrderServiceTests
     private readonly Mock<IWorkerRepository> _workerRepoMock;
     private readonly Mock<IOrderRepository> _orderRepoMock;
     private readonly Mock<IWorkRepository> _workRepoMock;
-    private readonly Mock<IBillRepository> _billRepoMock;
     private readonly Mock<IUserContext> _userContextMock;
-    private readonly Mock<ILogger<WorkInOrderService>> _loggerMock;
     private readonly WorkInOrderService _service;
 
     public WorkInOrderServiceTests()
@@ -29,9 +27,9 @@ public class WorkInOrderServiceTests
         _workerRepoMock = new Mock<IWorkerRepository>();
         _orderRepoMock = new Mock<IOrderRepository>();
         _workRepoMock = new Mock<IWorkRepository>();
-        _billRepoMock = new Mock<IBillRepository>();
+        var billRepoMock = new Mock<IBillRepository>();
         _userContextMock = new Mock<IUserContext>();
-        _loggerMock = new Mock<ILogger<WorkInOrderService>>();
+        var loggerMock = new Mock<ILogger<WorkInOrderService>>();
 
         _service = new WorkInOrderService(
             _wioRepoMock.Object,
@@ -39,9 +37,9 @@ public class WorkInOrderServiceTests
             _workerRepoMock.Object,
             _orderRepoMock.Object,
             _workRepoMock.Object,
-            _billRepoMock.Object,
+            billRepoMock.Object,
             _userContextMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

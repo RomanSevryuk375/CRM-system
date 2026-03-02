@@ -1,8 +1,8 @@
 ﻿// Ignore Spelling: Img
 
 using AutoMapper;
-using CRMSystem.Core.ProjectionModels.AccetanceImg;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.Core.ProjectionModels.AcceptanceImg;
+using CRMSystem.DataAccess.Entities;
 using Shared.Contracts.AcceptanceImg;
 
 namespace CRM_system_backend.MapProfiles;

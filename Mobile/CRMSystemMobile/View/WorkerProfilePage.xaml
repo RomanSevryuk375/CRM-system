@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage
     x:Class="CRMSystemMobile.View.WorkerProfilePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:contracts="clr-namespace:Shared.Contracts.Skill;assembly=Shared"
     xmlns:vm="clr-namespace:CRMSystemMobile.ViewModels"
     x:DataType="vm:WorkerProfileViewModel"
     BackgroundColor="#112347"
@@ -119,6 +120,54 @@
                             TextColor="White" />
                     </Border>
                 </VerticalStackLayout>
+
+                <Label
+                    Margin="0,10,0,5"
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    Text="Мои навыки:"
+                    TextColor="White" />
+
+                <StackLayout BindableLayout.ItemsSource="{Binding MySkills}" Spacing="8">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="contracts:SkillResponse">
+
+                            <Border
+                                Padding="15,10"
+                                BackgroundColor="#1C2D4F"
+                                StrokeShape="RoundRectangle 8"
+                                StrokeThickness="0">
+                                <Grid ColumnDefinitions="*, Auto">
+
+                                    <Label
+                                        Grid.Column="0"
+                                        FontSize="16"
+                                        Text="{Binding Specialization}"
+                                        TextColor="White"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+
+                <Label
+                    HorizontalOptions="Center"
+                    IsVisible="False"
+                    Text="Навыки не добавлены"
+                    TextColor="#707070">
+
+                    <Label.Triggers>
+                        <DataTrigger
+                            Binding="{Binding MySkills.Count}"
+                            TargetType="Label"
+                            Value="0">
+                            <Setter Property="IsVisible" Value="True" />
+                        </DataTrigger>
+                    </Label.Triggers>
+
+                </Label>
 
                 <Button
                     Margin="0,20,0,0"

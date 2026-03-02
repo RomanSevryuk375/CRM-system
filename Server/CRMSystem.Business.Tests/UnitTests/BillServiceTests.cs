@@ -17,7 +17,6 @@ public class BillServiceTests
     private readonly Mock<IOrderRepository> _orderRepoMock;
     private readonly Mock<IBillStatusRepository> _billStatusRepoMock;
     private readonly Mock<IUserContext> _userContextMock;
-    private readonly Mock<ILogger<BillService>> _loggerMock;
     private readonly BillService _service;
 
     public BillServiceTests()
@@ -26,14 +25,14 @@ public class BillServiceTests
         _orderRepoMock = new Mock<IOrderRepository>();
         _billStatusRepoMock = new Mock<IBillStatusRepository>();
         _userContextMock = new Mock<IUserContext>();
-        _loggerMock = new Mock<ILogger<BillService>>();
+        var loggerMock = new Mock<ILogger<BillService>>();
 
         _service = new BillService(
             _billRepoMock.Object,
             _orderRepoMock.Object,
             _billStatusRepoMock.Object,
             _userContextMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

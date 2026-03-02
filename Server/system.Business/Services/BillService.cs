@@ -16,11 +16,15 @@ public class BillService(
     IUserContext userContext,
     ILogger<BillService> logger) : IBillService
 {
-    private readonly ILogger _logger = logger;
+    public async Task<BillItem> GetBillById(long id, CancellationToken ct)
+    {
+        return await billRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Bill {id} not found");
+    }
 
     public async Task<List<BillItem>> GetPagedBills(BillFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting bills start");
+        logger.LogInformation("Getting bills start");
 
         if (userContext.RoleId != (int)RoleEnum.Manager)
         {
@@ -29,45 +33,45 @@ public class BillService(
 
         var bill = await billRepository.GetPaged(filter, ct);
 
-        _logger.LogInformation("Getting bills started");
+        logger.LogInformation("Getting bills started");
 
         return bill;
     }
 
     public async Task<int> GetCountBills(BillFilter filter, CancellationToken ct)
     {
-        _logger.LogInformation("Getting count start");
+        logger.LogInformation("Getting count start");
 
         var count = await billRepository.GetCount(filter, ct);
 
-        _logger.LogInformation("Getting count success");
+        logger.LogInformation("Getting count success");
 
         return count;
     }
 
     public async Task<long> CreateBill(BillCreateModel createModel, CancellationToken ct)
     {
-        _logger.LogInformation("Creating bill start");
+        logger.LogInformation("Creating bill start");
 
         if (!await orderRepository.Exists(createModel.OrderId, ct))
         {
-            _logger.LogError("Order{OrderId} not found", createModel.OrderId);
+            logger.LogError("Order{OrderId} not found", createModel.OrderId);
             throw new NotFoundException($"Order{createModel.OrderId} not found");
         }
 
         if (await orderRepository.GetStatus(createModel.OrderId, ct) == (int)OrderStatusEnum.Closed)
         {
-            _logger.LogError("Order{OrderId} is closed", createModel.OrderId);
+            logger.LogError("Order{OrderId} is closed", createModel.OrderId);
             throw new ConflictException($"Order {createModel.OrderId} is closed");
         }
 
         if (!await statusRepository.Exists((int)createModel.StatusId, ct))
         {
-            _logger.LogError("Status{StatusId} not found", createModel.StatusId);
+            logger.LogError("Status{StatusId} not found", createModel.StatusId);
             throw new NotFoundException($"Status{createModel.StatusId} not found");
         }
 
-        _logger.LogInformation("Creating bill success");
+        logger.LogInformation("Creating bill success");
         
         var (bill, errors) = Bill.Create(
             0,
@@ -89,50 +93,50 @@ public class BillService(
 
     public async Task<long> UpdateBill(long id, BillUpdateModel model, CancellationToken ct)
     {
-        _logger.LogInformation("Updating bill start");
+        logger.LogInformation("Updating bill start");
         
         if (model.StatusId is not null && !await statusRepository.Exists((int)model.StatusId, ct))
         {
-            _logger.LogError("Status{StatusId} not found", (int)model.StatusId);
+            logger.LogError("Status{StatusId} not found", (int)model.StatusId);
             throw new NotFoundException($"Status{(int)model.StatusId} not found");
         }
 
-        var Id = await billRepository.Update(id, model, ct);
+        var billId = await billRepository.Update(id, model, ct);
 
-        _logger.LogInformation("Updating bill success");
+        logger.LogInformation("Updating bill success");
 
-        return Id;
+        return billId;
     }
 
     public async Task<long> Delete(long id, CancellationToken ct)
     {
-        _logger.LogInformation("Deleting bill start");
+        logger.LogInformation("Deleting bill start");
 
-        var Id = await billRepository.Delete(id, ct);
+        var billId = await billRepository.Delete(id, ct);
 
-        _logger.LogInformation("Deleting bill success");
+        logger.LogInformation("Deleting bill success");
 
-        return Id;
+        return billId;
     }
 
     public async Task<decimal> FetchDebtOfBill(long orderId, CancellationToken ct)
     {
-        _logger.LogInformation("Recalculating debt of bill start");
+        logger.LogInformation("Recalculating debt of bill start");
 
         var debt = await billRepository.RecalculateDebt(orderId, ct);
 
-        _logger.LogInformation("Recalculating debt of bill success");
+        logger.LogInformation("Recalculating debt of bill success");
 
         return debt;
     }
 
     public async Task<decimal> RecalculateBillAmount(long id, CancellationToken ct)
     {
-        _logger.LogInformation("Recalculating amount of bill start");
+        logger.LogInformation("Recalculating amount of bill start");
 
         var amount = await billRepository.RecalculateAmount(id, ct);
 
-        _logger.LogInformation("Recalculating amount of bill success");
+        logger.LogInformation("Recalculating amount of bill success");
 
         return amount;
     }

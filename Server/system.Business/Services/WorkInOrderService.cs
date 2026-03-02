@@ -19,11 +19,16 @@ public class WorkInOrderService(
     IUserContext userContext,
     ILogger<WorkInOrderService> logger) : IWorkInOrderService
 {
+    public async Task<WorkInOrderItem> GetWorkInOrderById(long id, CancellationToken ct)
+    {
+        return await workInOrderRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"WorkInOrder {id} not found");
+    }
     public async Task<List<WorkInOrderItem>> GetPagedWiO(WorkInOrderFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting paged works in order start");
 
-        if (userContext.RoleId != (int)RoleEnum.Manager)
+        if (userContext.RoleId == (int)RoleEnum.Worker)
             filter = filter with { WorkerIds = [(int)userContext.ProfileId] };
 
         var works = await workInOrderRepository.GetPaged(filter, ct);

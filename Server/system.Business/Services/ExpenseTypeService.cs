@@ -1,5 +1,6 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.Abstractions;
+using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.ProjectionModels.ExpenseType;
 using Microsoft.Extensions.Logging;
 
@@ -9,6 +10,12 @@ public class ExpenseTypeService(
     IExpenseTypeRepository expenseTypeRepository,
     ILogger<ExpenseTypeService> logger) : IExpenseTypeService
 {
+    public async Task<ExpenseTypeItem> GetExpenseTypeById(int id, CancellationToken ct)
+    {
+        return await expenseTypeRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"ExpenseType {id} not found");
+    }
+    
     public async Task<List<ExpenseTypeItem>> GetExpenseType(CancellationToken ct)
     {
         logger.LogInformation("Getting absenceType start");

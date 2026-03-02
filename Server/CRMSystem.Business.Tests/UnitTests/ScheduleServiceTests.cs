@@ -12,29 +12,28 @@ namespace CRMSystem.Business.Tests.UnitTests;
 
 public class ScheduleServiceTests
 {
-    private readonly Mock<IScheduleRepository> _shceduleRepoMock;
+    private readonly Mock<IScheduleRepository> _scheduleRepoMock;
     private readonly Mock<IWorkerRepository> _workerRepoMock;
     private readonly Mock<IShiftRepository> _shiftRepoMock;
-    private readonly Mock<ILogger<ScheduleService>> _loggerMock;
     private readonly Mock<IUserContext> _userContextMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly ScheduleService _service;
 
     public ScheduleServiceTests()
     {
-        _shceduleRepoMock = new Mock<IScheduleRepository>();
+        _scheduleRepoMock = new Mock<IScheduleRepository>();
         _workerRepoMock = new Mock<IWorkerRepository>();
         _shiftRepoMock = new Mock<IShiftRepository>();
-        _loggerMock = new Mock<ILogger<ScheduleService>>();
+        var loggerMock = new Mock<ILogger<ScheduleService>>();
         _userContextMock = new Mock<IUserContext>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
 
         _service = new ScheduleService(
-            _shceduleRepoMock.Object,
+            _scheduleRepoMock.Object,
             _workerRepoMock.Object,
             _shiftRepoMock.Object,
             _userContextMock.Object,
-            _loggerMock.Object,
+            loggerMock.Object,
             _unitOfWorkMock.Object);
     }
 
@@ -52,7 +51,7 @@ public class ScheduleServiceTests
 
         await act.Should().ThrowAsync<NotFoundException>();
 
-        _shceduleRepoMock.Verify(x => x.Create(
+        _scheduleRepoMock.Verify(x => x.Create(
             It.IsAny<Schedule>(),
             It.IsAny<CancellationToken>()),
             Times.Never);
@@ -77,7 +76,7 @@ public class ScheduleServiceTests
 
         await act.Should().ThrowAsync<NotFoundException>();
 
-        _shceduleRepoMock.Verify(x => x.Create(
+        _scheduleRepoMock.Verify(x => x.Create(
             It.IsAny<Schedule>(),
             It.IsAny<CancellationToken>()),
             Times.Never);
@@ -108,7 +107,7 @@ public class ScheduleServiceTests
 
         await act.Should().ThrowAsync<Exception>();
 
-        _shceduleRepoMock.Verify(x => x.Create(
+        _scheduleRepoMock.Verify(x => x.Create(
             It.IsAny<Schedule>(),
             It.IsAny<CancellationToken>()),
             Times.Never);
@@ -141,14 +140,14 @@ public class ScheduleServiceTests
         _userContextMock.Setup(x => x.RoleId).Returns(3);
 
 
-        _shceduleRepoMock.Setup(x => x.GetPaged(
+        _scheduleRepoMock.Setup(x => x.GetPaged(
             It.IsAny<ScheduleFilter>(),
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<ScheduleItem>());
 
         await _service.GetPagedSchedules(inputFilter, CancellationToken.None);
 
-        _shceduleRepoMock.Verify(x => x.GetPaged(
+        _scheduleRepoMock.Verify(x => x.GetPaged(
                 It.Is<ScheduleFilter>(f => f.WorkerIds!.Count() == 1 && f.WorkerIds!.First() == 10),
                 It.IsAny<CancellationToken>()),
                 Times.Once);
@@ -169,14 +168,14 @@ public class ScheduleServiceTests
         _userContextMock.Setup(x => x.RoleId).Returns(1);
 
 
-        _shceduleRepoMock.Setup(x => x.GetPaged(
+        _scheduleRepoMock.Setup(x => x.GetPaged(
             It.IsAny<ScheduleFilter>(),
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<ScheduleItem>());
 
         await _service.GetPagedSchedules(inputFilter, CancellationToken.None);
 
-        _shceduleRepoMock.Verify(x => x.GetPaged(
+        _scheduleRepoMock.Verify(x => x.GetPaged(
                 It.Is<ScheduleFilter>(f => f.WorkerIds!.Count() != 1 && f.WorkerIds!.First() == 1),
                 It.IsAny<CancellationToken>()),
                 Times.Once);

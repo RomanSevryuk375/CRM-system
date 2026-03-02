@@ -13,6 +13,12 @@ public class TaxService(
     ITaxTypeRepository taxTypeRepository,
     ILogger<TaxService> logger) : ITaxService
 {
+    public async Task<TaxItem> GetTaxById(int id, CancellationToken ct)
+    {
+        return await taxRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Tax {id} not found");
+    }
+    
     public async Task<List<TaxItem>> GetTaxes(TaxFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting tax start");

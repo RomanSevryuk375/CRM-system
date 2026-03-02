@@ -4,7 +4,7 @@ using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Order;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared.Enums;
 using Shared.Filters;
@@ -51,6 +51,15 @@ public class OrderRepository(
         return query;
     }
 
+    public async Task<OrderItem?> GetById(long orderId, CancellationToken ct)
+    {
+        return await context.Orders
+            .AsNoTracking()
+            .Where(o => o.Id == orderId)
+            .ProjectTo<OrderItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<OrderItem>> GetPaged(OrderFilter filter, CancellationToken ct)
     {
         var query = context.Orders.AsNoTracking();
@@ -96,15 +105,6 @@ public class OrderRepository(
             .Skip((filter.Page - 1) * filter.Limit)
             .Take(filter.Limit)
             .ToListAsync(ct);
-    }
-    
-    public async Task<OrderItem?> GetById(long orderId, CancellationToken ct)
-    {
-        return await context.Orders
-            .AsNoTracking()
-            .Where(o => o.Id == orderId)
-            .ProjectTo<OrderItem>(mapper.ConfigurationProvider, ct)
-            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<OrderItem?> GetByProposalId(long proposalId, CancellationToken ct)

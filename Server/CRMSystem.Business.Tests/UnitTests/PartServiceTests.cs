@@ -11,19 +11,18 @@ public class PartServiceTests
 {
     private readonly Mock<IPartRepository> _partRepoMock;
     private readonly Mock<IPartCategoryRepository> _partCategoryRepoMock;
-    private readonly Mock<ILogger<PartService>> _loggerMock;
     private readonly PartService _service;
 
     public PartServiceTests()
     {
         _partRepoMock = new Mock<IPartRepository>();
         _partCategoryRepoMock = new Mock<IPartCategoryRepository>();
-        _loggerMock = new Mock<ILogger<PartService>>();
+        var loggerMock = new Mock<ILogger<PartService>>();
 
         _service = new PartService(
             _partRepoMock.Object,
             _partCategoryRepoMock.Object,
-            _loggerMock.Object);
+            loggerMock.Object);
     }
 
     [Fact]

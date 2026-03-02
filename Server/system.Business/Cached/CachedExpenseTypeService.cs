@@ -21,4 +21,9 @@ public class CachedExpenseTypeService(
             TimeSpan.FromHours(24),
             logger, ct);
     }
+
+    public async Task<ExpenseTypeItem> GetExpenseTypeById(int id, CancellationToken ct)
+    {
+        return await decorated.GetExpenseTypeById(id, ct);
+    }
 }

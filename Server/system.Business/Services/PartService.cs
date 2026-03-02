@@ -13,6 +13,12 @@ public class PartService(
     IPartCategoryRepository partCategoryRepository,
     ILogger<PartService> logger) : IPartService
 {
+    public async Task<PartItem> GetPartById(long id, CancellationToken ct)
+    {
+        return await partRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Part {id} not found");
+    }
+    
     public async Task<List<PartItem>> GetPagedParts(PartFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting part start");
@@ -72,21 +78,21 @@ public class PartService(
     {
         logger.LogInformation("Updating part start");
 
-        var Id = await partRepository.Update(id, model, ct);
+        var partId = await partRepository.Update(id, model, ct);
 
         logger.LogInformation("Updating part success");
 
-        return Id;
+        return partId;
     }
 
     public async Task<long> DeletePart(long id, CancellationToken ct)
     {
         logger.LogInformation("Deleting part start");
 
-        var Id = await partRepository.Delete(id, ct);
+        var partId = await partRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting part success");
 
-        return Id;
+        return partId;
     }
 }

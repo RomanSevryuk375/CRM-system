@@ -1,12 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using CRMSystemMobile.Extentions;
 using CRMSystemMobile.Message;
 using CRMSystemMobile.Services;
 using Shared.Contracts.Order;
 using Shared.Filters;
 using System.Collections.ObjectModel;
+using CRMSystemMobile.Extensions;
 
 namespace CRMSystemMobile.ViewModels;
 
@@ -121,12 +121,14 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
 
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            if (items != null)
+            if (items == null)
             {
-                foreach (var item in items)
-                {
-                    AssignedOrders.Add(item);
-                }
+                return;
+            }
+
+            foreach (var item in items)
+            {
+                AssignedOrders.Add(item);
             }
         });
 
@@ -160,7 +162,7 @@ public partial class WorkerMainViewModel : ObservableObject, IRecipient<ProfileU
     }
 
     [RelayCommand]
-    private async Task GoToWorkOrder(OrderResponse? order)
+    private static async Task GoToWorkOrder(OrderResponse? order)
     {
         if (order == null)
         {

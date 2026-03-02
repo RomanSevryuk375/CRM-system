@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using CRMSystem.Core.ProjectionModels.Specialization;
@@ -19,6 +19,15 @@ public class SpecializationRepository(
             .AsNoTracking()
             .ProjectTo<SpecializationItem>(mapper.ConfigurationProvider, ct)
             .ToListAsync(ct);
+    }
+    
+    public async Task<SpecializationItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.Specializations
+            .AsNoTracking()
+            .Where(s => s.Id == id)
+            .ProjectTo<SpecializationItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<int> Create(Specialization specialization, CancellationToken ct)

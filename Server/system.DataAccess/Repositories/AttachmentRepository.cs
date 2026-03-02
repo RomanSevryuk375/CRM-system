@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Attachment;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using Shared.Filters;
@@ -35,6 +35,15 @@ public class AttachmentRepository(
         return query;
     }
 
+    public async Task<AttachmentItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Attachments
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<AttachmentItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<AttachmentItem>> GetPaged(AttachmentFilter filter, CancellationToken ct)
     {
         var query = context.Attachments.AsNoTracking();

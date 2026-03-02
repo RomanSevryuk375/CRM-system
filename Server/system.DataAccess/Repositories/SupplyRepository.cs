@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Supply;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared.Filters;
 
@@ -15,12 +15,21 @@ public class SupplyRepository(
 {
     private static IQueryable<SupplyEntity> ApplyFilter(IQueryable<SupplyEntity> query, SupplyFilter filter)
     {
-        if (filter.SuplierIds != null && filter.SuplierIds.Any())
+        if (filter.SupplierIds != null && filter.SupplierIds.Any())
         {
-            query = query.Where(s => filter.SuplierIds.Contains(s.SupplierId));
+            query = query.Where(s => filter.SupplierIds.Contains(s.SupplierId));
         }
 
         return query;
+    }
+
+    public async Task<SupplyItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Suppliers
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<SupplyItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<List<SupplyItem>> GetPaged(SupplyFilter filter, CancellationToken ct)

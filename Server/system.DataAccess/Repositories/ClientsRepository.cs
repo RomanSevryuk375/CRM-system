@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.ProjectionModels.Client;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
 using Shared.Filters;
@@ -22,6 +22,15 @@ public class ClientsRepository(
         }
 
         return query;
+    }
+    
+    public async Task<ClientItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.Clients
+            .AsNoTracking()
+            .Where(c => c.Id == id)
+            .ProjectTo<ClientItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<List<ClientItem>> GetPaged(ClientFilter filter, CancellationToken ct)
@@ -66,15 +75,6 @@ public class ClientsRepository(
         query = ApplyFilter(query, filter);
 
         return await query.CountAsync(ct);
-    }
-
-    public async Task<ClientItem?> GetById(long id, CancellationToken ct)
-    {
-        return await context.Clients
-            .AsNoTracking()
-            .Where(c => c.Id == id)
-            .ProjectTo<ClientItem>(mapper.ConfigurationProvider, ct)
-            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<ClientItem?> GetByUserId(long userId, CancellationToken ct)

@@ -1,6 +1,6 @@
 ﻿using CRMSystem.Business.Abstractions;
 using CRMSystem.Core.ProjectionModels.WorkInOrder;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using FluentAssertions;
 using Shared.Enums;
 

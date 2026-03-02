@@ -10,6 +10,15 @@ public class PaymentMethodRepository(
     SystemDbContext context,
     IMapper mapper) : IPaymentMethodRepository
 {
+    public async Task<PaymentMethodItem?> GetById(int id, CancellationToken ct)
+    {
+        return await context.PaymentMethods
+            .AsNoTracking()
+            .Where(p => p.Id == id)
+            .ProjectTo<PaymentMethodItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
+    
     public async Task<List<PaymentMethodItem>> Get(CancellationToken ct)
     {
         return await context.PaymentMethods

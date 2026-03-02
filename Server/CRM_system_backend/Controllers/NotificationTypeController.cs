@@ -1,23 +1,20 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.ProjectionModels.NotificationType;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/v1/notification-types")]
 [ApiController]
-
-
+[Route("api/v1/notification-types")]
 public class NotificationTypeController(
     INotificationTypeService notificationTypeService,
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<NotificationTypeItem>>> GetNotificationTypes(CancellationToken ct)
+    public async Task<ActionResult<List<NotificationTypeResponse>>> GetNotificationTypes(CancellationToken ct)
     {
         var dto = await notificationTypeService.GetNotificationTypes(ct);
 

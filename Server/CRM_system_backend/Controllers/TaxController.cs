@@ -16,12 +16,22 @@ public class TaxController(
 {
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public async Task<ActionResult<List<TaxItem>>> GetTaxes(
+    public async Task<ActionResult<List<TaxResponse>>> GetTaxes(
         [FromQuery] TaxFilter filter, CancellationToken ct)
     {
         var dto = await taxService.GetTaxes(filter, ct);
-
         var response = mapper.Map<List<TaxResponse>>(dto);
+
+        return Ok(response);
+    }
+    
+    [HttpGet("{id:int}")]
+    [Authorize(Policy = "AdminPolicy")]
+    public async Task<ActionResult<TaxResponse>> GetTaxById(
+        int id, CancellationToken ct)
+    {
+        var dto = await taxService.GetTaxById(id, ct);
+        var response = mapper.Map<TaxResponse>(dto);
 
         return Ok(response);
     }
@@ -32,25 +42,23 @@ public class TaxController(
         [FromBody] TaxRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<TaxCreateModel>(request);
-
         await taxService.CreateTax(createModel, ct);
 
         return Created();
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> UpdateTax(
         int id, [FromBody] TaxUpdateRequest request, CancellationToken ct)
     {
         var model = mapper.Map<TaxUpdateModel>(request);
-
         await taxService.UpdateTax(id, model, ct);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> DeleteTax(int id, CancellationToken ct)
     {

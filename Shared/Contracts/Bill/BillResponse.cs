@@ -16,7 +16,7 @@ public record BillResponse
     [JsonPropertyName("statusId")]
     public int StatusId { get; init; }
 
-    [JsonPropertyName("createAt")]
+    [JsonPropertyName("createdAt")]
     public DateTime CreatedAt { get; init; }
 
     [JsonPropertyName("amount")]

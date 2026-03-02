@@ -198,19 +198,19 @@ public partial class RegistrationViewModel(
 
     [ObservableProperty] public partial string? NameSurname { get; set; }
 
-    partial void OnNameSurnameChanged(string value) => ValidateProperty(nameof(NameSurname), value);
+    partial void OnNameSurnameChanged(string? value) => ValidateProperty(nameof(NameSurname), value);
 
     [ObservableProperty] public partial string? ClientPhoneNumber { get; set; }
 
-    partial void OnClientPhoneNumberChanged(string value) => ValidateProperty(nameof(ClientPhoneNumber), value);
+    partial void OnClientPhoneNumberChanged(string? value) => ValidateProperty(nameof(ClientPhoneNumber), value);
 
     [ObservableProperty] public partial string? ClientEmail { get; set; }
 
-    partial void OnClientEmailChanged(string value) => ValidateProperty(nameof(ClientEmail), value);
+    partial void OnClientEmailChanged(string? value) => ValidateProperty(nameof(ClientEmail), value);
 
     [ObservableProperty] public partial string? UserLogin { get; set; }
 
-    partial void OnUserLoginChanged(string value) => ValidateProperty(nameof(UserLogin), value);
+    partial void OnUserLoginChanged(string? value) => ValidateProperty(nameof(UserLogin), value);
 
     [ObservableProperty] public partial string UserPassword { get; set; }
 

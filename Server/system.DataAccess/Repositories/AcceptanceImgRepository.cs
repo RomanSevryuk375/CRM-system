@@ -4,10 +4,10 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using CRMSystem.Core.Abstractions;
 using CRMSystem.Core.Models;
-using CRMSystem.DataAccess.Entites;
+using CRMSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using CRMSystem.Core.Exceptions;
-using CRMSystem.Core.ProjectionModels.AccetanceImg;
+using CRMSystem.Core.ProjectionModels.AcceptanceImg;
 using Shared.Filters;
 
 namespace CRMSystem.DataAccess.Repositories;
@@ -26,6 +26,15 @@ public class AcceptanceImgRepository(
 
         return query;
     }
+    
+    public async Task<AcceptanceImgItem?> GetById(long id, CancellationToken ct)
+    {
+        return await context.AcceptanceImgs
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .ProjectTo<AcceptanceImgItem>(mapper.ConfigurationProvider, ct)
+            .FirstOrDefaultAsync(ct);
+    }
 
     public async Task<List<AcceptanceImgItem>> GetPaged(AcceptanceImgFilter filter, CancellationToken ct)
     {
@@ -41,20 +50,9 @@ public class AcceptanceImgRepository(
             .ToListAsync(ct);
     }
 
-    public async Task<AcceptanceImgItem?> GetById(long id, CancellationToken ct)
-    {
-        return await context.AcceptanceImgs
-            .AsNoTracking()
-            .Where(a => a.Id == id)
-            .ProjectTo<AcceptanceImgItem>(mapper.ConfigurationProvider, ct)
-            .FirstOrDefaultAsync(ct);
-            
-    }
-
     public async Task<int> GetCount(AcceptanceImgFilter filter, CancellationToken ct)
     {
         var query = context.AcceptanceImgs.AsNoTracking();
-
         query = ApplyFilter(query, filter);
 
         return await query.CountAsync(ct);

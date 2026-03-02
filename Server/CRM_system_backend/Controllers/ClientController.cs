@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CRMSystem.Business.Abstractions;
-using CRMSystem.Core.Models;
 using CRMSystem.Core.ProjectionModels.Client;
 using CRMSystem.Core.ProjectionModels.User;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +17,7 @@ public class ClientController(
 {
     [HttpGet]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<List<ClientItem>>> GetPagedClient(
+    public async Task<ActionResult<List<ClientsResponse>>> GetPagedClient(
         [FromQuery] ClientFilter filter, CancellationToken ct)
     {
         var dto = await clientService.GetPagedClients(filter, ct);
@@ -31,13 +30,14 @@ public class ClientController(
         return Ok(response);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:long}")]
     [Authorize(Policy = "AdminUserPolicy")]
-    public async Task<ActionResult<List<Client>>> GetClientById(
+    public async Task<ActionResult<ClientsResponse>> GetClientById(
         long id, CancellationToken ct)
     {
-        var response = await clientService.GetClientById(id, ct);
-
+        var dto = await clientService.GetClientById(id, ct);
+        var response = mapper.Map<ClientsResponse>(dto);
+        
         return Ok(response);
     }
 
@@ -46,43 +46,46 @@ public class ClientController(
         ClientRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<ClientCreateModel>(request);
-
-        var clientId = await clientService.CreateClient(createModel, ct);
+        var id = await clientService.CreateClient(createModel, ct);
+        
+        var createdDto = await clientService.GetClientById(id, ct);
+        var response = mapper.Map<ClientsResponse>(createdDto);
 
         return CreatedAtAction(
             nameof(GetClientById), 
-            new { Id = clientId }, 
-            null);
+            new { id = createdDto.Id }, 
+            response);
     }
 
-    [HttpPost("/user")]
+    [HttpPost("users")]
     public async Task<ActionResult> CreateClientWithUser(
         [FromBody] ClientRegisterRequest request, CancellationToken ct)
     {
         var clientCreateModel = mapper.Map<ClientCreateModel>(request);
         var userCreateModel = mapper.Map<UserCreateModel>(request);
-
-        var clientId = await clientService.CreateClientWithUser(clientCreateModel!, userCreateModel!, ct);
+        var id = await clientService.CreateClientWithUser(clientCreateModel!, userCreateModel!, ct);
+        
+        var createdDto = await clientService.GetClientById(id, ct);
+        var response = mapper.Map<ClientsResponse>(createdDto);
 
         return CreatedAtAction(
             nameof(GetClientById),
-            new { Id = clientId },
-            null);
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:long}")]
     [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult> UpdateClient(
         long id, [FromBody] ClientUpdateRequest request, CancellationToken ct)
     {
         var model = mapper.Map<ClientUpdateModel>(request);
-
         await clientService.UpdateClient(id, model, ct);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminUserPolicy")]
     public async Task<ActionResult> DeleteClient(
         long id, CancellationToken ct)

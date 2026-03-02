@@ -8,15 +8,15 @@ using Shared.Filters;
 
 namespace CRM_system_backend.Controllers;
 
-[Route("api/v1/part-sets")]
 [ApiController]
+[Route("api/v1/part-sets")]
 public class PartSetController(
     IPartSetService partSetService,
     IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<List<PartSetItem>>> GetPagedPartSets(
+    public async Task<ActionResult<List<PartSetResponse>>> GetPagedPartSets(
         [FromQuery] PartSetFilter filter, CancellationToken ct)
     {
         var dto = await partSetService.GetPagedPartSets(filter, ct);
@@ -29,23 +29,23 @@ public class PartSetController(
         return Ok(response);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:long}")]
     [Authorize(Policy = "UniPolicy")]
-    public async Task<ActionResult<PartSetItem>> GetPartSetById(
+    public async Task<ActionResult<PartSetResponse>> GetPartSetById(
         long id, CancellationToken ct)
     {
-        var response = await partSetService.GetPartSetById(id, ct);
+        var dto = await partSetService.GetPartSetById(id, ct);
+        var response = mapper.Map<PartSetResponse>(dto);
 
         return Ok(response);
     }
 
-    [HttpGet("/orders/{orderId}")]
+    [HttpGet("orders/{orderId:long}")]
     [Authorize(Policy = "UniPolicy")]
     public async Task<ActionResult<List<PartSetItem>>> GetPartSetsByOrderId(
         long orderId, CancellationToken ct)
     {
         var dto = await partSetService.GetPartSetsByOrderId(orderId, ct);
-
         var response = mapper.Map<List<PartSetResponse>>(dto);
 
         return Ok(response);
@@ -57,28 +57,29 @@ public class PartSetController(
         [FromBody] PartSetRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<PartSetCreateModel>(request);
-
-        var partSetId = await partSetService.AddToPartSet(createModel, ct);
+        var id = await partSetService.AddToPartSet(createModel, ct);
+        
+        var createdDto = partSetService.GetPartSetById(id, ct);
+        var response = mapper.Map<PartSetResponse>(createdDto);
 
         return CreatedAtAction(
             nameof(GetPartSetById),
-            new { Id = partSetId },
-            null);
+            new { id = createdDto.Id },
+            response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:long}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> UpdatePartSet(
         long id, [FromBody] PartSetUpdateRequest request, CancellationToken ct)
     {
         var model = mapper.Map<PartSetUpdateModel>(request);
-
         await partSetService.UpdatePartSet(id, model, ct);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     [Authorize(Policy = "AdminWorkerPolicy")]
     public async Task<ActionResult> DeleteFromPartSet(long id, CancellationToken ct)
     {

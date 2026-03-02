@@ -9,15 +9,21 @@ using Shared.Filters;
 namespace CRMSystem.Business.Services;
 
 public class SupplyService(
-    ISupplyRepository supplySetRepository,
+    ISupplyRepository supplyRepository,
     ISupplierRepository supplierRepository,
     ILogger<SupplyService> logger) : ISupplyService
 {
+    public async Task<SupplyItem> GetSupplyById(long id, CancellationToken ct)
+    {
+        return await supplyRepository.GetById(id, ct)
+               ?? throw new NotFoundException($"Supply {id} not found");
+    }
+    
     public async Task<List<SupplyItem>> GetPagedSupplies(SupplyFilter filter, CancellationToken ct)
     {
         logger.LogInformation("Getting supplies start");
 
-        var supplies = await supplySetRepository.GetPaged(filter, ct);
+        var supplies = await supplyRepository.GetPaged(filter, ct);
 
         logger.LogInformation("Getting supplies success");
 
@@ -28,7 +34,7 @@ public class SupplyService(
     {
         logger.LogInformation("Getting supplies count start");
 
-        var count = await supplySetRepository.GetCount(filter, ct);
+        var count = await supplyRepository.GetCount(filter, ct);
 
         logger.LogInformation("Getting supplies count success");
 
@@ -55,7 +61,7 @@ public class SupplyService(
             throw new ValidationException(string.Join(", ", errors));
         }
         
-        var id = await supplySetRepository.Create(supply!, ct);
+        var id = await supplyRepository.Create(supply!, ct);
 
         logger.LogInformation("Creating supplies success");
 
@@ -66,10 +72,10 @@ public class SupplyService(
     {
         logger.LogInformation("Deleting supplies start");
 
-        var Id = await supplySetRepository.Delete(id, ct);
+        var supplyId = await supplyRepository.Delete(id, ct);
 
         logger.LogInformation("Deleting supplies success");
 
-        return Id;
+        return supplyId;
     }
 }
