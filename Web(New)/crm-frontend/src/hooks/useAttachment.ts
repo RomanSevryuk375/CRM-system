@@ -79,9 +79,9 @@ export const useUploadAttachmentImage = () => {
     return useMutation({
         mutationFn: ({ attachmentId, file, description }: { attachmentId: number; file: File; description?: string }) =>
             attachmentImageService.upload(attachmentId, file, description),
-        onSuccess: (_, variables) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: attachmentKeys.imagesByAttachment(variables.attachmentId),
+                queryKey: [...attachmentKeys.imagesAll, 'list'],
             });
         },
     });

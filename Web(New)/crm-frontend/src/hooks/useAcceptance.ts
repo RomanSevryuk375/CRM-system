@@ -79,9 +79,9 @@ export const useUploadAcceptanceImage = () => {
     return useMutation({
         mutationFn: ({ acceptanceId, file, description }: { acceptanceId: number; file: File; description?: string }) =>
             acceptanceImageService.upload(acceptanceId, file, description),
-        onSuccess: (_, variables) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: acceptanceKeys.imagesByAcceptance(variables.acceptanceId)
+                queryKey: [...acceptanceKeys.imagesAll, 'list']
             });
         },
     });
