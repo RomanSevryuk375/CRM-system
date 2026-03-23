@@ -1,4 +1,4 @@
-﻿import { apiClient } from "../config.ts";
+import { apiClient } from "../config.ts";
 import type {
     ShiftRequest,
     ShiftResponse,
@@ -7,22 +7,22 @@ import type {
 
 export const shiftService = {
     getAll: async () => {
-        return await apiClient.get<ShiftResponse[]>('/shifts');
+        return (await apiClient.get<ShiftResponse[]>('/shifts')).data;
     },
 
     getById: async (id: number) => {
-        return await apiClient.get<ShiftResponse>(`/shifts/${id}`);
+        return (await apiClient.get<ShiftResponse>(`/shifts/${id}`)).data;
     },
 
     create: async (request: ShiftRequest) => {
-        return await apiClient.post<ShiftResponse>('/shifts', request);
+        return (await apiClient.post<ShiftResponse>('/shifts', request)).data;
     },
 
     update: async (id: number, request: ShiftUpdateRequest) => {
-        return await apiClient.put(`/shifts/${id}`, request);
+        return (await apiClient.put(`/shifts/${id}`, request)).data;
     },
 
     delete: async (id: number) => {
-        return await apiClient.delete(`/shifts/${id}`);
+        return (await apiClient.delete(`/shifts/${id}`)).data;
     }
 };

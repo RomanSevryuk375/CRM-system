@@ -1,4 +1,4 @@
-﻿import { apiClient } from "../config.ts";
+import { apiClient } from "../config.ts";
 import type {
     NotificationFilter,
     NotificationRequest,
@@ -9,30 +9,30 @@ import type {
 
 export const notificationService = {
     getPaged: async (filter: NotificationFilter) => {
-        return await apiClient.get<NotificationResponse[]>('/notifications', { params: filter });
+        return (await apiClient.get<NotificationResponse[]>('/notifications', { params: filter })).data;
     },
 
     getById: async (id: number) => {
-        return await apiClient.get<NotificationResponse>(`/notifications/${id}`);
+        return (await apiClient.get<NotificationResponse>(`/notifications/${id}`)).data;
     },
 
     create: async (request: NotificationRequest) => {
-        return await apiClient.post<NotificationResponse>('/notifications', request);
+        return (await apiClient.post<NotificationResponse>('/notifications', request)).data;
     },
 
     delete: async (id: number) => {
-        return await apiClient.delete(`/notifications/${id}`);
+        return (await apiClient.delete(`/notifications/${id}`)).data;
     }
 };
 
 export const notificationStatusService = {
     getAll: async () => {
-        return await apiClient.get<NotificationStatusResponse[]>('/notification-statuses');
+        return (await apiClient.get<NotificationStatusResponse[]>('/notification-statuses')).data;
     }
 };
 
 export const notificationTypeService = {
     getAll: async () => {
-        return await apiClient.get<NotificationTypeResponse[]>('/notification-types');
+        return (await apiClient.get<NotificationTypeResponse[]>('/notification-types')).data;
     }
 };

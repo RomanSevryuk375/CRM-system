@@ -78,7 +78,7 @@ const Registration: React.FC<AuthModalProps> = ({ registrationIsOpen, setRegistr
         e.preventDefault();
         login(authForm, {
             onSuccess: (response) => {
-                setAuth({ id: 0, roleId: response.data.roleId, profileId: 0 });
+                setAuth({ id: 0, roleId: response.roleId, profileId: 0 });
                 setRegistrationIsOpen(false);
             }
         })

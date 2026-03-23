@@ -1,4 +1,4 @@
-﻿import type {
+import type {
     AttachmentFilter,
     AttachmentImgFilter,
     AttachmentImgResponse,
@@ -10,29 +10,29 @@ import {apiClient} from "../config.ts";
 
 export const attachmentService = {
     getPaged: async (filter: AttachmentFilter) => {
-        return await apiClient.get<AttachmentResponse[]>(`attachments`, { params: filter });
+        return (await apiClient.get<AttachmentResponse[]>(`attachments`, { params: filter })).data;
     },
 
     getById: async (id: number) => {
-        return await apiClient.get(`/attachments/${id}`);
+        return (await apiClient.get(`/attachments/${id}`)).data;
     },
 
     create: async (attachment: AttachmentRequest) => {
-        return await apiClient.post(`attachments`, attachment);
+        return (await apiClient.post(`attachments`, attachment)).data;
     },
 
     update: async (id: number, attachment: AttachmentUpdateRequest) => {
-        return await apiClient.put(`attachments/${id}`, attachment);
+        return (await apiClient.put(`attachments/${id}`, attachment)).data;
     },
 
     delete: async (id: number) => {
-        return await apiClient.delete(`attachments/${id}`);
+        return (await apiClient.delete(`attachments/${id}`)).data;
     }
 };
 
 export const attachmentImageService = {
     getPaged: async (filter: AttachmentImgFilter) => {
-        return await apiClient.get<AttachmentImgResponse[]>('/attachments-images', { params: filter });
+        return (await apiClient.get<AttachmentImgResponse[]>('/attachments-images', { params: filter })).data;
     },
 
     upload: async (attachmentId: number, file: File, description?: string) => {

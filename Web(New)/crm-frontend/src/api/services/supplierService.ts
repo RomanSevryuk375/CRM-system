@@ -1,4 +1,4 @@
-﻿import { apiClient } from "../config.ts";
+import { apiClient } from "../config.ts";
 import type {
     SupplierRequest,
     SupplierResponse,
@@ -7,22 +7,22 @@ import type {
 
 export const supplierService = {
     getAll: async () => {
-        return await apiClient.get<SupplierResponse[]>('/suppliers');
+        return (await apiClient.get<SupplierResponse[]>('/suppliers')).data;
     },
 
     getById: async (id: number) => {
-        return await apiClient.get<SupplierResponse>(`/suppliers/${id}`);
+        return (await apiClient.get<SupplierResponse>(`/suppliers/${id}`)).data;
     },
 
     create: async (request: SupplierRequest) => {
-        return await apiClient.post<SupplierResponse>('/suppliers', request);
+        return (await apiClient.post<SupplierResponse>('/suppliers', request)).data;
     },
 
     update: async (id: number, request: SupplierUpdateRequest) => {
-        return await apiClient.put(`/suppliers/${id}`, request);
+        return (await apiClient.put(`/suppliers/${id}`, request)).data;
     },
 
     delete: async (id: number) => {
-        return await apiClient.delete(`/suppliers/${id}`);
+        return (await apiClient.delete(`/suppliers/${id}`)).data;
     }
 };

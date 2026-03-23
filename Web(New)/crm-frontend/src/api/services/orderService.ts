@@ -1,4 +1,4 @@
-﻿import { apiClient } from "../config.ts";
+import { apiClient } from "../config.ts";
 import type {
     OrderFilter,
     OrderRequest,
@@ -12,11 +12,11 @@ import type {
 
 export const orderService = {
     getPaged: async (filter: OrderFilter) => {
-        return await apiClient.get<OrderResponse[]>('/orders', { params: filter });
+        return (await apiClient.get<OrderResponse[]>('/orders', { params: filter })).data;
     },
 
     getById: async (id: number) => {
-        return await apiClient.get<OrderResponse>(`/orders/${id}`);
+        return (await apiClient.get<OrderResponse>(`/orders/${id}`)).data;
     },
 
     downloadPdf: async (id: number): Promise<string> => {
@@ -27,38 +27,38 @@ export const orderService = {
     },
 
     create: async (request: OrderRequest) => {
-        return await apiClient.post<OrderResponse>('/orders', request);
+        return (await apiClient.post<OrderResponse>('/orders', request)).data;
     },
 
     createWithBill: async (request: OrderWithBillRequest) => {
-        return await apiClient.post<OrderResponse>('/orders/bills', request);
+        return (await apiClient.post<OrderResponse>('/orders/bills', request)).data;
     },
 
     generatePdf: async (id: number) => {
-        return await apiClient.post<{ message: string, path: string }>(`/orders/${id}/pdf`);
+        return (await apiClient.post<{ message: string, path: string }>(`/orders/${id}/pdf`)).data;
     },
 
     update: async (id: number, request: OrderUpdateRequest) => {
-        return await apiClient.put(`/orders/${id}`, request);
+        return (await apiClient.put(`/orders/${id}`, request)).data;
     },
 
     patchStatus: async (id: number, request: OrderPatchRequest) => {
-        return await apiClient.patch(`/orders/${id}`, request);
+        return (await apiClient.patch(`/orders/${id}`, request)).data;
     },
 
     delete: async (id: number) => {
-        return await apiClient.delete(`/orders/${id}`);
+        return (await apiClient.delete(`/orders/${id}`)).data;
     }
 };
 
 export const orderPriorityService = {
     getAll: async () => {
-        return await apiClient.get<OrderPriorityResponse[]>('/order-priorities');
+        return (await apiClient.get<OrderPriorityResponse[]>('/order-priorities')).data;
     }
 };
 
 export const orderStatusService = {
     getAll: async () => {
-        return await apiClient.get<OrderStatusResponse[]>('/order-statuses');
+        return (await apiClient.get<OrderStatusResponse[]>('/order-statuses')).data;
     }
 };

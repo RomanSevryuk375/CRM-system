@@ -1,4 +1,4 @@
-﻿import { apiClient } from "../config.ts";
+import { apiClient } from "../config.ts";
 import type {
     SkillFilter,
     SkillRequest,
@@ -7,18 +7,18 @@ import type {
 
 export const skillService = {
     getPaged: async (filter: SkillFilter) => {
-        return await apiClient.get<SkillResponse[]>('/skills', { params: filter });
+        return (await apiClient.get<SkillResponse[]>('/skills', { params: filter })).data;
     },
 
     getById: async (id: number) => {
-        return await apiClient.get<SkillResponse>(`/skills/${id}`);
+        return (await apiClient.get<SkillResponse>(`/skills/${id}`)).data;
     },
 
     create: async (request: SkillRequest) => {
-        return await apiClient.post<SkillResponse>('/skills', request);
+        return (await apiClient.post<SkillResponse>('/skills', request)).data;
     },
 
     delete: async (id: number) => {
-        return await apiClient.delete(`/skills/${id}`);
+        return (await apiClient.delete(`/skills/${id}`)).data;
     }
 };

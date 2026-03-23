@@ -1,4 +1,4 @@
-﻿import type {
+import type {
     AcceptanceFilter,
     AcceptanceImgFilter,
     AcceptanceImgResponse,
@@ -11,29 +11,29 @@ import {apiClient} from "../config.ts";
 
 export const acceptanceService = {
     getPaged: async (filter: AcceptanceFilter)  => {
-        return await apiClient.get<AcceptanceResponse[]>('/acceptances', { params: filter });
+        return (await apiClient.get<AcceptanceResponse[]>('/acceptances', { params: filter })).data;
     },
 
     getById: async (id: number)  => {
-        return await apiClient.get<AcceptanceResponse>(`/acceptances/${id}`);
+        return (await apiClient.get<AcceptanceResponse>(`/acceptances/${id}`)).data;
     },
 
     create: async (absence: AcceptanceRequest) => {
-        return await apiClient.post(`/acceptances`, absence);
+        return (await apiClient.post(`/acceptances`, absence)).data;
     },
 
     update: async (id: number, model: AcceptanceUpdateRequest) => {
-        return await apiClient.put(`/acceptances/${id}`, model);
+        return (await apiClient.put(`/acceptances/${id}`, model)).data;
     },
 
     delete: async (id: number) => {
-        return await apiClient.delete(`/acceptances/${id}`);
+        return (await apiClient.delete(`/acceptances/${id}`)).data;
     }
 };
 
 export const acceptanceImageService = {
     getPaged: async (filter: AcceptanceImgFilter) => {
-        return await apiClient.get<AcceptanceImgResponse[]>('/acceptance-images', { params: filter });
+        return (await apiClient.get<AcceptanceImgResponse[]>('/acceptance-images', { params: filter })).data;
     },
 
     upload: async (acceptanceId: number, file: File, description?: string) => {

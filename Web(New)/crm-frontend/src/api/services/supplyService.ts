@@ -1,4 +1,4 @@
-﻿import { apiClient } from "../config.ts";
+import { apiClient } from "../config.ts";
 import type {
     SupplyFilter,
     SupplyRequest,
@@ -7,18 +7,18 @@ import type {
 
 export const supplyService = {
     getPaged: async (filter: SupplyFilter) => {
-        return await apiClient.get<SupplyResponse[]>('/supplies', { params: filter });
+        return (await apiClient.get<SupplyResponse[]>('/supplies', { params: filter })).data;
     },
 
     getById: async (id: number) => {
-        return await apiClient.get<SupplyResponse>(`/supplies/${id}`);
+        return (await apiClient.get<SupplyResponse>(`/supplies/${id}`)).data;
     },
 
     create: async (request: SupplyRequest) => {
-        return await apiClient.post<SupplyResponse>('/supplies', request);
+        return (await apiClient.post<SupplyResponse>('/supplies', request)).data;
     },
 
     delete: async (id: number) => {
-        return await apiClient.delete(`/supplies/${id}`);
+        return (await apiClient.delete(`/supplies/${id}`)).data;
     }
 };

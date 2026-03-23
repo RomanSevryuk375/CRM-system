@@ -39,8 +39,8 @@ const Account: React.FC<AuthModalProps> = ({ registrationIsOpen, setRegistration
   }
 
   const initials = myClient
-      ? `${myClient.data.name?.[0] ?? ''}
-         ${myClient.data.surname?.[0] ?? ''}`
+      ? `${myClient.name?.[0] ?? ''}
+         ${myClient.surname?.[0] ?? ''}`
       : "??";
 
   return (
@@ -57,7 +57,7 @@ const Account: React.FC<AuthModalProps> = ({ registrationIsOpen, setRegistration
           </div>
           <div className="profile-user-role-cli">
             <h1 className="profile-user-cli">{initials.toUpperCase()}</h1>
-            <p className="profile-role-cli">{myClient?.data.email}</p>
+            <p className="profile-role-cli">{myClient?.email}</p>
           </div>
         </div>
         {activeUserMenu && (
