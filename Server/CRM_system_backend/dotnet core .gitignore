@@ -50,3 +50,4 @@ obj/
 
 # Publish
 publish/
+.env

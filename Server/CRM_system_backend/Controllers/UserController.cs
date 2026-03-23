@@ -74,6 +74,7 @@ public class UserController(IUserService userService, IMapper mapper) : Controll
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<ActionResult> CreateUser([FromBody] UserRequest request, CancellationToken ct)
     {
         var createModel = mapper.Map<UserCreateModel>(request);

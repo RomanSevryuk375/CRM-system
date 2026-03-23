@@ -4,15 +4,15 @@
     image: postgres:18
     container_name: AUTOService-postgres
     environment:
-      POSTGRES_DB: AUTOService
-      POSTGRES_USER: postgres228
-      POSTGRES_PASSWORD: roman228
+      POSTGRES_DB: ${POSTGRES_DB:-AUTOService}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5438:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/18
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres228 -d AUTOService"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB:-AUTOService}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -36,8 +36,8 @@
     - "9000:9000"
     - "9001:9001"
   environment:
-    MINIO_ROOT_USER: minio_admin
-    MINIO_ROOT_PASSWORD: minio_password
+    MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+    MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
   volumes:
     - minio_data:/data
   command: server /data --console-address ":9001"
@@ -55,13 +55,13 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__SystemDbContext=Host=postgres;Port=5432;Database=AUTOService;Username=postgres228;Password=roman228
+      - ConnectionStrings__SystemDbContext=Host=postgres;Port=5432;Database=${POSTGRES_DB:-AUTOService};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       - ConnectionStrings__Redis=redis:6379
       - Minio__ServiceUrl=http://minio:9000
-      - Minio__AccessKey=minio_admin
-      - Minio__SecretKey=minio_password
+      - Minio__AccessKey=${MINIO_ROOT_USER}
+      - Minio__SecretKey=${MINIO_ROOT_PASSWORD}
       - Minio__BucketName=service-files
-      - JwtOptions__SecretKey=SecretKeySecretKeySecretKeySecretKeySecretKeySecretKeySecretKeySecretKeySecretKey
+      - JwtOptions__SecretKey=${JWT_SECRET_KEY}
       - JwtOptions__ExpiresHours=12
     ports:
       - "5066:8080" 
