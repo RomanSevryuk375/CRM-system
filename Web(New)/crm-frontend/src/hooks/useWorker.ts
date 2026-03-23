@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     WorkerFilter,
     WorkerRequest,
@@ -31,7 +31,7 @@ export const useWorker = (id: number) => {
     });
 };
 
-export const useCreateWorker = async () => {
+export const useCreateWorker = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: WorkerRequest) => workerService.create(data),
@@ -41,7 +41,7 @@ export const useCreateWorker = async () => {
     });
 };
 
-export const useCreateWorkerWithUser = async () => {
+export const useCreateWorkerWithUser = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: WorkerWithUserRequest) => workerService.createWithUser(data),
@@ -51,7 +51,7 @@ export const useCreateWorkerWithUser = async () => {
     });
 };
 
-export const useUpdateWorker = async () => {
+export const useUpdateWorker = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: WorkerUpdateRequest }) =>
@@ -63,7 +63,7 @@ export const useUpdateWorker = async () => {
     });
 };
 
-export const useDeleteWorker = async () => {
+export const useDeleteWorker = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => workerService.delete(id),

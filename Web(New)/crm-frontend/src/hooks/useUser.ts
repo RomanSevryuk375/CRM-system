@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { LoginRequest } from "../api/types/login.ts";
 import type { UserRequest } from "../api/types/user.ts";
 import { userService } from "../api/services/userService.ts";
@@ -36,7 +36,7 @@ export const useLogin = () => {
     });
 };
 
-export const useLogout = async () => {
+export const useLogout = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: () => userService.logout(),
@@ -46,7 +46,7 @@ export const useLogout = async () => {
     });
 };
 
-export const useCreateUser = async () => {
+export const useCreateUser = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: UserRequest) => userService.create(data),
@@ -56,7 +56,7 @@ export const useCreateUser = async () => {
     });
 };
 
-export const useDeleteUser = async () => {
+export const useDeleteUser = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => userService.delete(id),

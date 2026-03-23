@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     WorkProposalFilter,
     WorkProposalRequest,
@@ -39,7 +39,7 @@ export const useWorkProposalStatuses = () => {
     });
 };
 
-export const useCreateWorkProposal = async () => {
+export const useCreateWorkProposal = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: WorkProposalRequest) => workProposalService.create(data),
@@ -49,7 +49,7 @@ export const useCreateWorkProposal = async () => {
     });
 };
 
-export const usePatchWorkProposalStatus = async () => {
+export const usePatchWorkProposalStatus = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: ProposalStatusRequest }) =>
@@ -61,7 +61,7 @@ export const usePatchWorkProposalStatus = async () => {
     });
 };
 
-export const useDeleteWorkProposal = async () => {
+export const useDeleteWorkProposal = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => workProposalService.delete(id),

@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     SpecializationRequest,
     SpecializationUpdateRequest
@@ -27,7 +27,7 @@ export const useSpecialization = (id: number) => {
     });
 };
 
-export const useCreateSpecialization = async () => {
+export const useCreateSpecialization = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: SpecializationRequest) => specializationService.create(data),
@@ -37,7 +37,7 @@ export const useCreateSpecialization = async () => {
     });
 };
 
-export const useUpdateSpecialization = async () => {
+export const useUpdateSpecialization = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: SpecializationUpdateRequest }) =>
@@ -49,7 +49,7 @@ export const useUpdateSpecialization = async () => {
     });
 };
 
-export const useDeleteSpecialization = async () => {
+export const useDeleteSpecialization = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => specializationService.delete(id),

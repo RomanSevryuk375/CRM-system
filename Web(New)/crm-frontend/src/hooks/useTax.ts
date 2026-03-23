@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     TaxFilter,
     TaxRequest,
@@ -39,7 +39,7 @@ export const useTaxTypes = () => {
     });
 };
 
-export const useCreateTax = async () => {
+export const useCreateTax = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: TaxRequest) => taxService.create(data),
@@ -49,7 +49,7 @@ export const useCreateTax = async () => {
     });
 };
 
-export const useUpdateTax = async () => {
+export const useUpdateTax = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: TaxUpdateRequest }) =>
@@ -61,7 +61,7 @@ export const useUpdateTax = async () => {
     });
 };
 
-export const useDeleteTax = async () => {
+export const useDeleteTax = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => taxService.delete(id),

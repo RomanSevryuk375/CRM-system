@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     PartFilter,
     PartRequest,
@@ -30,7 +30,7 @@ export const usePart = (id: number) => {
     });
 };
 
-export const useCreatePart = async () => {
+export const useCreatePart = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: PartRequest) => partService.create(data),
@@ -40,7 +40,7 @@ export const useCreatePart = async () => {
     });
 };
 
-export const useUpdatePart = async () => {
+export const useUpdatePart = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: PartUpdateRequest }) =>
@@ -52,7 +52,7 @@ export const useUpdatePart = async () => {
     });
 };
 
-export const useDeletePart = async () => {
+export const useDeletePart = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => partService.delete(id),

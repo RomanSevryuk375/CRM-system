@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {CarFilter, CarRequest, CarUpdateRequest} from "../api/types/car.ts";
 import {carService, carStatusService} from "../api/services/carService.ts";
 
@@ -35,7 +35,7 @@ export const useCarStatuses = () => {
     });
 };
 
-export const useCreateCar = async () => {
+export const useCreateCar = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: CarRequest) => carService.create(data),
@@ -45,7 +45,7 @@ export const useCreateCar = async () => {
     });
 };
 
-export const useUpdateCar = async () => {
+export const useUpdateCar = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: CarUpdateRequest }) =>
@@ -57,7 +57,7 @@ export const useUpdateCar = async () => {
     });
 };
 
-export const useDeleteCar = async () => {
+export const useDeleteCar = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => carService.delete(id),

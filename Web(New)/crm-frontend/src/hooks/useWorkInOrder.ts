@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     WorkInOrderFilter,
     WorkInOrderRequest,
@@ -48,7 +48,7 @@ export const useWorkInOrderStatuses = () => {
     });
 };
 
-export const useCreateWorkInOrder = async () => {
+export const useCreateWorkInOrder = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: WorkInOrderRequest) => workInOrderService.create(data),
@@ -58,7 +58,7 @@ export const useCreateWorkInOrder = async () => {
     });
 };
 
-export const useUpdateWorkInOrder = async () => {
+export const useUpdateWorkInOrder = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: WorkInOrderUpdateRequest }) =>
@@ -70,7 +70,7 @@ export const useUpdateWorkInOrder = async () => {
     });
 };
 
-export const useDeleteWorkInOrder = async () => {
+export const useDeleteWorkInOrder = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => workInOrderService.delete(id),

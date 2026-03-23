@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     GuaranteeFilter,
     GuaranteeRequest,
@@ -30,7 +30,7 @@ export const useGuarantee = (id: number) => {
     });
 };
 
-export const useCreateGuarantee = async () => {
+export const useCreateGuarantee = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: GuaranteeRequest) => guaranteeService.create(data),
@@ -40,7 +40,7 @@ export const useCreateGuarantee = async () => {
     });
 };
 
-export const useUpdateGuarantee = async () => {
+export const useUpdateGuarantee = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: GuaranteeUpdateRequest }) =>
@@ -52,7 +52,7 @@ export const useUpdateGuarantee = async () => {
     });
 };
 
-export const useDeleteGuarantee = async () => {
+export const useDeleteGuarantee = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => guaranteeService.delete(id),

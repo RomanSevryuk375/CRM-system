@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     ExpenseFilter,
     ExpenseRequest,
@@ -39,7 +39,7 @@ export const useExpenseTypes = () => {
     });
 };
 
-export const useCreateExpense = async () => {
+export const useCreateExpense = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: ExpenseRequest) => expenseService.create(data),
@@ -49,7 +49,7 @@ export const useCreateExpense = async () => {
     });
 };
 
-export const useUpdateExpense = async () => {
+export const useUpdateExpense = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: ExpenseUpdateRequest }) =>
@@ -61,7 +61,7 @@ export const useUpdateExpense = async () => {
     });
 };
 
-export const useDeleteExpense = async () => {
+export const useDeleteExpense = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => expenseService.delete(id),

@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { SkillFilter, SkillRequest } from "../api/types/skill.ts";
 import { skillService } from "../api/services/skillService.ts";
 
@@ -26,7 +26,7 @@ export const useSkill = (id: number) => {
     });
 };
 
-export const useCreateSkill = async () => {
+export const useCreateSkill = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: SkillRequest) => skillService.create(data),
@@ -36,7 +36,7 @@ export const useCreateSkill = async () => {
     });
 };
 
-export const useDeleteSkill = async () => {
+export const useDeleteSkill = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => skillService.delete(id),

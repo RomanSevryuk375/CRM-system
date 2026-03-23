@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     SupplyFilter,
     SupplyRequest
@@ -29,7 +29,7 @@ export const useSupply = (id: number) => {
     });
 };
 
-export const useCreateSupply = async () => {
+export const useCreateSupply = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: SupplyRequest) => supplyService.create(data),
@@ -39,7 +39,7 @@ export const useCreateSupply = async () => {
     });
 };
 
-export const useDeleteSupply = async () => {
+export const useDeleteSupply = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => supplyService.delete(id),

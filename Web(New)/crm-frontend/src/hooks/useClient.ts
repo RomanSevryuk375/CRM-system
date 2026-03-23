@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {ClientFilter, ClientRegisterRequest, ClientRequest, ClientUpdateRequest} from "../api/types/client.ts";
 import {clientService, roleService} from "../api/services/clientService.ts";
 
@@ -35,7 +35,7 @@ export const useRoles = () => {
     });
 };
 
-export const useCreateClient = async () => {
+export const useCreateClient = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: ClientRequest) => clientService.create(data),
@@ -55,7 +55,7 @@ export const useRegisterClient = () => {
     });
 };
 
-export const useUpdateClient = async () => {
+export const useUpdateClient = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: ClientUpdateRequest }) =>
@@ -67,7 +67,7 @@ export const useUpdateClient = async () => {
     });
 };
 
-export const useDeleteClient = async () => {
+export const useDeleteClient = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => clientService.delete(id),

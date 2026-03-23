@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     PaymentNoteFilter,
     PaymentNoteRequest
@@ -38,7 +38,7 @@ export const usePaymentMethods = () => {
     });
 };
 
-export const useCreatePaymentNote = async () => {
+export const useCreatePaymentNote = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: PaymentNoteRequest) => paymentNoteService.create(data),
@@ -48,7 +48,7 @@ export const useCreatePaymentNote = async () => {
     });
 };
 
-export const useUpdatePaymentNote = async () => {
+export const useUpdatePaymentNote = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, method }: { id: number; method: number | null }) =>
@@ -60,7 +60,7 @@ export const useUpdatePaymentNote = async () => {
     });
 };
 
-export const useDeletePaymentNote = async () => {
+export const useDeletePaymentNote = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => paymentNoteService.delete(id),

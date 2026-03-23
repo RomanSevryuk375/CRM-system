@@ -1,4 +1,4 @@
-﻿import type {
+import type {
     AttachmentFilter,
     AttachmentImgFilter,
     AttachmentRequest,
@@ -35,7 +35,7 @@ export const useAttachment = (id: number) => {
     });
 };
 
-export const useCreateAttachment = async () => {
+export const useCreateAttachment = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: AttachmentRequest) => attachmentService.create(data),
@@ -45,7 +45,7 @@ export const useCreateAttachment = async () => {
     });
 };
 
-export const useUpdateAttachment = async () => {
+export const useUpdateAttachment = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: {id: number; model: AttachmentUpdateRequest}) =>
@@ -57,7 +57,7 @@ export const useUpdateAttachment = async () => {
     });
 };
 
-export const useDeleteAttachment = async () => {
+export const useDeleteAttachment = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => attachmentService.delete(id),
@@ -74,7 +74,7 @@ export const useAttachmentImage = (filter: AttachmentImgFilter) => {
     })
 }
 
-export const useUploadAttachmentImage = async () => {
+export const useUploadAttachmentImage = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ attachmentId, file, description }: { attachmentId: number; file: File; description?: string }) =>
@@ -87,7 +87,7 @@ export const useUploadAttachmentImage = async () => {
     });
 };
 
-export const useDeleteAttachmentImage = async () => {
+export const useDeleteAttachmentImage = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => attachmentImageService.delete(id),

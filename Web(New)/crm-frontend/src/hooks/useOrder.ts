@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     OrderFilter,
     OrderRequest,
@@ -60,7 +60,7 @@ export const useOrderPdfFile = (id: number) => {
     });
 };
 
-export const useCreateOrder = async () => {
+export const useCreateOrder = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: OrderRequest) => orderService.create(data),
@@ -70,7 +70,7 @@ export const useCreateOrder = async () => {
     });
 };
 
-export const useCreateOrderWithBill = async () => {
+export const useCreateOrderWithBill = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: OrderWithBillRequest) => orderService.createWithBill(data),
@@ -80,7 +80,7 @@ export const useCreateOrderWithBill = async () => {
     });
 };
 
-export const useUpdateOrder = async () => {
+export const useUpdateOrder = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: OrderUpdateRequest }) =>
@@ -92,7 +92,7 @@ export const useUpdateOrder = async () => {
     });
 };
 
-export const usePatchOrderStatus = async () => {
+export const usePatchOrderStatus = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: OrderPatchRequest }) =>
@@ -104,7 +104,7 @@ export const usePatchOrderStatus = async () => {
     });
 };
 
-export const useGenerateOrderPdf = async () => {
+export const useGenerateOrderPdf = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => orderService.generatePdf(id),
@@ -114,7 +114,7 @@ export const useGenerateOrderPdf = async () => {
     });
 };
 
-export const useDeleteOrder = async () => {
+export const useDeleteOrder = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => orderService.delete(id),

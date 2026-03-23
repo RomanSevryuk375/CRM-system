@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     PartSetFilter,
     PartSetRequest,
@@ -39,7 +39,7 @@ export const usePartSetsByOrder = (orderId: number) => {
     });
 };
 
-export const useCreatePartSet = async () => {
+export const useCreatePartSet = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: PartSetRequest) => partSetService.create(data),
@@ -49,7 +49,7 @@ export const useCreatePartSet = async () => {
     });
 };
 
-export const useUpdatePartSet = async () => {
+export const useUpdatePartSet = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: PartSetUpdateRequest }) =>
@@ -61,7 +61,7 @@ export const useUpdatePartSet = async () => {
     });
 };
 
-export const useDeletePartSet = async () => {
+export const useDeletePartSet = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => partSetService.delete(id),

@@ -1,4 +1,4 @@
-﻿import type {BillFilter, BillRequest, BillUpdateRequest} from "../api/types/bill.ts";
+import type {BillFilter, BillRequest, BillUpdateRequest} from "../api/types/bill.ts";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {billService, billStatusService} from "../api/services/billService.ts";
 
@@ -45,7 +45,7 @@ export const useBillDebt = (id: number) => {
     });
 };
 
-export const useCreateBill = async () => {
+export const useCreateBill = () => {
     const  queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: BillRequest) => billService.create(data),
@@ -55,7 +55,7 @@ export const useCreateBill = async () => {
     });
 };
 
-export const useUpdateBill = async () => {
+export const useUpdateBill = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: BillUpdateRequest }) =>
@@ -68,7 +68,7 @@ export const useUpdateBill = async () => {
     });
 };
 
-export const useDeleteBill = async () => {
+export const useDeleteBill = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => billService.delete(id),

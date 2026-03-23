@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     StorageCellRequest,
     StorageCellUpdateRequest
@@ -27,7 +27,7 @@ export const useStorageCell = (id: number) => {
     });
 };
 
-export const useCreateStorageCell = async () => {
+export const useCreateStorageCell = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: StorageCellRequest) => storageCellService.create(data),
@@ -37,7 +37,7 @@ export const useCreateStorageCell = async () => {
     });
 };
 
-export const useUpdateStorageCell = async () => {
+export const useUpdateStorageCell = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: StorageCellUpdateRequest }) =>
@@ -49,7 +49,7 @@ export const useUpdateStorageCell = async () => {
     });
 };
 
-export const useDeleteStorageCell = async () => {
+export const useDeleteStorageCell = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => storageCellService.delete(id),

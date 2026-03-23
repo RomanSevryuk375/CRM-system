@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     SupplierRequest,
     SupplierUpdateRequest
@@ -27,7 +27,7 @@ export const useSupplier = (id: number) => {
     });
 };
 
-export const useCreateSupplier = async () => {
+export const useCreateSupplier = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: SupplierRequest) => supplierService.create(data),
@@ -37,7 +37,7 @@ export const useCreateSupplier = async () => {
     });
 };
 
-export const useUpdateSupplier = async () => {
+export const useUpdateSupplier = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: SupplierUpdateRequest }) =>
@@ -49,7 +49,7 @@ export const useUpdateSupplier = async () => {
     });
 };
 
-export const useDeleteSupplier = async () => {
+export const useDeleteSupplier = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => supplierService.delete(id),

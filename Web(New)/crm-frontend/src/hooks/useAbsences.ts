@@ -1,4 +1,4 @@
-﻿import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type {AbsenceFilter, AbsenceRequest, AbsenceUpdateRequest} from "../api/types/absence.ts";
 import {absenceService, absenceTypeService} from "../api/services/absenceService.ts";
 
@@ -35,7 +35,7 @@ export const useAbsenceTypes = () => {
     });
 };
 
-export const useCreateAbsence = async () => {
+export const useCreateAbsence = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -46,7 +46,7 @@ export const useCreateAbsence = async () => {
     });
 };
 
-export const useUpdateAbsence = async () => {
+export const useUpdateAbsence = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -59,7 +59,7 @@ export const useUpdateAbsence = async () => {
     });
 };
 
-export const useDeleteAbsence = async () => {
+export const useDeleteAbsence = () => {
     const queryClient = useQueryClient();
 
     return useMutation({

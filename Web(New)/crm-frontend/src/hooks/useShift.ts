@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     ShiftRequest,
     ShiftUpdateRequest
@@ -27,7 +27,7 @@ export const useShift = (id: number) => {
     });
 };
 
-export const useCreateShift = async () => {
+export const useCreateShift = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: ShiftRequest) => shiftService.create(data),
@@ -37,7 +37,7 @@ export const useCreateShift = async () => {
     });
 };
 
-export const useUpdateShift = async () => {
+export const useUpdateShift = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: ShiftUpdateRequest }) =>

@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     PositionFilter,
     PositionWithPartRequest,
@@ -30,7 +30,7 @@ export const usePosition = (id: number) => {
     });
 };
 
-export const useCreatePositionWithPart = async () => {
+export const useCreatePositionWithPart = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: PositionWithPartRequest) => positionService.createWithPart(data),
@@ -40,7 +40,7 @@ export const useCreatePositionWithPart = async () => {
     });
 };
 
-export const useUpdatePosition = async () => {
+export const useUpdatePosition = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: PositionUpdateRequest }) =>
@@ -52,7 +52,7 @@ export const useUpdatePosition = async () => {
     });
 };
 
-export const useDeletePosition = async () => {
+export const useDeletePosition = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => positionService.delete(id),

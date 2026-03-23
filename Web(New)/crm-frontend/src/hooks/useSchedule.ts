@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
     ScheduleFilter,
     ScheduleRequest,
@@ -31,7 +31,7 @@ export const useSchedule = (id: number) => {
     });
 };
 
-export const useCreateSchedule = async () => {
+export const useCreateSchedule = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: ScheduleRequest) => scheduleService.create(data),
@@ -41,7 +41,7 @@ export const useCreateSchedule = async () => {
     });
 };
 
-export const useCreateScheduleWithShift = async () => {
+export const useCreateScheduleWithShift = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: ScheduleWithShiftRequest) => scheduleService.createWithShift(data),
@@ -51,7 +51,7 @@ export const useCreateScheduleWithShift = async () => {
     });
 };
 
-export const useUpdateSchedule = async () => {
+export const useUpdateSchedule = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: ScheduleUpdateRequest }) =>
@@ -63,7 +63,7 @@ export const useUpdateSchedule = async () => {
     });
 };
 
-export const useDeleteSchedule = async () => {
+export const useDeleteSchedule = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => scheduleService.delete(id),

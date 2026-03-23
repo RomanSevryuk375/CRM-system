@@ -1,4 +1,4 @@
-﻿import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type {
     AcceptanceFilter,
     AcceptanceImgFilter,
@@ -35,7 +35,7 @@ export const useAcceptance = (id: number) => {
     });
 };
 
-export const useCreateAcceptance = async () => {
+export const useCreateAcceptance = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: AcceptanceRequest) => acceptanceService.create(data),
@@ -45,7 +45,7 @@ export const useCreateAcceptance = async () => {
     });
 };
 
-export const useUpdateAcceptance = async () => {
+export const useUpdateAcceptance = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, model }: { id: number; model: AcceptanceUpdateRequest }) =>
@@ -57,7 +57,7 @@ export const useUpdateAcceptance = async () => {
     });
 };
 
-export const useDeleteAcceptance = async () => {
+export const useDeleteAcceptance = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => acceptanceService.delete(id),
@@ -74,7 +74,7 @@ export const useAcceptanceImages = (filter: AcceptanceImgFilter) => {
     });
 };
 
-export const useUploadAcceptanceImage = async () => {
+export const useUploadAcceptanceImage = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ acceptanceId, file, description }: { acceptanceId: number; file: File; description?: string }) =>
@@ -87,7 +87,7 @@ export const useUploadAcceptanceImage = async () => {
     });
 };
 
-export const useDeleteAcceptanceImage = async () => {
+export const useDeleteAcceptanceImage = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: number) => acceptanceImageService.delete(id),

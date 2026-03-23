@@ -5,12 +5,15 @@ export const apiClient = axios.create({
     withCredentials: true,
 });
 
-apiClient.interceptors.request.use(response => {
-    if (response.headers['x-total-count']) {
-        return {
-            ...response,
-            totalCount: parseInt(response.headers['x-total-count'], 10)
-        };
-    }
-    return response;
-});
+apiClient.interceptors.response.use(
+    (response) => {
+        if (response.headers['x-total-count']) {
+            return {
+                ...response,
+                totalCount: parseInt(response.headers['x-total-count'], 10)
+            };
+        }
+        return response;
+    },
+    (error) => Promise.reject(error)
+);
