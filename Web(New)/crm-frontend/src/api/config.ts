@@ -1,7 +1,8 @@
-﻿import axios from "axios";
+import axios from "axios";
+import { env } from "../env.ts";
 
 export const apiClient = axios.create({
-    baseURL: 'http://localhost:5066/api/v1',
+    baseURL: env.VITE_API_BASE_URL,
     withCredentials: true,
 });
 
@@ -17,3 +18,4 @@ apiClient.interceptors.response.use(
     },
     (error) => Promise.reject(error)
 );
+

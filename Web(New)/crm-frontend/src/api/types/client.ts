@@ -1,4 +1,4 @@
-﻿export interface ClientResponse {
+export interface ClientResponse {
     id: number;
     userId: number;
     name: string;
@@ -20,7 +20,7 @@ export interface ClientRegisterRequest {
     name: string;
     surname: string;
     phoneNumber: string;
-    email: string;
+    email?: string;
     roleId: number;
     login: string;
     password: string;
@@ -45,3 +45,4 @@ export interface RoleResponse {
     id: number;
     name: string;
 }
+

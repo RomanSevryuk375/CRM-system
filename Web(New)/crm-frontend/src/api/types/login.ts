@@ -1,6 +1,6 @@
-﻿export interface LoginRequest {
-    login?: string;
-    password?: string;
+export interface LoginRequest {
+    login: string;
+    password: string;
 }
 
 export interface LoginResponse {
@@ -8,3 +8,4 @@ export interface LoginResponse {
     roleId: number;
     message: string;
 }
+

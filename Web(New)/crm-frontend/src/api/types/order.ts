@@ -1,4 +1,4 @@
-﻿export interface OrderPatchRequest {
+export interface OrderPatchRequest {
     orderStatus: number; // OrderStatusEnum
 }
 
@@ -27,7 +27,7 @@ export interface OrderWithBillRequest {
     carId: number;
     date: string;
     priorityId: number; // OrderPriorityEnum
-    ownerId: number;
+    orderId: number;
     billStatusId: number; // BillStatusEnum
     createdAt: string;
     amount: number;
@@ -35,7 +35,7 @@ export interface OrderWithBillRequest {
 }
 
 export interface OrderUpdateRequest {
-    priorityId: number;
+    priorityId?: number;
 }
 
 export interface OrderPriorityResponse {
@@ -60,3 +60,4 @@ export interface OrderFilter {
     limit: number;
     isDescending: boolean;
 }
+
