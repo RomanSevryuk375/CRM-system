@@ -1,0 +1,99 @@
+<Project>
+    <Choose>
+        <When Condition="$(MSBuildProjectName.EndsWith('.API', System.StringComparison.OrdinalIgnoreCase))">
+            <ItemGroup>
+                <PackageReference Include="Swashbuckle.AspNetCore" />
+                <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+                    <PrivateAssets>all</PrivateAssets>
+                    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+                </PackageReference>
+            </ItemGroup>
+        </When>
+    </Choose>
+
+    <Choose>
+        <When Condition="$(MSBuildProjectName.EndsWith('.Infrastructure', System.StringComparison.OrdinalIgnoreCase))">
+            <ItemGroup>
+                <PackageReference Include="Microsoft.EntityFrameworkCore" />
+                <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+                <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+            </ItemGroup>
+        </When>
+    </Choose>
+
+    <Choose>
+        <When Condition="$(MSBuildProjectName.EndsWith('.Application', System.StringComparison.OrdinalIgnoreCase))">
+            <ItemGroup>
+                <PackageReference Include="MediatR" />
+                <PackageReference Include="AutoMapper" />
+                <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+            </ItemGroup>
+        </When>
+    </Choose>
+
+    <Choose>
+        <When Condition="$(MSBuildProjectName.EndsWith('.IntegrationTests', System.StringComparison.OrdinalIgnoreCase))">
+            <ItemGroup>
+                <PackageReference Include="Microsoft.NET.Test.Sdk" />
+                <PackageReference Include="xunit" />
+                <PackageReference Include="xunit.runner.visualstudio" />
+                <PackageReference Include="coverlet.collector" />
+                <PackageReference Include="FluentAssertions" />
+                <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+                <PackageReference Include="Testcontainers.PostgreSql" />
+                <PackageReference Include="Respawn" />
+            </ItemGroup>
+        </When>
+    </Choose>
+
+    <Choose>
+        <When Condition="$(MSBuildProjectName.EndsWith('.UnitTests', System.StringComparison.OrdinalIgnoreCase))">
+            <ItemGroup>
+                <PackageReference Include="FluentAssertions" />
+                <PackageReference Include="coverlet.collector" />
+                <PackageReference Include="Microsoft.NET.Test.Sdk" />
+                <PackageReference Include="xunit" />
+                <PackageReference Include="xunit.runner.visualstudio" />
+            </ItemGroup>
+        </When>
+    </Choose>
+
+    <Choose>
+        <When Condition="$(MSBuildProjectName.EndsWith('.E2ETests', System.StringComparison.OrdinalIgnoreCase))">
+            <ItemGroup>
+                <PackageReference Include="Microsoft.NET.Test.Sdk" />
+                <PackageReference Include="xunit" />
+                <PackageReference Include="xunit.runner.visualstudio" />
+                <PackageReference Include="coverlet.collector" />
+                <PackageReference Include="FluentAssertions" />
+                <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+            </ItemGroup>
+        </When>
+    </Choose>
+
+    <Choose>
+        <When Condition="$(MSBuildProjectName.EndsWith('.ArchitectureTests', System.StringComparison.OrdinalIgnoreCase))">
+            <ItemGroup>
+                <PackageReference Include="Microsoft.NET.Test.Sdk" />
+                <PackageReference Include="xunit" />
+                <PackageReference Include="xunit.runner.visualstudio" />
+                <PackageReference Include="coverlet.collector" />
+                <PackageReference Include="FluentAssertions" />
+                <PackageReference Include="NetArchTest.Rules" />
+            </ItemGroup>
+        </When>
+    </Choose>
+
+    <Choose>
+        <When Condition="$(MSBuildProjectName.EndsWith('.E2ETests', System.StringComparison.OrdinalIgnoreCase))">
+            <ItemGroup>
+                <PackageReference Include="Microsoft.NET.Test.Sdk" />
+                <PackageReference Include="xunit" />
+                <PackageReference Include="xunit.runner.visualstudio" />
+                <PackageReference Include="coverlet.collector" />
+                <PackageReference Include="FluentAssertions" />
+                <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+            </ItemGroup>
+        </When>
+    </Choose>
+</Project>

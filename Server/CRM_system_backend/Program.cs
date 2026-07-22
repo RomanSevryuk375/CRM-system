@@ -12,14 +12,14 @@ public class Program
         try
         {
             var builder = WebApplication.CreateBuilder(args);
-        
+
             builder.Host.UseSerilog((context, configuration) => configuration
-                .ReadFrom.Configuration(context.Configuration)); 
-        
-        QuestPDF.Settings.License = LicenseType.Community;
-        
-        builder.Services.AddInfrastructure(builder.Configuration);
-        builder.Services.AddCustomCors();
+                .ReadFrom.Configuration(context.Configuration));
+
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddCustomCors();
 
             var app = builder.Build();
 
@@ -32,9 +32,9 @@ public class Program
             }
 
             app.UseCors("Frontend");
-            app.ApplyMigrations(); 
+            app.ApplyMigrations();
 
-            app.UseCustomException(); 
+            app.UseCustomException();
             app.MapHealthChecks("/health");
 
             app.UseAuthentication();

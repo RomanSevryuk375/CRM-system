@@ -1,59 +1,65 @@
-# From .NET Core 3.0 you can use the command: `dotnet new gitignore` to generate a customizable .gitignore file
-
-*.swp
-*.*~
-project.lock.json
-.DS_Store
-*.pyc
-
-# Visual Studio Code
-.vscode
+# Build artifacts
+[Bb]in/
+[Oo]bj/
+out/
+artifacts/
+keys/
 
 # User-specific files
-*.suo
 *.user
+*.rsuser
+*.suo
 *.userosscache
 *.sln.docstates
 
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-build/
-bld/
-[Bb]in/
-[Oo]bj/
-msbuild.log
-msbuild.err
-msbuild.wrn
-
-# Visual Studio 2015
+# IDE / Editor
 .vs/
+.vscode/
+.idea/
+.dotnet/
+**/.dotnet/
+*.swp
+*.swo
 
-# Build artifacts
-bin/
-obj/
-
-# Visual Studio files
-.vs/
-
-# User-specific files
-*.user
-*.suo
-
-# Logs and temp
+# Logs
 *.log
-*.tmp
+logs/
 
-# Publish
+# Test results / coverage
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+!**/packages/build/
+
+# Publish output
 publish/
 
-# Keys
-**/keys/
+# ASP.NET Core / local environment
+appsettings.Development.json
+appsettings.Local.json
+.env
+.env.*
+!.env.example
+secrets/
 
-qodana.yaml
-.idea/
-*.txt
+# Certificates
+*.pfx
+*.p12
+*.pem
+*.key
+
+# Docker / containers
+**/.docker/
+docker-compose.override.yml
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini

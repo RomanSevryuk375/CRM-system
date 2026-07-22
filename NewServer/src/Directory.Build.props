@@ -1,0 +1,23 @@
+<Project>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>.</DockerfileContext>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="
+                      $(MSBuildProjectName.EndsWith('.IntegrationTests', System.StringComparison.OrdinalIgnoreCase))
+                   Or $(MSBuildProjectName.EndsWith('.UnitTests', System.StringComparison.OrdinalIgnoreCase))
+                   Or $(MSBuildProjectName.EndsWith('.E2ETests', System.StringComparison.OrdinalIgnoreCase))
+                   Or $(MSBuildProjectName.EndsWith('.ArchitectureTests', System.StringComparison.OrdinalIgnoreCase))">
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SonarAnalyzer.CSharp" PrivateAssets="all" Condition="$(MSBuildProjectExtension) == '.csproj'" />
+    </ItemGroup>
+</Project>
