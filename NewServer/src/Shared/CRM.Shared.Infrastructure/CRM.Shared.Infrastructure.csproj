@@ -1,3 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<ItemGroup>
+		<PackageReference Include="MassTransit.RabbitMQ" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\CRM.Shared.Abstractions\CRM.Shared.Abstractions.csproj" />
+	</ItemGroup>
 </Project>

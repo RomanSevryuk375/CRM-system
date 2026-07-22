@@ -1,29 +1,47 @@
 <Solution>
-  <Project Path="../../Modules/Billing/CRM.Billing,Api/CRM.Billing,Api.csproj" Id="c8acb47c-a7e9-415a-93b0-c3a45a0b929f" />
-  <Project Path="../../Modules/Billing/CRM.Billing,Application/CRM.Billing,Application.csproj" Id="785dc7d9-1238-4c24-827f-b1010a1e4fb9" />
-  <Project Path="../../Modules/Billing/CRM.Billing,Domain/CRM.Billing,Domain.csproj" Id="ecf09812-6ebc-41e8-a199-eb17af3aa5e7" />
-  <Project Path="../../Modules/Billing/CRM.Billing,Infrastructure/CRM.Billing,Infrastructure.csproj" Id="a21a91e4-4eae-48b3-981b-af8cabfb24ad" />
-  <Project Path="../../Modules/Customers/CRM.Customers,Api/CRM.Customers,Api.csproj" Id="a106f7d2-de5f-4727-8595-161be642caef" />
-  <Project Path="../../Modules/Customers/CRM.Customers,Application/CRM.Customers,Application.csproj" Id="9b897f82-7f7d-4974-bc38-3250f751d1ae" />
-  <Project Path="../../Modules/Customers/CRM.Customers,Domain/CRM.Customers,Domain.csproj" Id="eb854076-2b4c-4792-bc0a-b103c9ae7fe3" />
-  <Project Path="../../Modules/Customers/CRM.Customers,Infrastructure/CRM.Customers,Infrastructure.csproj" Id="d7e5f777-0d03-47cc-a578-1830b9df37b7" />
-  <Project Path="../../Modules/HR/CRM.HR,Api/CRM.HR,Api.csproj" Id="46a2facb-9cd0-4946-a94e-442834ce20d7" />
-  <Project Path="../../Modules/HR/CRM.HR,Application/CRM.HR,Application.csproj" Id="6a45bf08-5eca-492d-bc5b-08982a4d1961" />
-  <Project Path="../../Modules/HR/CRM.HR,Domain/CRM.HR,Domain.csproj" Id="4317b6e9-5fe8-400d-9e69-f64f367f495c" />
-  <Project Path="../../Modules/HR/CRM.HR,Infrastructure/CRM.HR,Infrastructure.csproj" Id="f939ab3f-a5b7-43fd-9827-045d819a97db" />
-  <Project Path="../../Modules/IAM/CRM.IAM.Api/CRM.IAM.Api.csproj" Id="39671bb7-336e-4c09-ad0f-82c1a1e3aed2" />
-  <Project Path="../../Modules/IAM/CRM.IAM.Application/CRM.IAM.Application.csproj" Id="e159258d-582c-4bff-b232-956a829eefca" />
-  <Project Path="../../Modules/IAM/CRM.IAM.Domain/CRM.IAM.Domain.csproj" Id="b6d8f4a7-f049-47de-8ff8-0b4ce1520341" />
-  <Project Path="../../Modules/IAM/CRM.IAM.Infrastructure/CRM.IAM.Infrastructure.csproj" Id="f18e5728-0210-4da6-a608-1cf281b0c87b" />
-  <Project Path="../../Modules/Inventory/CRM.Inventory,Api/CRM.Inventory,Api.csproj" Id="c2404a36-9083-4186-8c75-651073ba44a4" />
-  <Project Path="../../Modules/Inventory/CRM.Invertory,Application/CRM.Invertory,Application.csproj" Id="2de85c25-ff0e-4514-8044-a7674ed54afb" />
-  <Project Path="../../Modules/Inventory/CRM.Invertory,Domain/CRM.Invertory,Domain.csproj" Id="df0e9578-9b13-4a83-b543-88965375b394" />
-  <Project Path="../../Modules/Inventory/CRM.Invertory,Infrastructure/CRM.Invertory,Infrastructure.csproj" Id="6ddc73eb-8512-4345-834c-0baf5b8309a8" />
-  <Project Path="../../Modules/Ordering/CRM.Ordering.Api/CRM.Ordering.Api.csproj" Id="7dd74139-5420-4263-b328-337d936c4d16" />
-  <Project Path="../../Modules/Ordering/CRM.Ordering.Application/CRM.Ordering.Application.csproj" Id="af6e0510-1b64-4ca5-bc29-4d0599edad48" />
-  <Project Path="../../Modules/Ordering/CRM.Ordering.Domain/CRM.Ordering.Domain.csproj" Id="30be5b1c-9584-4dff-a66f-e025d78e5952" />
-  <Project Path="../../Modules/Ordering/CRM.Ordering.Infrastructure/CRM.Ordering.Infrastructure.csproj" Id="be8f1b10-9a94-4bf3-8be1-4e39e592110c" />
-  <Project Path="../../Shared/CRM.Shared.Abstractions/CRM.Shared.Abstractions.csproj" Id="65430e99-5ebf-4f87-a907-049fb6bdb9a1" />
-  <Project Path="../../Shared/CRM.Shared.Infrastructure/CRM.Shared.Infrastructure.csproj" Id="a55887f8-b5bb-475d-bf45-5151ef0fa2ba" />
+  <Folder Name="/Modules/" />
+  <Folder Name="/Modules/Billing/">
+    <Project Path="../../Modules/Billing/CRM.Billing,Api/CRM.Billing,Api.csproj" Id="c8acb47c-a7e9-415a-93b0-c3a45a0b929f" />
+    <Project Path="../../Modules/Billing/CRM.Billing,Application/CRM.Billing,Application.csproj" Id="785dc7d9-1238-4c24-827f-b1010a1e4fb9" />
+    <Project Path="../../Modules/Billing/CRM.Billing,Domain/CRM.Billing,Domain.csproj" Id="ecf09812-6ebc-41e8-a199-eb17af3aa5e7" />
+    <Project Path="../../Modules/Billing/CRM.Billing,Infrastructure/CRM.Billing,Infrastructure.csproj" Id="a21a91e4-4eae-48b3-981b-af8cabfb24ad" />
+  </Folder>
+  <Folder Name="/Modules/Customers/">
+    <Project Path="../../Modules/Customers/CRM.Customers,Api/CRM.Customers,Api.csproj" Id="a106f7d2-de5f-4727-8595-161be642caef" />
+    <Project Path="../../Modules/Customers/CRM.Customers,Application/CRM.Customers,Application.csproj" Id="9b897f82-7f7d-4974-bc38-3250f751d1ae" />
+    <Project Path="../../Modules/Customers/CRM.Customers,Domain/CRM.Customers,Domain.csproj" Id="eb854076-2b4c-4792-bc0a-b103c9ae7fe3" />
+    <Project Path="../../Modules/Customers/CRM.Customers,Infrastructure/CRM.Customers,Infrastructure.csproj" Id="d7e5f777-0d03-47cc-a578-1830b9df37b7" />
+  </Folder>
+  <Folder Name="/Modules/HR/">
+    <Project Path="../../Modules/HR/CRM.HR,Api/CRM.HR,Api.csproj" Id="46a2facb-9cd0-4946-a94e-442834ce20d7" />
+    <Project Path="../../Modules/HR/CRM.HR,Application/CRM.HR,Application.csproj" Id="6a45bf08-5eca-492d-bc5b-08982a4d1961" />
+    <Project Path="../../Modules/HR/CRM.HR,Domain/CRM.HR,Domain.csproj" Id="4317b6e9-5fe8-400d-9e69-f64f367f495c" />
+    <Project Path="../../Modules/HR/CRM.HR,Infrastructure/CRM.HR,Infrastructure.csproj" Id="f939ab3f-a5b7-43fd-9827-045d819a97db" />
+  </Folder>
+  <Folder Name="/Modules/IAM/">
+    <Project Path="../../Modules/IAM/CRM.IAM.Api/CRM.IAM.Api.csproj" Id="39671bb7-336e-4c09-ad0f-82c1a1e3aed2" />
+    <Project Path="../../Modules/IAM/CRM.IAM.Application/CRM.IAM.Application.csproj" Id="e159258d-582c-4bff-b232-956a829eefca" />
+    <Project Path="../../Modules/IAM/CRM.IAM.Domain/CRM.IAM.Domain.csproj" Id="b6d8f4a7-f049-47de-8ff8-0b4ce1520341" />
+    <Project Path="../../Modules/IAM/CRM.IAM.Infrastructure/CRM.IAM.Infrastructure.csproj" Id="f18e5728-0210-4da6-a608-1cf281b0c87b" />
+  </Folder>
+  <Folder Name="/Modules/Inventory/">
+    <Project Path="../../Modules/Inventory/CRM.Inventory,Api/CRM.Inventory,Api.csproj" Id="c2404a36-9083-4186-8c75-651073ba44a4" />
+    <Project Path="../../Modules/Inventory/CRM.Invertory,Application/CRM.Invertory,Application.csproj" Id="2de85c25-ff0e-4514-8044-a7674ed54afb" />
+    <Project Path="../../Modules/Inventory/CRM.Invertory,Domain/CRM.Invertory,Domain.csproj" Id="df0e9578-9b13-4a83-b543-88965375b394" />
+    <Project Path="../../Modules/Inventory/CRM.Invertory,Infrastructure/CRM.Invertory,Infrastructure.csproj" Id="6ddc73eb-8512-4345-834c-0baf5b8309a8" />
+  </Folder>
+  <Folder Name="/Modules/Ordering/">
+    <Project Path="../../Modules/Ordering/CRM.Ordering.Api/CRM.Ordering.Api.csproj" Id="7dd74139-5420-4263-b328-337d936c4d16" />
+    <Project Path="../../Modules/Ordering/CRM.Ordering.Application/CRM.Ordering.Application.csproj" Id="af6e0510-1b64-4ca5-bc29-4d0599edad48" />
+    <Project Path="../../Modules/Ordering/CRM.Ordering.Domain/CRM.Ordering.Domain.csproj" Id="30be5b1c-9584-4dff-a66f-e025d78e5952" />
+    <Project Path="../../Modules/Ordering/CRM.Ordering.Infrastructure/CRM.Ordering.Infrastructure.csproj" Id="be8f1b10-9a94-4bf3-8be1-4e39e592110c" />
+  </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="../../Shared/CRM.Shared.Abstractions/CRM.Shared.Abstractions.csproj" Id="65430e99-5ebf-4f87-a907-049fb6bdb9a1" />
+    <Project Path="../../Shared/CRM.Shared.Infrastructure/CRM.Shared.Infrastructure.csproj" Id="a55887f8-b5bb-475d-bf45-5151ef0fa2ba" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
   <Project Path="CRM.Api.Host/CRM.Api.Host.csproj" />
 </Solution>
