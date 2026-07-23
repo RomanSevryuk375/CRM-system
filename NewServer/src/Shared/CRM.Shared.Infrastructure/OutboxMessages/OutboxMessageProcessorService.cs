@@ -1,4 +1,5 @@
 ﻿using CRM.Shared.Abstractions.Messaging;
+using CRM.Shared.Abstractions.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,7 @@ public sealed class OutboxMessageProcessorService<TDbContext>(
     ILogger<OutboxMessageProcessorService<TDbContext>> logger)
     where TDbContext : DbContext
 {
-    public async Task ProcessAsync(CancellationToken cancellationToken)
+    public async Task<Result> ProcessAsync(CancellationToken cancellationToken)
     {
         using IServiceScope scope = serviceScopeFactory.CreateScope();
 
@@ -25,7 +26,7 @@ public sealed class OutboxMessageProcessorService<TDbContext>(
         IReadOnlyList<OutboxMessage> messages = await outboxRepository.GetPendingMessagesAsync(50, cancellationToken);
         if (messages.Count == 0)
         {
-            return;
+            return Result.Success();
         }
         foreach (OutboxMessage message in messages)
         {
@@ -61,5 +62,7 @@ public sealed class OutboxMessageProcessorService<TDbContext>(
         }
 
         await dbContext.SaveChangesAsync(cancellationToken);
+
+        return Result.Success();
     }
 }

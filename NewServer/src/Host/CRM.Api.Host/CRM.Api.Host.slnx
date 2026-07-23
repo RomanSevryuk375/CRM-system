@@ -1,10 +1,10 @@
 <Solution>
   <Folder Name="/Modules/" />
   <Folder Name="/Modules/Billing/">
-    <Project Path="../../Modules/Billing/CRM.Billing,Api/CRM.Billing.Api.csproj" Id="c8acb47c-a7e9-415a-93b0-c3a45a0b929f" />
-    <Project Path="../../Modules/Billing/CRM.Billing,Application/CRM.Billing.Application.csproj" Id="785dc7d9-1238-4c24-827f-b1010a1e4fb9" />
-    <Project Path="../../Modules/Billing/CRM.Billing,Domain/CRM.Billing.Domain.csproj" Id="ecf09812-6ebc-41e8-a199-eb17af3aa5e7" />
-    <Project Path="../../Modules/Billing/CRM.Billing,Infrastructure/CRM.Billing.Infrastructure.csproj" Id="a21a91e4-4eae-48b3-981b-af8cabfb24ad" />
+    <Project Path="../../Modules/Billing/CRM.Billing.Api/CRM.Billing.Api.csproj" Id="c8acb47c-a7e9-415a-93b0-c3a45a0b929f" />
+    <Project Path="../../Modules/Billing/CRM.Billing.Application/CRM.Billing.Application.csproj" Id="785dc7d9-1238-4c24-827f-b1010a1e4fb9" />
+    <Project Path="../../Modules/Billing/CRM.Billing.Domain/CRM.Billing.Domain.csproj" Id="ecf09812-6ebc-41e8-a199-eb17af3aa5e7" />
+    <Project Path="../../Modules/Billing/CRM.Billing.Infrastructure/CRM.Billing.Infrastructure.csproj" Id="a21a91e4-4eae-48b3-981b-af8cabfb24ad" />
   </Folder>
   <Folder Name="/Modules/Customers/">
     <Project Path="../../Modules/Customers/CRM.Customers,Api/CRM.Customers,Api.csproj" Id="a106f7d2-de5f-4727-8595-161be642caef" />

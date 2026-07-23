@@ -9,4 +9,9 @@
 		<Folder Include="Controllers\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Shared\CRM.Shared.Abstractions\CRM.Shared.Abstractions.csproj" />
+	  <ProjectReference Include="..\..\..\Shared\CRM.Shared.Infrastructure\CRM.Shared.Infrastructure.csproj" />
+	</ItemGroup>
+
 </Project>

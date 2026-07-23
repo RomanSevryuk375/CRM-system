@@ -1,8 +1,11 @@
+using CRM.Shared.Infrastructure.Extensions;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSharedInfrastructure();
 
 WebApplication app = builder.Build();
 
