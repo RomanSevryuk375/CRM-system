@@ -7,6 +7,7 @@ namespace CRM.Billing.Domain.Entities;
 
 public sealed class PriceList : AggregateRoot<PriceListId>, ISoftDeletable, IAuditable
 {
+    public const int MaxNameLength = 128;
     private readonly List<PriceListItem> _items = [];
 
     private PriceList(
@@ -54,6 +55,12 @@ public sealed class PriceList : AggregateRoot<PriceListId>, ISoftDeletable, IAud
         {
             return Result<PriceList>.Failure(Error.Validation<PriceList>(
                 "Name cannot be empty"));
+        }
+
+        if (name.Length > MaxNameLength)
+        {
+            return Result<PriceList>.Failure(Error.Validation<Expense>(
+                $"Name should be shorter than {MaxNameLength} symbols."));
         }
 
         PriceList priceList = new(

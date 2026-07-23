@@ -8,7 +8,7 @@ namespace CRM.Billing.Domain.Entities;
 
 public sealed class Tax : AggregateRoot<TaxId>, IHasVersion
 {
-    private const int MaxNameLength = 64;
+    public const int MaxNameLength = 64;
 
     private Tax(
         TaxId id,

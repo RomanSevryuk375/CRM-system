@@ -8,8 +8,8 @@ namespace CRM.Billing.Domain.Entities;
 
 public sealed class Expense : AggregateRoot<ExpenseId>, ISoftDeletable, IAuditable, IHasVersion
 {
-    private const int MaxCategoryLength = 128;
-    private const int MaxDescriptionLength = 2000;
+    public const int MaxCategoryLength = 128;
+    public const int MaxDescriptionLength = 2000;
 
     private Expense(
         ExpenseId id,
