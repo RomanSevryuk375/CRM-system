@@ -1,33 +1,32 @@
-﻿using CRM.Shared.Abstractions.Abstractions;
-using CRM.Shared.Abstractions.Messaging;
+﻿using CRM.Shared.Abstractions.Messaging;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace CRM.Shared.Infrastructure.OutboxMessages;
 
-public sealed class OutboxMessageProcessorService(
+public sealed class OutboxMessageProcessorService<TDbContext>(
     IServiceScopeFactory serviceScopeFactory,
-    ILogger<OutboxMessageProcessorService> logger)
+    ILogger<OutboxMessageProcessorService<TDbContext>> logger)
+    where TDbContext : DbContext
 {
-    private const int BatchSize = 50;
-
     public async Task ProcessAsync(CancellationToken cancellationToken)
     {
         using IServiceScope scope = serviceScopeFactory.CreateScope();
 
-        IOutboxRepository outboxRepository = scope.ServiceProvider.GetRequiredService<IOutboxRepository>();
+        IOutboxRepository<TDbContext> outboxRepository = scope.ServiceProvider
+            .GetRequiredService<IOutboxRepository<TDbContext>>();
         IPublisher publisher = scope.ServiceProvider.GetRequiredService<IPublisher>();
-        IUnitOfWork unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-        IReadOnlyList<OutboxMessage>? messages = await outboxRepository.GetPendingMessagesAsync(
-            BatchSize, cancellationToken);
-        if (messages is null || !messages.Any())
+        TDbContext dbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
+
+        IReadOnlyList<OutboxMessage> messages = await outboxRepository.GetPendingMessagesAsync(50, cancellationToken);
+        if (messages.Count == 0)
         {
             return;
         }
-
         foreach (OutboxMessage message in messages)
         {
             try
@@ -61,6 +60,6 @@ public sealed class OutboxMessageProcessorService(
             }
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

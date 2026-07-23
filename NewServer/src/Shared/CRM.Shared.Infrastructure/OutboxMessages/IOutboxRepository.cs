@@ -1,6 +1,8 @@
-﻿namespace CRM.Shared.Infrastructure.OutboxMessages;
+﻿using Microsoft.EntityFrameworkCore;
 
-public interface IOutboxRepository
+namespace CRM.Shared.Infrastructure.OutboxMessages;
+
+public interface IOutboxRepository<TDbContext> where TDbContext : DbContext
 {
     Task<IReadOnlyList<OutboxMessage>> GetPendingMessagesAsync(
         int batchSize,
