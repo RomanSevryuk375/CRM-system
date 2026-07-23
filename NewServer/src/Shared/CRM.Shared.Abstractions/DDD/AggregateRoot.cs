@@ -3,9 +3,9 @@ using CRM.Shared.Abstractions.Messaging;
 
 namespace CRM.Shared.Abstractions.DDD;
 
-public abstract class AggregateRoot : IEntity, IHasDomainEvents
+public abstract class AggregateRoot<TId> : IEntity<TId>, IHasDomainEvents
 {
-    public Guid Id { get; protected set; }
+    public TId Id { get; protected set; }
 
     private readonly List<IDomainEvent> _domainEvents = [];
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
