@@ -1,7 +1,7 @@
 ﻿using CRM.Billing.Domain.Entities;
 using CRM.Billing.Domain.Interfaces;
 using CRM.Shared.Abstractions.Abstractions;
-using CRM.Shared.Infrastructure.Repositories;
+using CRM.Shared.Infrastructure.Data.Repositories;
 
 namespace CRM.Billing.Infrastructure.Persistence.Repositories;
 

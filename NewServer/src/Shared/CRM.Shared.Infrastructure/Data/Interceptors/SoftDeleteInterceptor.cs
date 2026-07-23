@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace CRM.Shared.Infrastructure.Interceptors;
+namespace CRM.Shared.Infrastructure.Data.Interceptors;
 
-public sealed class AuditInterceptor(IUserContext userContext) : SaveChangesInterceptor
+public sealed class SoftDeleteInterceptor(IUserContext userContext) : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
@@ -17,18 +17,15 @@ public sealed class AuditInterceptor(IUserContext userContext) : SaveChangesInte
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
 
-        foreach (EntityEntry<IAuditable> entry in eventData.Context.ChangeTracker.Entries<IAuditable>())
+        foreach (EntityEntry<ISoftDeletable> entry in eventData.Context.ChangeTracker.Entries<ISoftDeletable>())
         {
-            if (entry.State == EntityState.Added)
+            if (entry.State == EntityState.Deleted)
             {
-                entry.Entity.CreatedAt = DateTimeOffset.UtcNow;
-                entry.Entity.CreatedBy = userContext.UserId;
-            }
+                entry.State = EntityState.Modified;
 
-            if (entry.State == EntityState.Modified)
-            {
-                entry.Entity.UpdatedAt = DateTimeOffset.UtcNow;
-                entry.Entity.UpdatedBy = userContext.UserId;
+                entry.Property(x => x.IsDeleted).CurrentValue = true;
+                entry.Property(x => x.DeletedAt).CurrentValue = DateTimeOffset.UtcNow;
+                entry.Property(x => x.DeletedBy).CurrentValue = userContext.UserId;
             }
         }
 

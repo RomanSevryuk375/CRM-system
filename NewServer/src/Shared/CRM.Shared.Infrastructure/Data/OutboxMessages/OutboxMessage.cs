@@ -1,4 +1,4 @@
-﻿namespace CRM.Shared.Infrastructure.OutboxMessages;
+﻿namespace CRM.Shared.Infrastructure.Data.OutboxMessages;
 
 public sealed class OutboxMessage
 {

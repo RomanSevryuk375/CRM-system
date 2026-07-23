@@ -1,12 +1,12 @@
 ﻿using CRM.Shared.Abstractions.Abstractions;
-using CRM.Shared.Abstractions.Messaging;
-using CRM.Shared.Infrastructure.OutboxMessages;
+using CRM.Shared.Abstractions.DDD;
+using CRM.Shared.Infrastructure.Data.OutboxMessages;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Text.Json;
 
-namespace CRM.Shared.Infrastructure.Interceptors;
+namespace CRM.Shared.Infrastructure.Data.Interceptors;
 
 public sealed class ConvertDomainEventsToOutboxMessagesInterceptor : SaveChangesInterceptor
 {

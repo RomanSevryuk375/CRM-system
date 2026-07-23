@@ -2,7 +2,7 @@
 using CRM.Shared.Abstractions.DDD;
 using Microsoft.EntityFrameworkCore;
 
-namespace CRM.Shared.Infrastructure.Repositories;
+namespace CRM.Shared.Infrastructure.Data.Repositories;
 
 public abstract class BaseRepository<TEntity, TDbContext, TId>(TDbContext dbContext)
     : IRepository<TEntity, TId>

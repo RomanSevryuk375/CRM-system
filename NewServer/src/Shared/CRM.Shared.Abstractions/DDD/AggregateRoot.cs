@@ -1,5 +1,4 @@
 ﻿using CRM.Shared.Abstractions.Abstractions;
-using CRM.Shared.Abstractions.Messaging;
 
 namespace CRM.Shared.Abstractions.DDD;
 

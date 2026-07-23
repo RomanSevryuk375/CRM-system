@@ -1,3 +1,4 @@
+using CRM.Billing.Infrastructure.Extensions;
 using CRM.Shared.Infrastructure.Extensions;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -5,7 +6,10 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSharedInfrastructure();
+
+builder.Services.AddGlobalSharedInfrastructure(builder.Configuration);
+
+builder.Services.AddBillingInfrastructure(builder.Configuration);
 
 WebApplication app = builder.Build();
 

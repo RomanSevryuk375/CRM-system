@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace CRM.Shared.Infrastructure;
+namespace CRM.Shared.Infrastructure.Data;
 
 public sealed class UnitOfWork<TDbContext>(TDbContext dbContext)
     : IUnitOfWork where TDbContext : DbContext

@@ -1,5 +1,6 @@
 ﻿using CRM.Billing.Domain.Entities;
-using CRM.Shared.Infrastructure.OutboxMessages;
+using CRM.Shared.Infrastructure.Data.InboxMessages;
+using CRM.Shared.Infrastructure.Data.OutboxMessages;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Billing.Infrastructure.Persistence;
@@ -15,6 +16,7 @@ internal class BillingDbContext(DbContextOptions<BillingDbContext> options) : Db
     public DbSet<PriceListItem> PriceListItems => Set<PriceListItem>();
     public DbSet<Tax> Taxes => Set<Tax>();
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
+    public DbSet<InboxMessage> InboxMessages => Set<InboxMessage>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CRM.Shared.Infrastructure.Interceptors;
+namespace CRM.Shared.Infrastructure.Data.Interceptors;
 
 public static class AddInterceptorsExtensions
 {

@@ -1,6 +1,6 @@
 ﻿using CRM.Billing.Infrastructure.Persistence;
 using CRM.Shared.Abstractions.Results;
-using CRM.Shared.Infrastructure.OutboxMessages;
+using CRM.Shared.Infrastructure.Data.OutboxMessages;
 using Quartz;
 
 namespace CRM.Billing.Infrastructure.BackgroundJobs;
