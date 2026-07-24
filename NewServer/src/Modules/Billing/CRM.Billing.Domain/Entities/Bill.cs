@@ -144,7 +144,6 @@ public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable, IH
         _paymentNotes.Add(note);
 
         RecalculateStatus(DateOnly.FromDateTime(today.Date));
-
         IncrementVersion();
 
         return Result.Success();
@@ -162,8 +161,8 @@ public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable, IH
         _paymentNotes.Remove(note);
 
         RecalculateStatus(DateOnly.FromDateTime(today.Date));
-
         IncrementVersion();
+
         return Result.Success();
     }
 

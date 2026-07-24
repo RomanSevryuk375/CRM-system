@@ -1,3 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+	
+	<ItemGroup>
+		<PackageReference Include="MassTransit.RabbitMQ" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Folder Include="Behaviors\" />
+		<Folder Include="Features\Bills\Queries\" />
+		<Folder Include="Features\Expenses\Queries\" />
+		<Folder Include="Features\PriceList\Commands\CreatePriceListCommand\" />
+		<Folder Include="Features\PriceList\Commands\MakePriceListDefaultCommand\" />
+		<Folder Include="Features\PriceList\Commands\DeactivatePriceListCommand\" />
+		<Folder Include="Features\PriceList\Commands\SetFixedPriceForJobCommand\" />
+		<Folder Include="Features\PriceList\Queries\" />
+		<Folder Include="Features\Tax\Commands\CreateTaxCommand\" />
+		<Folder Include="Features\Tax\Commands\DeleteTaxCommand\" />
+		<Folder Include="Features\Tax\Commands\RenameTaxCommand\" />
+		<Folder Include="Features\Tax\Commands\UpdateTaxRateCommand\" />
+		<Folder Include="Features\Tax\Queries\" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Shared\CRM.Shared.Abstractions\CRM.Shared.Abstractions.csproj" />
+		<ProjectReference Include="..\CRM.Billing.Domain\CRM.Billing.Domain.csproj" />
+	</ItemGroup>
+	
 </Project>

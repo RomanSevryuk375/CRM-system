@@ -7,6 +7,7 @@
 		<PackageReference Include="AWSSDK.S3" />
 		<PackageReference Include="Dapper" />
 		<PackageReference Include="Scrutor" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
 		<PackageReference Include="AspNetCore.HealthChecks.Aws.S3" />
 	</ItemGroup>
 
