@@ -14,8 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Modules\Billing\CRM.Billing.Application\CRM.Billing.Application.csproj" />
-	  <ProjectReference Include="..\..\..\Modules\Billing\CRM.Billing.Infrastructure\CRM.Billing.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\Billing\CRM.Billing.Api\CRM.Billing.Api.csproj" />
 	  <ProjectReference Include="..\..\..\Shared\CRM.Shared.Abstractions\CRM.Shared.Abstractions.csproj" />
 	  <ProjectReference Include="..\..\..\Shared\CRM.Shared.Infrastructure\CRM.Shared.Infrastructure.csproj" />
 	</ItemGroup>

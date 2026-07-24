@@ -1,5 +1,4 @@
-using CRM.Billing.Application.Extensions;
-using CRM.Billing.Infrastructure.Extensions;
+using CRM.Billing.Api;
 using CRM.Shared.Infrastructure.Application.Extensions;
 using CRM.Shared.Infrastructure.Extensions;
 
@@ -12,8 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddGlobalSharedInfrastructure(builder.Configuration);
 builder.Services.AddGlobalSharedApplication();
 
-builder.Services.AddBillingInfrastructure(builder.Configuration);
-builder.Services.AddBillingApplication();
+builder.Services.AddBillingModule(builder.Configuration);
 
 WebApplication app = builder.Build();
 
