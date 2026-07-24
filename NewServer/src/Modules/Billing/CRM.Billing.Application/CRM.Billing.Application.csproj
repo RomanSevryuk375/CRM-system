@@ -2,13 +2,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="MassTransit.RabbitMQ" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<Folder Include="Features\Bills\Queries\" />
-		<Folder Include="Features\Expenses\Queries\" />
-		<Folder Include="Features\PriceLists\Queries\" />
-		<Folder Include="Features\Taxes\Queries\" />
+		<PackageReference Include="Dapper" />
 	</ItemGroup>
 	
 	<ItemGroup>
