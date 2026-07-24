@@ -1,13 +1,13 @@
 ﻿using CRM.Billing.Domain.Entities;
 using CRM.Billing.Domain.Interfaces;
 using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.CQRS;
 using CRM.Shared.Abstractions.Results;
-using MediatR;
 
 namespace CRM.Billing.Application.Features.Expenses.Commands.DeleteExpense;
 
 internal sealed class DeleteExpenseHandler(IExpenseRepository expenseRepository)
-    : IRequestHandler<DeleteExpenseCommand, Result>
+    : ICommandHandler<DeleteExpenseCommand>
 {
     public async Task<Result> Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
     {

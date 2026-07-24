@@ -2,15 +2,15 @@
 using CRM.Billing.Domain.Enums;
 using CRM.Billing.Domain.Interfaces;
 using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.CQRS;
 using CRM.Shared.Abstractions.Results;
-using MediatR;
 
 namespace CRM.Billing.Application.Features.Bills.Commands.AddPaymentNote;
 
 public sealed class AddPaymentNoteHandler(
     IBillRepository billRepository,
     TimeProvider timeProvider)
-    : IRequestHandler<AddPaymentNoteCommand, Result>
+    : ICommandHandler<AddPaymentNoteCommand>
 {
     public async Task<Result> Handle(AddPaymentNoteCommand request, CancellationToken cancellationToken)
     {
@@ -34,7 +34,7 @@ public sealed class AddPaymentNoteHandler(
             today);
         if (result.IsFailure)
         {
-            return Result.Failure(result.Error);
+            return result;
         }
 
         return Result.Success();

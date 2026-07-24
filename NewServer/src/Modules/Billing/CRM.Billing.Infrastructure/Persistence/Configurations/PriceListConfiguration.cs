@@ -43,6 +43,7 @@ internal sealed class PriceListConfiguration : IEntityTypeConfiguration<PriceLis
         builder.Property(x => x.UpdatedAt).IsRequired(false);
         builder.Property(x => x.UpdatedBy).IsRequired(false);
 
+        builder.Property(x => x.Version).IsConcurrencyToken();
         builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder.HasIndex(x => x.IsDefault);

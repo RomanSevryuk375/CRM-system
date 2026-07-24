@@ -1,15 +1,15 @@
 ﻿using CRM.Billing.Domain.Entities;
 using CRM.Billing.Domain.Interfaces;
 using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.CQRS;
 using CRM.Shared.Abstractions.Results;
-using MediatR;
 
 namespace CRM.Billing.Application.Features.Expenses.Commands.UpdateExpenseDetails;
 
-internal sealed class UpdateExpenseDetailsHandler(
+public sealed class UpdateExpenseDetailsHandler(
     IExpenseRepository expenseRepository,
     TimeProvider timeProvider)
-    : IRequestHandler<UpdateExpenseDetailsCommand, Result>
+    : ICommandHandler<UpdateExpenseDetailsCommand>
 {
     public async Task<Result> Handle(UpdateExpenseDetailsCommand request, CancellationToken cancellationToken)
     {
@@ -22,7 +22,6 @@ internal sealed class UpdateExpenseDetailsHandler(
         }
 
         DateOnly today = DateOnly.FromDateTime(timeProvider.GetUtcNow().Date);
-
         Result result = expense.UpdateDetails(
             request.Date,
             request.Category,
@@ -30,7 +29,7 @@ internal sealed class UpdateExpenseDetailsHandler(
             today);
         if (result.IsFailure)
         {
-            return Result.Failure(result.Error);
+            return result;
         }
 
         return Result.Success();

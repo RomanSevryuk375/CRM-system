@@ -31,13 +31,15 @@ public sealed class PaymentNote : IEntity<PaymentNoteId>, IAuditable, ISoftDelet
     public Money Amount { get; private set; }
     public PaymentMethod Method { get; private set; }
 
-    public bool IsDeleted { get; set; }
-    public DateTimeOffset? DeletedAt { get; set; }
-    public Guid? DeletedBy { get; set; }
+#pragma warning disable S1144
+    public bool IsDeleted { get; private set; }
+    public DateTimeOffset? DeletedAt { get; private set; }
+    public Guid? DeletedBy { get; private set; }
 
-    public DateTimeOffset CreatedAt { get; set; }
-    public Guid CreatedBy { get; set; }
-    public DateTimeOffset? UpdatedAt { get; set; }
-    public Guid? UpdatedBy { get; set; }
+    public DateTimeOffset CreatedAt { get; private set; }
+    public Guid CreatedBy { get; private set; }
+    public DateTimeOffset? UpdatedAt { get; private set; }
+    public Guid? UpdatedBy { get; private set; }
+#pragma warning restore S1144
 }
 

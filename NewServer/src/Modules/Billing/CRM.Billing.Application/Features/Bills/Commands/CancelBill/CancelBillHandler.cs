@@ -1,13 +1,13 @@
 ﻿using CRM.Billing.Domain.Entities;
 using CRM.Billing.Domain.Interfaces;
 using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.CQRS;
 using CRM.Shared.Abstractions.Results;
-using MediatR;
 
 namespace CRM.Billing.Application.Features.Bills.Commands.CancelBill;
 
 public sealed class CancelBillHandler(IBillRepository billRepository)
-    : IRequestHandler<CancelBillCommand, Result>
+    : ICommandHandler<CancelBillCommand>
 {
     public async Task<Result> Handle(CancelBillCommand request, CancellationToken cancellationToken)
     {

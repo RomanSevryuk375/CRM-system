@@ -7,16 +7,20 @@ namespace CRM.Billing.Domain.Entities;
 public sealed class PriceListItem : IEntity<PriceListItemId>
 {
     internal PriceListItem(
-        PriceListItemId listItemId,
+        PriceListItemId id,
         PriceListId priceListId,
         JobId jobId,
         Money fixedPrice)
     {
-        Id = listItemId;
+        Id = id;
         PriceListId = priceListId;
         JobId = jobId;
         FixedPrice = fixedPrice;
     }
+
+#pragma warning disable CS8618 
+    private PriceListItem() { }
+#pragma warning restore CS8618
 
     public PriceListItemId Id { get; private set; }
     public PriceListId PriceListId { get; private set; }

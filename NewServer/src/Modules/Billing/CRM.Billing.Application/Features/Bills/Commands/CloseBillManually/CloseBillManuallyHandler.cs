@@ -15,7 +15,6 @@ public sealed class CloseBillManuallyHandler(
     {
         BillId billId = new(request.BillId);
         DateTimeOffset today = timeProvider.GetUtcNow();
-
         Bill? bill = await billRepository.GetByIdAsync(billId, cancellationToken);
         if (bill is null)
         {
@@ -26,7 +25,7 @@ public sealed class CloseBillManuallyHandler(
         Result result = bill.CloseByUser(DateOnly.FromDateTime(today.Date));
         if (result.IsFailure)
         {
-            return Result.Failure(result.Error);
+            return result;
         }
 
         return Result.Success();

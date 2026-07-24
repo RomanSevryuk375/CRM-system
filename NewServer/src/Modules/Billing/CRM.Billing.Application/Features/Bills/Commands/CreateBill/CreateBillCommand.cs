@@ -3,6 +3,7 @@
 namespace CRM.Billing.Application.Features.Bills.Commands.CreateBill;
 
 public sealed record CreateBillCommand(
+    Guid BillId,
     Guid OrderId,
     int StatusId,
     decimal Amount,

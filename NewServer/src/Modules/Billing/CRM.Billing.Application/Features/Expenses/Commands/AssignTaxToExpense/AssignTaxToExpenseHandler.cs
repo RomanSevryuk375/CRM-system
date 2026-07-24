@@ -1,15 +1,15 @@
 ﻿using CRM.Billing.Domain.Entities;
 using CRM.Billing.Domain.Interfaces;
 using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.CQRS;
 using CRM.Shared.Abstractions.Results;
-using MediatR;
 
 namespace CRM.Billing.Application.Features.Expenses.Commands.AssignTaxToExpense;
 
-internal sealed class AssignTaxToExpenseHandler(
+public sealed class AssignTaxToExpenseHandler(
     IExpenseRepository expenseRepository,
     ITaxRepository taxRepository)
-    : IRequestHandler<AssignTaxToExpenseCommand, Result>
+    : ICommandHandler<AssignTaxToExpenseCommand>
 {
     public async Task<Result> Handle(AssignTaxToExpenseCommand request, CancellationToken cancellationToken)
     {
@@ -31,7 +31,7 @@ internal sealed class AssignTaxToExpenseHandler(
         Result result = expense.AssignTax(taxId);
         if (result.IsFailure)
         {
-            return Result.Failure(result.Error);
+            return result;
         }
 
         return Result.Success();

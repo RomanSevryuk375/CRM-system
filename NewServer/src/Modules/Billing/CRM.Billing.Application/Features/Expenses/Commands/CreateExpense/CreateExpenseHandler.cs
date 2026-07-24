@@ -2,16 +2,16 @@
 using CRM.Billing.Domain.Enums;
 using CRM.Billing.Domain.Interfaces;
 using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.CQRS;
 using CRM.Shared.Abstractions.Results;
-using MediatR;
 
 namespace CRM.Billing.Application.Features.Expenses.Commands.CreateExpense;
 
-internal sealed class CreateExpenseHandler(
+public sealed class CreateExpenseHandler(
     IExpenseRepository expenseRepository,
     ITaxRepository taxRepository,
     TimeProvider timeProvider)
-    : IRequestHandler<CreateExpenseCommand, Result>
+    : ICommandHandler<CreateExpenseCommand>
 {
     public async Task<Result> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
     {
@@ -42,7 +42,7 @@ internal sealed class CreateExpenseHandler(
             request.ReferenceId);
         if (result.IsFailure)
         {
-            return Result.Failure(result.Error);
+            return result;
         }
 
         await expenseRepository.AddAsync(result.Value, cancellationToken);

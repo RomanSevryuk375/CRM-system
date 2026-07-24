@@ -9,6 +9,9 @@ public sealed class CreateBillValidator
 {
     public CreateBillValidator()
     {
+        RuleFor(x => x.BillId)
+            .NotEmpty();
+
         RuleFor(x => x.OrderId)
             .NotEmpty();
 
