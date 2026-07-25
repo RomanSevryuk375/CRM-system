@@ -1,7 +1,6 @@
-﻿using CRM.Shared.Abstractions.DDD;
-using CRM.Shared.Abstractions.Results;
+﻿using CRM.Shared.Abstractions.Results;
 
-namespace CRM.Billing.Domain.ValueObjects;
+namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
 public sealed class TaxRate : ValueObject
 {

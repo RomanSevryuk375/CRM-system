@@ -1,6 +1,5 @@
 ﻿using Amazon.S3;
 using CRM.Shared.Abstractions.Abstractions;
-using CRM.Shared.Infrastructure.Data;
 using CRM.Shared.Infrastructure.Data.BlobStorage;
 using CRM.Shared.Infrastructure.Data.Interceptors;
 using Microsoft.EntityFrameworkCore;

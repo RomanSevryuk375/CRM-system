@@ -1,6 +1,6 @@
 ﻿using CRM.Billing.Domain.Entities;
-using CRM.Billing.Domain.ValueObjects;
 using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.DDD.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

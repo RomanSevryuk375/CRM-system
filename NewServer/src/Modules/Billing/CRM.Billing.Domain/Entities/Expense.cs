@@ -1,7 +1,7 @@
 ﻿using CRM.Billing.Domain.Enums;
-using CRM.Billing.Domain.ValueObjects;
 using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
+using CRM.Shared.Abstractions.DDD.ValueObjects;
 using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Billing.Domain.Entities;

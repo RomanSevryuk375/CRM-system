@@ -1,5 +1,5 @@
-﻿using CRM.Shared.Abstractions.CQRS;
-using CRM.Shared.Infrastructure.Data;
+﻿using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.CQRS;
 using Dapper;
 using System.Data;
 using System.Text;

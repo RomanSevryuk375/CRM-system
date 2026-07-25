@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Infrastructure.Data;
+﻿using CRM.Shared.Abstractions.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Data;

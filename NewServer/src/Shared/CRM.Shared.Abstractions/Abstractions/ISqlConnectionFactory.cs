@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace CRM.Shared.Infrastructure.Data;
+namespace CRM.Shared.Abstractions.Abstractions;
 
 public interface ISqlConnectionFactory
 {

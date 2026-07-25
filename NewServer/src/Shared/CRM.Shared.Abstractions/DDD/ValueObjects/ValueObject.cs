@@ -1,4 +1,4 @@
-﻿namespace CRM.Shared.Abstractions.DDD;
+﻿namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
 public abstract class ValueObject
 {
