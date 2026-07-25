@@ -36,7 +36,7 @@ public sealed class OrderPart : IEntity<OrderPartId>
     public bool IsProposed { get; private set; }
 
     public decimal Quantity { get; private set; }
-    public Money SoldPrice { get; private set; } = Money.Zero();
+    public Money SoldPrice { get; private set; }
 
     internal static Result<OrderPart> Create(
         OrderPartId id,

@@ -1,6 +1,93 @@
-﻿namespace CRM.Ordering.Domain.Entities
+﻿using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.DDD;
+using CRM.Shared.Abstractions.Results;
+
+namespace CRM.Ordering.Domain.Entities;
+
+public sealed class OrderGuarantee : IEntity<OrderGuaranteeId>
 {
-    public class OrderGuarantee
+    internal OrderGuarantee(
+        OrderGuaranteeId id,
+        OrderId orderId,
+        OrderPartId? orderPartId,
+        OrderWorkId? orderWorkId,
+        DateOnly dateStart,
+        DateOnly dateEnd,
+        string? description,
+        string terms)
     {
+        Id = id;
+        OrderId = orderId;
+        OrderPartId = orderPartId;
+        OrderWorkId = orderWorkId;
+        DateStart = dateStart;
+        DateEnd = dateEnd;
+        Description = description;
+        Terms = terms;
+    }
+
+#pragma warning disable CS8618
+    private OrderGuarantee() { }
+#pragma warning restore CS8618
+
+    public OrderGuaranteeId Id { get; private set; }
+    public OrderId OrderId { get; private set; }
+
+    public OrderPartId? OrderPartId { get; private set; }
+    public OrderWorkId? OrderWorkId { get; private set; }
+
+    public DateOnly DateStart { get; private set; }
+    public DateOnly DateEnd { get; private set; }
+
+    public string? Description { get; private set; }
+    public string Terms { get; private set; }
+
+    internal static Result<OrderGuarantee> Create(
+        OrderGuaranteeId id,
+        OrderId orderId,
+        OrderPartId? orderPartId,
+        OrderWorkId? orderWorkId,
+        DateOnly dateStart,
+        DateOnly dateEnd,
+        string? description,
+        string terms)
+    {
+        List<Error> errors = [];
+
+        if (dateStart >= dateEnd)
+        {
+            errors.Add(Error.Validation<OrderGuarantee>(
+                "Start date must be strictly earlier than end date."));
+        }
+
+        if (string.IsNullOrWhiteSpace(terms))
+        {
+            errors.Add(Error.Validation<OrderGuarantee>(
+                "Guarantee terms cannot be empty."));
+        }
+
+        if (orderPartId is not null && orderWorkId is not null)
+        {
+            errors.Add(Error.Validation<OrderGuarantee>(
+                "A guarantee cannot be linked to both a specific part and a specific work simultaneously."));
+        }
+
+        if (errors.Count != 0)
+        {
+            return Result<OrderGuarantee>.Failure(Error.Validation<OrderGuarantee>(
+                string.Join("; ", errors.Select(x => x.Message))));
+        }
+
+        OrderGuarantee guarantee = new(
+            id,
+            orderId,
+            orderPartId,
+            orderWorkId,
+            dateStart,
+            dateEnd,
+            description,
+            terms);
+
+        return Result<OrderGuarantee>.Success(guarantee);
     }
 }
