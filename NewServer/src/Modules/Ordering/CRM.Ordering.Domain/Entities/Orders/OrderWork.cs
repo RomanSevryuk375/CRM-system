@@ -4,7 +4,7 @@ using CRM.Shared.Abstractions.DDD;
 using CRM.Shared.Abstractions.DDD.ValueObjects;
 using CRM.Shared.Abstractions.Results;
 
-namespace CRM.Ordering.Domain.Entities;
+namespace CRM.Ordering.Domain.Entities.Orders;
 
 public sealed class OrderWork : IEntity<OrderWorkId>
 {
