@@ -144,6 +144,7 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
     public Result AddWork(
         OrderWorkId orderWorkId,
         JobId jobId,
+        decimal estimatedHours,
         decimal? hourlyRate,
         decimal? fixedPrice,
         bool isProposed)
@@ -161,6 +162,7 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
             jobId,
             status: WorkStatus.Pending,
             hourlyRate,
+            estimatedHours,
             fixedPrice,
             isProposed);
         if (workResult.IsFailure)

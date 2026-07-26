@@ -18,3 +18,4 @@ public readonly record struct OrderGuaranteeId(Guid Id);
 public readonly record struct VehicleInspectionId(Guid Id);
 public readonly record struct VehicleInspectionImageId(Guid Id);
 public readonly record struct AttachmentId(Guid Id);
+public readonly record struct ServiceCatalogId(Guid Id);

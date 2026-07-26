@@ -13,16 +13,20 @@ public sealed class OrderWork : IEntity<OrderWorkId>
         OrderId orderId,
         JobId jobId,
         WorkStatus status,
+        StandardHours estimatedHours,
         Money? hourlyRate,
         Money? fixedPrice,
+        Money? totalCost,
         bool isProposed)
     {
         Id = id;
         OrderId = orderId;
         JobId = jobId;
         Status = status;
+        EstimatedHours = estimatedHours;
         HourlyRate = hourlyRate;
         FixedPrice = fixedPrice;
+        TotalCost = totalCost;
         IsProposed = isProposed;
     }
 
@@ -34,6 +38,7 @@ public sealed class OrderWork : IEntity<OrderWorkId>
     public OrderId OrderId { get; private set; }
     public JobId JobId { get; private set; }
     public WorkerId? WorkerId { get; private set; }
+    public StandardHours EstimatedHours { get; private set; }
     public StandardHours? TimeSpent { get; private set; }
 
     public bool IsProposed { get; private set; }
@@ -43,16 +48,23 @@ public sealed class OrderWork : IEntity<OrderWorkId>
     public Money? FixedPrice { get; private set; }
     public Money? TotalCost { get; private set; }
 
-    internal static Result<OrderWork> Create(
+    public static Result<OrderWork> Create(
         OrderWorkId id,
         OrderId orderId,
         JobId jobId,
         WorkStatus status,
         decimal? hourlyRate,
+        decimal estimatedHours,
         decimal? fixedPrice,
         bool isProposed = false)
     {
         List<Error> errors = [];
+
+        Result<StandardHours> estimatedResult = StandardHours.Create(estimatedHours);
+        if (estimatedResult.IsFailure)
+        {
+            errors.Add(estimatedResult.Error);
+        }
 
         if (status == WorkStatus.Completed)
         {
@@ -100,18 +112,25 @@ public sealed class OrderWork : IEntity<OrderWorkId>
                 string.Join("; ", errors.Select(x => x.Message))));
         }
 
+        Money? totalCost = null;
+        if (fixedMoney is not null)
+        {
+            totalCost = fixedMoney;
+        }
+        else if (rateMoney is not null)
+        {
+            decimal calculatedAmount = estimatedResult.Value.Value * rateMoney.Value;
+            totalCost = Money.Create(calculatedAmount).Value;
+        }
+
         OrderWork work = new(
-            id,
-            orderId,
-            jobId,
-            status,
-            rateMoney,
-            fixedMoney,
+            id, orderId, jobId,
+            status, estimatedResult.Value,
+            rateMoney, fixedMoney, totalCost,
             isProposed);
 
         return Result<OrderWork>.Success(work);
     }
-
 
     internal Result MarkAsProposed()
     {
@@ -133,21 +152,19 @@ public sealed class OrderWork : IEntity<OrderWorkId>
         }
 
         IsProposed = false;
-
         return Result.Success();
     }
 
     internal Result BeginWork(WorkerId workerId)
     {
-        if (Status is WorkStatus.Completed)
+        if (Status is WorkStatus.Completed && IsProposed)
         {
             return Result.Failure(Error.Conflict<OrderWork>(
-                "Cannot begin a completed work."));
+                "Cannot begin a completed or proposed work."));
         }
 
         WorkerId = workerId;
         Status = WorkStatus.InProgress;
-        IsProposed = false;
 
         return Result.Success();
     }
@@ -174,16 +191,6 @@ public sealed class OrderWork : IEntity<OrderWorkId>
 
         TimeSpent = timeResult.Value;
         Status = WorkStatus.Completed;
-
-        if (FixedPrice is null)
-        {
-            decimal calculatedAmount = TimeSpent.Value * HourlyRate!.Value;
-            TotalCost = Money.Create(calculatedAmount).Value;
-        }
-        else
-        {
-            TotalCost = FixedPrice;
-        }
 
         return Result.Success();
     }
