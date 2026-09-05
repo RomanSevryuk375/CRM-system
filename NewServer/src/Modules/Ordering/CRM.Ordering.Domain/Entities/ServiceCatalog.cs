@@ -1,11 +1,11 @@
-﻿using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
 using CRM.Shared.Abstractions.DDD.ValueObjects;
 using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Ordering.Domain.Entities;
 
-public sealed class ServiceCatalogItem : AggregateRoot<JobId>, ISoftDeletable, IAuditable, IHasVersion
+public sealed class ServiceCatalogItem : AggregateRoot<JobId>, ISoftDeletable, IAuditable
 {
     private const int MaxTitleLength = 128;
     private const int MaxCategoryLength = 128;
@@ -43,8 +43,6 @@ public sealed class ServiceCatalogItem : AggregateRoot<JobId>, ISoftDeletable, I
     public Guid CreatedBy { get; private set; }
     public DateTimeOffset? UpdatedAt { get; private set; }
     public Guid? UpdatedBy { get; private set; }
-
-    public Guid Version { get; private set; }
 #pragma warning restore S1144
 
     public static Result<ServiceCatalogItem> Create(
@@ -52,42 +50,31 @@ public sealed class ServiceCatalogItem : AggregateRoot<JobId>, ISoftDeletable, I
         string title,
         string category,
         string? description,
-        decimal standardTime)
+        StandardHours standardTime)
     {
         List<Error> errors = [];
 
         if (string.IsNullOrWhiteSpace(title))
         {
-            errors.Add(Error.Validation<ServiceCatalogItem>(
-                "Title cannot be empty."));
+            errors.Add(Error.Validation<ServiceCatalogItem>(Errors.TitleEmpty));
         }
         else if (title.Length > MaxTitleLength)
         {
-            errors.Add(Error.Validation<ServiceCatalogItem>(
-                $"Title exceeds {MaxTitleLength} characters."));
+            errors.Add(Error.Validation<ServiceCatalogItem>(Errors.TitleTooLong));
         }
 
         if (string.IsNullOrWhiteSpace(category))
         {
-            errors.Add(Error.Validation<ServiceCatalogItem>(
-                "Category cannot be empty."));
+            errors.Add(Error.Validation<ServiceCatalogItem>(Errors.CategoryEmpty));
         }
         else if (category.Length > MaxCategoryLength)
         {
-            errors.Add(Error.Validation<ServiceCatalogItem>(
-                $"Category exceeds {MaxCategoryLength} characters."));
+            errors.Add(Error.Validation<ServiceCatalogItem>(Errors.CategoryTooLong));
         }
 
         if (description?.Length > MaxDescriptionLength)
         {
-            errors.Add(Error.Validation<ServiceCatalogItem>(
-                $"Description exceeds {MaxDescriptionLength} characters."));
-        }
-
-        Result<StandardHours> timeResult = StandardHours.Create(standardTime);
-        if (timeResult.IsFailure)
-        {
-            errors.Add(timeResult.Error);
+            errors.Add(Error.Validation<ServiceCatalogItem>(Errors.DescriptionTooLong));
         }
 
         if (errors.Count != 0)
@@ -101,7 +88,7 @@ public sealed class ServiceCatalogItem : AggregateRoot<JobId>, ISoftDeletable, I
             title.Trim(),
             category.Trim(),
             description?.Trim(),
-            timeResult.Value);
+            standardTime);
 
         catalogItem.IncrementVersion();
 
@@ -114,30 +101,25 @@ public sealed class ServiceCatalogItem : AggregateRoot<JobId>, ISoftDeletable, I
 
         if (string.IsNullOrWhiteSpace(title))
         {
-            errors.Add(Error.Validation<ServiceCatalogItem>(
-                "Title cannot be empty."));
+            errors.Add(Error.Validation<ServiceCatalogItem>(Errors.TitleEmpty));
         }
         else if (title.Length > MaxTitleLength)
         {
-            errors.Add(Error.Validation<ServiceCatalogItem>(
-                $"Title exceeds {MaxTitleLength} characters."));
+            errors.Add(Error.Validation<ServiceCatalogItem>(Errors.TitleTooLong));
         }
 
         if (string.IsNullOrWhiteSpace(category))
         {
-            errors.Add(Error.Validation<ServiceCatalogItem>(
-                "Category cannot be empty."));
+            errors.Add(Error.Validation<ServiceCatalogItem>(Errors.CategoryEmpty));
         }
         else if (category.Length > MaxCategoryLength)
         {
-            errors.Add(Error.Validation<ServiceCatalogItem>(
-                $"Category exceeds {MaxCategoryLength} characters."));
+            errors.Add(Error.Validation<ServiceCatalogItem>(Errors.CategoryTooLong));
         }
 
         if (description?.Length > MaxDescriptionLength)
         {
-            errors.Add(Error.Validation<ServiceCatalogItem>(
-                $"Description exceeds {MaxDescriptionLength} characters."));
+            errors.Add(Error.Validation<ServiceCatalogItem>(Errors.DescriptionTooLong));
         }
 
         if (errors.Count != 0)
@@ -155,23 +137,21 @@ public sealed class ServiceCatalogItem : AggregateRoot<JobId>, ISoftDeletable, I
         return Result.Success();
     }
 
-    public Result UpdateStandardTime(decimal newStandardTime)
+    public Result UpdateStandardTime(StandardHours newStandardTime)
     {
-        Result<StandardHours> timeResult = StandardHours.Create(newStandardTime);
-        if (timeResult.IsFailure)
-        {
-            return Result.Failure(timeResult.Error);
-        }
-
-        StandardTime = timeResult.Value;
+        StandardTime = newStandardTime;
 
         IncrementVersion();
 
         return Result.Success();
     }
 
-    private void IncrementVersion()
+    public static class Errors
     {
-        Version = Guid.NewGuid();
+        public const string TitleEmpty = "Title cannot be empty.";
+        public static readonly string TitleTooLong = $"Title exceeds {MaxTitleLength} characters.";
+        public const string CategoryEmpty = "Category cannot be empty.";
+        public static readonly string CategoryTooLong = $"Category exceeds {MaxCategoryLength} characters.";
+        public static readonly string DescriptionTooLong = $"Description exceeds {MaxDescriptionLength} characters.";
     }
 }

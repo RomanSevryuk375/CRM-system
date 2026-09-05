@@ -1,4 +1,4 @@
-﻿using CRMSystem.Core.Validation;
+using CRMSystem.Core.Validation;
 
 namespace CRMSystem.Core.Models;
 

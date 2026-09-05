@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Abstractions.Results;
+using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
@@ -15,13 +15,11 @@ public sealed class FuelLevel : ValueObject
     {
         if (rawFuelLevel < 0)
         {
-            return Result<FuelLevel>.Failure(Error.Validation<FuelLevel>(
-                "Value should be positive."));
+            return Result<FuelLevel>.Failure(Error.Validation<FuelLevel>(Errors.NegativeValue));
         }
 
-        FuelLevel fuelLevel = new(rawFuelLevel);
-
-        return Result<FuelLevel>.Success(fuelLevel);
+        return Result<FuelLevel>.Success(
+            new(rawFuelLevel));
     }
 
     public static FuelLevel Zero()
@@ -31,6 +29,11 @@ public sealed class FuelLevel : ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return Value;
+    }
+
+    public static class Errors
+    {
+        public const string NegativeValue = "Value should be positive.";
     }
 }

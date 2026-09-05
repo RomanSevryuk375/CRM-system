@@ -30,6 +30,12 @@
     <Project Path="../../Modules/Inventory/CRM.Inventory.Domain/CRM.Inventory.Domain.csproj" Id="df0e9578-9b13-4a83-b543-88965375b394" />
     <Project Path="../../Modules/Inventory/CRM.Inventory.Infrastructure/CRM.Inventory.Infrastructure.csproj" Id="6ddc73eb-8512-4345-834c-0baf5b8309a8" />
   </Folder>
+  <Folder Name="/Modules/Notifications/">
+    <Project Path="../../Modules/Notifications/CRM.Notifications.Domain/CRM.Notifications.Domain.csproj" />
+    <Project Path="CRM.Notifications.Api/CRM.Notifications.Api.csproj" Id="a7a6f61e-b341-4ccd-bca0-70adbdf06c5b" />
+    <Project Path="CRM.Notifications.Application/CRM.Notifications.Application.csproj" Id="40525e01-7e77-4017-ba02-6dbb05032b0c" />
+    <Project Path="CRM.Notifications.Infrastructure/CRM.Notifications.Infrastructure.csproj" Id="3880253f-9e27-4ba8-9106-3169ed169330" />
+  </Folder>
   <Folder Name="/Modules/Ordering/">
     <Project Path="../../Modules/Ordering/CRM.Ordering.Api/CRM.Ordering.Api.csproj" Id="7dd74139-5420-4263-b328-337d936c4d16" />
     <Project Path="../../Modules/Ordering/CRM.Ordering.Application/CRM.Ordering.Application.csproj" Id="af6e0510-1b64-4ca5-bc29-4d0599edad48" />

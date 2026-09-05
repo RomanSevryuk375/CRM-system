@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Abstractions.Results;
+using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
@@ -18,21 +18,26 @@ public sealed class StandardHours : ValueObject
     {
         if (value < MinValue)
         {
-            return Result<StandardHours>.Failure(Error.Validation<StandardHours>(
-                "Time spent cannot be negative."));
+            return Result<StandardHours>.Failure(Error.Validation<StandardHours>(Errors.NegativeValue));
         }
 
         if (value > MaxValue)
         {
-            return Result<StandardHours>.Failure(Error.Validation<StandardHours>(
-                "Time spent exceeds logical limits."));
+            return Result<StandardHours>.Failure(Error.Validation<StandardHours>(Errors.ExceedsLimit));
         }
 
-        return Result<StandardHours>.Success(new StandardHours(value));
+        return Result<StandardHours>.Success(
+            new StandardHours(value));
     }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
+    }
+
+    public static class Errors
+    {
+        public const string NegativeValue = "Time spent cannot be negative.";
+        public const string ExceedsLimit = "Time spent exceeds logical limits.";
     }
 }

@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
 using CRM.Shared.Abstractions.Results;
 
@@ -56,20 +56,17 @@ public sealed class OrderGuarantee : IEntity<OrderGuaranteeId>
 
         if (dateStart >= dateEnd)
         {
-            errors.Add(Error.Validation<OrderGuarantee>(
-                "Start date must be strictly earlier than end date."));
+            errors.Add(Error.Validation<OrderGuarantee>(Errors.InvalidDateRange));
         }
 
         if (string.IsNullOrWhiteSpace(terms))
         {
-            errors.Add(Error.Validation<OrderGuarantee>(
-                "Guarantee terms cannot be empty."));
+            errors.Add(Error.Validation<OrderGuarantee>(Errors.TermsEmpty));
         }
 
         if (orderPartId is not null && orderWorkId is not null)
         {
-            errors.Add(Error.Validation<OrderGuarantee>(
-                "A guarantee cannot be linked to both a specific part and a specific work simultaneously."));
+            errors.Add(Error.Validation<OrderGuarantee>(Errors.BothPartAndWorkSpecified));
         }
 
         if (errors.Count != 0)
@@ -89,5 +86,12 @@ public sealed class OrderGuarantee : IEntity<OrderGuaranteeId>
             terms);
 
         return Result<OrderGuarantee>.Success(guarantee);
+    }
+
+    public static class Errors
+    {
+        public const string InvalidDateRange = "Start date must be strictly earlier than end date.";
+        public const string TermsEmpty = "Guarantee terms cannot be empty.";
+        public const string BothPartAndWorkSpecified = "A guarantee cannot be linked to both a specific part and a specific work simultaneously.";
     }
 }

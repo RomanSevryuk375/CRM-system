@@ -1,4 +1,4 @@
-﻿using CRM.Ordering.Domain.Enums;
+using CRM.Ordering.Domain.Enums;
 using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
 using CRM.Shared.Abstractions.DDD.ValueObjects;
@@ -53,57 +53,21 @@ public sealed class OrderWork : IEntity<OrderWorkId>
         OrderId orderId,
         JobId jobId,
         WorkStatus status,
-        decimal? hourlyRate,
-        decimal estimatedHours,
-        decimal? fixedPrice,
+        Money? hourlyRate,
+        StandardHours estimatedHours,
+        Money? fixedPrice,
         bool isProposed = false)
     {
         List<Error> errors = [];
 
-        Result<StandardHours> estimatedResult = StandardHours.Create(estimatedHours);
-        if (estimatedResult.IsFailure)
-        {
-            errors.Add(estimatedResult.Error);
-        }
-
         if (status == WorkStatus.Completed)
         {
-            errors.Add(Error.Validation<OrderWork>(
-                "A newly created work cannot be completed."));
+            errors.Add(Error.Validation<OrderWork>(Errors.CannotBeCompleted));
         }
 
         if (hourlyRate is null && fixedPrice is null)
         {
-            errors.Add(Error.Validation<OrderWork>(
-                "Either HourlyRate or FixedPrice must be provided."));
-        }
-
-        Money? rateMoney = null;
-        if (hourlyRate.HasValue)
-        {
-            Result<Money> rateResult = Money.Create(hourlyRate.Value);
-            if (rateResult.IsFailure)
-            {
-                errors.Add(rateResult.Error);
-            }
-            else
-            {
-                rateMoney = rateResult.Value;
-            }
-        }
-
-        Money? fixedMoney = null;
-        if (fixedPrice.HasValue)
-        {
-            Result<Money> fixedResult = Money.Create(fixedPrice.Value);
-            if (fixedResult.IsFailure)
-            {
-                errors.Add(fixedResult.Error);
-            }
-            else
-            {
-                fixedMoney = fixedResult.Value;
-            }
+            errors.Add(Error.Validation<OrderWork>(Errors.MissingPriceOrRate));
         }
 
         if (errors.Count != 0)
@@ -113,20 +77,24 @@ public sealed class OrderWork : IEntity<OrderWorkId>
         }
 
         Money? totalCost = null;
-        if (fixedMoney is not null)
+        if (fixedPrice is not null)
         {
-            totalCost = fixedMoney;
+            totalCost = fixedPrice;
         }
-        else if (rateMoney is not null)
+        else
         {
-            decimal calculatedAmount = estimatedResult.Value.Value * rateMoney.Value;
-            totalCost = Money.Create(calculatedAmount).Value;
+            decimal calculatedAmount = estimatedHours.Value * hourlyRate!.Value;
+            Result<Money> costResult = Money.Create(calculatedAmount);
+            if (costResult.IsSuccess)
+            {
+                totalCost = costResult.Value;
+            }
         }
 
         OrderWork work = new(
             id, orderId, jobId,
-            status, estimatedResult.Value,
-            rateMoney, fixedMoney, totalCost,
+            status, estimatedHours,
+            hourlyRate, fixedPrice, totalCost,
             isProposed);
 
         return Result<OrderWork>.Success(work);
@@ -136,8 +104,7 @@ public sealed class OrderWork : IEntity<OrderWorkId>
     {
         if (Status is not WorkStatus.Pending)
         {
-            return Result.Failure(Error.Conflict<OrderWork>(
-                "Only pending works can be proposed."));
+            return Result.Failure(Error.Conflict<OrderWork>(Errors.OnlyPendingCanBeProposed));
         }
 
         IsProposed = true;
@@ -159,8 +126,7 @@ public sealed class OrderWork : IEntity<OrderWorkId>
     {
         if (Status is WorkStatus.Completed && IsProposed)
         {
-            return Result.Failure(Error.Conflict<OrderWork>(
-                "Cannot begin a completed or proposed work."));
+            return Result.Failure(Error.Conflict<OrderWork>(Errors.CannotBeginCompletedOrProposed));
         }
 
         WorkerId = workerId;
@@ -169,29 +135,31 @@ public sealed class OrderWork : IEntity<OrderWorkId>
         return Result.Success();
     }
 
-    internal Result CompleteWork(decimal timeSpent)
+    internal Result CompleteWork(StandardHours timeSpent)
     {
         if (Status is WorkStatus.Completed)
         {
-            return Result.Failure(Error.Conflict<OrderWork>(
-                "Work is already completed."));
+            return Result.Failure(Error.Conflict<OrderWork>(Errors.AlreadyCompleted));
         }
 
         if (WorkerId is null)
         {
-            return Result.Failure(Error.Conflict<OrderWork>(
-                "Cannot complete a work without assigned worker."));
+            return Result.Failure(Error.Conflict<OrderWork>(Errors.WorkerNotAssigned));
         }
 
-        Result<StandardHours> timeResult = StandardHours.Create(timeSpent);
-        if (timeResult.IsFailure)
-        {
-            return Result.Failure(timeResult.Error);
-        }
-
-        TimeSpent = timeResult.Value;
+        TimeSpent = timeSpent;
         Status = WorkStatus.Completed;
 
         return Result.Success();
+    }
+
+    public static class Errors
+    {
+        public const string CannotBeCompleted = "A newly created work cannot be completed.";
+        public const string MissingPriceOrRate = "Either HourlyRate or FixedPrice must be provided.";
+        public const string OnlyPendingCanBeProposed = "Only pending works can be proposed.";
+        public const string CannotBeginCompletedOrProposed = "Cannot begin a completed or proposed work.";
+        public const string AlreadyCompleted = "Work is already completed.";
+        public const string WorkerNotAssigned = "Cannot complete a work without assigned worker.";
     }
 }

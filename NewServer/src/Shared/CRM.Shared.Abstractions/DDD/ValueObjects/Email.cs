@@ -1,0 +1,46 @@
+namespace CRM.Shared.Abstractions.DDD.ValueObjects;
+
+using CRM.Shared.Abstractions.Results;
+using System.Text.RegularExpressions;
+
+public sealed partial class Email : ValueObject
+{
+    private const string Pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+
+    private Email(string value)
+    {
+        Value = value;
+    }
+
+    public string Value { get; }
+
+    public static Result<Email> Create(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return Result<Email>.Failure(Error.Validation<Email>(Errors.Empty));
+        }
+
+        if (!MyRegex().IsMatch(value))
+        {
+            return Result<Email>.Failure(Error.Validation<Email>(Errors.InvalidFormat));
+        }
+
+        return Result<Email>.Success(
+            new Email(value.ToLowerInvariant()));
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+    }
+
+    [GeneratedRegex(Pattern)]
+    private static partial Regex MyRegex();
+
+    public static class Errors
+    {
+        public const string Empty = "Email cannot be empty.";
+        public const string InvalidFormat = "Email is in an invalid format.";
+    }
+}

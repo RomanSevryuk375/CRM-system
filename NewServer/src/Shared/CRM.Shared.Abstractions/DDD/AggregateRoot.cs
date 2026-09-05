@@ -1,10 +1,12 @@
-﻿using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.Abstractions;
 
 namespace CRM.Shared.Abstractions.DDD;
 
-public abstract class AggregateRoot<TId> : IEntity<TId>, IHasDomainEvents
+public abstract class AggregateRoot<TId> : IEntity<TId>, IHasDomainEvents, IHasVersion
 {
     public TId Id { get; protected set; }
+
+    public Guid Version { get; protected set; }
 
     private readonly List<IDomainEvent> _domainEvents = [];
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
@@ -17,5 +19,10 @@ public abstract class AggregateRoot<TId> : IEntity<TId>, IHasDomainEvents
     public void ClearDomainEvents()
     {
         _domainEvents.Clear();
+    }
+
+    public void IncrementVersion()
+    {
+        Version = Guid.NewGuid();
     }
 }

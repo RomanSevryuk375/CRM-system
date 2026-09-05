@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
 using CRM.Shared.Abstractions.DDD.ValueObjects;
 using CRM.Shared.Abstractions.Results;
@@ -43,21 +43,14 @@ public sealed class OrderPart : IEntity<OrderPartId>
         OrderId orderId,
         PartId partId,
         decimal quantity,
-        decimal soldPrice,
+        Money soldPrice,
         bool isProposed = false)
     {
         List<Error> errors = [];
 
         if (quantity < MinQuantity)
         {
-            errors.Add(Error.Validation<OrderPart>(
-                "Part quantity should be positive."));
-        }
-
-        Result<Money> moneyResult = Money.Create(soldPrice);
-        if (moneyResult.IsFailure)
-        {
-            errors.Add(moneyResult.Error);
+            errors.Add(Error.Validation<OrderPart>(Errors.NegativeQuantity));
         }
 
         if (errors.Count != 0)
@@ -72,7 +65,7 @@ public sealed class OrderPart : IEntity<OrderPartId>
             partId,
             isProposed,
             quantity,
-            moneyResult.Value);
+            soldPrice);
 
         return Result<OrderPart>.Success(part);
     }
@@ -100,8 +93,7 @@ public sealed class OrderPart : IEntity<OrderPartId>
     {
         if (newQuantity < MinQuantity)
         {
-            return Result.Failure(Error.Validation<OrderPart>(
-                "Part quantity should be positive."));
+            return Result.Failure(Error.Validation<OrderPart>(Errors.NegativeQuantity));
         }
 
         Quantity = newQuantity;
@@ -109,16 +101,15 @@ public sealed class OrderPart : IEntity<OrderPartId>
         return Result.Success();
     }
 
-    internal Result SetSoldPrice(decimal newSoldPrice)
+    internal Result SetSoldPrice(Money newSoldPrice)
     {
-        Result<Money> moneyResult = Money.Create(newSoldPrice);
-        if (moneyResult.IsFailure)
-        {
-            return moneyResult;
-        }
-
-        SoldPrice = moneyResult.Value;
+        SoldPrice = newSoldPrice;
 
         return Result.Success();
+    }
+
+    public static class Errors
+    {
+        public const string NegativeQuantity = "Part quantity should be positive.";
     }
 }

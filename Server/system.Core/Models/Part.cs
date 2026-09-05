@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: oem
+// Ignore Spelling: oem
 
 using CRMSystem.Core.Validation;
 

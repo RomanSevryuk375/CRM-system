@@ -50,8 +50,6 @@ public sealed class Attachment : AggregateRoot<AttachmentId>, ISoftDeletable, IA
     public Guid CreatedBy { get; private set; }
     public DateTimeOffset? UpdatedAt { get; private set; }
     public Guid? UpdatedBy { get; private set; }
-
-    public Guid Version { get; private set; }
 #pragma warning restore S1144
 
     public static Result<Attachment> Create(

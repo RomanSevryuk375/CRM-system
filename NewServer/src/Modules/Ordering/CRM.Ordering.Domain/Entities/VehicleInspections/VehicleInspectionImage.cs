@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
 using CRM.Shared.Abstractions.Results;
 
@@ -40,19 +40,16 @@ public sealed class VehicleInspectionImage : IEntity<VehicleInspectionImageId>
 
         if (string.IsNullOrWhiteSpace(path))
         {
-            errors.Add(Error.Validation<VehicleInspectionImage>(
-                "Image path cannot be empty."));
+            errors.Add(Error.Validation<VehicleInspectionImage>(Errors.PathEmpty));
         }
         else if (path.Length > MaxPathLength)
         {
-            errors.Add(Error.Validation<VehicleInspectionImage>(
-                $"Image path exceeds {MaxPathLength} characters."));
+            errors.Add(Error.Validation<VehicleInspectionImage>(Errors.PathTooLong));
         }
 
         if (description?.Length > MaxDescriptionLength)
         {
-            errors.Add(Error.Validation<VehicleInspectionImage>(
-                $"Image description exceeds {MaxDescriptionLength} characters."));
+            errors.Add(Error.Validation<VehicleInspectionImage>(Errors.DescriptionTooLong));
         }
 
         if (errors.Count != 0)
@@ -69,12 +66,18 @@ public sealed class VehicleInspectionImage : IEntity<VehicleInspectionImageId>
     {
         if (newDescription?.Length > MaxDescriptionLength)
         {
-            return Result.Failure(Error.Validation<VehicleInspectionImage>(
-                $"Image description exceeds {MaxDescriptionLength} characters."));
+            return Result.Failure(Error.Validation<VehicleInspectionImage>(Errors.DescriptionTooLong));
         }
 
         Description = newDescription;
 
         return Result.Success();
+    }
+
+    public static class Errors
+    {
+        public const string PathEmpty = "Image path cannot be empty.";
+        public static readonly string PathTooLong = $"Image path exceeds {MaxPathLength} characters.";
+        public static readonly string DescriptionTooLong = $"Image description exceeds {MaxDescriptionLength} characters.";
     }
 }

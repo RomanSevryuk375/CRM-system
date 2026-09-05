@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Abstractions.Results;
+using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
@@ -17,11 +17,11 @@ public sealed class Money : ValueObject
     {
         if (rawMoney < 0)
         {
-            return Result<Money>.Failure(Error.Validation<Money>(
-                "Value should be positive."));
+            return Result<Money>.Failure(Error.Validation<Money>(Errors.NegativeValue));
         }
 
-        return Result<Money>.Success(new Money(rawMoney));
+        return Result<Money>.Success(
+            new Money(rawMoney));
     }
 
     public static Money Zero()
@@ -37,5 +37,10 @@ public sealed class Money : ValueObject
     public override string ToString()
     {
         return $"{Value} + {Currency}";
+    }
+
+    public static class Errors
+    {
+        public const string NegativeValue = "Value should be positive.";
     }
 }

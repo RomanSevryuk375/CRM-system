@@ -1,4 +1,4 @@
-﻿using CRM.Ordering.Domain.Enums;
+using CRM.Ordering.Domain.Enums;
 using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
 using CRM.Shared.Abstractions.DDD.ValueObjects;
@@ -6,7 +6,7 @@ using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Ordering.Domain.Entities.Orders;
 
-public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, IHasVersion
+public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable
 {
     private readonly List<OrderWork> _works = [];
     private readonly List<OrderPart> _parts = [];
@@ -57,8 +57,6 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
     public Guid CreatedBy { get; private set; }
     public DateTimeOffset? UpdatedAt { get; private set; }
     public Guid? UpdatedBy { get; private set; }
-
-    public Guid Version { get; private set; }
 #pragma warning restore S1144
 
     public static Result<Order> Create(
@@ -71,8 +69,7 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
     {
         if (plannedFinishDate.HasValue && startedAt > plannedFinishDate.Value)
         {
-            return Result<Order>.Failure(Error.Validation<Order>(
-                "Planned finish date cannot be earlier than start date."));
+            return Result<Order>.Failure(Error.Validation<Order>(Errors.InvalidPlannedFinishDate));
         }
 
         Order order = new(
@@ -98,14 +95,12 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
 
         if (Status is OrderStatus.Closed)
         {
-            return Result.Failure(Error.Conflict<Order>(
-                "Cannot change status of a closed order."));
+            return Result.Failure(Error.Conflict<Order>(Errors.CannotChangeClosedOrderStatus));
         }
 
         if (ImpossibleToComplete(newStatus))
         {
-            return Result.Failure(Error.Conflict<Order>(
-                "Cannot complete order because it contains unfinished works."));
+            return Result.Failure(Error.Conflict<Order>(Errors.CannotCompleteWithUnfinishedWorks));
         }
 
         Status = newStatus;
@@ -131,8 +126,7 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
     {
         if (newPlannedFinishDate < StartedAt)
         {
-            return Result.Failure(Error.Validation<Order>(
-                "Planned finish date cannot be earlier than start date."));
+            return Result.Failure(Error.Validation<Order>(Errors.InvalidPlannedFinishDate));
         }
 
         PlannedFinishDate = newPlannedFinishDate;
@@ -144,16 +138,15 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
     public Result AddWork(
         OrderWorkId orderWorkId,
         JobId jobId,
-        decimal estimatedHours,
-        decimal? hourlyRate,
-        decimal? fixedPrice,
+        StandardHours estimatedHours,
+        Money? hourlyRate,
+        Money? fixedPrice,
         bool isProposed)
     {
         if (Status is OrderStatus.Completed ||
             Status is OrderStatus.Closed)
         {
-            return Result.Failure(Error.Conflict<Order>(
-                "Cannot add works to completed or closed orders."));
+            return Result.Failure(Error.Conflict<Order>(Errors.CannotAddWorkToClosedOrCompleted));
         }
 
         Result<OrderWork> workResult = OrderWork.Create(
@@ -183,8 +176,7 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
         if (Status is OrderStatus.Completed ||
             Status is OrderStatus.Closed)
         {
-            return Result.Failure(Error.Conflict<Order>(
-                "Cannot remove works from completed or closed orders."));
+            return Result.Failure(Error.Conflict<Order>(Errors.CannotRemoveWorkFromClosedOrCompleted));
         }
 
         OrderWork? work = _works.Find(w => w.Id == orderWorkId);
@@ -195,8 +187,7 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
 
         if (work.Status is not WorkStatus.Pending)
         {
-            return Result.Failure(Error.Conflict<Order>(
-                "Cannot remove a work that is already in progress or completed."));
+            return Result.Failure(Error.Conflict<Order>(Errors.CannotRemoveInProgressOrCompletedWork));
         }
 
         _works.Remove(work);
@@ -211,14 +202,13 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
         OrderPartId orderPartId,
         PartId partId,
         decimal quantity,
-        decimal soldPrice,
+        Money soldPrice,
         bool isProposed)
     {
         if (Status is OrderStatus.Completed ||
             Status is OrderStatus.Closed)
         {
-            return Result.Failure(Error.Conflict<Order>(
-                "Cannot add parts to completed or closed orders."));
+            return Result.Failure(Error.Conflict<Order>(Errors.CannotAddPartToClosedOrCompleted));
         }
 
         Result<OrderPart> partResult = OrderPart.Create(
@@ -246,8 +236,7 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
         if (Status is OrderStatus.Completed ||
             Status is OrderStatus.Closed)
         {
-            return Result.Failure(Error.Conflict<Order>(
-                "Cannot remove parts from completed or closed orders."));
+            return Result.Failure(Error.Conflict<Order>(Errors.CannotRemovePartFromClosedOrCompleted));
         }
 
         OrderPart? part = _parts.Find(p => p.Id == orderPartId);
@@ -275,22 +264,19 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
     {
         if (Status is OrderStatus.Closed)
         {
-            return Result.Failure(Error.Conflict<Order>(
-                "Cannot add guarantees to closed orders."));
+            return Result.Failure(Error.Conflict<Order>(Errors.CannotAddGuaranteeToClosed));
         }
 
         if (orderPartId is not null &&
             !_parts.Exists(p => p.Id == orderPartId))
         {
-            return Result.Failure(Error.NotFound<Order>(
-                "The specified part does not belong to this order."));
+            return Result.Failure(Error.NotFound<Order>(Errors.PartNotBelongToOrder));
         }
 
         if (orderWorkId is not null &&
             !_works.Exists(w => w.Id == orderWorkId))
         {
-            return Result.Failure(Error.NotFound<Order>(
-                "The specified work does not belong to this order."));
+            return Result.Failure(Error.NotFound<Order>(Errors.WorkNotBelongToOrder));
         }
 
         Result<OrderGuarantee> guaranteeResult = OrderGuarantee.Create(
@@ -317,8 +303,7 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
     {
         if (Status is OrderStatus.Closed)
         {
-            return Result.Failure(Error.Conflict<Order>(
-                "Cannot remove guarantees from a closed order."));
+            return Result.Failure(Error.Conflict<Order>(Errors.CannotRemoveGuaranteeFromClosed));
         }
 
         OrderGuarantee? guarantee = _guarantees.Find(g => g.Id == orderGuaranteeId);
@@ -362,8 +347,19 @@ public sealed class Order : AggregateRoot<OrderId>, ISoftDeletable, IAuditable, 
                                  !w.IsProposed);
     }
 
-    private void IncrementVersion()
+    public static class Errors
     {
-        Version = Guid.NewGuid();
+        public const string InvalidPlannedFinishDate = "Planned finish date cannot be earlier than start date.";
+        public const string CannotChangeClosedOrderStatus = "Cannot change status of a closed order.";
+        public const string CannotCompleteWithUnfinishedWorks = "Cannot complete order because it contains unfinished works.";
+        public const string CannotAddWorkToClosedOrCompleted = "Cannot add works to completed or closed orders.";
+        public const string CannotRemoveWorkFromClosedOrCompleted = "Cannot remove works from completed or closed orders.";
+        public const string CannotRemoveInProgressOrCompletedWork = "Cannot remove a work that is already in progress or completed.";
+        public const string CannotAddPartToClosedOrCompleted = "Cannot add parts to completed or closed orders.";
+        public const string CannotRemovePartFromClosedOrCompleted = "Cannot remove parts from completed or closed orders.";
+        public const string CannotAddGuaranteeToClosed = "Cannot add guarantees to closed orders.";
+        public const string PartNotBelongToOrder = "The specified part does not belong to this order.";
+        public const string WorkNotBelongToOrder = "The specified work does not belong to this order.";
+        public const string CannotRemoveGuaranteeFromClosed = "Cannot remove guarantees from a closed order.";
     }
 }

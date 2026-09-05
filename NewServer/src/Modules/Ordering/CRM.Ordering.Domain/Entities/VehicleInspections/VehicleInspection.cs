@@ -1,4 +1,4 @@
-﻿using CRM.Ordering.Domain.Enums;
+using CRM.Ordering.Domain.Enums;
 using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
 using CRM.Shared.Abstractions.DDD.ValueObjects;
@@ -6,7 +6,7 @@ using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Ordering.Domain.Entities.VehicleInspections;
 
-public sealed class VehicleInspection : AggregateRoot<VehicleInspectionId>, ISoftDeletable, IAuditable, IHasVersion
+public sealed class VehicleInspection : AggregateRoot<VehicleInspectionId>, ISoftDeletable, IAuditable
 {
     private const int MaxTextLength = 2000;
 
@@ -77,16 +77,14 @@ public sealed class VehicleInspection : AggregateRoot<VehicleInspectionId>, ISof
     public Guid CreatedBy { get; private set; }
     public DateTimeOffset? UpdatedAt { get; private set; }
     public Guid? UpdatedBy { get; private set; }
-
-    public Guid Version { get; private set; }
 #pragma warning restore S1144
 
     public static Result<VehicleInspection> Create(
         VehicleInspectionId id,
         OrderId orderId,
         WorkerId workerId,
-        int rawMileage,
-        int rawFuelLevel,
+        Mileage mileage,
+        FuelLevel fuelLevel,
         VehicleCleanliness cleanlinessLevel,
         bool hasWheelNutKey,
         bool hasServiceBook,
@@ -97,40 +95,24 @@ public sealed class VehicleInspection : AggregateRoot<VehicleInspectionId>, ISof
     {
         List<Error> errors = [];
 
-        Result<Mileage> mileageResult = Mileage.Create(rawMileage);
-        if (mileageResult.IsFailure)
-        {
-            errors.Add(mileageResult.Error);
-        }
-
-        Result<FuelLevel> fuelLevelResult = FuelLevel.Create(rawFuelLevel);
-        if (fuelLevelResult.IsFailure)
-        {
-            errors.Add(fuelLevelResult.Error);
-        }
-
         if (externalDefects?.Length > MaxTextLength)
         {
-            errors.Add(Error.Validation<VehicleInspection>(
-                $"External defects text exceeds {MaxTextLength} characters."));
+            errors.Add(Error.Validation<VehicleInspection>(Errors.ExternalDefectsTooLong));
         }
 
         if (internalDefects?.Length > MaxTextLength)
         {
-            errors.Add(Error.Validation<VehicleInspection>(
-                $"Internal defects text exceeds {MaxTextLength} characters."));
+            errors.Add(Error.Validation<VehicleInspection>(Errors.InternalDefectsTooLong));
         }
 
         if (personalBelongings?.Length > MaxTextLength)
         {
-            errors.Add(Error.Validation<VehicleInspection>(
-                $"Personal belongings text exceeds {MaxTextLength} characters."));
+            errors.Add(Error.Validation<VehicleInspection>(Errors.PersonalBelongingsTooLong));
         }
 
         if (dashboardWarnings?.Length > MaxTextLength)
         {
-            errors.Add(Error.Validation<VehicleInspection>(
-                $"Dashboard warnings text exceeds {MaxTextLength} characters."));
+            errors.Add(Error.Validation<VehicleInspection>(Errors.DashboardWarningsTooLong));
         }
 
         if (errors.Count != 0)
@@ -141,7 +123,7 @@ public sealed class VehicleInspection : AggregateRoot<VehicleInspectionId>, ISof
 
         VehicleInspection inspection = new(
             id, orderId, workerId,
-            mileageResult.Value, fuelLevelResult.Value,
+            mileage, fuelLevel,
             cleanlinessLevel, hasWheelNutKey, hasServiceBook,
             externalDefects, internalDefects, personalBelongings, dashboardWarnings);
 
@@ -154,8 +136,7 @@ public sealed class VehicleInspection : AggregateRoot<VehicleInspectionId>, ISof
     {
         if (Status == InspectionStatus.Signed)
         {
-            return Result.Failure(Error.Conflict<VehicleInspection>(
-                "Cannot add images to a signed inspection."));
+            return Result.Failure(Error.Conflict<VehicleInspection>(Errors.CannotAddImageToSigned));
         }
 
         Result<VehicleInspectionImage> imageResult = VehicleInspectionImage.Create(imageId, Id, path, description);
@@ -174,8 +155,7 @@ public sealed class VehicleInspection : AggregateRoot<VehicleInspectionId>, ISof
     {
         if (Status is InspectionStatus.Signed)
         {
-            return Result.Failure(Error.Conflict<VehicleInspection>(
-                "Cannot remove images from a signed inspection."));
+            return Result.Failure(Error.Conflict<VehicleInspection>(Errors.CannotRemoveImageFromSigned));
         }
 
         VehicleInspectionImage? image = _images.Find(i => i.Id == imageId);
@@ -194,15 +174,13 @@ public sealed class VehicleInspection : AggregateRoot<VehicleInspectionId>, ISof
     {
         if (Status == InspectionStatus.Signed)
         {
-            return Result.Failure(Error.Conflict<VehicleInspection>(
-                "Cannot edit images in a signed inspection."));
+            return Result.Failure(Error.Conflict<VehicleInspection>(Errors.CannotEditImageInSigned));
         }
 
         VehicleInspectionImage? image = _images.Find(i => i.Id == imageId);
         if (image is null)
         {
-            return Result.Failure(Error.NotFound<VehicleInspectionImage>(
-                $"Vehicle inspection image {imageId} not found."));
+            return Result.Failure(Error.NotFound<VehicleInspectionImage>(Errors.ImageNotFound));
         }
 
         Result updateResult = image.UpdateDescription(newDescription);
@@ -220,8 +198,7 @@ public sealed class VehicleInspection : AggregateRoot<VehicleInspectionId>, ISof
     {
         if (Status is InspectionStatus.Signed)
         {
-            return Result.Failure(Error.Conflict<VehicleInspection>(
-                "This inspection is already signed."));
+            return Result.Failure(Error.Conflict<VehicleInspection>(Errors.AlreadySigned));
         }
 
         ClientSign = true;
@@ -249,8 +226,16 @@ public sealed class VehicleInspection : AggregateRoot<VehicleInspectionId>, ISof
         return Result.Success();
     }
 
-    private void IncrementVersion()
+    public static class Errors
     {
-        Version = Guid.NewGuid();
+        public static readonly string ExternalDefectsTooLong = $"External defects text exceeds {MaxTextLength} characters.";
+        public static readonly string InternalDefectsTooLong = $"Internal defects text exceeds {MaxTextLength} characters.";
+        public static readonly string PersonalBelongingsTooLong = $"Personal belongings text exceeds {MaxTextLength} characters.";
+        public static readonly string DashboardWarningsTooLong = $"Dashboard warnings text exceeds {MaxTextLength} characters.";
+        public const string CannotAddImageToSigned = "Cannot add images to a signed inspection.";
+        public const string CannotRemoveImageFromSigned = "Cannot remove images from a signed inspection.";
+        public const string CannotEditImageInSigned = "Cannot edit images in a signed inspection.";
+        public const string ImageNotFound = "Vehicle inspection image not found.";
+        public const string AlreadySigned = "This inspection is already signed.";
     }
 }

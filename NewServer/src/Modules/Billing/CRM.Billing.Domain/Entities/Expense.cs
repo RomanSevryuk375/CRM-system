@@ -1,4 +1,4 @@
-﻿using CRM.Billing.Domain.Enums;
+using CRM.Billing.Domain.Enums;
 using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
 using CRM.Shared.Abstractions.DDD.ValueObjects;
@@ -6,7 +6,7 @@ using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Billing.Domain.Entities;
 
-public sealed class Expense : AggregateRoot<ExpenseId>, ISoftDeletable, IAuditable, IHasVersion
+public sealed class Expense : AggregateRoot<ExpenseId>, ISoftDeletable, IAuditable
 {
     public const int MaxCategoryLength = 128;
     public const int MaxDescriptionLength = 2000;
@@ -52,8 +52,6 @@ public sealed class Expense : AggregateRoot<ExpenseId>, ISoftDeletable, IAuditab
     public Guid CreatedBy { get; private set; }
     public DateTimeOffset? UpdatedAt { get; private set; }
     public Guid? UpdatedBy { get; private set; }
-
-    public Guid Version { get; private set; }
 #pragma warning restore S1144
 
     public static Result<Expense> Create(
@@ -71,25 +69,21 @@ public sealed class Expense : AggregateRoot<ExpenseId>, ISoftDeletable, IAuditab
 
         if (date > today)
         {
-            errors.Add(Error.Validation<Expense>(
-                "Date cannot be in the future."));
+            errors.Add(Error.Validation<Expense>(Errors.FutureDate));
         }
 
         if (string.IsNullOrWhiteSpace(category))
         {
-            errors.Add(Error.Validation<Expense>(
-                "Category cannot be empty."));
+            errors.Add(Error.Validation<Expense>(Errors.CategoryEmpty));
         }
         else if (category.Length > MaxCategoryLength)
         {
-            errors.Add(Error.Validation<Expense>(
-                $"Category should be shorter than {MaxCategoryLength} symbols."));
+            errors.Add(Error.Validation<Expense>(Errors.CategoryTooLong));
         }
 
         if (description?.Length > MaxDescriptionLength)
         {
-            errors.Add(Error.Validation<Expense>(
-                $"Description should be shorter than {MaxDescriptionLength} symbols."));
+            errors.Add(Error.Validation<Expense>(Errors.DescriptionTooLong));
         }
 
         Result<Money> amountResult = Money.Create(amount);
@@ -99,8 +93,7 @@ public sealed class Expense : AggregateRoot<ExpenseId>, ISoftDeletable, IAuditab
         }
         else if (amountResult.Value.Value == 0)
         {
-            errors.Add(Error.Validation<Expense>(
-                "Expense amount must be greater than zero."));
+            errors.Add(Error.Validation<Expense>(Errors.ZeroAmount));
         }
 
         if (errors.Count != 0)
@@ -134,25 +127,21 @@ public sealed class Expense : AggregateRoot<ExpenseId>, ISoftDeletable, IAuditab
 
         if (newDate > today)
         {
-            errors.Add(Error.Validation<Expense>(
-                "Date cannot be in the future."));
+            errors.Add(Error.Validation<Expense>(Errors.FutureDate));
         }
 
         if (string.IsNullOrWhiteSpace(category))
         {
-            errors.Add(Error.Validation<Expense>(
-                "Category cannot be empty."));
+            errors.Add(Error.Validation<Expense>(Errors.CategoryEmpty));
         }
         else if (category.Length > MaxCategoryLength)
         {
-            errors.Add(Error.Validation<Expense>(
-                $"Category should be shorter than {MaxCategoryLength} symbols."));
+            errors.Add(Error.Validation<Expense>(Errors.CategoryTooLong));
         }
 
         if (description?.Length > MaxDescriptionLength)
         {
-            errors.Add(Error.Validation<Expense>(
-                $"Description should be shorter than {MaxDescriptionLength} symbols."));
+            errors.Add(Error.Validation<Expense>(Errors.DescriptionTooLong));
         }
 
         if (errors.Count != 0)
@@ -179,8 +168,12 @@ public sealed class Expense : AggregateRoot<ExpenseId>, ISoftDeletable, IAuditab
         return Result.Success();
     }
 
-    private void IncrementVersion()
+    public static class Errors
     {
-        Version = Guid.NewGuid();
+        public const string FutureDate = "Date cannot be in the future.";
+        public const string CategoryEmpty = "Category cannot be empty.";
+        public static readonly string CategoryTooLong = $"Category should be shorter than {MaxCategoryLength} symbols.";
+        public static readonly string DescriptionTooLong = $"Description should be shorter than {MaxDescriptionLength} symbols.";
+        public const string ZeroAmount = "Expense amount must be greater than zero.";
     }
 }

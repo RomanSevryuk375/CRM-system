@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Abstractions.Results;
+using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
@@ -15,17 +15,16 @@ public sealed class TaxRate : ValueObject
     {
         if (percentage < 0)
         {
-            return Result<TaxRate>.Failure(Error.Validation<TaxRate>(
-                "Tax rate cannot be negative."));
+            return Result<TaxRate>.Failure(Error.Validation<TaxRate>(Errors.NegativeRate));
         }
 
         if (percentage > 100)
         {
-            return Result<TaxRate>.Failure(Error.Validation<TaxRate>(
-                "Tax rate cannot exceed 100%."));
+            return Result<TaxRate>.Failure(Error.Validation<TaxRate>(Errors.ExceedsMax));
         }
 
-        return Result<TaxRate>.Success(new TaxRate(percentage / 100m));
+        return Result<TaxRate>.Success(
+            new TaxRate(percentage / 100m));
     }
 
     public Money CalculateAmount(Money baseAmount)
@@ -35,6 +34,12 @@ public sealed class TaxRate : ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return Value;
+    }
+
+    public static class Errors
+    {
+        public const string NegativeRate = "Tax rate cannot be negative.";
+        public const string ExceedsMax = "Tax rate cannot exceed 100%.";
     }
 }

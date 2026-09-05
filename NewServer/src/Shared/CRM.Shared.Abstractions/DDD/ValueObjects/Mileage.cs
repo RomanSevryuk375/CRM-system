@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Abstractions.Results;
+using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
@@ -15,13 +15,11 @@ public sealed class Mileage : ValueObject
     {
         if (rawMileage < 0)
         {
-            return Result<Mileage>.Failure(Error.Validation<Mileage>(
-                "Value should be positive."));
+            return Result<Mileage>.Failure(Error.Validation<Mileage>(Errors.NegativeValue));
         }
 
-        Mileage mileage = new(rawMileage);
-
-        return Result<Mileage>.Success(mileage);
+        return Result<Mileage>.Success(
+            new Mileage(rawMileage));
     }
 
     public static Mileage Zero()
@@ -32,5 +30,10 @@ public sealed class Mileage : ValueObject
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
+    }
+
+    public static class Errors
+    {
+        public const string NegativeValue = "Value should be positive.";
     }
 }

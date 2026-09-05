@@ -1,4 +1,4 @@
-﻿using CRM.Billing.Domain.Enums;
+using CRM.Billing.Domain.Enums;
 using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
 using CRM.Shared.Abstractions.DDD.ValueObjects;
@@ -6,7 +6,7 @@ using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Billing.Domain.Entities;
 
-public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable, IHasVersion
+public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable
 {
     private const int CriticalOffsetDays = 14;
 
@@ -49,7 +49,6 @@ public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable, IH
     public DateTimeOffset? UpdatedAt { get; private set; }
     public Guid? UpdatedBy { get; private set; }
 
-    public Guid Version { get; private set; }
 #pragma warning restore S1144
 
     public static Result<Bill> Create(
@@ -71,14 +70,12 @@ public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable, IH
         if (status == BillStatus.Paid &&
             !actualBillDate.HasValue)
         {
-            errors.Add(Error.Validation<Bill>(
-                "Actual closing date must be set for paid bills."));
+            errors.Add(Error.Validation<Bill>(Errors.ActualDateRequiredForPaid));
         }
         else if (actualBillDate.HasValue &&
                  actualBillDate > today)
         {
-            errors.Add(Error.Validation<Bill>(
-                "Actual bill date can not be in the future."));
+            errors.Add(Error.Validation<Bill>(Errors.FutureActualDate));
         }
 
         if (errors.Count != 0)
@@ -98,8 +95,7 @@ public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable, IH
     {
         if (Status == BillStatus.Paid)
         {
-            return Result.Failure(Error.Conflict<Bill>(
-                "The bill is already paid."));
+            return Result.Failure(Error.Conflict<Bill>(Errors.BillAlreadyPaid));
         }
 
         ActualBillDate = today;
@@ -119,8 +115,7 @@ public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable, IH
     {
         if (Status == BillStatus.Paid)
         {
-            return Result.Failure(Error.Conflict<Bill>(
-                "Cannot add payment to an already paid bill."));
+            return Result.Failure(Error.Conflict<Bill>(Errors.CannotAddPaymentToPaidBill));
         }
 
         Result<Money> moneyResult = Money.Create(paymentAmount);
@@ -131,14 +126,12 @@ public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable, IH
 
         if (paymentDate > today)
         {
-            return Result.Failure(Error.Validation<PaymentNote>(
-                "Payment date cannot be in the future."));
+            return Result.Failure(Error.Validation<PaymentNote>(Errors.FuturePaymentDate));
         }
 
         if (TotalPaidAmount + paymentAmount > Amount.Value)
         {
-            return Result.Failure(Error.Validation<Bill>(
-                "Payment amount exceeds the remaining bill balance."));
+            return Result.Failure(Error.Validation<Bill>(Errors.PaymentExceedsBalance));
         }
 
         PaymentNote note = new(paymentId, Id, paymentDate, moneyResult.Value, method);
@@ -156,8 +149,7 @@ public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable, IH
         PaymentNote? note = _paymentNotes.Find(x => x.Id == paymentNoteId);
         if (note is null)
         {
-            return Result.Failure(Error.NotFound<PaymentNote>(
-                "Payment note not found in this bill."));
+            return Result.Failure(Error.NotFound<PaymentNote>(Errors.PaymentNoteNotFound));
         }
 
         _paymentNotes.Remove(note);
@@ -189,8 +181,14 @@ public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable, IH
         }
     }
 
-    private void IncrementVersion()
+    public static class Errors
     {
-        Version = Guid.NewGuid();
+        public const string ActualDateRequiredForPaid = "Actual closing date must be set for paid bills.";
+        public const string FutureActualDate = "Actual bill date can not be in the future.";
+        public const string BillAlreadyPaid = "The bill is already paid.";
+        public const string CannotAddPaymentToPaidBill = "Cannot add payment to an already paid bill.";
+        public const string FuturePaymentDate = "Payment date cannot be in the future.";
+        public const string PaymentExceedsBalance = "Payment amount exceeds the remaining bill balance.";
+        public const string PaymentNoteNotFound = "Payment note not found in this bill.";
     }
 }
