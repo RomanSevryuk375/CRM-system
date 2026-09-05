@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Data;
 
+namespace CRM.Shared.Infrastructure.Data;
+
 public sealed class SqlConnectionFactory(IConfiguration configuration) : ISqlConnectionFactory
 {
     public IDbConnection CreateConnection()
