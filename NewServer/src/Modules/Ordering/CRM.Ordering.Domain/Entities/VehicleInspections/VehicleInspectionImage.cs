@@ -6,8 +6,8 @@ namespace CRM.Ordering.Domain.Entities.VehicleInspections;
 
 public sealed class VehicleInspectionImage : IEntity<VehicleInspectionImageId>
 {
-    private const int MaxPathLength = 256;
-    private const int MaxDescriptionLength = 2000;
+    public const int MaxPathLength = 256;
+    public const int MaxDescriptionLength = 2000;
 
     internal VehicleInspectionImage(
         VehicleInspectionImageId id,

@@ -10,6 +10,14 @@ namespace CRM.Customers.Domain.Entities;
 
 public sealed partial class Car : AggregateRoot<CarId>, IAuditable, ISoftDeletable
 {
+    public const int MaxBrandLength = 100;
+    public const int MaxModelLength = 100;
+    public const int VinLength = 17;
+    public const int MaxStateNumberLength = 32;
+    public const int MinYearOfManufacture = 1900;
+    public const int MaxFutureYearsOffset = 1;
+    public const int MinMileage = 0;
+
     private Car(
         CarId id,
         CustomerId ownerId,
@@ -71,12 +79,22 @@ public sealed partial class Car : AggregateRoot<CarId>, IAuditable, ISoftDeletab
             return Result<Car>.Failure(Error.Validation<Car>(Errors.BrandEmpty));
         }
 
+        if (brand.Length > MaxBrandLength)
+        {
+            return Result<Car>.Failure(Error.Validation<Car>(Errors.BrandTooLong));
+        }
+
         if (string.IsNullOrWhiteSpace(model))
         {
             return Result<Car>.Failure(Error.Validation<Car>(Errors.ModelEmpty));
         }
 
-        if (yearOfManufacture < 1900 || yearOfManufacture > DateTime.UtcNow.Year + 1)
+        if (model.Length > MaxModelLength)
+        {
+            return Result<Car>.Failure(Error.Validation<Car>(Errors.ModelTooLong));
+        }
+
+        if (yearOfManufacture < MinYearOfManufacture || yearOfManufacture > DateTime.UtcNow.Year + MaxFutureYearsOffset)
         {
             return Result<Car>.Failure(Error.Validation<Car>(Errors.InvalidYear));
         }
@@ -86,12 +104,12 @@ public sealed partial class Car : AggregateRoot<CarId>, IAuditable, ISoftDeletab
             return Result<Car>.Failure(Error.Validation<Car>(Errors.InvalidVin));
         }
 
-        if (!StateNumberRegex().IsMatch(stateNumber))
+        if (stateNumber.Length > MaxStateNumberLength || !StateNumberRegex().IsMatch(stateNumber))
         {
             return Result<Car>.Failure(Error.Validation<Car>(Errors.InvalidStateNumber));
         }
 
-        if (mileage < 0)
+        if (mileage < MinMileage)
         {
             return Result<Car>.Failure(Error.Validation<Car>(Errors.NegativeMileage));
         }
@@ -146,7 +164,9 @@ public sealed partial class Car : AggregateRoot<CarId>, IAuditable, ISoftDeletab
     public static class Errors
     {
         public const string BrandEmpty = "Brand cannot be empty.";
+        public static readonly string BrandTooLong = $"Brand exceeds maximum length of {MaxBrandLength} characters.";
         public const string ModelEmpty = "Model cannot be empty.";
+        public static readonly string ModelTooLong = $"Model exceeds maximum length of {MaxModelLength} characters.";
         public const string InvalidYear = "Invalid year of manufacture.";
         public const string InvalidVin = "VIN number is in an invalid format.";
         public const string InvalidStateNumber = "State number is in an invalid format.";

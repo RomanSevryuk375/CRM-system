@@ -26,11 +26,11 @@ internal sealed class VehicleInspectionImageConfiguration : IEntityTypeConfigura
             .IsRequired();
 
         builder.Property(x => x.Path)
-            .HasMaxLength(256)
+            .HasMaxLength(VehicleInspectionImage.MaxPathLength)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasMaxLength(2000)
+            .HasMaxLength(VehicleInspectionImage.MaxDescriptionLength)
             .IsRequired(false);
 
         builder.HasIndex(x => x.InspectionId);

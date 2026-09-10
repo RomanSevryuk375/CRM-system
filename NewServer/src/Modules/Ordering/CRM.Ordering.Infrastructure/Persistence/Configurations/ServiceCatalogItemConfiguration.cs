@@ -21,22 +21,22 @@ internal sealed class ServiceCatalogItemConfiguration : IEntityTypeConfiguration
             .IsRequired();
 
         builder.Property(x => x.Title)
-            .HasMaxLength(128)
+            .HasMaxLength(ServiceCatalogItem.MaxTitleLength)
             .IsRequired();
 
         builder.Property(x => x.Category)
-            .HasMaxLength(128)
+            .HasMaxLength(ServiceCatalogItem.MaxCategoryLength)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasMaxLength(2000)
+            .HasMaxLength(ServiceCatalogItem.MaxDescriptionLength)
             .IsRequired(false);
 
         builder.Property(x => x.StandardTime)
             .HasConversion(
                 vo => vo.Value,
                 dbVal => StandardHours.Create(dbVal).Value)
-            .HasPrecision(18, 2)
+            .HasPrecision(StandardHours.Precision, StandardHours.Scale)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted).IsRequired();

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 public sealed partial class PhoneNumber : ValueObject
 {
+    public const int MaxLength = 32;
     private const string Pattern = @"^\+?[1-9]\d{1,14}$";
 
     private PhoneNumber(string value)
@@ -19,6 +20,11 @@ public sealed partial class PhoneNumber : ValueObject
         if (string.IsNullOrWhiteSpace(value))
         {
             return Result<PhoneNumber>.Failure(Error.Validation<PhoneNumber>(Errors.Empty));
+        }
+
+        if (value.Length > MaxLength)
+        {
+            return Result<PhoneNumber>.Failure(Error.Validation<PhoneNumber>(Errors.TooLong));
         }
 
         if (!Regex.IsMatch(value, Pattern))
@@ -38,5 +44,6 @@ public sealed partial class PhoneNumber : ValueObject
     {
         public const string Empty = "Phone number cannot be empty.";
         public const string InvalidFormat = "Phone number is in an invalid format.";
+        public static readonly string TooLong = $"Phone number exceeds maximum length of {MaxLength} characters.";
     }
 }

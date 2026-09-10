@@ -7,6 +7,10 @@ namespace CRM.Inventory.Domain.Entities;
 
 public sealed class Position : AggregateRoot<PositionId>, IAuditable, ISoftDeletable
 {
+    public const int QuantityPrecision = 18;
+    public const int QuantityScale = 3;
+    public const decimal MinQuantity = 0m;
+
     private Position(
         PositionId id,
         PartId partId,
@@ -52,7 +56,7 @@ public sealed class Position : AggregateRoot<PositionId>, IAuditable, ISoftDelet
         Money sellingPrice,
         decimal quantity)
     {
-        if (quantity < 0)
+        if (quantity < MinQuantity)
         {
             return Result<Position>.Failure(Error.Validation<Position>(Errors.NegativeQuantity));
         }
@@ -71,7 +75,7 @@ public sealed class Position : AggregateRoot<PositionId>, IAuditable, ISoftDelet
 
     public Result UpdateQuantity(decimal change)
     {
-        if (Quantity + change < 0)
+        if (Quantity + change < MinQuantity)
         {
             return Result.Failure(Error.Conflict<Position>(Errors.NotEnoughQuantity));
         }

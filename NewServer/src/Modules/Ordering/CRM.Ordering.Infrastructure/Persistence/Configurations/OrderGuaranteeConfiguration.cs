@@ -51,11 +51,11 @@ internal sealed class OrderGuaranteeConfiguration : IEntityTypeConfiguration<Ord
         builder.Property(x => x.DateEnd).IsRequired();
 
         builder.Property(x => x.Description)
-            .HasMaxLength(2000)
+            .HasMaxLength(OrderGuarantee.MaxDescriptionLength)
             .IsRequired(false);
 
         builder.Property(x => x.Terms)
-            .HasMaxLength(2000)
+            .HasMaxLength(OrderGuarantee.MaxTermsLength)
             .IsRequired();
 
         builder.HasIndex(x => x.OrderId);

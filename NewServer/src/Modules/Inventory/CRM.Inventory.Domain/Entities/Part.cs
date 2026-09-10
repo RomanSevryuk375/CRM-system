@@ -8,6 +8,12 @@ namespace CRM.Inventory.Domain.Entities;
 
 public sealed class Part : AggregateRoot<PartId>, IAuditable, ISoftDeletable
 {
+    public const int MaxArticleLength = 64;
+    public const int MaxNameLength = 256;
+    public const int MaxManufacturerLength = 128;
+    public const int MaxApplicabilityLength = 1000;
+    public const int MaxDescriptionLength = 1000;
+
     private Part(
         PartId id,
         PartCategoryId categoryId,
@@ -65,9 +71,63 @@ public sealed class Part : AggregateRoot<PartId>, IAuditable, ISoftDeletable
         string manufacturer,
         string applicability)
     {
+        List<Error> errors = [];
+
         if (string.IsNullOrWhiteSpace(internalArticle))
         {
-            return Result<Part>.Failure(Error.Validation<Part>(Errors.InternalArticleEmpty));
+            errors.Add(Error.Validation<Part>(Errors.InternalArticleEmpty));
+        }
+        else if (internalArticle.Length > MaxArticleLength)
+        {
+            errors.Add(Error.Validation<Part>(Errors.InternalArticleTooLong));
+        }
+
+        if (oemArticle?.Length > MaxArticleLength)
+        {
+            errors.Add(Error.Validation<Part>(Errors.OemArticleTooLong));
+        }
+
+        if (manufacturerArticle?.Length > MaxArticleLength)
+        {
+            errors.Add(Error.Validation<Part>(Errors.ManufacturerArticleTooLong));
+        }
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            errors.Add(Error.Validation<Part>(Errors.NameEmpty));
+        }
+        else if (name.Length > MaxNameLength)
+        {
+            errors.Add(Error.Validation<Part>(Errors.NameTooLong));
+        }
+
+        if (string.IsNullOrWhiteSpace(manufacturer))
+        {
+            errors.Add(Error.Validation<Part>(Errors.ManufacturerEmpty));
+        }
+        else if (manufacturer.Length > MaxManufacturerLength)
+        {
+            errors.Add(Error.Validation<Part>(Errors.ManufacturerTooLong));
+        }
+
+        if (string.IsNullOrWhiteSpace(applicability))
+        {
+            errors.Add(Error.Validation<Part>(Errors.ApplicabilityEmpty));
+        }
+        else if (applicability.Length > MaxApplicabilityLength)
+        {
+            errors.Add(Error.Validation<Part>(Errors.ApplicabilityTooLong));
+        }
+
+        if (description?.Length > MaxDescriptionLength)
+        {
+            errors.Add(Error.Validation<Part>(Errors.DescriptionTooLong));
+        }
+
+        if (errors.Count != 0)
+        {
+            return Result<Part>.Failure(Error.Validation<Part>(
+                string.Join("; ", errors.Select(e => e.Message))));
         }
 
         Part part = new(
@@ -88,5 +148,15 @@ public sealed class Part : AggregateRoot<PartId>, IAuditable, ISoftDeletable
     public static class Errors
     {
         public const string InternalArticleEmpty = "Internal article cannot be empty.";
+        public static readonly string InternalArticleTooLong = $"Internal article exceeds {MaxArticleLength} characters.";
+        public static readonly string OemArticleTooLong = $"OEM article exceeds {MaxArticleLength} characters.";
+        public static readonly string ManufacturerArticleTooLong = $"Manufacturer article exceeds {MaxArticleLength} characters.";
+        public const string NameEmpty = "Name cannot be empty.";
+        public static readonly string NameTooLong = $"Name exceeds {MaxNameLength} characters.";
+        public const string ManufacturerEmpty = "Manufacturer cannot be empty.";
+        public static readonly string ManufacturerTooLong = $"Manufacturer exceeds {MaxManufacturerLength} characters.";
+        public const string ApplicabilityEmpty = "Applicability cannot be empty.";
+        public static readonly string ApplicabilityTooLong = $"Applicability exceeds {MaxApplicabilityLength} characters.";
+        public static readonly string DescriptionTooLong = $"Description exceeds {MaxDescriptionLength} characters.";
     }
 }

@@ -40,7 +40,7 @@ internal sealed class NotificationConfiguration : IEntityTypeConfiguration<Notif
             .IsRequired();
 
         builder.Property(x => x.Message)
-            .HasMaxLength(2000)
+            .HasMaxLength(Notification.MaxMessageLength)
             .IsRequired();
 
         builder.Property(x => x.SendAt)

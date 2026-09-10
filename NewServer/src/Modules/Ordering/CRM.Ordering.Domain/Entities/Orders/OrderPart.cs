@@ -7,7 +7,9 @@ namespace CRM.Ordering.Domain.Entities.Orders;
 
 public sealed class OrderPart : IEntity<OrderPartId>
 {
-    private const int MinQuantity = 0;
+    public const decimal MinQuantity = 0m;
+    public const int QuantityPrecision = 18;
+    public const int QuantityScale = 3;
 
     internal OrderPart(
         OrderPartId id,

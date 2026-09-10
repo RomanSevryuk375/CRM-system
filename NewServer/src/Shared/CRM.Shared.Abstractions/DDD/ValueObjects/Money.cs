@@ -4,6 +4,10 @@ namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
 public sealed class Money : ValueObject
 {
+    public const int Precision = 18;
+    public const int Scale = 2;
+    public const decimal MinValue = 0m;
+
     private const string Currency = "BYN";
 
     public decimal Value { get; }
@@ -15,7 +19,7 @@ public sealed class Money : ValueObject
 
     public static Result<Money> Create(decimal rawMoney)
     {
-        if (rawMoney < 0)
+        if (rawMoney < MinValue)
         {
             return Result<Money>.Failure(Error.Validation<Money>(Errors.NegativeValue));
         }
@@ -26,7 +30,7 @@ public sealed class Money : ValueObject
 
     public static Money Zero()
     {
-        return new Money(0);
+        return new Money(MinValue);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

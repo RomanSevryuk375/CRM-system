@@ -4,6 +4,8 @@ namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
 public sealed class Mileage : ValueObject
 {
+    public const int MinValue = 0;
+
     public int Value { get; }
 
     private Mileage(int value)
@@ -13,7 +15,7 @@ public sealed class Mileage : ValueObject
 
     public static Result<Mileage> Create(int rawMileage)
     {
-        if (rawMileage < 0)
+        if (rawMileage < MinValue)
         {
             return Result<Mileage>.Failure(Error.Validation<Mileage>(Errors.NegativeValue));
         }
@@ -24,7 +26,7 @@ public sealed class Mileage : ValueObject
 
     public static Mileage Zero()
     {
-        return new Mileage(0);
+        return new Mileage(MinValue);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

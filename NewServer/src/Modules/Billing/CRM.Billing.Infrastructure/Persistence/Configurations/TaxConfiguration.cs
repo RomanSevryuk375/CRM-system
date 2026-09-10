@@ -23,7 +23,7 @@ internal sealed class TaxConfiguration : IEntityTypeConfiguration<Tax>
             .HasConversion(
                 vo => vo.Value,
                 dbVal => TaxRate.Create(dbVal).Value)
-            .HasPrecision(5, 4)
+            .HasPrecision(TaxRate.Precision, TaxRate.Scale)
             .IsRequired();
 
         builder.Property(x => x.Type)

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 public sealed partial class Email : ValueObject
 {
+    public const int MaxLength = 256;
     private const string Pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
 
     private Email(string value)
@@ -19,6 +20,11 @@ public sealed partial class Email : ValueObject
         if (string.IsNullOrWhiteSpace(value))
         {
             return Result<Email>.Failure(Error.Validation<Email>(Errors.Empty));
+        }
+
+        if (value.Length > MaxLength)
+        {
+            return Result<Email>.Failure(Error.Validation<Email>(Errors.TooLong));
         }
 
         if (!MyRegex().IsMatch(value))
@@ -42,5 +48,6 @@ public sealed partial class Email : ValueObject
     {
         public const string Empty = "Email cannot be empty.";
         public const string InvalidFormat = "Email is in an invalid format.";
+        public static readonly string TooLong = $"Email exceeds maximum length of {MaxLength} characters.";
     }
 }

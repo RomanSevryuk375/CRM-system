@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
 using CRM.Shared.Abstractions.Results;
 
@@ -6,7 +6,12 @@ namespace CRM.Ordering.Domain.Entities;
 
 public sealed class Attachment : AggregateRoot<AttachmentId>, ISoftDeletable, IAuditable
 {
-    private const int MaxFileSize = 15 * 1024 * 1024;
+    public const int MaxFileSize = 15 * 1024 * 1024;
+    public const int MaxFileNameLength = 256;
+    public const int MaxFilePathLength = 1024;
+    public const int MaxContentTypeLength = 128;
+    public const int MaxDescriptionLength = 2000;
+
 #pragma warning disable CS8618
     private Attachment() { }
 #pragma warning restore CS8618
@@ -66,21 +71,47 @@ public sealed class Attachment : AggregateRoot<AttachmentId>, ISoftDeletable, IA
 
         if (fileSize <= 0 || fileSize > MaxFileSize)
         {
-            errors.Add(Error.Validation<Attachment>(
-                "File size must be between 1 byte and 15 MB."));
+            errors.Add(Error.Validation<Attachment>(Errors.InvalidFileSize));
         }
 
-        string[] allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
-        if (!allowedTypes.Contains(contentType.ToLowerInvariant()))
+        if (string.IsNullOrWhiteSpace(fileName))
         {
-            errors.Add(Error.Validation<Attachment>(
-                "Only JPG, PNG and PDF files are allowed."));
+            errors.Add(Error.Validation<Attachment>(Errors.FileNameRequired));
+        }
+        else if (fileName.Length > MaxFileNameLength)
+        {
+            errors.Add(Error.Validation<Attachment>(Errors.FileNameTooLong));
         }
 
         if (string.IsNullOrWhiteSpace(filePath))
         {
-            errors.Add(Error.Validation<Attachment>(
-                "File path is required."));
+            errors.Add(Error.Validation<Attachment>(Errors.FilePathRequired));
+        }
+        else if (filePath.Length > MaxFilePathLength)
+        {
+            errors.Add(Error.Validation<Attachment>(Errors.FilePathTooLong));
+        }
+
+        if (string.IsNullOrWhiteSpace(contentType))
+        {
+            errors.Add(Error.Validation<Attachment>(Errors.ContentTypeRequired));
+        }
+        else if (contentType.Length > MaxContentTypeLength)
+        {
+            errors.Add(Error.Validation<Attachment>(Errors.ContentTypeTooLong));
+        }
+        else
+        {
+            string[] allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+            if (!allowedTypes.Contains(contentType.ToLowerInvariant()))
+            {
+                errors.Add(Error.Validation<Attachment>(Errors.UnsupportedContentType));
+            }
+        }
+
+        if (description?.Length > MaxDescriptionLength)
+        {
+            errors.Add(Error.Validation<Attachment>(Errors.DescriptionTooLong));
         }
 
         if (errors.Count != 0)
@@ -93,5 +124,18 @@ public sealed class Attachment : AggregateRoot<AttachmentId>, ISoftDeletable, IA
             id, orderId,
             uploadedBy, fileName, filePath, contentType, fileSize,
             description));
+    }
+
+    public static class Errors
+    {
+        public static readonly string InvalidFileSize = $"File size must be between 1 byte and {MaxFileSize / (1024 * 1024)} MB.";
+        public const string FileNameRequired = "File name is required.";
+        public static readonly string FileNameTooLong = $"File name exceeds {MaxFileNameLength} characters.";
+        public const string FilePathRequired = "File path is required.";
+        public static readonly string FilePathTooLong = $"File path exceeds {MaxFilePathLength} characters.";
+        public const string ContentTypeRequired = "Content type is required.";
+        public static readonly string ContentTypeTooLong = $"Content type exceeds {MaxContentTypeLength} characters.";
+        public const string UnsupportedContentType = "Only JPG, PNG and PDF files are allowed.";
+        public static readonly string DescriptionTooLong = $"Description exceeds {MaxDescriptionLength} characters.";
     }
 }

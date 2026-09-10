@@ -7,6 +7,8 @@ namespace CRM.Notifications.Domain.Entities;
 
 public sealed class Notification : AggregateRoot<NotificationId>, IAuditable, ISoftDeletable
 {
+    public const int MaxMessageLength = 2000;
+
     private Notification(
         NotificationId id,
         CustomerId customerId,
@@ -59,6 +61,11 @@ public sealed class Notification : AggregateRoot<NotificationId>, IAuditable, IS
             return Result<Notification>.Failure(Error.Validation<Notification>(Errors.MessageEmpty));
         }
 
+        if (message.Length > MaxMessageLength)
+        {
+            return Result<Notification>.Failure(Error.Validation<Notification>(Errors.MessageTooLong));
+        }
+
         Notification notification = new(id, customerId, carId, type, message, sendAt);
         notification.IncrementVersion();
 
@@ -81,5 +88,6 @@ public sealed class Notification : AggregateRoot<NotificationId>, IAuditable, IS
     public static class Errors
     {
         public const string MessageEmpty = "Message cannot be empty.";
+        public static readonly string MessageTooLong = $"Message exceeds maximum length of {MaxMessageLength} characters.";
     }
 }

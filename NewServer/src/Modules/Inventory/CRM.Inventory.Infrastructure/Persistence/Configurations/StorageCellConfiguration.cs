@@ -20,11 +20,11 @@ internal sealed class StorageCellConfiguration : IEntityTypeConfiguration<Storag
             .IsRequired();
 
         builder.Property(x => x.Rack)
-            .HasMaxLength(50)
+            .HasMaxLength(StorageCell.MaxRackLength)
             .IsRequired();
 
         builder.Property(x => x.Shelf)
-            .HasMaxLength(50)
+            .HasMaxLength(StorageCell.MaxShelfLength)
             .IsRequired();
 
         builder.HasIndex(x => new { x.Rack, x.Shelf }).IsUnique();

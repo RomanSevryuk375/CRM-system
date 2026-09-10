@@ -4,8 +4,10 @@ namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
 public sealed class StandardHours : ValueObject
 {
-    private const int MinValue = 0;
-    private const int MaxValue = 1000;
+    public const decimal MinValue = 0m;
+    public const decimal MaxValue = 1000m;
+    public const int Precision = 18;
+    public const int Scale = 2;
 
     public decimal Value { get; }
 

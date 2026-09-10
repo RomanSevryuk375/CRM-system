@@ -6,6 +6,9 @@ namespace CRM.Inventory.Domain.Entities;
 
 public sealed class StorageCell : Entity<StorageCellId>
 {
+    public const int MaxRackLength = 50;
+    public const int MaxShelfLength = 50;
+
     private StorageCell(StorageCellId id, string rack, string shelf)
     {
         Id = id;
@@ -27,9 +30,19 @@ public sealed class StorageCell : Entity<StorageCellId>
             return Result<StorageCell>.Failure(Error.Validation<StorageCell>(Errors.RackEmpty));
         }
 
+        if (rack.Length > MaxRackLength)
+        {
+            return Result<StorageCell>.Failure(Error.Validation<StorageCell>(Errors.RackTooLong));
+        }
+
         if (string.IsNullOrWhiteSpace(shelf))
         {
             return Result<StorageCell>.Failure(Error.Validation<StorageCell>(Errors.ShelfEmpty));
+        }
+
+        if (shelf.Length > MaxShelfLength)
+        {
+            return Result<StorageCell>.Failure(Error.Validation<StorageCell>(Errors.ShelfTooLong));
         }
 
         return Result<StorageCell>.Success(new StorageCell(id, rack, shelf));
@@ -38,6 +51,8 @@ public sealed class StorageCell : Entity<StorageCellId>
     public static class Errors
     {
         public const string RackEmpty = "Rack cannot be empty.";
+        public static readonly string RackTooLong = $"Rack exceeds maximum length of {MaxRackLength} characters.";
         public const string ShelfEmpty = "Shelf cannot be empty.";
+        public static readonly string ShelfTooLong = $"Shelf exceeds maximum length of {MaxShelfLength} characters.";
     }
 }

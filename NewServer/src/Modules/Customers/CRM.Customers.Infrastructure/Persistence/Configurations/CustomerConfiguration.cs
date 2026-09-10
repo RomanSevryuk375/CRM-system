@@ -44,14 +44,14 @@ internal sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .HasConversion(
                 vo => vo.Value,
                 dbVal => PhoneNumber.Create(dbVal).Value)
-            .HasMaxLength(32)
+            .HasMaxLength(PhoneNumber.MaxLength)
             .IsRequired();
 
         builder.Property(x => x.Email)
             .HasConversion(
                 vo => vo.Value,
                 dbVal => Email.Create(dbVal).Value)
-            .HasMaxLength(256)
+            .HasMaxLength(Email.MaxLength)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted).IsRequired();

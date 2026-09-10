@@ -35,14 +35,14 @@ internal sealed class OrderPartConfiguration : IEntityTypeConfiguration<OrderPar
         builder.Property(x => x.IsProposed).IsRequired();
 
         builder.Property(x => x.Quantity)
-            .HasPrecision(18, 3)
+            .HasPrecision(OrderPart.QuantityPrecision, OrderPart.QuantityScale)
             .IsRequired();
 
         builder.Property(x => x.SoldPrice)
             .HasConversion(
                 vo => vo.Value,
                 dbVal => Money.Create(dbVal).Value)
-            .HasPrecision(18, 2)
+            .HasPrecision(Money.Precision, Money.Scale)
             .IsRequired();
 
         builder.HasIndex(x => x.OrderId);

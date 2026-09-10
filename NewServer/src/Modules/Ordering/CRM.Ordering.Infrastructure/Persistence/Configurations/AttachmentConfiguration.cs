@@ -32,22 +32,22 @@ internal sealed class AttachmentConfiguration : IEntityTypeConfiguration<Attachm
             .IsRequired();
 
         builder.Property(x => x.FileName)
-            .HasMaxLength(256)
+            .HasMaxLength(Attachment.MaxFileNameLength)
             .IsRequired();
 
         builder.Property(x => x.FilePath)
-            .HasMaxLength(1024)
+            .HasMaxLength(Attachment.MaxFilePathLength)
             .IsRequired();
 
         builder.Property(x => x.ContentType)
-            .HasMaxLength(128)
+            .HasMaxLength(Attachment.MaxContentTypeLength)
             .IsRequired();
 
         builder.Property(x => x.FileSize)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasMaxLength(2000)
+            .HasMaxLength(Attachment.MaxDescriptionLength)
             .IsRequired(false);
 
         builder.Property(x => x.IsDeleted).IsRequired();

@@ -8,7 +8,7 @@ namespace CRM.Ordering.Domain.Entities.VehicleInspections;
 
 public sealed class VehicleInspection : AggregateRoot<VehicleInspectionId>, ISoftDeletable, IAuditable
 {
-    private const int MaxTextLength = 2000;
+    public const int MaxTextLength = 2000;
 
     private readonly List<VehicleInspectionImage> _images = [];
 

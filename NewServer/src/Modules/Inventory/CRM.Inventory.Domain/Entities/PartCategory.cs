@@ -7,6 +7,8 @@ namespace CRM.Inventory.Domain.Entities;
 
 public sealed class PartCategory : Entity<PartCategoryId>
 {
+    public const int MaxDescriptionLength = 500;
+
     private PartCategory(PartCategoryId id, Name name, string? description)
     {
         Id = id;
@@ -23,6 +25,17 @@ public sealed class PartCategory : Entity<PartCategoryId>
 
     public static Result<PartCategory> Create(PartCategoryId id, Name name, string? description)
     {
+        if (description?.Length > MaxDescriptionLength)
+        {
+            return Result<PartCategory>.Failure(
+                Error.Validation<PartCategory>(Errors.DescriptionTooLong));
+        }
+
         return Result<PartCategory>.Success(new PartCategory(id, name, description));
+    }
+
+    public static class Errors
+    {
+        public static readonly string DescriptionTooLong = $"Description exceeds maximum length of {MaxDescriptionLength} characters.";
     }
 }

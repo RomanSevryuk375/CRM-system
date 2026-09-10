@@ -44,21 +44,21 @@ internal sealed class WorkerConfiguration : IEntityTypeConfiguration<Worker>
             .HasConversion(
                 vo => vo.Value,
                 dbVal => Money.Create(dbVal).Value)
-            .HasPrecision(18, 2)
+            .HasPrecision(Money.Precision, Money.Scale)
             .IsRequired();
 
         builder.Property(x => x.PhoneNumber)
             .HasConversion(
                 vo => vo.Value,
                 dbVal => PhoneNumber.Create(dbVal).Value)
-            .HasMaxLength(32)
+            .HasMaxLength(PhoneNumber.MaxLength)
             .IsRequired();
 
         builder.Property(x => x.Email)
             .HasConversion(
                 vo => vo.Value,
                 dbVal => Email.Create(dbVal).Value)
-            .HasMaxLength(256)
+            .HasMaxLength(Email.MaxLength)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted).IsRequired();

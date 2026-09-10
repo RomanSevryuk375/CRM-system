@@ -4,6 +4,11 @@ namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
 public sealed class TaxRate : ValueObject
 {
+    public const decimal MinPercentage = 0m;
+    public const decimal MaxPercentage = 100m;
+    public const int Precision = 5;
+    public const int Scale = 4;
+
     public decimal Value { get; }
 
     private TaxRate(decimal value)
@@ -13,18 +18,18 @@ public sealed class TaxRate : ValueObject
 
     public static Result<TaxRate> Create(decimal percentage)
     {
-        if (percentage < 0)
+        if (percentage < MinPercentage)
         {
             return Result<TaxRate>.Failure(Error.Validation<TaxRate>(Errors.NegativeRate));
         }
 
-        if (percentage > 100)
+        if (percentage > MaxPercentage)
         {
             return Result<TaxRate>.Failure(Error.Validation<TaxRate>(Errors.ExceedsMax));
         }
 
         return Result<TaxRate>.Success(
-            new TaxRate(percentage / 100m));
+            new TaxRate(percentage / MaxPercentage));
     }
 
     public Money CalculateAmount(Money baseAmount)
@@ -40,6 +45,6 @@ public sealed class TaxRate : ValueObject
     public static class Errors
     {
         public const string NegativeRate = "Tax rate cannot be negative.";
-        public const string ExceedsMax = "Tax rate cannot exceed 100%.";
+        public static readonly string ExceedsMax = $"Tax rate cannot exceed {MaxPercentage}%.";
     }
 }

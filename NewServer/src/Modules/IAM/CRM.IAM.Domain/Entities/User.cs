@@ -7,6 +7,9 @@ namespace CRM.IAM.Domain.Entities;
 
 public sealed class User : AggregateRoot<UserId>, IAuditable, ISoftDeletable
 {
+    public const int MaxLoginLength = 128;
+    public const int MaxPasswordHashLength = 256;
+
     private User(UserId id, Role role, string login, string passwordHash)
     {
         Id = id;
@@ -41,9 +44,19 @@ public sealed class User : AggregateRoot<UserId>, IAuditable, ISoftDeletable
             return Result<User>.Failure(Error.Validation<User>(Errors.LoginEmpty));
         }
 
+        if (login.Length > MaxLoginLength)
+        {
+            return Result<User>.Failure(Error.Validation<User>(Errors.LoginTooLong));
+        }
+
         if (string.IsNullOrWhiteSpace(passwordHash))
         {
             return Result<User>.Failure(Error.Validation<User>(Errors.PasswordEmpty));
+        }
+
+        if (passwordHash.Length > MaxPasswordHashLength)
+        {
+            return Result<User>.Failure(Error.Validation<User>(Errors.PasswordTooLong));
         }
 
         User user = new(id, role, login, passwordHash);
@@ -59,6 +72,11 @@ public sealed class User : AggregateRoot<UserId>, IAuditable, ISoftDeletable
             return Result.Failure(Error.Validation<User>(Errors.PasswordEmpty));
         }
 
+        if (newPasswordHash.Length > MaxPasswordHashLength)
+        {
+            return Result.Failure(Error.Validation<User>(Errors.PasswordTooLong));
+        }
+
         PasswordHash = newPasswordHash;
         IncrementVersion();
 
@@ -68,6 +86,8 @@ public sealed class User : AggregateRoot<UserId>, IAuditable, ISoftDeletable
     public static class Errors
     {
         public const string LoginEmpty = "Login cannot be empty.";
+        public static readonly string LoginTooLong = $"Login exceeds maximum length of {MaxLoginLength} characters.";
         public const string PasswordEmpty = "Password hash cannot be empty.";
+        public static readonly string PasswordTooLong = $"Password hash exceeds maximum length of {MaxPasswordHashLength} characters.";
     }
 }

@@ -7,9 +7,9 @@ namespace CRM.Ordering.Domain.Entities;
 
 public sealed class ServiceCatalogItem : AggregateRoot<JobId>, ISoftDeletable, IAuditable
 {
-    private const int MaxTitleLength = 128;
-    private const int MaxCategoryLength = 128;
-    private const int MaxDescriptionLength = 2000;
+    public const int MaxTitleLength = 128;
+    public const int MaxCategoryLength = 128;
+    public const int MaxDescriptionLength = 2000;
 
     private ServiceCatalogItem(
         JobId id,

@@ -24,11 +24,11 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder.Property(x => x.Login)
-            .HasMaxLength(128)
+            .HasMaxLength(User.MaxLoginLength)
             .IsRequired();
 
         builder.Property(x => x.PasswordHash)
-            .HasMaxLength(256)
+            .HasMaxLength(User.MaxPasswordHashLength)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted).IsRequired();

@@ -28,7 +28,7 @@ internal sealed class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
             .IsRequired();
 
         builder.Property(x => x.Contacts)
-            .HasMaxLength(500)
+            .HasMaxLength(Supplier.MaxContactsLength)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted).IsRequired();

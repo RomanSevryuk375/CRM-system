@@ -19,7 +19,8 @@ public sealed class CreateTaxValidator
             .MaximumLength(Name.MaxLength);
 
         RuleFor(x => x.Rate)
-            .GreaterThanOrEqualTo(0);
+            .GreaterThanOrEqualTo(TaxRate.MinPercentage)
+            .LessThanOrEqualTo(TaxRate.MaxPercentage);
 
         RuleFor(x => x.TypeId)
             .IsInEnum();

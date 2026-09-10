@@ -47,7 +47,7 @@ internal sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
             .HasConversion(
                 vo => vo.Value,
                 dbVal => Money.Create(dbVal).Value)
-            .HasPrecision(18, 2)
+            .HasPrecision(Money.Precision, Money.Scale)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted).IsRequired();

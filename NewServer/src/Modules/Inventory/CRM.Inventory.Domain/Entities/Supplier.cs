@@ -7,6 +7,8 @@ namespace CRM.Inventory.Domain.Entities;
 
 public sealed class Supplier : AggregateRoot<SupplierId>, IAuditable, ISoftDeletable
 {
+    public const int MaxContactsLength = 500;
+
     private Supplier(SupplierId id, Name name, string contacts)
     {
         Id = id;
@@ -34,9 +36,25 @@ public sealed class Supplier : AggregateRoot<SupplierId>, IAuditable, ISoftDelet
 
     public static Result<Supplier> Create(SupplierId id, Name name, string contacts)
     {
+        if (string.IsNullOrWhiteSpace(contacts))
+        {
+            return Result<Supplier>.Failure(Error.Validation<Supplier>(Errors.ContactsEmpty));
+        }
+
+        if (contacts.Length > MaxContactsLength)
+        {
+            return Result<Supplier>.Failure(Error.Validation<Supplier>(Errors.ContactsTooLong));
+        }
+
         Supplier supplier = new(id, name, contacts);
         supplier.IncrementVersion();
 
         return Result<Supplier>.Success(supplier);
+    }
+
+    public static class Errors
+    {
+        public const string ContactsEmpty = "Contacts cannot be empty.";
+        public static readonly string ContactsTooLong = $"Contacts exceed maximum length of {MaxContactsLength} characters.";
     }
 }

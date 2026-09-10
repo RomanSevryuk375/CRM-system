@@ -35,22 +35,22 @@ internal sealed class CarConfiguration : IEntityTypeConfiguration<Car>
             .IsRequired();
 
         builder.Property(x => x.Brand)
-            .HasMaxLength(100)
+            .HasMaxLength(Car.MaxBrandLength)
             .IsRequired();
 
         builder.Property(x => x.Model)
-            .HasMaxLength(100)
+            .HasMaxLength(Car.MaxModelLength)
             .IsRequired();
 
         builder.Property(x => x.YearOfManufacture)
             .IsRequired();
 
         builder.Property(x => x.VinNumber)
-            .HasMaxLength(17)
+            .HasMaxLength(Car.VinLength)
             .IsRequired();
 
         builder.Property(x => x.StateNumber)
-            .HasMaxLength(32)
+            .HasMaxLength(Car.MaxStateNumberLength)
             .IsRequired();
 
         builder.Property(x => x.Mileage)

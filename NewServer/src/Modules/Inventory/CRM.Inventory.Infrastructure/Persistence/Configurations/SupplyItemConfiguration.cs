@@ -38,14 +38,14 @@ internal sealed class SupplyItemConfiguration : IEntityTypeConfiguration<SupplyI
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property(x => x.Quantity)
-            .HasPrecision(18, 3)
+            .HasPrecision(SupplyItem.QuantityPrecision, SupplyItem.QuantityScale)
             .IsRequired();
 
         builder.Property(x => x.Price)
             .HasConversion(
                 vo => vo.Value,
                 dbVal => Money.Create(dbVal).Value)
-            .HasPrecision(18, 2)
+            .HasPrecision(Money.Precision, Money.Scale)
             .IsRequired();
 
         builder.HasIndex(x => x.SupplyId);

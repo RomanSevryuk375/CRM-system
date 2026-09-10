@@ -31,31 +31,31 @@ internal sealed class PartConfiguration : IEntityTypeConfiguration<Part>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property(x => x.OemArticle)
-            .HasMaxLength(64)
+            .HasMaxLength(Part.MaxArticleLength)
             .IsRequired(false);
 
         builder.Property(x => x.ManufacturerArticle)
-            .HasMaxLength(64)
+            .HasMaxLength(Part.MaxArticleLength)
             .IsRequired(false);
 
         builder.Property(x => x.InternalArticle)
-            .HasMaxLength(64)
+            .HasMaxLength(Part.MaxArticleLength)
             .IsRequired();
 
         builder.Property(x => x.Name)
-            .HasMaxLength(256)
+            .HasMaxLength(Part.MaxNameLength)
             .IsRequired();
 
         builder.Property(x => x.Manufacturer)
-            .HasMaxLength(128)
+            .HasMaxLength(Part.MaxManufacturerLength)
             .IsRequired();
 
         builder.Property(x => x.Applicability)
-            .HasMaxLength(1000)
+            .HasMaxLength(Part.MaxApplicabilityLength)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasMaxLength(1000)
+            .HasMaxLength(Part.MaxDescriptionLength)
             .IsRequired(false);
 
         builder.Property(x => x.IsDeleted).IsRequired();

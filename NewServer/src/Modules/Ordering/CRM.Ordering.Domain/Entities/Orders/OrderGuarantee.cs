@@ -6,6 +6,9 @@ namespace CRM.Ordering.Domain.Entities.Orders;
 
 public sealed class OrderGuarantee : IEntity<OrderGuaranteeId>
 {
+    public const int MaxDescriptionLength = 2000;
+    public const int MaxTermsLength = 2000;
+
     internal OrderGuarantee(
         OrderGuaranteeId id,
         OrderId orderId,
@@ -63,6 +66,15 @@ public sealed class OrderGuarantee : IEntity<OrderGuaranteeId>
         {
             errors.Add(Error.Validation<OrderGuarantee>(Errors.TermsEmpty));
         }
+        else if (terms.Length > MaxTermsLength)
+        {
+            errors.Add(Error.Validation<OrderGuarantee>(Errors.TermsTooLong));
+        }
+
+        if (description?.Length > MaxDescriptionLength)
+        {
+            errors.Add(Error.Validation<OrderGuarantee>(Errors.DescriptionTooLong));
+        }
 
         if (orderPartId is not null && orderWorkId is not null)
         {
@@ -92,6 +104,8 @@ public sealed class OrderGuarantee : IEntity<OrderGuaranteeId>
     {
         public const string InvalidDateRange = "Start date must be strictly earlier than end date.";
         public const string TermsEmpty = "Guarantee terms cannot be empty.";
+        public static readonly string TermsTooLong = $"Guarantee terms exceed {MaxTermsLength} characters.";
+        public static readonly string DescriptionTooLong = $"Description exceeds {MaxDescriptionLength} characters.";
         public const string BothPartAndWorkSpecified = "A guarantee cannot be linked to both a specific part and a specific work simultaneously.";
     }
 }

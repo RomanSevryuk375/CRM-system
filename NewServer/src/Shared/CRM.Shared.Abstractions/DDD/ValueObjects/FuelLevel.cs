@@ -4,6 +4,9 @@ namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
 public sealed class FuelLevel : ValueObject
 {
+    public const int MinValue = 0;
+    public const int MaxValue = 100;
+
     public int Value { get; }
 
     private FuelLevel(int value)
@@ -13,18 +16,18 @@ public sealed class FuelLevel : ValueObject
 
     public static Result<FuelLevel> Create(int rawFuelLevel)
     {
-        if (rawFuelLevel < 0)
+        if (rawFuelLevel < MinValue || rawFuelLevel > MaxValue)
         {
-            return Result<FuelLevel>.Failure(Error.Validation<FuelLevel>(Errors.NegativeValue));
+            return Result<FuelLevel>.Failure(Error.Validation<FuelLevel>(Errors.OutOfRange));
         }
 
         return Result<FuelLevel>.Success(
-            new(rawFuelLevel));
+            new FuelLevel(rawFuelLevel));
     }
 
     public static FuelLevel Zero()
     {
-        return new FuelLevel(0);
+        return new FuelLevel(MinValue);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()
@@ -34,6 +37,6 @@ public sealed class FuelLevel : ValueObject
 
     public static class Errors
     {
-        public const string NegativeValue = "Value should be positive.";
+        public static readonly string OutOfRange = $"Fuel level must be between {MinValue} and {MaxValue} percent.";
     }
 }

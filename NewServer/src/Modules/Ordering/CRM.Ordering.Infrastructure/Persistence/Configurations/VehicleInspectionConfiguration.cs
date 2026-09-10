@@ -49,19 +49,19 @@ internal sealed class VehicleInspectionConfiguration : IEntityTypeConfiguration<
             .IsRequired();
 
         builder.Property(x => x.PersonalBelongings)
-            .HasMaxLength(2000)
+            .HasMaxLength(VehicleInspection.MaxTextLength)
             .IsRequired(false);
 
         builder.Property(x => x.DashboardWarnings)
-            .HasMaxLength(2000)
+            .HasMaxLength(VehicleInspection.MaxTextLength)
             .IsRequired(false);
 
         builder.Property(x => x.ExternalDefects)
-            .HasMaxLength(2000)
+            .HasMaxLength(VehicleInspection.MaxTextLength)
             .IsRequired(false);
 
         builder.Property(x => x.InternalDefects)
-            .HasMaxLength(2000)
+            .HasMaxLength(VehicleInspection.MaxTextLength)
             .IsRequired(false);
 
         builder.Property(x => x.HasWheelNutKey).IsRequired();

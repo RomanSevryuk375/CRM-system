@@ -8,7 +8,7 @@ namespace CRM.Billing.Domain.Entities;
 
 public sealed class Bill : AggregateRoot<BillId>, ISoftDeletable, IAuditable
 {
-    private const int CriticalOffsetDays = 14;
+    public const int CriticalOffsetDays = 14;
 
     private Bill(
         BillId id,

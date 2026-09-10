@@ -42,14 +42,14 @@ internal sealed class OrderWorkConfiguration : IEntityTypeConfiguration<OrderWor
             .HasConversion(
                 vo => vo.Value,
                 dbVal => StandardHours.Create(dbVal).Value)
-            .HasPrecision(18, 2)
+            .HasPrecision(StandardHours.Precision, StandardHours.Scale)
             .IsRequired();
 
         builder.Property(x => x.TimeSpent)
             .HasConversion<decimal?>(
                 vo => vo != null ? vo.Value : null,
                 dbVal => dbVal.HasValue ? StandardHours.Create(dbVal.Value).Value : null)
-            .HasPrecision(18, 2)
+            .HasPrecision(StandardHours.Precision, StandardHours.Scale)
             .IsRequired(false);
 
         builder.Property(x => x.IsProposed).IsRequired();
@@ -62,21 +62,21 @@ internal sealed class OrderWorkConfiguration : IEntityTypeConfiguration<OrderWor
             .HasConversion<decimal?>(
                 vo => vo != null ? vo.Value : null,
                 dbVal => dbVal.HasValue ? Money.Create(dbVal.Value).Value : null)
-            .HasPrecision(18, 2)
+            .HasPrecision(Money.Precision, Money.Scale)
             .IsRequired(false);
 
         builder.Property(x => x.FixedPrice)
             .HasConversion<decimal?>(
                 vo => vo != null ? vo.Value : null,
                 dbVal => dbVal.HasValue ? Money.Create(dbVal.Value).Value : null)
-            .HasPrecision(18, 2)
+            .HasPrecision(Money.Precision, Money.Scale)
             .IsRequired(false);
 
         builder.Property(x => x.TotalCost)
             .HasConversion<decimal?>(
                 vo => vo != null ? vo.Value : null,
                 dbVal => dbVal.HasValue ? Money.Create(dbVal.Value).Value : null)
-            .HasPrecision(18, 2)
+            .HasPrecision(Money.Precision, Money.Scale)
             .IsRequired(false);
 
         builder.HasIndex(x => x.OrderId);

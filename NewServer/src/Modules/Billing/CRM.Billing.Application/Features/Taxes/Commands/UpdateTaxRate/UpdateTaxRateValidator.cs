@@ -1,5 +1,6 @@
-﻿// Ignore Spelling: Validator
+// Ignore Spelling: Validator
 
+using CRM.Shared.Abstractions.DDD.ValueObjects;
 using FluentValidation;
 
 namespace CRM.Billing.Application.Features.Taxes.Commands.UpdateTaxRate;
@@ -13,6 +14,7 @@ public sealed class UpdateTaxRateValidator
             .NotEmpty();
 
         RuleFor(x => x.Rate)
-            .GreaterThanOrEqualTo(0);
+            .GreaterThanOrEqualTo(TaxRate.MinPercentage)
+            .LessThanOrEqualTo(TaxRate.MaxPercentage);
     }
 }

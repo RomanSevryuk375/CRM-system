@@ -46,18 +46,18 @@ internal sealed class PositionConfiguration : IEntityTypeConfiguration<Position>
             .HasConversion(
                 vo => vo.Value,
                 dbVal => Money.Create(dbVal).Value)
-            .HasPrecision(18, 2)
+            .HasPrecision(Money.Precision, Money.Scale)
             .IsRequired();
 
         builder.Property(x => x.SellingPrice)
             .HasConversion(
                 vo => vo.Value,
                 dbVal => Money.Create(dbVal).Value)
-            .HasPrecision(18, 2)
+            .HasPrecision(Money.Precision, Money.Scale)
             .IsRequired();
 
         builder.Property(x => x.Quantity)
-            .HasPrecision(18, 3)
+            .HasPrecision(Position.QuantityPrecision, Position.QuantityScale)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted).IsRequired();

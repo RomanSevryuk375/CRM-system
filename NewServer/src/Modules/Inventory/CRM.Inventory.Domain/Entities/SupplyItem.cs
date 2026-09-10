@@ -7,6 +7,10 @@ namespace CRM.Inventory.Domain.Entities;
 
 public sealed class SupplyItem : Entity<SupplyItemId>
 {
+    public const int QuantityPrecision = 18;
+    public const int QuantityScale = 3;
+    public const decimal MinQuantity = 0m;
+
     internal SupplyItem(
         SupplyItemId id,
         SupplyId supplyId,
@@ -37,7 +41,17 @@ public sealed class SupplyItem : Entity<SupplyItemId>
         decimal quantity,
         Money price)
     {
+        if (quantity < MinQuantity)
+        {
+            return Result<SupplyItem>.Failure(Error.Validation<SupplyItem>(Errors.NegativeQuantity));
+        }
+
         return Result<SupplyItem>.Success(
             new SupplyItem(id, supplyId, positionId, quantity, price));
+    }
+
+    public static class Errors
+    {
+        public const string NegativeQuantity = "Quantity cannot be negative.";
     }
 }

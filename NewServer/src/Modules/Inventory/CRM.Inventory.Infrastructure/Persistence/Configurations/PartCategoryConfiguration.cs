@@ -28,7 +28,7 @@ internal sealed class PartCategoryConfiguration : IEntityTypeConfiguration<PartC
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasMaxLength(500)
+            .HasMaxLength(PartCategory.MaxDescriptionLength)
             .IsRequired(false);
 
         builder.HasIndex(x => x.Name);

@@ -1,4 +1,4 @@
-﻿using CRM.Billing.Domain.Entities;
+using CRM.Billing.Domain.Entities;
 using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +27,7 @@ internal sealed class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
             .HasConversion(
                 vo => vo.Value,
                 dbVal => Money.Create(dbVal).Value)
-            .HasPrecision(18, 2)
+            .HasPrecision(Money.Precision, Money.Scale)
             .IsRequired();
 
         builder.Property(x => x.TaxId)
