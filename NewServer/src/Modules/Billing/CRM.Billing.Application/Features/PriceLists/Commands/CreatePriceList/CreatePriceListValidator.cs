@@ -1,6 +1,7 @@
 // Ignore Spelling: Validator
 
 using CRM.Billing.Domain.Entities;
+using CRM.Shared.Abstractions.DDD.ValueObjects;
 using FluentValidation;
 
 namespace CRM.Billing.Application.Features.PriceLists.Commands.CreatePriceList;
@@ -15,7 +16,7 @@ public sealed class CreatePriceListValidator
 
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(CRM.Shared.Abstractions.DDD.ValueObjects.Name.MaxLength);
+            .MaximumLength(Name.MaxLength);
 
         RuleFor(x => x.ValidFrom).NotEmpty();
 

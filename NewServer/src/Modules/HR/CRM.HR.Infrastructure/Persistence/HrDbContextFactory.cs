@@ -1,3 +1,4 @@
+using CRM.Shared.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -9,8 +10,7 @@ internal sealed class HrDbContextFactory : IDesignTimeDbContextFactory<HrDbConte
     {
         DbContextOptionsBuilder<HrDbContext> builder = new();
 
-        const string connectionString =
-            "Host=localhost;Port=5438;Database=AUTOService;Username=postgres;Password=postgres";
+        string connectionString = ConnectionStringHelper.GetConnectionString(connectionName: nameof(HrDbContext));
 
         builder.UseNpgsql(connectionString, b =>
             b.MigrationsHistoryTable("__EFMigrationsHistory", HrDbContext.Schema))

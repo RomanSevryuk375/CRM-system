@@ -1,5 +1,6 @@
-﻿using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
+using CRM.Shared.Infrastructure.Configuration;
 using CRM.Shared.Infrastructure.Data.InboxMessages;
 using CRM.Shared.Infrastructure.Data.Interceptors;
 using CRM.Shared.Infrastructure.Data.OutboxMessages;
@@ -18,7 +19,8 @@ public static class AddModuleDatabase
         IConfiguration configuration)
         where TDbContext : DbContext
     {
-        string? connectionString = configuration.GetConnectionString("Database");
+        string connectionString = ConnectionStringHelper.GetConnectionString(configuration, typeof(TDbContext).Name);
+
         services.AddDbContext<TDbContext>((sp, options) =>
         {
             options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention();

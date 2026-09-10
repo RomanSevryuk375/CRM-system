@@ -1,6 +1,9 @@
 using CRM.Billing.Api;
 using CRM.Shared.Infrastructure.Application.Extensions;
+using CRM.Shared.Infrastructure.Configuration;
 using CRM.Shared.Infrastructure.Extensions;
+
+EnvLoader.Load();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

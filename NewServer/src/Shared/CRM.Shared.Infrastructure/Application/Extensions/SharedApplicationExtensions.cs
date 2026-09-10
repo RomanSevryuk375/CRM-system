@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Infrastructure.Application.Behaviors;
+using CRM.Shared.Infrastructure.Application.Behaviors;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CRM.Shared.Infrastructure.Application.Extensions;
@@ -9,6 +9,7 @@ public static class SharedApplicationExtensions
     {
         services.AddMediatR(config =>
         {
+            config.RegisterServicesFromAssembly(typeof(SharedApplicationExtensions).Assembly);
             config.AddOpenBehavior(typeof(LoggingBehavior<,>));
             config.AddOpenBehavior(typeof(ValidationBehavior<,>));
             config.AddOpenBehavior(typeof(TransactionBehavior<,>));

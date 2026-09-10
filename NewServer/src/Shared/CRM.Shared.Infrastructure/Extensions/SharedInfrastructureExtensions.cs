@@ -1,5 +1,6 @@
-﻿using Amazon.S3;
+using Amazon.S3;
 using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Infrastructure.Configuration;
 using CRM.Shared.Infrastructure.Data;
 using CRM.Shared.Infrastructure.Data.BlobStorage;
 using CRM.Shared.Infrastructure.Data.Interceptors;
@@ -14,6 +15,8 @@ public static class SharedInfrastructureExtensions
 {
     public static IServiceCollection AddGlobalSharedInfrastructure(this IServiceCollection services, IConfiguration config)
     {
+        config.ExpandEnvironmentVariables();
+
         services.AddHttpContextAccessor();
         services.AddScoped<IUserContext, UserContext>();
         services.RegisterMyInterceptors();
@@ -38,8 +41,10 @@ public static class SharedInfrastructureExtensions
 
         services.AddSingleton<IFileService, MinioFileService>();
 
+        string connectionString = ConnectionStringHelper.GetConnectionString(config);
+
         services.AddHealthChecks()
-            .AddNpgSql(config.GetConnectionString("Database")!)
+            .AddNpgSql(connectionString)
             .AddS3(options =>
             {
                 MinioOptions? minioConfig = config.GetSection(MinioOptions.SectionName).Get<MinioOptions>();
