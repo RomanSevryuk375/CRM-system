@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
@@ -15,6 +16,12 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\Modules\Billing\CRM.Billing.Api\CRM.Billing.Api.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\Customers\CRM.Customers.Infrastructure\CRM.Customers.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\HR\CRM.HR.Infrastructure\CRM.HR.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\IAM\CRM.IAM.Infrastructure\CRM.IAM.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\Inventory\CRM.Inventory.Infrastructure\CRM.Inventory.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\Notifications\CRM.Notifications.Infrastructure\CRM.Notifications.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\Ordering\CRM.Ordering.Infrastructure\CRM.Ordering.Infrastructure.csproj" />
 	  <ProjectReference Include="..\..\..\Shared\CRM.Shared.Abstractions\CRM.Shared.Abstractions.csproj" />
 	  <ProjectReference Include="..\..\..\Shared\CRM.Shared.Infrastructure\CRM.Shared.Infrastructure.csproj" />
 	</ItemGroup>

@@ -1,7 +1,8 @@
-﻿using CRM.Billing.Domain.Entities;
+using CRM.Billing.Domain.Entities;
 using CRM.Billing.Domain.Interfaces;
 using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.CQRS;
+using CRM.Shared.Abstractions.DDD.ValueObjects;
 using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Billing.Application.Features.Taxes.Commands.RenameTax;
@@ -19,7 +20,13 @@ public sealed class RenameTaxHandler(ITaxRepository taxRepository)
                 "The specified tax was not found."));
         }
 
-        Result result = tax.Rename(request.Name);
+        Result<Name> nameResult = Name.Create(request.Name);
+        if (nameResult.IsFailure)
+        {
+            return nameResult;
+        }
+
+        Result result = tax.Rename(nameResult.Value);
         if (result.IsFailure)
         {
             return result;

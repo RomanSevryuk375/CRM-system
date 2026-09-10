@@ -1,6 +1,7 @@
-﻿// Ignore Spelling: Validator
+// Ignore Spelling: Validator
 
 using CRM.Billing.Domain.Entities;
+using CRM.Shared.Abstractions.DDD.ValueObjects;
 using FluentValidation;
 
 namespace CRM.Billing.Application.Features.Taxes.Commands.CreateTax;
@@ -15,7 +16,7 @@ public sealed class CreateTaxValidator
 
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(Tax.MaxNameLength);
+            .MaximumLength(Name.MaxLength);
 
         RuleFor(x => x.Rate)
             .GreaterThanOrEqualTo(0);

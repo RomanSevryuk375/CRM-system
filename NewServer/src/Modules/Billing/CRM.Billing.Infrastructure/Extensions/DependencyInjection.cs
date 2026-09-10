@@ -2,7 +2,7 @@
 using CRM.Billing.Infrastructure.BackgroundJobs;
 using CRM.Billing.Infrastructure.Persistence;
 using CRM.Billing.Infrastructure.Persistence.Repositories;
-using CRM.Shared.Infrastructure.Extensions;
+using CRM.Shared.Infrastructure.Data.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;

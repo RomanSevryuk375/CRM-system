@@ -1,6 +1,5 @@
 ﻿using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
-using CRM.Shared.Infrastructure.Data;
 using CRM.Shared.Infrastructure.Data.InboxMessages;
 using CRM.Shared.Infrastructure.Data.Interceptors;
 using CRM.Shared.Infrastructure.Data.OutboxMessages;
@@ -10,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace CRM.Shared.Infrastructure.Extensions;
+namespace CRM.Shared.Infrastructure.Data.Extensions;
 
 public static class AddModuleDatabase
 {

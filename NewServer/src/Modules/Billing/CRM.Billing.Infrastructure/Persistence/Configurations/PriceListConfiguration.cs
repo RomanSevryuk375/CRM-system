@@ -1,4 +1,4 @@
-﻿using CRM.Billing.Domain.Entities;
+using CRM.Billing.Domain.Entities;
 using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +27,10 @@ internal sealed class PriceListConfiguration : IEntityTypeConfiguration<PriceLis
             .IsRequired();
 
         builder.Property(x => x.Name)
-            .HasMaxLength(PriceList.MaxNameLength)
+            .HasConversion(
+                vo => vo.Value,
+                dbVal => Name.Create(dbVal).Value)
+            .HasMaxLength(Name.MaxLength)
             .IsRequired();
 
         builder.Property(x => x.ValidFrom).IsRequired();
