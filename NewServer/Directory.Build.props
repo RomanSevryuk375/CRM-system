@@ -1,0 +1,31 @@
+<Project>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <Deterministic>true</Deterministic>
+        <NoWarn>$(NoWarn);EnableGenerateDocumentationFile;S6964</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="$(MSBuildProjectName) == 'CRM.Api.Host'">
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>.</DockerfileContext>
+    </PropertyGroup>
+
+    <!-- Test Projects configuration -->
+    <PropertyGroup Condition="
+                      $(MSBuildProjectName.EndsWith('.IntegrationTests'))
+                   Or $(MSBuildProjectName.EndsWith('.UnitTests'))
+                   Or $(MSBuildProjectName.EndsWith('.E2ETests'))
+                   Or $(MSBuildProjectName.EndsWith('.ArchitectureTests'))">
+        <IsTestProject>true</IsTestProject>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SonarAnalyzer.CSharp" PrivateAssets="all" Condition="$(MSBuildProjectExtension) == '.csproj'" />
+    </ItemGroup>
+</Project>

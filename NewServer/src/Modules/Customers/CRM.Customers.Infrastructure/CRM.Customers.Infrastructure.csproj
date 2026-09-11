@@ -1,14 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<PackageReference Include="EFCore.NamingConventions" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\..\..\Shared\CRM.Shared.Infrastructure\CRM.Shared.Infrastructure.csproj" />
 		<ProjectReference Include="..\CRM.Customers.Domain\CRM.Customers.Domain.csproj" />
 	</ItemGroup>

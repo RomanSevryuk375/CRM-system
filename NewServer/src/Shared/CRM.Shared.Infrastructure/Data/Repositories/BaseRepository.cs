@@ -1,4 +1,4 @@
-﻿using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +19,7 @@ public abstract class BaseRepository<TEntity, TDbContext, TId>(TDbContext dbCont
 
     public async Task<bool> ExistsAsync(TId id, CancellationToken cancellationToken = default)
     {
-        return await DbSet.AnyAsync(e => EF.Property<TId>(e, "Id").Equals(id), cancellationToken);
+        return await DbSet.AnyAsync(e => EF.Property<TId>(e, "Id")!.Equals(id), cancellationToken);
     }
 
     public async Task<TId> AddAsync(TEntity entity, CancellationToken cancellationToken = default)

@@ -1,8 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
-		<PackageReference Include="EFCore.NamingConventions" />
 		<PackageReference Include="MassTransit.RabbitMQ" />
 		<PackageReference Include="AWSSDK.S3" />
 		<PackageReference Include="Dapper" />

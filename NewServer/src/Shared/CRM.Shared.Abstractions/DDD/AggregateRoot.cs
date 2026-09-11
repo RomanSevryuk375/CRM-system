@@ -4,7 +4,7 @@ namespace CRM.Shared.Abstractions.DDD;
 
 public abstract class AggregateRoot<TId> : IEntity<TId>, IHasDomainEvents, IHasVersion
 {
-    public TId Id { get; protected set; }
+    public TId Id { get; protected set; } = default!;
 
     public Guid Version { get; protected set; }
 

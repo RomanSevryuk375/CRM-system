@@ -47,17 +47,10 @@
     <Project Path="../../Shared/CRM.Shared.Infrastructure/CRM.Shared.Infrastructure.csproj" Id="a55887f8-b5bb-475d-bf45-5151ef0fa2ba" />
   </Folder>
   <Folder Name="/Solution Items/">
-    <File Path=".editorconfig" />
-  </Folder>
-  <Folder Name="/Solution Items/src/">
-    <File Path="../../Directory.Build.props" />
-    <File Path="../../Directory.Build.targets" />
-    <File Path="../../Directory.Packages.props" />
-  </Folder>
-  <Folder Name="/Solution Items/tests/">
-    <File Path="../../../tests/Directory.Build.props" />
-    <File Path="../../../tests/Directory.Build.targets" />
-    <File Path="../../../tests/Directory.Packages.props" />
+    <File Path="../../../.editorconfig" />
+    <File Path="../../../Directory.Build.props" />
+    <File Path="../../../Directory.Build.targets" />
+    <File Path="../../../Directory.Packages.props" />
   </Folder>
   <Folder Name="/tests/" />
   <Project Path="CRM.Api.Host/CRM.Api.Host.csproj" />

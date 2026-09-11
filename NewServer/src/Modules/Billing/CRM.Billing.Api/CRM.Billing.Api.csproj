@@ -1,8 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
-	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
+
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\Shared\CRM.Shared.Infrastructure\CRM.Shared.Infrastructure.csproj" />

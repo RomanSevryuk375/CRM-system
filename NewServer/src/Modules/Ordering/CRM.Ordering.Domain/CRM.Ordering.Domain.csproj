@@ -1,11 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\Shared\CRM.Shared.Abstractions\CRM.Shared.Abstractions.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>CRM.Ordering.UnitTests</_Parameter1>
-		</AssemblyAttribute>
-	</ItemGroup>
 </Project>
