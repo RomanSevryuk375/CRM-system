@@ -35,7 +35,7 @@ public sealed record Money : ValueObject
 
     public override string ToString()
     {
-        return $"{Value} + {Currency}";
+        return $"{Value} {Currency}";
     }
 
     public static class Errors

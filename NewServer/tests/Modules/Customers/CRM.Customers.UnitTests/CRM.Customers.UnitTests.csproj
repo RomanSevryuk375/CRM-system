@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\Modules\Customers\CRM.Customers.Domain\CRM.Customers.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Shared\CRM.Shared.Abstractions\CRM.Shared.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\Shared\CRM.TestHelpers\CRM.TestHelpers.csproj" />
+  </ItemGroup>
+</Project>

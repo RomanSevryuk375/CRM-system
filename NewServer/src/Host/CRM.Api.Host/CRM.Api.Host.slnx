@@ -49,5 +49,29 @@
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
   </Folder>
+  <Folder Name="/Solution Items/src/">
+    <File Path="../../Directory.Build.props" />
+    <File Path="../../Directory.Build.targets" />
+    <File Path="../../Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/Solution Items/tests/">
+    <File Path="../../../tests/Directory.Build.props" />
+    <File Path="../../../tests/Directory.Build.targets" />
+    <File Path="../../../tests/Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/tests/" />
   <Project Path="CRM.Api.Host/CRM.Api.Host.csproj" />
+  <Folder Name="/tests/Modules/">
+    <Project Path="../../../tests/Modules/Billing/CRM.Billing.UnitTests/CRM.Billing.UnitTests.csproj" />
+    <Project Path="../../../tests/Modules/Customers/CRM.Customers.UnitTests/CRM.Customers.UnitTests.csproj" />
+    <Project Path="../../../tests/Modules/HR/CRM.HR.UnitTests/CRM.HR.UnitTests.csproj" />
+    <Project Path="../../../tests/Modules/IAM/CRM.IAM.UnitTests/CRM.IAM.UnitTests.csproj" />
+    <Project Path="../../../tests/Modules/Inventory/CRM.Inventory.UnitTests/CRM.Inventory.UnitTests.csproj" />
+    <Project Path="../../../tests/Modules/Notifications/CRM.Notifications.UnitTests/CRM.Notifications.UnitTests.csproj" />
+    <Project Path="../../../tests/Modules/Ordering/CRM.Ordering.UnitTests/CRM.Ordering.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Shared/">
+    <Project Path="../../../tests/Shared/CRM.Shared.UnitTests/CRM.Shared.UnitTests.csproj" />
+    <Project Path="../../../tests/Shared/CRM.TestHelpers/CRM.TestHelpers.csproj" />
+  </Folder>
 </Solution>
