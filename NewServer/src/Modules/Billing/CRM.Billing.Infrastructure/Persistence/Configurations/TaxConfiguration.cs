@@ -1,6 +1,5 @@
 using CRM.Billing.Domain.Entities;
-using CRM.Shared.Abstractions.Abstractions;
-using CRM.Shared.Abstractions.DDD.ValueObjects;
+using CRM.Shared.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,31 +12,16 @@ internal sealed class TaxConfiguration : IEntityTypeConfiguration<Tax>
         builder.ToTable("taxes", BillingDbContext.Schema);
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .HasConversion(
-                id => id.Id,
-                value => new TaxId(value))
-            .IsRequired();
-
-        builder.Property(x => x.Rate)
-            .HasConversion(
-                vo => vo.Value,
-                dbVal => TaxRate.Create(dbVal).Value)
-            .HasPrecision(TaxRate.Precision, TaxRate.Scale)
-            .IsRequired();
+        builder.Property(x => x.Id).IsRequired();
+        builder.Property(x => x.Rate).IsRequired();
 
         builder.Property(x => x.Type)
             .HasConversion<int>()
             .IsRequired();
 
-        builder.Property(x => x.Name)
-            .HasConversion(
-                vo => vo.Value,
-                dbVal => Name.Create(dbVal).Value)
-            .HasMaxLength(Name.MaxLength)
-            .IsRequired();
+        builder.Property(x => x.Name).IsRequired();
 
-        builder.Property(x => x.Version).IsConcurrencyToken();
+        builder.ConfigureConcurrency();
 
         builder.HasIndex(x => x.Type);
     }

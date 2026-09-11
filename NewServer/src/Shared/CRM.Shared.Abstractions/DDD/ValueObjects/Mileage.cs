@@ -2,13 +2,13 @@ using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
-public sealed class Mileage : ValueObject
+public sealed record Mileage : ValueObject
 {
     public const int MinValue = 0;
 
     public int Value { get; }
 
-    private Mileage(int value)
+    internal Mileage(int value)
     {
         Value = value;
     }
@@ -27,11 +27,6 @@ public sealed class Mileage : ValueObject
     public static Mileage Zero()
     {
         return new Mileage(MinValue);
-    }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
     }
 
     public static class Errors

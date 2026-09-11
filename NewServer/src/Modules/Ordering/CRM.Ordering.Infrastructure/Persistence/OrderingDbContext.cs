@@ -1,6 +1,7 @@
 using CRM.Ordering.Domain.Entities;
 using CRM.Ordering.Domain.Entities.Orders;
 using CRM.Ordering.Domain.Entities.VehicleInspections;
+using CRM.Shared.Infrastructure.Data.Extensions;
 using CRM.Shared.Infrastructure.Data.InboxMessages;
 using CRM.Shared.Infrastructure.Data.OutboxMessages;
 using Microsoft.EntityFrameworkCore;
@@ -23,11 +24,20 @@ internal class OrderingDbContext(DbContextOptions<OrderingDbContext> options) : 
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
     public DbSet<InboxMessage> InboxMessages => Set<InboxMessage>();
 
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddSharedValueConverters();
+        base.ConfigureConventions(configurationBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schema);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderingDbContext).Assembly);
+
+        modelBuilder.Entity<OutboxMessage>().ConfigureOutboxMessage(Schema);
+        modelBuilder.Entity<InboxMessage>().ConfigureInboxMessage(Schema);
 
         base.OnModelCreating(modelBuilder);
     }

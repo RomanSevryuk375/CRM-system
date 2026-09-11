@@ -13,40 +13,10 @@ internal sealed class OrderGuaranteeConfiguration : IEntityTypeConfiguration<Ord
         builder.ToTable("order_guarantees", OrderingDbContext.Schema);
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .HasConversion(
-                id => id.Id,
-                value => new OrderGuaranteeId(value))
-            .IsRequired();
-
-        builder.Property(x => x.OrderId)
-            .HasConversion(
-                id => id.Id,
-                value => new OrderId(value))
-            .IsRequired();
-
-        builder.Property(x => x.OrderPartId)
-            .HasConversion<Guid?>(
-                id => id.HasValue ? id.Value.Id : null,
-                value => value.HasValue ? new OrderPartId(value.Value) : null)
-            .IsRequired(false);
-
-        builder.HasOne<OrderPart>()
-            .WithMany()
-            .HasForeignKey(x => x.OrderPartId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.Property(x => x.OrderWorkId)
-            .HasConversion<Guid?>(
-                id => id.HasValue ? id.Value.Id : null,
-                value => value.HasValue ? new OrderWorkId(value.Value) : null)
-            .IsRequired(false);
-
-        builder.HasOne<OrderWork>()
-            .WithMany()
-            .HasForeignKey(x => x.OrderWorkId)
-            .OnDelete(DeleteBehavior.Restrict);
-
+        builder.Property(x => x.Id).IsRequired();
+        builder.Property(x => x.OrderId).IsRequired();
+        builder.Property(x => x.OrderPartId).IsRequired(false);
+        builder.Property(x => x.OrderWorkId).IsRequired(false);
         builder.Property(x => x.DateStart).IsRequired();
         builder.Property(x => x.DateEnd).IsRequired();
 
@@ -57,6 +27,16 @@ internal sealed class OrderGuaranteeConfiguration : IEntityTypeConfiguration<Ord
         builder.Property(x => x.Terms)
             .HasMaxLength(OrderGuarantee.MaxTermsLength)
             .IsRequired();
+
+        builder.HasOne<OrderPart>()
+            .WithMany()
+            .HasForeignKey(x => x.OrderPartId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        builder.HasOne<OrderWork>()
+            .WithMany()
+            .HasForeignKey(x => x.OrderWorkId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(x => x.OrderId);
         builder.HasIndex(x => x.OrderPartId);

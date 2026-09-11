@@ -2,7 +2,7 @@ using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
-public sealed class TaxRate : ValueObject
+public sealed record TaxRate : ValueObject
 {
     public const decimal MinPercentage = 0m;
     public const decimal MaxPercentage = 100m;
@@ -11,7 +11,7 @@ public sealed class TaxRate : ValueObject
 
     public decimal Value { get; }
 
-    private TaxRate(decimal value)
+    internal TaxRate(decimal value)
     {
         Value = value;
     }
@@ -35,11 +35,6 @@ public sealed class TaxRate : ValueObject
     public Money CalculateAmount(Money baseAmount)
     {
         return Money.Create(baseAmount.Value * Value).Value;
-    }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
     }
 
     public static class Errors

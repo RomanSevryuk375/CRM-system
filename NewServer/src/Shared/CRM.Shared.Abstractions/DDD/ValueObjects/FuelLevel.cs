@@ -2,14 +2,14 @@ using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
-public sealed class FuelLevel : ValueObject
+public sealed record FuelLevel : ValueObject
 {
     public const int MinValue = 0;
     public const int MaxValue = 100;
 
     public int Value { get; }
 
-    private FuelLevel(int value)
+    internal FuelLevel(int value)
     {
         Value = value;
     }
@@ -28,11 +28,6 @@ public sealed class FuelLevel : ValueObject
     public static FuelLevel Zero()
     {
         return new FuelLevel(MinValue);
-    }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
     }
 
     public static class Errors

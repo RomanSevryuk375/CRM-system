@@ -13,17 +13,8 @@ internal sealed class VehicleInspectionImageConfiguration : IEntityTypeConfigura
         builder.ToTable("vehicle_inspection_images", OrderingDbContext.Schema);
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .HasConversion(
-                id => id.Id,
-                value => new VehicleInspectionImageId(value))
-            .IsRequired();
-
-        builder.Property(x => x.InspectionId)
-            .HasConversion(
-                id => id.Id,
-                value => new VehicleInspectionId(value))
-            .IsRequired();
+        builder.Property(x => x.Id).IsRequired();
+        builder.Property(x => x.InspectionId).IsRequired();
 
         builder.Property(x => x.Path)
             .HasMaxLength(VehicleInspectionImage.MaxPathLength)

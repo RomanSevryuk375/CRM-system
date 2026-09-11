@@ -2,7 +2,7 @@ using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
-public sealed class Money : ValueObject
+public sealed record Money : ValueObject
 {
     public const int Precision = 18;
     public const int Scale = 2;
@@ -12,7 +12,7 @@ public sealed class Money : ValueObject
 
     public decimal Value { get; }
 
-    private Money(decimal value)
+    internal Money(decimal value)
     {
         Value = value;
     }
@@ -31,11 +31,6 @@ public sealed class Money : ValueObject
     public static Money Zero()
     {
         return new Money(MinValue);
-    }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
     }
 
     public override string ToString()

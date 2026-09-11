@@ -1,6 +1,5 @@
 using CRM.Customers.Domain.Entities;
-using CRM.Customers.Infrastructure.Persistence;
-using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,22 +12,8 @@ internal sealed class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.ToTable("cars", CustomersDbContext.Schema);
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .HasConversion(
-                id => id.Id,
-                value => new CarId(value))
-            .IsRequired();
-
-        builder.Property(x => x.OwnerId)
-            .HasConversion(
-                id => id.Id,
-                value => new CustomerId(value))
-            .IsRequired();
-
-        builder.HasOne<Customer>()
-            .WithMany()
-            .HasForeignKey(x => x.OwnerId)
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(x => x.Id).IsRequired();
+        builder.Property(x => x.OwnerId).IsRequired();
 
         builder.Property(x => x.Status)
             .HasConversion<int>()
@@ -53,20 +38,14 @@ internal sealed class CarConfiguration : IEntityTypeConfiguration<Car>
             .HasMaxLength(Car.MaxStateNumberLength)
             .IsRequired();
 
-        builder.Property(x => x.Mileage)
-            .IsRequired();
+        builder.Property(x => x.Mileage).IsRequired();
 
-        builder.Property(x => x.IsDeleted).IsRequired();
-        builder.Property(x => x.DeletedAt).IsRequired(false);
-        builder.Property(x => x.DeletedBy).IsRequired(false);
+        builder.ConfigureBaseEntity();
 
-        builder.Property(x => x.CreatedAt).IsRequired();
-        builder.Property(x => x.CreatedBy).IsRequired();
-        builder.Property(x => x.UpdatedAt).IsRequired(false);
-        builder.Property(x => x.UpdatedBy).IsRequired(false);
-
-        builder.Property(x => x.Version).IsConcurrencyToken();
-        builder.HasQueryFilter(x => !x.IsDeleted);
+        builder.HasOne<Customer>()
+            .WithMany()
+            .HasForeignKey(x => x.OwnerId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(x => x.OwnerId);
         builder.HasIndex(x => x.VinNumber).IsUnique();

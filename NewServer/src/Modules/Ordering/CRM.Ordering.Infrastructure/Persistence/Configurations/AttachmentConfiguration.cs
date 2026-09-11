@@ -1,6 +1,7 @@
 using CRM.Ordering.Domain.Entities;
 using CRM.Ordering.Infrastructure.Persistence;
 using CRM.Shared.Abstractions.Abstractions;
+using CRM.Shared.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,23 +14,9 @@ internal sealed class AttachmentConfiguration : IEntityTypeConfiguration<Attachm
         builder.ToTable("attachments", OrderingDbContext.Schema);
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .HasConversion(
-                id => id.Id,
-                value => new AttachmentId(value))
-            .IsRequired();
-
-        builder.Property(x => x.OrderId)
-            .HasConversion(
-                id => id.Id,
-                value => new OrderId(value))
-            .IsRequired();
-
-        builder.Property(x => x.UploadedBy)
-            .HasConversion(
-                id => id.Id,
-                value => new WorkerId(value))
-            .IsRequired();
+        builder.Property(x => x.Id).IsRequired();
+        builder.Property(x => x.OrderId).IsRequired();
+        builder.Property(x => x.UploadedBy).IsRequired();
 
         builder.Property(x => x.FileName)
             .HasMaxLength(Attachment.MaxFileNameLength)
@@ -50,17 +37,7 @@ internal sealed class AttachmentConfiguration : IEntityTypeConfiguration<Attachm
             .HasMaxLength(Attachment.MaxDescriptionLength)
             .IsRequired(false);
 
-        builder.Property(x => x.IsDeleted).IsRequired();
-        builder.Property(x => x.DeletedAt).IsRequired(false);
-        builder.Property(x => x.DeletedBy).IsRequired(false);
-
-        builder.Property(x => x.CreatedAt).IsRequired();
-        builder.Property(x => x.CreatedBy).IsRequired();
-        builder.Property(x => x.UpdatedAt).IsRequired(false);
-        builder.Property(x => x.UpdatedBy).IsRequired(false);
-
-        builder.Property(x => x.Version).IsConcurrencyToken();
-        builder.HasQueryFilter(x => !x.IsDeleted);
+        builder.ConfigureBaseEntity();
 
         builder.HasIndex(x => x.OrderId);
         builder.HasIndex(x => x.UploadedBy);

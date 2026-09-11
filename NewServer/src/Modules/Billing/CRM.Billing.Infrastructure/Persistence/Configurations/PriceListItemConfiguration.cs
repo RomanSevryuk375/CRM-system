@@ -13,31 +13,11 @@ internal sealed class PriceListItemConfiguration : IEntityTypeConfiguration<Pric
         builder.ToTable("price_list_items", BillingDbContext.Schema);
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .HasConversion(
-                id => id.Id,
-                value => new PriceListItemId(value))
-            .IsRequired();
-
-        builder.Property(x => x.PriceListId)
-            .HasConversion(
-                id => id.Id,
-                value => new PriceListId(value))
-            .IsRequired();
-
-        builder.Property(x => x.JobId)
-            .HasConversion(
-                id => id.Id,
-                value => new JobId(value))
-            .IsRequired();
-
-        builder.Property(x => x.FixedPrice)
-            .HasConversion(
-                vo => vo.Value,
-                dbVal => Money.Create(dbVal).Value)
-            .HasPrecision(Money.Precision, Money.Scale)
-            .IsRequired();
-
+        builder.Property(x => x.Id).IsRequired();
+        builder.Property(x => x.PriceListId).IsRequired();
+        builder.Property(x => x.JobId).IsRequired();
+        builder.Property(x => x.FixedPrice).IsRequired();
+        
         builder.HasIndex(x => x.PriceListId);
         builder.HasIndex(x => x.JobId);
     }

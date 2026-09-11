@@ -2,7 +2,7 @@ using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
-public sealed class StandardHours : ValueObject
+public sealed record StandardHours : ValueObject
 {
     public const decimal MinValue = 0m;
     public const decimal MaxValue = 1000m;
@@ -11,7 +11,7 @@ public sealed class StandardHours : ValueObject
 
     public decimal Value { get; }
 
-    private StandardHours(decimal value)
+    internal StandardHours(decimal value)
     {
         Value = value;
     }
@@ -30,11 +30,6 @@ public sealed class StandardHours : ValueObject
 
         return Result<StandardHours>.Success(
             new StandardHours(value));
-    }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
     }
 
     public static class Errors

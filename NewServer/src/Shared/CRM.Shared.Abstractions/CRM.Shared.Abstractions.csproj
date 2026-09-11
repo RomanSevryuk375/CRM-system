@@ -1,8 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
 		<PackageReference Include="MediatR" />
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="CRM.Shared.Infrastructure" />
+		<InternalsVisibleTo Include="Microsoft.EntityFrameworkCore" />
 	</ItemGroup>
 
 </Project>

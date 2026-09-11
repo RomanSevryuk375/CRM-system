@@ -1,6 +1,4 @@
 using CRM.HR.Domain.Entities;
-using CRM.HR.Infrastructure.Persistence;
-using CRM.Shared.Abstractions.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,23 +11,9 @@ internal sealed class SkillConfiguration : IEntityTypeConfiguration<Skill>
         builder.ToTable("skills", HrDbContext.Schema);
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .HasConversion(
-                id => id.Id,
-                value => new SkillId(value))
-            .IsRequired();
-
-        builder.Property(x => x.WorkerId)
-            .HasConversion(
-                id => id.Id,
-                value => new WorkerId(value))
-            .IsRequired();
-
-        builder.Property(x => x.SpecializationId)
-            .HasConversion(
-                id => id.Id,
-                value => new SpecializationId(value))
-            .IsRequired();
+        builder.Property(x => x.Id).IsRequired();
+        builder.Property(x => x.WorkerId).IsRequired();
+        builder.Property(x => x.SpecializationId).IsRequired();
 
         builder.HasOne<Specialization>()
             .WithMany()

@@ -13,11 +13,7 @@ internal sealed class StorageCellConfiguration : IEntityTypeConfiguration<Storag
         builder.ToTable("storage_cells", InventoryDbContext.Schema);
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .HasConversion(
-                id => id.Id,
-                value => new StorageCellId(value))
-            .IsRequired();
+        builder.Property(x => x.Id).IsRequired();
 
         builder.Property(x => x.Rack)
             .HasMaxLength(StorageCell.MaxRackLength)

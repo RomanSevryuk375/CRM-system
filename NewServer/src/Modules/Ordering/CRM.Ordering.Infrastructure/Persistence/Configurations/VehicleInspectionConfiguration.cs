@@ -2,6 +2,7 @@ using CRM.Ordering.Domain.Entities.VehicleInspections;
 using CRM.Ordering.Infrastructure.Persistence;
 using CRM.Shared.Abstractions.Abstractions;
 using CRM.Shared.Abstractions.DDD.ValueObjects;
+using CRM.Shared.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,35 +15,11 @@ internal sealed class VehicleInspectionConfiguration : IEntityTypeConfiguration<
         builder.ToTable("vehicle_inspections", OrderingDbContext.Schema);
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .HasConversion(
-                id => id.Id,
-                value => new VehicleInspectionId(value))
-            .IsRequired();
-
-        builder.Property(x => x.OrderId)
-            .HasConversion(
-                id => id.Id,
-                value => new OrderId(value))
-            .IsRequired();
-
-        builder.Property(x => x.WorkerId)
-            .HasConversion(
-                id => id.Id,
-                value => new WorkerId(value))
-            .IsRequired();
-
-        builder.Property(x => x.Mileage)
-            .HasConversion(
-                vo => vo.Value,
-                dbVal => Mileage.Create(dbVal).Value)
-            .IsRequired();
-
-        builder.Property(x => x.FuelLevel)
-            .HasConversion(
-                vo => vo.Value,
-                dbVal => FuelLevel.Create(dbVal).Value)
-            .IsRequired();
+        builder.Property(x => x.Id).IsRequired();
+        builder.Property(x => x.OrderId).IsRequired();
+        builder.Property(x => x.WorkerId).IsRequired();
+        builder.Property(x => x.Mileage).IsRequired();
+        builder.Property(x => x.FuelLevel).IsRequired();
 
         builder.Property(x => x.CleanlinessLevel)
             .HasConversion<int>()
@@ -73,17 +50,7 @@ internal sealed class VehicleInspectionConfiguration : IEntityTypeConfiguration<
             .HasConversion<int>()
             .IsRequired();
 
-        builder.Property(x => x.IsDeleted).IsRequired();
-        builder.Property(x => x.DeletedAt).IsRequired(false);
-        builder.Property(x => x.DeletedBy).IsRequired(false);
-
-        builder.Property(x => x.CreatedAt).IsRequired();
-        builder.Property(x => x.CreatedBy).IsRequired();
-        builder.Property(x => x.UpdatedAt).IsRequired(false);
-        builder.Property(x => x.UpdatedBy).IsRequired(false);
-
-        builder.Property(x => x.Version).IsConcurrencyToken();
-        builder.HasQueryFilter(x => !x.IsDeleted);
+        builder.ConfigureBaseEntity();
 
         builder.HasIndex(x => x.OrderId);
         builder.HasIndex(x => x.WorkerId);
@@ -94,8 +61,7 @@ internal sealed class VehicleInspectionConfiguration : IEntityTypeConfiguration<
             .HasForeignKey(x => x.InspectionId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Metadata
-            .FindNavigation(nameof(VehicleInspection.Images))!
-            .SetPropertyAccessMode(PropertyAccessMode.Field);
+        builder.Navigation(x => x.Images)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

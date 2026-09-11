@@ -12,6 +12,8 @@ public static class EntityTypeBuilderExtensions
         builder.Property(x => x.DeletedAt).IsRequired(false);
         builder.Property(x => x.DeletedBy).IsRequired(false);
 
+        builder.HasQueryFilter(x => !x.IsDeleted);
+
         return builder;
     }
 
@@ -30,6 +32,16 @@ public static class EntityTypeBuilderExtensions
         where T : class, IHasVersion
     {
         builder.Property(x => x.Version).IsConcurrencyToken();
+
+        return builder;
+    }
+
+    public static EntityTypeBuilder<T> ConfigureBaseEntity<T>(this EntityTypeBuilder<T> builder)
+        where T : class, IAuditable, ISoftDeletable, IHasVersion
+    {
+        builder.ConfigureSoftDelete();
+        builder.ConfigureAudit();
+        builder.ConfigureConcurrency();
 
         return builder;
     }

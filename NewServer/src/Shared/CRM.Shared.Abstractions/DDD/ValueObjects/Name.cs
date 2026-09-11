@@ -2,13 +2,13 @@ using CRM.Shared.Abstractions.Results;
 
 namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 
-public sealed class Name : ValueObject
+public sealed record Name : ValueObject
 {
     public const int MaxLength = 128;
 
     public string Value { get; }
 
-    private Name(string value)
+    internal Name(string value)
     {
         Value = value;
     }
@@ -26,11 +26,6 @@ public sealed class Name : ValueObject
         }
 
         return Result<Name>.Success(new Name(value));
-    }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
     }
 
     public static class Errors

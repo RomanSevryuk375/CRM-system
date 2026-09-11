@@ -3,12 +3,12 @@ namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 using CRM.Shared.Abstractions.Results;
 using System.Text.RegularExpressions;
 
-public sealed partial class Email : ValueObject
+public sealed partial record Email : ValueObject
 {
     public const int MaxLength = 256;
     private const string Pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
 
-    private Email(string value)
+    internal Email(string value)
     {
         Value = value;
     }
@@ -34,11 +34,6 @@ public sealed partial class Email : ValueObject
 
         return Result<Email>.Success(
             new Email(value.ToLowerInvariant()));
-    }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
     }
 
     [GeneratedRegex(Pattern)]

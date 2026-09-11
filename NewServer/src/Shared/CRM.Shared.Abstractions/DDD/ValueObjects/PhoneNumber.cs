@@ -3,12 +3,12 @@ namespace CRM.Shared.Abstractions.DDD.ValueObjects;
 using CRM.Shared.Abstractions.Results;
 using System.Text.RegularExpressions;
 
-public sealed partial class PhoneNumber : ValueObject
+public sealed partial record PhoneNumber : ValueObject
 {
     public const int MaxLength = 32;
     private const string Pattern = @"^\+?[1-9]\d{1,14}$";
 
-    private PhoneNumber(string value)
+    internal PhoneNumber(string value)
     {
         Value = value;
     }
@@ -33,11 +33,6 @@ public sealed partial class PhoneNumber : ValueObject
         }
 
         return Result<PhoneNumber>.Success(new PhoneNumber(value));
-    }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
     }
 
     public static class Errors

@@ -14,36 +14,16 @@ internal sealed class OrderPartConfiguration : IEntityTypeConfiguration<OrderPar
         builder.ToTable("order_parts", OrderingDbContext.Schema);
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .HasConversion(
-                id => id.Id,
-                value => new OrderPartId(value))
-            .IsRequired();
-
-        builder.Property(x => x.OrderId)
-            .HasConversion(
-                id => id.Id,
-                value => new OrderId(value))
-            .IsRequired();
-
-        builder.Property(x => x.PartId)
-            .HasConversion(
-                id => id.Id,
-                value => new PartId(value))
-            .IsRequired();
-
+        builder.Property(x => x.Id).IsRequired();
+        builder.Property(x => x.OrderId).IsRequired();
+        builder.Property(x => x.PartId).IsRequired();
         builder.Property(x => x.IsProposed).IsRequired();
 
         builder.Property(x => x.Quantity)
             .HasPrecision(OrderPart.QuantityPrecision, OrderPart.QuantityScale)
             .IsRequired();
 
-        builder.Property(x => x.SoldPrice)
-            .HasConversion(
-                vo => vo.Value,
-                dbVal => Money.Create(dbVal).Value)
-            .HasPrecision(Money.Precision, Money.Scale)
-            .IsRequired();
+        builder.Property(x => x.SoldPrice).IsRequired();
 
         builder.HasIndex(x => x.OrderId);
         builder.HasIndex(x => x.PartId);
